@@ -1,0 +1,122 @@
+a.button-link {
+	outline: none;
+	display: inline-block;
+	margin: 5px;
+	text-align: center;
+	text-decoration: none;
+	border-radius: 5px;
+	border-width: 2px;
+	border-style: solid;
+
+}
+
+.button-link-wrapper {
+	display: inline-block;
+	text-align: center;
+	width: 100%;
+}
+
+.button-link.grey {
+	background-color: #555;
+	border-color: #556;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 1);
+	color: #fff !important;
+}
+
+.button-link.black {
+	background-color: #222;
+	border-color: #223;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 1);
+	color: #fff !important;
+}
+
+.button-link.red {
+	background-color: #B02B2C;
+	border-color: #B02B20;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+	color: #5d1a1b !important;
+}
+
+.button-link.orange {
+	background-color: #edae44;
+	border-color: #edae45;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+	color: #745521 !important;
+}
+
+.button-link.green {
+	background-color: #83a846;
+	border-color: #83a847;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+	color: #415324 !important;
+}
+
+.button-link.blue {
+	background-color: #7bb0e7;
+	border-color: #7bb0e8;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+	color: #3f5871 !important;
+}
+
+.button-link.aqua {
+	background-color: #4ecac2;
+	border-color: #4ecac4;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+	color: #286460 !important;
+}
+
+.button-link.teal {
+	background-color: #5f8789;
+	border-color: #5f8790;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+	color: #314445 !important;
+}
+
+.button-link.purple {
+	background-color: #745f7e;
+	border-color: #745f7f;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+	color: #3c3240 !important;
+}
+
+.button-link.pink {
+	background-color: #d65799;
+	border-color: #d65796;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+	color: #692b4b !important;
+}
+
+.button-link.silver {
+	background-color: #d7d7d7;
+	border-color: #d7d7d9;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+	color: #444 !important;
+}
+
+.button-link.small {
+	padding: 9px 10px 7px;
+	font-size: 13px;
+	min-width: 80px;
+}
+
+.button-link.medium {
+	padding: 12px 16px 10px;
+	font-size: 13px;
+	min-width: 90px;
+}
+
+.button-link.large {
+	padding: 15px 30px 13px;
+	font-size: 13px;
+	min-width: 127px;
+}
+
+.button-link.position-right {
+	float: right;
+	display: block;
+}
+
+.button-link.position-left {
+	float: left;
+	display: block;
+}

@@ -1,0 +1,17 @@
+.fw-option-type-upload.any-files.empty span {
+	display: none;
+}
+.fw-option-type-upload.any-files span {
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+.fw-option-type-upload.any-files em {
+	font-style: normal;
+}
+.fw-option-type-upload.any-files a {
+	outline: none;
+}
+.fw-option-type-upload.any-files button {
+	vertical-align: middle;
+}

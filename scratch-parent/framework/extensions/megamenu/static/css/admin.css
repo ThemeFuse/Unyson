@@ -1,0 +1,139 @@
+/* Screen Options */
+
+.show-if-screen-options-icon {
+	display: none;
+}
+
+.screen-options-icon .show-if-screen-options-icon {
+	display: block;
+}
+
+/* Menu */
+
+.show-if-menu-top {
+	display: none;
+}
+
+.menu-item-depth-0 .show-if-menu-top {
+	display: block;
+}
+
+/* Mega Menu */
+
+.show-if-mega-menu-top,
+.show-if-mega-menu-column,
+.show-if-mega-menu-item {
+	display: none;
+}
+
+.mega-menu.menu-item-depth-0 .show-if-mega-menu-top,
+.mega-menu.menu-item-depth-1 .show-if-mega-menu-column,
+.mega-menu.menu-item-depth-2 .show-if-mega-menu-item,
+.mega-menu.menu-item-depth-3 .show-if-mega-menu-item,
+.mega-menu.menu-item-depth-4 .show-if-mega-menu-item,
+.mega-menu.menu-item-depth-5 .show-if-mega-menu-item,
+.mega-menu.menu-item-depth-6 .show-if-mega-menu-item,
+.mega-menu.menu-item-depth-7 .show-if-mega-menu-item,
+.mega-menu.menu-item-depth-8 .show-if-mega-menu-item,
+.mega-menu.menu-item-depth-9 .show-if-mega-menu-item,
+.mega-menu.menu-item-depth-2 .force-show-if-mega-menu-item,
+.mega-menu.menu-item-depth-3 .force-show-if-mega-menu-item,
+.mega-menu.menu-item-depth-4 .force-show-if-mega-menu-item,
+.mega-menu.menu-item-depth-5 .force-show-if-mega-menu-item,
+.mega-menu.menu-item-depth-6 .force-show-if-mega-menu-item,
+.mega-menu.menu-item-depth-7 .force-show-if-mega-menu-item,
+.mega-menu.menu-item-depth-8 .force-show-if-mega-menu-item,
+.mega-menu.menu-item-depth-9 .force-show-if-mega-menu-item {
+	display: block;
+}
+
+.mega-menu.menu-item-depth-0 .hide-if-mega-menu-top,
+.mega-menu.menu-item-depth-1 .hide-if-mega-menu-column,
+.mega-menu.menu-item-depth-2 .hide-if-mega-menu-item,
+.mega-menu.menu-item-depth-3 .hide-if-mega-menu-item,
+.mega-menu.menu-item-depth-4 .hide-if-mega-menu-item,
+.mega-menu.menu-item-depth-5 .hide-if-mega-menu-item,
+.mega-menu.menu-item-depth-6 .hide-if-mega-menu-item,
+.mega-menu.menu-item-depth-7 .hide-if-mega-menu-item,
+.mega-menu.menu-item-depth-8 .hide-if-mega-menu-item,
+.mega-menu.menu-item-depth-9 .hide-if-mega-menu-item {
+	display: none;
+}
+
+/* Empty */
+
+.inline-if-empty {
+	display: none;
+}
+
+.empty .inline-if-empty {
+	display: inline;
+}
+
+.empty .hide-if-empty {
+	display: none;
+}
+
+/* etc */
+
+.mega-menu-icon-frame {
+	border: 1px solid #e1e1e1;
+	padding: 4px;
+	-webkit-border-radius: 2px;
+	   -moz-border-radius: 2px;
+	        border-radius: 2px;
+}
+
+.mega-menu-icon-frame .fa:before {
+	display: inline-block;
+	width: 1em;
+	text-align: center;
+}
+
+.mega-menu-icon-remove {
+	font-size: 14px !important;
+	position: absolute;
+	top: -7px;
+	right: -7px;
+	display: inline-block;
+	width: 13px;
+	height: auto;
+	line-height: 13px;
+	overflow: hidden;
+	background: white;
+	border: none;
+	-webkit-transition: none;
+	transition: none;
+}
+
+.mega-menu-icon-remove:hover {
+	-webkit-transition: none;
+	transition: none;
+}
+
+/* Mega Menu Column Options: title and checkbox */
+
+.mega-menu-title[disabled] {
+	background: #ddd;
+}
+
+body .mega-menu-title {
+	width: 300px;
+}
+
+body .mega-menu-title-off-label {
+	float: right;
+	border:1px solid #ddd;
+	-webkit-box-shadow:inset 0 1px 2px rgba(0,0,0,.07);
+	box-shadow: inset 0 1px 2px rgba(0,0,0,.07);
+	background-color: #fff;
+	color: #333;
+	-webkit-transition: .05s border-color ease-in-out;
+	transition: .05s border-color ease-in-out;
+	width: 46px; height: 19px;
+	padding: 3px 20px;
+	white-space: nowrap;
+	position: relative;
+	left: -3px;
+	border-left: none;
+}

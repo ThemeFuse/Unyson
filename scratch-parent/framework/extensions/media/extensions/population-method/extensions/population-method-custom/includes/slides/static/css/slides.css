@@ -1,0 +1,136 @@
+.thumbs-wrapper  {
+	margin: 20px auto;
+	padding-left: 25px;
+	padding-right: 25px;
+}
+.thumbs-wrapper .add-new-btn {
+	padding: 2px;
+	border: 3px solid transparent;
+}
+.thumbs-wrapper .add-new-btn div{
+	width: 90px;
+	height:75px;
+	display: block;
+	background-color:#f2f2f2;
+	float:left;
+	font-size: 0px;
+	background-image: url(../images/icon.png);
+	background-repeat: no-repeat;
+	background-position: 50% 20px;
+}
+.thumbs-wrapper .add-new-btn p {
+	margin-top: 45px;
+	text-align: center;
+	font-style: italic;
+}
+.thumbs-wrapper .delete-btn {
+	display: none;
+	z-index: 999;
+	position: absolute;
+	border-width: 0px;
+	line-height: 0;
+	right: -5px;
+	top: -5px;
+	padding: 0px;
+	margin: 0px;
+	cursor: pointer;
+	border-radius: 100%;
+	background-color: #fff;
+}
+.thumbs-wrapper .delete-btn:hover {
+	color: #db382f;
+}
+.thumbs-wrapper .delete-btn:before {
+	content: '\f153';
+	display: block !important;
+	font: 400 18px/1 dashicons;
+}
+.fw-option-type-slides .buttons-wrapper{
+	padding: 15px 25px;
+	display : none;
+}
+.thumbs-wrapper li:hover .delete-btn {
+	display: block;
+}
+.thumbs-wrapper li {
+	margin-right: 4px;
+	margin-bottom: 0px;
+	position: relative;
+	display: block;
+	float: left;
+	cursor: pointer;
+	line-height: 0;
+	padding: 2px;
+	border-radius: 2px;
+	border: 3px solid transparent;
+}
+.thumbs-wrapper li.selected {
+	border: 3px solid #64bd1f;
+}
+.thumbs-wrapper li:hover{
+	border: 3px solid #dddddd;
+}
+.thumbs-wrapper li.selected:hover{
+	border: 3px solid #64bd1f;
+}
+
+.thumbs-wrapper li.new-selected {
+	border: 3px solid #64bd1f;
+	margin-right: 40px;
+}
+.thumbs-wrapper li.selected:after, .thumbs-wrapper li.new-selected:after{
+	content: "\f147";
+	font-family: dashicons;
+	background-color: #64bd1f;
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	border-top-left-radius: 2px;
+	color: #fff;
+	line-height: normal;
+	font-size: 20px;
+}
+.fw-slides-wrapper .fw-slide {
+	display :none;
+	border-top: 1px solid #eeeeee;
+}
+.fw-slides-wrapper .fw-slide.default{
+	display: block;
+}
+.fw-backend-option-type-slides > .fw-backend-option-input > .fw-inner {
+	width: 100% !important;
+}
+.fw-backend-option-type-slides{
+	padding: 0 !important;
+}
+.multimedia-radio-controls div {
+	display: inline-block;
+	margin-left: 15px;
+}
+
+#fw-options-box-wrapper-population-method-custom .inside{
+	margin-top: 0px !important;
+	padding-bottom: 0px !important;
+}
+
+/* qtip */
+
+.qtip-fw-slides {
+	padding: 5px 10px;
+	min-width: 0;
+}
+
+.qtip-fw-slides .qtip-content {
+	text-align: center;
+}
+
+/* end: qtip */
+
+.fw-slide-spinner.spinner {
+	/*float: left;*/
+	float: none;
+	display: inline-block !important;
+	margin-top: -3px;
+	visibility: hidden;
+	margin-right: 20px;
+}

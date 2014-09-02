@@ -1,0 +1,67 @@
+.backup-subtitle {
+	margin-bottom: 24px !important;
+}
+
+/* This .css file will be included on backup page only.
+ * So only .fw-flash-message classes on this page will be affected. */
+.fw-flash-message,
+.backup-alert {
+	padding-left: 8px !important;
+	margin-top: 7px !important;
+	margin-bottom: 7px !important;
+}
+
+.backup-alert .backup-spinner {
+	margin-top: -1px;
+	margin-right: -1px;
+}
+
+.backup-controls {
+	line-height: 28px;
+	margin-top: 24px;
+	margin-bottom: 44px;
+}
+
+.backup-spinner {
+	float: none;
+	display: inline-block;
+	margin: 0;
+	vertical-align: -5px;
+}
+
+a.backup-icon-remove {
+	display: inline-block;
+	width: 13px;
+	height: 13px;
+	position: relative;
+	top: 2px;
+	padding: 0;
+	margin: 0 5px 0 1px;
+	background: url(../img/cross-1.png);
+	-webkit-transition: none;
+	        transition: none;
+}
+a.backup-icon-remove:hover {
+	background: url(../img/cross-2.png);
+	-webkit-transition: none;
+	        transition: none;
+}
+
+.hide-fw-options-tabs-list .fw-options-tabs-list {
+	display: none;
+}
+
+.border-orange {
+	border-color: #ffba00 !important;
+}
+
+.disabled .hide-if-disabled {
+	display: none;
+}
+
+/**
+ * Hide empty space below "Show on screen"
+ */
+#adv-settings .metabox-prefs {
+	display: none;
+}

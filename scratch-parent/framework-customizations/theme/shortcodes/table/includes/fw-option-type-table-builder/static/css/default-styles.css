@@ -1,0 +1,160 @@
+/** table builder start **/
+
+/** buttons start**/
+.fw-option-type-table-builder .fw-add-buttons-builder {
+	float: right;
+}
+
+/** buttons end **/
+
+/** table start **/
+.fw-option-type-table-builder .fw-table {
+	width: 100%;
+	display: table;
+	table-layout: fixed;
+}
+
+/** row start **/
+.fw-option-type-table-builder .fw-table-row {
+	width: 100%;
+	line-height: 1.5em;
+	display: table-row;
+	position: relative;
+}
+
+.fw-option-type-table-builder .fw-template-row {
+	display: none;
+}
+
+/** cell start **/
+/*
+.fw-option-type-table-builder .fw-table-row:first-child select {
+	width: 150px;
+}
+*/
+
+.fw-option-type-table-builder .fw-table-cell {
+	display: table-cell;
+	border-left: 1px solid #e1e1e1;
+	border-bottom: 1px solid #e1e1e1;
+	padding: 10px;
+	background: #fff;
+	cursor: pointer;
+	height: 18px;
+	vertical-align: middle;
+	position: relative;
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+
+	padding-bottom: 9.1px;
+}
+
+.fw-option-type-table-builder .fw-table-cell-worksheet:hover,
+.fw-option-type-table-builder .fw-table-cell-worksheet.fw-cell-show-editor {
+	background: #f8f8f8;
+}
+
+.fw-option-type-table-builder .fw-table-col-option {
+	border-left: none;
+	padding-bottom: 18px;
+}
+
+.fw-option-type-table-builder .fw-table-row-delete {
+	width: 23px;
+	border-bottom: none;
+	position: relative;
+}
+
+.fw-option-type-table-builder .fw-table-col-delete,
+.fw-option-type-table-builder .fw-table-cell-options {
+	border-left: none;
+	border-bottom: none;
+}
+
+.fw-option-type-table-builder .empty-cell {
+	border: none;
+}
+
+.fw-option-type-table-builder .fw-table-col-delete {
+	text-align: center;
+	vertical-align: middle;
+}
+
+/** cell editor start **/
+.fw-option-type-table-builder .fw-table-cell.fw-cell-show-editor textarea {
+	display: block;
+}
+
+.fw-option-type-table-builder .fw-table-cell.fw-cell-show-editor .fw-table-cell-content {
+	display: none;
+}
+
+.fw-option-type-table-builder .fw-table-cell .fw-table-cell-content {
+	display: block;
+}
+
+.fw-option-type-table-builder .fw-table-cell textarea {
+	display: none;
+}
+
+/** cell editor end **/
+
+.fw-option-type-table-builder .fw-table-cell-options {
+	width: 180px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.fw-option-type-table-builder .fw-table-row .fw-table-cell-options select {
+	width: 150px;
+}
+
+.fw-option-type-table-builder .fw-table-col-options select {
+	max-width: 250px;
+	width: 50%;
+}
+
+.fw-option-type-table-builder .fw-backend-option .fw-backend-option-input .fw-table-cell-options select {
+	width: auto;
+}
+
+.fw-option-type-table-builder .fw-table-add-column {
+	display: none;
+	float: right;
+}
+
+.fw-option-type-table-builder .fw-table-col-options > :nth-last-child(2) > .fw-table-add-column {
+	display: inline-block;
+}
+
+.fw-option-type-table-builder .fw-table-add-row {
+	float: right;
+	margin-right: 10px;
+}
+
+.fw-option-type-table-builder .fw-table-col-options > .fw-table-cell {
+	padding-top: 0;
+}
+
+.fw-option-type-table-builder .fw-table-col-options > :nth-last-child(2) {
+	padding-right: 0;
+}
+
+.fw-option-type-table-builder .fw-table-col-options > :nth-child(2) {
+	padding-left: 0;
+}
+
+.fw-option-type-table-builder .fw-table-row-delete-btn {
+	padding-left: 4px;
+}
+
+/** cell end **/
+/** row end **/
+/** table end **/
+/** tablebuilder end **/

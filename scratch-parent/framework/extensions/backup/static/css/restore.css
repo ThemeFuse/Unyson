@@ -1,0 +1,49 @@
+#posts-filter {
+	display: none;
+}
+
+.backup-restore-container {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 10000;
+}
+
+.backup-restore-overlay {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+	background: #000;
+	opacity: 0.5;
+}
+
+.backup-restore-modal {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 475px;
+	height: 300px;
+	margin: -133px 0 0 -238px;
+	background: #fff;
+	color: #a2a2a2;
+	text-align: center;
+	line-height: 300px;
+	border: 1px solid #a2a2a2;
+}
+
+.backup-restore-modal-vertical {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.backup-restore-modal h2 {
+	padding: 0;
+	color: inherit;
+}
+
+.backup-restore-modal .backup-spinner {
+	vertical-align: -1px;
+}

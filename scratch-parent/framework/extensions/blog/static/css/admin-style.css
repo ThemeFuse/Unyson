@@ -1,0 +1,9 @@
+#posts-filter th.column-posts span{
+	white-space: nowrap;
+}
+
+@media screen and (max-width: 1450px) {
+	#posts-filter th.column-posts{
+		width: 20%;
+	}
+}

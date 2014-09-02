@@ -1,0 +1,7 @@
+.fw-backend-option-type-multi {
+	padding: 0 !important;
+}
+
+.fw-option-type-multi > .fw-backend-option {
+	border-bottom-width: 0;
+}

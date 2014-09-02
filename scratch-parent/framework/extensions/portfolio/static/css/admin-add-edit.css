@@ -1,0 +1,14 @@
+.project-gallery-postbox .inside {
+	margin-top: 0 !important;
+	padding-bottom: 0 !important;
+}
+#fw-backend-option-fw-option-project-gallery {
+	padding: 0 12px 12px;
+}
+#fw-option-project-gallery .thumb {
+	width: 76px;
+	height: 76px;
+}
+#fw-option-project-gallery .thumbs-container:not(.empty) {
+	margin-top: 14px;
+}

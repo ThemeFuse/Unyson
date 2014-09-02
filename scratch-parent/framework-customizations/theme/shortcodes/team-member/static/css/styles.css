@@ -1,0 +1,16 @@
+.team-member-wrapper {
+	width: 100%;
+	display: block;
+}
+
+.team-member-wrapper div {
+	float: left;
+}
+
+.team-member-wrapper div span {
+	float: left;
+}
+
+.team-member-wrapper div span a {
+	padding: 10px;
+}

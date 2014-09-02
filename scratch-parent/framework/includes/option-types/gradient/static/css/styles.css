@@ -1,0 +1,21 @@
+.fw-backend-option-input-type-gradient .fw-option-help-in-input {
+	top: 4px !important;
+}
+
+.fw-option-type-gradient .primary-color {
+	display: inline-block;
+}
+
+.fw-option-type-gradient .secondary-color {
+	display: inline-block;
+}
+
+.fw-option-type-gradient .delimiter {
+	display: inline-block;
+	padding: 0 4px;
+}
+
+#side-sortables .fw-option-type-gradient .secondary-color,
+#side-sortables .fw-option-type-gradient .primary-color {
+	width: inherit !important;
+}

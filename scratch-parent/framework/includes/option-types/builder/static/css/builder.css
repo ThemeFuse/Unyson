@@ -1,0 +1,130 @@
+.fw-option-type-builder .builder-items-types {
+	padding: 0;
+}
+
+
+/* builder-item-type */
+
+.fw-option-type-builder .builder-item-type {
+	width: 70px;
+	height: 70px;
+	border: 1px solid #e1e1e1;
+	font-size: 11px;
+	margin: 0 5px 5px 0;
+	background-color: #ffffff;
+	float: left;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.fw-option-type-builder .builder-item-type:hover,
+.fw-option-type-builder .builder-item-type.ui-draggable-dragging {
+	border-color: #8f8f8f;
+	cursor: move;
+	z-index: 9999;
+}
+
+.fw-option-type-builder .builder-item-type .builder-item-type-icon-title {
+	padding: 5px;
+}
+
+.fw-option-type-builder .builder-item-type .item-type-icon-title .item-type-icon {
+	text-align: center;
+}
+
+.fw-option-type-builder .builder-item-type .item-type-icon-title .item-type-icon .dashicons {
+	font-size: 30px;
+	display: inline-table;
+}
+
+.fw-option-type-builder .builder-item-type .item-type-icon-title .item-type-title {
+	text-align: center;
+}
+
+/* end: builder-item-type */
+
+
+.fw-option-type-builder .builder-root-items {
+	padding-top: 15px;
+	border-top: 1px solid #eeeeee;
+}
+
+.fw-option-type-builder .builder-items {
+	padding: 10px;
+}
+
+.fw-option-type-builder .builder-items .builder-item {
+	float: none;
+	display: inline-block;
+	vertical-align: top;
+	padding: 10px;
+	cursor: move;
+}
+
+.fw-option-type-builder .builder-items .builder-item.new-item {
+	animation: fwGrowIn .3s ease-in-out;
+	animation-iteration-count: 1;
+
+	-webkit-animation: fwGrowIn .3s ease-in-out;
+	-webkit-animation-iteration-count: 1;
+
+	-moz-animation: fwGrowIn .3s ease-in-out;
+	-moz-animation-iteration-count: 1;
+
+	-o-animation: fwGrowIn .3s ease-in-out;
+	-o-animation-iteration-count: 1;
+
+	-ms-animation: fwGrowIn .3s ease-in-out;
+	-ms-animation-iteration-count: 1;
+}
+
+.fw-option-type-builder .builder-root-items .builder-item-type.ui-sortable-placeholder {
+	display: inline-block;
+	float: none;
+}
+
+
+/* allow/deny items in _items */
+
+.fw-option-type-builder .builder-items .builder-item.fw-builder-item-allow-incoming-type > div {
+}
+
+.fw-option-type-builder .builder-items .builder-item.fw-builder-item-deny-incoming-type > div {
+}
+
+/* end: allow/deny*/
+
+
+/* backend fixes */
+
+.fw-backend-option-type-builder {
+	padding-left: 0;
+	padding-top: 0;
+	padding-right: 0;
+}
+
+.fw-backend-option-type-builder > .fw-backend-option-desc {
+	padding: 15px 25px 0;
+}
+
+.fw-option-type-builder .fw-backend-option-type-html {
+	padding-top: 0;
+	border-bottom: 0;
+}
+
+/* end: backend fixes */
+
+
+/* qtip */
+
+.qtip-fw-builder {
+	padding: 5px 10px;
+	min-width: 0;
+}
+
+.qtip-fw-builder .qtip-content {
+	text-align: center;
+}
+
+/* end: qtip */
