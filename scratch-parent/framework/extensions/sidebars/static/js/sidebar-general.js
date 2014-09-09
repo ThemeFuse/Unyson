@@ -652,7 +652,7 @@ fwSidebars = {
 				viewport: $(document.body)
 			},
 			style: {
-				classes: 'qtip-fw qtip-fw-info',
+				classes: 'qtip-fw qtip-fw-info-sidebars',
 				tip: {
 					width: 12,
 					height: 5

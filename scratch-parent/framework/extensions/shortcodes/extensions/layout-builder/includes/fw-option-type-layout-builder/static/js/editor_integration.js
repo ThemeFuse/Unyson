@@ -2,10 +2,11 @@
 	var gui = {
 		elements: {
 			$showButton: $('<a href="#" class="button button-primary">' + data.l10n.showButton + '</a>'),
-			$hideButton: $('<a href="#" class="button button-primary" style="margin-bottom: 5px">' + data.l10n.hideButton + '</a>'),
+			$hideButton: $('<a href="#" class="button button-primary layout-builder-hide-button">' + data.l10n.hideButton + '</a>'),
 			$builderBox: $('#' + data.optionId).closest('.postbox'),
 			$builderActiveHidden: $('<input name="layout-builder-active" type="hidden">'),
-			$wpEditorDiv: $('#postdivrich'),
+			$wpPostBodyContent: $('#post-body-content'),
+			$wpPostDivRich: $('#postdivrich'),
 			$wpContentWrap: $('#wp-content-wrap')
 		},
 		getWPEditorContent: function() {
@@ -37,17 +38,25 @@
 			}
 		},
 		showBuilder: function() {
-			this.elements.$wpEditorDiv.hide();
+			this.elements.$wpPostBodyContent.addClass('layout-builder-visible');
+
+			this.elements.$wpPostDivRich.hide();
 			this.elements.$hideButton.show();
 			this.elements.$builderBox.show();
+
+			window.editorExpand && window.editorExpand.off && window.editorExpand.off();
 
 			// set the hidden to store that the builder is active
 			this.elements.$builderActiveHidden.val('true');
 		},
 		hideBuilder: function() {
+			this.elements.$wpPostBodyContent.removeClass('layout-builder-visible');
+
 			this.elements.$hideButton.hide();
 			this.elements.$builderBox.hide();
-			this.elements.$wpEditorDiv.show();
+			this.elements.$wpPostDivRich.show();
+
+			window.editorExpand && window.editorExpand.on && window.editorExpand.on();
 
 			// set the hidden to store that the builder is inactive
 			this.elements.$builderActiveHidden.val('false');
@@ -57,7 +66,7 @@
 			$('#wp-content-media-buttons').prepend(this.elements.$showButton);
 
 			// insert the hide button
-			this.elements.$wpEditorDiv.before(this.elements.$hideButton);
+			this.elements.$wpPostDivRich.before(this.elements.$hideButton);
 
 			if (data.renderInBuilderMode) {
 				this.showBuilder();

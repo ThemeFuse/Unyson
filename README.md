@@ -8,17 +8,15 @@ To get started, check out http://unyson.themefuse.com/ !
 
 ##Table of contents
 
-* [Quick start](#quick-start)
+* [Installation](#installation)
 * [Bug reports](#bug-reports)
 * [Documentation](#documentation)
 * [Copyright and license](#copyright-and-license)
 
-## Quick start
+## Installation
 
-Three quick start options are available:
-
-* [Download the latest release](https://github.com/ThemeFuse/Unyson/releases).
-* Clone the repo: `git clone https://github.com/ThemeFuse/Unyson.git`.
+1. [Download the latest release](https://github.com/ThemeFuse/Unyson/releases/latest).
+2. Extract the zip in the `wp-content/themes` directory.
 
 ## Bug reports
 

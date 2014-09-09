@@ -38,6 +38,8 @@ final class _Fw
 			/** @var array $manifest */
 
 			$this->manifest = new FW_Framework_Manifest($manifest);
+
+			add_action('fw_init', array($this, '_check_requirements'));
 		}
 
 		require FW_DIR .'/core/extends/class-fw-extension.php';
@@ -53,6 +55,20 @@ final class _Fw
 
 			require FW_DIR .'/core/components/theme.php';
 			$this->theme = new _FW_Component_Theme();
+		}
+	}
+
+	/**
+	 * @internal
+	 */
+	public function _check_requirements()
+	{
+		if (is_admin() && !$this->manifest->check_requirements()) {
+			FW_Flash_Messages::add(
+				'fw_requirements',
+				__('Framework requirements not met: ') . $this->manifest->get_not_met_requirement_text(),
+				'warning'
+			);
 		}
 	}
 }

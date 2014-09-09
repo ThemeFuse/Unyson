@@ -144,13 +144,15 @@ class Breadcrumbs_Builder {
 
 				$terms = wp_get_post_terms( $post->ID, $slugs );
 
-				$term = array_shift( $terms );
-				unset( $terms );
+				if ( ! empty( $terms ) ) {
+					$term = array_shift( $terms );
+					unset( $terms );
 
-				$cat         = array();
-				$cat['name'] = $term->name;
-				$cat['url']  = get_term_link( $term, $term->taxonomy );
-				$return[]    = $cat;
+					$cat         = array();
+					$cat['name'] = $term->name;
+					$cat['url']  = get_term_link( $term, $term->taxonomy );
+					$return[]    = $cat;
+				}
 			}
 
 			$return = array_merge( $return, array_reverse( $this->get_page_hierarchy( $post->ID ) ) );

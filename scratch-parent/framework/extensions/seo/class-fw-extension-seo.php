@@ -42,8 +42,11 @@ class FW_Extension_SEO extends FW_Extension {
 		}
 	}
 
+	/**
+	 * @internal
+	 */
 	public function _admin_action_add_settings_menu() {
-		add_submenu_page( 'options-general.php',
+		add_options_page(
 			$this->name, __( 'Search Engines', 'fw' ),
 			'manage_options',
 			$this->get_name() . '-settings',

@@ -421,3 +421,13 @@ div.wrap br.clear {
 .fw-ext-sidebars-wrap h3 {
 	margin-bottom: 10px;
 }
+
+/* (i) tips */
+.qtip.qtip-fw-info-sidebars {
+	max-width: 320px;
+}
+
+.qtip.qtip-fw-info-sidebars .qtip-content {
+	padding: 15px;
+}
+/* end: (i) tips */

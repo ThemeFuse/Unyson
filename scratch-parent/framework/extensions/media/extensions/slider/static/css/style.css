@@ -27,3 +27,6 @@ td.column-slider_design{
 #submitdiv .fw-option-type-image-picker .thumbnail{
 	cursor: auto;
 }
+#post-body-content {
+	margin-bottom: 0px !important;
+}

@@ -294,10 +294,12 @@ final class _FW_Component_Backend extends FW_Component
 		$this->static_registered = true;
 	}
 
+	/**
+	 * @internal
+	 */
 	public function _action_admin_menu()
 	{
-		add_submenu_page(
-			'themes.php',
+		add_theme_page(
 			__('Theme Settings', 'fw'),
 			__('Theme Settings', 'fw'),
 			'manage_options',

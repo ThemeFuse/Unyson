@@ -72,6 +72,7 @@ final class _FW_Component_Theme extends FW_Component
 		add_action('wp_enqueue_scripts',    array($this, '_action_enqueue_scripts'));
 		add_action('admin_enqueue_scripts', array($this, '_action_enqueue_scripts'));
 		add_action('widgets_init',          array($this, '_action_widgets_init'));
+		add_action('fw_extensions_init',    array($this, '_action_fw_extensions_init'));
 	}
 
 	/**
@@ -262,5 +263,19 @@ final class _FW_Component_Theme extends FW_Component
 		}
 
 		return $key === null ? $config : fw_akg($key, $config);
+	}
+
+	/**
+	 * @internal
+	 */
+	public function _action_fw_extensions_init()
+	{
+		if (is_admin() && !fw()->theme->manifest->check_requirements()) {
+			FW_Flash_Messages::add(
+				'fw_theme_requirements',
+				__('Theme requirements not met: ') . fw()->theme->manifest->get_not_met_requirement_text(),
+				'warning'
+			);
+		}
 	}
 }

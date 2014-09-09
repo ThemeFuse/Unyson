@@ -1,4 +1,11 @@
-/* WP editor */
+#post-body-content.layout-builder-visible {
+	margin-bottom: 0;
+}
+
 #postdivrich {
 	display: none;
+}
+
+.layout-builder-hide-button {
+	margin: 20px 0 5px !important;
 }

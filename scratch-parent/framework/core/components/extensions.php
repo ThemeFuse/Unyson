@@ -284,7 +284,9 @@ final class _FW_Component_Extensions extends FW_Component
 					&&
 					!$extension->get_parent()->_child_extension_is_valid($extension)
 				) {
-					if (is_admin()) { // show warning only in admin side
+					// extension does not pass parent extension rules
+					if (is_admin()) {
+						// show warning only in admin side
 						FW_Flash_Messages::add(
 							'fw-invalid-extension',
 							sprintf(__('Extension %s is invalid.', 'fw'), $extension->get_name()),
@@ -359,7 +361,9 @@ final class _FW_Component_Extensions extends FW_Component
 						&&
 						!$waiting_extension->get_parent()->_child_extension_is_valid($waiting_extension)
 					) {
-						if (is_admin()) { // show warning only in admin side
+						// extension does not pass parent extension rules
+						if (is_admin()) {
+							// show warning only in admin side
 							FW_Flash_Messages::add(
 								'fw-invalid-extension',
 								sprintf(__('Extension %s is invalid.', 'fw'), $waiting_extension_name),

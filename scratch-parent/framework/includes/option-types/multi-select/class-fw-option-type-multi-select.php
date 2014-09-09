@@ -65,7 +65,7 @@ class FW_Option_Type_Multi_Select extends FW_Option_Type {
 				$names = implode( "%' OR usermeta.meta_value LIKE '%", $names );
 				$items = $wpdb->get_results(
 					"SELECT users.id val, users.display_name title " .
-					"FROM $wpdb->users as users, $wpdb->usermeta usermeta " .
+					"FROM $wpdb->users as users, $wpdb->usermeta as usermeta " .
 					"WHERE users.display_name LIKE '%$title%' AND ( usermeta.meta_key = 'wp_capabilities' AND usermeta.meta_value LIKE '%$names%' ) " .
 					"AND usermeta.user_id = users.ID"
 				);

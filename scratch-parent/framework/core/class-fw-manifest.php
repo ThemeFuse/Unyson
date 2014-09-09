@@ -18,7 +18,7 @@ abstract class FW_Manifest
 	 * )
 	 * or
 	 * array(
-	 *  'requirement'  => 'extension',
+	 *  'requirement'  => 'extensions',
 	 *  'extension'    => 'extension_name',
 	 *  'requirements' => array('min_version' => '1.2.3', ...)
 	 * )
@@ -263,6 +263,78 @@ abstract class FW_Manifest
 	public function get($multi_key)
 	{
 		return fw_akg($multi_key, $this->manifest);
+	}
+
+	/**
+	 * Call this only after check_requirements() failed
+	 * @return array
+	 */
+	public function get_not_met_requirement()
+	{
+		return $this->not_met_requirement;
+	}
+
+	/**
+	 * Return user friendly requirement as text
+	 * Call this only after check_requirements() failed
+	 * @return string
+	 */
+	public function get_not_met_requirement_text()
+	{
+		if (!$this->not_met_requirement) {
+			return '';
+		}
+
+		$requirement = array();
+
+		foreach ($this->not_met_requirement['requirements'] as $req_key => $req) {
+			switch ($req_key) {
+				case 'min_version':
+					$requirement[] = __('minimum required version is', 'fw') .' '. $req;
+					break;
+				case 'max_version':
+					$requirement[] = __('maximum required version is', 'fw') .' '. $req;
+					break;
+			}
+		}
+
+		$requirement = implode(' '. __('and', 'fw') .' ', $requirement);
+
+		switch ($this->not_met_requirement['requirement']) {
+			case 'wordpress':
+				global $wp_version;
+
+				$requirement = sprintf(
+					__('Current WordPress version is %s, %s', 'fw'),
+					$wp_version, $requirement
+				);
+				break;
+			case 'framework':
+				$requirement = sprintf(
+					__('Current Framework version is %s, %s', 'fw'),
+					fw()->manifest->get_version(), $requirement
+				);
+				break;
+			case 'extensions':
+				$extension = fw()->extensions->get($this->not_met_requirement['extension']);
+
+				if ($extension) {
+					$requirement = sprintf(
+						__('Current version of the %s extension is %s, %s', 'fw'),
+						$extension->manifest->get_name(), $extension->manifest->get_version(), $requirement
+					);
+				} else {
+					$requirement = sprintf(
+						__('%s extension is required (%s)', 'fw'),
+						ucfirst($this->not_met_requirement['extension']), $requirement
+					);
+				}
+				break;
+			default:
+				$requirement = 'Unknown requirement "'. $this->not_met_requirement['requirement'] .'"';
+		}
+
+		return $requirement;
 	}
 }
 
