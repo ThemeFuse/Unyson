@@ -164,6 +164,16 @@ final class _FW_Component_Backend extends FW_Component
 			return;
 		}
 
+		/**
+		 * Register styles/scripts only in admin area, on frontend it's not allowed to use styles/scripts from framework backend core
+		 * because they are meant to be used only in backend and can be changed in the future.
+		 * If you want to use a style/script from framework backend core, copy it to your theme and enqueue as a theme style/script.
+		 */
+		if (!is_admin()) {
+			$this->static_registered = true;
+			return;
+		}
+
 		wp_register_script(
 			'fw-events',
 			FW_URI .'/static/js/fw-events.js',
@@ -171,6 +181,7 @@ final class _FW_Component_Backend extends FW_Component
 			fw()->manifest->get_version(),
 			true
 		);
+
 		wp_register_script(
 			'fw-ie-fixes',
 			FW_URI .'/static/js/ie-fixes.js',

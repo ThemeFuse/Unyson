@@ -78,16 +78,3 @@ function fw_ext_portfolio_get_sort_classes( $items, $taxonomy, $categories, $pre
 
 	return $classes;
 }
-
-function _fw_ext_portfolio_theme_action_set_posts_per_page( $query ) {
-	if( !$query->is_main_query() ) {
-		return;
-	}
-
-	if( isset( $query->query['post_type'] ) && $query->query['post_type'] != fw()->extensions->get('portfolio')->get_post_type_name()){
-		return;
-	}
-
-	$query->set( 'posts_per_page', -1 );
-}
-add_action( 'pre_get_posts', '_fw_ext_portfolio_theme_action_set_posts_per_page' );

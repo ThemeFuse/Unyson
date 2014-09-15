@@ -57,7 +57,7 @@ class FW_Widget_Social extends WP_Widget {
 		foreach ( $instance as $key => $value ) {
 			?>
 			<p>
-				<label><?php echo __( $titles[ $key ], "fw" ); ?></label>
+				<label><?php echo $titles[ $key ] ?></label>
 				<input class="widefat widget_social_link widget_link_field"
 				       name="<?php echo $this->get_field_name( $key ) ?>" type="text"
 				       value="<?php echo ( $instance[ $key ] === $titles[ $key ] ) ? '' : $instance[ $key ]; ?>"/>

@@ -26,9 +26,8 @@ class _FW_Extension_Sidebars_Model_Sidebar
 		foreach ($sidebar as $key => $value)
 		{
 			$method = 'set_' . $key;
-			if(method_exists($this, $method))
-			{
-				$this->$method($value);
+			if(method_exists($this, $method)) {
+				call_user_func_array(array($this, $method), array($value));
 			}
 
 		}

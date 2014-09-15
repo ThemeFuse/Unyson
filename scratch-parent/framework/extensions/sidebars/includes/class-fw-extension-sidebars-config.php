@@ -302,13 +302,13 @@ class _FW_Extension_Sidebars_Config
 	}
 
 	/**
-	 * Retrive info about registered post_types or taxonomies
+	 * Retrieve info about registered post_types or taxonomies
 	 */
 	protected function get_name_from_db($slug, $type_key, $is_singular)
 	{
 		$result = $slug;
 		$get_object = ($type_key === self::POST_TYPES_PREFIX ? 'get_post_type_object' : 'get_taxonomy' );
-		$obj = $get_object($slug);
+		$obj = call_user_func_array($get_object, array($slug));
 		if($obj) {
 			if($is_singular) {
 				//singular name

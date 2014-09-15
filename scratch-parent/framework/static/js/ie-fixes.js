@@ -1,3 +1,7 @@
+/**
+ * IE fixes for jQuery plugins to not throw errors
+ */
+
 if (!Array.prototype.indexOf) {
 	Array.prototype.indexOf = function (searchElement, fromIndex) {
 		if ( this === undefined || this === null ) {

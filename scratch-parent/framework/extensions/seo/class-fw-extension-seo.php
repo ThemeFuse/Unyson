@@ -46,11 +46,12 @@ class FW_Extension_SEO extends FW_Extension {
 	 * @internal
 	 */
 	public function _admin_action_add_settings_menu() {
-		add_options_page(
+		add_theme_page(
 			$this->name, __( 'Search Engines', 'fw' ),
 			'manage_options',
 			$this->get_name() . '-settings',
-			array( $this, 'get_settings_page' ) );
+			array( $this, 'get_settings_page' )
+		);
 	}
 
 	public function _admin_action_add_static() {

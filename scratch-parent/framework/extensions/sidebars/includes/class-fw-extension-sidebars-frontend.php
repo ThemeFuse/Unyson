@@ -68,10 +68,11 @@ class _FW_Extension_Sidebars_Frontend
 	}
 
 	/**
-	 * Generate current page requirements and return array with avaible sidebars for current page
+	 * Generate current page requirements and return array with available sidebars for current page
 	 */
-	public function get_current_page_preset(){
-		//check if current_page_preset doesn't get before
+	public function get_current_page_preset()
+	{
+		// check if current_page_preset doesn't get before
 		if ($this->current_page_preset !== null) {
 			return $this->current_page_preset;
 		}
@@ -125,7 +126,7 @@ class _FW_Extension_Sidebars_Frontend
 
 		foreach($conditional_tags as $key => $cond_tag)
 		{
-			$function           = null;
+			$function = null;
 			if (isset($cond_tag['conditional_tag']))
 			{
 				$function = isset($cond_tag['conditional_tag']['callback']) ? $cond_tag['conditional_tag']['callback'] : '';
@@ -150,7 +151,7 @@ class _FW_Extension_Sidebars_Frontend
 			} else {
 				$function = $key;
 				if (is_callable($function)) {
-					if ($function()){
+					if (call_user_func($function)){
 						$data['type'] = $this->config->get_type_by_prefix(_FW_Extension_Sidebars_Config::CONDITIONAL_TAGS_PREFIX);
 						$data['sub_type'] = $key;
 
