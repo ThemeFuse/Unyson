@@ -69,7 +69,12 @@
 						compiledTemplates.push(_.template(
 							templates.thumb.notEmpty,
 							{
-								src: attachment.get('sizes').thumbnail.url,
+								// if the image is large enough it will
+								// have a 'thumbnail' size and we display the thumb
+								// if it isn't then we display the full image
+								src: attachment.get('sizes').thumbnail
+										? attachment.get('sizes').thumbnail.url
+										: attachment.get('sizes').full.url,
 								alt: attachment.get('filename'),
 								id: attachment.id,
 								originalSrc: attachment.get('url')

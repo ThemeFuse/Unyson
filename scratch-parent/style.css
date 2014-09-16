@@ -1142,8 +1142,9 @@ input[type="submit"]:active {
 .shortcode-icon i, .icon-box i {
 	font-family: 'FontAwesome';
 	font-style: normal;
-	font-size: 34px;
+	font-size: 28px;
 	position: relative;
+	line-height: 1.5;
 }
 
 
@@ -1155,7 +1156,6 @@ input[type="submit"]:active {
 
 .icon-box {
 	margin: 0;
-	overflow: hidden;
 	position: relative;
 }
 
@@ -1633,15 +1633,18 @@ span + .edit-link:before {
 
 .primary-navigation a {
 	padding: 7px 0;
+	line-height: inherit;
+	display: block;
 }
 
 .primary-navigation a:before {
+	font-family: 'FontAwesome';
+	font-style: normal;
 	position: relative;
 	font-size: 16px;
 	line-height: 0;
 	margin-right: 5px;
 	top: 1px;
-	font-family: 'FontAwesome';
 	font-weight: 100;
 	display: inline-block;
 	width: 1em;
@@ -1726,7 +1729,6 @@ span + .edit-link:before {
 	}
 
 	.primary-navigation a {
-		display: inline-block;
 		padding: 0 12px;
 		white-space: nowrap;
 	}
@@ -1737,7 +1739,6 @@ span + .edit-link:before {
 		line-height: 0;
 		margin-right: 9px;
 		top: 2px;
-		font-family: 'FontAwesome';
 		font-weight: 100;
 	}
 
@@ -3235,7 +3236,7 @@ a.pp_arrow_next{
 
 .wrap-nivoslider.theme-default{
 	position: relative;
-	margin-bottom: 20px;
+	margin-bottom: 45px;
 }
 
 .wrap-nivoslider .nivo-caption{
@@ -4980,7 +4981,6 @@ a.pp_arrow_next{
 		margin-bottom: 45px;
         width: 100%;
         box-sizing: border-box;
-        overflow: hidden;
 	}
 
 	h1.shortcode-container {
@@ -5506,11 +5506,11 @@ a.pp_arrow_next{
 }
 
 /* Widget Social Links */
-.widget_social_links{
+.widget_social_links {
 	overflow: hidden;
 }
 
-.widget_social_links i{
+.widget_social_links i {
 	font-family: 'FontAwesome';
 	font-style: normal;
 }

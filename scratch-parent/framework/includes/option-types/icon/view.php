@@ -43,7 +43,7 @@ $attr['value'] = $data['value'];
 	<div class="fa-lg fontawesome-icon-list">
 		<?php foreach ($icon_set as $a): list ($category, $title, $icon_string) = $a; ?>
 			<?php foreach (explode(' ', $icon_string) as $icon): ?>
-				<i class="<?php if ($icon == $data['value']): ?>active<?php endif ?> fa <?php echo esc_attr($icon) ?> ib-if-dialog-icon-category-all ib-if-dialog-icon-category-<?php echo esc_attr($category) ?>" data-value="<?php echo esc_attr($icon) ?>" data-category="<?php echo esc_attr($category) ?>"></i>
+				<i class="<?php if ($icon == $data['value']): ?>active<?php endif ?> fa <?php echo esc_attr($icon) ?> ib-if-dialog-icon-category-all ib-if-dialog-icon-category-<?php echo esc_attr($category) ?>" data-value="fa <?php echo esc_attr($icon) ?>" data-category="<?php echo esc_attr($category) ?>"></i>
 			<?php endforeach ?>
 		<?php endforeach ?>
 	</div>

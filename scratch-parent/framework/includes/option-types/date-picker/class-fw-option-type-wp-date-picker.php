@@ -40,7 +40,11 @@ class FW_Option_Type_Date_Picker extends FW_Option_Type {
 	}
 
 	/**
-	 * @internal
+	 * @param string $id
+	 * @param array $option
+	 * @param array $data
+	 *
+	 * @return string
 	 */
 	protected function _render( $id, $option, $data ) {
 		$language = substr(get_locale(), 0, 2);

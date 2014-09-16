@@ -44,7 +44,14 @@
 
 				frame.on('select', function() {
 					var attachment = frame.state().get('selection').first(),
-						url = attachment.get('sizes').thumbnail.url,
+
+						// if the image is large enough it will
+						// have a 'thumbnail' size and we display the thumb
+						// if it isn't then we display the full image
+						url = attachment.get('sizes').thumbnail
+								? attachment.get('sizes').thumbnail.url
+								: attachment.get('sizes').full.url,
+
 						filename = attachment.get('filename'),
 						compiled = _.template(
 							templates.thumb.notEmpty,

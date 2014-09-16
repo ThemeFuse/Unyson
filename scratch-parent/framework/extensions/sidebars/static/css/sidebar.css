@@ -218,6 +218,8 @@ div.wrap br.clear {
 .fw-ext-sidebars-wrap .nav-tab:focus,
 .fw-ext-sidebars-wrap .nav-tab {
 	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
 	margin-right: 0;
 }
 

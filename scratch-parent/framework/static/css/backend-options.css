@@ -78,6 +78,8 @@ Included on pages where backend options are rendered
 
 .fw-options-tabs-list ul li a.nav-tab:focus {
 	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
 }
 
 .fw-options-tabs-wrapper .metabox-holder {
