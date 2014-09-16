@@ -1,3 +1,3 @@
 <?php if (!defined('WP_DEBUG')) die('Direct access forbidden.');
 
-require_once(TEMPLATEPATH .'/framework/bootstrap.php');
+require_once get_template_directory() .'/framework/bootstrap.php';

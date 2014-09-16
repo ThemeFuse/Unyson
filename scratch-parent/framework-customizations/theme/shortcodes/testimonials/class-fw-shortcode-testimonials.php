@@ -2,22 +2,10 @@
 	die( 'Forbidden' );
 }
 
-class FW_Shortcode_Testimonials extends FW_Shortcode {
-	/**
-	 * @internal
-	 */
-	public function _init() {
-		if ( ! is_admin() ) {
-			add_action( 'wp_enqueue_scripts', array( $this, 'add_static' ) );
-		}
-	}
-
-
-	/**
-	 * @internal
-	 */
-	public function add_static() {
-		wp_enqueue_script( 'jquery' );
+class FW_Shortcode_Testimonials extends FW_Shortcode
+{
+	protected function handle_shortcode($atts, $content, $tag)
+	{
 		wp_enqueue_script(
 			'carouFredSel',
 			$this->get_uri() . '/static/js/jquery.carouFredSel-6.2.1-packed.js',
@@ -25,5 +13,11 @@ class FW_Shortcode_Testimonials extends FW_Shortcode {
 			fw()->theme->manifest->get_version(),
 			true
 		);
+
+		return fw_render_view($this->get_path() . '/views/view.php', array(
+			'atts'    => $atts,
+			'content' => $content,
+			'tag'     => $tag
+		));
 	}
 }

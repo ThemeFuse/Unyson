@@ -11,9 +11,9 @@ $id = uniqid( 'testimonials-' );
 				swipe: {
 					onTouch: true
 				},
-				next: "#<?php echo $id ?>-next",
-				prev: "#<?php echo $id ?>-prev",
-				pagination: "#<?php echo $id ?>-controls",
+				next: "#<?php echo $id; ?>-next",
+				prev: "#<?php echo $id; ?>-prev",
+				pagination: "#<?php echo $id; ?>-controls",
 				infinite: false,
 				items: 1,
 				auto: {
@@ -31,16 +31,14 @@ $id = uniqid( 'testimonials-' );
 		}
 
 		testimonialsInit();
-		jQuery(window).resize(function () {
-			testimonialsInit();
-		});
+		jQuery(window).resize(testimonialsInit);
 
 		var tControlsHeight = jQuery('.testimonials-controls').innerHeight();
 		jQuery('.testimonials-controls').css('margin-top', -tControlsHeight / 2);
 	});
 </script>
 <div class="testimonials shortcode shortcode-container">
-	<ul id="<?php echo $id ?>">
+	<ul id="<?php echo $id; ?>">
 		<?php
 		$counter = 1;
 		foreach ( $atts['testimonials'] as $testimonial ) : {
@@ -57,19 +55,25 @@ $id = uniqid( 'testimonials-' );
 			?>
 			<li data-testimonial="<?php echo $counter ++ ?>">
 				<div class="testimonials-author">
-					<div class="avatar"><img src="<?php echo $testimonial['author_avatar'] ?>"
-					                         alt="<?php echo $testimonial['author_name'] ?>"></div>
+					<div class="avatar">
+						<img src="<?php echo $testimonial['author_avatar'] ?>" alt="<?php echo $testimonial['author_name'] ?>">
+					</div>
 					<span class="name"><?php echo $testimonial['author_name'] ?></span>
-				<span
-					class="function"><?php echo $testimonial['author_job'] ?><?php if ( ! empty( $testimonial['site_url'] ) ) : { ?> -
-						<a href="<?php echo $testimonial['site_url'] ?>"
-						   target="_blank" ><?php echo $testimonial['site_name'] ?></a><?php } endif ?></span>
+					<span class="function">
+						<?php echo $testimonial['author_job']; ?>
+						<?php if ( ! empty( $testimonial['site_url'] ) ) : ?>
+							-
+							<a href="<?php echo $testimonial['site_url']; ?>" target="_blank" >
+								<?php echo $testimonial['site_name']; ?>
+							</a>
+						<?php endif; ?>
+					</span>
 				</div>
 				<div class="testimonials-text"><p><?php echo do_shortcode( $testimonial['content'] ); ?></p></div>
 			</li>
 		<?php } endforeach ?>
 	</ul>
-	<div id="<?php echo $id ?>-controls" class="testimonials-controls"></div>
-	<a id="<?php echo $id ?>-prev" class="prev" href="#"><i class="fa-angle-left"></i></a>
-	<a id="<?php echo $id ?>-next" class="next" href="#"><i class="fa-angle-right"></i></a>
+	<div id="<?php echo $id; ?>-controls" class="testimonials-controls"></div>
+	<a id="<?php echo $id; ?>-prev" class="prev" href="#"><i class="fa-angle-left"></i></a>
+	<a id="<?php echo $id; ?>-next" class="next" href="#"><i class="fa-angle-right"></i></a>
 </div>

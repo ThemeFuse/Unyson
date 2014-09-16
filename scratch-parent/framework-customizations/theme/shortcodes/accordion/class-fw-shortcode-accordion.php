@@ -6,7 +6,7 @@ class FW_Shortcode_Accordion extends FW_Shortcode {
 
 	protected function handle_shortcode( $atts, $content, $tag ) {
 		wp_enqueue_script(
-			'dsad',
+			'shortcode-accordion',
 			$this->get_uri() . '/static/js/scripts.js',
 			array( 'jquery-ui-accordion' ),
 			fw()->theme->manifest->get_version(),

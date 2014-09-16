@@ -7,11 +7,10 @@ if ( empty( $atts['tabs'] ) ) {
 }
 ?>
 <div class="accordion shortcode-container">
-	<?php $counter = 1;
-	foreach ( $atts['tabs'] as $tab ) : { ?>
-		<h3 class="accordion-title"><?php echo $tab['tab_title'] ?></h3>
+	<?php foreach ( $atts['tabs'] as $tab ) : ?>
+		<h3 class="accordion-title"><?php echo $tab['tab_title']; ?></h3>
 		<div class="accordion-content">
-			<p><?php echo do_shortcode( $tab['tab_content'] ) ?></p>
+			<p><?php echo do_shortcode( $tab['tab_content'] ); ?></p>
 		</div>
-	<?php } endforeach ?>
+	<?php endforeach; ?>
 </div>
