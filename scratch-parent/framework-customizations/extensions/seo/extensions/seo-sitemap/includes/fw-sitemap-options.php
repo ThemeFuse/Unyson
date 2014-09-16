@@ -79,7 +79,7 @@ function fw_ext_seo_sitemap_get_settings_options() {
 								$prefix . 'search-engies-pings' => array(
 									'label' => __( 'Search Engines', 'fw' ),
 									'type'  => 'html',
-									'html'  => __( 'After adding contnet the extension will automatically ping to:', 'fw' ) . ' <strong>' . fw_ext_seo_sitemap_get_search_engines_names( false ) . '</strong>',
+									'html'  => __( 'After adding content the extension will automatically ping to:', 'fw' ) . ' <strong>' . fw_ext_seo_sitemap_get_search_engines_names( false ) . '</strong>',
 									'value' => ''
 								)
 							)

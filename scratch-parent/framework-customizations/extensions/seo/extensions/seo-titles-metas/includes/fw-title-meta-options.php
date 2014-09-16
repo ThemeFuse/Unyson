@@ -361,7 +361,7 @@ function fw_ext_seo_titles_meta_get_general_settings_options() {
 			'options' => array(
 				$prefix . 'metakeywords' => array(
 					'label' => __( 'Use Meta Keywords', 'fw' ),
-					'desc'  => __( 'Allow to use mata keywords in posts and taxonomies', 'fw' ),
+					'desc'  => __( 'Allow the use of meta keywords in posts and taxonomies', 'fw' ),
 					'type'  => 'checkbox',
 					'value' => false
 				)
