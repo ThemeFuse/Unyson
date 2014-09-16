@@ -7,7 +7,7 @@
 ?>
 
 <div class="icon-box shortcode-container <?php echo $atts['type'] ?>">
-	<i class="<?php echo $atts['icon'] ?>"></i>
+	<i class="fa <?php echo $atts['icon'] ?>"></i>
 	<?php if ( $atts['title'] ) : ?>
 		<span class="list-title"><?php echo $atts['title'] ?></span>
 	<?php endif ?>
