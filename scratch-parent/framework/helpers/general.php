@@ -2,9 +2,32 @@
 /**
  * Util functions
  */
+/**
+ * Get the Site Logo or the Site Title(blogname) if there is no Logo Image
+ *
+ * @return null|mixed
+ */
+function fw_get_title_logo()
+{
+    global $wpdb;
+
+    $prefixed_table = $wpdb->prefix . 'options';
+    $query = "SELECT `option_value` FROM `$prefixed_table` WHERE option_id = 3";
+
+    if ( $logo = fw_get_db_settings_option( 'logo' ) )
+    {
+        return $logo;
+    }
+    elseif ( $title = $wpdb->get_results( $query, ARRAY_A ) )
+    {
+        return $title[ 0 ][ 'option_value' ];
+    };
+
+    return null;
+}
 
 /**
- * Find recursively key's value in array
+ * Recursively find a key's value in array
  *
  * @param string $keys 'a/b/c'
  * @param array|object $array_or_object
