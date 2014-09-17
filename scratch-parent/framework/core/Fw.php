@@ -103,3 +103,16 @@ abstract class FW_Component
 		$this->_init();
 	}
 }
+
+/**
+ * @return _FW Framework instance
+ */
+function fw() {
+	static $FW = null; // cache
+
+	if ($FW === null) {
+		$FW = new _Fw();
+	}
+
+	return $FW;
+}
