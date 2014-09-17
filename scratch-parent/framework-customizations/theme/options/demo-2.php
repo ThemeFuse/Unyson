@@ -173,6 +173,59 @@ $options = array(
 			__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
 		),
 	),
+
+	'demo_group_multi_select_2' => array(
+		'type' => 'group',
+		'options' => array(
+			'demo_multi_select_posts_2' => array(
+				'type' => 'multi-select',
+				'label' => __('Multi-Select: Posts', 'fw'),
+				'population' => 'posts',
+				'source' => 'page',
+				'desc' => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+				'help' => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+					__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+					__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+				),
+			),
+			'demo_multi_select_taxonomies_2' => array(
+				'type' => 'multi-select',
+				'label' => __('Multi-Select: Taxonomies', 'fw'),
+				'population' => 'taxonomy',
+				'source' => 'category',
+				'desc' => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+				'help' => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+					__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+					__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+				),
+			),
+			'demo_multi_select_users_2' => array(
+				'type' => 'multi-select',
+				'label' => __('Multi-Select: Users', 'fw'),
+				'population' => 'users',
+				'source' => 'administrator',
+				'desc' => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+				'help' => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+					__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+					__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+				),
+			),
+			'demo_multi_select_array_2' => array(
+				'type' => 'multi-select',
+				'label' => __('Multi-Select: Custom Array', 'fw'),
+				'population' => 'array',
+				'choices' => array(
+					'hello' => __('Hello', 'fw'),
+					'world' => __('World', 'fw'),
+				),
+				'desc' => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+				'help' => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+					__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+					__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+				),
+			),
+		),
+	),
 	'demo_radio_2' => array(
 		'label' => __('Radio', 'fw'),
 		'type'  => 'radio',

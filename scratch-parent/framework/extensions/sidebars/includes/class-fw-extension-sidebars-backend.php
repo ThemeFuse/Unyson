@@ -294,7 +294,7 @@ class _FW_Extension_Sidebars_Backend
 		switch ($search_type)
 		{
 			case 'post_types':
-				$wp_query = new WP_Query(array('post_type' => $search_sub_type , 'post_title_like' => $search_term, 'numberposts' => $max_autocomplete_results, 'post_status' => 'any'));
+				$wp_query = new WP_Query(array('post_type' => $search_sub_type , 'fw_ext_sidebars_post_title_like' => $search_term, 'numberposts' => $max_autocomplete_results, 'post_status' => 'any'));
 				$items = $wp_query->get_posts();
 				wp_reset_query();
 				foreach($items as $item){

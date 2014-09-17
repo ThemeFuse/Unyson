@@ -25,6 +25,9 @@
  */
 function fw_add_metadata( $meta_type, $object_id, $meta_key, $meta_value, $unique = false ) {
 
+	/**
+	 * @var WPDB $wpdb
+	 */
 	global $wpdb;
 
 	if ( ! $meta_type || ! $meta_key || ! is_numeric( $object_id ) ) {
@@ -68,7 +71,7 @@ function fw_add_metadata( $meta_type, $object_id, $meta_key, $meta_value, $uniqu
 	}
 
 	if ( $unique && $wpdb->get_var( $wpdb->prepare(
-			"SELECT COUNT(*) FROM $table WHERE meta_key = %s AND $column = %d",
+			"SELECT COUNT(*) FROM $table WHERE meta_key = %s AND $column = %d LIMIT 1",
 			$meta_key, $object_id ) )
 	) {
 		return false;
@@ -190,7 +193,7 @@ function fw_update_metadata( $meta_type, $object_id, $meta_key, $meta_value, $pr
 		}
 	}
 
-	if ( ! $meta_id = $wpdb->get_var( $wpdb->prepare( "SELECT $id_column FROM $table WHERE meta_key = %s AND $column = %d", $meta_key, $object_id ) ) ) {
+	if ( ! $meta_id = $wpdb->get_var( $wpdb->prepare( "SELECT $id_column FROM $table WHERE meta_key = %s AND $column = %d LIMIT 1", $meta_key, $object_id ) ) ) {
 		return fw_add_metadata( $meta_type, $object_id, $meta_key, $passed_value );
 	}
 
@@ -283,6 +286,9 @@ function fw_update_metadata( $meta_type, $object_id, $meta_key, $meta_value, $pr
  * @return bool True on successful delete, false on failure.
  */
 function fw_delete_metadata( $meta_type, $object_id, $meta_key, $meta_value = '', $delete_all = false ) {
+	/**
+	 * @var WPDB $wpdb
+	 */
 	global $wpdb;
 
 	if ( ! $meta_type || ! $meta_key || ! is_numeric( $object_id ) && ! $delete_all ) {
