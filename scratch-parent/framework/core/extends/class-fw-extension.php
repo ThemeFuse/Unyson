@@ -266,7 +266,7 @@ abstract class FW_Extension
 			$search_in_framework = $search_in_parent_theme = false;
 		}
 
-		if (!FW_CT) {
+		if (!is_child_theme()) {
 			$search_in_child_theme = false;
 		}
 
@@ -363,13 +363,13 @@ abstract class FW_Extension
 			$paths    = array();
 
 			if ($search_in_framework) {
-				$paths[] = FW_EXTENSIONS_DIR . $rel_path;
+				$paths[] = fw_get_framework_directory('/extensions'. $rel_path);
 			}
 			if ($search_in_parent_theme) {
-				$paths[] = FW_PT_EXTENSIONS_DIR . $rel_path;
+				$paths[] = fw_get_template_customizations_directory('/extensions'. $rel_path);
 			}
 			if ($search_in_child_theme) {
-				$paths[] = FW_CT_EXTENSIONS_DIR . $rel_path;
+				$paths[] = fw_get_stylesheet_customizations_directory('/extensions'. $rel_path);
 			}
 
 			foreach ($paths as $path) {

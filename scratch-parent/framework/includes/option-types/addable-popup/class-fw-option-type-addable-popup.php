@@ -21,14 +21,14 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 
 		wp_enqueue_style(
 			'fw-option-' . $this->get_type(),
-			FW_URI . '/includes/option-types/' . $this->get_type() . '/static/css/styles.css',
+			fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/css/styles.css'),
 			array('fw'),
 			fw()->manifest->get_version()
 		);
 
 		wp_enqueue_script(
 			'fw-option-' . $this->get_type(),
-			FW_URI . '/includes/option-types/' . $this->get_type() . '/static/js/' . $this->get_type() . '.js',
+			fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/js/' . $this->get_type() . '.js'),
 			array('underscore', 'fw-events', 'jquery-ui-sortable', 'fw'),
 			fw()->manifest->get_version(),
 			true
@@ -55,9 +55,9 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 
 		fw()->backend->render_options($option['popup-options']); // This makes sure that the option's static is enqueued
 
-		$sortable_image = FW_URI . '/static/img/sort-vertically.png';
+		$sortable_image = fw_get_framework_directory_uri('/static/img/sort-vertically.png');
 
-		return fw_render_view(FW_DIR . '/includes/option-types/' . $this->get_type() . '/views/view.php', compact('id', 'option', 'data', 'sortable_image'));
+		return fw_render_view(fw_get_framework_directory('/includes/option-types/' . $this->get_type() . '/views/view.php'), compact('id', 'option', 'data', 'sortable_image'));
 	}
 
 	/*

@@ -16,7 +16,7 @@ class FW_Extension_Update extends FW_Extension
 	 * For which directory to request write permissions from Filesystem API
 	 * @var string
 	 */
-	private $context = FW_PT_DIR;
+	private $context;
 
 	/**
 	 * @internal
@@ -26,6 +26,8 @@ class FW_Extension_Update extends FW_Extension
 		if (!current_user_can('update_themes')) {
 			return false; // prevent child extensions activation
 		}
+
+		$this->context = get_template_directory();
 
 		$this->add_actions();
 		$this->add_filters();
@@ -313,7 +315,9 @@ class FW_Extension_Update extends FW_Extension
 
 			// create temporary directory for files to be downloaded in it
 			{
-				$tmp_download_dir = FW_WP_Filesystem::real_path_to_filesystem_path(FW_CACHE_DIR .'/update');
+				$tmp_download_dir = FW_WP_Filesystem::real_path_to_filesystem_path(
+					fw_fix_path(WP_CONTENT_DIR) .'/cache/framework/update'
+				);
 
 				// just in case it already exists, clear everything, it may contain broken/old files
 				$wp_filesystem->rmdir($tmp_download_dir, true);
@@ -342,7 +346,7 @@ class FW_Extension_Update extends FW_Extension
 
 			$skin->feedback(__('Installing framework...', 'fw'));
 			{
-				$framework_dir = FW_WP_Filesystem::real_path_to_filesystem_path(FW_DIR);
+				$framework_dir = FW_WP_Filesystem::real_path_to_filesystem_path(fw_get_framework_directory());
 
 				// remove entire framework directory
 				$wp_filesystem->rmdir($framework_dir, true);

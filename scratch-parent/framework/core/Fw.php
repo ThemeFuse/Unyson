@@ -32,9 +32,9 @@ final class _Fw
 
 		// manifest
 		{
-			require FW_DIR .'/core/class-fw-manifest.php';
+			require fw_get_framework_directory('/core/class-fw-manifest.php');
 
-			require FW_DIR .'/manifest.php';
+			require fw_get_framework_directory('/manifest.php');
 			/** @var array $manifest */
 
 			$this->manifest = new FW_Framework_Manifest($manifest);
@@ -42,18 +42,18 @@ final class _Fw
 			add_action('fw_init', array($this, '_check_requirements'));
 		}
 
-		require FW_DIR .'/core/extends/class-fw-extension.php';
-		require FW_DIR .'/core/extends/class-fw-option-type.php';
+		require fw_get_framework_directory('/core/extends/class-fw-extension.php');
+		require fw_get_framework_directory('/core/extends/class-fw-option-type.php');
 
 		// components
 		{
-			require FW_DIR .'/core/components/extensions.php';
+			require fw_get_framework_directory('/core/components/extensions.php');
 			$this->extensions = new _FW_Component_Extensions();
 
-			require FW_DIR .'/core/components/backend.php';
+			require fw_get_framework_directory('/core/components/backend.php');
 			$this->backend = new _FW_Component_Backend();
 
-			require FW_DIR .'/core/components/theme.php';
+			require fw_get_framework_directory('/core/components/theme.php');
 			$this->theme = new _FW_Component_Theme();
 		}
 	}

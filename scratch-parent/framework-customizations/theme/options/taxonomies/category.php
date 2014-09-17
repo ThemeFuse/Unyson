@@ -200,21 +200,21 @@ $options = array(
 			'choice-1' => array(
 				'small' => array(
 					'height' => 70,
-					'src' => FW_PT_URI .'/images/image-picker-demo/thumb1.jpg'
+					'src' => get_template_directory_uri() .'/images/image-picker-demo/thumb1.jpg'
 				),
 				'large' => array(
 					'height' => 214,
-					'src' => FW_PT_URI .'/images/image-picker-demo/tooltip1.jpg'
+					'src' => get_template_directory_uri() .'/images/image-picker-demo/tooltip1.jpg'
 				),
 			),
 			'choice-2' => array(
 				'small' => array(
 					'height' => 70,
-					'src' => FW_PT_URI .'/images/image-picker-demo/thumb2.jpg'
+					'src' => get_template_directory_uri() .'/images/image-picker-demo/thumb2.jpg'
 				),
 				'large' => array(
 					'height' => 214,
-					'src' => FW_PT_URI .'/images/image-picker-demo/tooltip2.jpg'
+					'src' => get_template_directory_uri() .'/images/image-picker-demo/tooltip2.jpg'
 				),
 			),
 		),
@@ -301,64 +301,64 @@ $options = array(
 		'value'   => 'none',
 		'choices' => array(
 			'none' => array(
-				'icon' => FW_PT_URI . '/images/patterns/no_pattern.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/no_pattern.jpg',
 				'css'  => array(
 					'background-image' => 'none'
 				)
 			),
 			'bg-1' => array(
-				'icon' => FW_PT_URI . '/images/patterns/diagonal_bottom_to_top_pattern_preview.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/diagonal_bottom_to_top_pattern_preview.jpg',
 				'css'  => array(
-					'background-image'  => 'url("' . FW_PT_URI . '/images/patterns/diagonal_bottom_to_top_pattern.png' . '")',
+					'background-image'  => 'url("' . get_template_directory_uri() . '/images/patterns/diagonal_bottom_to_top_pattern.png' . '")',
 					'background-repeat' => 'repeat',
 				)
 			),
 			'bg-2' => array(
-				'icon' => FW_PT_URI . '/images/patterns/diagonal_top_to_bottom_pattern_preview.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/diagonal_top_to_bottom_pattern_preview.jpg',
 				'css'  => array(
-					'background-image'  => 'url("' . FW_PT_URI . '/images/patterns/diagonal_top_to_bottom_pattern.png' . '")',
+					'background-image'  => 'url("' . get_template_directory_uri() . '/images/patterns/diagonal_top_to_bottom_pattern.png' . '")',
 					'background-repeat' => 'repeat',
 				)
 			),
 			'bg-3' => array(
-				'icon' => FW_PT_URI . '/images/patterns/dots_pattern_preview.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/dots_pattern_preview.jpg',
 				'css'  => array(
-					'background-image'  => 'url("' . FW_PT_URI . '/images/patterns/dots_pattern.png' . '")',
+					'background-image'  => 'url("' . get_template_directory_uri() . '/images/patterns/dots_pattern.png' . '")',
 					'background-repeat' => 'repeat',
 				)
 			),
 			'bg-4' => array(
-				'icon' => FW_PT_URI . '/images/patterns/romb_pattern_preview.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/romb_pattern_preview.jpg',
 				'css'  => array(
-					'background-image'  => 'url("' . FW_PT_URI . '/images/patterns/romb_pattern.png' . '")',
+					'background-image'  => 'url("' . get_template_directory_uri() . '/images/patterns/romb_pattern.png' . '")',
 					'background-repeat' => 'repeat',
 				)
 			),
 			'bg-5' => array(
-				'icon' => FW_PT_URI . '/images/patterns/square_pattern_preview.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/square_pattern_preview.jpg',
 				'css'  => array(
-					'background-image'  => 'url("' . FW_PT_URI . '/images/patterns/square_pattern.png' . '")',
+					'background-image'  => 'url("' . get_template_directory_uri() . '/images/patterns/square_pattern.png' . '")',
 					'background-repeat' => 'repeat',
 				)
 			),
 			'bg-6' => array(
-				'icon' => FW_PT_URI . '/images/patterns/noise_pattern_preview.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/noise_pattern_preview.jpg',
 				'css'  => array(
-					'background-image'  => 'url("' . FW_PT_URI . '/images/patterns/noise_pattern.png' . '")',
+					'background-image'  => 'url("' . get_template_directory_uri() . '/images/patterns/noise_pattern.png' . '")',
 					'background-repeat' => 'repeat',
 				)
 			),
 			'bg-7' => array(
-				'icon' => FW_PT_URI . '/images/patterns/vertical_lines_pattern_preview.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/vertical_lines_pattern_preview.jpg',
 				'css'  => array(
-					'background-image'  => 'url("' . FW_PT_URI . '/images/patterns/vertical_lines_pattern.png' . '")',
+					'background-image'  => 'url("' . get_template_directory_uri() . '/images/patterns/vertical_lines_pattern.png' . '")',
 					'background-repeat' => 'repeat',
 				)
 			),
 			'bg-8' => array(
-				'icon' => FW_PT_URI . '/images/patterns/waves_pattern_preview.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/waves_pattern_preview.jpg',
 				'css'  => array(
-					'background-image'  => 'url("' . FW_PT_URI . '/images/patterns/waves_pattern.png' . '")',
+					'background-image'  => 'url("' . get_template_directory_uri() . '/images/patterns/waves_pattern.png' . '")',
 					'background-repeat' => 'repeat',
 				)
 			),

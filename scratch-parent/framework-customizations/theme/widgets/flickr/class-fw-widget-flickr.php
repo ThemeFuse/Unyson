@@ -18,7 +18,7 @@ class FW_Widget_Flickr extends WP_Widget {
 
 		wp_enqueue_script(
 			'fw-theme-flickr-widget',
-			FW_PT_THEME_URI . '/widgets/flickr/static/js/scripts.js',
+			fw_get_template_customizations_directory_uri('/theme/widgets/flickr/static/js/scripts.js'),
 			array( 'jquery' ),
 			fw()->theme->manifest->get_version()
 		);

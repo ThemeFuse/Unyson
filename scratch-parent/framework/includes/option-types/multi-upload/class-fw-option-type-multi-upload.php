@@ -38,7 +38,7 @@ class FW_Option_Type_Multi_Upload extends FW_Option_Type
 	protected function _init()
 	{
 		$this->views_path   = dirname(__FILE__) . '/views/';
-		$static_uri         = FW_URI . '/includes/option-types/' . $this->get_type() . '/static/';
+		$static_uri         = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/');
 		$this->js_uri       = $static_uri . 'js/';
 		$this->css_uri      = $static_uri . 'css/';
 	}

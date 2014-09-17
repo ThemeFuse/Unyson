@@ -53,7 +53,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type
 	 */
 	protected function _init()
 	{
-		$static_uri   = FW_URI . '/includes/option-types/' . $this->get_type() . '/static/';
+		$static_uri   = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/');
 		$this->js_uri = $static_uri . 'js/';
 
 	}

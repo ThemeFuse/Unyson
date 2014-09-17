@@ -10,99 +10,76 @@
  */
 define('FW', true);
 
-/** Convert to Unix style directory separators */
-function fw_fix_path($path) {
-	return str_replace(array('//', '\\'), array('/', '/'), $path);
-}
-
-/** Define useful constants */
+/**
+ * Helper functions used while loading the framework
+ */
 {
-	/** Child theme */
+	/**
+	 * Convert to Unix style directory separators
+	 */
+	function fw_fix_path($path) {
+		return str_replace(array('//', '\\'), array('/', '/'), $path);
+	}
+
+	/** Child theme related functions */
 	{
-		define('FW_CT', is_child_theme());
+		/**
+		 * Full path to the child-theme/framework-customizations directory
+		 */
+		function fw_get_stylesheet_customizations_directory($rel_path = '') {
+			return get_stylesheet_directory() .'/framework-customizations'. $rel_path;
+		}
 
-		if (FW_CT) {
-			/** Full path to directory */
-			define('FW_CT_DIR', fw_fix_path(get_stylesheet_directory()));
-
-			/** Full path to directory with settings */
-			define('FW_CT_CUSTOM_DIR', FW_CT_DIR .'/framework-customizations');
-
-			/** Full path to directory with theme settings */
-			define('FW_CT_THEME_DIR', FW_CT_CUSTOM_DIR .'/theme');
-
-			/** Full path to directory with extensions */
-			define('FW_CT_EXTENSIONS_DIR', FW_CT_CUSTOM_DIR .'/extensions');
-
-			/** URI to directory */
-			define('FW_CT_URI', get_stylesheet_directory_uri());
-
-			/** URI to directory with settings */
-			define('FW_CT_CUSTOM_URI', FW_CT_URI .'/framework-customizations');
-
-			/** URI to directory with theme settings */
-			define('FW_CT_THEME_URI', FW_CT_CUSTOM_URI .'/theme');
-
-			/** URI to directory with extensions */
-			define('FW_CT_EXTENSIONS_URI', FW_CT_CUSTOM_URI .'/extensions');
+		/**
+		 * URI to the child-theme/framework-customizations directory
+		 */
+		function fw_get_stylesheet_customizations_directory_uri($rel_path = '') {
+			return get_stylesheet_directory_uri() .'/framework-customizations'. $rel_path;
 		}
 	}
 
-	/** Parent theme */
+	/** Parent theme related functions */
 	{
-		/** Full path to directory */
-		define('FW_PT_DIR', fw_fix_path(get_template_directory()));
+		/**
+		 * Full path to the parent-theme/framework-customizations directory
+		 */
+		function fw_get_template_customizations_directory($rel_path = '') {
+			return get_template_directory() .'/framework-customizations'. $rel_path;
+		}
 
-		/** Full path to directory with settings */
-		define('FW_PT_CUSTOM_DIR', FW_PT_DIR .'/framework-customizations');
-
-		/** Full path to directory with theme settings */
-		define('FW_PT_THEME_DIR', FW_PT_CUSTOM_DIR .'/theme');
-
-		/** Full path to directory with extensions */
-		define('FW_PT_EXTENSIONS_DIR', FW_PT_CUSTOM_DIR .'/extensions');
-
-		/** URI to directory */
-		define('FW_PT_URI', get_template_directory_uri());
-
-		/** URI to directory with settings */
-		define('FW_PT_CUSTOM_URI', FW_PT_URI .'/framework-customizations');
-
-		/** URI to directory with theme settings */
-		define('FW_PT_THEME_URI', FW_PT_CUSTOM_URI .'/theme');
-
-		/** URI to directory with extensions */
-		define('FW_PT_EXTENSIONS_URI', FW_PT_CUSTOM_URI .'/extensions');
+		/**
+		 * URI to the parent-theme/framework-customizations directory
+		 */
+		function fw_get_template_customizations_directory_uri($rel_path = '') {
+			return get_template_directory_uri() .'/framework-customizations'. $rel_path;
+		}
 	}
 
-	/** Framework */
+	/** Framework related functions */
 	{
-		/** Full path to directory */
-		define('FW_DIR', FW_PT_DIR .'/framework');
+		/**
+		 * Full path to the parent-theme/framework directory
+		 */
+		function fw_get_framework_directory($rel_path = '') {
+			return get_template_directory() .'/framework'. $rel_path;
+		}
 
-		/** Full path to directory with extensions */
-		define('FW_EXTENSIONS_DIR', FW_DIR .'/extensions');
-
-		/** URI to directory */
-		define('FW_URI', FW_PT_URI .'/framework');
-
-		/** URI to directory with extensions */
-		define('FW_EXTENSIONS_URI', FW_URI .'/extensions');
-	}
-
-	/** Cache */
-	{
-		define('FW_CACHE_DIR', fw_fix_path(WP_CONTENT_DIR) .'/cache/framework');
-
-		define('FW_CACHE_URI', WP_CONTENT_URL .'/cache/framework');
+		/**
+		 * URI to the parent-theme/framework directory
+		 */
+		function fw_get_framework_directory_uri($rel_path = '') {
+			return get_template_directory_uri() .'/framework'. $rel_path;
+		}
 	}
 }
+
+include dirname(__FILE__) .'/deprecated-constants.php';
 
 /**
  * Load core
  */
 {
-	require FW_DIR .'/core/Fw.php';
+	require fw_get_framework_directory('/core/Fw.php');
 
 	/**
 	 * @return _FW Framework instance
@@ -142,7 +119,7 @@ foreach (
 	)
 	as $file
 ) {
-	require FW_DIR .'/helpers/'. $file .'.php';
+	require fw_get_framework_directory('/helpers/'. $file .'.php');
 }
 
 /**
@@ -155,7 +132,7 @@ foreach (
 	)
 	as $file
 ) {
-	require FW_DIR .'/includes/'. $file .'.php';
+	require fw_get_framework_directory('/includes/'. $file .'.php');
 }
 
 /**
@@ -172,7 +149,7 @@ foreach (fw() as $component_name => $component) {
 /**
  * For Flash Message Helper:
  * just start session before headers sent
- * to prevent: Warning: session_start(): Cannot send session cookie - headers already sent if flash added to late
+ * to prevent: Warning: session_start(): Cannot send session cookie - headers already sent, if flash added to late
  */
 FW_Session::get(-1);
 

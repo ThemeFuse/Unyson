@@ -27,8 +27,8 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 	 */
 	protected function _render($id, $option, $data)
 	{
-		$css_path = FW_URI . '/includes/option-types/' . $this->get_type() . '/static/css/';
-		$js_path  = FW_URI . '/includes/option-types/' . $this->get_type() . '/static/js/';
+		$css_path = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/css/');
+		$js_path  = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/js/');
 		wp_enqueue_style(
 			'fw-option-type' . $this->get_type(),
 			$css_path . 'multi-picker.css',

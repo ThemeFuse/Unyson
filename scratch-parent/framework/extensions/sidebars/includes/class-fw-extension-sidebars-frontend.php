@@ -60,7 +60,7 @@ class _FW_Extension_Sidebars_Frontend
 			if ( ! empty( $sidebars_widgets[$sidebar] ) ){
 				dynamic_sidebar( $sidebar );
 			} else {
-				echo fw_render_view(FW_EXTENSIONS_DIR . '/sidebars/views/frontend-no-widgets.php', array('sidebar_id' => $sidebar) );
+				echo fw_render_view(fw_get_framework_directory('/extensions/sidebars/views/frontend-no-widgets.php'), array('sidebar_id' => $sidebar) );
 			}
 		}
 

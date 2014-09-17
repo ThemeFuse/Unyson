@@ -4,7 +4,7 @@
  */
 
 /**
- * Find recursively key's value in array
+ * Recursively find a key's value in array
  *
  * @param string $keys 'a/b/c'
  * @param array|object $array_or_object
@@ -478,12 +478,12 @@ function fw_current_screen_match(array $rules) {
  * @return string URI
  */
 function fw_locate_theme_path_uri($rel_path) {
-	if (FW_CT && file_exists(FW_CT_DIR . $rel_path)) {
-		return FW_CT_URI . $rel_path;
+	if (is_child_theme() && file_exists(get_stylesheet_directory() . $rel_path)) {
+		return get_stylesheet_directory_uri() . $rel_path;
 	}
 
-	if (file_exists(FW_PT_DIR . $rel_path)) {
-		return FW_PT_URI . $rel_path;
+	if (file_exists(get_template_directory() . $rel_path)) {
+		return get_template_directory_uri() . $rel_path;
 	}
 
 	return 'about:blank#theme-file-not-found:'. $rel_path;
@@ -496,12 +496,12 @@ function fw_locate_theme_path_uri($rel_path) {
  * @return string URI
  */
 function fw_locate_theme_path($rel_path) {
-	if (FW_CT && file_exists(FW_CT_DIR . $rel_path)) {
-		return FW_CT_DIR . $rel_path;
+	if (is_child_theme() && file_exists(get_stylesheet_directory() . $rel_path)) {
+		return get_stylesheet_directory() . $rel_path;
 	}
 
-	if (file_exists(FW_PT_DIR . $rel_path)) {
-		return FW_PT_DIR . $rel_path;
+	if (file_exists(get_template_directory() . $rel_path)) {
+		return get_template_directory() . $rel_path;
 	}
 
 	return false;
