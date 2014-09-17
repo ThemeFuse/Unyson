@@ -324,3 +324,30 @@ endif;
 		<?php endif; // End is_singular()
 	}
 }
+
+if ( ! function_exists( 'fw_theme_get_title_logo' ) )
+{
+    /**
+     * Get the Site Logo or a cell from  if there is no Logo Image
+     * @param $option_name string
+     * @return null|mixed
+     */
+    function fw_theme_get_title_logo( $option_name = 'blogname')
+    {
+        global $wpdb;
+
+        $prefixed_table = $wpdb->prefix . 'options';
+        $query = "SELECT option_value FROM `$prefixed_table` WHERE option_name = '$option_name'";
+
+        if ( $logo = fw_get_db_settings_option( 'logo' ) )
+        {
+            return $logo;
+        }
+        elseif ( $title = $wpdb->get_results( $query, ARRAY_A ) )
+        {
+            return $title[ 0 ][ 'option_value' ];
+        };
+
+        return null;
+    }
+}
