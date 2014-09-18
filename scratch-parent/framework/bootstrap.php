@@ -25,7 +25,7 @@ if (!function_exists('_action_init_framework')):
 		remove_action('after_setup_theme', '_action_init_framework');
 
 		include dirname(__FILE__) .'/bootstrap-helpers.php';
-		include dirname(__FILE__) .'/deprecated-constants.php';
+		include dirname(__FILE__) .'/deprecated.php';
 
 		/**
 		 * Load core

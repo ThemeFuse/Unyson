@@ -405,7 +405,7 @@ final class _FW_Component_Extensions extends FW_Component
 
 	private function add_actions()
 	{
-		add_action('fw_init',               array($this, '_action_init_extensions'));
+		add_action('fw_init',               array($this, '_action_init_extensions'), 1);
 		add_action('init',                  array($this, '_action_init'));
 		add_action('wp_enqueue_scripts',    array($this, '_action_enqueue_scripts'));
 		add_action('admin_enqueue_scripts', array($this, '_action_enqueue_scripts'));

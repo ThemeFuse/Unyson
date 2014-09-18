@@ -67,7 +67,7 @@ if ( ! function_exists( '_action_theme_setup' ) ) :
 		add_filter( 'use_default_gallery_style', '__return_false' );
 	}
 endif;
-add_action( 'after_setup_theme', '_action_theme_setup' );
+add_action( 'fw_init', '_action_theme_setup' );
 
 /**
  * Adjust content_width value for image attachment template.

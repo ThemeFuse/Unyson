@@ -67,7 +67,7 @@ final class _FW_Component_Theme extends FW_Component
 	{
 		self::include_file_all('/hooks.php');
 
-		add_action('fw_init',               array($this, '_action_fw_init'));
+		add_action('fw_init',               array($this, '_action_fw_init'), 1);
 		add_action('init',                  array($this, '_action_init'));
 		add_action('wp_enqueue_scripts',    array($this, '_action_enqueue_scripts'));
 		add_action('admin_enqueue_scripts', array($this, '_action_enqueue_scripts'));

@@ -39,7 +39,7 @@ final class _Fw
 
 			$this->manifest = new FW_Framework_Manifest($manifest);
 
-			add_action('fw_init', array($this, '_check_requirements'));
+			add_action('fw_init', array($this, '_check_requirements'), 1);
 		}
 
 		require fw_get_framework_directory('/core/extends/class-fw-extension.php');
