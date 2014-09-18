@@ -424,6 +424,11 @@ div.wrap br.clear {
 	margin-bottom: 10px;
 }
 
+.fw-ext-sidebars-autocomplete-menu {
+	overflow: auto;
+	max-height: 270px;
+}
+
 /* (i) tips */
 .qtip.qtip-fw-info-sidebars {
 	max-width: 320px;

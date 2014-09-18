@@ -281,7 +281,7 @@ class _FW_Extension_Sidebars_Backend
 	/**
 	 *  Get results by user query for autocomplete
 	 */
-	public function get_autocomplete_results($search_slug, $search_term, $max_autocomplete_results = 10)
+	public function get_autocomplete_results($search_slug, $search_term, $max_autocomplete_results = 50)
 	{
 		$search_type      = $this->config->get_type_by_prefix($this->config->parse_prefix($search_slug));
 		$search_sub_type  = $this->config->parse_sub_type($search_slug);
@@ -305,7 +305,7 @@ class _FW_Extension_Sidebars_Backend
 				break;
 
 			case 'taxonomies':
-				$items = get_terms($search_sub_type, array('name_like'=>$search_term, 'hide_empty' => false, 'number' => $max_autocomplete_results));
+				$items = get_terms($search_sub_type, array('name__like'=>$search_term, 'hide_empty' => false, 'number' => $max_autocomplete_results));
 				foreach($items as $item){
 					$result['items'][$item->term_id] = $item->name;
 				}

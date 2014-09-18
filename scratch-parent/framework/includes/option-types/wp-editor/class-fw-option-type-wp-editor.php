@@ -3,6 +3,7 @@
 class FW_Option_Type_Wp_Editor extends FW_Option_Type
 {
 	private $js_uri;
+	private $css_uri;
 
 	public function get_type()
 	{
@@ -53,9 +54,9 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type
 	 */
 	protected function _init()
 	{
-		$static_uri   = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/');
-		$this->js_uri = $static_uri . 'js/';
-
+		$static_uri    = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/');
+		$this->js_uri  = $static_uri . 'js/';
+		$this->css_uri = $static_uri . 'css/';
 	}
 
 	private function get_teeny_preset($option){
@@ -204,7 +205,12 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type
 			array(),
 			fw()->manifest->get_version()
 		);
-
+		wp_enqueue_style(
+			'fw-option-type-'. $this->get_type() ,
+			$this->css_uri . 'styles.css',
+			array(),
+			fw()->manifest->get_version()
+		);
 	}
 
 	private function  _get_tmce_locale(){
