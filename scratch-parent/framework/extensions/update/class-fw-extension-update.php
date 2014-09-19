@@ -247,21 +247,26 @@ class FW_Extension_Update extends FW_Extension
 
 	private function maintenance_mode($enable = false)
 	{
+		/** @var WP_Filesystem_Base $wp_filesystem */
 		global $wp_filesystem;
 
 		if (!$wp_filesystem) {
 			return;
 		}
 
-		$file = $wp_filesystem->abspath() . '.maintenance';
+		$file_path = $wp_filesystem->abspath() . '.maintenance';
+
+		if ($wp_filesystem->exists($file_path)) {
+			if (!$wp_filesystem->delete($file_path)) {
+				trigger_error(__('Cannot delete: ', 'fw') . $file_path, E_USER_WARNING);
+			}
+		}
 
 		if ($enable) {
 			// Create maintenance file to signal that we are upgrading
-			$maintenance_string = '<?php $upgrading = ' . time() . '; ?>';
-			$wp_filesystem->delete($file);
-			$wp_filesystem->put_contents($file, $maintenance_string, FS_CHMOD_FILE);
-		} else if ( !$enable && $wp_filesystem->exists($file) ) {
-			$wp_filesystem->delete($file);
+			if (!$wp_filesystem->put_contents($file_path, '<?php $upgrading = ' . time() . '; ?>', FS_CHMOD_FILE)) {
+				trigger_error(__('Cannot create: ', 'fw') . $file_path, E_USER_WARNING);
+			}
 		}
 	}
 
@@ -283,11 +288,11 @@ class FW_Extension_Update extends FW_Extension
 			}
 
 			$skin = new _FW_Ext_Update_Framework_Upgrader_Skin(array(
-				'title' => __('Update Framework', 'fw'),
+				'title' => __('Framework Update', 'fw'),
 			));
 		}
 
-		require_once ABSPATH . 'wp-admin/admin-header.php';
+		require_once ABSPATH .'wp-admin/admin-header.php';
 
 		$skin->header();
 
@@ -308,8 +313,6 @@ class FW_Extension_Update extends FW_Extension
 				break;
 			}
 
-			$this->maintenance_mode(true);
-
 			/** @var WP_Filesystem_Base $wp_filesystem */
 			global $wp_filesystem;
 
@@ -320,42 +323,82 @@ class FW_Extension_Update extends FW_Extension
 				);
 
 				// just in case it already exists, clear everything, it may contain broken/old files
-				$wp_filesystem->rmdir($tmp_download_dir, true);
+				if ($wp_filesystem->exists($tmp_download_dir)) {
+					if (!$wp_filesystem->rmdir( $tmp_download_dir, true )) {
+						$skin->error(__('Cannot remove old temporary directory: ', 'fw') . $tmp_download_dir);
+						break;
+					}
+				}
 
 				if (!FW_WP_Filesystem::mkdir_recursive($tmp_download_dir)) {
-					$skin->error(__('Cannot create directory: '. $tmp_download_dir, 'fw'));
+					$skin->error(__('Cannot create directory: ', 'fw') . $tmp_download_dir);
 					break;
 				}
 			}
 
-			$skin->feedback(__('Downloading framework...', 'fw'));
+			$skin->feedback(__('Downloading the framework...', 'fw'));
 			{
 				/** @var FW_Ext_Update_Service $service */
 				$service = $this->get_child($update['service']);
 
-				$downloaded_files_dir = $service->_download_framework($update['latest_version'], $tmp_download_dir);
+				$downloaded_dir = $service->_download_framework($update['latest_version'], $tmp_download_dir);
 
-				if (!$downloaded_files_dir) {
-					$skin->error(__('Failed to download framework.', 'fw'));
+				if (!$downloaded_dir) {
+					$skin->error(__('Cannot download the framework.', 'fw'));
 					break;
-				} elseif (is_wp_error($downloaded_files_dir)) {
-					$skin->error($downloaded_files_dir);
+				} elseif (is_wp_error($downloaded_dir)) {
+					$skin->error($downloaded_dir);
 					break;
 				}
 			}
 
-			$skin->feedback(__('Installing framework...', 'fw'));
+			$this->maintenance_mode(true);
+
+			$skin->feedback(__('Installing the framework...', 'fw'));
 			{
 				$framework_dir = FW_WP_Filesystem::real_path_to_filesystem_path(fw_get_framework_directory());
 
-				// remove entire framework directory
-				$wp_filesystem->rmdir($framework_dir, true);
+				$include_hidden_files = false;
 
-				// move downloaded directory as new framework directory
-				$wp_filesystem->move($downloaded_files_dir, $framework_dir);
+				// removing all files from the framework directory
+				{
+					$dir_files = $wp_filesystem->dirlist($framework_dir, $include_hidden_files);
+					if ($dir_files === false) {
+						$skin->error(__('Cannot access directory: ', 'fw') . $framework_dir);
+						break;
+					}
+
+					foreach ($dir_files as $file) {
+						$file_path = $framework_dir .'/'. $file['name'];
+
+						if (!$wp_filesystem->delete($file_path, true, $file['type'])) {
+							$skin->error(__('Cannot remove: ', 'fw') . $file_path);
+						}
+					}
+				}
+
+				// move all files from the downloaded directory to the framework directory
+				{
+					$dir_files = $wp_filesystem->dirlist($downloaded_dir, $include_hidden_files);
+					if ($dir_files === false) {
+						$skin->error(__('Cannot access directory: ', 'fw') . $downloaded_dir);
+						break;
+					}
+
+					foreach ($dir_files as $file) {
+						$downloaded_file_path = $downloaded_dir .'/'. $file['name'];
+						$framework_file_path  = $framework_dir .'/'. $file['name'];
+
+						if (!$wp_filesystem->move($downloaded_file_path, $framework_file_path)) {
+							$skin->error(
+								sprintf(__('Cannot move "%s" to "%s"', 'fw'), $framework_dir, $framework_file_path)
+							);
+						}
+					}
+				}
 			}
 
-			$skin->feedback(__('Framework updated.', 'fw'));
+			$skin->feedback(__('The framework has been successfully updated.', 'fw'));
 
 			$wp_filesystem->delete($tmp_download_dir, true, 'd');
 

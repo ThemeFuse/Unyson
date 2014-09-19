@@ -136,16 +136,21 @@ class FW_WP_Filesystem
 		foreach (explode('/', $wp_filesystem_dir_path) as $dir_name) {
 			if (empty($dir_name)) {
 				if ($firs_loop) {
-					// in first loop $dir_name can be empty because it's starting with
+					/**
+					 * It's a unix style path staring with '/'
+					 * (On windows it starts with 'C:/')
+					 */
+					$path = '/';
 				} else {
 					trigger_error('Invalid path: '. $wp_filesystem_dir_path, E_USER_WARNING);
 					return false;
 				}
 			}
 
+			$path .= ($firs_loop ? '' : '/') . $dir_name;
+
 			$firs_loop = false;
 
-			$path .= '/'. $dir_name;
 			if ($check_if_exists) {
 				if ($wp_filesystem->is_dir($path)) {
 					// do nothing if exists
@@ -156,7 +161,9 @@ class FW_WP_Filesystem
 				}
 			}
 
-			$wp_filesystem->mkdir($path, FS_CHMOD_DIR);
+			if (!$wp_filesystem->mkdir($path, FS_CHMOD_DIR)) {
+				return false;
+			}
 		}
 
 		return true;
