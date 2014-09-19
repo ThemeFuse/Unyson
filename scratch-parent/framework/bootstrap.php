@@ -19,19 +19,25 @@ if (defined('FW')) {
 
 if (!function_exists('_action_init_framework')):
 
+	/**
+	 * Load the framework on 'after_setup_theme' action when the theme information is available
+	 * To prevent `undefined constant TEMPLATEPATH` errors when the framework is used as plugin
+	 */
 	add_action('after_setup_theme', '_action_init_framework');
 
 	function _action_init_framework() {
 		remove_action('after_setup_theme', '_action_init_framework');
 
-		include dirname(__FILE__) .'/bootstrap-helpers.php';
-		include dirname(__FILE__) .'/deprecated.php';
+		$fw_dir = dirname(__FILE__);
+
+		include $fw_dir .'/bootstrap-helpers.php';
+		include $fw_dir .'/deprecated.php';
 
 		/**
 		 * Load core
 		 */
 		{
-			require fw_get_framework_directory('/core/Fw.php');
+			require $fw_dir .'/core/Fw.php';
 
 			fw();
 		}
@@ -58,40 +64,54 @@ if (!function_exists('_action_init_framework')):
 			)
 			as $file
 		) {
-			require fw_get_framework_directory('/helpers/'. $file .'.php');
+			require $fw_dir .'/helpers/'. $file .'.php';
 		}
 
 		/**
-		 * Load (includes) other functionality
+		 * Load includes
 		 */
-		foreach (
-			array(
-				'hooks',
-				'option-types',
-			)
-			as $file
-		) {
-			require fw_get_framework_directory('/includes/'. $file .'.php');
+		foreach (array('hooks', 'option-types') as $file) {
+			require $fw_dir .'/includes/'. $file .'.php';
 		}
 
 		/**
 		 * Init components
 		 */
-		foreach (fw() as $component_name => $component) {
-			if ($component_name === 'manifest')
-				continue;
+		{
+			$components = array(
+				/**
+				 * Load the theme's hooks.php first, to give users the possibility to add_action()
+				 * for `extensions` and `backend` components actions that can happen while their initialization
+				 */
+				'theme',
+				/**
+				 * Load extensions before backend, to give extensions the possibility to add_action()
+				 * for the `backend` component actions that can happen while its initialization
+				 */
+				'extensions',
+				'backend'
+			);
 
-			/** @var FW_Component $component */
-			$component->_call_init();
+			foreach ($components as $component) {
+				fw()->{$component}->_init();
+			}
+
+			foreach ($components as $component) {
+				fw()->{$component}->_after_components_init();
+			}
+		}
+
+		if (!session_id()) {
+			/**
+			 * Start session for FW_Flash_Messages helper, in case a flash is added after the headers sent
+			 * Prevent Warning: session_start(): Cannot send session cookie - headers already sent
+			 */
+			session_start();
 		}
 
 		/**
-		 * For Flash Message Helper:
-		 * just start session before headers sent
-		 * to prevent: Warning: session_start(): Cannot send session cookie - headers already sent, if flash added to late
+		 * The framework is loaded
 		 */
-		FW_Session::get(-1);
-
 		do_action('fw_init');
 	}
 

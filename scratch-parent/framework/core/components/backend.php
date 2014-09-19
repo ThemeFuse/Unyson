@@ -3,7 +3,7 @@
 /**
  * Backend functionality
  */
-final class _FW_Component_Backend extends FW_Component
+final class _FW_Component_Backend
 {
 	/** @var callable */
 	private $print_meta_box_content_callback;
@@ -93,7 +93,10 @@ final class _FW_Component_Backend extends FW_Component
 		}
 	}
 
-	protected function _init()
+	/**
+	 * @internal
+	 */
+	public function _init()
 	{
 		if (!is_admin()) {
 			return;
@@ -106,6 +109,13 @@ final class _FW_Component_Backend extends FW_Component
 		));
 
 		$this->add_actions();
+	}
+
+	/**
+	 * @internal
+	 */
+	public function _after_components_init()
+	{
 	}
 
 	private function add_actions()
@@ -658,9 +668,11 @@ final class _FW_Component_Backend extends FW_Component
 			)
 		);
 
-		FW_Flash_Messages::add('fw_settings_form_saved', __('Options successfuly saved', 'fw'), 'success');
+		FW_Flash_Messages::add('fw_settings_form_saved', __('Options successfully saved', 'fw'), 'success');
 
 		$data['redirect'] = fw_current_url();
+
+		do_action('fw_settings_form_saved');
 
 		return $data;
 	}

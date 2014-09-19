@@ -30,11 +30,13 @@ final class _Fw
 			self::$loaded = true;
 		}
 
+		$fw_dir = fw_get_framework_directory();
+
 		// manifest
 		{
-			require fw_get_framework_directory('/core/class-fw-manifest.php');
+			require $fw_dir .'/core/class-fw-manifest.php';
 
-			require fw_get_framework_directory('/manifest.php');
+			require $fw_dir .'/manifest.php';
 			/** @var array $manifest */
 
 			$this->manifest = new FW_Framework_Manifest($manifest);
@@ -42,18 +44,18 @@ final class _Fw
 			add_action('fw_init', array($this, '_check_requirements'), 1);
 		}
 
-		require fw_get_framework_directory('/core/extends/class-fw-extension.php');
-		require fw_get_framework_directory('/core/extends/class-fw-option-type.php');
+		require $fw_dir .'/core/extends/class-fw-extension.php';
+		require $fw_dir .'/core/extends/class-fw-option-type.php';
 
 		// components
 		{
-			require fw_get_framework_directory('/core/components/extensions.php');
+			require $fw_dir .'/core/components/extensions.php';
 			$this->extensions = new _FW_Component_Extensions();
 
-			require fw_get_framework_directory('/core/components/backend.php');
+			require $fw_dir .'/core/components/backend.php';
 			$this->backend = new _FW_Component_Backend();
 
-			require fw_get_framework_directory('/core/components/theme.php');
+			require $fw_dir .'/core/components/theme.php';
 			$this->theme = new _FW_Component_Theme();
 		}
 	}
@@ -66,41 +68,10 @@ final class _Fw
 		if (is_admin() && !$this->manifest->check_requirements()) {
 			FW_Flash_Messages::add(
 				'fw_requirements',
-				__('Framework requirements not met: ') . $this->manifest->get_not_met_requirement_text(),
+				__('Framework requirements not met: ', 'fw') . $this->manifest->get_not_met_requirement_text(),
 				'warning'
 			);
 		}
-	}
-}
-
-/**
- * All framework components should extend this
- */
-abstract class FW_Component
-{
-	/**
-	 * Called after all components instances was created
-	 */
-	abstract protected function _init();
-
-	/**
-	 * If _init() was called
-	 * @var bool
-	 */
-	private $initialized = false;
-
-	/**
-	 * @internal
-	 */
-	final public function _call_init()
-	{
-		if ($this->initialized) {
-			trigger_error('Already initialized', E_USER_ERROR);
-		} else {
-			$this->initialized = true;
-		}
-
-		$this->_init();
 	}
 }
 

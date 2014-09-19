@@ -1,9 +1,9 @@
 <?php if (!defined('FW')) die('Forbidden');
 
 /**
- * Extensions
+ * Extensions component
  */
-final class _FW_Component_Extensions extends FW_Component
+final class _FW_Component_Extensions
 {
 	/**
 	 * All existing extensions
@@ -405,7 +405,6 @@ final class _FW_Component_Extensions extends FW_Component
 
 	private function add_actions()
 	{
-		add_action('fw_init',               array($this, '_action_init_extensions'), 1);
 		add_action('init',                  array($this, '_action_init'));
 		add_action('wp_enqueue_scripts',    array($this, '_action_enqueue_scripts'));
 		add_action('admin_enqueue_scripts', array($this, '_action_enqueue_scripts'));
@@ -424,13 +423,19 @@ final class _FW_Component_Extensions extends FW_Component
 		return self::$extension_to_active_tree[$extension_name];
 	}
 
-	protected function _init()
+	/**
+	 * @internal
+	 */
+	public function _init()
 	{
 		$this->load_all_extensions();
 		$this->add_actions();
 	}
 
-	public function _action_init_extensions()
+	/**
+	 * @internal
+	 */
+	public function _after_components_init()
 	{
 		/** Prepare BlackList */
 		{
@@ -446,7 +451,8 @@ final class _FW_Component_Extensions extends FW_Component
 		$this->activate_extensions();
 
 		/**
-		 * Now $this->get_children() is available
+		 * Extensions are activated
+		 * Now $this->get_children() inside extensions is available
 		 */
 		do_action('fw_extensions_init');
 	}

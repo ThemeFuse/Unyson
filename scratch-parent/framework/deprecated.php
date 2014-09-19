@@ -96,7 +96,7 @@
  * but in theme remains an important add_action('after_setup_theme', '...')
  * https://github.com/ThemeFuse/Unyson/blob/0e3f5563a7f0748c2b83b9c8820a58e7ff1e8406/scratch-parent/framework-customizations/theme/hooks.php#L70
  * that is not executed anymore.
- * So we hardcoded execute it for the users that downloaded the framework default heme before the 1.2.3 release
+ * So we execute it for the users that downloaded the default framework heme before the 1.2.3 release
  */
 {
 	/**

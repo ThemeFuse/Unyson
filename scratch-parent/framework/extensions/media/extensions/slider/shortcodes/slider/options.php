@@ -21,12 +21,11 @@ if (!empty($choices)) {
 } else {
 	$options = array(
 		'no_sliders' => array(
-			'type' => 'html',
-			'attr' => array('style' => 'position: fixed; left: 50%; top: 50%; margin-left: -108px; margin-top: -50px;'),
+			'type' => 'html-full',
 			'label' => false,
 			'desc' => false,
-			'html' => '<h1 style="font-weight:100">No Sliders Available</h1>'.
-   '<p style="text-align:center"><i>'. __('No Sliders created yet. Please go to the <br/>Sliders page and <a href="'.admin_url('post-new.php?post_type='.fw()->extensions->get('slider')->get_post_type()).'">create a new Slider</a> </i></p>','fw')
+			'html' => '<div style=""><h1 style="font-weight:100; text-align:center; margin-top:80px">No Sliders Available</h1>'.
+   '<p style="text-align:center"><i>'. __('No Sliders created yet. Please go to the <br/>Sliders page and <a href="'.admin_url('post-new.php?post_type='.fw()->extensions->get('slider')->get_post_type()).'">create a new Slider</a> </i></p></div>','fw')
 
 		)
 	);

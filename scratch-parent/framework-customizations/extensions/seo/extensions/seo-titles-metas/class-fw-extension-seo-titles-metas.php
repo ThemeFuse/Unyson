@@ -634,8 +634,8 @@ class FW_Extension_Seo_Titles_Metas extends FW_Extension {
 		unset( $taxonomies['post_format'] );
 
 		foreach ( $excluded_taxonomies as $type ) {
-			if ( isset( $post_types[ $type ] ) ) {
-				unset( $post_types[ $type ] );
+			if ( isset( $taxonomies[ $type ] ) ) {
+				unset( $taxonomies[ $type ] );
 			}
 		}
 		$this->allowed_taxonomies = $taxonomies;

@@ -1,10 +1,10 @@
 <?php if (!defined('FW')) die('Forbidden');
 
 /**
- * Theme
- * Works with folder .../framework-customizations/theme
+ * Theme Component
+ * Works with framework-customizations/theme directory
  */
-final class _FW_Component_Theme extends FW_Component
+final class _FW_Component_Theme
 {
 	private static $cache_key = 'fw_theme';
 
@@ -63,11 +63,10 @@ final class _FW_Component_Theme extends FW_Component
 	/**
 	 * @internal
 	 */
-	protected function _init()
+	public function _init()
 	{
 		self::include_file_all('/hooks.php');
 
-		add_action('fw_init',               array($this, '_action_fw_init'), 1);
 		add_action('init',                  array($this, '_action_init'));
 		add_action('wp_enqueue_scripts',    array($this, '_action_enqueue_scripts'));
 		add_action('admin_enqueue_scripts', array($this, '_action_enqueue_scripts'));
@@ -78,7 +77,7 @@ final class _FW_Component_Theme extends FW_Component
 	/**
 	 * @internal
 	 */
-	public function _action_fw_init()
+	public function _after_components_init()
 	{
 		self::include_file_all('/helpers.php');
 		self::include_directory_all('/includes');
@@ -273,7 +272,7 @@ final class _FW_Component_Theme extends FW_Component
 		if (is_admin() && !fw()->theme->manifest->check_requirements()) {
 			FW_Flash_Messages::add(
 				'fw_theme_requirements',
-				__('Theme requirements not met: ') . fw()->theme->manifest->get_not_met_requirement_text(),
+				__('Theme requirements not met: ', 'fw') . fw()->theme->manifest->get_not_met_requirement_text(),
 				'warning'
 			);
 		}
