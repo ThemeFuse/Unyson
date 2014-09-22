@@ -170,10 +170,14 @@ class FW_Extension_Population_Method_Tags extends FW_Extension implements Popula
 				), $tax_query
 			);
 
+			global $post;
+			$original_post = $post;
+
 			$the_query = new WP_Query($final_query);
 
 			while ($the_query->have_posts()) {
 				$the_query->the_post();
+
 				array_push($collector['slides'], array(
 					'title' => get_the_title(),
 					'src' => wp_get_attachment_url(get_post_thumbnail_id(get_the_ID())),
@@ -181,7 +185,11 @@ class FW_Extension_Population_Method_Tags extends FW_Extension implements Popula
 					'extra' => array()
 				));
 			}
+
 			wp_reset_postdata();
+
+			$post = $original_post;
+			unset($original_post);
 		}
 
 		return $collector;

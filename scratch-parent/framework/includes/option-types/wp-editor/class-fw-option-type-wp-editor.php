@@ -69,7 +69,9 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type
 			'plugins'  => "hr,tabfocus,fullscreen,wordpress,wpeditimage",
 			'preview_styles' => 'font-family font-size font-weight font-style text-decoration text-transform',
 			'content_css' => $this->_get_tmce_content_css(),
-			'language' => $this->_get_tmce_locale()
+			'language' => $this->_get_tmce_locale(),
+			'relative_urls' => false,
+			'remove_script_host' => false,
 		);
 	}
 

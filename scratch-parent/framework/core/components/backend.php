@@ -381,8 +381,9 @@ final class _FW_Component_Backend
 
 		unset($options); // free memory
 
-		if (empty($collected['boxes']))
+		if (empty($collected['boxes'])) {
 			return; // only boxes are allowed on edit post page
+		}
 
 		$boxes =& $collected['boxes'];
 

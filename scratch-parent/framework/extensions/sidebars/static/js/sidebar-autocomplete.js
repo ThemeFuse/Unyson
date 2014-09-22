@@ -21,8 +21,9 @@
 					},
 					type: 'POST',
 					success: function( data ) {
+						$('#specific-field-id').removeClass('ui-autocomplete-loading');
 						if (data.success === false || typeof data.data.items === 'undefined') {
-							return event.preventDefault();
+							return false;
 						}
 
 						if (data.data.items.length === 0) {
