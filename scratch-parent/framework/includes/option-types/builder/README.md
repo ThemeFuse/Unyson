@@ -75,12 +75,12 @@ class FW_Option_Type_Builder_Foo_Item_Bar extends FW_Option_Type_Builder_Foo_Ite
 	{
 		wp_enqueue_style(
 			'fw-builder-'. $this->get_builder_type() .'-item-'. $this->get_type(),
-			FW_URI .'/.../items/'. $this->get_type() .'/static/css/styles.css'
+			fw_get_framework_directory_uri('/.../items/'. $this->get_type() .'/static/css/styles.css')
 		);
 
 		wp_enqueue_script(
 			'fw-builder-'. $this->get_builder_type() .'-item-'. $this->get_type(),
-			FW_URI .'/.../items/'. $this->get_type() .'/static/js/scripts.js',
+			fw_get_framework_directory_uri('/.../items/'. $this->get_type() .'/static/js/scripts.js'),
 			array(
 				'fw-events',
 			),

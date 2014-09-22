@@ -1,9 +1,9 @@
 <?php if (!defined('FW')) die('Forbidden');
 
 /**
- * Extensions
+ * Extensions component
  */
-final class _FW_Component_Extensions extends FW_Component
+final class _FW_Component_Extensions
 {
 	/**
 	 * All existing extensions
@@ -182,15 +182,15 @@ final class _FW_Component_Extensions extends FW_Component
 		$rel_path = $extension->get_rel_path() . $extension_file_rel_path;
 
 		if ($search_in_framework) {
-			fw_include_file_isolated(FW_DIR .'/extensions'. $rel_path);
+			fw_include_file_isolated(fw_get_framework_directory('/extensions'. $rel_path));
 		}
 
 		if ($search_in_child_theme) {
-			fw_include_file_isolated(FW_CT_CUSTOM_DIR .'/extensions'. $rel_path);
+			fw_include_file_isolated(fw_get_stylesheet_customizations_directory('/extensions'. $rel_path));
 		}
 
 		if ($search_in_parent_theme) {
-			fw_include_file_isolated(FW_PT_CUSTOM_DIR .'/extensions'. $rel_path);
+			fw_include_file_isolated(fw_get_template_customizations_directory('/extensions'. $rel_path));
 		}
 	}
 
@@ -219,15 +219,15 @@ final class _FW_Component_Extensions extends FW_Component
 		$paths    = array();
 
 		if ($search_in_framework) {
-			$paths[] = FW_DIR .'/extensions'. $rel_path;
+			$paths[] = fw_get_framework_directory('/extensions'. $rel_path);
 		}
 
 		if ($search_in_child_theme) {
-			$paths[] = FW_CT_CUSTOM_DIR .'/extensions'. $rel_path;
+			$paths[] = fw_get_stylesheet_customizations_directory('/extensions'. $rel_path);
 		}
 
 		if ($search_in_parent_theme) {
-			$paths[] = FW_PT_CUSTOM_DIR .'/extensions'. $rel_path;
+			$paths[] = fw_get_template_customizations_directory('/extensions'. $rel_path);
 		}
 
 		foreach ($paths as $path) {
@@ -244,14 +244,35 @@ final class _FW_Component_Extensions extends FW_Component
 		$parent = null;
 
 		self::$current_declaring_source = 'framework';
-		self::load_extensions(FW_DIR .'/extensions', $parent, self::$all_extensions_tree, self::$all_extensions, FW_EXTENSIONS_URI, 1);
+		self::load_extensions(
+			fw_get_framework_directory('/extensions'),
+			$parent,
+			self::$all_extensions_tree,
+			self::$all_extensions,
+			fw_get_framework_directory_uri('/extensions'),
+			1
+		);
 
 		self::$current_declaring_source = 'parent';
-		self::load_extensions(FW_PT_CUSTOM_DIR .'/extensions', $parent, self::$all_extensions_tree, self::$all_extensions, FW_PT_EXTENSIONS_URI, 1);
+		self::load_extensions(
+			fw_get_template_customizations_directory('/extensions'),
+			$parent,
+			self::$all_extensions_tree,
+			self::$all_extensions,
+			fw_get_template_customizations_directory_uri('/extensions'),
+			1
+		);
 
-		if (FW_CT) {
+		if (is_child_theme()) {
 			self::$current_declaring_source = 'child';
-			self::load_extensions(FW_CT_CUSTOM_DIR .'/extensions', $parent, self::$all_extensions_tree, self::$all_extensions, FW_CT_EXTENSIONS_URI, 1);
+			self::load_extensions(
+				fw_get_stylesheet_customizations_directory('/extensions'),
+				$parent,
+				self::$all_extensions_tree,
+				self::$all_extensions,
+				fw_get_stylesheet_customizations_directory_uri('/extensions'),
+				1
+			);
 		}
 
 		self::$current_declaring_source = null;
@@ -384,7 +405,6 @@ final class _FW_Component_Extensions extends FW_Component
 
 	private function add_actions()
 	{
-		add_action('fw_init',               array($this, '_action_init_extensions'));
 		add_action('init',                  array($this, '_action_init'));
 		add_action('wp_enqueue_scripts',    array($this, '_action_enqueue_scripts'));
 		add_action('admin_enqueue_scripts', array($this, '_action_enqueue_scripts'));
@@ -403,13 +423,19 @@ final class _FW_Component_Extensions extends FW_Component
 		return self::$extension_to_active_tree[$extension_name];
 	}
 
-	protected function _init()
+	/**
+	 * @internal
+	 */
+	public function _init()
 	{
 		$this->load_all_extensions();
 		$this->add_actions();
 	}
 
-	public function _action_init_extensions()
+	/**
+	 * @internal
+	 */
+	public function _after_components_init()
 	{
 		/** Prepare BlackList */
 		{
@@ -425,7 +451,8 @@ final class _FW_Component_Extensions extends FW_Component
 		$this->activate_extensions();
 
 		/**
-		 * Now $this->get_children() is available
+		 * Extensions are activated
+		 * Now $this->get_children() inside extensions is available
 		 */
 		do_action('fw_extensions_init');
 	}
@@ -488,21 +515,21 @@ final class _FW_Component_Extensions extends FW_Component
 	 */
 	public function locate_path($rel_path, $search_in_framework = true, $search_in_parent_theme = true, $search_in_child_theme = true)
 	{
-		if ($search_in_child_theme && FW_CT) {
-			if (file_exists(FW_CT_EXTENSIONS_DIR . $rel_path)) {
-				return FW_CT_EXTENSIONS_DIR . $rel_path;
+		if ($search_in_child_theme && is_child_theme()) {
+			if (file_exists(fw_get_stylesheet_customizations_directory('/extensions'. $rel_path))) {
+				return fw_get_stylesheet_customizations_directory('/extensions'. $rel_path);
 			}
 		}
 
 		if ($search_in_parent_theme) {
-			if (file_exists(FW_PT_EXTENSIONS_DIR . $rel_path)) {
-				return FW_PT_EXTENSIONS_DIR . $rel_path;
+			if (file_exists(fw_get_template_customizations_directory('/extensions'. $rel_path))) {
+				return fw_get_template_customizations_directory('/extensions'. $rel_path);
 			}
 		}
 
 		if ($search_in_framework) {
-			if (file_exists(FW_EXTENSIONS_DIR . $rel_path)) {
-				return FW_EXTENSIONS_DIR . $rel_path;
+			if (file_exists(fw_get_framework_directory('/extensions'. $rel_path))) {
+				return fw_get_framework_directory('/extensions'. $rel_path);
 			}
 		}
 
@@ -520,21 +547,21 @@ final class _FW_Component_Extensions extends FW_Component
 	 */
 	public function locate_path_URI($rel_path, $search_in_framework = true, $search_in_parent_theme = true, $search_in_child_theme = true)
 	{
-		if ($search_in_child_theme && FW_CT) {
-			if (file_exists(FW_CT_EXTENSIONS_DIR . $rel_path)) {
-				return FW_CT_EXTENSIONS_URI . $rel_path;
+		if ($search_in_child_theme && is_child_theme()) {
+			if (file_exists(fw_get_stylesheet_customizations_directory('/extensions'. $rel_path))) {
+				return fw_get_stylesheet_customizations_directory_uri('/extensions' . $rel_path);
 			}
 		}
 
 		if ($search_in_parent_theme) {
-			if (file_exists(FW_PT_EXTENSIONS_DIR . $rel_path)) {
-				return FW_PT_EXTENSIONS_URI . $rel_path;
+			if (file_exists(fw_get_template_customizations_directory('/extensions'. $rel_path))) {
+				return fw_get_template_customizations_directory_uri('/extensions'. $rel_path);
 			}
 		}
 
 		if ($search_in_framework) {
-			if (file_exists(FW_EXTENSIONS_DIR . $rel_path)) {
-				return FW_EXTENSIONS_URI . $rel_path;
+			if (file_exists(fw_get_framework_directory('/extensions'. $rel_path))) {
+				return fw_get_framework_directory_uri('/extensions'. $rel_path);
 			}
 		}
 

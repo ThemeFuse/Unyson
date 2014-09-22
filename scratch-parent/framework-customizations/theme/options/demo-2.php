@@ -173,6 +173,59 @@ $options = array(
 			__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
 		),
 	),
+
+	'demo_group_multi_select_2' => array(
+		'type' => 'group',
+		'options' => array(
+			'demo_multi_select_posts_2' => array(
+				'type' => 'multi-select',
+				'label' => __('Multi-Select: Posts', 'fw'),
+				'population' => 'posts',
+				'source' => 'page',
+				'desc' => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+				'help' => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+					__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+					__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+				),
+			),
+			'demo_multi_select_taxonomies_2' => array(
+				'type' => 'multi-select',
+				'label' => __('Multi-Select: Taxonomies', 'fw'),
+				'population' => 'taxonomy',
+				'source' => 'category',
+				'desc' => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+				'help' => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+					__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+					__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+				),
+			),
+			'demo_multi_select_users_2' => array(
+				'type' => 'multi-select',
+				'label' => __('Multi-Select: Users', 'fw'),
+				'population' => 'users',
+				'source' => 'administrator',
+				'desc' => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+				'help' => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+					__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+					__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+				),
+			),
+			'demo_multi_select_array_2' => array(
+				'type' => 'multi-select',
+				'label' => __('Multi-Select: Custom Array', 'fw'),
+				'population' => 'array',
+				'choices' => array(
+					'hello' => __('Hello', 'fw'),
+					'world' => __('World', 'fw'),
+				),
+				'desc' => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+				'help' => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+					__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+					__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+				),
+			),
+		),
+	),
 	'demo_radio_2' => array(
 		'label' => __('Radio', 'fw'),
 		'type'  => 'radio',
@@ -197,21 +250,21 @@ $options = array(
 			'choice-1' => array(
 				'small' => array(
 					'height' => 70,
-					'src' => FW_PT_URI .'/images/image-picker-demo/thumb1.jpg'
+					'src' => get_template_directory_uri() .'/images/image-picker-demo/thumb1.jpg'
 				),
 				'large' => array(
 					'height' => 214,
-					'src' => FW_PT_URI .'/images/image-picker-demo/tooltip1.jpg'
+					'src' => get_template_directory_uri() .'/images/image-picker-demo/tooltip1.jpg'
 				),
 			),
 			'choice-2' => array(
 				'small' => array(
 					'height' => 70,
-					'src' => FW_PT_URI .'/images/image-picker-demo/thumb2.jpg'
+					'src' => get_template_directory_uri() .'/images/image-picker-demo/thumb2.jpg'
 				),
 				'large' => array(
 					'height' => 214,
-					'src' => FW_PT_URI .'/images/image-picker-demo/tooltip2.jpg'
+					'src' => get_template_directory_uri() .'/images/image-picker-demo/tooltip2.jpg'
 				),
 			),
 		),
@@ -297,64 +350,64 @@ $options = array(
 		'value'   => 'none',
 		'choices' => array(
 			'none' => array(
-				'icon' => FW_PT_URI . '/images/patterns/no_pattern.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/no_pattern.jpg',
 				'css'  => array(
 					'background-image' => 'none'
 				)
 			),
 			'bg-1' => array(
-				'icon' => FW_PT_URI . '/images/patterns/diagonal_bottom_to_top_pattern_preview.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/diagonal_bottom_to_top_pattern_preview.jpg',
 				'css'  => array(
-					'background-image'  => 'url("' . FW_PT_URI . '/images/patterns/diagonal_bottom_to_top_pattern.png' . '")',
+					'background-image'  => 'url("' . get_template_directory_uri() . '/images/patterns/diagonal_bottom_to_top_pattern.png' . '")',
 					'background-repeat' => 'repeat',
 				)
 			),
 			'bg-2' => array(
-				'icon' => FW_PT_URI . '/images/patterns/diagonal_top_to_bottom_pattern_preview.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/diagonal_top_to_bottom_pattern_preview.jpg',
 				'css'  => array(
-					'background-image'  => 'url("' . FW_PT_URI . '/images/patterns/diagonal_top_to_bottom_pattern.png' . '")',
+					'background-image'  => 'url("' . get_template_directory_uri() . '/images/patterns/diagonal_top_to_bottom_pattern.png' . '")',
 					'background-repeat' => 'repeat',
 				)
 			),
 			'bg-3' => array(
-				'icon' => FW_PT_URI . '/images/patterns/dots_pattern_preview.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/dots_pattern_preview.jpg',
 				'css'  => array(
-					'background-image'  => 'url("' . FW_PT_URI . '/images/patterns/dots_pattern.png' . '")',
+					'background-image'  => 'url("' . get_template_directory_uri() . '/images/patterns/dots_pattern.png' . '")',
 					'background-repeat' => 'repeat',
 				)
 			),
 			'bg-4' => array(
-				'icon' => FW_PT_URI . '/images/patterns/romb_pattern_preview.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/romb_pattern_preview.jpg',
 				'css'  => array(
-					'background-image'  => 'url("' . FW_PT_URI . '/images/patterns/romb_pattern.png' . '")',
+					'background-image'  => 'url("' . get_template_directory_uri() . '/images/patterns/romb_pattern.png' . '")',
 					'background-repeat' => 'repeat',
 				)
 			),
 			'bg-5' => array(
-				'icon' => FW_PT_URI . '/images/patterns/square_pattern_preview.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/square_pattern_preview.jpg',
 				'css'  => array(
-					'background-image'  => 'url("' . FW_PT_URI . '/images/patterns/square_pattern.png' . '")',
+					'background-image'  => 'url("' . get_template_directory_uri() . '/images/patterns/square_pattern.png' . '")',
 					'background-repeat' => 'repeat',
 				)
 			),
 			'bg-6' => array(
-				'icon' => FW_PT_URI . '/images/patterns/noise_pattern_preview.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/noise_pattern_preview.jpg',
 				'css'  => array(
-					'background-image'  => 'url("' . FW_PT_URI . '/images/patterns/noise_pattern.png' . '")',
+					'background-image'  => 'url("' . get_template_directory_uri() . '/images/patterns/noise_pattern.png' . '")',
 					'background-repeat' => 'repeat',
 				)
 			),
 			'bg-7' => array(
-				'icon' => FW_PT_URI . '/images/patterns/vertical_lines_pattern_preview.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/vertical_lines_pattern_preview.jpg',
 				'css'  => array(
-					'background-image'  => 'url("' . FW_PT_URI . '/images/patterns/vertical_lines_pattern.png' . '")',
+					'background-image'  => 'url("' . get_template_directory_uri() . '/images/patterns/vertical_lines_pattern.png' . '")',
 					'background-repeat' => 'repeat',
 				)
 			),
 			'bg-8' => array(
-				'icon' => FW_PT_URI . '/images/patterns/waves_pattern_preview.jpg',
+				'icon' => get_template_directory_uri() . '/images/patterns/waves_pattern_preview.jpg',
 				'css'  => array(
-					'background-image'  => 'url("' . FW_PT_URI . '/images/patterns/waves_pattern.png' . '")',
+					'background-image'  => 'url("' . get_template_directory_uri() . '/images/patterns/waves_pattern.png' . '")',
 					'background-repeat' => 'repeat',
 				)
 			),
@@ -408,21 +461,21 @@ $options = array(
 					'choice-1' => array(
 						'small' => array(
 							'height' => 70,
-							'src' => FW_PT_URI .'/images/image-picker-demo/thumb1.jpg'
+							'src' => get_template_directory_uri() .'/images/image-picker-demo/thumb1.jpg'
 						),
 						'large' => array(
 							'height' => 214,
-							'src' => FW_PT_URI .'/images/image-picker-demo/tooltip1.jpg'
+							'src' => get_template_directory_uri() .'/images/image-picker-demo/tooltip1.jpg'
 						),
 					),
 					'choice-2' => array(
 						'small' => array(
 							'height' => 70,
-							'src' => FW_PT_URI .'/images/image-picker-demo/thumb2.jpg'
+							'src' => get_template_directory_uri() .'/images/image-picker-demo/thumb2.jpg'
 						),
 						'large' => array(
 							'height' => 214,
-							'src' => FW_PT_URI .'/images/image-picker-demo/tooltip2.jpg'
+							'src' => get_template_directory_uri() .'/images/image-picker-demo/tooltip2.jpg'
 						),
 					),
 				),
@@ -682,22 +735,22 @@ $options = array(
 						'label' => __('Phone', 'fw'),
 						'small' => array(
 							'height' => 70,
-							'src' => FW_PT_URI .'/images/image-picker-demo/thumb1.jpg'
+							'src' => get_template_directory_uri() .'/images/image-picker-demo/thumb1.jpg'
 						),
 						'large' => array(
 							'height' => 214,
-							'src' => FW_PT_URI .'/images/image-picker-demo/tooltip1.jpg'
+							'src' => get_template_directory_uri() .'/images/image-picker-demo/tooltip1.jpg'
 						),
 					),
 					'laptop' => array(
 						'label' => __('Laptop', 'fw'),
 						'small' => array(
 							'height' => 70,
-							'src' => FW_PT_URI .'/images/image-picker-demo/thumb2.jpg'
+							'src' => get_template_directory_uri() .'/images/image-picker-demo/thumb2.jpg'
 						),
 						'large' => array(
 							'height' => 214,
-							'src' => FW_PT_URI .'/images/image-picker-demo/tooltip2.jpg'
+							'src' => get_template_directory_uri() .'/images/image-picker-demo/tooltip2.jpg'
 						),
 					)
 				),

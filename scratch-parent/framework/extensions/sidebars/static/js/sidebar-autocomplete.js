@@ -21,8 +21,9 @@
 					},
 					type: 'POST',
 					success: function( data ) {
+						$('#specific-field-id').removeClass('ui-autocomplete-loading');
 						if (data.success === false || typeof data.data.items === 'undefined') {
-							return event.preventDefault();
+							return false;
 						}
 
 						if (data.data.items.length === 0) {
@@ -55,6 +56,7 @@
 			},
 			open: function() {
 				$( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+				$(this).data("uiAutocomplete").menu.element.addClass("fw-ext-sidebars-autocomplete-menu");
 			},
 			close: function() {
 				$( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );

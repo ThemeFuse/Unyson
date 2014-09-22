@@ -1,10 +1,10 @@
 <?php if (!defined('FW')) die('Forbidden');
 
 /**
- * Theme
- * Works with folder .../framework-customizations/theme
+ * Theme Component
+ * Works with framework-customizations/theme directory
  */
-final class _FW_Component_Theme extends FW_Component
+final class _FW_Component_Theme
 {
 	private static $cache_key = 'fw_theme';
 
@@ -18,7 +18,7 @@ final class _FW_Component_Theme extends FW_Component
 		{
 			$manifest = array();
 
-			@include FW_PT_THEME_DIR .'/manifest.php';
+			@include fw_get_template_customizations_directory('/theme/manifest.php');
 
 			$this->manifest = new FW_Theme_Manifest($manifest);
 		}
@@ -30,11 +30,11 @@ final class _FW_Component_Theme extends FW_Component
 	 */
 	private static function include_file_all($rel_path)
 	{
-		if (FW_CT) {
-			fw_include_file_isolated(FW_CT_CUSTOM_DIR .'/theme'. $rel_path);
+		if (is_child_theme()) {
+			fw_include_file_isolated(fw_get_stylesheet_customizations_directory('/theme'. $rel_path));
 		}
 
-		fw_include_file_isolated(FW_PT_CUSTOM_DIR .'/theme'. $rel_path);
+		fw_include_file_isolated(fw_get_template_customizations_directory('/theme'. $rel_path));
 	}
 
 	/**
@@ -45,11 +45,11 @@ final class _FW_Component_Theme extends FW_Component
 	{
 		$paths = array();
 
-		if (FW_CT) {
-			$paths[] = FW_CT_CUSTOM_DIR .'/theme'. $rel_path;
+		if (is_child_theme()) {
+			$paths[] = fw_get_stylesheet_customizations_directory('/theme'. $rel_path);
 		}
 
-		$paths[] = FW_PT_CUSTOM_DIR .'/theme'. $rel_path;
+		$paths[] = fw_get_template_customizations_directory('/theme'. $rel_path);
 
 		foreach ($paths as $path) {
 			if ($files = glob($path .'/*.php')) {
@@ -63,11 +63,10 @@ final class _FW_Component_Theme extends FW_Component
 	/**
 	 * @internal
 	 */
-	protected function _init()
+	public function _init()
 	{
 		self::include_file_all('/hooks.php');
 
-		add_action('fw_init',               array($this, '_action_fw_init'));
 		add_action('init',                  array($this, '_action_init'));
 		add_action('wp_enqueue_scripts',    array($this, '_action_enqueue_scripts'));
 		add_action('admin_enqueue_scripts', array($this, '_action_enqueue_scripts'));
@@ -78,7 +77,7 @@ final class _FW_Component_Theme extends FW_Component
 	/**
 	 * @internal
 	 */
-	public function _action_fw_init()
+	public function _after_components_init()
 	{
 		self::include_file_all('/helpers.php');
 		self::include_directory_all('/includes');
@@ -108,11 +107,11 @@ final class _FW_Component_Theme extends FW_Component
 	{
 		$paths = array();
 
-		if (FW_CT) {
-			$paths[] = FW_CT_CUSTOM_DIR .'/theme/widgets';
+		if (is_child_theme()) {
+			$paths[] = fw_get_stylesheet_customizations_directory('/theme/widgets');
 		}
 
-		$paths[] = FW_PT_CUSTOM_DIR .'/theme/widgets';
+		$paths[] = fw_get_template_customizations_directory('/theme/widgets');
 
 		$included_widgets = array();
 
@@ -147,12 +146,12 @@ final class _FW_Component_Theme extends FW_Component
 	 */
 	public function locate_path($rel_path)
 	{
-		if (FW_CT && file_exists(FW_CT_THEME_DIR . $rel_path)) {
-			return FW_CT_THEME_DIR . $rel_path;
+		if (is_child_theme() && file_exists(fw_get_stylesheet_customizations_directory('/theme'. $rel_path))) {
+			return fw_get_stylesheet_customizations_directory('/theme'. $rel_path);
 		}
 
-		if (file_exists(FW_PT_THEME_DIR . $rel_path)) {
-			return FW_PT_THEME_DIR . $rel_path;
+		if (file_exists(fw_get_template_customizations_directory('/theme'. $rel_path))) {
+			return fw_get_template_customizations_directory('/theme'. $rel_path);
 		}
 
 		return false;
@@ -239,8 +238,8 @@ final class _FW_Component_Theme extends FW_Component
 		} catch (FW_Cache_Not_Found_Exception $e) {
 			$config = array();
 
-			if (file_exists(FW_PT_CUSTOM_DIR .'/theme/config.php')) {
-				$variables = fw_get_variables_from_file(FW_PT_CUSTOM_DIR .'/theme/config.php', array('cfg' => null));
+			if (file_exists(fw_get_template_customizations_directory('/theme/config.php'))) {
+				$variables = fw_get_variables_from_file(fw_get_template_customizations_directory('/theme/config.php'), array('cfg' => null));
 
 				if (!empty($variables['cfg'])) {
 					$config = array_merge($config, $variables['cfg']);
@@ -248,8 +247,8 @@ final class _FW_Component_Theme extends FW_Component
 				}
 			}
 
-			if (FW_CT && file_exists(FW_CT_CUSTOM_DIR .'/theme/config.php')) {
-				$variables = fw_get_variables_from_file(FW_CT_CUSTOM_DIR .'/theme/config.php', array('cfg' => null));
+			if (is_child_theme() && file_exists(fw_get_stylesheet_customizations_directory('/theme/config.php'))) {
+				$variables = fw_get_variables_from_file(fw_get_stylesheet_customizations_directory('/theme/config.php'), array('cfg' => null));
 
 				if (!empty($variables['cfg'])) {
 					$config = array_merge($config, $variables['cfg']);
@@ -273,7 +272,7 @@ final class _FW_Component_Theme extends FW_Component
 		if (is_admin() && !fw()->theme->manifest->check_requirements()) {
 			FW_Flash_Messages::add(
 				'fw_theme_requirements',
-				__('Theme requirements not met: ') . fw()->theme->manifest->get_not_met_requirement_text(),
+				__('Theme requirements not met: ', 'fw') . fw()->theme->manifest->get_not_met_requirement_text(),
 				'warning'
 			);
 		}

@@ -129,14 +129,14 @@ abstract class FW_Option_Type_Builder extends FW_Option_Type
 		{
 			wp_enqueue_style(
 				'fw-option-builder',
-				FW_URI .'/includes/option-types/builder/static/css/builder.css',
+				fw_get_framework_directory_uri('/includes/option-types/builder/static/css/builder.css'),
 				array('fw'),
 				fw()->manifest->get_version()
 			);
 
 			wp_enqueue_script(
 				'fw-option-builder',
-				FW_URI .'/includes/option-types/builder/static/js/builder.js',
+				fw_get_framework_directory_uri('/includes/option-types/builder/static/js/builder.js'),
 				array(
 					'jquery-ui-draggable',
 					'jquery-ui-sortable',
@@ -153,7 +153,7 @@ abstract class FW_Option_Type_Builder extends FW_Option_Type
 		{
 			wp_enqueue_style(
 				'fw-option-builder-helpers',
-				FW_URI .'/includes/option-types/builder/static/css/helpers.css',
+				fw_get_framework_directory_uri('/includes/option-types/builder/static/css/helpers.css'),
 				array('fw-option-builder'),
 				fw()->manifest->get_version()
 			);
@@ -162,7 +162,7 @@ abstract class FW_Option_Type_Builder extends FW_Option_Type
 
 			wp_enqueue_script(
 				'fw-option-builder-helpers',
-				FW_URI .'/includes/option-types/builder/static/js/helpers.js',
+				fw_get_framework_directory_uri('/includes/option-types/builder/static/js/helpers.js'),
 				array('fw-option-builder',),
 				fw()->manifest->get_version(),
 				true

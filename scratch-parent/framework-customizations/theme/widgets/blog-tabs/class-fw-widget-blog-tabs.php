@@ -75,7 +75,7 @@ class FW_Widget_Blog_Tabs extends WP_Widget {
 	public function _theme_action_add_static() {
 		wp_enqueue_script(
 			'fw-theme-blog-tabs-widget',
-			FW_PT_THEME_URI . '/widgets/blog-tabs/static/js/scripts.js',
+			fw_get_template_customizations_directory_uri('/theme/widgets/blog-tabs/static/js/scripts.js'),
 			array( 'jquery' ),
 			fw()->theme->manifest->get_version()
 		);

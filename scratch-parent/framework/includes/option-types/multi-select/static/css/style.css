@@ -19,6 +19,5 @@
 }
 
 .fw-option-type-multi-select .selectize-input.focus.input-active.dropdown-active:after {
-	margin-top: -3px;
 	border-width: 5px 5px 0 5px;
 }

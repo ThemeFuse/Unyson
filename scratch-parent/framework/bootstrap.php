@@ -4,176 +4,115 @@
  * Include this file in theme/functions.php
  */
 
-/**
- * Tells that the framework is loaded.
- * You can check if this constant is defined to be sure the file is not accessed directly from browser.
- */
-define('FW', true);
-
-/** Convert to Unix style directory separators */
-function fw_fix_path($path) {
-	return str_replace(array('//', '\\'), array('/', '/'), $path);
+if (defined('FW')) {
+	/**
+	 * The framework is already loaded.
+	 */
+	return;
+} else {
+	/**
+	 * Tells that the framework is loaded.
+	 * You can check if this constant is defined to be sure the file is not accessed directly from browser.
+	 */
+	define('FW', true);
 }
 
-/** Define useful constants */
-{
-	/** Child theme */
-	{
-		define('FW_CT', is_child_theme());
-
-		if (FW_CT) {
-			/** Full path to directory */
-			define('FW_CT_DIR', fw_fix_path(get_stylesheet_directory()));
-
-			/** Full path to directory with settings */
-			define('FW_CT_CUSTOM_DIR', FW_CT_DIR .'/framework-customizations');
-
-			/** Full path to directory with theme settings */
-			define('FW_CT_THEME_DIR', FW_CT_CUSTOM_DIR .'/theme');
-
-			/** Full path to directory with extensions */
-			define('FW_CT_EXTENSIONS_DIR', FW_CT_CUSTOM_DIR .'/extensions');
-
-			/** URI to directory */
-			define('FW_CT_URI', get_stylesheet_directory_uri());
-
-			/** URI to directory with settings */
-			define('FW_CT_CUSTOM_URI', FW_CT_URI .'/framework-customizations');
-
-			/** URI to directory with theme settings */
-			define('FW_CT_THEME_URI', FW_CT_CUSTOM_URI .'/theme');
-
-			/** URI to directory with extensions */
-			define('FW_CT_EXTENSIONS_URI', FW_CT_CUSTOM_URI .'/extensions');
-		}
-	}
-
-	/** Parent theme */
-	{
-		/** Full path to directory */
-		define('FW_PT_DIR', fw_fix_path(get_template_directory()));
-
-		/** Full path to directory with settings */
-		define('FW_PT_CUSTOM_DIR', FW_PT_DIR .'/framework-customizations');
-
-		/** Full path to directory with theme settings */
-		define('FW_PT_THEME_DIR', FW_PT_CUSTOM_DIR .'/theme');
-
-		/** Full path to directory with extensions */
-		define('FW_PT_EXTENSIONS_DIR', FW_PT_CUSTOM_DIR .'/extensions');
-
-		/** URI to directory */
-		define('FW_PT_URI', get_template_directory_uri());
-
-		/** URI to directory with settings */
-		define('FW_PT_CUSTOM_URI', FW_PT_URI .'/framework-customizations');
-
-		/** URI to directory with theme settings */
-		define('FW_PT_THEME_URI', FW_PT_CUSTOM_URI .'/theme');
-
-		/** URI to directory with extensions */
-		define('FW_PT_EXTENSIONS_URI', FW_PT_CUSTOM_URI .'/extensions');
-	}
-
-	/** Framework */
-	{
-		/** Full path to directory */
-		define('FW_DIR', FW_PT_DIR .'/framework');
-
-		/** Full path to directory with extensions */
-		define('FW_EXTENSIONS_DIR', FW_DIR .'/extensions');
-
-		/** URI to directory */
-		define('FW_URI', FW_PT_URI .'/framework');
-
-		/** URI to directory with extensions */
-		define('FW_EXTENSIONS_URI', FW_URI .'/extensions');
-	}
-
-	/** Cache */
-	{
-		define('FW_CACHE_DIR', fw_fix_path(WP_CONTENT_DIR) .'/cache/framework');
-
-		define('FW_CACHE_URI', WP_CONTENT_URL .'/cache/framework');
-	}
-}
-
-/**
- * Load core
- */
-{
-	require FW_DIR .'/core/Fw.php';
+if (!function_exists('_action_init_framework')):
 
 	/**
-	 * @return _FW Framework instance
+	 * Load the framework on 'after_setup_theme' action when the theme information is available
+	 * To prevent `undefined constant TEMPLATEPATH` errors when the framework is used as plugin
 	 */
-	function fw() {
-		static $FW = null; // cache
+	add_action('after_setup_theme', '_action_init_framework');
 
-		if ($FW === null) {
-			$FW = new _Fw();
+	function _action_init_framework() {
+		remove_action('after_setup_theme', '_action_init_framework');
+
+		$fw_dir = dirname(__FILE__);
+
+		include $fw_dir .'/bootstrap-helpers.php';
+		include $fw_dir .'/deprecated.php';
+
+		/**
+		 * Load core
+		 */
+		{
+			require $fw_dir .'/core/Fw.php';
+
+			fw();
 		}
 
-		return $FW;
+		/**
+		 * Load helpers
+		 */
+		foreach (
+			array(
+				'meta',
+				'class-fw-access-key',
+				'class-fw-dumper',
+				'general',
+				'class-fw-wp-filesystem',
+				'class-fw-cache',
+				'class-fw-form',
+				'class-fw-request',
+				'class-fw-session',
+				'class-fw-wp-option',
+				'class-fw-wp-post-meta',
+				'database',
+				'class-fw-flash-messages',
+				'class-fw-resize',
+			)
+			as $file
+		) {
+			require $fw_dir .'/helpers/'. $file .'.php';
+		}
+
+		/**
+		 * Load includes
+		 */
+		foreach (array('hooks', 'option-types') as $file) {
+			require $fw_dir .'/includes/'. $file .'.php';
+		}
+
+		/**
+		 * Init components
+		 */
+		{
+			$components = array(
+				/**
+				 * Load the theme's hooks.php first, to give users the possibility to add_action()
+				 * for `extensions` and `backend` components actions that can happen while their initialization
+				 */
+				'theme',
+				/**
+				 * Load extensions before backend, to give extensions the possibility to add_action()
+				 * for the `backend` component actions that can happen while its initialization
+				 */
+				'extensions',
+				'backend'
+			);
+
+			foreach ($components as $component) {
+				fw()->{$component}->_init();
+			}
+
+			foreach ($components as $component) {
+				fw()->{$component}->_after_components_init();
+			}
+		}
+
+		if (!session_id()) {
+			/**
+			 * Start session for FW_Flash_Messages helper, in case a flash is added after the headers sent
+			 * Prevent Warning: session_start(): Cannot send session cookie - headers already sent
+			 */
+			session_start();
+		}
+
+		/**
+		 * The framework is loaded
+		 */
+		do_action('fw_init');
 	}
 
-	fw();
-}
-
-/**
- * Load helpers
- */
-foreach (
-	array(
-		'post-meta',
-		'class-fw-access-key',
-		'class-fw-dumper',
-		'general',
-		'class-fw-wp-filesystem',
-		'class-fw-cache',
-		'class-fw-form',
-		'class-fw-request',
-		'class-fw-session',
-		'class-fw-wp-option',
-		'class-fw-wp-post-meta',
-		'database',
-		'class-fw-flash-messages',
-		'class-fw-resize',
-	)
-	as $file
-) {
-	require FW_DIR .'/helpers/'. $file .'.php';
-}
-
-/**
- * Load (includes) other functionality
- */
-foreach (
-	array(
-		'hooks',
-		'option-types',
-	)
-	as $file
-) {
-	require FW_DIR .'/includes/'. $file .'.php';
-}
-
-/**
- * Init components
- */
-foreach (fw() as $component_name => $component) {
-	if ($component_name === 'manifest')
-		continue;
-
-	/** @var FW_Component $component */
-	$component->_call_init();
-}
-
-/**
- * For Flash Message Helper:
- * just start session before headers sent
- * to prevent: Warning: session_start(): Cannot send session cookie - headers already sent if flash added to late
- */
-FW_Session::get(-1);
-
-do_action('fw_init');
+endif;

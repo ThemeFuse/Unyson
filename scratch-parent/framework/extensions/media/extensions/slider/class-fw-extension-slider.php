@@ -14,6 +14,7 @@ class FW_Extension_Slider extends FW_Extension
 			$this->add_admin_filters();
 			$this->add_admin_actions();
 		}
+
 	}
 
 	private function add_admin_filters()
@@ -417,7 +418,7 @@ class FW_Extension_Slider extends FW_Extension
 
 		foreach ($this->get_populated_sliders() as $slider) {
 
-			$choices[$slider->ID] = $slider->post_title;
+			$choices[$slider->ID] = empty($slider->post_title) ? __('(no title)', 'fw') : $slider->post_title;
 		}
 
 		return $choices;
@@ -431,10 +432,11 @@ class FW_Extension_Slider extends FW_Extension
 		));
 
 		foreach ($posts as $key => $post) {
-			$meta = fw_get_db_post_option($post->ID);
-			if (!isset($meta['populated'])) {
+			$data =fw()->extensions->get('population-method')->get_frontend_data($post->ID);
+			if(empty($data['slides'])){
 				unset($posts[$key]);
 			}
+
 		}
 		return $posts;
 	}

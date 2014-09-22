@@ -156,28 +156,54 @@ class FW_Extension_Github_Update extends FW_Ext_Update_Service
 
 		if (wp_remote_retrieve_response_code($response) !== 200) {
 			return new WP_Error('fw_ext_update_github_framework_download_failed',
-				__('Failed to download framework zip.', 'fw')
+				__('Cannot download the framework zip.', 'fw')
 			);
 		}
 
 		$zip_path = $wp_filesystem_download_directory .'/temp.zip';
 
 		// save zip to file
-		$wp_filesystem->put_contents($zip_path, $response['body']);
+		if (!$wp_filesystem->put_contents($zip_path, $response['body'])) {
+			return new WP_Error('fw_ext_update_github_framework_save_download_failed',
+				__('Cannot save the framework zip.', 'fw')
+			);
+		}
 
 		unset($response);
 
-		unzip_file(FW_WP_Filesystem::filesystem_path_to_real_path($zip_path), $wp_filesystem_download_directory);
+		$unzip_result = unzip_file(FW_WP_Filesystem::filesystem_path_to_real_path($zip_path), $wp_filesystem_download_directory);
 
-		// remove zip file
-		$wp_filesystem->delete($zip_path, false, 'f');
-
-		// in this directory, sure exists only one directory, get it
-		{
-			$unzipped_dir = $wp_filesystem->dirlist($wp_filesystem_download_directory);
-			$unzipped_dir = $wp_filesystem_download_directory .'/'. key($unzipped_dir);
+		if (is_wp_error($unzip_result)) {
+			return $unzip_result;
 		}
 
-		return $unzipped_dir;
+		// remove zip file
+		if (!$wp_filesystem->delete($zip_path, false, 'f')) {
+			return new WP_Error('fw_ext_update_github_framework_remove_downloaded_zip_failed',
+				__('Cannot remove the framework zip.', 'fw')
+			);
+		}
+
+		$unzipped_dir_files = $wp_filesystem->dirlist($wp_filesystem_download_directory);
+
+		if (!$unzipped_dir_files) {
+			return new WP_Error('fw_ext_update_github_framework_unzipped_dir_fail',
+				__('Cannot access the unzipped directory files.', 'fw')
+			);
+		}
+
+		/**
+		 * get first found directory
+		 * (if everything worked well, there should be only one directory)
+		 */
+		foreach ($unzipped_dir_files as $file) {
+			if ($file['type'] == 'd') {
+				return $wp_filesystem_download_directory .'/'. $file['name'];
+			}
+		}
+
+		return new WP_Error('fw_ext_update_github_framework_unzipped_dir_not_found',
+			__('The unzipped framework directory not found.', 'fw')
+		);
 	}
 }

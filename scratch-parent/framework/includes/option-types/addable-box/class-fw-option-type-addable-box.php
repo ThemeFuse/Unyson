@@ -19,14 +19,14 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 		{
 			wp_enqueue_style(
 				'fw-option-'. $this->get_type(),
-				FW_URI .'/includes/option-types/'. $this->get_type() .'/static/css/styles.css',
+				fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/css/styles.css'),
 				array(),
 				fw()->manifest->get_version()
 			);
 
 			wp_enqueue_script(
 				'fw-option-'. $this->get_type(),
-				FW_URI .'/includes/option-types/'. $this->get_type() .'/static/js/scripts.js',
+				fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/js/scripts.js'),
 				array('fw-events', 'jquery-ui-sortable'),
 				fw()->manifest->get_version(),
 				true
@@ -57,7 +57,7 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 			}
 		}
 
-		return fw_render_view(FW_DIR .'/includes/option-types/'. $this->get_type() .'/view.php', array(
+		return fw_render_view(fw_get_framework_directory('/includes/option-types/'. $this->get_type() .'/view.php'), array(
 			'id'        => $id,
 			'option'    => $option,
 			'data'      => $data,

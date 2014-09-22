@@ -343,7 +343,7 @@ class _FW_Extension_Sidebars_Config
 
 	static function get_images_path()
 	{
-		return FW_PT_CUSTOM_URI . '/extensions/sidebars/static/images/';
+		return fw_get_template_customizations_directory_uri('/extensions/sidebars/static/images/');
 	}
 
 	/**

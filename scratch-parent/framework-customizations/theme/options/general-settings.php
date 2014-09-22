@@ -23,7 +23,7 @@ $options = array(
 							),
 							'favicon' => array(
 								'label' => __( 'Favicon', 'fw' ),
-								'desc'  => __( 'Upload favicon image', 'fw' ),
+								'desc'  => __( 'Upload a favicon image', 'fw' ),
 								'type'  => 'upload'
 							)
 						)

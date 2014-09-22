@@ -13,10 +13,10 @@ class _FW_Ext_Update_Framework_Upgrader_Skin extends WP_Upgrader_Skin
 				'a',
 				array(
 					'href' => self_admin_url('update-core.php'),
-					'title' => esc_attr__('Go to updates page'),
+					'title' => esc_attr__('Go to updates page', 'fw'),
 					'target' => '_parent',
 				),
-				__('Return to Updates page')
+				__('Return to Updates page', 'fw')
 			)
 		);
 

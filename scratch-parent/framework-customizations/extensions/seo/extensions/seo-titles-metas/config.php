@@ -4,5 +4,5 @@
 
 $cfg = array(
 	'excluded_post_types' => array( 'attachment' ),
-	'excluded_taxonomies'   => array( 'post_tag' ),
+	'excluded_taxonomies' => array( 'post_tag' ),
 );

@@ -6,64 +6,64 @@ $background_image = array(
 	'value'   => 'none',
 	'choices' => array(
 		'none' => array(
-			'icon' => FW_PT_EXTENSIONS_URI . '/styling/static/images/patterns/no_pattern.jpg',
+			'icon' => fw_get_template_customizations_directory_uri('/extensions/styling/static/images/patterns/no_pattern.jpg'),
 			'css'  => array(
 				'background-image' => 'none'
 			)
 		),
 		'bg-1' => array(
-			'icon' => FW_PT_EXTENSIONS_URI . '/styling/static/images/patterns/diagonal_bottom_to_top_pattern_preview.jpg',
+			'icon' => fw_get_template_customizations_directory_uri('/extensions/styling/static/images/patterns/diagonal_bottom_to_top_pattern_preview.jpg'),
 			'css'  => array(
-				'background-image'  => 'url("' . FW_PT_EXTENSIONS_URI . '/styling/static/images/patterns/diagonal_bottom_to_top_pattern.png' . '")',
+				'background-image'  => 'url("' . fw_get_template_customizations_directory_uri('/extensions/styling/static/images/patterns/diagonal_bottom_to_top_pattern.png') . '")',
 				'background-repeat' => 'repeat',
 			)
 		),
 		'bg-2' => array(
-			'icon' => FW_PT_EXTENSIONS_URI . '/styling/static/images/patterns/diagonal_top_to_bottom_pattern_preview.jpg',
+			'icon' => fw_get_template_customizations_directory_uri('/extensions/styling/static/images/patterns/diagonal_top_to_bottom_pattern_preview.jpg'),
 			'css'  => array(
-				'background-image'  => 'url("' . FW_PT_EXTENSIONS_URI . '/styling/static/images/patterns/diagonal_top_to_bottom_pattern.png' . '")',
+				'background-image'  => 'url("' . fw_get_template_customizations_directory_uri('/extensions/styling/static/images/patterns/diagonal_top_to_bottom_pattern.png') . '")',
 				'background-repeat' => 'repeat',
 			)
 		),
 		'bg-3' => array(
-			'icon' => FW_PT_EXTENSIONS_URI . '/styling/static/images/patterns/dots_pattern_preview.jpg',
+			'icon' => fw_get_template_customizations_directory_uri('/extensions/styling/static/images/patterns/dots_pattern_preview.jpg'),
 			'css'  => array(
-				'background-image'  => 'url("' . FW_PT_EXTENSIONS_URI . '/styling/static/images/patterns/dots_pattern.png' . '")',
+				'background-image'  => 'url("' . fw_get_template_customizations_directory_uri('/extensions/styling/static/images/patterns/dots_pattern.png') . '")',
 				'background-repeat' => 'repeat',
 			)
 		),
 		'bg-4' => array(
-			'icon' => FW_PT_EXTENSIONS_URI . '/styling/static/images/patterns/romb_pattern_preview.jpg',
+			'icon' => fw_get_template_customizations_directory_uri('/extensions/styling/static/images/patterns/romb_pattern_preview.jpg'),
 			'css'  => array(
-				'background-image'  => 'url("' . FW_PT_EXTENSIONS_URI . '/styling/static/images/patterns/romb_pattern.png' . '")',
+				'background-image'  => 'url("' . fw_get_template_customizations_directory_uri('/extensions/styling/static/images/patterns/romb_pattern.png') . '")',
 				'background-repeat' => 'repeat',
 			)
 		),
 		'bg-5' => array(
-			'icon' => FW_PT_EXTENSIONS_URI . '/styling/static/images/patterns/square_pattern_preview.jpg',
+			'icon' => fw_get_template_customizations_directory_uri('/extensions/styling/static/images/patterns/square_pattern_preview.jpg'),
 			'css'  => array(
-				'background-image'  => 'url("' . FW_PT_EXTENSIONS_URI . '/styling/static/images/patterns/square_pattern.png' . '")',
+				'background-image'  => 'url("' . fw_get_template_customizations_directory_uri('/extensions/styling/static/images/patterns/square_pattern.png') . '")',
 				'background-repeat' => 'repeat',
 			)
 		),
 		'bg-6' => array(
-			'icon' => FW_PT_EXTENSIONS_URI . '/styling/static/images/patterns/noise_pattern_preview.jpg',
+			'icon' => fw_get_template_customizations_directory_uri('/extensions/styling/static/images/patterns/noise_pattern_preview.jpg'),
 			'css'  => array(
-				'background-image'  => 'url("' . FW_PT_EXTENSIONS_URI . '/styling/static/images/patterns/noise_pattern.png' . '")',
+				'background-image'  => 'url("' . fw_get_template_customizations_directory_uri('/extensions/styling/static/images/patterns/noise_pattern.png') . '")',
 				'background-repeat' => 'repeat',
 			)
 		),
 		'bg-7' => array(
-			'icon' => FW_PT_EXTENSIONS_URI . '/styling/static/images/patterns/vertical_lines_pattern_preview.jpg',
+			'icon' => fw_get_template_customizations_directory_uri('/extensions/styling/static/images/patterns/vertical_lines_pattern_preview.jpg'),
 			'css'  => array(
-				'background-image'  => 'url("' . FW_PT_EXTENSIONS_URI . '/styling/static/images/patterns/vertical_lines_pattern.png' . '")',
+				'background-image'  => 'url("' . fw_get_template_customizations_directory_uri('/extensions/styling/static/images/patterns/vertical_lines_pattern.png') . '")',
 				'background-repeat' => 'repeat',
 			)
 		),
 		'bg-8' => array(
-			'icon' => FW_PT_EXTENSIONS_URI . '/styling/static/images/patterns/waves_pattern_preview.jpg',
+			'icon' => fw_get_template_customizations_directory_uri('/extensions/styling/static/images/patterns/waves_pattern_preview.jpg'),
 			'css'  => array(
-				'background-image'  => 'url("' . FW_PT_EXTENSIONS_URI . '/styling/static/images/patterns/waves_pattern.png' . '")',
+				'background-image'  => 'url("' . fw_get_template_customizations_directory_uri('/extensions/styling/static/images/patterns/waves_pattern.png') . '")',
 				'background-repeat' => 'repeat',
 			)
 		),
@@ -73,7 +73,7 @@ $background_image = array(
 $styles = array(
 	'black' => array(
 		'name'   => 'Black',
-		'icon'   => FW_PT_EXTENSIONS_URI . '/styling/static/images/black_predefined_style.jpg',
+		'icon'   => fw_get_template_customizations_directory_uri('/extensions/styling/static/images/black_predefined_style.jpg'),
 		'blocks' => array(
 			'header'  => array(
 				'h1'          => array(
@@ -159,7 +159,7 @@ $styles = array(
 	),
 	'green' => array(
 		'name'   => 'Green',
-		'icon'   => FW_PT_EXTENSIONS_URI . '/styling/static/images/green_predefined_style.jpg',
+		'icon'   => fw_get_template_customizations_directory_uri('/extensions/styling/static/images/green_predefined_style.jpg'),
 		'blocks' => array(
 			'header'  => array(
 				'h1'          => array(
@@ -245,7 +245,7 @@ $styles = array(
 	),
 	'blue'  => array(
 		'name'   => 'Blue',
-		'icon'   => FW_PT_EXTENSIONS_URI . '/styling/static/images/blue_predefined_style.jpg',
+		'icon'   => fw_get_template_customizations_directory_uri('/extensions/styling/static/images/blue_predefined_style.jpg'),
 		'blocks' => array(
 			'header'  => array(
 				'h1'          => array(

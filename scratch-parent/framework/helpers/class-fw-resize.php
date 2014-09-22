@@ -42,14 +42,17 @@ if ( ! class_exists( 'FW_Resize' ) ) {
 		}
 
 		private function get_attachment( $attachment ) {
+			/**
+			 * @var WPDB $wpdb
+			 */
 			global $wpdb;
 
 			if ( is_numeric( $attachment ) ) {
-				return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE ID=%d", $attachment ), ARRAY_A );
+				return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE ID=%d LIMIT 1", $attachment ), ARRAY_A );
 			} else {
 				$attachment = str_replace( array( 'http:', 'https:' ), '', $attachment );
 
-				return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE guid LIKE %s", '%' . $attachment ), ARRAY_A );
+				return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE guid LIKE %s LIMIT 1", '%' . $wpdb->esc_like($attachment) ), ARRAY_A );
 			}
 		}
 

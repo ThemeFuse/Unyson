@@ -3,7 +3,7 @@
 /**
  * Backend functionality
  */
-final class _FW_Component_Backend extends FW_Component
+final class _FW_Component_Backend
 {
 	/** @var callable */
 	private $print_meta_box_content_callback;
@@ -93,7 +93,10 @@ final class _FW_Component_Backend extends FW_Component
 		}
 	}
 
-	protected function _init()
+	/**
+	 * @internal
+	 */
+	public function _init()
 	{
 		if (!is_admin()) {
 			return;
@@ -106,6 +109,13 @@ final class _FW_Component_Backend extends FW_Component
 		));
 
 		$this->add_actions();
+	}
+
+	/**
+	 * @internal
+	 */
+	public function _after_components_init()
+	{
 	}
 
 	private function add_actions()
@@ -176,7 +186,7 @@ final class _FW_Component_Backend extends FW_Component
 
 		wp_register_script(
 			'fw-events',
-			FW_URI .'/static/js/fw-events.js',
+			fw_get_framework_directory_uri('/static/js/fw-events.js'),
 			array('backbone'),
 			fw()->manifest->get_version(),
 			true
@@ -184,7 +194,7 @@ final class _FW_Component_Backend extends FW_Component
 
 		wp_register_script(
 			'fw-ie-fixes',
-			FW_URI .'/static/js/ie-fixes.js',
+			fw_get_framework_directory_uri('/static/js/ie-fixes.js'),
 			array(),
 			fw()->manifest->get_version(),
 			true
@@ -193,21 +203,21 @@ final class _FW_Component_Backend extends FW_Component
 		{
 			wp_register_style(
 				'fw',
-				FW_URI .'/static/css/fw.css',
+				fw_get_framework_directory_uri('/static/css/fw.css'),
 				array(),
 				fw()->manifest->get_version()
 			);
 
 			wp_register_script(
 				'fw',
-				FW_URI .'/static/js/fw.js',
+				fw_get_framework_directory_uri('/static/js/fw.js'),
 				array('jquery', 'fw-events', 'backbone'),
 				fw()->manifest->get_version(),
 				true
 			);
 
 			wp_localize_script('fw', '_fw_localized', array(
-				'FW_URI'   => FW_URI,
+				'FW_URI'   => fw_get_framework_directory_uri(),
 				'SITE_URI' => site_url(),
 			));
 		}
@@ -215,13 +225,13 @@ final class _FW_Component_Backend extends FW_Component
 		{
 			wp_register_style(
 				'fw-backend-options',
-				FW_URI .'/static/css/backend-options.css',
+				fw_get_framework_directory_uri('/static/css/backend-options.css'),
 				array('fw', 'qtip'),
 				fw()->manifest->get_version()
 			);
 			wp_register_script(
 				'fw-backend-options',
-				FW_URI .'/static/js/backend-options.js',
+				fw_get_framework_directory_uri('/static/js/backend-options.js'),
 				array('fw-events', 'postbox', 'qtip', 'jquery-ui-tabs', 'fw'),
 				fw()->manifest->get_version(),
 				true
@@ -230,13 +240,13 @@ final class _FW_Component_Backend extends FW_Component
 
 		{
 			wp_register_style('qtip',
-				FW_URI .'/static/lib/qtip/css/jquery.qtip.min.css',
+				fw_get_framework_directory_uri('/static/lib/qtip/css/jquery.qtip.min.css'),
 				array(),
 				fw()->manifest->get_version()
 			);
 			wp_register_script(
 				'qtip',
-				FW_URI .'/static/lib/qtip/jquery.qtip.min.js',
+				fw_get_framework_directory_uri('/static/lib/qtip/jquery.qtip.min.js'),
 				array('jquery'),
 				fw()->manifest->get_version()
 			);
@@ -245,13 +255,13 @@ final class _FW_Component_Backend extends FW_Component
 		{
 			wp_register_style(
 				'fw-selectize',
-				FW_URI .'/static/css/selectize.css',
+				fw_get_framework_directory_uri('/static/css/selectize.css'),
 				array(),
 				fw()->manifest->get_version()
 			);
 			wp_register_script(
 				'fw-selectize',
-				FW_URI .'/static/js/selectize.min.js',
+				fw_get_framework_directory_uri('/static/js/selectize.min.js'),
 				array('jquery', 'fw-ie-fixes'),
 				fw()->manifest->get_version(),
 				true
@@ -261,7 +271,7 @@ final class _FW_Component_Backend extends FW_Component
 		{
 			wp_register_script(
 				'fw-mousewheel',
-				FW_URI .'/static/js/jquery.mousewheel.min.js',
+				fw_get_framework_directory_uri('/static/js/jquery.mousewheel.min.js'),
 				array('jquery'),
 				fw()->manifest->get_version(),
 				true
@@ -271,12 +281,12 @@ final class _FW_Component_Backend extends FW_Component
 		{
 			wp_register_style(
 				'fw-jscrollpane',
-				FW_URI . '/static/css/jquery.jscrollpane.css',
+				fw_get_framework_directory_uri('/static/css/jquery.jscrollpane.css'),
 				array(),
 				fw()->manifest->get_version()
 			);
 			wp_register_script( 'fw-jscrollpane',
-				FW_URI . '/static/js/jquery.jscrollpane.min.js',
+				fw_get_framework_directory_uri('/static/js/jquery.jscrollpane.min.js'),
 				array( 'jquery', 'fw-mousewheel' ),
 				fw()->manifest->get_version(),
 				true
@@ -286,7 +296,7 @@ final class _FW_Component_Backend extends FW_Component
 		{
 			wp_register_style(
 				'fw-font-awesome',
-				FW_URI . '/static/lib/font-awesome/css/font-awesome.min.css',
+				fw_get_framework_directory_uri('/static/lib/font-awesome/css/font-awesome.min.css'),
 				array(),
 				fw()->manifest->get_version()
 			);
@@ -295,7 +305,7 @@ final class _FW_Component_Backend extends FW_Component
 		{
 			wp_register_script(
 				'backbone-relational',
-				FW_URI .'/static/lib/backbone-relational/backbone-relational.js',
+				fw_get_framework_directory_uri('/static/lib/backbone-relational/backbone-relational.js'),
 				array('backbone'),
 				fw()->manifest->get_version(),
 				true
@@ -371,8 +381,9 @@ final class _FW_Component_Backend extends FW_Component
 
 		unset($options); // free memory
 
-		if (empty($collected['boxes']))
+		if (empty($collected['boxes'])) {
 			return; // only boxes are allowed on edit post page
+		}
 
 		$boxes =& $collected['boxes'];
 
@@ -658,9 +669,11 @@ final class _FW_Component_Backend extends FW_Component
 			)
 		);
 
-		FW_Flash_Messages::add('fw_settings_form_saved', __('Options successfuly saved', 'fw'), 'success');
+		FW_Flash_Messages::add('fw_settings_form_saved', __('Options successfully saved', 'fw'), 'success');
 
 		$data['redirect'] = fw_current_url();
+
+		do_action('fw_settings_form_saved');
 
 		return $data;
 	}
@@ -691,7 +704,7 @@ final class _FW_Component_Backend extends FW_Component
 		ob_start();
 
 		if (!empty($collected['tabs'])) {
-			echo fw_render_view(FW_DIR .'/views/backend-tabs.php', array(
+			echo fw_render_view(fw_get_framework_directory('/views/backend-tabs.php'), array(
 				'tabs'   => &$collected['tabs'],
 				'values' => &$values,
 				'options_data' => $options_data,
@@ -783,7 +796,7 @@ final class _FW_Component_Backend extends FW_Component
 			$data['id_prefix'] = FW_Option_Type::get_default_id_prefix();
 		}
 
-		return fw_render_view(FW_DIR .'/views/backend-option-design-'. $design .'.php', array(
+		return fw_render_view(fw_get_framework_directory('/views/backend-option-design-'. $design .'.php'), array(
 			'id'     => $id,
 			'option' => $option,
 			'data'   => $data,

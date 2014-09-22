@@ -95,6 +95,10 @@ make inputs look in modal the same as in not in modal
 	margin: 1px;
 }
 
+.fw-options-modal .media-frame select[multiple] {
+	height: auto;
+}
+
 .fw-options-modal .media-frame input,
 .fw-options-modal .media-frame textarea {
 	padding: 3px 5px;

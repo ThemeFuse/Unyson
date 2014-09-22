@@ -14,21 +14,21 @@ class _FW_Shortcodes_Loader
 
 		// framework/shortcodes
 		self::load_from_shortcodes_folder(array(
-			'path'  => FW_DIR . '/shortcodes',
-			'uri'   => FW_URI . '/shortcodes'
+			'path'  => fw_get_framework_directory('/shortcodes'),
+			'uri'   => fw_get_framework_directory_uri('/shortcodes')
 		));
 
 		// parent theme: framework-customizations/shortcodes
 		self::load_from_shortcodes_folder(array(
-			'path'  => FW_PT_THEME_DIR . '/shortcodes',
-			'uri'   => FW_PT_THEME_URI . '/shortcodes'
+			'path'  => fw_get_template_customizations_directory('/theme/shortcodes'),
+			'uri'   => fw_get_template_customizations_directory_uri('/theme/shortcodes')
 		));
 
 		// child theme: framework-customizations/shortcodes
-		if (FW_CT) {
+		if (is_child_theme()) {
 			self::load_from_shortcodes_folder(array(
-				'path'  => FW_CT_THEME_DIR . '/shortcodes',
-				'uri'   => FW_CT_THEME_URI . '/shortcodes'
+				'path'  => fw_get_stylesheet_customizations_directory('/theme/shortcodes'),
+				'uri'   => fw_get_stylesheet_customizations_directory_uri('/theme/shortcodes')
 			));
 		}
 
@@ -55,30 +55,30 @@ class _FW_Shortcodes_Loader
 			$rel_path  = $extension->get_rel_path();
 
 			// framework
-			$fw_path = FW_EXTENSIONS_DIR . $rel_path . '/shortcodes';
+			$fw_path = fw_get_framework_directory('/extensions'. $rel_path . '/shortcodes');
 			if (file_exists($fw_path)) {
 				self::load_from_shortcodes_folder(array(
 					'path'  => $fw_path,
-					'uri'   => FW_EXTENSIONS_URI . $rel_path . '/shortcodes'
+					'uri'   => fw_get_framework_directory_uri('/extensions'. $rel_path . '/shortcodes')
 				));
 			}
 
 			// parent theme framework-customizations
-			$parent_fws_path = FW_PT_EXTENSIONS_DIR . $rel_path . '/shortcodes';
+			$parent_fws_path = fw_get_template_customizations_directory('/extensions'. $rel_path . '/shortcodes');
 			if (file_exists($parent_fws_path)) {
 				self::load_from_shortcodes_folder(array(
 					'path'  => $parent_fws_path,
-					'uri'   => FW_PT_EXTENSIONS_URI . $rel_path . '/shortcodes'
+					'uri'   => fw_get_template_customizations_directory_uri('/extensions'. $rel_path . '/shortcodes')
 				));
 			}
 
 			// child theme framework-customizations
-			if (FW_CT) {
-				$child_fws_path = FW_CT_EXTENSIONS_DIR . $rel_path . '/shortcodes';
+			if (is_child_theme()) {
+				$child_fws_path = fw_get_stylesheet_customizations_directory('/extensions'. $rel_path . '/shortcodes');
 				if (file_exists($child_fws_path)) {
 					self::load_from_shortcodes_folder(array(
 						'path'  => $child_fws_path,
-						'uri'   => FW_CT_EXTENSIONS_URI . $rel_path . '/shortcodes'
+						'uri'   => fw_get_stylesheet_customizations_directory_uri('/extensions' . $rel_path . '/shortcodes')
 					));
 				}
 			}

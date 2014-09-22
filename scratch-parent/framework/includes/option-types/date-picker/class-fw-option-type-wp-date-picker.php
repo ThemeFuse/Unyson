@@ -48,9 +48,9 @@ class FW_Option_Type_Date_Picker extends FW_Option_Type {
 	 */
 	protected function _render( $id, $option, $data ) {
 		$language = substr(get_locale(), 0, 2);
-		$css_uri    = FW_URI . '/includes/option-types/' . $this->get_type() . '/static/css/datepicker.css';
-		$js_uri     = FW_URI . '/includes/option-types/' . $this->get_type() . '/static/js/scripts.js';
-		$date_picker_js_uri = FW_URI . '/includes/option-types/' . $this->get_type() . '/static/js/bootstrap-datepicker.js';
+		$css_uri    = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/css/datepicker.css');
+		$js_uri     = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/js/scripts.js');
+		$date_picker_js_uri = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/js/bootstrap-datepicker.js');
 
 
 
@@ -86,7 +86,7 @@ class FW_Option_Type_Date_Picker extends FW_Option_Type {
 		);
 
 		if( $language != 'en' ) {
-			$locale_uri = FW_URI . '/includes/option-types/' . $this->get_type() . '/static/js/locales/bootstrap-datepicker.' . $language . '.js';
+			$locale_uri = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/js/locales/bootstrap-datepicker.' . $language . '.js');
 			wp_enqueue_script(
 				'fw-option-' . $this->get_type() . '-date-picker-locale',
 				$locale_uri,

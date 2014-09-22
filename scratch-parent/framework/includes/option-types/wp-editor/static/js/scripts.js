@@ -16,7 +16,9 @@
 			window.tinyMCE.execCommand("mceRemoveEditor", false, dynamicId);
 			$('#qt_'+ dynamicId +'_toolbar').remove();
 
-			$textarea.attr('id', 'wp-editor-textarea-'+ fw.randomMD5());
+			var id = 'wp-editor-textarea-'+ fw.randomMD5();
+			$textarea.attr('id', id);
+			$textareaWrapper.find('[id="insert-media-button"]').data('editor', id);
 			reachTexEditorReinit($textarea);
 		}
 

@@ -141,13 +141,13 @@ abstract class FW_Option_Type
 		{
 			wp_enqueue_style(
 				'fw-option-types',
-				FW_URI .'/static/css/option-types.css',
+				fw_get_framework_directory_uri('/static/css/option-types.css'),
 				array('fw', 'qtip'),
 				fw()->manifest->get_version()
 			);
 			wp_enqueue_script(
 				'fw-option-types',
-				FW_URI .'/static/js/option-types.js',
+				fw_get_framework_directory_uri('/static/js/option-types.js'),
 				array('fw-events', 'qtip'),
 				fw()->manifest->get_version(),
 				true
