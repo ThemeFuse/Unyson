@@ -20,12 +20,7 @@
 	<title><?php wp_title( '|', true, 'right' ); ?></title>
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
-	<?php
-	$favicon = fw_get_db_settings_option('favicon');
-	if( !empty( $favicon ) ) :
-	?>
-	<link rel="icon" type="image/png" href="<?php echo $favicon['url'] ?>">
-	<?php endif ?>
+	<?php fw_theme_get_favicon(); ?>
 	<!--[if lt IE 9]>
 	<script src="<?php echo get_template_directory_uri(); ?>/js/html5.js"></script>
 	<![endif]-->
