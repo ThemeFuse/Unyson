@@ -330,7 +330,7 @@ if (!function_exists('fw_theme_get_title_logo')) {
      * Get the Site Logo or an Option Name if there is no Logo Image
      * Defaults to 'blogname' if no option_name is passed
      * @param $option_name string The option_name that you want to display if there is no Logo.
-     * @return null|mixed
+     * @return string|null Logo Image or Site Title
      */
     function fw_theme_get_title_logo($option_name = 'blogname') {
         global $wpdb;
