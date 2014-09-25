@@ -28,11 +28,11 @@ class FW_Option_Type_Builder_Foo extends FW_Option_Type_Builder
 
 	final public function item_type_is_valid($item_type_instance)
 	{
-		if (!is_subclass_of($item_type_instance, 'FW_Option_Type_Builder_Foo_Item')) {
-			return false;
+		if (is_subclass_of($item_type_instance, 'FW_Option_Type_Builder_Foo_Item')) {
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 
 	// ...
@@ -99,7 +99,7 @@ FW_Option_Type_Builder::register_item_type('FW_Option_Type_Builder_Foo_Item_Bar'
 
 #### In JavaScript
 
-Attach to event and register your item __class__ (not instance!)
+Attach to event and register your item **class** (not instance!)
 
 ```javascript
 fwEvents.one('fw-builder:'+ 'builder-foo' +':register-items', function(builder){

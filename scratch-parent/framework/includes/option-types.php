@@ -782,7 +782,7 @@ require $dir .'/option-types/background-image/class-fw-option-type-background-im
 require $dir .'/option-types/multi/class-fw-option-type-multi.php';
 require $dir .'/option-types/switch/class-fw-option-type-switch.php';
 require $dir .'/option-types/typography/class-fw-option-type-typography.php';
-require $dir .'/option-types/builder/class-fw-option-type-builder.php';
+require $dir .'/option-types/builder/builder.php';
 require $dir .'/option-types/multi-upload/class-fw-option-type-multi-upload.php';
 require $dir .'/option-types/multi-picker/class-fw-option-type-multi-picker.php';
 require $dir .'/option-types/wp-editor/class-fw-option-type-wp-editor.php';

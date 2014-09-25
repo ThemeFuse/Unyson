@@ -38,9 +38,9 @@ class FW_Extension_Analytics extends FW_Extension {
 		if ( fw_current_screen_match( $current_screen ) ) {
 			wp_enqueue_style(
 				$this->get_name() . '-styles',
-				$this->locate_css_URI( 'style' ),
+				$this->get_declared_URI( '/static/css/style.css' ),
 				array(),
-				$this->manifest->get_version()
+				fw()->theme->manifest->get_version()
 			);
 		}
 	}

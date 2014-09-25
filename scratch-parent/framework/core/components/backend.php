@@ -471,10 +471,12 @@ final class _FW_Component_Backend
 
 		fw_set_db_post_option($post_id, null, $options_values);
 
-		// find options that requested to be saved in separate meta
+		/**
+		 * find options that requested to be saved in separate meta
+		 */
 		foreach (fw_extract_only_options(fw()->theme->get_post_options($post->post_type)) as $option_id => $option) {
-			if (isset($option['save-to-separate-meta']) && $option['save-to-separate-meta']) { // think of a better key name
-				fw_update_post_meta($post_id, 'fw_option_'. $option_id, $options_values[$option_id]);
+			if (isset($option['save-in-separate-meta']) && $option['save-in-separate-meta']) {
+				fw_update_post_meta($post_id, 'fw_option:'. $option_id, $options_values[$option_id]);
 			}
 		}
 

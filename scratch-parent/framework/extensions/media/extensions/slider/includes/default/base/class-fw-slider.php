@@ -68,7 +68,7 @@ class FW_Slider extends FW_Extension
 					'fw-ext-'. $this->get_name() .'-'. $js,
 					$this->locate_js_URI($js),
 					array(),
-					$this->manifest->get_version()
+					fw()->manifest->get_version()
 				);
 			}
 		}
@@ -79,7 +79,7 @@ class FW_Slider extends FW_Extension
 					'fw-ext-'. $this->get_name() .'-'. $css,
 					$this->locate_css_URI($css),
 					array(),
-					$this->manifest->get_version()
+					fw()->manifest->get_version()
 				);
 			}
 		}

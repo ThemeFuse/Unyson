@@ -132,15 +132,15 @@ class FW_Extension_Styling extends FW_Extension {
 	private function add_admin_static() {
 		wp_enqueue_style(
 			'fw-extension-' . $this->get_name() . '-styles',
-			$this->locate_css_URI( 'styles' ),
+			$this->get_declared_URI( '/static/css/styles.css' ),
 			array(),
-			$this->manifest->get_version()
+			fw()->manifest->get_version()
 		);
 		wp_enqueue_script(
 			'fw-extension-' . $this->get_name(),
-			$this->locate_js_URI('scripts'),
+			$this->get_declared_URI('/static/js/scripts.js'),
 			array('jquery'),
-			$this->manifest->get_version(),
+			fw()->manifest->get_version(),
 			true
 		);
 	}

@@ -1,4 +1,10 @@
 <?php if (!defined('FW')) die('Forbidden');
+/**
+ * @var string $id
+ * @var array $option
+ * @var array $data
+ * @var string $sortable_image url
+ */
 $attr = $option['attr'];
 ?>
 <div <?php echo fw_attr_to_html($attr); ?>>
@@ -26,7 +32,7 @@ $attr = $option['attr'];
 				</div>
 				<img src="<?php echo $sortable_image; ?>" class="sort-item"/>
 
-				<div class="content">tmp</div>
+				<div class="content"><!-- will be populated from js --></div>
 				<a href="#" class="dashicons fw-x delete-item"></a>
 			</div>
 		<?php endforeach; ?>

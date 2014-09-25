@@ -67,22 +67,22 @@ class FW_Extension_Sidebars extends FW_Extension
 		if ( 'widgets.php' === $hook ) {
 			wp_enqueue_style(
 				'fw-extension-'. $this->get_name() .'-css',
-				$this->locate_css_URI('sidebar'),
+				$this->get_declared_URI('/static/css/sidebar.css'),
 				array('fw', 'fw-selectize', 'fw-backend-options'),
-				$this->manifest->get_version()
+				fw()->manifest->get_version()
 			);
 
 			wp_enqueue_script('fw-extension-'. $this->get_name() .'-autocomplete-js',
-				$this->locate_js_URI('sidebar-autocomplete'),
+				$this->get_declared_URI('/static/js/sidebar-autocomplete.js'),
 				array('fw-events', 'jquery', 'jquery-ui-autocomplete', 'fw'),
-				$this->manifest->get_version()
+				fw()->manifest->get_version()
 			);
 			wp_localize_script( 'fw-extension-'. $this->get_name() .'-autocomplete-js', 'noMatchesFoundMsg', __('No matches found', 'fw'));
 
 			wp_enqueue_script('fw-extension-'. $this->get_name() .'-general-js',
-				$this->locate_js_URI('sidebar-general'),
+				$this->get_declared_URI('/static/js/sidebar-general.js'),
 				array('fw-events','jquery', 'fw', 'fw-selectize', 'jquery-ui-tabs'),
-				$this->manifest->get_version()
+				fw()->manifest->get_version()
 			);
 			wp_localize_script( 'fw-extension-'. $this->get_name() .'-general-js', 'PhpVar', array(
 				'confirmMessage'         => __('Do you realy want to change without saving?','fw'),

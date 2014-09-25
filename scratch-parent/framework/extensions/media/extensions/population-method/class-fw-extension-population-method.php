@@ -25,9 +25,9 @@ class FW_Extension_Population_Method extends FW_Extension
 			wp_enqueue_style('fw-selectize');
 			wp_enqueue_script(
 				'fw-population-method-categories',
-				$this->locate_js_URI($this->get_name()),
+				$this->get_declared_URI('/static/js/'. $this->get_name() .'.js'),
 				array('fw-selectize'),
-				$this->manifest->get_version()
+				fw()->manifest->get_version()
 			);
 		}
 	}

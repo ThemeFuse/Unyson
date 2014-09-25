@@ -63,7 +63,7 @@ class FW_Extension_SEO extends FW_Extension {
 			)
 		);
 		if ( fw_current_screen_match($screen) ) {
-			wp_enqueue_style( $this->get_name() . '-style', $this->locate_css_URI('style') );
+			wp_enqueue_style( $this->get_name() . '-style', $this->get_declared_URI('/static/css/style.css') );
 		}
 	}
 

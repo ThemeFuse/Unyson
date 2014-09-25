@@ -99,9 +99,9 @@ class FW_Extension_Blog extends FW_Extension {
 
 		wp_enqueue_style(
 			'fw-ext-'. $this->get_name() .'-admin-style',
-			$this->locate_css_URI('admin-style'),
+			$this->get_declared_URI('/static/css/admin-style.css'),
 			array(),
-			$this->manifest->get_version()
+			fw()->manifest->get_version()
 		);
 	}
 }

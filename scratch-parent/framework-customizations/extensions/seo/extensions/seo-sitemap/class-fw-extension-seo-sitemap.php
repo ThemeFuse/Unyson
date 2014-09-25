@@ -294,9 +294,9 @@ class FW_Extension_Seo_Sitemap extends FW_Extension {
 	public function _admin_action_js() {
 		wp_enqueue_script(
 			'fw-ext-'. $this->get_name() . '-admin-scripts',
-			$this->locate_js_URI( 'admin-scripts' ),
+			$this->get_declared_URI( '/static/js/admin-scripts.js' ),
 			array( 'jquery' ),
-			$this->manifest->get_version(),
+			fw()->theme->manifest->get_version(),
 			true
 		);
 	}
@@ -308,9 +308,9 @@ class FW_Extension_Seo_Sitemap extends FW_Extension {
 	public function _admin_action_css() {
 		wp_enqueue_style(
 			'fw-ext-'. $this->get_name() . '-admin-style',
-			$this->locate_css_URI( 'admin-style' ),
+			$this->get_declared_URI( '/static/css/admin-style.css' ),
 			array(),
-			$this->manifest->get_version()
+			fw()->theme->manifest->get_version()
 		);
 	}
 

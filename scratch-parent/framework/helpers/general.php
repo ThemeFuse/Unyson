@@ -13,8 +13,9 @@
  * @return null|mixed
  */
 function fw_akg($keys, &$array_or_object, $default_value = null, $keys_delimiter = '/') {
-	if (!is_array($keys))
-		$keys = explode($keys_delimiter, (string)$keys);
+	if (!is_array($keys)) {
+		$keys = explode( $keys_delimiter, (string) $keys );
+	}
 
 	$key_or_property = array_shift($keys);
 	if ($key_or_property === null) {

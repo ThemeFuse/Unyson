@@ -53,15 +53,15 @@ class FW_Extension_Megamenu extends FW_Extension
 			wp_enqueue_media();
 			wp_enqueue_style(
 				"fw-ext-{$this->get_name()}-admin",
-				$this->locate_URI('/static/css/admin.css'),
+				$this->get_declared_URI('/static/css/admin.css'),
 				array(),
-				$this->manifest->get_version()
+				fw()->manifest->get_version()
 			);
 			wp_enqueue_script(
 				"fw-ext-{$this->get_name()}-admin",
-				$this->locate_URI('/static/js/admin.js'),
+				$this->get_declared_URI('/static/js/admin.js'),
 				array('fw'),
-				$this->manifest->get_version()
+				fw()->manifest->get_version()
 			);
 
 			// Enqueue all the necessary files for Icon dialog

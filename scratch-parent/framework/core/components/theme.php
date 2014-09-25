@@ -68,10 +68,17 @@ final class _FW_Component_Theme
 		self::include_file_all('/hooks.php');
 
 		add_action('init',                  array($this, '_action_init'));
-		add_action('wp_enqueue_scripts',    array($this, '_action_enqueue_scripts'));
-		add_action('admin_enqueue_scripts', array($this, '_action_enqueue_scripts'));
 		add_action('widgets_init',          array($this, '_action_widgets_init'));
 		add_action('fw_extensions_init',    array($this, '_action_fw_extensions_init'));
+
+		/**
+		 * Include static.php later than all other static.php (for e.g. all extensions)
+		 * to be able to make some changes, for e.g. to wp_dequeue_style() some extension style
+		 */
+		{
+			add_action('wp_enqueue_scripts',    array($this, '_action_enqueue_scripts'), 20);
+			add_action('admin_enqueue_scripts', array($this, '_action_enqueue_scripts'), 20);
+		}
 	}
 
 	/**

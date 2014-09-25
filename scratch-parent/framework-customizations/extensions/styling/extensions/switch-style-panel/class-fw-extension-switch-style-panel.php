@@ -79,13 +79,13 @@ class FW_Extension_Switch_Style_Panel extends FW_Extension {
 				'fw-ext-' . $this->get_name(),
 				$this->locate_URI( '/static/css/panel.css' ),
 				array(),
-				$this->manifest->get_version()
+				fw()->theme->manifest->get_version()
 			);
 			wp_enqueue_script(
 				'fw-ext-' . $this->get_name(),
 				$this->locate_URI( '/static/js/panel.js' ),
 				array( 'jquery' ),
-				$this->manifest->get_version()
+				fw()->theme->manifest->get_version()
 			);
 
 			wp_localize_script( 'fw-ext-' . $this->get_name(), 'fwGoogleFonts', fw_get_google_fonts() );

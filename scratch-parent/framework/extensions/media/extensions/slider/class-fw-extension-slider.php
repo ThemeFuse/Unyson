@@ -405,9 +405,9 @@ class FW_Extension_Slider extends FW_Extension
 		if ($match_current_screen) {
 			wp_enqueue_style(
 				'fw-extension-' . $this->get_name() . '-css',
-				$this->locate_css_URI('style'),
+				$this->get_declared_URI('/static/css/style.css'),
 				array(),
-				$this->manifest->get_version()
+				fw()->manifest->get_version()
 			);
 		}
 	}

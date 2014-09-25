@@ -84,24 +84,24 @@ class FW_Extension_Portfolio extends FW_Extension {
 		if ( fw_current_screen_match( $projects_listing_screen ) ) {
 			wp_enqueue_style(
 				'fw-extension-' . $this->get_name() . '-listing',
-				$this->locate_css_URI( 'admin-listing' ),
+				$this->get_declared_URI( '/static/css/admin-listing.css' ),
 				array(),
-				$this->manifest->get_version()
+				fw()->manifest->get_version()
 			);
 		}
 
 		if ( fw_current_screen_match( $projects_add_edit_screen ) ) {
 			wp_enqueue_style(
 				'fw-extension-' . $this->get_name() . '-add-edit',
-				$this->locate_css_URI( 'admin-add-edit' ),
+				$this->get_declared_URI( '/static/css/admin-add-edit.css' ),
 				array(),
-				$this->manifest->get_version()
+				fw()->manifest->get_version()
 			);
 			wp_enqueue_script(
 				'fw-extension-' . $this->get_name() . '-add-edit',
-				$this->locate_js_URI( 'admin-add-edit' ),
+				$this->get_declared_URI( '/static/js/admin-add-edit.js' ),
 				array( 'jquery' ),
-				$this->manifest->get_version(),
+				fw()->manifest->get_version(),
 				true
 			);
 		}
@@ -277,7 +277,7 @@ class FW_Extension_Portfolio extends FW_Extension {
 					         '<img src="' . fw_resize( get_post_thumbnail_id( intval( $id ) ), 150, 100, true ) . '" width="150" height="100" >' .
 					         '</a>';
 				} else {
-					$value = '<img src="' . $this->locate_URI( '/static/images/no-image.png' ) . '"/>';
+					$value = '<img src="' . $this->get_declared_URI( '/static/images/no-image.png' ) . '"/>';
 				}
 				echo $value;
 				break;

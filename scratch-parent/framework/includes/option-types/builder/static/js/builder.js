@@ -686,7 +686,16 @@ jQuery(document).ready(function($){
 
 						tagName: 'div',
 						className: 'builder-item fw-border-box-sizing fw-col-xs-12',
-						template: _.template('<div style="border: 1px solid #CCC;"><em>Default View</em><div class="builder-items"></div></div>'),
+						template: _.template([
+							'<div style="border: 1px solid #CCC; padding: 5px; color: #999;">',
+							'<em class="fw-text-muted">Default View</em>',
+							'<a href="#" onclick="return false;" class="dashicons fw-x"></a>',
+							'<div class="builder-items"></div>',
+							'</div>'
+						].join('')),
+						events: {
+							'click a.dashicons.fw-x': 'defaultRemove'
+						},
 						initialize: function(){
 							this.defaultInitialize();
 							this.render();
@@ -731,6 +740,11 @@ jQuery(document).ready(function($){
 							);
 
 							return this;
+						},
+						defaultRemove: function() {
+							this.remove();
+
+							this.model.collection.remove(this.model);
 						}
 					});
 				}
