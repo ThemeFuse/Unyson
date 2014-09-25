@@ -20,12 +20,7 @@
 	<title><?php wp_title( '|', true, 'right' ); ?></title>
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
-	<?php
-	$favicon = fw_get_db_settings_option('favicon');
-	if( !empty( $favicon ) ) :
-	?>
-	<link rel="icon" type="image/png" href="<?php echo $favicon['url'] ?>">
-	<?php endif ?>
+	<?php fw_theme_get_favicon(); ?>
 	<!--[if lt IE 9]>
 	<script src="<?php echo get_template_directory_uri(); ?>/js/html5.js"></script>
 	<![endif]-->
@@ -51,7 +46,7 @@
 
 	<header id="masthead" class="site-header" role="banner">
 		<div class="header-main">
-			<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php echo fw_get_db_settings_option('logo'); ?></a></h1>
+			<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php echo fw_theme_get_title_logo(); ?></a></h1>
 
 			<div class="search-toggle">
 				<a href="#search-container" class="screen-reader-text"><?php _e( 'Search', 'unyson' ); ?></a>

@@ -324,3 +324,46 @@ endif;
 		<?php endif; // End is_singular()
 	}
 }
+
+if (!function_exists('fw_theme_get_title_logo')) {
+    /**
+     * Get the Site Logo or an Option Name if there is no Logo Image
+     * Defaults to 'blogname' if no option_name is passed
+     * @param $option_name string The option_name that you want to display if there is no Logo.
+     * @return string|null Logo Image or Site Title
+     */
+    function fw_theme_get_title_logo($option_name = 'blogname') {
+        global $wpdb;
+        // Get the name of the site from the Options
+        $prefixed_table = $wpdb->prefix . 'options';
+        $query = "SELECT option_value FROM `$prefixed_table` WHERE option_name = '$option_name'";
+        // If there's a logo, show it.
+        if ($logo = fw_get_db_settings_option('logo')) {
+            return $logo;
+            // If not, return the Site Name(default) or the Option Name if one was passed
+        } elseif ($title = $wpdb->get_results($query, ARRAY_A)) {
+            return $title[0]['option_value'];
+        };
+
+        return null;
+    }
+}
+
+if (!function_exists('fw_theme_get_favicon')) {
+    /**
+     * Output a <head> link for the Favicon if one has been uploaded
+     * @return string|null A link to the favicon or bust!
+     */
+    function fw_theme_get_favicon() {
+        // Output the link if the favicon exists
+        if ($favicon = fw_get_db_settings_option('favicon')) {
+            ob_start();
+            ?><link rel="icon" type="image/png" href="<?php echo $favicon['url'] ?>"><?php
+            return ob_get_flush();
+        } else {
+            // Output null
+            return null;
+        }
+
+    }
+}
