@@ -1,6 +1,6 @@
 <?php if (!defined('FW')) die('Forbidden'); ?>
 <div class="fw-option fw-option-type-<?php echo $type; ?>"
-     data-option="<?php echo esc_attr(json_encode(array('option' => $option, 'data' => $data, 'id' => $id))) ?>">
+     data-option="<?php echo fw_htmlspecialchars(json_encode(array('option' => $option, 'data' => $data, 'id' => $id))) ?>">
 	<ul class="thumbs-wrapper">
 		<?php if (isset($values)): ?>
 			<?php foreach ($values as $key => $value): ?>

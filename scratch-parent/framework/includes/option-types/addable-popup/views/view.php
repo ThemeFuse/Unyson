@@ -25,7 +25,7 @@ $attr = $option['attr'];
 		<?php foreach ($data['value'] as $key => $value): ?>
 			<div class="item">
 				<div class="input-wrapper">
-					<?php echo fw()->backend->option_type('hidden')->render('', array('value' => esc_attr(json_encode($value))), array(
+					<?php echo fw()->backend->option_type('hidden')->render('', array('value' => json_encode($value)), array(
 						'id_prefix' => $data['id_prefix'] . $id . '-' . $key . '-',
 						'name_prefix' => $data['name_prefix'] . '[' . $id . ']',
 					));?>

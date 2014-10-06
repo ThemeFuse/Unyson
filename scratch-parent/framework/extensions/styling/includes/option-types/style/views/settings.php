@@ -166,7 +166,7 @@
 						<input type="hidden" class="background-image-data"
 						       id="<?php echo esc_attr($data['name_prefix'] . '-' . $id . '-' . $block_id . '-background-image-data'); ?>"
 						       name="<?php echo esc_attr($data['name_prefix'] . '[' . $id . ']' . '[' . $block_id . '][background][background-image][data]'); ?>"
-						       value="<?php echo esc_attr(json_encode( $background_image_option )); ?>">
+						       value="<?php echo fw_htmlspecialchars(json_encode( $background_image_option )); ?>">
 						<?php
 						$tmp_options = array(
 							'background-image' => array_merge(
