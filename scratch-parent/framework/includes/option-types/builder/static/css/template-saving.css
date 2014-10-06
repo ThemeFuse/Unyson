@@ -1,0 +1,99 @@
+.fw-option-type-builder .template-container a {
+	text-decoration: none;
+	float: right;
+}
+
+.fw-option-type-builder .template-container {
+	float: right;
+}
+
+.fw-option-type-builder .template-btn {
+	background-image: url(../img/template-saving/template.png);
+	background-repeat: no-repeat;
+	padding-left: 14px;
+	background-position: left center;
+	cursor: pointer;
+}
+
+.fw-templates-wrapper a.template-delete {
+	float: right;
+	visibility: hidden;
+	margin-top: 3px;
+}
+
+.fw-templates-wrapper {
+	padding: 5px;
+	overflow: auto;
+}
+
+.fw-templates-wrapper .save-template {
+	text-align: left;
+	text-decoration: none;
+	color: #b1b1b1;
+	float: left;
+	font-style: normal;
+	padding-bottom: 10px;
+	padding-left: 3px;
+}
+
+.fw-templates-wrapper .save-template:hover {
+	color: #eee;
+}
+
+.fw-templates-wrapper .navigation {
+	float: left;
+}
+
+.fw-templates-wrapper .templates-list {
+	border-top: 1px solid #4b4b4b;
+	border-top: 1px solid rgba(208, 208, 208, 0.15);
+	float: left;
+	clear: both;
+	width: 100%;
+}
+
+.fw-templates-wrapper .templates-list .head-text {
+	text-align: left;
+	float: left;
+	padding: 10px 0px;
+	margin-left: 3px;
+	color: #707070;
+}
+
+.fw-templates-wrapper ul {
+	float: left;
+	margin: 0px;
+	width: 100%;
+}
+
+.fw-templates-wrapper ul li {
+	font-style: normal;
+	padding-bottom: 10px;
+	margin-bottom: 0px;
+	list-style: disc inside none;
+	margin-left: 4px;
+	text-align: left;
+	line-height: 18px;
+	color: #b1b1b1;
+	cursor: pointer;
+}
+
+.fw-templates-wrapper ul li:last-child {
+	padding-bottom: 0px;
+}
+
+.fw-templates-wrapper .default-li {
+	cursor: text;
+}
+
+.fw-templates-wrapper .default-li:hover {
+	color: #b1b1b1;
+}
+
+.fw-templates-wrapper ul li:hover a.template-delete {
+	visibility: visible;
+}
+
+.fw-templates-wrapper ul li:hover {
+	color: #eee;
+}

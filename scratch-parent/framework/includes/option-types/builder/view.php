@@ -16,7 +16,7 @@
 		$div_attr['name']
 	);
 
-	$div_attr['class'] .= ' fw-option-type-builder';
+	$div_attr['class'] .= apply_filters('fw_builder_fullscreen_add_classes', ' fw-option-type-builder');
 
 	$div_attr['data-builder-option-type'] = $option_type;
 }
@@ -59,3 +59,10 @@
 	</div>
 	<div class="builder-root-items"></div>
 </div>
+
+<?php
+//do action once to add one backdrop for all builders in page
+if (!did_action('fw_builder_fullscreen_add_backdrop')) {
+	do_action('fw_builder_fullscreen_add_backdrop');
+}?>
+

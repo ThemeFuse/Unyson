@@ -242,7 +242,7 @@ FwBuilderComponents.ItemView.WidthChanger = Backbone.View.extend({
  */
 FwBuilderComponents.ItemView.InlineTextEditor = Backbone.View.extend({
 	tagName: 'div',
-	className: 'fw-builder-item-width-changer',
+	className: 'fw-builder-item-inline-text-editor',
 	template: _.template(
 		'<input type="text" style="width: auto;" value="<%- value %>">&nbsp;<button class="button" onclick="return false;"><%- save %></button>'
 	),

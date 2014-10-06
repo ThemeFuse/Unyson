@@ -718,6 +718,8 @@ jQuery(document).ready(function($){
 							 */
 							_items.view.$el.detach();
 
+
+
 							this.$el.html(
 								this.template(
 									templateData || {}
@@ -752,7 +754,6 @@ jQuery(document).ready(function($){
 
 			this.rootItems = new this.classes.Items;
 
-			fwEvents.trigger('fw-builder:'+ this.get('type') +':register-items', this);
 
 			// prepare this.$input
 			{
@@ -763,6 +764,9 @@ jQuery(document).ready(function($){
 				} else {
 					this.$input = options.$input;
 				}
+
+				fwEvents.trigger('fw-builder:'+ this.get('type') +':register-items', this);
+
 
 				// recover saved items from input
 				{
@@ -780,20 +784,39 @@ jQuery(document).ready(function($){
 				}
 
 				// listen to items changes and update input
-				{
-					// use timeout to not load browser/cpu when there are many changes at once (for e.g. on .reset())
+				(function(){
+					function saveBuilderValueToInput() {
+						builder.$input.val(JSON.stringify(builder.rootItems));
+						builder.$input.trigger('fw-builder:input:change');
+					}
+
+					/**
+					 * use timeout to not load browser/cpu when there are many changes at once (for e.g. on .reset())
+					 */
 					var saveTimeout = 0;
 
-					this.listenTo(this.rootItems, 'builder:change', function(){
+					builder.listenTo(builder.rootItems, 'builder:change', function(){
 						clearTimeout(saveTimeout);
 
 						saveTimeout = setTimeout(function(){
-							builder.$input.val(
-								JSON.stringify(builder.rootItems)
-							);
+							saveTimeout = 0;
+
+							saveBuilderValueToInput();
 						}, 100);
 					});
-				}
+
+					/**
+					 * Save value to input if there is a pending timeout on form submit
+					 */
+					builder.$input.closest('form').on('submit', function(){
+						if (saveTimeout) {
+							clearTimeout(saveTimeout);
+							saveTimeout = 0;
+
+							saveBuilderValueToInput();
+						}
+					});
+				})();
 			}
 		}
 	});
@@ -863,6 +886,10 @@ jQuery(document).ready(function($){
 		var $options = data.$elements.find('.fw-option-type-builder:not(.initialized)');
 
 		$options.closest('.fw-backend-option').addClass('fw-backend-option-type-builder');
+
+		fwEvents.trigger('fw:option-type:builder:init', {
+			$elements: $options
+		});
 
 		$options.each(function(){
 			var $this = $(this);
@@ -1000,7 +1027,8 @@ jQuery(document).ready(function($){
 				$(this).qtip({
 					position: {
 						at: 'top center',
-						my: 'bottom center'
+						my: 'bottom center',
+						viewport: $('body')
 					},
 					style: {
 						classes: 'qtip-fw qtip-fw-builder',
