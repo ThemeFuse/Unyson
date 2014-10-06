@@ -72,10 +72,7 @@ textarea.fw-option-type-textarea {
 }
 
 
-/*
-make inputs look in modal the same as in not in modal
-(in modal inputs looks smaller)
-*/
+/* modal fixes */
 
 .fw-options-modal .media-frame input[type=email],
 .fw-options-modal .media-frame input[type=number],
@@ -117,3 +114,10 @@ make inputs look in modal the same as in not in modal
 		height: auto !important;
 	}
 }
+
+.fw-options-modal .media-frame input[type=radio]:checked:before {
+	width: 8px;
+	height: 8px;
+}
+
+/* end: modal fixes */

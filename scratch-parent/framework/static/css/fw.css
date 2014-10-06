@@ -1662,6 +1662,9 @@ a.fw-wp-link:hover {
 
 	-ms-animation: fwGrowOut .3s ease-in-out;
 	-ms-animation-iteration-count: 1;
+
+	-webkit-animation-fill-mode: forwards; /* Chrome, Safari, Opera */
+	animation-fill-mode: forwards;
 }
 
 .fw-options-modal.fw-options-modal-closing > .media-modal > .media-modal-close {
@@ -1735,3 +1738,22 @@ a.fw-wp-link:hover {
 }
 
 /* end: qtip custom style */
+
+/* qtip-fw (x) button */
+
+.qtip.qtip-fw .fw-x.dashicons:before {
+	content: "\f158";
+}
+
+.qtip.qtip-fw .fw-x.dashicons {
+	font-size: 13px;
+	line-height: 13px;
+	height: 13px;
+	width: 13px;
+	cursor: pointer;
+	color: #fff;
+	background-color: #CC0000;
+	border-radius: 100%;
+}
+
+/* end: qtip-fw (x) button */

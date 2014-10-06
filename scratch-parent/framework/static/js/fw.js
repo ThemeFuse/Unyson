@@ -450,6 +450,17 @@ fw.randomMD5 = function() {
 	);
 };
 
+/**
+ * Return value from QueryString
+ * @param name
+ * @returns {string}
+ */
+fw.getQueryString = function(name) {
+	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+	var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+		results = regex.exec(location.search);
+	return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+};
 
 (function() {
 
@@ -656,7 +667,7 @@ fw.randomMD5 = function() {
 
 								preventOriginalClose();
 							},
-							299 // must be cssAnimationMilliseconds - 1
+							300 // css animation duration
 							);
 						};
 
@@ -665,6 +676,7 @@ fw.randomMD5 = function() {
 							e.preventDefault();
 
 							if (closingTimeout) {
+								// do nothing if currently there is a closing delay/animation in progress
 								return;
 							}
 
@@ -832,21 +844,29 @@ fw.randomMD5 = function() {
 		 * Resize .fw-options-tabs-contents to fit entire window
 		 */
 		resizeTabsContent: function () {
-			var $tabsContent = this.frame.$el.find('.fw-options-tabs-first-level > .fw-options-tabs-contents');
 
-			if (!$tabsContent.length) {
+			var $content, $frame;
+
+			$content = this.frame.$el.find('.fw-options-tabs-first-level > .fw-options-tabs-contents');
+			if ($content.length == 0) {
 				return;
 			}
 
-			var $frameContent = $tabsContent.closest('.media-frame-content');
+			$frame = $content.closest('.media-frame-content');
 
 			// resize icon list to fit entire window
-			$tabsContent.css('overflow-y', 'auto').height(1000000);
-			$frameContent.scrollTop(1000000);
+			$content.css('overflow-y', 'auto').height(1000000);
+			$frame.scrollTop(1000000);
 
-			// I don't know why this -1 is stands for, but without it scroll bar appears.
-			$tabsContent.height($tabsContent.height() - $frameContent.scrollTop() - 1);
-		}
+			// -1 is necessary for Linux and Windows
+			// -2 is necessary for Mac OS
+			// I don't know where this numbers come from but without this adjustment
+			// vertical scroll bar appears.
+			$content.height($content.height() - $frame.scrollTop() /* - 2  */);
+
+			// This is another fix for vertical scroll bar issue
+			$frame.css('overflow-y', 'hidden');
+        }
 	});
 
 })();
