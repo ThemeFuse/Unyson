@@ -316,7 +316,7 @@ if (!function_exists('_action_theme_display_form_errors')):
 		}
 
 		wp_enqueue_script(
-			'',
+			'fw-theme-show-form-errors',
 			get_template_directory_uri() . '/js/form-errors.js',
 			array('jquery'),
 			fw()->theme->manifest->get_version(),
@@ -330,3 +330,18 @@ if (!function_exists('_action_theme_display_form_errors')):
 	}
 endif;
 add_action('wp_enqueue_scripts', '_action_theme_display_form_errors');
+
+if(!function_exists('_action_theme_add_feedback')) :
+	function _action_theme_add_feedback(){
+		add_post_type_support('post', 'fw-feedback');
+		add_post_type_support('fw-event', 'fw-feedback');
+	}
+endif;
+add_action('init', '_action_theme_add_feedback');
+
+if(!function_exists('_action_theme_add_layout_builder')) :
+	function _action_theme_add_layout_builder(){
+		add_post_type_support('page', 'fw-layout-builder');
+	}
+endif;
+add_action('init', '_action_theme_add_layout_builder');
