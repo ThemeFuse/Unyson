@@ -32,38 +32,40 @@ class FW_Extension_Portfolio extends FW_Extension {
 	}
 
 	public function add_admin_actions() {
-		add_action( 'admin_menu', array( $this, '_admin_action_rename_porjects' ) );
-
+		add_action( 'admin_menu', array( $this, '_action_admin_rename_porjects' ) );
+		add_action( 'restrict_manage_posts', array( $this, '_action_admin_add_portfolio_edit_page_filter' ) );
 		// listing screen
 		add_action( 'manage_' . $this->post_type . '_posts_custom_column', array(
 			$this,
-			'_admin_action_manage_custom_column'
+			'_action_admin_manage_custom_column'
 		), 10, 2 );
 
 		// add / edit screen
-		add_action( 'fw_post_options', array( $this, '_admin_action_add_post_options' ), 10, 2 );
-		add_action( 'do_meta_boxes', array( $this, '_admin_action_featured_image_label' ) );
+		add_action( 'fw_post_options', array( $this, '_action_admin_add_post_options' ), 10, 2 );
+		add_action( 'do_meta_boxes', array( $this, '_action_admin_featured_image_label' ) );
 
-		add_action( 'admin_enqueue_scripts', array( $this, '_admin_action_add_static' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, '_action_admin_add_static' ) );
 
-		add_action( 'admin_head', array( $this, '_admin_action_initial_nav_menu_meta_boxes' ), 999 );
+		add_action( 'admin_head', array( $this, '_action_admin_initial_nav_menu_meta_boxes' ), 999 );
 	}
 
 	public function add_admin_filters() {
+		add_filter( 'parse_query', array( $this, '_filter_admin_filter_portfolios_by_portfolio_category' ), 10, 2 );
+		add_filter( 'months_dropdown_results', array( $this, '_filter_admin_remove_select_by_date_filter' ) );
 		add_filter( 'manage_edit-' . $this->post_type . '_columns', array(
 			$this,
-			'_admin_filter_manage_edit_columns'
+			'_filter_adminmanage_edit_columns'
 		), 10, 1 );
 	}
 
 	public function add_theme_filters() {
-		add_filter( 'template_include', array( $this, '_theme_filter_template_include' ) );
+		add_filter( 'template_include', array( $this, '_filter_theme_template_include' ) );
 	}
 
 	/**
 	 * @internal
 	 */
-	public function _admin_action_add_static() {
+	public function _action_admin_add_static() {
 		$projects_listing_screen  = array(
 			'only' => array(
 				array(
@@ -155,22 +157,21 @@ class FW_Extension_Portfolio extends FW_Extension {
 				'editor',
 				'thumbnail', /* Displays a box for featured image. */
 			),
-			'capabilities' => array(
-				'edit_post'         => 'edit_pages',
-				'read_post'         => 'edit_pages',
-				'delete_post'       => 'edit_pages',
-				'edit_posts'        => 'edit_pages',
-				'edit_others_posts' => 'edit_pages',
-				'publish_posts'     => 'edit_pages',
-				'read_private_posts'=> 'edit_pages',
-
-				'read'                  => 'edit_pages',
-				'delete_posts'          => 'edit_pages',
-				'delete_private_posts'  => 'edit_pages',
-				'delete_published_posts'=> 'edit_pages',
-				'delete_others_posts'   => 'edit_pages',
-				'edit_private_posts'    => 'edit_pages',
-				'edit_published_posts'  => 'edit_pages',
+			'capabilities'       => array(
+				'edit_post'              => 'edit_pages',
+				'read_post'              => 'edit_pages',
+				'delete_post'            => 'edit_pages',
+				'edit_posts'             => 'edit_pages',
+				'edit_others_posts'      => 'edit_pages',
+				'publish_posts'          => 'edit_pages',
+				'read_private_posts'     => 'edit_pages',
+				'read'                   => 'edit_pages',
+				'delete_posts'           => 'edit_pages',
+				'delete_private_posts'   => 'edit_pages',
+				'delete_published_posts' => 'edit_pages',
+				'delete_others_posts'    => 'edit_pages',
+				'edit_private_posts'     => 'edit_pages',
+				'edit_published_posts'   => 'edit_pages',
 			),
 		) );
 
@@ -219,7 +220,7 @@ class FW_Extension_Portfolio extends FW_Extension {
 	/**
 	 * @internal
 	 */
-	public function _admin_action_add_post_options( $options, $post_type ) {
+	public function _action_admin_add_post_options( $options, $post_type ) {
 		if ( $post_type === $this->post_type ) {
 			$options[] = array(
 				'general' => array(
@@ -247,7 +248,7 @@ class FW_Extension_Portfolio extends FW_Extension {
 	/**
 	 * internal
 	 */
-	public function _admin_action_rename_porjects() {
+	public function _action_admin_rename_porjects() {
 		global $menu;
 
 		foreach ( $menu as $key => $menu_item ) {
@@ -261,7 +262,7 @@ class FW_Extension_Portfolio extends FW_Extension {
 	 * Change the title of Featured Image Meta box
 	 * @internal
 	 */
-	public function _admin_action_featured_image_label() {
+	public function _action_admin_featured_image_label() {
 		remove_meta_box( 'postimagediv', $this->post_type, 'side' );
 		add_meta_box( 'postimagediv', __( 'Project Cover Image', 'fw' ), 'post_thumbnail_meta_box', $this->post_type, 'side' );
 	}
@@ -269,7 +270,7 @@ class FW_Extension_Portfolio extends FW_Extension {
 	/**
 	 * @internal
 	 */
-	public function _admin_action_manage_custom_column( $column_name, $id ) {
+	public function _action_admin_manage_custom_column( $column_name, $id ) {
 		switch ( $column_name ) {
 			case 'image':
 				if ( get_the_post_thumbnail( intval( $id ) ) ) {
@@ -290,7 +291,7 @@ class FW_Extension_Portfolio extends FW_Extension {
 	/**
 	 * @internal
 	 */
-	public function _admin_filter_manage_edit_columns( $columns ) {
+	public function _filter_adminmanage_edit_columns( $columns ) {
 		$new_columns          = array();
 		$new_columns['cb']    = $columns['cb']; // checkboxes for all projects page
 		$new_columns['image'] = __( 'Cover Image', 'fw' );
@@ -300,8 +301,110 @@ class FW_Extension_Portfolio extends FW_Extension {
 
 	/**
 	 * @internal
+	 *
+	 * @param WP_Query $query
+	 *
+	 * @return WP_Query
 	 */
-	public function _theme_filter_template_include( $template ) {
+	public function _filter_admin_filter_portfolios_by_portfolio_category( $query ) {
+		$screen = fw_current_screen_match( array(
+			'only' => array(
+				'base'      => 'edit',
+				'id'        => 'edit-' . $this->post_type,
+				'post_type' => $this->post_type,
+			)
+		) );
+
+		if ( ! $screen || ! $query->is_main_query() ) {
+			return $query;
+		}
+
+		$filter_value = FW_Request::GET( $this->get_name() . '-filter-by-portfolio-category' );
+
+		if ( empty( $filter_value ) ) {
+			return $query;
+		}
+
+		$filter_value = (int) $filter_value;
+
+		$query->set( 'tax_query', array(
+			array(
+				'taxonomy' => $this->taxonomy_name,
+				'field'    => 'id',
+				'terms'    => $filter_value,
+			)
+		) );
+
+		return $query;
+	}
+
+	/**
+	 * @internal
+	 *
+	 * @param array $filters
+	 *
+	 * @return array
+	 */
+	public function _filter_admin_remove_select_by_date_filter( $filters ) {
+		$screen = array(
+			'only' => array(
+				'base' => 'edit',
+				'id'   => 'edit-' . $this->post_type,
+			)
+		);
+
+		if ( ! fw_current_screen_match( $screen ) ) {
+			return $filters;
+		}
+
+		return array();
+	}
+
+	/**
+	 * @internal
+	 */
+	public function _action_admin_add_portfolio_edit_page_filter() {
+		$screen = fw_current_screen_match( array(
+			'only' => array(
+				'base'      => 'edit',
+				'id'        => 'edit-' . $this->post_type,
+				'post_type' => $this->post_type,
+			)
+		) );
+
+		if ( ! $screen ) {
+			return;
+		}
+
+		$terms = get_terms( $this->taxonomy_name );
+
+		if ( empty( $terms ) || is_wp_error( $terms ) ) {
+			echo '<select name="' . $this->get_name() . '-filter-by-portfolio-category"><option value="0">' . __( 'View all categories', 'fw' ) . '</option></select>';
+
+			return;
+		}
+
+		$get = FW_Request::GET( $this->get_name() . '-filter-by-portfolio-category' );
+		$id  = ( ! empty( $get ) ) ? (int) $get : 0;
+
+		$dropdown_options = array(
+			'selected'        => $id,
+			'name'            => $this->get_name() . '-filter-by-portfolio-category">',
+			'taxonomy'        => $this->taxonomy_name,
+			'show_option_all' => __( 'View all categories' ),
+			'hide_empty'      => true,
+			'hierarchical'    => 1,
+			'show_count'      => 0,
+			'orderby'         => 'name',
+		);
+
+		wp_dropdown_categories( $dropdown_options );
+	}
+
+	/**
+	 * @internal
+	 */
+	public function _filter_theme_template_include( $template ) {
 		if ( is_singular( $this->post_type ) ) {
 			return $this->locate_path( '/views/single.php' );
 		} else if ( is_tax( $this->taxonomy_name ) ) {
@@ -337,7 +440,7 @@ class FW_Extension_Portfolio extends FW_Extension {
 		return $this->taxonomy_name;
 	}
 
-	public function _admin_action_initial_nav_menu_meta_boxes() {
+	public function _action_admin_initial_nav_menu_meta_boxes() {
 		$screen = array(
 			'only' => array(
 				'base' => 'nav-menus'
