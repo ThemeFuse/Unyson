@@ -189,3 +189,47 @@
 		FW_WP_Option::set( 'fw_extensions', $multi_key, $value );
 	}
 }
+
+{
+	/**
+	 * Get user meta set by w specific extension
+	 * @param int $user_id
+	 * @param string $extension_name
+	 *
+	 * If the extension doesn't exist or is disabled, or meta key doesn't exist, returns null,
+	 * else returns the meta key value
+	 * @return mixed|null
+	 */
+	function fw_get_db_extension_user_data( $user_id, $extension_name ) {
+		if ( ! fw()->extensions->get( $extension_name ) ) {
+			trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
+
+			return null;
+		}
+		$data = get_user_meta( $user_id, 'fw_data', true );
+		if ( isset( $data[ $extension_name ] ) ) {
+			return $data[ $extension_name ];
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param int $user_id
+	 * @param string $extension_name
+	 * @param mixed $value
+	 *
+	 * In case the extension doesn't exist or is disabled, or the value is equal to previous, returns false
+	 * @return bool|int
+	 */
+	function fw_set_db_extension_user_data( $user_id, $extension_name, $value ) {
+		if ( ! fw()->extensions->get( $extension_name ) ) {
+			trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
+
+			return false;
+		}
+		$data                    = get_user_meta( $user_id, 'fw_data', true );
+		$data[ $extension_name ] = $value;
+		return fw_update_user_meta( $user_id, 'fw_data', $data );
+	}
+}

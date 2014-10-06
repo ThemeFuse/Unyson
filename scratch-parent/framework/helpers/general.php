@@ -243,7 +243,7 @@ function fw_html_tag($tag, $attr = array(), $end = false) {
 	if ($end === true) {
 		# <script></script>
 		$html .= '></'. $tag .'>';
-	} else if ($end === false || empty($end)) {
+	} else if ($end === false) {
 		# <br/>
 		$html .= '/>';
 	} else {
@@ -267,7 +267,7 @@ function fw_attr_to_html(array $attr_array) {
 			continue;
 		}
 
-		$html_attr .= $attr_name .'="'. esc_attr($attr_val) .'" ';
+		$html_attr .= $attr_name .'="'. fw_htmlspecialchars($attr_val) .'" ';
 	}
 
 	return $html_attr;
@@ -789,7 +789,7 @@ function fw_is_valid_domain_name($domain_name) {
  * @return string
  */
 function fw_htmlspecialchars($string) {
-	return htmlspecialchars($string, ENT_COMPAT, 'UTF-8');
+	return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
 }
 
 /**
@@ -828,26 +828,26 @@ function fw_human_time($seconds)
 	static $translations = null;
 	if ($translations === null) {
 		$translations = array(
-			'year'      => __('year', 'tfuse'),
-			'years'     => __('years', 'tfuse'),
+			'year'      => __('year', 'fw'),
+			'years'     => __('years', 'fw'),
 
-			'month'     => __('month', 'tfuse'),
-			'months'    => __('months', 'tfuse'),
+			'month'     => __('month', 'fw'),
+			'months'    => __('months', 'fw'),
 
-			'week'      => __('week', 'tfuse'),
-			'weeks'     => __('weeks', 'tfuse'),
+			'week'      => __('week', 'fw'),
+			'weeks'     => __('weeks', 'fw'),
 
-			'day'       => __('day', 'tfuse'),
-			'days'      => __('days', 'tfuse'),
+			'day'       => __('day', 'fw'),
+			'days'      => __('days', 'fw'),
 
-			'hour'      => __('hour', 'tfuse'),
-			'hours'     => __('hours', 'tfuse'),
+			'hour'      => __('hour', 'fw'),
+			'hours'     => __('hours', 'fw'),
 
-			'minute'    => __('minute', 'tfuse'),
-			'minutes'   => __('minutes', 'tfuse'),
+			'minute'    => __('minute', 'fw'),
+			'minutes'   => __('minutes', 'fw'),
 
-			'second'    => __('second', 'tfuse'),
-			'seconds'   => __('seconds', 'tfuse'),
+			'second'    => __('second', 'fw'),
+			'seconds'   => __('seconds', 'fw'),
 		);
 	}
 

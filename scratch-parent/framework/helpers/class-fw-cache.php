@@ -165,9 +165,10 @@ class FW_Cache
 		self::$cache = array();
 	}
 }
-FW_Cache::_init();
 
 class FW_Cache_Not_Found_Exception extends Exception {}
+
+FW_Cache::_init();
 
 // auto free_memory() every X ticks
 {

@@ -252,7 +252,7 @@ class FW_Form
 	 */
 	public function render($data = array())
 	{
-		echo fw_html_tag('form', $this->attr);
+		?><form <?php echo fw_attr_to_html($this->attr) ?> ><?php
 
 		if (!empty($this->attr['action']) && $this->attr['method'] == 'get') {
 			/**
@@ -265,7 +265,7 @@ class FW_Form
 
 			if (!empty($query_vars)) {
 				foreach ($query_vars as $var_name => $var_value) {
-					?><input type="hidden" name="<?php print esc_attr($var_name) ?>" value="<?php print esc_attr($var_value) ?>" /><?php
+					?><input type="hidden" name="<?php print esc_attr($var_name) ?>" value="<?php print fw_htmlspecialchars($var_value) ?>" /><?php
 				}
 			}
 		}
