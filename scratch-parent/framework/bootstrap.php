@@ -1,4 +1,5 @@
 <?php if (!defined('WP_DEBUG')) die('Forbidden');
+
 /**
  * Loads the framework
  * Include this file in theme/functions.php
