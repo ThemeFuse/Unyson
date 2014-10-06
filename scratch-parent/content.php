@@ -42,6 +42,11 @@
 
 				edit_post_link( __( 'Edit', 'unyson' ), '<span class="edit-link">', '</span>' );
 			?>
+			<?php
+				if( function_exists('fw_ext_feedback_stars_load_view') ) {
+					fw_ext_feedback_stars_load_view();
+				}
+			?>
 		</div><!-- .entry-meta -->
 	</header><!-- .entry-header -->
 
