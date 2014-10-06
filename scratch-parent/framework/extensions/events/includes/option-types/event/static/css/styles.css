@@ -1,0 +1,9 @@
+.fw-backend-option-type-event {
+	padding-left: 0;
+	padding-top: 0;
+	padding-right: 0;
+}
+
+.fw-option-type-event .fw-backend-option-design-default:last-child {
+	border: none;
+}
