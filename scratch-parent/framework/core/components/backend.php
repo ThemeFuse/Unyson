@@ -240,13 +240,13 @@ final class _FW_Component_Backend
 
 		{
 			wp_register_style('qtip',
-				fw_get_framework_directory_uri('/static/lib/qtip/css/jquery.qtip.min.css'),
+				fw_get_framework_directory_uri('/static/libs/qtip/css/jquery.qtip.min.css'),
 				array(),
 				fw()->manifest->get_version()
 			);
 			wp_register_script(
 				'qtip',
-				fw_get_framework_directory_uri('/static/lib/qtip/jquery.qtip.min.js'),
+				fw_get_framework_directory_uri('/static/libs/qtip/jquery.qtip.min.js'),
 				array('jquery'),
 				fw()->manifest->get_version()
 			);
@@ -255,13 +255,13 @@ final class _FW_Component_Backend
 		{
 			wp_register_style(
 				'fw-selectize',
-				fw_get_framework_directory_uri('/static/css/selectize.css'),
+				fw_get_framework_directory_uri('/static/libs/selectize/selectize.css'),
 				array(),
 				fw()->manifest->get_version()
 			);
 			wp_register_script(
 				'fw-selectize',
-				fw_get_framework_directory_uri('/static/js/selectize.min.js'),
+				fw_get_framework_directory_uri('/static/libs/selectize/selectize.min.js'),
 				array('jquery', 'fw-ie-fixes'),
 				fw()->manifest->get_version(),
 				true
@@ -271,7 +271,7 @@ final class _FW_Component_Backend
 		{
 			wp_register_script(
 				'fw-mousewheel',
-				fw_get_framework_directory_uri('/static/js/jquery.mousewheel.min.js'),
+				fw_get_framework_directory_uri('/static/libs/mousewheel/jquery.mousewheel.min.js'),
 				array('jquery'),
 				fw()->manifest->get_version(),
 				true
@@ -281,12 +281,12 @@ final class _FW_Component_Backend
 		{
 			wp_register_style(
 				'fw-jscrollpane',
-				fw_get_framework_directory_uri('/static/css/jquery.jscrollpane.css'),
+				fw_get_framework_directory_uri('/static/libs/jscrollpane/jquery.jscrollpane.css'),
 				array(),
 				fw()->manifest->get_version()
 			);
 			wp_register_script( 'fw-jscrollpane',
-				fw_get_framework_directory_uri('/static/js/jquery.jscrollpane.min.js'),
+				fw_get_framework_directory_uri('/static/libs/jscrollpane/jquery.jscrollpane.min.js'),
 				array( 'jquery', 'fw-mousewheel' ),
 				fw()->manifest->get_version(),
 				true
@@ -296,7 +296,7 @@ final class _FW_Component_Backend
 		{
 			wp_register_style(
 				'fw-font-awesome',
-				fw_get_framework_directory_uri('/static/lib/font-awesome/css/font-awesome.min.css'),
+				fw_get_framework_directory_uri('/static/libs/font-awesome/css/font-awesome.min.css'),
 				array(),
 				fw()->manifest->get_version()
 			);
@@ -305,8 +305,17 @@ final class _FW_Component_Backend
 		{
 			wp_register_script(
 				'backbone-relational',
-				fw_get_framework_directory_uri('/static/lib/backbone-relational/backbone-relational.js'),
+				fw_get_framework_directory_uri('/static/libs/backbone-relational/backbone-relational.js'),
 				array('backbone'),
+				fw()->manifest->get_version(),
+				true
+			);
+		}
+
+		{
+			wp_register_script(
+				'fw-uri',
+				fw_get_framework_directory_uri('/static/libs/uri/URI.js'),
 				fw()->manifest->get_version(),
 				true
 			);
