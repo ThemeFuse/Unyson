@@ -5834,3 +5834,7 @@ a.pp_arrow_next{
 .video-wrapper .mejs-container {
 	margin-top: 0;
 }
+
+.form-error {
+	color: #c2362c;
+}
