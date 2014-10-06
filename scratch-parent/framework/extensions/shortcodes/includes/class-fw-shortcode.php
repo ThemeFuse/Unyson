@@ -82,7 +82,7 @@ class FW_Shortcode
 	 *
 	 * From a given array of attributes e.g.:
 	 * array(
-     *     'width'  => 200,
+	 *     'width'  => 200,
 	 *     'height' => 100
 	 * )
 	 * the method generates the corresponding shortcode notation:

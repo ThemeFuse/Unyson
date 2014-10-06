@@ -4,6 +4,8 @@ class FW_Extension_Layout_Builder extends FW_Extension
 {
 	private $builder_option_key = 'layout-builder';
 
+	private $supports_feature_name = 'fw-layout-builder';
+
 	/**
 	 * @internal
 	 */
@@ -19,7 +21,7 @@ class FW_Extension_Layout_Builder extends FW_Extension
 
 	private function add_admin_filters()
 	{
-		add_filter('fw_post_options',      array($this, '_admin_filter_fw_post_options'), 10, 2);
+		add_filter('fw_post_options', array($this, '_admin_filter_fw_post_options'), 10, 2);
 	}
 
 	private function add_admin_actions()
@@ -38,17 +40,20 @@ class FW_Extension_Layout_Builder extends FW_Extension
 	 */
 	public function _admin_filter_fw_post_options($post_options, $post_type)
 	{
-		if (in_array($post_type, $this->get_config('supported_post_types'))) {
+		if (
+			post_type_supports($post_type, $this->supports_feature_name) or
+			in_array($post_type, $this->get_config('supported_post_types'))
+		) {
 			$layout_builder_options = array(
 				'layout-builder-box' => array(
-					'title'    => false,
-					'type'     => 'box',
+					'title' => false,
+					'type' => 'box',
 					'priority' => 'high',
-					'options'  => array(
+					'options' => array(
 						$this->builder_option_key => array(
-							'label'              => false,
-							'desc'               => false,
-							'type'               => 'layout-builder',
+							'label' => false,
+							'desc' => false,
+							'type' => 'layout-builder',
 							'editor_integration' => true
 						)
 					)
@@ -63,9 +68,12 @@ class FW_Extension_Layout_Builder extends FW_Extension
 	/**
 	 * @internal
 	 */
-	public function _admin_action_fw_save_post_options($post_id , $post)
+	public function _admin_action_fw_save_post_options($post_id, $post)
 	{
-		if (in_array($post->post_type, $this->get_config('supported_post_types'))) {
+		if (
+			post_type_supports($post->post_type, $this->supports_feature_name) or
+			in_array($post->post_type, $this->get_config('supported_post_types'))
+		) {
 			$builder_shortcodes = fw_get_db_post_option($post_id, $this->builder_option_key);
 			if (
 				!$builder_shortcodes['builder_active'] ||
@@ -77,8 +85,8 @@ class FW_Extension_Layout_Builder extends FW_Extension
 			// remove then add again to avoid infinite loop
 			remove_action('fw_save_post_options', array($this, '_admin_action_fw_save_post_options'));
 			wp_update_post(array(
-				'ID'            => $post_id,
-				'post_content'  => $builder_shortcodes['shortcode_notation']
+				'ID' => $post_id,
+				'post_content' => $builder_shortcodes['shortcode_notation']
 			));
 			add_action('fw_save_post_options', array($this, '_admin_action_fw_save_post_options'), 10, 2);
 		}
@@ -93,7 +101,10 @@ class FW_Extension_Layout_Builder extends FW_Extension
 	{
 		global $post;
 
-		if (in_array($post->post_type, $this->get_config('supported_post_types'))) {
+		if (
+			post_type_supports($post->post_type, $this->supports_feature_name) or
+			in_array($post->post_type, $this->get_config('supported_post_types'))
+		) {
 			$builder_meta = fw_get_db_post_option($post->ID, $this->builder_option_key);
 			if ($builder_meta['builder_active']) {
 				remove_filter('the_content', 'wpautop');
