@@ -1,0 +1,10 @@
+.fullwidth-section {
+	width: 100%;
+	background-repeat: no-repeat;
+	padding: 0px;
+	margin: 0px;
+}
+
+.fullwidth-section.wallpapered .shortcode-column {
+	z-index: 1;
+}

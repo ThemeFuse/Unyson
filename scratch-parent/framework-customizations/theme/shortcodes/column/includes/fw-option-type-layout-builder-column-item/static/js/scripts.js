@@ -156,7 +156,7 @@
 
 			return function(items) {
 				var type = 'column',
-					columnSumm;
+					columnSum;
 
 				items.each(function(item, index, list) {
 
@@ -166,32 +166,40 @@
 						// checking if the previous element exists
 						if (!list[index - 1]) {
 							item.set('firstInRow', true, {silent: true});
-							columnSumm = Fraction.createFromString(item.get('subtype'));
+							columnSum = Fraction.createFromString(item.get('subtype'));
 							return;
 						}
 
 						// checking if the previous element is not a column
 						if (list[index - 1].get('type') !== type) {
 							item.set('firstInRow', true, {silent: true});
-							columnSumm = Fraction.createFromString(item.get('subtype'));
+							columnSum = Fraction.createFromString(item.get('subtype'));
 							return;
 						}
 
-						// if here then the previos is also a column
-						// summ it and see if new row
-						columnSumm.add(Fraction.createFromString(item.get('subtype')));
-						if (columnSumm.toNumber() > 1) {
+						// if here then the previous is also a column
+						// sum it and see if new row
+						columnSum.add(Fraction.createFromString(item.get('subtype')));
+						if (columnSum.toNumber() > 1) {
 							item.set('firstInRow', true, {silent: true});
-							columnSumm = Fraction.createFromString(item.get('subtype'));
+							columnSum = Fraction.createFromString(item.get('subtype'));
 						}
+					} else {
+						setFirstRowColumns(item.get('_items'));
 					}
 
 				});
 			};
 		})();
 
-		builder.rootItems.on('change add remove reset', function() {
-			setFirstRowColumns(builder.rootItems);
+		var saveTimeout = 0;
+
+		builder.rootItems.on('builder:change', function () {
+			clearTimeout(saveTimeout);
+
+			saveTimeout = setTimeout(function () {
+				setFirstRowColumns(builder.rootItems);
+			}, 100);
 		});
 
 		builder.registerItemClass(LayoutBuilderColumnItem);

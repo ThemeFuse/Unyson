@@ -1,0 +1,35 @@
+.fw-shortcode-calendar #cal-week-box {
+	z-index: 2;
+}
+
+.fw-shortcode-calendar-wrapper .hidden-header {
+	visibility: hidden;
+}
+
+.fw-shortcode-calendar-wrapper  .time-col {
+	width: 100px;
+	box-sizing: border-box;
+}
+
+.fw-shortcode-calendar-wrapper .events-col {
+	width: 100%;
+}
+
+.fw-shortcode-calendar-wrapper .page-header{
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 23px;
+    border: none;
+}
+
+.fw-shortcode-calendar-wrapper .page-header h3{
+    display: inline-block;
+    margin: 0;
+    font-size: 20px;
+    color: #0f71bc;
+}
+
+.fw-shortcode-calendar-wrapper .btn-group{
+    margin-right: 15px;
+    vertical-align: top;
+}
