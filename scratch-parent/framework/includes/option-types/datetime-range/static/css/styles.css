@@ -1,0 +1,13 @@
+.fw-backend-option-input-type-datetime-range .delimiter {
+	margin: 0 10px;
+}
+
+.fw-backend-option-input-type-datetime-range .fw-option-type-datetime-picker.from,
+.fw-backend-option-input-type-datetime-range .fw-option-type-datetime-picker.to,
+.fw-backend-option-input-type-datetime-range .delimiter {
+	display: inline-block;
+}
+
+.fw-backend-option-input-type-datetime-range .fw-option-type-datetime-picker {
+	width: 150px;
+}

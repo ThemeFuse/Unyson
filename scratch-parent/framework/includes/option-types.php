@@ -456,9 +456,6 @@ class FW_Option_Type_Radio extends FW_Option_Type
 
 		$html = '<div '. fw_attr_to_html($div_attr) .'>';
 
-		/*$html .= '<input type="radio" name="'. esc_attr($option['attr']['name']) .'" value="" checked="checked" style="display: none">'.
-			'<!-- used for "'. esc_attr($id) .'" to be present in _POST -->';*/
-
 		foreach ($option['choices'] as $value => $text) {
 			$choice_id = $option['attr']['id'] .'-'. $value;
 
@@ -791,3 +788,6 @@ require $dir .'/option-types/addable-option/class-fw-option-type-addable-option.
 require $dir .'/option-types/addable-box/class-fw-option-type-addable-box.php';
 require $dir .'/option-types/addable-popup/class-fw-option-type-addable-popup.php';
 require $dir .'/option-types/multi-select/class-fw-option-type-multi-select.php';
+require $dir .'/option-types/map/class-fw-option-type-map.php';
+require $dir .'/option-types/datetime-range/class-fw-option-type-datetime-range.php';
+require $dir .'/option-types/datetime-picker/class-fw-option-type-datetime-picker.php';
