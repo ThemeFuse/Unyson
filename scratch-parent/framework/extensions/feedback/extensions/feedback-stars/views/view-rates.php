@@ -2,7 +2,7 @@
 	die( 'Forbidden' );
 }
 /**
- * Displays information about the votes allocated to a product.
+ * Displays information about the votes allocated to a post.
  * @var int $stars_number
  * @var array $rating
  */

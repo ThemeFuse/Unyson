@@ -152,8 +152,8 @@ class FW_Extension_FeedBack extends FW_Extension {
 		}
 
 		/**
-		 * remove previous comments by this user on this product, only last feedback is saved
-		 * user is allowed to have only one feedback per product
+		 * remove previous comments by this user on this post, only last feedback is saved
+		 * user is allowed to have only one feedback per post
 		 */
 		foreach (
 			get_comments( array(
@@ -175,7 +175,7 @@ class FW_Extension_FeedBack extends FW_Extension {
 
 		do_action( 'fw_ext_feedback_insert', $comment_id, array(
 			'active'     => $active,
-			'product_id' => $post_id,
+			'post_id' => $post_id,
 			'user_id'    => $user_id
 		) );
 	}

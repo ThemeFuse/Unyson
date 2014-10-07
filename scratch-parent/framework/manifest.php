@@ -2,7 +2,7 @@
 
 $manifest = array();
 
-$manifest['version'] = '1.3.0';
+$manifest['version'] = '1.3.1';
 
 $manifest['requirements'] = array(
 	'wordpress' => array(

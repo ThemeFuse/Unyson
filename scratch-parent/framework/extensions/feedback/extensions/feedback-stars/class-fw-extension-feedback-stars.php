@@ -83,7 +83,7 @@ class FW_Extension_FeedBack_Stars extends FW_Extension {
 
 
 	public function _action_show_schema() {
-		$rating = $this->get_product_rating();
+		$rating = $this->get_post_rating();
 		$html   = '';
 		if ( intval( $rating['count'] ) > 0 ) {
 			$html .= '<div itemscope itemtype="http://schema.org/Product">';
@@ -106,7 +106,7 @@ class FW_Extension_FeedBack_Stars extends FW_Extension {
 	 *
 	 * @return mixed
 	 */
-	public function get_product_rating( $post_id = null ) {
+	public function get_post_rating( $post_id = null ) {
 		if ( null === $post_id ) {
 			$post_id = get_the_ID();
 		}
@@ -251,7 +251,7 @@ class FW_Extension_FeedBack_Stars extends FW_Extension {
 	 *
 	 * @return mixed
 	 */
-	public function get_product_detailed_rating( $post_id = null ) {
+	public function get_post_detailed_rating( $post_id = null ) {
 
 		if ( null === $post_id ) {
 			$post_id = get_the_ID();
@@ -267,7 +267,7 @@ class FW_Extension_FeedBack_Stars extends FW_Extension {
 
 		$result = $wpdb->get_results( $wpdb->prepare( $sql, $post_id, $this->field_name ), ARRAY_A );
 
-		$return = $this->get_product_rating($post_id);
+		$return = $this->get_post_rating($post_id);
 		$stars = array();
 		for($i=$this->max_rating; $i>=1; $i--){
 			$stars[$i] = array(
