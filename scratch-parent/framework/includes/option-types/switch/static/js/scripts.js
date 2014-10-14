@@ -10,6 +10,7 @@ jQuery(document).ready(function ($) {
 				var $this = $(this);
 
 				var value;
+
 				if ($this.prop('checked')) {
 					value = $this.attr('data-switch-right-bool-value');
 
@@ -18,6 +19,9 @@ jQuery(document).ready(function ($) {
 					} else {
 						value = $this.attr('data-switch-right-value')
 					}
+
+					// prevent hidden value sent in POST
+					$this.prev('input[type="hidden"]').removeAttr('name');
 				} else {
 					value = $this.attr('data-switch-left-bool-value');
 
@@ -26,6 +30,9 @@ jQuery(document).ready(function ($) {
 					} else {
 						value = $this.attr('data-switch-left-value');
 					}
+
+					// make hidden value sent in POST
+					$this.prev('input[type="hidden"]').attr('name', $this.attr('name'));
 				}
 
 				$this.closest('.'+ optionTypeClass).trigger(customEventPrefix +'change', {
