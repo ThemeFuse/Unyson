@@ -9,13 +9,16 @@ jQuery(function ($) {
         $(templ).insertAfter(table);
     }
 
-    $('[data-action=backup-now]').click(function (event) {
+    $('[data-action=backup-spinner]').click(function (event) {
+        // Do not allow to click on *Backup Now* button twice
         if ($(this).prop('disabled')) {
             event.preventDefault();
         }
         else {
-            $('<span>&nbsp;<i class="backup-spinner spinner"></i></span>').insertAfter(this);
-            $('[data-action=backup-now]').prop('disabled', true).attr('disabled', true);
+	        // Disable all *Backup Now* buttons
+	        $('[data-action=backup-spinner]').prop('disabled', true).attr('disabled', true);
+	        // And display spinner
+            $('<span>&nbsp;<i class="backup-spinner spinner"></i></span>').appendTo($(this).parent());
         }
     });
 

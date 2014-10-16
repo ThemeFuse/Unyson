@@ -1,0 +1,7 @@
+.hide-fw-options-tabs-list .fw-options-tabs-list {
+	display: none;
+}
+
+.disabled .hide-if-disabled {
+	display: none;
+}

@@ -1,0 +1,28 @@
+/**
+ * Stylize wordpress table
+ */
+
+#backup-container ~ #posts-filter .search-box,
+#backup-container ~ #posts-filter .tablenav .actions,
+#backup-container ~ #posts-filter .tablenav .view-switch,
+#backup-container ~ #posts-filter thead,
+#backup-container ~ #posts-filter tfoot,
+#backup-container ~ #posts-filter .row-actions {
+	display: none;
+}
+
+#backup-container ~ #posts-filter .tablenav.top {
+	margin-top: -40px;
+}
+
+#backup-container ~ #posts-filter .tablenav.bottom {
+	margin-bottom: -40px;
+}
+
+#backup-container ~ #posts-filter .column-description p {
+	margin-bottom: 2px;
+}
+
+.wp-list-table .column-description p {
+	margin-bottom: 2px;
+}

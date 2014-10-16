@@ -2,34 +2,18 @@
 
 interface FW_Backup_Interface_Storage
 {
-	/**
-	 * @param string $context
-	 * @return string
-	 */
+    public function get_name();
 	public function get_title($context = null);
 
-	/**
-	 * @throw FW_Backup_Exception
-	 */
-	public function ping();
+    public function get_storage_options();
+	public function set_storage_options($values);
+	// Allows storage layer to exchange auth_code to access_token
+	public function before_save_storage_options($values);
 
-	/**
-	 * @param $file
-	 * @return FW_Backup_Interface_File
-	 * @throws FW_Backup_Exception
-	 */
-	public function move($file);
+	public function ping(FW_Backup_Interface_Feedback $feedback);
+	public function move($file, FW_Backup_Interface_Feedback $feedback);
+	public function fetch($storage_file, FW_Backup_Interface_Feedback $feedback);
+	public function remove($storage_file, FW_Backup_Interface_Feedback $feedback);
 
-	/**
-	 * @param FW_Backup_Interface_File $backup_file
-	 * @return string path to temporary file
-	 * @throws FW_Backup_Exception
-	 */
-	public function fetch(FW_Backup_Interface_File $backup_file);
-
-	/**
-	 * @param FW_Backup_Interface_File $backup_file
-	 * @throws FW_Backup_Exception
-	 */
-	public function remove(FW_Backup_Interface_File $backup_file);
+	public function download($storage_file);
 }
