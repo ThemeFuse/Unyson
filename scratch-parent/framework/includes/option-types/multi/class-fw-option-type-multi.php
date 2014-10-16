@@ -12,21 +12,30 @@ class FW_Option_Type_Multi extends FW_Option_Type
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data)
+	{
+		wp_enqueue_style(
+			'fw-option-'. $this->get_type(),
+			fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/css/styles.css'),
+			array(),
+			fw()->manifest->get_version()
+		);
+
+		fw()->backend->enqueue_options_static($option['inner-options']);
+
+		return true;
+	}
+
+	/**
+	 * @internal
 	 */
 	protected function _render($id, $option, $data)
 	{
-		// static
-		{
-			wp_enqueue_style(
-				'fw-option-'. $this->get_type(),
-				fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/css/styles.css'),
-				array(),
-				fw()->manifest->get_version()
-			);
-		}
-
-		if (empty($data['value']))
+		if (empty($data['value'])) {
 			$data['value'] = array();
+		}
 
 		$div_attr = $option['attr'];
 		unset($div_attr['name'], $div_attr['value']);

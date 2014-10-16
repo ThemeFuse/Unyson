@@ -8,12 +8,13 @@
 	 * Get a framework settings option value from database
 	 *
 	 * @param string|null $option_id Specific option id (accepts multikey). null - all options
+	 * @param null|mixed $default_value If no option found in the database, this value will be returned
 	 * @param null|bool $get_original_value Original value is that with no translations and other changes
 	 *
 	 * @return mixed|null
 	 */
-	function fw_get_db_settings_option( $option_id = null, $get_original_value = null ) {
-		$value = FW_WP_Option::get( 'fw_options', $option_id, $get_original_value );
+	function fw_get_db_settings_option( $option_id = null, $default_value = null, $get_original_value = null ) {
+		$value = FW_WP_Option::get( 'fw_options', $option_id, $default_value, $get_original_value );
 
 		if ( is_null( $value ) ) {
 			/**
@@ -39,7 +40,7 @@
 				// option id not specified, return all options values
 				return $all_options_values;
 			} else {
-				return fw_akg( $option_id, $all_options_values );
+				return fw_akg( $option_id, $all_options_values, $default_value );
 			}
 		} else {
 			return $value;
@@ -64,14 +65,15 @@
 	 *
 	 * @param int $post_id
 	 * @param string|null $option_id Specific option id (accepts multikey). null - all options
+	 * @param null|mixed $default_value If no option found in the database, this value will be returned
 	 * @param null|bool $get_original_value Original value is that with no translations and other changes
 	 *
 	 * @return mixed|null
 	 */
-	function fw_get_db_post_option( $post_id, $option_id = null, $get_original_value = null ) {
+	function fw_get_db_post_option( $post_id, $option_id = null, $default_value = null, $get_original_value = null ) {
 		$option_id = 'fw_options' . ( $option_id !== null ? '/' . $option_id : '' );
 
-		return FW_WP_Post_Meta::get( $post_id, $option_id, $get_original_value );
+		return FW_WP_Post_Meta::get( $post_id, $option_id, $default_value, $get_original_value );
 	}
 
 	/**
@@ -96,19 +98,50 @@
 	 * @param int $term_id
 	 * @param string $taxonomy
 	 * @param string|null $option_id Specific option id (accepts multikey). null - all options
+	 * @param null|mixed $default_value If no option found in the database, this value will be returned
 	 * @param null|bool $get_original_value Original value is that with no translations and other changes
 	 *
 	 * @return mixed|null
 	 */
-	function fw_get_db_term_option( $term_id, $taxonomy, $option_id = null, $get_original_value = null ) {
+	function fw_get_db_term_option( $term_id, $taxonomy, $option_id = null, $default_value = null, $get_original_value = null ) {
 		if ( ! taxonomy_exists( $taxonomy ) ) {
 			return null;
 		}
 
 		$option_name = 'fw_taxonomy_' . $taxonomy . '_options';
-		$option_id   = $term_id . ( $option_id === null ? null : '/' . $option_id );
+		$term_option_id   = $term_id . ( $option_id === null ? null : '/' . $option_id );
 
-		return FW_WP_Option::get( $option_name, $option_id, $get_original_value );
+		$value = FW_WP_Option::get( $option_name, $term_option_id, $default_value, $get_original_value );
+
+		if ( is_null( $value ) ) {
+			/**
+			 * Maybe the options was never saved or the given option id does not exists
+			 * Extract the default values from the options array and try to find there the option id
+			 */
+
+			$cache_key = 'fw_default_options_values/taxonomy/'. $taxonomy;
+
+			try {
+				$all_options_values = FW_Cache::get( $cache_key );
+			} catch ( FW_Cache_Not_Found_Exception $e ) {
+				// extract the default values from options array
+				$all_options_values = fw_get_options_values_from_input(
+					fw()->theme->get_taxonomy_options($taxonomy),
+					array()
+				);
+
+				FW_Cache::set( $cache_key, $all_options_values );
+			}
+
+			if ( empty( $option_id ) ) {
+				// option id not specified, return all options values
+				return $all_options_values;
+			} else {
+				return fw_akg( $option_id, $all_options_values, $default_value );
+			}
+		} else {
+			return $value;
+		}
 	}
 
 	/**
@@ -146,11 +179,12 @@
 	 *
 	 * @param string $extension_name Name of the extension that owns the data
 	 * @param string|null $multi_key The key of the data you want to get. null - all data
+	 * @param null|mixed $default_value If no option found in the database, this value will be returned
 	 * @param null|bool $get_original_value Original value is that with no translations and other changes
 	 *
 	 * @return mixed|null
 	 */
-	function fw_get_db_extension_data( $extension_name, $multi_key = null, $get_original_value = null ) {
+	function fw_get_db_extension_data( $extension_name, $multi_key = null, $default_value = null, $get_original_value = null ) {
 		if ( ! fw()->extensions->get( $extension_name ) ) {
 			trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
 
@@ -163,7 +197,7 @@
 			$multi_key = $extension_name;
 		}
 
-		return FW_WP_Option::get( 'fw_extensions', $multi_key, $get_original_value );
+		return FW_WP_Option::get( 'fw_extensions', $multi_key, $default_value, $get_original_value );
 	}
 
 	/**

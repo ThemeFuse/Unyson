@@ -192,9 +192,6 @@ class FW_Option_Type_Multi_Select extends FW_Option_Type
 	 * @internal
 	 */
 	protected function _render( $id, $option, $data ) {
-		$this->add_css();
-		$this->add_js();
-
 		$items      = '';
 		$population = 'array';
 		$source     = array();
@@ -376,20 +373,15 @@ class FW_Option_Type_Multi_Select extends FW_Option_Type
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
 	 */
-	private function add_css() {
+	protected function _enqueue_static($id, $option, $data) {
 		wp_enqueue_style(
 			$this->get_type() . '-styles',
 			fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/css/style.css'),
 			array('fw-selectize'),
 			fw()->manifest->get_version()
 		);
-	}
-
-	/**
-	 * @internal
-	 */
-	private function add_js() {
 		wp_enqueue_script(
 			$this->get_type() . '-styles',
 			fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/js/scripts.js'),
@@ -397,6 +389,8 @@ class FW_Option_Type_Multi_Select extends FW_Option_Type
 			fw()->manifest->get_version(),
 			true
 		);
+
+		fw()->backend->option_type( 'text' )->enqueue_static();
 	}
 
 	/**

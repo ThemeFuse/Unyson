@@ -232,14 +232,17 @@ class FW_Shortcode_Map extends FW_Shortcode {
 		wp_enqueue_script(
 			'fw-shortcode-map-script',
 			$this->get_uri() . '/static/js/script.js',
-			array('jquery', 'google-maps-api-v3', 'underscore')
+			array('jquery', 'google-maps-api-v3', 'underscore'),
+			fw()->theme->manifest->get_version()
 		);
 	}
 
 	private function _fw_theme_inc_css(){
 		wp_enqueue_style(
 			'fw-theme-shortcode-map-style',
-			$this->get_uri() . '/static/css/style.css'
+			$this->get_uri() . '/static/css/style.css',
+			array(),
+			fw()->theme->manifest->get_version()
 		);
 	}
 }

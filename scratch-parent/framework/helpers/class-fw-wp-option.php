@@ -19,10 +19,11 @@ class FW_WP_Option
 	/**
 	 * @param string $option_name
 	 * @param string|null $specific_multi_key 'ab/c/def'
+	 * @param null|mixed $default_value If no option found in the database, this value will be returned
 	 * @param bool|null $get_original_value Original value from db, no changes and translations
 	 * @return mixed|null
 	 */
-	public static function get($option_name, $specific_multi_key = null, $get_original_value = null)
+	public static function get($option_name, $specific_multi_key = null, $default_value = null, $get_original_value = null)
 	{
 		if ($get_original_value === null) {
 			$get_original_value = is_admin();
@@ -44,7 +45,7 @@ class FW_WP_Option
 		if (empty($specific_multi_key)) {
 			return $values[$get_original_value ? 'original' : 'prepared'];
 		} else {
-			return fw_akg($specific_multi_key, $values[$get_original_value ? 'original' : 'prepared']);
+			return fw_akg($specific_multi_key, $values[$get_original_value ? 'original' : 'prepared'], $default_value);
 		}
 	}
 

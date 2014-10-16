@@ -12,6 +12,35 @@ abstract class FW_Option_Type
 	abstract public function get_type();
 
 	/**
+	 * Overwrite this method to enqueue scripts and styles
+	 *
+	 * Enqueue scripts and styles in the _render() method is deprecated.
+	 *
+	 * This method would be abstract but was added after the framework release,
+	 * and to prevent fatal errors from new option types created by users we can't make it abstract.
+	 *
+	 * @param string $id
+	 * @param array  $option
+	 * @param array  $data
+	 * @param bool   Return true to call this method again on the next enqueue,
+	 *               if you have some functionality in it that depends on option parameters.
+	 *               By default this method is called only once for performance reasons.
+	 */
+	protected function _enqueue_static($id, $option, $data)
+	{
+		/**
+		 * @deprecated
+		 *
+		 * Call the _render() method to enqueue styles and scripts for option types created before this method was added
+		 *
+		 * For example this option type
+		 * https://github.com/ThemeFuse/Unyson/blob/e650bf083dde23ae2842344e70a16d5c335bf876/scratch-parent/framework-customizations/theme/shortcodes/table/includes/fw-option-type-table-builder/class-fw-option-type-table-builder.php#L13
+		 * is located in the theme and will remain there forever because the theme is not affected by the framework update
+		 */
+		$this->_render($id, $option, $data);
+	}
+
+	/**
 	 * Generate option's html from option array
 	 * @param string $id
 	 * @param array  $option
@@ -48,6 +77,12 @@ abstract class FW_Option_Type
 	abstract protected function _get_defaults();
 
 	/**
+	 * Prevent execute enqueue multiple times
+	 * @var bool
+	 */
+	private $static_enqueued = false;
+
+	/**
 	 * Used as prefix for attribute id="{$this->id_prefix}$id"
 	 * @return string
 	 */
@@ -76,44 +111,14 @@ abstract class FW_Option_Type
 	}
 
 	/**
-	 * Fix and prepare attributes
+	 * Fixes and prepare defaults
 	 *
 	 * @param string $id
 	 * @param array  $option
 	 * @param array  $data
 	 * @return array
 	 */
-	private static function prepare($id, $option, $data)
-	{
-		if (!isset($option['attr'])) {
-			$option['attr'] = array();
-		}
-
-		$option['attr']['name']  = $data['name_prefix'] .'['. $id .']';
-		$option['attr']['id']    = $data['id_prefix'] . $id;
-		$option['attr']['class'] = 'fw-option fw-option-type-'. $option['type'] .(
-			isset($option['attr']['class'])
-				? ' '. $option['attr']['class']
-				: ''
-			);
-		$option['attr']['value'] = is_array($option['value']) ? '' : $option['value'];
-
-		// remove some blacklisted attributes. this should be added only by render method
-		unset($option['attr']['type']);
-		unset($option['attr']['checked']);
-		unset($option['attr']['selected']);
-
-		return $option;
-	}
-
-	/**
-	 * Generate option's html from option array
-	 * @param string $id
-	 * @param  array $option
-	 * @param  array $data
-	 * @return string HTML
-	 */
-	final public function render($id, $option, $data = array())
+	private function prepare(&$id, &$option, &$data)
 	{
 		$data = array_merge(
 			array(
@@ -136,25 +141,90 @@ abstract class FW_Option_Type
 			$data['value'] = $option['value'];
 		}
 
-		$option = self::prepare($id, $option, $data);
-
-		{
-			wp_enqueue_style(
-				'fw-option-types',
-				fw_get_framework_directory_uri('/static/css/option-types.css'),
-				array('fw', 'qtip'),
-				fw()->manifest->get_version()
-			);
-			wp_enqueue_script(
-				'fw-option-types',
-				fw_get_framework_directory_uri('/static/js/option-types.js'),
-				array('fw-events', 'qtip'),
-				fw()->manifest->get_version(),
-				true
-			);
+		if (!isset($option['attr'])) {
+			$option['attr'] = array();
 		}
 
+		$option['attr']['name']  = $data['name_prefix'] .'['. $id .']';
+		$option['attr']['id']    = $data['id_prefix'] . $id;
+		$option['attr']['class'] = 'fw-option fw-option-type-'. $option['type'] .(
+			isset($option['attr']['class'])
+				? ' '. $option['attr']['class']
+				: ''
+			);
+		$option['attr']['value'] = is_array($option['value']) ? '' : $option['value'];
+
+		/**
+		 * Remove some blacklisted attributes
+		 * They should be added only by the render method
+		 */
+		{
+			unset($option['attr']['type']);
+			unset($option['attr']['checked']);
+			unset($option['attr']['selected']);
+		}
+	}
+
+	/**
+	 * Generate option's html from option array
+	 * @param  string $id
+	 * @param   array $option
+	 * @param   array $data
+	 * @return string HTML
+	 */
+	final public function render($id, $option, $data = array())
+	{
+		$this->prepare($id, $option, $data);
+
+		$this->enqueue_static($id, $option, $data);
+
 		return $this->_render($id, $option, $data);
+	}
+
+	/**
+	 * Enqueue option type scripts and styles
+	 *
+	 * All parameters are optional and will be populated with defaults
+	 * @param string $id
+	 * @param array $option
+	 * @param array $data
+	 * @return bool
+	 */
+	final public function enqueue_static($id = '', $option = array(), $data = array())
+	{
+		{
+			static $option_types_static_enqueued = false;
+
+			if (!$option_types_static_enqueued) {
+				wp_enqueue_style(
+					'fw-option-types',
+					fw_get_framework_directory_uri('/static/css/option-types.css'),
+					array('fw', 'qtip'),
+					fw()->manifest->get_version()
+				);
+				wp_enqueue_script(
+					'fw-option-types',
+					fw_get_framework_directory_uri('/static/js/option-types.js'),
+					array('fw-events', 'qtip'),
+					fw()->manifest->get_version(),
+					true
+				);
+
+				$option_types_static_enqueued = true;
+			}
+		}
+
+		if ($this->static_enqueued) {
+			return false;
+		}
+
+		$this->prepare($id, $option, $data);
+
+		$call_next_time = $this->_enqueue_static($id, $option, $data);
+
+		$this->static_enqueued = !$call_next_time;
+
+		return $call_next_time;
 	}
 
 	/**

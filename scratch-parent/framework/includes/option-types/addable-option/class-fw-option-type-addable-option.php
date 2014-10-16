@@ -22,27 +22,35 @@ class FW_Option_Type_Addable_Option extends FW_Option_Type
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data)
+	{
+		wp_enqueue_style(
+			'fw-option-'. $this->get_type(),
+			fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/css/styles.css'),
+			array(),
+			fw()->manifest->get_version()
+		);
+
+		wp_enqueue_script(
+			'fw-option-'. $this->get_type(),
+			fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/js/scripts.js'),
+			array('fw-events', 'jquery-ui-sortable'),
+			fw()->manifest->get_version(),
+			true
+		);
+
+		fw()->backend->option_type($option['option']['type'])->enqueue_static();
+
+		return true;
+	}
+
+	/**
+	 * @internal
 	 */
 	protected function _render($id, $option, $data)
 	{
-		// static
-		{
-			wp_enqueue_style(
-				'fw-option-'. $this->get_type(),
-				fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/css/styles.css'),
-				array(),
-				fw()->manifest->get_version()
-			);
-
-			wp_enqueue_script(
-				'fw-option-'. $this->get_type(),
-				fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/js/scripts.js'),
-				array('fw-events', 'jquery-ui-sortable'),
-				fw()->manifest->get_version(),
-				true
-			);
-		}
-
 		return fw_render_view(fw_get_framework_directory('/includes/option-types/'. $this->get_type() .'/view.php'), array(
 			'id'     => $id,
 			'option' => $option,

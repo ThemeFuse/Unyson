@@ -112,23 +112,10 @@ class FW_Option_Type_Style extends FW_Option_Type {
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
 	 */
-	protected function _render( $id, $option, $data ) {
-		$this->add_static( $option );
-
-		$option = $this->prepare_options( $option );
-
-		return fw_render_view( self::$extension['path'] . '/includes/option-types/' . $this->get_type() . '/views/main.php', array(
-			'id'        => $id,
-			'option'    => $option,
-			'data'      => $data,
-			'settings'  => self::$settings,
-			'extension' => self::$extension
-		) );
-	}
-
-	private function add_static( $option ) {
-
+	protected function _enqueue_static($id, $option, $data)
+	{
 		$version = fw()->extensions->get('styling')->manifest->get_version();
 
 		wp_enqueue_style(
@@ -137,15 +124,31 @@ class FW_Option_Type_Style extends FW_Option_Type {
 			array('fw-jscrollpane'),
 			$version
 		);
-
 		wp_enqueue_script(
 			'fw-option-' . $this->get_type(),
 			self::$extension['URI'] . '/includes/option-types/' . $this->get_type() . '/static/js/scripts.js',
 			array('jquery', 'underscore', 'fw-jscrollpane'),
 			$version
 		);
+	}
 
-		wp_localize_script( 'fw-option-' . $this->get_type(), 'styleOptionTypeSettings', array( 'preview' => ( ! isset( $option['preview'] ) || $option['preview'] !== false ) ? true : false ) );
+	/**
+	 * @internal
+	 */
+	protected function _render( $id, $option, $data ) {
+		$option = $this->prepare_options( $option );
+
+		if ( ! isset( $option['preview'] ) || $option['preview'] !== false ) {
+			$option['attr']['data-preview'] = 'yes';
+		}
+
+		return fw_render_view( self::$extension['path'] . '/includes/option-types/' . $this->get_type() . '/views/main.php', array(
+			'id'        => $id,
+			'option'    => $option,
+			'data'      => $data,
+			'settings'  => self::$settings,
+			'extension' => self::$extension,
+		) );
 	}
 
 	public function get_type() {

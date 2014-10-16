@@ -72,6 +72,29 @@ class FW_Option_Type_Slides extends FW_Option_Type
 	}
 
 	/**
+	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data)
+	{
+		$js_path = fw()->extensions->get($this->extension_name)->get_declared_URI('/includes/slides/static/js/slides.js');
+		$css_path = fw()->extensions->get($this->extension_name)->get_declared_URI('/includes/slides/static/css/slides.css');
+
+		wp_enqueue_script(
+			'fw-option-'. $this->get_type() .'-slides-js',
+			$js_path,
+			array('jquery-ui-sortable','qtip', 'fw'),
+			fw()->manifest->get_version()
+		);
+		wp_enqueue_style(
+			'fw-option-'. $this->get_type() .'-slides-css',
+			$css_path,
+			array('qtip'),
+			fw()->manifest->get_version()
+		);
+	}
+
+	/**
 	 * Generate option's html from option array
 	 * @param string $id
 	 * @param array $option
@@ -81,23 +104,7 @@ class FW_Option_Type_Slides extends FW_Option_Type
 	 */
 	protected function _render($id, $option, $data)
 	{
-		$js_path = fw()->extensions->get($this->extension_name)->get_declared_URI('/includes/slides/static/js/slides.js');
-		$css_path = fw()->extensions->get($this->extension_name)->get_declared_URI('/includes/slides/static/css/slides.css');
-
 		$template_path = fw()->extensions->get($this->extension_name)->get_declared_path('/includes/slides/views/templates.php');
-
-		wp_enqueue_script(
-			'fw-option-'. $this->get_type() .'-slides-js',
-			$js_path,
-			array('jquery-ui-sortable','qtip', 'fw'),
-			fw()->extensions->get($this->extension_name)->manifest->get_version()
-		);
-		wp_enqueue_style(
-			'fw-option-'. $this->get_type() .'-slides-css',
-			$css_path,
-			array('qtip'),
-			fw()->extensions->get($this->extension_name)->manifest->get_version()
-		);
 
 		$values = $data['value'];
 		$thumb_size = $option['thumb_size'];
@@ -141,7 +148,7 @@ class FW_Option_Type_Slides extends FW_Option_Type
 			return $option['value'];
 		}
 
-		//unset the last slide that is default for add
+		// unset the last slide that is default for add
 		array_pop($input_value);
 
 		$value = array();

@@ -2,10 +2,6 @@
 	die( 'Forbidden' );
 }
 
-/**
- * Extension configuration file
- */
+$cfg = array();
 
-$cfg = array(
-	'webmasters' => array( 'google', 'bing' )
-);
+$cfg['webmasters'] = array( 'google', 'bing' );

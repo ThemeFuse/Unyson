@@ -11,7 +11,6 @@ $first_row = '';
 if( isset( $atts['first_in_row'] ) && $atts['first_in_row'] == 'true' ) {
 	$first_row = 'first';
 }
-
 ?>
 
-<div class="shortcode shortcode-column column-<?php echo $atts['type']; ?> <?php echo $first_row ?>"><?php echo do_shortcode($content); ?></div>
+<div class="shortcode <?php echo esc_attr(fw_ext_builder_get_item_width('layout-builder', $atts['type'] .'/frontend_class')) ?> <?php echo $first_row ?>"><?php echo do_shortcode($content); ?></div>

@@ -17,25 +17,30 @@ class FW_Option_Type_Icon extends FW_Option_Type
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data)
+	{
+		wp_enqueue_style(
+			'fw-option-type-'. $this->get_type() .'-if',
+			fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/css/styles.css'),
+			array('fw-font-awesome'),
+			fw()->manifest->get_version()
+		);
+
+		wp_enqueue_script(
+			'fw-option-type-'. $this->get_type() .'-dialog',
+			fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/js/scripts.js'),
+			array('jquery', 'fw-events'),
+			fw()->manifest->get_version()
+		);
+	}
+
+	/**
+	 * @internal
 	 */
 	protected function _render($id, $option, $data)
 	{
-		{
-			wp_enqueue_style(
-				'fw-option-type-'. $this->get_type() .'-if',
-				fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/css/styles.css'),
-				array('fw-font-awesome'),
-				fw()->manifest->get_version()
-			);
-
-			wp_enqueue_script(
-				'fw-option-type-'. $this->get_type() .'-dialog',
-				fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/js/scripts.js'),
-				array('jquery', 'fw-events'),
-				fw()->manifest->get_version()
-			);
-		}
-
 		$option['value'] = (string)$data['value'];
 		unset($option['attr']['value']); // be sure to remove value from attributes
 

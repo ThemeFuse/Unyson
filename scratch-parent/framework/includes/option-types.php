@@ -14,6 +14,12 @@ class FW_Option_Type_Hidden extends FW_Option_Type
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data) {}
+
+	/**
+	 * @internal
 	 */
 	protected function _render($id, $option, $data)
 	{
@@ -59,6 +65,12 @@ class FW_Option_Type_Text extends FW_Option_Type
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data) {}
+
+	/**
+	 * @internal
 	 */
 	protected function _render($id, $option, $data)
 	{
@@ -96,6 +108,12 @@ class FW_Option_Type_Password extends FW_Option_Type
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data) {}
+
+	/**
+	 * @internal
 	 */
 	protected function _render($id, $option, $data)
 	{
@@ -130,6 +148,12 @@ class FW_Option_Type_Textarea extends FW_Option_Type
 	{
 		return 'textarea';
 	}
+
+	/**
+	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data) {}
 
 	/**
 	 * @internal
@@ -178,6 +202,12 @@ class FW_Option_Type_Html extends FW_Option_Type
 	{
 		return 'html';
 	}
+
+	/**
+	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data) {}
 
 	/**
 	 * @internal
@@ -284,6 +314,12 @@ class FW_Option_Type_Checkbox extends FW_Option_Type
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data) {}
+
+	/**
+	 * @internal
 	 */
 	protected function _render($id, $option, $data)
 	{
@@ -345,6 +381,12 @@ class FW_Option_Type_Checkboxes extends FW_Option_Type
 	{
 		return 'checkboxes';
 	}
+
+	/**
+	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data) {}
 
 	/**
 	 * @internal
@@ -445,6 +487,12 @@ class FW_Option_Type_Radio extends FW_Option_Type
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data) {}
+
+	/**
+	 * @internal
 	 */
 	protected function _render($id, $option, $data)
 	{
@@ -532,6 +580,12 @@ class FW_Option_Type_Select extends FW_Option_Type
 	{
 		return 'select';
 	}
+
+	/**
+	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data) {}
 
 	/**
 	 * @internal
@@ -671,6 +725,12 @@ class FW_Option_Type_Select_Multiple extends FW_Option_Type_Select
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data) {}
+
+	/**
+	 * @internal
 	 */
 	protected function _render($id, $option, $data)
 	{
@@ -779,7 +839,6 @@ require $dir .'/option-types/background-image/class-fw-option-type-background-im
 require $dir .'/option-types/multi/class-fw-option-type-multi.php';
 require $dir .'/option-types/switch/class-fw-option-type-switch.php';
 require $dir .'/option-types/typography/class-fw-option-type-typography.php';
-require $dir .'/option-types/builder/builder.php';
 require $dir .'/option-types/multi-upload/class-fw-option-type-multi-upload.php';
 require $dir .'/option-types/multi-picker/class-fw-option-type-multi-picker.php';
 require $dir .'/option-types/wp-editor/class-fw-option-type-wp-editor.php';

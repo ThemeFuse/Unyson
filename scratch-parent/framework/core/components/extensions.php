@@ -218,16 +218,16 @@ final class _FW_Component_Extensions
 		$rel_path = $extension->get_rel_path() . $extension_dir_rel_path;
 		$paths    = array();
 
-		if ($search_in_framework) {
-			$paths[] = fw_get_framework_directory('/extensions'. $rel_path);
-		}
-
 		if ($search_in_child_theme) {
 			$paths[] = fw_get_stylesheet_customizations_directory('/extensions'. $rel_path);
 		}
 
 		if ($search_in_parent_theme) {
 			$paths[] = fw_get_template_customizations_directory('/extensions'. $rel_path);
+		}
+
+		if ($search_in_framework) {
+			$paths[] = fw_get_framework_directory('/extensions'. $rel_path);
 		}
 
 		foreach ($paths as $path) {

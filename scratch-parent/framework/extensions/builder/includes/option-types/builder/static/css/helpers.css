@@ -18,3 +18,7 @@
 .fw-builder-item-width-changer.is-last a.increase-width {
 	color: #b2b2b2;
 }
+
+.fw-builder-col-1-5{
+	width: 20%;
+}

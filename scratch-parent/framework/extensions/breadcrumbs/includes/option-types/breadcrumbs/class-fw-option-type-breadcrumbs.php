@@ -51,8 +51,9 @@ class FW_Option_Type_Breadcrumbs extends FW_Option_Type
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
 	 */
-	protected function _render($id, $option, $data)
+	protected function _enqueue_static($id, $option, $data)
 	{
 		$uri = fw()->extensions->get('breadcrumbs')->get_declared_URI('/includes/option-types/' . $this->get_type() . '/static/css/style.css');
 
@@ -63,6 +64,14 @@ class FW_Option_Type_Breadcrumbs extends FW_Option_Type
 			fw()->extensions->get('breadcrumbs')->manifest->get_version()
 		);
 
+		fw()->backend->option_type('multi')->enqueue_static();
+	}
+
+	/**
+	 * @internal
+	 */
+	protected function _render($id, $option, $data)
+	{
 		$id = fw()->extensions->get('breadcrumbs')->get_option_id();
 
 		return fw()->backend->option_type('multi')->render($id, $this->internal_options, $data);

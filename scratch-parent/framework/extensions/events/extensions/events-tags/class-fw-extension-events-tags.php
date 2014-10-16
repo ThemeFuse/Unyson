@@ -265,7 +265,10 @@ class FW_Extension_Events_Tags extends FW_Extension {
 				$start_date = fw_akg('event_date_range/from', $meta_row);
 				$end_date = fw_akg('event_date_range/to', $meta_row);
 
-				if (empty($start_date) || empty($end_date)) {
+				$from_timestamp = strtotime($start_date);
+				$to_timestamp   = strtotime($end_date);
+
+				if ( !$from_timestamp || !$to_timestamp || -1 === $from_timestamp || -1 === $to_timestamp ) {
 					continue;
 				}
 
@@ -279,9 +282,6 @@ class FW_Extension_Events_Tags extends FW_Extension {
 				if ($event_post_tag_id == 0 || $event_post_tag_id instanceof WP_Error) {
 					throw new Exception(sprintf(__('wp_insert_post(post_type=%s) failed', 'fw'), $this->post_type));
 				}
-
-				$from_timestamp = strtotime($start_date);
-				$to_timestamp   = strtotime($end_date);
 
 				add_post_meta($event_post_tag_id, $this->event_from_date_tag, $from_timestamp - (date('H', $from_timestamp)*3600 + date('i', $from_timestamp)*60) );
 				add_post_meta($event_post_tag_id, $this->event_to_date_tag,   $to_timestamp - (date('H', $to_timestamp)*3600 + date('i', $to_timestamp)*60) );

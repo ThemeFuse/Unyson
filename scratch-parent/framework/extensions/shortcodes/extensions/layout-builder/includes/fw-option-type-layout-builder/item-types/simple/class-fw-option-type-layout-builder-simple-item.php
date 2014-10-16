@@ -118,7 +118,7 @@ class FW_Option_Type_Layout_Builder_Simple_Item extends FW_Option_Type_Layout_Bu
 					$options = $shortcode->get_options();
 					if ($options) {
 						$item_data['options'] = $this->transform_options($options);
-						fw()->backend->render_options($options); // This makes sure that the option's static is enqueued
+						fw()->backend->enqueue_options_static($options);
 					}
 
 					$this->builder_data[$tag] = $item_data;

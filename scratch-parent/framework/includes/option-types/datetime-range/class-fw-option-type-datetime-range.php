@@ -26,7 +26,6 @@ class FW_Option_Type_Datetime_Range extends FW_Option_Type {
 					'minDate' => '1970/01/01',
 					'maxDate' => '2038/01/19',
 					'format'  => 'Y/m/d H:i',
-					'scrollInput' => false,
 					'timepicker'  => true,
 					'datepicker'  => true
 					),
@@ -34,7 +33,6 @@ class FW_Option_Type_Datetime_Range extends FW_Option_Type {
 					'minDate' => '1970/01/01',
 					'maxDate' => '2038/01/19',
 					'format'  => 'Y/m/d H:i',
-					'scrollInput' => false,
 					'timepicker'  => true,
 					'datepicker'  => true
 				)
@@ -44,6 +42,18 @@ class FW_Option_Type_Datetime_Range extends FW_Option_Type {
 				'to' => ''
 			)
 		);
+	}
+
+	/**
+	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data)
+	{
+		wp_enqueue_style('fw-option-datetime-range-CSS', $this->_get_static_uri() . '/css/styles.css' );
+		wp_enqueue_script( 'fw-option-datetime-range-js', $this->_get_static_uri() . '/js/script.js', array('jquery', 'fw-events'));
+
+		fw()->backend->option_type('datetime-picker')->enqueue_static();
 	}
 
 	protected function _render( $id, $option, $data ) {
@@ -67,15 +77,11 @@ class FW_Option_Type_Datetime_Range extends FW_Option_Type {
 			}
 		}
 
-		wp_enqueue_style('fw-option-datetime-range-CSS', $this->_get_static_uri() . '/css/styles.css' );
-		wp_enqueue_script( 'fw-option-datetime-range-js', $this->_get_static_uri() . '/js/script.js', array('jquery'));
-
 		return fw_render_view( dirname(__FILE__) . '/view.php', array(
 			'id' => $id,
 			'option' => $option,
 			'data' => $data
 		));
-
 	}
 
 	/**
@@ -87,8 +93,8 @@ class FW_Option_Type_Datetime_Range extends FW_Option_Type {
 			return $option['value'];
 		}
 
-		$from = fw()->backend->option_type('datetime-picker')->_get_value_from_input(array('datetime-picker' => $option['datetime-pickers']['from'], 'value' => $option['value']['from'] ), $input_value['from']);
-		$to = fw()->backend->option_type('datetime-picker')->_get_value_from_input(array('datetime-picker' => $option['datetime-pickers']['to'],  'value' => $option['value']['to']), $input_value['to']);
+		$from = fw()->backend->option_type('datetime-picker')->get_value_from_input(array('datetime-picker' => $option['datetime-pickers']['from'], 'value' => $option['value']['from'] ), $input_value['from']);
+		$to = fw()->backend->option_type('datetime-picker')->get_value_from_input(array('datetime-picker' => $option['datetime-pickers']['to'],  'value' => $option['value']['to']), $input_value['to']);
 
 		if (empty($from) or empty($to) or (strtotime($from) > strtotime($to)) ) {
 			return $option['value'];

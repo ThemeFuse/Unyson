@@ -121,22 +121,28 @@ abstract class FW_Option_Type_Builder extends FW_Option_Type
 		);
 	}
 
+	private function get_static_uri($append = '')
+	{
+		return fw()->extensions->get('builder')->get_declared_URI('/includes/option-types/builder/static'. $append);
+	}
+
 	/**
 	 * @internal
+	 * {@inheritdoc}
 	 */
-	final protected function _render($id, $option, $data)
+	protected function _enqueue_static($id, $option, $data)
 	{
 		{
 			wp_enqueue_style(
 				'fw-option-builder',
-				fw_get_framework_directory_uri('/includes/option-types/builder/static/css/builder.css'),
+				$this->get_static_uri('/css/builder.css'),
 				array('fw'),
 				fw()->manifest->get_version()
 			);
 
 			wp_enqueue_script(
 				'fw-option-builder',
-				fw_get_framework_directory_uri('/includes/option-types/builder/static/js/builder.js'),
+				$this->get_static_uri('/js/builder.js'),
 				array(
 					'jquery-ui-draggable',
 					'jquery-ui-sortable',
@@ -150,84 +156,94 @@ abstract class FW_Option_Type_Builder extends FW_Option_Type
 			);
 		}
 
+		wp_enqueue_media();
+
 		{
 			wp_enqueue_style(
 				'fw-option-builder-helpers',
-				fw_get_framework_directory_uri('/includes/option-types/builder/static/css/helpers.css'),
+				$this->get_static_uri('/css/helpers.css'),
 				array('fw-option-builder'),
 				fw()->manifest->get_version()
 			);
-
-			wp_enqueue_style(
-				'fw-option-builder-fullscreen',
-				fw_get_framework_directory_uri('/includes/option-types/builder/static/css/fullscreen.css'),
-				array('fw-option-builder'),
-				fw()->manifest->get_version()
-			);
-
-			wp_enqueue_style(
-				'fw-option-builder-history',
-				fw_get_framework_directory_uri('/includes/option-types/builder/static/css/history.css'),
-				array('fw-option-builder'),
-				fw()->manifest->get_version()
-			);
-
-			wp_enqueue_style(
-				'fw-option-builder-template-saving',
-				fw_get_framework_directory_uri('/includes/option-types/builder/static/css/template-saving.css'),
-				array('fw-option-builder'),
-				fw()->manifest->get_version()
-			);
-
-			wp_enqueue_media();
 
 			wp_enqueue_script(
 				'fw-option-builder-helpers',
-				fw_get_framework_directory_uri('/includes/option-types/builder/static/js/helpers.js'),
+				$this->get_static_uri('/js/helpers.js'),
 				array('fw-option-builder',),
-				fw()->manifest->get_version(),
-				true
-			);
-
-			wp_enqueue_script(
-				'fw-option-builder-fullscreen',
-				fw_get_framework_directory_uri('/includes/option-types/builder/static/js/fullscreen.js'),
-				array('fw-option-builder',),
-				fw()->manifest->get_version(),
-				true
-			);
-
-			wp_enqueue_script(
-				'fw-option-builder-history',
-				fw_get_framework_directory_uri('/includes/option-types/builder/static/js/history.js'),
-				array('fw-option-builder',),
-				fw()->manifest->get_version(),
-				true
-			);
-
-			wp_enqueue_script(
-				'fw-option-builder-template-saving',
-				fw_get_framework_directory_uri('/includes/option-types/builder/static/js/template-saving.js'),
-				array('fw-option-builder'),
 				fw()->manifest->get_version(),
 				true
 			);
 
 			wp_localize_script(
 				'fw-option-builder-helpers',
-				'fw_option_type_builder_helpers',
+				'_fw_option_type_builder_helpers',
 				array(
 					'l10n' => array(
-						'save' => __('Save', 'fw')
-					)
+						'save' => __('Save', 'fw'),
+					),
+					'item_widths' => fw_ext_builder_get_item_widths_for_js($this->get_type())
 				)
 			);
 		}
 
-		if (method_exists($this, 'enqueue_static')) {
-			$this->enqueue_static($id, $option, $data);
+		{
+			wp_enqueue_style(
+				'fw-option-builder-fullscreen',
+				$this->get_static_uri('/css/fullscreen.css'),
+				array('fw-option-builder'),
+				fw()->manifest->get_version()
+			);
+
+			wp_enqueue_script(
+				'fw-option-builder-fullscreen',
+				$this->get_static_uri('/js/fullscreen.js'),
+				array('fw-option-builder',),
+				fw()->manifest->get_version(),
+				true
+			);
 		}
 
+		{
+			wp_enqueue_style(
+				'fw-option-builder-template-saving',
+				$this->get_static_uri('/css/template-saving.css'),
+				array('fw-option-builder'),
+				fw()->manifest->get_version()
+			);
+
+			wp_enqueue_script(
+				'fw-option-builder-template-saving',
+				$this->get_static_uri('/js/template-saving.js'),
+				array('fw-option-builder'),
+				fw()->manifest->get_version(),
+				true
+			);
+		}
+
+		{
+			wp_enqueue_style(
+				'fw-option-builder-history',
+				$this->get_static_uri('/css/history.css'),
+				array('fw-option-builder'),
+				fw()->manifest->get_version()
+			);
+
+			wp_enqueue_script(
+				'fw-option-builder-history',
+				$this->get_static_uri('/js/history.js'),
+				array('fw-option-builder',),
+				fw()->manifest->get_version(),
+				true
+			);
+		}
+	}
+
+	/**
+	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _render($id, $option, $data)
+	{
 		/**
 		 * array(
 		 *  'Tab title' => array(

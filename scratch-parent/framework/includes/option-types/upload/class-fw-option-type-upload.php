@@ -44,6 +44,59 @@ class FW_Option_Type_Upload extends FW_Option_Type
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data)
+	{
+		wp_enqueue_media();
+
+		{
+			wp_enqueue_style(
+				'fw-option-type-'. $this->get_type() . '-modal',
+				$this->css_uri . 'modal.css',
+				array(),
+				fw()->manifest->get_version()
+			);
+			wp_enqueue_style(
+				'fw-option-type-'. $this->get_type() . '-images-only',
+				$this->css_uri . 'images-only.css',
+				array(),
+				fw()->manifest->get_version()
+			);
+			wp_enqueue_script(
+				'fw-option-type-'. $this->get_type() . '-images-only',
+				$this->js_uri . 'images-only.js',
+				array('jquery', 'fw-events', 'underscore'),
+				fw()->manifest->get_version(),
+				true
+			);
+		}
+
+		{
+			wp_enqueue_style(
+				'fw-option-type-'. $this->get_type() . '-modal',
+				$this->css_uri . 'modal.css',
+				array(),
+				fw()->manifest->get_version()
+			);
+			wp_enqueue_style(
+				'fw-option-type-'. $this->get_type() . '-any-files',
+				$this->css_uri . 'any-files.css',
+				array(),
+				fw()->manifest->get_version()
+			);
+			wp_enqueue_script(
+				'fw-option-type-'. $this->get_type() . '-any-files',
+				$this->js_uri . 'any-files.js',
+				array('jquery', 'fw-events'),
+				fw()->manifest->get_version(),
+				true
+			);
+		}
+	}
+
+	/**
+	 * @internal
 	 */
 	protected function _render($id, $option, $data)
 	{
@@ -79,27 +132,6 @@ class FW_Option_Type_Upload extends FW_Option_Type
 			'data-l10n-button-edit' => $l10n['button_edit'],
 		));
 
-		wp_enqueue_media();
-		wp_enqueue_style(
-			'fw-option-type-'. $this->get_type() . '-modal',
-			$this->css_uri . 'modal.css',
-			array(),
-			fw()->manifest->get_version()
-		);
-		wp_enqueue_style(
-			'fw-option-type-'. $this->get_type() . '-images-only',
-			$this->css_uri . 'images-only.css',
-			array(),
-			fw()->manifest->get_version()
-		);
-		wp_enqueue_script(
-			'fw-option-type-'. $this->get_type() . '-images-only',
-			$this->js_uri . 'images-only.js',
-			array('jquery', 'fw-events', 'underscore'),
-			fw()->manifest->get_version(),
-			true
-		);
-
 		$wrapper_attr['class'] .= ' images-only';
 		$is_empty               = empty($input_attr['value']);
 		$wrapper_attr['class'] .= $is_empty ? ' empty' : '';
@@ -125,27 +157,6 @@ class FW_Option_Type_Upload extends FW_Option_Type
 			'data-l10n-button-add'  => $l10n['button_add'],
 			'data-l10n-button-edit' => $l10n['button_edit'],
 		));
-
-		wp_enqueue_media();
-		wp_enqueue_style(
-			'fw-option-type-'. $this->get_type() . '-modal',
-			$this->css_uri . 'modal.css',
-			array(),
-			fw()->manifest->get_version()
-		);
-		wp_enqueue_style(
-			'fw-option-type-'. $this->get_type() . '-any-files',
-			$this->css_uri . 'any-files.css',
-			array(),
-			fw()->manifest->get_version()
-		);
-		wp_enqueue_script(
-			'fw-option-type-'. $this->get_type() . '-any-files',
-			$this->js_uri . 'any-files.js',
-			array('jquery', 'fw-events'),
-			fw()->manifest->get_version(),
-			true
-		);
 
 		$wrapper_attr['class'] .= ' any-files';
 		$is_empty               = empty($input_attr['value']);;

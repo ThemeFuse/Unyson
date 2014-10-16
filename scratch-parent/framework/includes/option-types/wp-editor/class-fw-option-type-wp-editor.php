@@ -54,9 +54,9 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type
 	 */
 	protected function _init()
 	{
-		$static_uri    = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/');
-		$this->js_uri  = $static_uri . 'js/';
-		$this->css_uri = $static_uri . 'css/';
+		$static_uri    = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static');
+		$this->js_uri  = $static_uri . '/js';
+		$this->css_uri = $static_uri . '/css';
 	}
 
 	private function get_teeny_preset($option){
@@ -151,8 +151,6 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type
 		$name = $option['attr']['name'];
 		unset($option['attr']['name'], $option['attr']['value']);
 
-		$this->enqueue_static($option);
-
 		$textarea_id = 'textarea_';
 		if (
 			// check if id contains characters that can produce errors
@@ -185,11 +183,15 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type
 		echo '</div>';
 	}
 
-	private function enqueue_static($option)
+	/**
+	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data)
 	{
 		wp_enqueue_script(
 			'fw-option-type-'. $this->get_type() ,
-			$this->js_uri . 'scripts.js',
+			$this->js_uri . '/scripts.js',
 			array('jquery', 'fw-events', 'editor', 'fw'),
 			fw()->manifest->get_version(),
 			true
@@ -209,7 +211,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type
 		);
 		wp_enqueue_style(
 			'fw-option-type-'. $this->get_type() ,
-			$this->css_uri . 'styles.css',
+			$this->css_uri . '/styles.css',
 			array(),
 			fw()->manifest->get_version()
 		);

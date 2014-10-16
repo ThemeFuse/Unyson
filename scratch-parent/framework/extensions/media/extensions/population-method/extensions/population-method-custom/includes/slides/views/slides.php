@@ -1,4 +1,15 @@
-<?php if (!defined('FW')) die('Forbidden'); ?>
+<?php if (!defined('FW')) die('Forbidden');
+/**
+ * @var string $id
+ * @var array  $option
+ * @var array  $data
+ * @var array  $thumb_size
+ * @var array  $values
+ * @var string $type
+ * @var array  $slides_options
+ * @var array  $multimedia_type
+ */
+?>
 <div class="fw-option fw-option-type-<?php echo $type; ?>"
      data-option="<?php echo fw_htmlspecialchars(json_encode(array('option' => $option, 'data' => $data, 'id' => $id))) ?>">
 	<ul class="thumbs-wrapper">
@@ -18,7 +29,7 @@
 			<?php endforeach; ?>
 			<li class="sortable-false add-new-btn">
 				<div>
-					<p>Add New</p>
+					<p><?php _e('Add New', 'fw') ?></p>
 				</div>
 			</li>
 		<?php endif; ?>

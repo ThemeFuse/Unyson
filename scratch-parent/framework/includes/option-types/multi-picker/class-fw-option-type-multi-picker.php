@@ -16,19 +16,26 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 	protected function _get_defaults()
 	{
 		return array(
-			'picker'  => array(),
+			'picker' => array(
+				'default' => array(
+					'type' => 'select',
+					'choices' => array()
+				)
+			),
 			'choices' => array(),
-			'value'   => array()
+			'value' => array()
 		);
 	}
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
 	 */
-	protected function _render($id, $option, $data)
+	protected function _enqueue_static($id, $option, $data)
 	{
 		$css_path = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/css/');
 		$js_path  = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/js/');
+
 		wp_enqueue_style(
 			'fw-option-type' . $this->get_type(),
 			$css_path . 'multi-picker.css',
@@ -43,6 +50,17 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 			true
 		);
 
+		fw()->backend->enqueue_options_static($this->prepare_option($id, $option));
+
+		return true;
+	}
+
+	/**
+	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _render($id, $option, $data)
+	{
 		$options_array = $this->prepare_option($id, $option);
 		unset($option['attr']['name'], $option['attr']['value']);
 

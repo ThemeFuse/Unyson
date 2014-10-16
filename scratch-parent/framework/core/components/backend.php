@@ -34,6 +34,14 @@ final class _FW_Component_Backend
 
 	private $static_registered = false;
 
+	/**
+	 * @internal
+	 */
+	public function _get_settings_page_slug()
+	{
+		return 'fw-settings';
+	}
+
 	private function get_current_edit_taxonomy()
 	{
 		static $cache_current_taxonomy_data = null;
@@ -83,8 +91,6 @@ final class _FW_Component_Backend
 	public function __construct()
 	{
 		$this->print_meta_box_content_callback = create_function('$post,$args', 'echo $args["args"];');
-
-		add_filter('fw_get_settings_page_slug', create_function('', 'return "fw-settings";'));
 
 		{
 			$this->undefined_option_type = new FW_Option_Type_Undefined();
@@ -229,6 +235,7 @@ final class _FW_Component_Backend
 				array('fw', 'qtip'),
 				fw()->manifest->get_version()
 			);
+
 			wp_register_script(
 				'fw-backend-options',
 				fw_get_framework_directory_uri('/static/js/backend-options.js'),
@@ -239,7 +246,8 @@ final class _FW_Component_Backend
 		}
 
 		{
-			wp_register_style('qtip',
+			wp_register_style(
+				'qtip',
 				fw_get_framework_directory_uri('/static/libs/qtip/css/jquery.qtip.min.css'),
 				array(),
 				fw()->manifest->get_version()
@@ -329,13 +337,45 @@ final class _FW_Component_Backend
 	 */
 	public function _action_admin_menu()
 	{
-		add_theme_page(
-			__('Theme Settings', 'fw'),
-			__('Theme Settings', 'fw'),
-			'manage_options',
-			apply_filters('fw_get_settings_page_slug', null),
-			array($this, '_print_settings_page')
+		$data = array(
+			'capability'       => 'manage_options',
+			'slug'             => $this->_get_settings_page_slug(),
+			'content_callback' => array($this, '_print_settings_page'),
 		);
+
+		/**
+		 * Use this action if you what to add the settings page in a custom place in menu
+		 * Usage example http://pastebin.com/0KQXLPZj
+		 */
+		do_action('fw_backend_add_custom_settings_menu', $data);
+
+		/**
+		 * check if settings menu was added in the action above
+		 */
+		{
+			global $_registered_pages;
+
+			$menu_exists = false;
+
+			foreach ($_registered_pages as $hookname => $b) {
+				if (strpos($hookname, $data['slug']) !== false) {
+					$menu_exists = true;
+					break;
+				}
+			}
+		}
+
+		if ($menu_exists) {
+			remove_action('admin_menu', array($this, '_action_admin_change_theme_settings_order'), 9999);
+		} else {
+			add_theme_page(
+				__( 'Theme Settings', 'fw' ),
+				__( 'Theme Settings', 'fw' ),
+				$data['capability'],
+				$data['slug'],
+				$data['content_callback']
+			);
+		}
 	}
 
 	public function _action_admin_change_theme_settings_order() {
@@ -346,7 +386,7 @@ final class _FW_Component_Backend
 			return;
 		}
 
-		$id    = apply_filters( 'fw_get_settings_page_slug', '' );
+		$id    = $this->_get_settings_page_slug();
 		$index = null;
 
 		foreach ( $submenu['themes.php'] as $key => $sm ) {
@@ -690,10 +730,16 @@ final class _FW_Component_Backend
 	}
 
 	/**
-	 * Render options array and return HTML
-	 * Can contain: tabs, boxes and options
+	 * Render options array and return the generated HTML
+	 *
+	 * @param array $options
+	 * @param array $values
+	 * @param array $options_data
+	 * @param string $design
+	 *
+	 * @return string HTML
 	 */
-	public function render_options(&$options, &$values = array(), $options_data = array(), $design = 'default')
+	public function render_options($options, $values = array(), $options_data = array(), $design = 'default')
 	{
 		{
 			/**
@@ -702,7 +748,6 @@ final class _FW_Component_Backend
 			 * and option types has some of these in their dependencies
 			 */
 			$this->register_static();
-
 
 			wp_enqueue_style('fw-backend-options');
 			wp_enqueue_script('fw-backend-options');
@@ -787,7 +832,41 @@ final class _FW_Component_Backend
 	}
 
 	/**
+	 * Enqueue options static
+	 *
+	 * Useful when you have dynamic options html on the page (for e.g. options modal)
+	 * and in order to initialize that html properly, the option types scripts styles must be enqueued on the page
+	 *
+	 * @param array $options
+	 */
+	public function enqueue_options_static($options)
+	{
+		{
+			/**
+			 * register scripts and styles
+			 * in case if this method is called before enqueue_scripts action
+			 * and option types has some of these in their dependencies
+			 */
+			$this->register_static();
+
+			wp_enqueue_style('fw-backend-options');
+			wp_enqueue_script('fw-backend-options');
+		}
+
+		foreach (fw_extract_only_options($options) as $option_id => $option) {
+			fw()->backend->option_type($option['type'])->enqueue_static($option_id, $option);
+		}
+	}
+
+	/**
 	 * Render option enclosed in backend design
+	 *
+	 * @param string $id
+	 * @param array $option
+	 * @param array $data
+	 * @param string $design default or taxonomy
+	 *
+	 * @return string
 	 */
 	public function render_option($id, $option, $data = array(), $design = 'default')
 	{
@@ -1026,6 +1105,13 @@ final class FW_Option_Type_Undefined extends FW_Option_Type
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data) {}
+
+	/**
+	 * @internal
+	 * {@inheritdoc}
 	 */
 	protected function _render($id, $name, $data)
 	{
@@ -1034,6 +1120,7 @@ final class FW_Option_Type_Undefined extends FW_Option_Type
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
 	 */
 	protected function _get_value_from_input($option, $input_value)
 	{

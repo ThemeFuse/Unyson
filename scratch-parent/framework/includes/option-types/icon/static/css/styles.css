@@ -64,6 +64,9 @@
 	margin: 0 0 -1px -1px;
 	padding: 0.5em;
 }
+body.rtl .fw-option-type-icon .fontawesome-icon-list i {
+	float: right;
+}
 
 .fw-option-type-icon .fontawesome-icon-list i:before {
 	display: inline-block;

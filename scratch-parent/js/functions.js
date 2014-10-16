@@ -163,3 +163,39 @@ jQuery(function ($) {
     $('.primary-navigation .menu-item-has-mega-menu').hover(hoverIn, hoverOut);
 
 });
+
+jQuery(document).ready(function () {
+	var counter = 0;
+	var widths = {
+		'1-1' : 1,
+		'3-4' : 0.75,
+		'2-3' : 0.6,
+		'1-2' : 0.5,
+		'1-3' : 0.3,
+		'1-4' : 0.25,
+		'1-5' : 0.2
+	};
+
+	var columns = jQuery('*>*[class*="column-"]');
+	columns.first().addClass('first');
+
+	columns.each(function () {
+		var klass = jQuery(this).attr('class').match(/column-[1-9]-[1-9]/g);
+		var width = 0;
+
+		if (klass != null) {
+			klass = klass.shift().replace('column-', '');
+
+			if (widths.hasOwnProperty(klass)) {
+				width = widths[klass];
+			}
+		}
+
+		if ( ( counter + width ) > 1) {
+			jQuery(this).addClass('first');
+			counter = 0;
+		}
+
+		counter += width;
+	});
+});

@@ -26,11 +26,12 @@ class FW_Option_Type_Layout_Builder_Column_Item extends FW_Option_Type_Layout_Bu
 			fw()->theme->manifest->get_version(),
 			true
 		);
+
 		wp_localize_script(
 			$this->get_builder_type() . '_item_type_' . $this->get_type(),
 			str_replace('-', '_', $this->get_builder_type()) . '_item_type_' . $this->get_type() . '_data',
 			array(
-				'restrictedTypes' => $this->restricted_types
+				'restrictedTypes' => $this->restricted_types,
 			)
 		);
 	}

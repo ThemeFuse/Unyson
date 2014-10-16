@@ -1,4 +1,4 @@
-<?php if (!defined('WP_DEBUG')) die('Forbidden');
+<?php if (!defined('ABSPATH')) die('Forbidden');
 
 /**
  * Loads the framework
@@ -100,14 +100,6 @@ if (!function_exists('_action_init_framework')):
 			foreach ($components as $component) {
 				fw()->{$component}->_after_components_init();
 			}
-		}
-
-		if (!session_id()) {
-			/**
-			 * Start session for FW_Flash_Messages helper, in case a flash is added after the headers sent
-			 * Prevent Warning: session_start(): Cannot send session cookie - headers already sent
-			 */
-			session_start();
 		}
 
 		/**

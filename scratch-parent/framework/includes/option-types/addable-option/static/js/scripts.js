@@ -29,20 +29,38 @@ jQuery(document).ready(function ($) {
 		});
 	}
 
+	var methods = {
+		/** Make full/prefixed event name from short name */
+		makeEventName: function (shortName) {
+			return 'fw:option-type:addable-option:' + shortName;
+		}
+	};
+
+	var optionClass = '.fw-option-type-addable-option';
+
 	fwEvents.on('fw:options:init', function (data) {
-		var $elements = data.$elements.find('.fw-option-type-addable-option:not(.fw-option-initialized)');
+		var $elements = data.$elements.find(optionClass +':not(.fw-option-initialized)');
 
 		/** Init Add button */
-		$elements.on('click', '.fw-option-type-addable-option-add', function(){
+		$elements.on('click', optionClass +'-add', function(){
 			var $button   = $(this);
-			var $option   = $button.closest('.fw-option-type-addable-option');
-			var $options  = $option.find('.fw-option-type-addable-option-options:first');
+			var $option   = $button.closest(optionClass);
+			var $options  = $option.find(optionClass +'-options:first');
 			var increment = parseInt($button.attr('data-increment'));
 
 			var $newOption = $(
 				$option.find('.default-addable-option-template:first').attr('data-template')
 					.split('###-addable-option-increment-###').join(String(increment))
 			);
+
+			// animation
+			{
+				$newOption.addClass('fw-animation-zoom-in');
+
+				setTimeout(function(){
+					$newOption.removeClass('fw-animation-zoom-in');
+				}, 300);
+			}
 
 			$button.attr('data-increment', increment + 1);
 
@@ -54,15 +72,17 @@ jQuery(document).ready(function ($) {
 			$newOption.find('input,select,textarea').first().focus();
 
 			fwEvents.trigger('fw:options:init', {$elements: $newOption});
+
+			$option.trigger(methods.makeEventName('option:init'), {$option: $newOption});
 		});
 
 		/** Init Remove button */
-		$elements.on('click', '.fw-option-type-addable-option-remove', function(){
-			$(this).closest('.fw-option-type-addable-option-option').remove();
+		$elements.on('click', optionClass +'-remove', function(){
+			$(this).closest(optionClass +'-option').remove();
 		});
 
 		$elements.each(function(){
-			initSortable($elements.find('.fw-option-type-addable-option-options:first'));
+			initSortable($elements.find(optionClass +'-options:first'));
 		});
 
 		$elements.addClass('fw-option-initialized');

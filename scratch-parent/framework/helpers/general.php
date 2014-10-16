@@ -559,7 +559,7 @@ function fw_include_file_isolated($file_path) {
  * Extract only input options from array with: tabs, boxes, options
  * @param array $options
  * @param array $_recursion_options Do not use this parameter
- * @return array
+ * @return array {option_id => option}
  */
 function fw_extract_only_options(array $options, &$_recursion_options = array()) {
 	static $recursion = null;
@@ -716,8 +716,7 @@ function fw_prepare_option_value($value) {
  * @param $post_id
  * @return bool
  */
-function fw_is_real_post_save($post_id)
-{
+function fw_is_real_post_save($post_id) {
 	return !(
 		wp_is_post_revision($post_id)
 		|| wp_is_post_autosave($post_id)
@@ -725,6 +724,7 @@ function fw_is_real_post_save($post_id)
 		|| (defined('DOING_AJAX') && DOING_AJAX)
 		|| empty($_POST)
 		|| empty($_POST['post_ID'])
+		|| $_POST['post_ID'] != $post_id
 	);
 }
 
@@ -950,4 +950,46 @@ function fw_oembed_get($url, $args = array()) {
 	}
 
 	return $html;
+}
+
+/**
+ * @var $length
+ * @return string
+ *
+ * Reference
+ *
+ * Strong cryptography in PHP
+ * http://www.zimuel.it/en/strong-cryptography-in-php/
+ * > Don't use rand() or mt_rand()
+ */
+function fw_secure_rand($length)
+{
+	if (function_exists('openssl_random_pseudo_bytes')) {
+		$rnd = openssl_random_pseudo_bytes($length, $strong);
+		if ($strong) {
+			return $rnd;
+		}
+	}
+
+	$sha ='';
+	$rnd ='';
+
+	if (file_exists('/dev/urandom')) {
+		$fp = fopen('/dev/urandom', 'rb');
+		if ($fp) {
+			if (function_exists('stream_set_read_buffer')) {
+				stream_set_read_buffer($fp, 0);
+			}
+			$sha = fread($fp, $length);
+			fclose($fp);
+		}
+	}
+
+	for ($i = 0; $i < $length; $i++) {
+		$sha = hash('sha256', $sha.mt_rand());
+		$char = mt_rand(0, 62);
+		$rnd .= chr(hexdec($sha[$char].$sha[$char+1]));
+	}
+
+	return $rnd;
 }

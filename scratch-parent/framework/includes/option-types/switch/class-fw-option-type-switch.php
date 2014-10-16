@@ -12,8 +12,9 @@ class FW_Option_Type_Switch extends FW_Option_Type
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
 	 */
-	protected function _render($id, $option, $data)
+	protected function _enqueue_static($id, $option, $data)
 	{
 		// adaptive switch
 		{
@@ -47,7 +48,13 @@ class FW_Option_Type_Switch extends FW_Option_Type
 			fw()->manifest->get_version(),
 			true
 		);
+	}
 
+	/**
+	 * @internal
+	 */
+	protected function _render($id, $option, $data)
+	{
 		{
 			$input_attr = array(
 				'name' => $option['attr']['name'],

@@ -40,29 +40,14 @@ class FW_Option_Type_Date_Picker extends FW_Option_Type {
 	}
 
 	/**
-	 * @param string $id
-	 * @param array $option
-	 * @param array $data
-	 *
-	 * @return string
+	 * @internal
+	 * {@inheritdoc}
 	 */
-	protected function _render( $id, $option, $data ) {
-		$language = substr(get_locale(), 0, 2);
+	protected function _enqueue_static($id, $option, $data)
+	{
 		$css_uri    = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/css/datepicker.css');
 		$js_uri     = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/js/scripts.js');
 		$date_picker_js_uri = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/js/bootstrap-datepicker.js');
-
-
-
-		$properties = array(
-			'language' => $language,
-			'weekStart'  => ( $option['monday-first'] == true ) ? 1 : 0,
-			'minDate'  => ( $option['min-date'] !== null ) ? $option['min-date'] : null,
-			'maxDate'  => ( $option['max-date'] !== null ) ? $option['max-date'] : null,
-		);
-
-		$option['attr']['readonly'] = 'readonly';
-		$option['attr']['data-fw-option-date-picker-opts'] = json_encode( $properties );
 
 		wp_enqueue_style(
 			'fw-option-' . $this->get_type(),
@@ -85,7 +70,9 @@ class FW_Option_Type_Date_Picker extends FW_Option_Type {
 			true
 		);
 
-		if( $language != 'en' ) {
+		$language = substr(get_locale(), 0, 2);
+
+		if ( $language != 'en' ) {
 			$locale_uri = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/js/locales/bootstrap-datepicker.' . $language . '.js');
 			wp_enqueue_script(
 				'fw-option-' . $this->get_type() . '-date-picker-locale',
@@ -95,6 +82,29 @@ class FW_Option_Type_Date_Picker extends FW_Option_Type {
 				true
 			);
 		}
+
+		fw()->backend->option_type( 'text' )->enqueue_static();
+	}
+
+	/**
+	 * @param string $id
+	 * @param array $option
+	 * @param array $data
+	 *
+	 * @return string
+	 */
+	protected function _render( $id, $option, $data ) {
+		$language = substr(get_locale(), 0, 2);
+
+		$properties = array(
+			'language' => $language,
+			'weekStart'  => ( $option['monday-first'] == true ) ? 1 : 0,
+			'minDate'  => ( $option['min-date'] !== null ) ? $option['min-date'] : null,
+			'maxDate'  => ( $option['max-date'] !== null ) ? $option['max-date'] : null,
+		);
+
+		$option['attr']['readonly'] = 'readonly';
+		$option['attr']['data-fw-option-date-picker-opts'] = json_encode( $properties );
 
 		return fw()->backend->option_type( 'text' )->render( $id, $option, $data );
 	}

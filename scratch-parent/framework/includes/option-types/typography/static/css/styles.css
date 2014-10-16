@@ -16,10 +16,18 @@
 	.fw-option-type-typography .fw-option-typography-option {
 		padding-right: 5px;
 	}
+	body.rtl .fw-option-type-typography .fw-option-typography-option {
+		padding-right: 0;
+		padding-left: 5px;
+	}
 
 	.fw-option-type-typography .fw-option-typography-option:last-child,
 	.fw-force-xs .fw-option-type-typography .fw-option-typography-option {
 		padding-right: 0;
+	}
+	body.rtl .fw-option-type-typography .fw-option-typography-option:last-child,
+	body.rtl .fw-force-xs .fw-option-type-typography .fw-option-typography-option {
+		padding-left: 0;
 	}
 
 	.fw-force-xs .fw-option-type-typography .fw-option-typography-option {
@@ -78,6 +86,10 @@ select.fw-option-typography-option-style-input {
 	margin-top: -2px;
 	border-width: 6px 3px 0 3px;
 	border-color: #000000 transparent transparent transparent;
+}
+body.rtl .fw-option-type-typography .fw-option-typography-option-family .selectize-control.single .selectize-input:after {
+	right: auto;
+	left: 8px;
 }
 
 @media (max-width: 782px) {

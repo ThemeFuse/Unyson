@@ -11,7 +11,7 @@
 					<div class="day-highlight dh-<%= event['class'] %>">
 						<a href="<%- event.url ? event.url : 'javascript:void(0)' %>" data-event-id="<%= event.id %>"
 						   data-event-class="<%= event['class'] %>" class="event-item">
-							<%- event.title %></a>
+							<%- event.title ? event.title : (event.url ? event.url : null) %></a>
 					</div>
 				<% }); %>
 			</div>
@@ -26,7 +26,7 @@
 						<span class="cal-hours pull-right"><%= event.end_hour %></span>
 						<a href="<%- event.url ? event.url : 'javascript:void(0)' %>" data-event-id="<%= event.id %>"
 						   data-event-class="<%= event['class'] %>" class="event-item">
-							<%- event.title %></a>
+							<%- event.title ? event.title : (event.url ? event.url : null) %></a>
 					</div>
 				<% }); %>
 			</div>
@@ -51,7 +51,7 @@
 				<span class="cal-hours"><%= event.start_hour %> - <%= event.end_hour %></span>
 				<a href="<%- event.url ? event.url : 'javascript:void(0)' %>" data-event-id="<%= event.id %>"
 				   data-event-class="<%= event['class'] %>" class="event-item">
-					<%- event.title %></a>
+					<%- event.title ? event.title : (event.url ? event.url : null) %></a>
 			</div>
 		<% }); %>
 	</div>
@@ -64,7 +64,7 @@
 				<span class="cal-hours pull-right"><%= event.start_hour %></span>
 				<a href="<%- event.url ? event.url : 'javascript:void(0)' %>" data-event-id="<%= event.id %>"
 				   data-event-class="<%= event['class'] %>" class="event-item">
-					<%- event.title %></a>
+					<%- event.title ? event.title : (event.url ? event.url : null) %></a>
 			</div>
 			<% }); %>
 		</div>

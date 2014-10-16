@@ -13,8 +13,6 @@ class FW_Option_Type_Map extends FW_Option_Type {
 	 */
 	public function _init() {
 		$this->language = substr( get_locale(), 0, 2 );
-
-		add_action( 'admin_enqueue_scripts', array( $this, 'add_header_js' ), 99999 );
 	}
 
 	public function get_type() {
@@ -23,35 +21,15 @@ class FW_Option_Type_Map extends FW_Option_Type {
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
 	 */
-	protected function _render( $id, $option, $data ) {
-		$this->add_css();
-		$this->add_js();
-
-		$data['value']['coordinates'] = json_encode($data['value']['coordinates']);
-
-		$path = fw_get_framework_directory('/includes/option-types/' . $this->get_type() . '/views/view.php');
-
-		return fw_render_view( $path, array(
-			'id'     => $id,
-			'option' => $option,
-			'data'   => $data
-		) );
-	}
-
-	private function add_css() {
+	protected function _enqueue_static($id, $option, $data)
+	{
 		wp_enqueue_style(
 			$this->get_type() . '-styles',
 			fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/css/style.css')
 		);
-	}
 
-	public function add_header_js() {
-		wp_enqueue_script( 'jquery' );
-		wp_enqueue_script( 'jquery-ui-autocomplete' );
-	}
-
-	private function add_js() {
 		wp_enqueue_script(
 			'google-maps-api-v3',
 			'https://maps.googleapis.com/maps/api/js?v=3.15&sensor=false&libraries=places&language=' . $this->language,
@@ -62,10 +40,25 @@ class FW_Option_Type_Map extends FW_Option_Type {
 		wp_enqueue_script(
 			$this->get_type() . '-styles',
 			fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/js/scripts.js'),
-			array( 'jquery', 'jquery-ui-widget', 'fw-events', 'underscore' ),
+			array( 'jquery', 'jquery-ui-widget', 'fw-events', 'underscore', 'jquery-ui-autocomplete' ),
 			'1.0',
 			true
 		);
+	}
+
+	/**
+	 * @internal
+	 */
+	protected function _render( $id, $option, $data ) {
+		$data['value']['coordinates'] = json_encode($data['value']['coordinates']);
+
+		$path = fw_get_framework_directory('/includes/option-types/' . $this->get_type() . '/views/view.php');
+
+		return fw_render_view( $path, array(
+			'id'     => $id,
+			'option' => $option,
+			'data'   => $data
+		) );
 	}
 
 	/**

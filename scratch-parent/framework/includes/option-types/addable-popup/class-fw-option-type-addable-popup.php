@@ -8,17 +8,11 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 	}
 
 	/**
-	 * Generate option's html from option array
-	 * @param string $id
-	 * @param array $option
-	 * @param array $data
-	 * @return string HTML
 	 * @internal
+	 * {@inheritdoc}
 	 */
-	protected function _render($id, $option, $data)
+	protected function _enqueue_static($id, $option, $data)
 	{
-		unset($option['attr']['name'], $option['attr']['value']);
-
 		wp_enqueue_style(
 			'fw-option-' . $this->get_type(),
 			fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/css/styles.css'),
@@ -34,26 +28,28 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 			true
 		);
 
-		{
-			$transformed_options = $this->transform_options($option['popup-options']);
-			$localize_var_name = 'fw_option_type_' . str_replace('-', '_', $this->get_type()) . '_localize_' .
-				// this way prevents undefined variable errors when addable popup is used inside another addable popup
-				md5(json_encode($transformed_options));
+		fw()->backend->enqueue_options_static($option['popup-options']);
 
-			wp_localize_script(
-				'fw-option-' . $this->get_type(),
-				$localize_var_name,
-				array(
-					'title' => empty($option['popup-title']) ? $option['label'] : $option['popup-title'],
-					'options' => $this->transform_options($option['popup-options']),
-					'template' => $option['template']
-				)
-			);
+		return true;
+	}
 
-			$option['attr']['data-localize-var-name'] = $localize_var_name;
-		}
+	/**
+	 * Generate option's html from option array
+	 * @param string $id
+	 * @param array $option
+	 * @param array $data
+	 * @return string HTML
+	 * @internal
+	 */
+	protected function _render($id, $option, $data)
+	{
+		unset($option['attr']['name'], $option['attr']['value']);
 
-		fw()->backend->render_options($option['popup-options']); // This makes sure that the option's static is enqueued
+		$option['attr']['data-for-js'] = base64_encode(json_encode(array(
+			'title' => empty($option['popup-title']) ? $option['label'] : $option['popup-title'],
+			'options' => $this->transform_options($option['popup-options']),
+			'template' => $option['template']
+		)));
 
 		$sortable_image = fw_get_framework_directory_uri('/static/img/sort-vertically.png');
 

@@ -2,10 +2,10 @@
 	die( 'Forbidden' );
 }
 
-$cfg = array(
-	'layout_builder' => array(
-		'title'       => __( 'Notification', 'fw' ),
-		'description' => __( 'A very awesome notification', 'fw' ),
-		'tab'         => __( 'Content Elements', 'fw' ),
-	)
+$cfg = array();
+
+$cfg['layout_builder'] = array(
+	'title'       => __( 'Notification', 'fw' ),
+	'description' => __( 'A very awesome notification', 'fw' ),
+	'tab'         => __( 'Content Elements', 'fw' ),
 );

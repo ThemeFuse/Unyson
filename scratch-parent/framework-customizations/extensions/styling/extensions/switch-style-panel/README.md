@@ -5,12 +5,13 @@ Show on the front-end a panel that allows the user to make the switch between pr
 ## Configuration
 
 ```php
-$cfg = array(
-    // enable or disable panel
-    'display' => true,
-    // the text that will be displayed at the top of the panel
-    'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-);
+$cfg = array();
+
+// enable or disable panel
+$cfg['display'] = true;
+
+// the text that will be displayed at the top of the panel
+$cfg['description'] = __('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'fw');
 ```
  
 ## Views

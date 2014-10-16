@@ -1011,6 +1011,23 @@ jQuery(document).ready(function($){
 									$thumb: $itemType
 								})
 							);
+
+							// animation
+							{
+								// stop previous animation
+								{
+									clearTimeout($itemType.attr('data-animation-timeout-id'));
+									$itemType.removeClass('fw-builder-animation-item-type-add');
+								}
+
+								$itemType.addClass('fw-builder-animation-item-type-add');
+
+								$itemType.attr('data-animation-timeout-id',
+									setTimeout(function(){
+										$itemType.removeClass('fw-builder-animation-item-type-add');
+									}, 500)
+								);
+							}
 						}
 					} else {
 						console.error('Invalid item type: '+ itemType);

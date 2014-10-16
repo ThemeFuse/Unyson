@@ -2,6 +2,25 @@
 
 class FW_Extension_Megamenu extends FW_Extension
 {
+	public function render_str($rel, $param = array())
+	{
+		return $this->render_view($rel, $param);
+	}
+
+	public function render($rel, $param = array())
+	{
+		echo $this->render_view($rel, $param);
+	}
+
+	public function show_icon()
+	{
+		return !in_array('icon', (array) get_user_option('manage' . 'nav-menus' . 'columnshidden'));
+	}
+
+
+
+
+
 	/**
 	 * @internal
 	 */
@@ -71,7 +90,7 @@ class FW_Extension_Megamenu extends FW_Extension
 					'label' => __('Select Icon', 'fw'),
 				),
 			);
-			fw()->backend->render_options($options);
+			fw()->backend->enqueue_options_static($options);
 
 		}
 	}
@@ -135,16 +154,25 @@ class FW_Extension_Megamenu extends FW_Extension
 	 */
 	public function _theme_filter_wp_nav_menu_args($args)
 	{
+		// nav-menu-template.php L271
 		// $args['menu'] = ...
+
+		// nav-menu-template.php L363
 		// $args['menu_id'] = 'xxx-menu-id';
 		// $args['menu_class'] = 'xxx-menu-class';
+
+		// nav-menu-template.php L311
 		// $args['container'] = 'xxx-container'; // should be in apply_filters('wp_nav_menu_container_allowedtags')
 		// $args['container_id'] = 'xxx-container-id';
 		// $args['container_class'] = 'xxx-container-class';
+
+		// nav-menu-template.php L151
 		// $args['before'] = 'xxx-before';
 		// $args['after'] = 'xxx-after';
 		// $args['link_before'] = 'xxx-link-before';
 		// $args['link_after'] = 'xxx-link-after';
+
+		// nav-menu-template.php L405
 		// $args['items_wrap'] = '<ul id="%1$s" class="%2$s">%3$s</ul>';
 
 		$args['walker'] = new FW_Theme_Menu_Walker();
@@ -184,23 +212,22 @@ class FW_Extension_Megamenu extends FW_Extension
 
 	/**
 	 * @internal
+	 *
+	 * nav-menu-template.php L141
+	 * Walker_Nav_Menu::start_el
 	 */
 	public function _theme_filter_nav_menu_link_attributes($attr, $item, $args)
 	{
 		// item_output = {{before}}<a {{ attr }}>{{ link_before }}{% the_title %}{{ link_after }}</a>{{ after }}
-
-		$show_icon = !in_array('icon', (array) get_user_option('manage' . 'nav-menus' . 'columnshidden'));
-
-		if ($show_icon) {
-			$fa_class = get_mega_menu_meta($item, 'icon');
-			$attr['class'] = trim(@$attr['class'] . " $fa_class");
-		}
 
 		return $attr;
 	}
 
 	/**
 	 * @internal
+	 *
+	 * nav-menu-template.php L174
+	 * Walker_Nav_Menu::start_el
 	 */
 	public function _theme_filter_walker_nav_menu_start_el($item_output, $item, $depth, $args)
 	{

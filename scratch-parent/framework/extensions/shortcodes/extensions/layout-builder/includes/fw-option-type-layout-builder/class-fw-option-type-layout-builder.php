@@ -22,7 +22,11 @@ class FW_Option_Type_Layout_Builder extends FW_Option_Type_Builder
 		);
 	}
 
-	protected function enqueue_static($id, $option, $data)
+	/**
+	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _render($id, $option, $data)
 	{
 		$static_uri = fw()->extensions->get('layout-builder')->locate_URI('/includes/fw-option-type-layout-builder/static/');
 		$version = fw()->extensions->get('layout-builder')->manifest->get_version();
@@ -74,6 +78,8 @@ class FW_Option_Type_Layout_Builder extends FW_Option_Type_Builder
 				)
 			);
 		}
+
+		return parent::_render($id, $option, $data);
 	}
 
 	protected function item_type_is_valid($item_type_instance)

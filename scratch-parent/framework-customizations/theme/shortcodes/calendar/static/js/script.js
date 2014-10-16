@@ -16,7 +16,16 @@
 		var prepareEventSources = function(events) {
 			events.forEach(function(element, index, events_array){
 
-				events_array[index].start = ( parseInt(element.start) + gmtOffset ) * 1000;
+				//disable offset for all_day event
+				{
+					var e = new Date(parseInt(element.end + '000')),
+						offset = gmtOffset;
+					if ( e.getUTCHours() == 23 && e.getUTCMinutes() == 59 && e.getUTCMinutes() == 59 && gmtOffset < 0 ) {
+						offset = 0;
+					}
+				}
+
+				events_array[index].start = ( parseInt(element.start) + offset ) * 1000;
 				events_array[index].end   = ( parseInt(element.end) + gmtOffset ) * 1000;
 
 				if ($.type(element.class) == 'undefined') {

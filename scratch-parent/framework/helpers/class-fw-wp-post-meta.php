@@ -19,13 +19,15 @@ class FW_WP_Post_Meta
 	/**
 	 * @param int $post_id
 	 * @param string $multi_key 'abc' or 'ab/c/def'
+	 * @param null|mixed $default_value If no option found in the database, this value will be returned
 	 * @param bool|null $get_original_value Original value from db, no changes and translations
 	 * @return mixed|null
 	 */
-	public static function get($post_id, $multi_key, $get_original_value = null)
+	public static function get($post_id, $multi_key, $default_value = null, $get_original_value = null)
 	{
-		if ($get_original_value === null)
+		if ($get_original_value === null) {
 			$get_original_value = is_admin();
+		}
 
 		if (empty($multi_key)) {
 			trigger_error('Key not specified', E_USER_WARNING);
@@ -52,7 +54,7 @@ class FW_WP_Post_Meta
 		if (empty($multi_key)) {
 			return $values[$get_original_value ? 'original' : 'prepared'];
 		} else {
-			return fw_akg($multi_key, $values[$get_original_value ? 'original' : 'prepared']);
+			return fw_akg($multi_key, $values[$get_original_value ? 'original' : 'prepared'], $default_value);
 		}
 	}
 

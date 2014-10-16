@@ -1,13 +1,10 @@
-/*global styleOptionTypeSettings, googleFonts */
+/*global googleFonts */
 
 (function ($) {
 
 	var fwOptionTypeStyle, fwOptionTypeStylePreview;
 
 	fwOptionTypeStyle = {
-
-		previewEnabled: styleOptionTypeSettings.preview,
-
 		deselectPredefined: function ($options) {
 			$(document).find('.fw-option-type-style-option.predefined_styles .fw-option-type-image-picker ul li .thumbnail.selected').trigger('click');
 		},
@@ -38,12 +35,10 @@
 						$options.on('fw:color:picker:changed', 'input.fw-option-type-color-picker', fwOptionTypeStylePreview.fireColorChange);
 					});
 
-				if (fwOptionTypeStyle.previewEnabled) {
-
+				if ($options.attr('data-preview')) {
 					setTimeout(function () {
 						fwOptionTypeStylePreview.initialize($options);
 					}, 0);
-
 				}
 			});
 		},
@@ -184,6 +179,7 @@
 				}, 100);
 
 				var scrollAPI = $scrollpane.data('jsp');
+				var isRtl = $(document.body).hasClass('rtl');
 
 				// fix preview position and size
 				$(window).on('resize scroll fw:option:style:fix-preview', function () {
@@ -203,7 +199,12 @@
 					var previewWidth = $this.width();
 					var contentHeight = $this.find('.inner .jspPane:first').height();
 
-					var left = $leftProvider.offset().left + $leftProvider.width() + 40;
+					var left;
+					if (isRtl) {
+						left = $leftProvider.offset().left - previewWidth - 40;
+					} else {
+						left = $leftProvider.offset().left + $leftProvider.width() + 40;
+					}
 
 					var top = $topProvider.offset().top - adminBarHeight + 12;
 					top -= $(window).scrollTop();

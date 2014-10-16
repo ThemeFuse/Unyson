@@ -98,6 +98,15 @@ jQuery(document).ready(function ($) {
 
 			$button.attr('data-increment', increment + 1);
 
+			// animation
+			{
+				$newBox.addClass('fw-animation-zoom-in');
+
+				setTimeout(function(){
+					$newBox.removeClass('fw-animation-zoom-in');
+				}, 300);
+			}
+
 			$boxes.append(
 				$newBox
 			);

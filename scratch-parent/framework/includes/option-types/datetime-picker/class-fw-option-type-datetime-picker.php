@@ -25,7 +25,6 @@ class FW_Option_Type_Datetime_Picker extends FW_Option_Type {
 				'format'        => 'Y/m/d H:i',
 				'extra-formats' => array(),
 				'moment-format' => 'YYYY/MM/DD HH:mm',
-				'scrollInput'   => false,
 				'maxDate'       => false,
 				'minDate'       => false,
 				'timepicker'    => true,
@@ -36,8 +35,6 @@ class FW_Option_Type_Datetime_Picker extends FW_Option_Type {
 	}
 
 	protected function _render( $id, $option, $data ) {
-		$this->_enqueue_static();
-
 		$wrapper_attr = $option['attr'];
 
 		$moment_format = $option['datetime-picker']['moment-format'];
@@ -53,7 +50,7 @@ class FW_Option_Type_Datetime_Picker extends FW_Option_Type {
 			unset($option['datetime-picker']['value']);
 		}
 
-
+		$option['datetime-picker']['scrollInput'] = false;
 		$option['datetime-picker']['lang'] = substr(get_locale(), 0, 2);
 		$option['attr']['data-moment-format'] = $moment_format;
 
@@ -62,8 +59,11 @@ class FW_Option_Type_Datetime_Picker extends FW_Option_Type {
 		echo '</div>';
 	}
 
-
-	private  function _enqueue_static() {
+	/**
+	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data) {
 		//plugin styles & js
 		{
 			$css_lib_uri        = fw_get_framework_directory_uri('/includes/option-types/datetime-picker/static/css/jquery.datetimepicker.css');
@@ -82,6 +82,8 @@ class FW_Option_Type_Datetime_Picker extends FW_Option_Type {
 		wp_enqueue_script( 'fw-option-datetime-picker-lib-moment-js', $js_lib_moment_uri, array('jquery'), false, true );
 		wp_enqueue_script( 'fw-option-datetime-picker-lib-js', $js_lib_uri, array('jquery', 'fw-option-datetime-picker-lib-moment-js'), false, true );
 		wp_enqueue_script( 'fw-option-datetime-picker-main-js', $js_main_uri, array('jquery', 'fw-option-datetime-picker-lib-js', 'fw-events' ), false, true );
+
+		fw()->backend->option_type( 'text' )->enqueue_static();
 	}
 
 	/**

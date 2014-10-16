@@ -9,17 +9,14 @@ class FW_Option_Type_Table_Builder extends FW_Option_Type {
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
 	 */
-	protected function _render( $id, $option, $data ) {
+	protected function _enqueue_static($id, $option, $data)
+	{
 		$table_shortcode = fw()->extensions->get( 'shortcodes' )->get_shortcode( 'table' );
-		if ( ! $table_shortcode ) {
-			trigger_error(
-				__( 'table-builder option type must be inside the table shortcode', 'fw' ),
-				E_USER_ERROR
-			);
-		}
 
 		$static_uri = $table_shortcode->get_uri() . '/includes/fw-option-type-table-builder/static/';
+
 		wp_enqueue_style(
 			'fw-option-' . $this->get_type() . '-default',
 			$static_uri . 'css/default-styles.css',
@@ -39,6 +36,20 @@ class FW_Option_Type_Table_Builder extends FW_Option_Type {
 			fw()->theme->manifest->get_version(),
 			true
 		);
+	}
+
+	/**
+	 * @internal
+	 */
+	protected function _render( $id, $option, $data ) {
+		$table_shortcode = fw()->extensions->get( 'shortcodes' )->get_shortcode( 'table' );
+
+		if ( ! $table_shortcode ) {
+			trigger_error(
+				__( 'table-builder option type must be inside the table shortcode', 'fw' ),
+				E_USER_ERROR
+			);
+		}
 
 		if ( ! isset( $data['value'] ) || empty( $data['value'] ) ) {
 			$data['value'] = $option['value'];

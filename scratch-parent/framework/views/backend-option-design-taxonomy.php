@@ -94,7 +94,7 @@
 	</th>
 	<td>
 		<div class="<?php echo esc_attr($classes['input']) ?>">
-			<div class="fw-inner fw-pull-left">
+			<div class="fw-inner fw-pull-<?php echo is_rtl() ? 'right' : 'left'; ?>">
 				<?php if ($help): ?><div class="fw-option-help fw-option-help-in-input fw-pull-right fw-hidden-xs <?php echo esc_attr($help['class']) ?>" title="<?php echo esc_attr($help['html']) ?>"></div><?php endif; ?>
 				<div class="fw-inner-option">
 					<?php echo fw()->backend->option_type($option['type'])->render($id, $option, $data) ?>

@@ -11,7 +11,6 @@ class FW_Option_Type_Typography extends FW_Option_Type
 	 * Allowed fonts
 	 */
 	private static $fonts;
-	private static $googleFontsPrinted = false;
 
 	/**
 	 * @internal
@@ -43,30 +42,31 @@ class FW_Option_Type_Typography extends FW_Option_Type
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data)
+	{
+		wp_enqueue_style(
+			'fw-option-' . $this->get_type(),
+			fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/css/styles.css'),
+			array('fw-selectize'),
+			fw()->manifest->get_version()
+		);
+		wp_enqueue_script(
+			'fw-option-' . $this->get_type(),
+			fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/js/scripts.js'),
+			array('jquery', 'underscore', 'fw', 'fw-selectize'),
+			fw()->manifest->get_version()
+		);
+
+		wp_localize_script('fw-option-' . $this->get_type(), 'googleFonts', self::$fonts['google']);
+	}
+
+	/**
+	 * @internal
 	 */
 	protected function _render($id, $option, $data)
 	{
-		//static
-		{
-			wp_enqueue_style(
-				'fw-option-' . $this->get_type(),
-				fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/css/styles.css'),
-				array('fw-selectize'),
-				fw()->manifest->get_version()
-			);
-			wp_enqueue_script(
-				'fw-option-' . $this->get_type(),
-				fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/js/scripts.js'),
-				array('jquery', 'underscore', 'fw', 'fw-selectize'),
-				fw()->manifest->get_version()
-			);
-
-			if(!self::$googleFontsPrinted) {
-				wp_localize_script('fw-option-' . $this->get_type(), 'googleFonts', self::$fonts['google']);
-				self::$googleFontsPrinted = true;
-			}
-		}
-
 		return fw_render_view(fw_get_framework_directory('/includes/option-types/' . $this->get_type() . '/view.php'), array(
 			'id' => $id,
 			'option' => $option,

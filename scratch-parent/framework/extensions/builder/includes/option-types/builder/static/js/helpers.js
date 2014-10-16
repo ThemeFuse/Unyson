@@ -14,18 +14,20 @@ var FwBuilderComponents = {
  *
  * this.widthChangerView = new FwBuilderComponents.ItemView.WidthChanger({
  *  model: this.model,
- *  view: this,
+ *  view:  this,
  *  widths: [
  *      {
- *          text: '1/12',
- *          value: 1, // or 8.33333333 as %
- *          itemViewClass: 'fw-col-sm-1'
+ *          title:          '1/12',
+ *          id:             '1_12',
+ *          backend_class:  'fw-col-sm-1',
+ *          frontend_class: 'col-sm-1'
  *      },
- *      //...
+ *      ...
  *      {
- *          text: '1/1',
- *          value: 12, // or 100 as %
- *          itemViewClass: 'fw-col-sm-12'
+ *          title:          '12/12',
+ *          id:             '12_12',
+ *          backend_class:  'fw-col-sm-12',
+ *          frontend_class: 'col-sm-12'
  *      }
  *  ],
  *  modelAttribute: 'width',
@@ -42,81 +44,65 @@ FwBuilderComponents.ItemView.WidthChanger = Backbone.View.extend({
 	className: 'fw-builder-item-width-changer',
 	template: _.template(
 		'<a href="#" class="decrease-width dashicons dashicons-arrow-left-alt2" onclick="return false;"></a>'+
-			' <span class="current-width fw-wp-link-color"><%- width %></span> '+
+			' <span class="current-width fw-wp-link-color"><%- title %></span> '+
 		'<a href="#" class="increase-width dashicons dashicons-arrow-right-alt2" onclick="return false;"></a>'
 	),
 	events: {
 		'click .decrease-width': 'decreaseWidth',
 		'click .increase-width': 'increaseWidth'
 	},
-	widths: [
-		{
-			'text': '1/12',
-			'value': 1,
-			'itemViewClass': 'fw-col-sm-1'
-		},
-		{
-			'text': '2/12',
-			'value': 2,
-			'itemViewClass': 'fw-col-sm-2'
-		},
-		{
-			'text': '3/12',
-			'value': 3,
-			'itemViewClass': 'fw-col-sm-3'
-		},
-		{
-			'text': '4/12',
-			'value': 4,
-			'itemViewClass': 'fw-col-sm-4'
-		},
-		{
-			'text': '5/12',
-			'value': 5,
-			'itemViewClass': 'fw-col-sm-5'
-		},
-		{
-			'text': '6/12',
-			'value': 6,
-			'itemViewClass': 'fw-col-sm-6'
-		},
-		{
-			'text': '7/12',
-			'value': 7,
-			'itemViewClass': 'fw-col-sm-7'
-		},
-		{
-			'text': '8/12',
-			'value': 8,
-			'itemViewClass': 'fw-col-sm-8'
-		},
-		{
-			'text': '9/12',
-			'value': 9,
-			'itemViewClass': 'fw-col-sm-9'
-		},
-		{
-			'text': '10/12',
-			'value': 10,
-			'itemViewClass': 'fw-col-sm-10'
-		},
-		{
-			'text': '11/12',
-			'value': 11,
-			'itemViewClass': 'fw-col-sm-11'
-		},
-		{
-			'text': '12/12',
-			'value': 12,
-			'itemViewClass': 'fw-col-sm-12'
-		}
-	],
+	widths: _fw_option_type_builder_helpers['item_widths'],
 	/**
 	 * The attribute name that will be changed in item on width changes
-	 * this.model.set(this.modelAttribute, this.widths[N].value)
+	 * this.model.set(this.modelAttribute, this.widths[N].id)
 	 */
 	modelAttribute: 'width',
 	initialize: function(options) {
+		if (
+			options['widths']
+			&&
+			options['widths'].length
+			&&
+			(
+				typeof options['widths'][0].value != 'undefined'
+				||
+				typeof options['widths'][0].text != 'undefined'
+				||
+				typeof options['widths'][0].itemViewClass != 'undefined'
+			)
+		) {
+			/**
+			 * Old version properties compatibility
+			 *
+			 * Rename old keys to new names:
+			 *  value -> id
+			 *  text -> title
+			 *  itemViewClass -> backend_class
+			 *
+			 * @deprecated
+			 */
+			console.log('[Warning] Item widths contains deprecated properties: value, text, itemViewClass', options['widths'][0]);
+
+			var fixedWidths = [];
+
+			_.each(options['widths'], function(width){
+				fixedWidths.push({
+					id: typeof width.value == 'undefined'
+						? width.id
+						: width.value,
+					title: typeof width.text == 'undefined'
+						? width.title
+						: width.text,
+					backend_class: typeof width.itemViewClass == 'undefined'
+						? width.backend_class
+						: width.itemViewClass,
+					frontend_class: typeof width.frontend_class == 'undefined' ? '' : width.itemViewClass
+				});
+			});
+
+			options.widths = fixedWidths;
+		}
+
 		_.extend(this, _.pick(options,
 			'view',
 			'widths',
@@ -136,12 +122,12 @@ FwBuilderComponents.ItemView.WidthChanger = Backbone.View.extend({
 	render: function() {
 		this.updateWidth();
 
-		var widthValue = this.model.get(this.modelAttribute);
-		var width      = _.findWhere(this.widths, {value: widthValue});
-		var widthText  = '?';
+		var widthId    = this.model.get(this.modelAttribute);
+		var width      = _.findWhere(this.widths, {id: widthId});
+		var widthTitle = '?';
 
 		if (width) {
-			widthText = width.text;
+			widthTitle = width.title;
 		}
 
 		{
@@ -158,69 +144,71 @@ FwBuilderComponents.ItemView.WidthChanger = Backbone.View.extend({
 
 		this.$el.html(
 			this.template({
-				width: widthText
+				title: widthTitle
 			})
 		);
 	},
 	decreaseWidth: function() {
-		var widthValue = this.model.get(this.modelAttribute);
-		var widthsValues = _.pluck(this.widths, 'value');
-		var currentWidthIndex = _.indexOf(widthsValues, widthValue);
+		var widthId           = this.model.get(this.modelAttribute);
+		var widthsIds         = _.pluck(this.widths, 'id');
+		var currentWidthIndex = _.indexOf(widthsIds, widthId);
 
 		if (currentWidthIndex == -1) {
-			// Current value does not exists (invalid) set first width
-			widthValue = widthsValues[0];
+			// Current id does not exists (invalid) set first width
+			widthId = widthsIds[0];
 		} else if (currentWidthIndex == 0) {
 			// Do nothing, this is the smallest width
 		} else {
 			// Set smaller width
-			widthValue = widthsValues[currentWidthIndex - 1];
+			widthId = widthsIds[currentWidthIndex - 1];
 		}
 
-		this.updateWidth(widthValue);
+		this.updateWidth(widthId);
 	},
 	increaseWidth: function() {
-		var widthValue = this.model.get(this.modelAttribute);
-		var widthsValues = _.pluck(this.widths, 'value');
-		var currentWidthIndex = _.indexOf(widthsValues, widthValue);
+		var widthId           = this.model.get(this.modelAttribute);
+		var widthsIds         = _.pluck(this.widths, 'id');
+		var currentWidthIndex = _.indexOf(widthsIds, widthId);
 
 		if (currentWidthIndex == -1) {
-			// Current value does not exists (invalid) set last width
-			widthValue = widthsValues[ widthsValues.length - 1 ];
-		} else if (currentWidthIndex == widthsValues.length - 1) {
+			// Current id does not exists (invalid) set last width
+			widthId = widthsIds[ widthsIds.length - 1 ];
+		} else if (currentWidthIndex == widthsIds.length - 1) {
 			// Do nothing, this is the biggest width
 		} else {
 			// Set bigger width
-			widthValue = widthsValues[currentWidthIndex + 1];
+			widthId = widthsIds[currentWidthIndex + 1];
 		}
 
-		this.updateWidth(widthValue);
+		this.updateWidth(widthId);
 	},
-	updateWidth: function(widthValue) {
-		if (typeof widthValue == 'undefined') {
-			widthValue = this.model.get(this.modelAttribute);
+	updateWidth: function(widthId) {
+		if (typeof widthId == 'undefined') {
+			widthId = this.model.get(this.modelAttribute);
 		}
 
-		var widthsValues = _.pluck(this.widths, 'value');
+		var widthsIds = _.pluck(this.widths, 'id');
 
 		// check if correct
-		if (-1 == _.indexOf(widthsValues, widthValue)) {
+		if (-1 == _.indexOf(widthsIds, widthId)) {
 			// set default
-			widthValue = widthsValues[0];
+			widthId = widthsIds[
+				parseInt(widthsIds.length / 2) // middle width
+			];
 		}
 
-		if (widthValue != this.model.get(this.modelAttribute)) {
+		if (widthId != this.model.get(this.modelAttribute)) {
 			// set only when is different, to prevent trigger actions on those who listens to model 'change'
-			this.model.set(this.modelAttribute, widthValue);
+			this.model.set(this.modelAttribute, widthId);
 		}
-
-		var itemViewClass = _.findWhere(this.widths, {value: widthValue}).itemViewClass;
 
 		this.view.$el
 			.removeClass(
-				_.pluck(this.widths, 'itemViewClass').join(' ')
+				_.pluck(this.widths, 'backend_class').join(' ')
 			)
-			.addClass(itemViewClass);
+			.addClass(
+				_.findWhere(this.widths, {id: widthId})['backend_class']
+			);
 	}
 });
 
@@ -251,7 +239,7 @@ FwBuilderComponents.ItemView.InlineTextEditor = Backbone.View.extend({
 		'focusout input': 'hide'
 	},
 	render: function() {
-		var localized = fw_option_type_builder_helpers;
+		var localized = _fw_option_type_builder_helpers;
 
 		this.$el.html(
 			this.template({

@@ -156,7 +156,11 @@ class FW_Extension_Events extends FW_Extension {
 		);
 
 		if (fw_current_screen_match($current_screen)) {
-			wp_enqueue_style('fw-ext-events-css', $this->get_declared_URI() . '/static/css/backend-events-style.css');
+			wp_enqueue_style('fw-ext-events-css',
+				$this->get_declared_URI('/static/css/backend-events-style.css'),
+				array(),
+				fw()->manifest->get_version()
+			);
 		}
 
 	}
@@ -394,11 +398,16 @@ class FW_Extension_Events extends FW_Extension {
 						continue;
 					}
 
-					$from_date = new DateTime($from_date, new DateTimeZone('GMT'));
-					if ($min_date === null or $from_date->format('U') < $min_date->format('U')) {
-						$min_date = $from_date;
+					try {
+						$from_date = new DateTime($from_date, new DateTimeZone('GMT'));
+						if ($min_date === null or $from_date->format('U') < $min_date->format('U')) {
+							$min_date = $from_date;
+						}
+						$cnt++;
+					} catch(Exception $e) {
+						//if was saved wrong format
 					}
-					$cnt++;
+
 				}
 
 				if ($cnt > 1 ) {

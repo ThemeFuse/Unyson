@@ -10,6 +10,12 @@
 
 .fw-option-type-multi-picker > .choice-group.chosen {
 	display: block;
+
+	-webkit-animation-name: fwFadeIn;
+	animation-name: fwFadeIn;
+
+	-webkit-animation-duration: 1s;
+	animation-duration: 1s;
 }
 
 .fw-option-type-multi-picker > .choice-group .fw-show-borders .fw-backend-option{

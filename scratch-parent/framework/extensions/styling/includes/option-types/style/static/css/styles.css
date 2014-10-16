@@ -32,7 +32,11 @@
 }
 
 .fw-option-type-style .tabs .block-tab .iris-picker.iris-border {
-	left: 349px
+	left: 349px;
+}
+body.rtl .fw-option-type-style .tabs .block-tab .iris-picker.iris-border {
+	right: 349px;
+	left: auto;
 }
 
 
@@ -53,6 +57,9 @@
 	background: #f1f1f1;
 	margin: -4px 4px -1px 0;
 	border: 1px solid #ccc;
+}
+body.rtl .fw-option-type-style .fw-options-tabs-first-level.fw-option-type-style-settings > .fw-options-tabs-list ul li a.nav-tab {
+	margin: -4px 0 -1px 4px;
 }
 
 .fw-option-type-style .fw-options-tabs-first-level.fw-option-type-style-settings > .fw-options-tabs-list ul li:after {
@@ -90,6 +97,10 @@
 	background-color: red;
 	display: none;
 }
+body.rtl .fw-option-type-style .style-preview {
+	right: auto;
+	left: 0;
+}
 
 
 /* New */
@@ -106,6 +117,9 @@
 	padding: 1px 14px !important;
 	font-size: 12px !important;
 	margin: -4px -2px -1px 0 !important;
+}
+body.rtl .fw-option-type-style .fw-option-type-style-settings-tabs.fw-options-tabs-list ul li a.nav-tab {
+	margin: -4px 0 -1px -2px !important;
 }
 
 .fw-option-type-style .fw-option-type-style-settings-tabs.fw-options-tabs-list ul li.ui-state-active a.nav-tab,
@@ -157,17 +171,28 @@
 .fw-option-type-style .preview-block p {
 	margin: 0 100px 0 0;
 }
+body.rtl .fw-option-type-style .preview-block p{
+	margin: 0 0 0 100px;
+}
 
 .fw-option-type-style .preview-block .bl-links {
 	position: absolute;
 	right: 15px;
 	bottom: 20px;
 }
+body.rtl .fw-option-type-style .preview-block .bl-links {
+	right: auto;
+	left: 15px;
+}
 
 .fw-option-type-style .preview-block .bl-links a {
 	font-size: 12px;
 	display: inline-block;
 	margin-right: 5px;
+}
+body.rtl .fw-option-type-style .preview-block .bl-links a{
+	margin-left: 5px;
+	margin-right: 0;
 }
 
 .fw-option-type-style .preview-block .bl-links a:hover,
@@ -200,6 +225,10 @@
 	width: 6px;
 	background: transparent;
 	right: 5px;
+}
+body.rtl .fw-option-type-style .style-preview .jspVerticalBar {
+	right: auto;
+	left: 5px;
 }
 
 .fw-option-type-style .style-preview .jspTrack {
@@ -234,5 +263,8 @@
 }
 
 .fw-option-type-style .predefined_styles .fw-option-type-image-picker ul.thumbnails.image_picker_selector li {
-	 margin: 0 8px 1px 0;
- }
+	margin: 0 8px 1px 0;
+}
+body.rtl .fw-option-type-style .predefined_styles .fw-option-type-image-picker ul.thumbnails.image_picker_selector li{
+	margin: 0 0 1px 8px;
+}

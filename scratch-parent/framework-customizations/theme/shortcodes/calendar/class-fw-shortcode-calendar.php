@@ -120,9 +120,21 @@ class FW_Shortcode_Calendar extends FW_Shortcode {
 
 	public function _action_theme_add_static(){
 
-		wp_enqueue_style('fw-shortcode-calendar-plugin-component-bootstrap3-grid', $this->get_uri() . '/static/components/bootstrap3/css/bootstrap-grid.css' );
-		wp_enqueue_style('fw-shortcode-calendar-css', $this->get_uri() . '/static/css/calendar.css' );
-		wp_enqueue_style('fw-shortcode-calendar-style-css', $this->get_uri() . '/static/css/style.css' );
+		wp_enqueue_style('fw-shortcode-calendar-plugin-component-bootstrap3-grid',
+			$this->get_uri() . '/static/components/bootstrap3/css/bootstrap-grid.css',
+			array(),
+			fw()->theme->manifest->get_version()
+		);
+		wp_enqueue_style('fw-shortcode-calendar-css',
+			$this->get_uri() . '/static/css/calendar.css',
+			array(),
+			fw()->theme->manifest->get_version()
+		);
+		wp_enqueue_style('fw-shortcode-calendar-style-css',
+			$this->get_uri() . '/static/css/style.css',
+			array(),
+			fw()->theme->manifest->get_version()
+		);
 
 
 		wp_enqueue_script('fw-shortcode-calendar-plugin-component-bootstrap3',

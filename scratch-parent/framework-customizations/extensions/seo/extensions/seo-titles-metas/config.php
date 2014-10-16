@@ -2,7 +2,7 @@
 	die( 'Forbidden' );
 }
 
-$cfg = array(
-	'excluded_post_types' => array( 'attachment' ),
-	'excluded_taxonomies' => array( 'post_tag' ),
-);
+$cfg = array();
+
+$cfg['excluded_post_types'] = array( 'attachment' );
+$cfg['excluded_taxonomies'] = array( 'post_tag' );

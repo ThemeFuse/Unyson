@@ -41,12 +41,14 @@ class FW_Flash_Messages
 		$pending_remove = array();
 
 		foreach (self::get_messages() as $messages) {
-			if (empty($messages))
+			if (empty($messages)) {
 				continue;
+			}
 
 			foreach ($messages as $message) {
-				if (empty($message['remove_ids']))
+				if (empty($message['remove_ids'])) {
 					continue;
+				}
 
 				foreach ($message['remove_ids'] as $remove_id) {
 					$pending_remove[$remove_id] = true;
@@ -54,11 +56,16 @@ class FW_Flash_Messages
 			}
 		}
 
+		if (empty($pending_remove)) {
+			return;
+		}
+
 		$types = self::get_messages();
 
 		foreach ($types as $type => $messages) {
-			if (empty($messages))
+			if (empty($messages)) {
 				continue;
+			}
 
 			foreach ($messages as $id => $message) {
 				if (isset($pending_remove[$id])) {
@@ -67,7 +74,7 @@ class FW_Flash_Messages
 			}
 		}
 
-		self::set_messages($types);
+		self::set_messages( $types );
 	}
 
 	/**
@@ -122,11 +129,11 @@ class FW_Flash_Messages
 			}
 		}
 
-		echo '<div class="fw-flash-messages">'. implode("\n\n", $html) .'</div>';
-
 		unset($success, $error, $info);
 
 		self::set_messages($all_messages);
+
+		echo '<div class="fw-flash-messages">'. implode("\n\n", $html) .'</div>';
 	}
 
 	/**
@@ -138,7 +145,6 @@ class FW_Flash_Messages
 		self::process_pending_remove_ids();
 
 		$html = array_fill_keys(array_keys(self::$available_types), '');
-
 		$all_messages = self::get_messages();
 
 		foreach ($all_messages as $type => $messages) {
@@ -161,7 +167,31 @@ class FW_Flash_Messages
 	}
 }
 
-/**
- * Display flash messages in backend as notices
- */
-add_action('admin_notices', array('FW_Flash_Messages', '_print_backend'));
+if (is_admin()) {
+	/**
+	 * Start the session before the content is sent to prevent the "headers already sent" warning
+	 * @internal
+	 */
+	function _action_fw_flash_message_backend_prepare() {
+		if (!session_id()) {
+			session_start();
+		}
+	}
+	add_action('current_screen', '_action_fw_flash_message_backend_prepare', 9999);
+
+	/**
+	 * Display flash messages in backend as notices
+	 */
+	add_action( 'admin_notices', array( 'FW_Flash_Messages', '_print_backend' ) );
+} else {
+	/**
+	 * Start the session before the content is sent to prevent the "headers already sent" warning
+	 * @internal
+	 */
+	function _action_fw_flash_message_frontend_prepare() {
+		if (!session_id()) {
+			session_start();
+		}
+	}
+	add_action('send_headers', '_action_fw_flash_message_frontend_prepare', 9999);
+}

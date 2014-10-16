@@ -8,43 +8,6 @@
 				this.widthChangerView = new FwBuilderComponents.ItemView.WidthChanger({
 					model: this.model,
 					view: this,
-					widths: [
-						{
-							text: '1/5',
-							value: '1-5',
-							itemViewClass: 'lb-column-1-5'
-						},
-						{
-							text: '1/4',
-							value: '1-4',
-							itemViewClass: 'lb-column-1-4'
-						},
-						{
-							text: '1/3',
-							value: '1-3',
-							itemViewClass: 'lb-column-1-3'
-						},
-						{
-							text: '1/2',
-							value: '1-2',
-							itemViewClass: 'lb-column-1-2'
-						},
-						{
-							text: '2/3',
-							value: '2-3',
-							itemViewClass: 'lb-column-2-3'
-						},
-						{
-							text: '3/4',
-							value: '3-4',
-							itemViewClass: 'lb-column-3-4'
-						},
-						{
-							text: '1/1',
-							value: '1-1',
-							itemViewClass: 'lb-column-1-1'
-						}
-					],
 					modelAttribute: 'subtype'
 				});
 				this.defaultInitialize();

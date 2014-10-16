@@ -102,13 +102,14 @@ abstract class FW_Extension
 	 * Cache key for this extension
 	 *
 	 * Usage:
-	 * FW_Cache::get( $this->get_cache_key() .'/something' )
+	 * FW_Cache::get( $this->get_cache_key('/some/key') )
 	 *
+	 * @param string $sub_key
 	 * @return string
 	 */
-	final public function get_cache_key()
+	final public function get_cache_key($sub_key = '')
 	{
-		return self::$cache_key .'/'. $this->get_name();
+		return self::$cache_key .'/'. $this->get_name() . $sub_key;
 	}
 
 	/**
@@ -152,8 +153,8 @@ abstract class FW_Extension
 	}
 
 	/**
-	 * @param string $rel_path E.g. `/views/test.php`
-	 * @return false|string E.g. '/var/www/wordpress/wp-content/themes/theme-name/framework/extensions/<extension>/views/test.php'
+	 * @param string $rel_path '/views/test.php'
+	 * @return false|string    '/var/www/wordpress/wp-content/themes/theme-name/framework/extensions/<extension>/views/test.php'
 	 */
 	final public function locate_path($rel_path)
 	{

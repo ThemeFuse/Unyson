@@ -11,7 +11,7 @@
 					return $defaultItem.clone().removeClass('default');
 				}
 			},
-			data = window[nodes.$optionWrapper.attr('data-localize-var-name')],
+			data = JSON.parse(atob(nodes.$optionWrapper.attr('data-for-js'))),
 			utils = {
 				modal: new fw.OptionsModal({
 					title: data.title,

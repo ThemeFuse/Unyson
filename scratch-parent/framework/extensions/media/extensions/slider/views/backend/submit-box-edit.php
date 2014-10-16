@@ -22,8 +22,6 @@
 		$out.=fw()->backend->render_option($key, $option);
 	}
 	echo $out;
-//	fw()->backend->render_options($options);
-
 	?>
 	<div id="major-publishing-actions">
 		<div id="delete-action">

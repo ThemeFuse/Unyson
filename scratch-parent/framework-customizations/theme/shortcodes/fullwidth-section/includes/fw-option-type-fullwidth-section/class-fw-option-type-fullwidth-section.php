@@ -14,7 +14,6 @@ class FW_Option_Type_Fullwidth_Section extends FW_Option_Type_Layout_Builder_Ite
 	 */
 	public function enqueue_static()
 	{
-		// TODO: Implement enqueue_static() method.
 		$this->shortcode_instance = fw()->extensions->get('shortcodes')->get_shortcode('fullwidth_section');
 		$static_uri = $this->shortcode_instance->get_uri() . '/includes/fw-option-type-fullwidth-section/static/';
 		wp_enqueue_style(
@@ -44,7 +43,7 @@ class FW_Option_Type_Fullwidth_Section extends FW_Option_Type_Layout_Builder_Ite
 		$collector = array();
 		if ($options) {
 			$collector['options'] = $this->transform_options($options);
-			fw()->backend->render_options($options); // This makes sure that the option's static is enqueued
+			fw()->backend->enqueue_options_static($options);
 		}
 
 		return $collector;

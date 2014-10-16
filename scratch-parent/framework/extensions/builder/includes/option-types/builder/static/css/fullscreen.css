@@ -72,3 +72,11 @@
 	margin-top: 4px;
 	margin-right: 0px;
 }
+
+.fw-option-type-builder .ui-tabs-nav{
+	width: 80%;
+}
+
+.fw-option-type-builder .ui-tabs-nav.ui-helper-clearfix:after{
+	clear: none;
+}

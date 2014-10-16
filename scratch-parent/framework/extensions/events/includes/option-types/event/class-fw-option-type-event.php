@@ -99,18 +99,30 @@ class FW_Option_Type_Event extends FW_Option_Type {
 		);
 	}
 
+	/**
+	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data)
+	{
+		wp_enqueue_script('fw-option-' . $this->get_type(),
+			self::$extension['URI'] . '/includes/option-types/' . $this->get_type() . '/static/js/scripts.js',
+			array('jquery', 'fw-events', 'editor', 'fw'),
+			fw()->manifest->get_version()
+		);
+		wp_enqueue_style('fw-option-' . $this->get_type(),
+			self::$extension['URI'] . '/includes/option-types/' . $this->get_type() . '/static/css/styles.css',
+			array(),
+			fw()->manifest->get_version()
+		);
+	}
+
 
 	/**
 	 * @internal
 	 */
 	protected function _render($id, $option, $data)
 	{
-		//static
-		{
-			wp_enqueue_script('fw-option-' . $this->get_type(), self::$extension['URI'] . '/includes/option-types/' . $this->get_type() . '/static/js/scripts.js', array('jquery', 'fw-events', 'editor', 'fw'));
-			wp_enqueue_style('fw-option-' . $this->get_type(), self::$extension['URI'] . '/includes/option-types/' . $this->get_type() . '/static/css/styles.css');
-		}
-
 		return fw_render_view( dirname(__FILE__) . '/view.php', array(
 			'id'     => $id,
 			'option' => $option,

@@ -9,6 +9,11 @@
 #edittag .form-table .fw-option-type-addable-option .fw-option-type-addable-option-option td.td-option {
 	padding-right: 10px;
 }
+body.rtl .fw-option-type-addable-option .fw-option-type-addable-option-option td.td-option,
+body.rtl #edittag .form-table .fw-option-type-addable-option .fw-option-type-addable-option-option td.td-option {
+	padding-right: 0;
+	padding-left: 10px;
+}
 
 .fw-option-type-addable-option .fw-option-type-addable-option-option td.td-remove,
 #edittag .form-table .fw-option-type-addable-option .fw-option-type-addable-option-option td.td-remove {
@@ -51,6 +56,9 @@
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+}
+body.rtl .fw-option-type-addable-option tr.fw-option-type-addable-option-option.ui-sortable-helper > td {
+	float: right;
 }
 
 .fw-option-type-addable-option tr.fw-option-type-addable-option-option.ui-sortable-helper td.td-option {

@@ -12,29 +12,33 @@ class FW_Option_Type_Color_Picker extends FW_Option_Type
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
+	 */
+	protected function _enqueue_static($id, $option, $data)
+	{
+		wp_enqueue_style(
+			'fw-option-'. $this->get_type(),
+			fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/css/styles.css'),
+			array(),
+			fw()->manifest->get_version()
+		);
+
+		wp_enqueue_script('wp-color-picker');
+
+		wp_enqueue_script(
+			'fw-option-'. $this->get_type(),
+			fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/js/scripts.js'),
+			array('fw-events'),
+			fw()->manifest->get_version(),
+			true
+		);
+	}
+
+	/**
+	 * @internal
 	 */
 	protected function _render($id, $option, $data)
 	{
-		// static
-		{
-			wp_enqueue_style(
-				'fw-option-'. $this->get_type(),
-				fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/css/styles.css'),
-				array(),
-				fw()->manifest->get_version()
-			);
-
-			wp_enqueue_script('wp-color-picker');
-
-			wp_enqueue_script(
-				'fw-option-'. $this->get_type(),
-				fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/js/scripts.js'),
-				array('fw-events'),
-				fw()->manifest->get_version(),
-				true
-			);
-		}
-
 		$option['attr']['value']  = (string)$data['value'];
 		$option['attr']['class'] .= ' code';
 		$option['attr']['size']   = '7';
