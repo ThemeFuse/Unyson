@@ -78,8 +78,7 @@ class FW_WP_Filesystem
 		global $wp_filesystem;
 
 		if (!$wp_filesystem) {
-			trigger_error('Filesystem is not available', E_USER_WARNING);
-			return false;
+			trigger_error('Filesystem is not available', E_USER_ERROR);
 		}
 
 		$path = fw_fix_path($path);
@@ -101,8 +100,7 @@ class FW_WP_Filesystem
 		global $wp_filesystem;
 
 		if (!$wp_filesystem) {
-			trigger_error('Filesystem is not available', E_USER_WARNING);
-			return false;
+			trigger_error('Filesystem is not available', E_USER_ERROR);
 		}
 
 		$wp_filesystem_path = fw_fix_path($wp_filesystem_path);
@@ -124,8 +122,7 @@ class FW_WP_Filesystem
 		global $wp_filesystem;
 
 		if (!$wp_filesystem) {
-			trigger_error('Filesystem is not available', E_USER_WARNING);
-			return false;
+			trigger_error('Filesystem is not available', E_USER_ERROR);
 		}
 
 		$wp_filesystem_dir_path = fw_fix_path($wp_filesystem_dir_path);

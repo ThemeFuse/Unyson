@@ -72,7 +72,7 @@ abstract class FW_Ext_Update_Service extends FW_Extension
 	/**
 	 * Return latest version of the extension if this service supports extension update
 	 *
-	 * @param FW_Extension $extension Instance of the extension to check
+	 * @param FW_Extension $extension
 	 * @param bool $force_check Check now, do not use cache
 	 * @return string|false|WP_Error
 	 *      false    Does not know how to work with extension.
@@ -91,13 +91,14 @@ abstract class FW_Ext_Update_Service extends FW_Extension
 	 *
 	 * ! Work with global $wp_filesystem; Do not use base php filesystem functions
 	 *
+	 * @param FW_Extension $extension
 	 * @param $version Version to download
 	 * @param string $wp_filesystem_download_directory Empty directory offered for download files in it
 	 * @return string|false|WP_Error Path to WP Filesystem directory with downloaded (and extracted) files
 	 *
 	 * @internal
 	 */
-	public function _download_extension($version, $wp_filesystem_download_directory)
+	public function _download_extension(FW_Extension $extension, $version, $wp_filesystem_download_directory)
 	{
 		return false;
 	}

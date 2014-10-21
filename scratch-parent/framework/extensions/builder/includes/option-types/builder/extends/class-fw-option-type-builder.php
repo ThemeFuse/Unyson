@@ -186,7 +186,7 @@ abstract class FW_Option_Type_Builder extends FW_Option_Type
 			);
 		}
 
-		{
+		if (!(isset($option['fullscreen']) and $option['fullscreen'] === false)) {
 			wp_enqueue_style(
 				'fw-option-builder-fullscreen',
 				$this->get_static_uri('/css/fullscreen.css'),
@@ -203,7 +203,7 @@ abstract class FW_Option_Type_Builder extends FW_Option_Type
 			);
 		}
 
-		{
+		if (!(isset($option['template_saving']) and $option['template_saving'] === false)) {
 			wp_enqueue_style(
 				'fw-option-builder-template-saving',
 				$this->get_static_uri('/css/template-saving.css'),

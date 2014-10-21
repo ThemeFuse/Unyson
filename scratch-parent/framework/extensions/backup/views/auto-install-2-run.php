@@ -5,13 +5,14 @@
  */
 
 $backup = fw()->extensions->get('backup');
+$theme_name = fw()->theme->manifest->get_name();
 
 ?>
 <div class="wrap">
 
 	<div id="icon-tools" class="icon32"></div>
 
-	<h2><?php echo esc_html(fw()->theme->manifest->get_name()) ?> WordPress Theme</h2>
+	<h2><?php strtr(__('{theme_name} WordPress Theme', 'fw'), array('{theme_name}' => esc_html($theme_name))) ?></h2>
 
 	<?php
 

@@ -47,6 +47,19 @@ class FW_Extension_Update extends FW_Extension
 		add_filter('wp_get_update_data', array($this, '_filter_update_data'), 10, 2);
 	}
 
+	private function get_fixed_version($version)
+	{
+		// remove from the beginning everything that is not a number: 'v1.2.3' -> '1.2.3', 'ver1.0.0' -> '1.0.0'
+		return preg_replace('/^[^1-9]+/i', '', $version);;
+	}
+
+	private function get_wp_fs_tmp_dir()
+	{
+		return FW_WP_Filesystem::real_path_to_filesystem_path(
+			fw_fix_path(WP_CONTENT_DIR) .'/tmp/fw-ext-update'
+		);
+	}
+
 	/**
 	 * @internal
 	 */
@@ -108,6 +121,8 @@ class FW_Extension_Update extends FW_Extension
 
 	/**
 	 * Collect extensions that has new versions available
+	 * @param bool $force_check
+	 * @return array {ext_name => update_data}
 	 */
 	private function get_extensions_with_updates($force_check = false)
 	{
@@ -145,9 +160,9 @@ class FW_Extension_Update extends FW_Extension
 					break;
 				}
 
-				$fixed_latest_version = preg_replace('/^[^0-9]+/i', '', $latest_version);
+				$fixed_latest_version = $this->get_fixed_version($latest_version);
 
-				if (!version_compare($latest_version, $extension->manifest->get_version(), '>')) {
+				if (!version_compare($fixed_latest_version, $extension->manifest->get_version(), '>')) {
 					// we already have latest version
 					continue;
 				}
@@ -188,7 +203,7 @@ class FW_Extension_Update extends FW_Extension
 				return $latest_version;
 			}
 
-			$fixed_latest_version = preg_replace('/^[^0-9]+/i', '', $latest_version);
+			$fixed_latest_version = $this->get_fixed_version($latest_version);
 
 			if (!version_compare($fixed_latest_version, fw()->manifest->get_version(), '>')) {
 				// we already have latest version
@@ -228,7 +243,7 @@ class FW_Extension_Update extends FW_Extension
 				return $latest_version;
 			}
 
-			$fixed_latest_version = preg_replace('/^[^0-9]+/i', '', $latest_version);
+			$fixed_latest_version = $this->get_fixed_version($latest_version);
 
 			if (!version_compare($fixed_latest_version, fw()->theme->manifest->get_version(), '>')) {
 				// we already have latest version
@@ -245,6 +260,10 @@ class FW_Extension_Update extends FW_Extension
 		return false;
 	}
 
+	/**
+	 * Turn on/off the maintenance mode
+	 * @param bool $enable
+	 */
 	private function maintenance_mode($enable = false)
 	{
 		/** @var WP_Filesystem_Base $wp_filesystem */
@@ -267,6 +286,174 @@ class FW_Extension_Update extends FW_Extension
 			if (!$wp_filesystem->put_contents($file_path, '<?php $upgrading = ' . time() . '; ?>', FS_CHMOD_FILE)) {
 				trigger_error(__('Cannot create: ', 'fw') . $file_path, E_USER_WARNING);
 			}
+		}
+	}
+
+	/**
+	 * Download and install new version files
+	 *
+	 * global $wp_filesystem; must be initialized before calling this method
+	 *
+	 * @param array $data
+	 * @return null|WP_Error
+	 */
+	private function update($data)
+	{
+		$required_data_keys = array(
+			'wp_fs_destination_dir'  => true,
+			'download_callback'      => true,
+			'download_callback_args' => true,
+			'skin'                   => true,
+			'title'                  => true,
+		);
+
+		if (count($required_data_keys) > count(array_intersect_key($required_data_keys, $data))) {
+			trigger_error('Some required keys are not present', E_USER_ERROR);
+		}
+
+		// move manually every key to variable, so IDE will understand better them
+		{
+			/**
+			 * Replace all files in this directory with downloaded
+			 * @var string $wp_fs_destination_dir
+			 */
+			$wp_fs_destination_dir = $data['wp_fs_destination_dir'];
+
+			/**
+			 * Called to download new version files to $this->get_wp_fs_tmp_dir()
+			 * @var callable $download_callback
+			 */
+			$download_callback = $data['download_callback'];
+
+			/**
+			 * @var array
+			 */
+			$download_callback_args = $data['download_callback_args'];
+
+			/**
+			 * @var WP_Upgrader_Skin $skin
+			 */
+			$skin = $data['skin'];
+
+			/**
+			 * Used in text messages
+			 * @var string $title
+			 */
+			$title = $data['title'];
+
+			unset($data);
+		}
+
+		/**
+		 * @var string|WP_Error
+		 */
+		$error = false;
+
+		$tmp_download_dir = $this->get_wp_fs_tmp_dir();
+
+		do {
+			/** @var WP_Filesystem_Base $wp_filesystem */
+			global $wp_filesystem;
+
+			// create temporary directory
+			{
+				if ($wp_filesystem->exists($tmp_download_dir)) {
+					// just in case it already exists, clear everything, it may contain old files
+					if (!$wp_filesystem->rmdir($tmp_download_dir, true)) {
+						$error = __('Cannot remove old temporary directory: ', 'fw') . $tmp_download_dir;
+						break;
+					}
+				}
+
+				if (!FW_WP_Filesystem::mkdir_recursive($tmp_download_dir)) {
+					$error = __('Cannot create directory: ', 'fw') . $tmp_download_dir;
+					break;
+				}
+			}
+
+			$skin->feedback(sprintf(__('Downloading the %s...', 'fw'), $title));
+			{
+				$downloaded_dir = call_user_func_array($download_callback, $download_callback_args);
+
+				if (!$downloaded_dir) {
+					$error = sprintf(__('Cannot download the %s.', 'fw'), $title);
+					break;
+				} elseif (is_wp_error($downloaded_dir)) {
+					$error = $downloaded_dir;
+					break;
+				}
+			}
+
+			$this->maintenance_mode(true);
+
+			$skin->feedback(sprintf(__('Installing the %s...', 'fw'), $title));
+			{
+				$skip_file_names = array('.git');
+
+				// remove all files from destination directory
+				{
+					$dir_files = $wp_filesystem->dirlist($wp_fs_destination_dir, true);
+					if ($dir_files === false) {
+						$error =__('Cannot access directory: ', 'fw') . $wp_fs_destination_dir;
+						break;
+					}
+
+					foreach ($dir_files as $file) {
+						if (in_array($file['name'], $skip_file_names)) {
+							continue;
+						}
+
+						$file_path = $wp_fs_destination_dir .'/'. $file['name'];
+
+						if (!$wp_filesystem->delete($file_path, true, $file['type'])) {
+							$skin->error(__('Cannot remove: ', 'fw') . $file_path);
+						}
+					}
+				}
+
+				// move all files from the temporary directory to the destination directory
+				{
+					$dir_files = $wp_filesystem->dirlist($downloaded_dir, true);
+					if ($dir_files === false) {
+						$error = __('Cannot access directory: ', 'fw') . $downloaded_dir;
+						break;
+					}
+
+					foreach ($dir_files as $file) {
+						if (in_array($file['name'], $skip_file_names)) {
+							continue;
+						}
+
+						$downloaded_file_path  = $downloaded_dir .'/'. $file['name'];
+						$destination_file_path = $wp_fs_destination_dir .'/'. $file['name'];
+
+						if (!$wp_filesystem->move($downloaded_file_path, $destination_file_path)) {
+							$skin->error(sprintf(
+								__('Cannot move "%s" to "%s"', 'fw'),
+								$downloaded_file_path, $destination_file_path
+							));
+						}
+					}
+				}
+			}
+
+			$skin->feedback(sprintf(__('The %s has been successfully updated.', 'fw'), $title));
+		} while(false);
+
+		$this->maintenance_mode(false);
+
+		if ($wp_filesystem->exists($tmp_download_dir)) {
+			if ( ! $wp_filesystem->delete( $tmp_download_dir, true, 'd' ) ) {
+				$error = sprintf( __( 'Cannot remove temporary directory "%s".', 'fw' ), $tmp_download_dir );
+			}
+		}
+
+		if ($error) {
+			if (!is_wp_error($error)) {
+				$error = new WP_Error( 'fw_ext_update_failed', (string)$error );
+			}
+
+			return $error;
 		}
 	}
 
@@ -296,9 +483,14 @@ class FW_Extension_Update extends FW_Extension
 
 		$skin->header();
 
-		$update = $this->get_framework_update(true);
-
 		do {
+			if (!FW_WP_Filesystem::request_access($this->context, fw_current_url(), array($nonce_name))) {
+				$skin->error(__('Cannot obtain filesystem access.', 'fw'));
+				break;
+			}
+
+			$update = $this->get_framework_update();
+
 			if ($update === false) {
 				$skin->error(__('Failed to get framework latest version.', 'fw'));
 				break;
@@ -307,106 +499,27 @@ class FW_Extension_Update extends FW_Extension
 				break;
 			}
 
-			$context = $this->context;
+			/** @var FW_Ext_Update_Service $service */
+			$service = $this->get_child($update['service']);
 
-			if (!FW_WP_Filesystem::request_access($context, fw_current_url(), array($nonce_name))) {
+			$update_result = $this->update(array(
+				'wp_fs_destination_dir' => FW_WP_Filesystem::real_path_to_filesystem_path(
+					fw_get_framework_directory()
+				),
+				'download_callback' => array($service, '_download_framework'),
+				'download_callback_args' => array($update['latest_version'], $this->get_wp_fs_tmp_dir()),
+				'skin' => $skin,
+				'title' => __('Framework', 'fw'),
+			));
+
+			if (is_wp_error($update_result)) {
+				$skin->error($update_result);
 				break;
 			}
-
-			/** @var WP_Filesystem_Base $wp_filesystem */
-			global $wp_filesystem;
-
-			// create temporary directory for files to be downloaded in it
-			{
-				$tmp_download_dir = FW_WP_Filesystem::real_path_to_filesystem_path(
-					fw_fix_path(WP_CONTENT_DIR) .'/cache/framework/update'
-				);
-
-				// just in case it already exists, clear everything, it may contain broken/old files
-				if ($wp_filesystem->exists($tmp_download_dir)) {
-					if (!$wp_filesystem->rmdir( $tmp_download_dir, true )) {
-						$skin->error(__('Cannot remove old temporary directory: ', 'fw') . $tmp_download_dir);
-						break;
-					}
-				}
-
-				if (!FW_WP_Filesystem::mkdir_recursive($tmp_download_dir)) {
-					$skin->error(__('Cannot create directory: ', 'fw') . $tmp_download_dir);
-					break;
-				}
-			}
-
-			$skin->feedback(__('Downloading the framework...', 'fw'));
-			{
-				/** @var FW_Ext_Update_Service $service */
-				$service = $this->get_child($update['service']);
-
-				$downloaded_dir = $service->_download_framework($update['latest_version'], $tmp_download_dir);
-
-				if (!$downloaded_dir) {
-					$skin->error(__('Cannot download the framework.', 'fw'));
-					break;
-				} elseif (is_wp_error($downloaded_dir)) {
-					$skin->error($downloaded_dir);
-					break;
-				}
-			}
-
-			$this->maintenance_mode(true);
-
-			$skin->feedback(__('Installing the framework...', 'fw'));
-			{
-				$framework_dir = FW_WP_Filesystem::real_path_to_filesystem_path(fw_get_framework_directory());
-
-				$include_hidden_files = false;
-
-				// removing all files from the framework directory
-				{
-					$dir_files = $wp_filesystem->dirlist($framework_dir, $include_hidden_files);
-					if ($dir_files === false) {
-						$skin->error(__('Cannot access directory: ', 'fw') . $framework_dir);
-						break;
-					}
-
-					foreach ($dir_files as $file) {
-						$file_path = $framework_dir .'/'. $file['name'];
-
-						if (!$wp_filesystem->delete($file_path, true, $file['type'])) {
-							$skin->error(__('Cannot remove: ', 'fw') . $file_path);
-						}
-					}
-				}
-
-				// move all files from the downloaded directory to the framework directory
-				{
-					$dir_files = $wp_filesystem->dirlist($downloaded_dir, $include_hidden_files);
-					if ($dir_files === false) {
-						$skin->error(__('Cannot access directory: ', 'fw') . $downloaded_dir);
-						break;
-					}
-
-					foreach ($dir_files as $file) {
-						$downloaded_file_path = $downloaded_dir .'/'. $file['name'];
-						$framework_file_path  = $framework_dir .'/'. $file['name'];
-
-						if (!$wp_filesystem->move($downloaded_file_path, $framework_file_path)) {
-							$skin->error(
-								sprintf(__('Cannot move "%s" to "%s"', 'fw'), $framework_dir, $framework_file_path)
-							);
-						}
-					}
-				}
-			}
-
-			$skin->feedback(__('The framework has been successfully updated.', 'fw'));
-
-			$wp_filesystem->delete($tmp_download_dir, true, 'd');
 
 			$skin->set_result(true);
 			$skin->after();
 		} while(false);
-
-		$this->maintenance_mode(false);
 
 		$skin->footer();
 
@@ -423,9 +536,61 @@ class FW_Extension_Update extends FW_Extension
 			wp_die(__('Invalid nonce.', 'fw'));
 		}
 
+		{
+			if (!class_exists('_FW_Ext_Update_Theme_Upgrader_Skin')) {
+				fw_include_file_isolated(
+					$this->get_declared_path('/includes/classes/class--fw-ext-update-theme-upgrader-skin.php')
+				);
+			}
+
+			$skin = new _FW_Ext_Update_Theme_Upgrader_Skin(array(
+				'title' => __('Theme Update', 'fw'),
+			));
+		}
+
 		require_once(ABSPATH . 'wp-admin/admin-header.php');
 
-		fw_print('Hello');
+		$skin->header();
+
+		do {
+			if (!FW_WP_Filesystem::request_access($this->context, fw_current_url(), array($nonce_name))) {
+				$skin->error(__('Cannot obtain filesystem access.', 'fw'));
+				break;
+			}
+
+			$update = $this->get_theme_update();
+
+			if ($update === false) {
+				$skin->error(__('Failed to get theme latest version.', 'fw'));
+				break;
+			} elseif (is_wp_error($update)) {
+				$skin->error($update);
+				break;
+			}
+
+			/** @var FW_Ext_Update_Service $service */
+			$service = $this->get_child($update['service']);
+
+			$update_result = $this->update(array(
+				'wp_fs_destination_dir' => FW_WP_Filesystem::real_path_to_filesystem_path(
+					get_template_directory()
+				),
+				'download_callback' => array($service, '_download_theme'),
+				'download_callback_args' => array($update['latest_version'], $this->get_wp_fs_tmp_dir()),
+				'skin' => $skin,
+				'title' => __('Theme', 'fw'),
+			));
+
+			if (is_wp_error($update_result)) {
+				$skin->error($update_result);
+				break;
+			}
+
+			$skin->set_result(true);
+			$skin->after();
+		} while(false);
+
+		$skin->footer();
 
 		require_once(ABSPATH . 'wp-admin/admin-footer.php');
 	}
@@ -440,9 +605,124 @@ class FW_Extension_Update extends FW_Extension
 			wp_die(__('Invalid nonce.', 'fw'));
 		}
 
+		$form_input_name = 'extensions';
+		$extensions_list = FW_Request::POST($form_input_name);
+
+		if (empty($extensions_list)) {
+			FW_Flash_Messages::add(
+				'fw_ext_update',
+				__('Please check the extensions you want to update.', 'fw'),
+				'warning'
+			);
+			wp_redirect(self_admin_url('update-core.php'));
+			exit;
+		}
+
+		// handle changes by the hack below
+		{
+			if (is_string($extensions_list)) {
+				$extensions_list = json_decode($extensions_list);
+			} else {
+				$extensions_list = array_keys($extensions_list);
+			}
+		}
+
+		{
+			if (!class_exists('_FW_Ext_Update_Extensions_Upgrader_Skin')) {
+				fw_include_file_isolated(
+					$this->get_declared_path('/includes/classes/class--fw-ext-update-extensions-upgrader-skin.php')
+				);
+			}
+
+			$skin = new _FW_Ext_Update_Extensions_Upgrader_Skin(array(
+				'title' => __('Extensions Update', 'fw'),
+			));
+		}
+
 		require_once(ABSPATH . 'wp-admin/admin-header.php');
 
-		fw_print('Hello');
+		$skin->header();
+
+		do {
+			/**
+			 * Hack for the ftp credentials template that does not support array post values
+			 * https://github.com/WordPress/WordPress/blob/3949a8b6cc50a021ed93798287b4ef9ea8a560d9/wp-admin/includes/file.php#L1144
+			 */
+			{
+				$original_post_value = $_POST[$form_input_name];
+				$_POST[$form_input_name] = wp_slash(json_encode($extensions_list));
+			}
+
+			if (!FW_WP_Filesystem::request_access($this->context, fw_current_url(), array($nonce_name, $form_input_name))) {
+				{ // revert hack changes
+					$_POST[$form_input_name] = $original_post_value;
+					unset($original_post_value);
+				}
+
+				$skin->error(__('Cannot obtain filesystem access.', 'fw'));
+				break;
+			}
+
+			{ // revert hack changes
+				$_POST[$form_input_name] = $original_post_value;
+				unset($original_post_value);
+			}
+
+			$updates = $this->get_extensions_with_updates();
+
+			if (empty($updates)) {
+				$skin->error(__('No extensions updates found.', 'fw'));
+				break;
+			}
+
+			foreach ($extensions_list as $extension_name) {
+				if (!($extension = fw()->extensions->get($extension_name))) {
+					$skin->error(
+						sprintf(__('Extension "%s" does not exist or is disabled.', 'fw'), $extension_name)
+					);
+					continue;
+				}
+
+				if (!isset($updates[$extension_name])) {
+					$skin->error(
+						sprintf(__('No update found for the "%s" extension.', 'fw'), $extension->manifest->get_name())
+					);
+					continue;
+				}
+
+				$update = $updates[$extension_name];
+
+				if (is_wp_error($update)) {
+					$skin->error($update);
+					continue;
+				}
+
+				/** @var FW_Ext_Update_Service $service */
+				$service = $this->get_child($update['service']);
+
+				$update_result = $this->update(array(
+					'wp_fs_destination_dir' => FW_WP_Filesystem::real_path_to_filesystem_path(
+						$extension->get_declared_path()
+					),
+					'download_callback' => array($service, '_download_extension'),
+					'download_callback_args' => array($extension, $update['latest_version'], $this->get_wp_fs_tmp_dir()),
+					'skin' => $skin,
+					'title' => sprintf(__('%s extension', 'fw'), $extension->manifest->get_name()),
+				));
+
+				if (is_wp_error($update_result)) {
+					$skin->error($update_result);
+					continue;
+				}
+
+				$skin->set_result(true);
+				$skin->decrement_extension_update_count($extension_name);
+			}
+
+			$skin->after();
+		} while(false);
+
+		$skin->footer();
 
 		require_once(ABSPATH . 'wp-admin/admin-footer.php');
 	}

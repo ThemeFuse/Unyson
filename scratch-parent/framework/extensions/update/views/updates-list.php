@@ -24,7 +24,8 @@
 
 <?php if ($updates['theme']): ?>
 	<a name="fw-theme"></a>
-	<h3><?php _e(sprintf('%s Theme', fw()->theme->manifest->get_name()), 'fw') ?></h3>
+	<?php $theme = wp_get_theme(); ?>
+	<h3><?php _e(sprintf('%s Theme', $theme->parent()->get('Name')), 'fw') ?></h3>
 	<?php if (is_wp_error($updates['theme'])): ?>
 		<p class="wp-ui-text-notification"><?php echo $updates['theme']->get_error_message() ?></p>
 	<?php else: ?>

@@ -283,7 +283,7 @@ class icit_srdb {
 			@set_time_limit( 60 * 10 );
 
 			// try to push the allowed memory up, while we're at it
-			@ini_set( 'memory_limit', '1024M' );
+			// @ini_set( 'memory_limit', '1024M' );
 
 		}
 

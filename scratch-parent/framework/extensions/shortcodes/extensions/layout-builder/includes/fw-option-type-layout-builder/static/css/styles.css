@@ -24,6 +24,9 @@
 }
 
 /* Thumbs */
+.fw-option-type-builder.fw-option-type-layout-builder .builder-item-type {
+	display: block;
+}
 .fw-option-type-layout-builder .builder-item-type .inner {
 	width: 100%;
 	height: 100%;

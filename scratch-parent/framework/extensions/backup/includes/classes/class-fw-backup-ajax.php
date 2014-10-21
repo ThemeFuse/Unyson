@@ -20,6 +20,10 @@ class FW_Backup_Ajax
 	 */
 	public function _admin_action_wp_ajax_backup_settings_save()
 	{
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error();
+		}
+
 		$settings = $this->backup()->settings();
 
 		$values = fw_get_options_values_from_input($settings->get_options(), FW_Request::POST('values'));

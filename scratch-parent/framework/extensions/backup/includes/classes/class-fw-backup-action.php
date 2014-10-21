@@ -6,6 +6,7 @@ class FW_Backup_Action
     {
 	    if (is_admin()) {
 		    $this->add_admin_actions();
+		    $this->add_admin_filters();
 	    }
     }
 
@@ -127,6 +128,11 @@ class FW_Backup_Action
 		add_action('admin_init', array($this, '_admin_action_admin_init'));
 	}
 
+	private function add_admin_filters()
+	{
+		add_filter('admin_memory_limit', array($this, '_admin_filter_admin_memory_limit'));
+	}
+
 	/**
 	 * @internal
 	 */
@@ -189,6 +195,22 @@ class FW_Backup_Action
 		if ($this->is_backup_restore()) {
 			$this->do_backup_restore(FW_Request::GET('post'));
 		}
+	}
+
+	/**
+	 * @internal
+	 *
+	 * @var $limit
+	 * @return string
+	 */
+	public function _admin_filter_admin_memory_limit($limit)
+	{
+		if ($this->is_backup_restore() || $this->is_auto_install()) {
+			// @ini_set('memory_limit', '1024M') for srdb class
+			return '1024M';
+		}
+
+		return $limit;
 	}
 
 

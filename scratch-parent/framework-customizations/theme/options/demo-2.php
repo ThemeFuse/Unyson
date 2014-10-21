@@ -433,6 +433,52 @@ $options = array(
 			__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
 		),
 	),
+	'demo_datetime_range_2' => array(
+		'type'  => 'datetime-range',
+		'attr'  => array( 'class' => 'custom-class', 'data-foo' => 'bar' ),
+		'label' => __('Demo date range', 'fw'),
+		'desc'  => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+		'help'  => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+			__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+			__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+		),
+		'datetime-pickers' => array(
+			'from' => array(
+				'timepicker' => false,
+				'datepicker' => true,
+			),
+			'to' => array(
+				'timepicker' => false,
+				'datepicker' => true,
+			)
+		),
+		'value' => array(
+			'from' => '',
+			'to'   => ''
+		)
+	),
+	'demo_datetime_picker_2' => array(
+		'type'  => 'datetime-picker',
+		'value' => '',
+		'attr'  => array( 'class' => 'custom-class', 'data-foo' => 'bar' ),
+		'label' => __('Date & Time picker', 'fw'),
+		'desc'  => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+		'help'  => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+			__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+			__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+		),
+		'datetime-picker' => array(
+			'format'        => 'd-m-Y H:i',
+			'extra-formats' => array(),
+			'moment-format' => 'DD-MM-YYYY HH:mm',
+			'scrollInput'   => false,
+			'maxDate'       => false,
+			'minDate'       => false,
+			'timepicker'    => true,
+			'datepicker'    => true,
+			'defaultTime'   => '12:00'
+		)
+	),
 	'demo_addable_popup_2' => array(
 		'label' => __('Addable Popup', 'fw'),
 		'type' => 'addable-popup',

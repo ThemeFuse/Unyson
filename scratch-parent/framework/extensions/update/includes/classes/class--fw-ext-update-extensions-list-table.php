@@ -79,9 +79,11 @@ class _FW_Ext_Update_Extensions_List_Table extends WP_List_Table
 					'details' =>
 						'<p>'.
 							'<strong>'. fw_htmlspecialchars($extension->manifest->get_name()) .'</strong>'.
-						'<br/>'.
-						'You have version '. $extension->manifest->get_version() .' installed. '.
-						'Update to '. fw_htmlspecialchars($ext_update['fixed_latest_version']) .'.'.
+							'<br/>'.
+							sprintf(
+								__('You have version %s installed. Update to %s.', 'fw'),
+								$extension->manifest->get_version(), fw_htmlspecialchars($ext_update['fixed_latest_version'])
+							).
 						'</p>',
 				);
 			}

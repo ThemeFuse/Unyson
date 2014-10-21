@@ -2,11 +2,11 @@
 
 require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader-skins.php';
 
-class _FW_Ext_Update_Framework_Upgrader_Skin extends WP_Upgrader_Skin
+class _FW_Ext_Update_Theme_Upgrader_Skin extends WP_Upgrader_Skin
 {
 	public function after()
 	{
-		$this->decrement_update_count('fw');
+		$this->decrement_update_count('fw:theme');
 
 		$update_actions = array(
 			'updates_page' => fw_html_tag(
@@ -21,10 +21,10 @@ class _FW_Ext_Update_Framework_Upgrader_Skin extends WP_Upgrader_Skin
 		);
 
 		/**
-		 * Filter the list of action links available following framework update.
+		 * Filter the list of action links available following theme update.
 		 * @param array $update_actions Array of plugin action links.
 		 */
-		$update_actions = apply_filters('fw_ext_update_framework_complete_actions', $update_actions);
+		$update_actions = apply_filters('fw_ext_update_theme_complete_actions', $update_actions);
 
 		if (!empty($update_actions)) {
 			$this->feedback(implode(' | ', (array)$update_actions));
