@@ -17,14 +17,24 @@
 		 * Full path to the child-theme/framework-customizations directory
 		 */
 		function fw_get_stylesheet_customizations_directory($rel_path = '') {
-			return get_stylesheet_directory() .'/framework-customizations'. $rel_path;
+			if (is_child_theme()) {
+				return get_stylesheet_directory() . '/framework-customizations' . $rel_path;
+			} else {
+				// check is_child_theme() before using this function
+				return null;
+			}
 		}
 
 		/**
 		 * URI to the child-theme/framework-customizations directory
 		 */
 		function fw_get_stylesheet_customizations_directory_uri($rel_path = '') {
-			return get_stylesheet_directory_uri() .'/framework-customizations'. $rel_path;
+			if (is_child_theme()) {
+				return get_stylesheet_directory_uri() . '/framework-customizations' . $rel_path;
+			} else {
+				// check is_child_theme() before using this function
+				return null;
+			}
 		}
 	}
 

@@ -126,7 +126,7 @@ final class _FW_Component_Backend
 
 	private function add_actions()
 	{
-		add_action('admin_menu',            array($this, '_action_admin_menu'), 10);
+		add_action('admin_menu',            array($this, '_action_admin_menu'));
 		add_action('admin_menu',            array($this, '_action_admin_change_theme_settings_order'), 9999);
 		add_action('add_meta_boxes',        array($this, '_action_create_post_meta_boxes'), 10, 2);
 		add_action('save_post',             array($this, '_action_save_post'), 10, 2);
@@ -357,10 +357,12 @@ final class _FW_Component_Backend
 
 			$menu_exists = false;
 
-			foreach ($_registered_pages as $hookname => $b) {
-				if (strpos($hookname, $data['slug']) !== false) {
-					$menu_exists = true;
-					break;
+			if (!empty($_registered_pages)) {
+				foreach ( $_registered_pages as $hookname => $b ) {
+					if ( strpos( $hookname, $data['slug'] ) !== false ) {
+						$menu_exists = true;
+						break;
+					}
 				}
 			}
 		}
@@ -680,7 +682,7 @@ final class _FW_Component_Backend
 	{
 		/**
 		 * wp moves flash message error with js after first h2
-		 * if there are any h2 on the page it shows it wrong
+		 * if there are no h2 on the page it shows them wrong
 		 */
 		echo '<h2 class="fw-hidden"></h2>';
 
