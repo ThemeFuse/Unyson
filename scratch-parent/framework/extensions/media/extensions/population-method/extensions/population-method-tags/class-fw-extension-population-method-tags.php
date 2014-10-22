@@ -18,7 +18,7 @@ class FW_Extension_Population_Method_Tags extends FW_Extension implements Popula
 
 	public function get_population_method()
 	{
-		return array('tags' => __('Automatically, fetch images from tags'));
+		return array('tags' => __('Automatically, fetch images from tags', 'fw'));
 	}
 
 	public function get_population_options($multimedia_types, $custom_options)

@@ -487,7 +487,7 @@ class _FW_Extension_Sidebars_Backend
 				$grouped_label = $this->config->get_label_grouped($db_key['type'], $db_key['sub_type']);
 				$result[] = array(
 					'type'       => $slug,
-					'label'      => $db_key['sub_type'] === 'common'? __('Default for all pages') : reset($grouped_label),
+					'label'      => $db_key['sub_type'] === 'common'? __('Default for all pages', 'fw') : reset($grouped_label),
 					'timestamp'  => isset($preset['timestamp']) ? $preset['timestamp'] : 0
 				);
 			}
