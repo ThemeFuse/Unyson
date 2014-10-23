@@ -690,7 +690,7 @@ function fw_html_attr_name_to_array_multi_key($attr_name) {
 /**
  * Used when getting some option value from serialized array saved in a custom place
  * and that option is unreachable for standard WordPress filters by other plugins
- * For e.g. that option cannot be translated by plugins, so we pass it's value through this function and do the fixes
+ * For e.g. that option cannot be translated by plugins, so we pass its value through this function and do the fixes
  * @param $value
  * @return array
  */

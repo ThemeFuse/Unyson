@@ -115,6 +115,7 @@ final class _FW_Component_Backend
 		));
 
 		$this->add_actions();
+		$this->add_filters();
 	}
 
 	/**
@@ -131,13 +132,18 @@ final class _FW_Component_Backend
 		add_action('add_meta_boxes',        array($this, '_action_create_post_meta_boxes'), 10, 2);
 		add_action('save_post',             array($this, '_action_save_post'), 10, 2);
 		add_action('init',                  array($this, '_action_init'), 20);
-		add_action('admin_enqueue_scripts', array($this, '_action_admin_enqueue_scripts'));
+		add_action('admin_enqueue_scripts', array($this, '_action_admin_enqueue_scripts'), 8);
 
 		// render and submit options from javascript
 		{
 			add_action('wp_ajax_fw_backend_options_render',     array($this, '_action_ajax_options_render'));
 			add_action('wp_ajax_fw_backend_options_get_values', array($this, '_action_ajax_options_get_values'));
 		}
+	}
+
+	private function add_filters()
+	{
+		add_filter('update_footer', array($this, '_filter_footer_version'), 11);
 	}
 
 	/**
@@ -377,6 +383,21 @@ final class _FW_Component_Backend
 				$data['slug'],
 				$data['content_callback']
 			);
+		}
+	}
+
+	/**
+	 * Print framework version in the admin footer
+	 * @param string $value
+	 * @return string
+	 * @internal
+	 */
+	public function _filter_footer_version($value)
+	{
+		if (current_user_can('update_themes') || current_user_can('update_plugins')) {
+			return (empty($value) ? '' : $value .' | ') . fw()->manifest->get_name() .' '. fw()->manifest->get_version();
+		} else {
+			return $value;
 		}
 	}
 

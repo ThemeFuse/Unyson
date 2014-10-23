@@ -58,7 +58,7 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 
 	/*
 	 * Puts each option into a separate array
-	 * to keep it's order inside the modal dialog
+	 * to keep their order inside the modal dialog
 	 */
 	private function transform_options($options)
 	{

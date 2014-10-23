@@ -25,7 +25,7 @@ class FW_Cache
 	protected static $cache = array();
 
 	/**
-	 * If the PHP will have less that this memory, the cache will try to delete parts from it's array to free memory
+	 * If the PHP will have less that this memory, the cache will try to delete parts from its array to free memory
 	 *
 	 * (1024 * 1024 = 1048576 = 1 Mb) * 10
 	 */

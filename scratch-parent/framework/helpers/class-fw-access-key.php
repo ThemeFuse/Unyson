@@ -6,7 +6,7 @@
  * For e.g. Inside some class is created an instance of FW_Access_Key with unique key 'whatever',
  * so nobody else can create another instance with same key, only that class owns that unique key.
  * Some public callback (function or method) that wants to allow to be called only by that class,
- * sets an requirement that some parameter should be an instance on FW_Access_Key and it's key should be 'whatever'
+ * sets an requirement that some parameter should be an instance on FW_Access_Key and its key should be 'whatever'
  * 
  * function my_function(FW_Access_Key $key, $another_parameter) {
  *  if ($key->get_key() !== 'whatever') {

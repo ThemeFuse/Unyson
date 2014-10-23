@@ -23,14 +23,14 @@ class FW_Extension_Update extends FW_Extension
 	 */
 	protected function _init()
 	{
-		if (!current_user_can('update_themes')) {
+		if (current_user_can('update_themes') || current_user_can('update_plugins')) {
+			$this->context = get_template_directory();
+
+			$this->add_actions();
+			$this->add_filters();
+		} else {
 			return false; // prevent child extensions activation
 		}
-
-		$this->context = get_template_directory();
-
-		$this->add_actions();
-		$this->add_filters();
 	}
 
 	private function add_actions()

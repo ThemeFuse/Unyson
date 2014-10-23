@@ -232,7 +232,7 @@ body.rtl .fw-option-type-typography .fw-option-typography-option-family .selecti
 
 /*
 Fix: for color picker width too small or too big
-Solution: Set color fixed size, and font-style to calculate it's width
+Solution: Set color fixed size, and font-style to calculate its width
 
 font-style: fw-col-sm-3 = 25%
 color:      fw-col-sm-2 = 16.66666667%

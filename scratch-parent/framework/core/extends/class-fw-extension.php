@@ -460,7 +460,7 @@ abstract class FW_Extension
 	/**
 	 * Check if child extension is valid
 	 *
-	 * Used for special cases when an extension requires it's child extensions to extend some special class
+	 * Used for special cases when an extension requires its child extensions to extend some special class
 	 *
 	 * @param FW_Extension $child_extension_instance
 	 * @return bool

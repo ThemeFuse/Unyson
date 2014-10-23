@@ -342,13 +342,11 @@ class FW_Framework_Manifest extends FW_Manifest
 {
 	public function __construct(array $manifest)
 	{
-		parent::__construct($manifest);
-
 		if (empty($manifest['name'])) {
 			$manifest['name'] = __('Framework', 'fw');
 		}
 
-		unset($manifest);
+		parent::__construct($manifest);
 	}
 
 	protected function get_default_requirements()

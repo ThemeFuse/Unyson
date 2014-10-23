@@ -81,7 +81,7 @@ final class _FW_Component_Extensions
 					trigger_error('Extension "'. $extension_name .'" already loaded', E_USER_ERROR);
 				}
 
-				// this is not original extension, it contains only settings, has no class
+				// this is a directory with customizations for an extension
 
 				self::load_extensions(
 					$extension_dir .'/extensions',
@@ -94,14 +94,28 @@ final class _FW_Component_Extensions
 			} else {
 				$class_file_name = 'class-fw-extension-'. $extension_name .'.php';
 
-				if (file_exists($extension_dir .'/'. $class_file_name)) {
+				if (file_exists($extension_dir .'/manifest.php')) {
 					$all_extensions_tree[$extension_name] = array();
 
 					self::$extension_to_all_tree[$extension_name] =& $all_extensions_tree[$extension_name];
 
-					require $extension_dir .'/'. $class_file_name;
+					if (file_exists($extension_dir .'/'. $class_file_name)) {
+						$class_name = 'FW_Extension_'. fw_dirname_to_classname($extension_name);
 
-					$class_name = 'FW_Extension_'. fw_dirname_to_classname($extension_name);
+						require $extension_dir .'/'. $class_file_name;
+					} else {
+						$parent_class_name = get_class($parent);
+						// check if parent extension has been defined custom Default class for its child extensions
+						if (class_exists($parent_class_name .'_Default')) {
+							$class_name = $parent_class_name .'_Default';
+						} else {
+							$class_name = 'FW_Extension_Default';
+						}
+					}
+
+					if (!is_subclass_of($class_name, 'FW_Extension')) {
+						trigger_error('Extension "'. $extension_name .'" must extend FW_Extension class', E_USER_ERROR);
+					}
 
 					$all_extensions[$extension_name] = new $class_name(
 						$parent,
@@ -110,38 +124,10 @@ final class _FW_Component_Extensions
 						$URI,
 						$current_depth
 					);
-
-					if (!($all_extensions[$extension_name] instanceof FW_Extension)) {
-						trigger_error('Extension "'. $extension_name .'" should extend FW_Extension class', E_USER_ERROR);
-					}
-				} elseif (file_exists($extension_dir .'/manifest.php')) {
-					/**
-					 * extension class does not exists, but exists manifest, create an instance of default class
-					 */
-
-					$all_extensions_tree[$extension_name] = array();
-
-					self::$extension_to_all_tree[$extension_name] =& $all_extensions_tree[$extension_name];
-
-					$default_class_name = 'FW_Extension_Default';
-
-					// check if parent class defined custom Default class for it's children extensions
-					$parent_class_name = get_class($parent);
-					if (class_exists($parent_class_name .'_Default')) {
-						$default_class_name = $parent_class_name .'_Default';
-					}
-
-					$all_extensions[$extension_name] = new $default_class_name(
-						$parent,
-						$extension_dir,
-						self::$current_declaring_source,
-						$URI,
-						$current_depth
-					);
 				} else {
 					/**
-					 * class or manifest does not exists, do not load this extension
-					 * maybe it's a directory with configurations for a not existing extension
+					 * The manifest file does not exist, do not load this extension.
+					 * Maybe it's a directory with configurations for a not existing extension.
 					 */
 					continue;
 				}

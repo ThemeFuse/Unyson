@@ -347,6 +347,10 @@ min-width: 1200px
 .fw-col-lg-12 {
 	position: relative;
 	min-height: 1px;
+
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .fw-col-xs-1,
