@@ -30,8 +30,8 @@ $options = array(
 		)
 	),
 	'map_height' => array(
-		'label' => __('Map Height'),
-		'desc'  => __('Set map height (Ex: 300)'),
+		'label' => __('Map Height', 'fw'),
+		'desc'  => __('Set map height (Ex: 300)', 'fw'),
 		'type'  => 'text'
 	)
 

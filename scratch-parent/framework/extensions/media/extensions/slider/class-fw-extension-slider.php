@@ -178,7 +178,7 @@ class FW_Extension_Slider extends FW_Extension
 				6 => sprintf(__('%s published. <a href="%s">View %s</a>'), $singular, esc_url(get_permalink($post->ID)), strtolower($singular)),
 				7 => __('Page saved.', 'fw'),
 				8 => sprintf(__('%s submitted. <a target="_blank" href="%s">Preview %s</a>'), $singular, esc_url(add_query_arg('preview', 'true', get_permalink($post->ID))), strtolower($singular)),
-				9 => sprintf(__('%s scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview %s</a>'), $singular, date_i18n(__('M j, Y @ G:i'), strtotime($post->post_date)), esc_url(get_permalink($post->ID)), strtolower($singular)),
+				9 => sprintf(__('%s scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview %s</a>'), $singular, date_i18n(__('M j, Y @ G:i', 'fw'), strtotime($post->post_date)), esc_url(get_permalink($post->ID)), strtolower($singular)),
 				10 => sprintf(__('%s draft updated. <a target="_blank" href="%s">Preview %s</a>'), $singular, esc_url(add_query_arg('preview', 'true', get_permalink($post->ID))), strtolower($singular)),
 			);
 		}

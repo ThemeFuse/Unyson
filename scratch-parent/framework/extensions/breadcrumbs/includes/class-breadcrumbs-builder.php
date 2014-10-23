@@ -113,7 +113,7 @@ class Breadcrumbs_Builder {
 			$search = array();
 
 			$search['type'] = 'search';
-			$search['name'] = __( 'Searching for:' ) . ' ' . get_search_query();
+			$search['name'] = __( 'Searching for:', 'fw' ) . ' ' . get_search_query();
 			$s              = '?s=' . apply_filters( 'fw_ext_breadcrumbs_search_query', get_search_query() );
 			$search['url']  = home_url( '/' ) . $s;
 
@@ -227,7 +227,7 @@ class Breadcrumbs_Builder {
 
 		foreach ( $return as $key => $item ) {
 			if ( empty( $item['name'] ) ) {
-				$return[ $key ]['name'] = __( 'No title' );
+				$return[ $key ]['name'] = __( 'No title', 'fw' );
 			}
 		}
 

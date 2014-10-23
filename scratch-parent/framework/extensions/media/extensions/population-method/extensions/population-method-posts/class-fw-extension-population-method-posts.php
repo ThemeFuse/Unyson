@@ -18,7 +18,7 @@ class FW_Extension_Population_Method_Posts extends FW_Extension implements Popul
 
 	public function get_population_method()
 	{
-		return array('posts' => __('Automatically, fetch images from posts'));
+		return array('posts' => __('Automatically, fetch images from posts', 'fw'));
 	}
 
 	public function get_population_options($multimedia_types, $custom_options)

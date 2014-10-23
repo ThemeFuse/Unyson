@@ -57,8 +57,8 @@ class _FW_Extension_Sidebars_Config
 					),
 					'fw-portfolio'=> array(
 						'name' => array(
-							'singular' => __('Portfolio Project'),
-							'plural'   => __('Portfolio Projects'),
+							'singular' => __('Portfolio Project', 'fw'),
+							'plural'   => __('Portfolio Projects', 'fw'),
 						)
 					)
 				),

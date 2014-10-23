@@ -18,7 +18,7 @@ class FW_Extension_Population_Method_Categories extends FW_Extension implements 
 
 	public function get_population_method()
 	{
-		return array('categories' => __('Automatically, fetch images from categories'));
+		return array('categories' => __('Automatically, fetch images from categories', 'fw'));
 	}
 
 	public function get_population_options($multimedia_types, $custom_options)

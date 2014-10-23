@@ -15,7 +15,7 @@
 	<div class="fw-clear"></div>
 
 	<div class="fw-ext-sidebars-desc fw-col-sm-8 fw-col-sm-offset-4 fw-col-md-9 fw-col-md-offset-3 fw-col-lg-10 fw-col-lg-offset-2">
-		<?php _e('Choose the position for your sidebar(s)')?>
+		<?php _e('Choose the position for your sidebar(s)', 'fw')?>
 	</div>
 </div>
 

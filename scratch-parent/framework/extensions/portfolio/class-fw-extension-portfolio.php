@@ -274,7 +274,7 @@ class FW_Extension_Portfolio extends FW_Extension {
 		switch ( $column_name ) {
 			case 'image':
 				if ( get_the_post_thumbnail( intval( $id ) ) ) {
-					$value = '<a href="' . get_edit_post_link( $id, true ) . '" title="' . esc_attr( __( 'Edit this item' ) ) . '">' .
+					$value = '<a href="' . get_edit_post_link( $id, true ) . '" title="' . esc_attr( __( 'Edit this item', 'fw' ) ) . '">' .
 					         '<img src="' . fw_resize( get_post_thumbnail_id( intval( $id ) ), 150, 100, true ) . '" width="150" height="100" >' .
 					         '</a>';
 				} else {
@@ -391,7 +391,7 @@ class FW_Extension_Portfolio extends FW_Extension {
 			'selected'        => $id,
 			'name'            => $this->get_name() . '-filter-by-portfolio-category">',
 			'taxonomy'        => $this->taxonomy_name,
-			'show_option_all' => __( 'View all categories' ),
+			'show_option_all' => __( 'View all categories', 'fw' ),
 			'hide_empty'      => true,
 			'hierarchical'    => 1,
 			'show_count'      => 0,

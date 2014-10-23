@@ -113,8 +113,8 @@ function fw_ext_seo_sitemap_get_settings_options() {
 							'desc'  => __( 'Update sitemap XML file', 'fw' ),
 							'type'  => 'html',
 							'html'  => '<a href="#" onclick="fw_ext_seo_sitemap_update(this); return false;" class="button-secondary">' . __( 'Update XML Sitemap', 'fw' ) . '</a><span class="spinner"></span>
-							<span class="sitemap-update-response sitemap-successfully">' . __( 'The sitemap was updated successfully' ) . '</span>
-							<span class="sitemap-update-response sitemap-unsuccessfully">' . __( 'Unable to update the sitemap' ) . '</span>
+							<span class="sitemap-update-response sitemap-successfully">' . __( 'The sitemap was updated successfully', 'fw' ) . '</span>
+							<span class="sitemap-update-response sitemap-unsuccessfully">' . __( 'Unable to update the sitemap', 'fw' ) . '</span>
 							',
 							'value' => ''
 						),

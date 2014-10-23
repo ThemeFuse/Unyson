@@ -6,7 +6,7 @@ class FW_Backup_Exception_Request_File_System_Credentials extends Exception
 
 	public function __construct($html)
 	{
-		parent::__construct(__('File System Credentials Required'));
+		parent::__construct(__('File System Credentials Required', 'fw'));
 
 		$this->html = $html;
 	}

@@ -28,10 +28,10 @@ $tag = ( 'div' === $args['style'] ) ? 'div' : 'li';
 		<div class="comment-metadata">
 			<a href="<?php echo esc_url( get_comment_link( $comment->comment_ID, $args ) ); ?>">
 				<time datetime="<?php comment_time( 'c' ); ?>">
-					<?php printf( _x( '%1$s at %2$s', '1: date, 2: time' ), get_comment_date(), get_comment_time() ); ?>
+					<?php printf( _x( '%1$s at %2$s', '1: date, 2: time', 'fw'), get_comment_date(), get_comment_time() ); ?>
 				</time>
 			</a>
-			<?php edit_comment_link( __( 'Edit' ), '<span class="edit-link">', '</span>' ); ?>
+			<?php edit_comment_link( __( 'Edit', 'fw' ), '<span class="edit-link">', '</span>' ); ?>
 			<!--Rating-->
 			<div class="wrap-rating listing">
 				<div class="rating">
@@ -48,7 +48,7 @@ $tag = ( 'div' === $args['style'] ) ? 'div' : 'li';
 		<!-- .comment-metadata -->
 
 		<?php if ( '0' == $comment->comment_approved ) : ?>
-			<p class="comment-awaiting-moderation"><?php _e( 'Your comment is awaiting moderation.' ); ?></p>
+			<p class="comment-awaiting-moderation"><?php _e( 'Your comment is awaiting moderation.', 'fw' ); ?></p>
 		<?php endif; ?>
 	</footer>
 	<!-- .comment-meta -->
