@@ -4,7 +4,7 @@ $manifest = array();
 
 $manifest['name'] = __('Unyson', 'fw');
 
-$manifest['version'] = '1.4.3';
+$manifest['version'] = '1.4.4';
 
 $manifest['requirements'] = array(
 	'wordpress' => array(

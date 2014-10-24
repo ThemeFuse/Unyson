@@ -32,6 +32,50 @@
 	text-transform: capitalize;
 }
 
+.fw-text-muted {
+	color: #777;
+}
+
+.fw-text-primary {
+	color: #428bca;
+}
+
+a.fw-text-primary:hover {
+	color: #3071a9;
+}
+
+.fw-text-success {
+	color: #3c763d;
+}
+
+a.fw-text-success:hover {
+	color: #2b542c;
+}
+
+.fw-text-info {
+	color: #31708f;
+}
+
+a.fw-text-info:hover {
+	color: #245269;
+}
+
+.fw-text-warning {
+	color: #8a6d3b;
+}
+
+a.fw-text-warning:hover {
+	color: #66512c;
+}
+
+.fw-text-danger {
+	color: #a94442;
+}
+
+a.fw-text-danger:hover {
+	color: #843534;
+}
+
 .fw-img-responsive {
 	display: block;
 	max-width: 100%;

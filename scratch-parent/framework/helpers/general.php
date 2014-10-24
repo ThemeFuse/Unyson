@@ -993,3 +993,15 @@ function fw_secure_rand($length)
 
 	return $rnd;
 }
+
+/**
+ * Try to make user friendly title from an id
+ * @param string $id 'hello-world'
+ * @return string 'Hello world'
+ */
+function fw_id_to_title($id) {
+	// mb_ucfirst()
+	$id = mb_strtoupper(mb_substr($id, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($id, 1, mb_strlen($id, 'UTF-8'), 'UTF-8');
+
+	return str_replace(array('_', '-'), ' ', $id);
+}

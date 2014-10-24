@@ -234,9 +234,10 @@ final class _FW_Component_Theme
 	 * Return config key value, or entire config array
 	 * Config array is merged from child configs
 	 * @param string|null $key Multi key format accepted: 'a/b/c'
+	 * @param mixed $default_value
 	 * @return mixed|null
 	 */
-	final public function get_config($key = null)
+	final public function get_config($key = null, $default_value = null)
 	{
 		$cache_key = self::$cache_key .'/config';
 
@@ -268,7 +269,7 @@ final class _FW_Component_Theme
 			FW_Cache::set($cache_key, $config);
 		}
 
-		return $key === null ? $config : fw_akg($key, $config);
+		return $key === null ? $config : fw_akg($key, $config, $default_value);
 	}
 
 	/**

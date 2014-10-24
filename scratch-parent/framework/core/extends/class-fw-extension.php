@@ -91,7 +91,7 @@ abstract class FW_Extension
 			}
 
 			if (empty($manifest['name'])) {
-				$manifest['name'] = str_replace(array('_', '-'), ' ', ucfirst($this->get_name()));
+				$manifest['name'] = fw_id_to_title($this->get_name());
 			}
 
 			$this->manifest = new FW_Extension_Manifest($manifest);
