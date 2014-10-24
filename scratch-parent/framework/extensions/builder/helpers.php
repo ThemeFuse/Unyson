@@ -50,3 +50,25 @@ function fw_ext_builder_get_item_widths_for_js($builder_type) {
 
 	return $item_widths;
 }
+
+
+
+function fw_ext_builder_page_templates($builder_type, $template_name = null, $default_value = null) {
+	try {
+		$cache_key = fw()->extensions->get('builder')->get_cache_key('page_templates/'. $builder_type);
+
+		$templates = FW_Cache::get($cache_key);
+	} catch (FW_Cache_Not_Found_Exception $e) {
+		$templates = apply_filters('fw_builder_page_templates:'. $builder_type,
+			fw()->extensions->get('builder')->get_config('default_page_templates')
+		);
+
+		FW_Cache::set($cache_key, $templates);
+	}
+
+	if (is_null($template_name)) {
+		return $templates;
+	} else {
+		return fw_akg($template_name, $templates, $default_value);
+	}
+}

@@ -42,3 +42,18 @@ if (!function_exists('_filter_ext_layout_builder_widths')):
 	}
 endif;
 add_filter('fw_builder_item_widths:layout-builder', '_filter_ext_layout_builder_widths');
+
+if (!function_exists('_filter_ext_layout_builder_page_templates')):
+	function _filter_ext_layout_builder_page_templates($templates) {
+
+		/**
+		 * Add your template like so:
+		 *
+		 * $templates[] = 'page-templates/my-template.php';
+		 * 
+		 */
+		
+		return $templates;
+	}
+endif;
+add_filter('fw_builder_page_templates:layout-builder', '_filter_ext_layout_builder_page_templates');

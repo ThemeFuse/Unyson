@@ -42,3 +42,4 @@ $cfg['default_item_widths'] = array(
 		'frontend_class' => 'col-xs-12',
 	),
 );
+$cfg['default_page_templates'] = array();
