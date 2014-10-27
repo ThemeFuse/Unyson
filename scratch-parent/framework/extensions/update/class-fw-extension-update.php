@@ -485,7 +485,6 @@ class FW_Extension_Update extends FW_Extension
 
 		do {
 			if (!FW_WP_Filesystem::request_access($this->context, fw_current_url(), array($nonce_name))) {
-				$skin->error(__('Cannot obtain filesystem access.', 'fw'));
 				break;
 			}
 
@@ -554,7 +553,6 @@ class FW_Extension_Update extends FW_Extension
 
 		do {
 			if (!FW_WP_Filesystem::request_access($this->context, fw_current_url(), array($nonce_name))) {
-				$skin->error(__('Cannot obtain filesystem access.', 'fw'));
 				break;
 			}
 
@@ -658,8 +656,6 @@ class FW_Extension_Update extends FW_Extension
 					$_POST[$form_input_name] = $original_post_value;
 					unset($original_post_value);
 				}
-
-				$skin->error(__('Cannot obtain filesystem access.', 'fw'));
 				break;
 			}
 

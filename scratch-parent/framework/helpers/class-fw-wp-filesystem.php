@@ -7,7 +7,10 @@ class FW_WP_Filesystem
 	 * @param string $context
 	 * @param string $url
 	 * @param array $extra_fields
-	 * @return bool
+	 * @return null|bool
+	 *      null  - if has no access and the input credentials form was displayed
+	 *      false - if user submitted wrong credentials
+	 *      true  - if we have filesystem access
 	 */
 	final public static function request_access($context, $url, $extra_fields = array())
 	{
@@ -28,7 +31,7 @@ class FW_WP_Filesystem
 
 			if (!$creds) {
 				// the form was printed to the user
-				return false;
+				return null;
 			}
 
 			/* initialize the API */
@@ -60,12 +63,10 @@ class FW_WP_Filesystem
 			&&
 			$wp_filesystem->find_folder($context)
 		) {
-			// ok
+			return true;
 		} else {
 			return false;
 		}
-
-		return true;
 	}
 
 	/**
