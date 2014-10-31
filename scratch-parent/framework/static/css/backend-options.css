@@ -192,6 +192,10 @@ form#post .fw-options-tabs-contents .fw-postboxes {
 	cursor: pointer !important; /* to rewrite .js .postbox .hndle */
 }
 
+.fw-postbox:not(.fw-postbox-initialized) h3.hndle {
+	display: none;
+}
+
 .fw-postbox h3.hndle .fw-html-before-title small:not(.dashicons),
 .fw-postbox h3.hndle .fw-html-after-title small:not(.dashicons) {
 	font-size: medium !important;

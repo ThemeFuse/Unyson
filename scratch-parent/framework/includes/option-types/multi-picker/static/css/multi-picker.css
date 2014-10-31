@@ -28,6 +28,11 @@
 
 .fw-option-type-multi-picker > .picker-group {
 	border-bottom-width: 0px;
+	padding-bottom: 0;
+}
+
+.fw-option-type-multi > .fw-backend-option:not(:last-child) {
+	padding-bottom: 0;
 }
 
 .fw-option-type-multi-picker > .picker-group.fw-show-borders {

@@ -25,6 +25,11 @@ class FW_Cache
 	protected static $cache = array();
 
 	/**
+	 * @var bool
+	 */
+	protected static $is_enabled;
+
+	/**
 	 * If the PHP will have less that this memory, the cache will try to delete parts from its array to free memory
 	 *
 	 * (1024 * 1024 = 1048576 = 1 Mb) * 10
@@ -67,7 +72,13 @@ class FW_Cache
 	 */
 	public static function _init()
 	{
+		self::$is_enabled = function_exists('register_tick_function');
 		self::$not_found_value = new FW_Cache_Not_Found_Exception();
+	}
+
+	public static function is_enabled()
+	{
+		return self::$is_enabled;
 	}
 
 	public static function free_memory()
@@ -88,6 +99,10 @@ class FW_Cache
 	 */
 	public static function set($keys, $value, $keys_delimiter = '/')
 	{
+		if (!self::$is_enabled) {
+			return;
+		}
+
 		fw_aks($keys, $value, self::$cache, $keys_delimiter);
 
 		self::free_memory(); // call it every time to take care about memory
@@ -108,11 +123,10 @@ class FW_Cache
 	/**
 	 * @param $keys
 	 * @param $keys_delimiter
-	 * @param $load_callback
 	 * @return mixed
 	 * @throws FW_Cache_Not_Found_Exception
 	 */
-	public static function get($keys, $load_callback = null, $keys_delimiter = '/')
+	public static function get($keys, $keys_delimiter = '/')
 	{
 		$keys = (string)$keys;
 		$keys_arr = explode($keys_delimiter, $keys);
@@ -129,29 +143,7 @@ class FW_Cache
 		self::free_memory(); // call it every time to take care about memory
 
 		if ($value === self::$not_found_value) {
-			// others can load values for keys with TFC::set()
-			{
-				$parameters = array(
-					'key'      => $key,
-					'keys'     => $keys,
-					'keys_arr' => $keys_arr,
-				);
-
-				if (is_callable($load_callback)) {
-					call_user_func_array($load_callback, array($parameters));
-				} else {
-					do_action('fw_cache_load', $parameters);
-				}
-
-				unset($parameters);
-			}
-
-			// try again to get value (maybe someone loaded it)
-			$value = fw_akg($keys, self::$cache, self::$not_found_value, $keys_delimiter);
-
-			if ($value === self::$not_found_value) {
-				throw new FW_Cache_Not_Found_Exception('Cache key not found: '. $keys);
-			}
+			throw new FW_Cache_Not_Found_Exception('Cache key not found: '. $keys);
 		}
 
 		return $value;
@@ -171,10 +163,7 @@ class FW_Cache_Not_Found_Exception extends Exception {}
 FW_Cache::_init();
 
 // auto free_memory() every X ticks
-{
-	/**
-	 * 3000: ~15 times
-	 */
+if (FW_Cache::is_enabled()) {
 	declare(ticks=3000);
 
 	register_tick_function(array('FW_Cache', 'free_memory'));

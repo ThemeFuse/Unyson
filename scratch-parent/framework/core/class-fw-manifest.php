@@ -232,7 +232,6 @@ abstract class FW_Manifest
 
 						// met
 						unset($this->requirements_for_verification[$requirement][$extension]);
-
 					}
 
 					if (empty($this->requirements_for_verification[$requirement])) {
@@ -354,7 +353,7 @@ class FW_Framework_Manifest extends FW_Manifest
 	{
 		return array(
 			'wordpress' => array(
-				'min_version' => '3.9',
+				'min_version' => '4.0',
 				/*'max_version' => '10000.0.0',*/
 			),
 		);
@@ -411,7 +410,7 @@ class FW_Theme_Manifest extends FW_Manifest
 	{
 		return array(
 			'wordpress' => array(
-				'min_version' => '3.9',
+				'min_version' => '4.0',
 				/*'max_version' => '10000.0.0',*/
 			),
 			'framework' => array(
@@ -449,7 +448,7 @@ class FW_Extension_Manifest extends FW_Manifest
 	{
 		return array(
 			'wordpress' => array(
-				'min_version' => '3.9',
+				'min_version' => '4.0',
 				/*'max_version' => '10000.0.0',*/
 			),
 			'framework' => array(

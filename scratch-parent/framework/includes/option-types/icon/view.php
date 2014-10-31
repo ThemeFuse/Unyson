@@ -27,6 +27,8 @@ unset($option['attr']['class'], $option['attr']['id']);
 $attr = $option['attr'];
 $attr['value'] = $data['value'];
 
+$value_without_prefix = preg_replace('/^fa /', '', $data['value']);
+
 ?>
 <div <?php echo fw_attr_to_html($wrapper_attr) ?>>
 	<input <?php echo fw_attr_to_html($attr) ?> type="hidden" />
@@ -35,7 +37,7 @@ $attr['value'] = $data['value'];
 		<select data-type="dialog-icon-category">
 			<option value="all"><?php echo __('All Categories', 'fw') ?></option>
 			<?php foreach ($icon_set as $a): list($category, $title, $icon_string) = $a; ?>
-				<option <?php if (in_array($data['value'], explode(' ', $icon_string))): ?>selected="selected"<?php endif ?> value="<?php echo esc_attr($category) ?>"><?php echo esc_html($title) ?></option>
+				<option <?php if (in_array($value_without_prefix, explode(' ', $icon_string))): ?>selected="selected"<?php endif ?> value="<?php echo esc_attr($category) ?>"><?php echo esc_html($title) ?></option>
 			<?php endforeach ?>
 		</select>
 	</div>
