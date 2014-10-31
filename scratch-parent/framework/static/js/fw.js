@@ -999,3 +999,118 @@ fw.getQueryString = function(name) {
 	if (!window.btoa) window.btoa = Plugin.btoa;
 	if (!window.atob) window.atob = Plugin.atob;
 }(jQuery));
+
+/**
+ * fw.qtip($elements)
+ */
+(function($){
+	/**
+	 * Trigger custom event with delay when mouse left (i) and popup
+	 * @param $i
+	 */
+	function initHide($i) {
+		var api = $i.qtip('api');
+
+		var hideTimeout = 0;
+		var hideDelay = 200;
+
+		var hide = function(){
+			clearTimeout(hideTimeout);
+
+			hideTimeout = setTimeout(function(){
+				$i.trigger('fw-qtip:hide');
+			}, hideDelay);
+		};
+
+		{
+			api.elements.tooltip
+				.on('mouseenter', function(){
+					clearTimeout(hideTimeout);
+				})
+				.on('mouseleave', function(){
+					hide();
+				});
+
+			$i
+				.on('mouseenter', function(){
+					clearTimeout(hideTimeout);
+				})
+				.on('mouseleave', function(){
+					hide();
+				});
+		}
+	};
+
+	var idIncrement = 1;
+
+	function initHelps($helps) {
+		$helps.each(function(){
+			var $i = $(this);
+
+			var id = 'fw-qtip-'+ idIncrement++;
+
+			var hideInitialized = false;
+
+			$i.qtip({
+				id: id,
+				position: {
+					viewport: $(document.body),
+					at: 'top center',
+					my: 'bottom center',
+					adjust: {
+						y: 2
+					}
+				},
+				style: {
+					classes: $i.hasClass('dashicons-info')
+						? 'qtip-fw fw-tip-info'
+						: 'qtip-fw',
+					tip: {
+						width: 12,
+						height: 5
+					}
+				},
+				show: {
+					solo: true,
+					event: 'mouseover',
+					effect: function(offset) {
+						// fix tip position
+						setTimeout(function(){
+							offset.elements.tooltip.css('top',
+								(parseInt(offset.elements.tooltip.css('top')) + 5) + 'px'
+							);
+						}, 12);
+
+						if (!hideInitialized) {
+							initHide($i);
+
+							hideInitialized = true;
+						}
+
+						$(this).fadeIn(300);
+					}
+				},
+				hide: {
+					event: 'fw-qtip:hide',
+					effect: function(offset) {
+						$(this).fadeOut(300, function(){
+							/**
+							 * Reset tip content html.
+							 * Needed for video tips, after hide the video should stop.
+							 */
+							api.elements.content.html($i.attr('title'))
+						});
+					}
+				}
+			});
+
+			$i.on('remove', function(){
+				api.hide();
+			});
+
+			var api = $i.qtip('api');
+		});
+	};
+
+	fw.qtip = initHelps;
+})(jQuery);

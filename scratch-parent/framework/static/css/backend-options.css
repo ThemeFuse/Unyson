@@ -504,15 +504,3 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 }
 
 /* end: Edit Term page */
-
-
-/* (i) tips */
-
-.fw-backend-options-tip.fw-backend-options-tip-info {
-	max-width: 320px;
-}
-.fw-backend-options-tip.fw-backend-options-tip-info .qtip-content {
-	padding: 15px;
-}
-
-/* end: (i) tips */

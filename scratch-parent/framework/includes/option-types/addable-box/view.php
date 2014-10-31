@@ -31,7 +31,7 @@ unset($attr['value']);
 ?>
 <div <?php echo fw_attr_to_html($attr) ?>>
 	<?php $i = 0; ?>
-	<div class="fw-option-boxes">
+	<div class="fw-option-boxes metabox-holder">
 		<?php foreach ($data['value'] as $value_index => &$values): ?>
 			<?php $i++; ?>
 			<div class="fw-option-box">

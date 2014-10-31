@@ -2828,7 +2828,16 @@ body.rtl .fw-options-modal .media-frame-content > form .fw-options-tabs-contents
 	display: block; /* fix: creates extra bottom padding (like image is not set as display:block) */
 }
 
+.qtip.qtip-fw.fw-tip-info {
+	max-width: 320px;
+}
+
+.qtip.qtip-fw.fw-tip-info .qtip-content {
+	padding: 15px;
+}
+
 /* end: qtip custom style */
+
 
 /* qtip-fw (x) button */
 
