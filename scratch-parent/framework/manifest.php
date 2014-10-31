@@ -4,12 +4,6 @@ $manifest = array();
 
 $manifest['name'] = __('Unyson', 'fw');
 
-$manifest['version'] = '1.4.6';
-
-$manifest['requirements'] = array(
-	'wordpress' => array(
-		'min_version' => '4.0',
-	),
-);
+$manifest['version'] = '1.4.7';
 
 $manifest['github_update'] = 'ThemeFuse/Unyson-Framework';
