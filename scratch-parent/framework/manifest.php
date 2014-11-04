@@ -4,6 +4,6 @@ $manifest = array();
 
 $manifest['name'] = __('Unyson', 'fw');
 
-$manifest['version'] = '1.4.8';
+$manifest['version'] = '1.4.9';
 
 $manifest['github_update'] = 'ThemeFuse/Unyson-Framework';

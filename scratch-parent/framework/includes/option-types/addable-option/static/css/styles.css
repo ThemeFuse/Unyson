@@ -1,3 +1,7 @@
+.fw-option-type-addable-option .fw-option-type-addable-option-option:not(.ui-sortable-helper) td {
+	max-width: 383px; /* .fw-backend-option-fixed-width - 45px */
+}
+
 .fw-option-type-addable-option .fw-option-type-addable-option-option td,
 #edittag .form-table .fw-option-type-addable-option .fw-option-type-addable-option-option td,
 #edittag .form-table .fw-option-type-addable-option tr.sortable-placeholder td {

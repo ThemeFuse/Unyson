@@ -69,7 +69,7 @@ a.fw-text-warning:hover {
 }
 
 .fw-text-danger {
-	color: #a94442;
+	color: #dd3d36;
 }
 
 a.fw-text-danger:hover {
@@ -2822,6 +2822,10 @@ body.rtl .fw-options-modal .media-frame-content > form .fw-options-tabs-contents
 	font-size: 13px;
 	line-height: 1.4em;
 	font-style: italic;
+}
+
+.qtip.qtip-fw .qtip-content a {
+	color: #5fc5ee;
 }
 
 .qtip.qtip-fw .qtip-content iframe {

@@ -103,9 +103,16 @@ class FW_Option_Type_Upload extends FW_Option_Type
 		// separate attributes for the hidden input
 		$input_attr = array();
 		$input_attr['name']  = $option['attr']['name'];
-		$input_attr['value'] = !empty($data['value']['attachment_id'])
-								? $data['value']['attachment_id']
-								: $option['value'];
+
+		$input_attr['value'] = '';
+		if (!empty($data['value']['attachment_id'])) {
+			$input_attr['value'] = $data['value']['attachment_id'];
+		} else if (!empty($option['value']['attachment_id'])) {
+			$input_attr['value'] = $option['value']['attachment_id'];
+		} else if (is_numeric($option['value'])) {
+			$input_attr['value'] = (int) $option['value'];
+		}
+
 		unset($option['attr']['name'], $option['attr']['value']);
 		$wrapper_attr = $option['attr'];
 

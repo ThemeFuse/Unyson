@@ -1,4 +1,4 @@
-#Unyson Framework
+# Unyson Framework
 
 [Unyson](http://unyson.themefuse.com/) is a framework for [WordPress](http://wordpress.org/) that facilitates development of a theme.
 
@@ -6,7 +6,7 @@ This framework was created from the ground up by the team behind [ThemeFuse](htt
 
 To get started, check out http://unyson.themefuse.com/ !
 
-##Table of contents
+## Table of contents
 
 * [Installation](#installation)
 * [Bug reports](#bug-reports)

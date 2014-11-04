@@ -14,6 +14,14 @@ class FW_WP_Filesystem
 	 */
 	final public static function request_access($context, $url, $extra_fields = array())
 	{
+		/** @var WP_Filesystem_Base $wp_filesystem */
+		global $wp_filesystem;
+
+		if ($wp_filesystem) {
+			// already initialized (has access)
+			return true;
+		}
+
 		if (get_filesystem_method() === 'direct') {
 			// in case if direct access is available
 
@@ -111,6 +119,34 @@ class FW_WP_Filesystem
 		$relative_path = preg_replace('/^'. preg_quote($wp_filesystem_abspath, '/') .'/', '', $wp_filesystem_path);
 
 		return $real_abspath . $relative_path;
+	}
+
+	/**
+	 * Check if there is direct filesystem access, so we can make changes without asking the credentials via form
+	 * @return bool
+	 */
+	final public static function has_direct_access()
+	{
+		/** @var WP_Filesystem_Base $wp_filesystem */
+		global $wp_filesystem;
+
+		if ($wp_filesystem) {
+			return $wp_filesystem->method === 'direct';
+		}
+
+		if (get_filesystem_method() === 'direct') {
+			ob_start();
+			{
+				$creds = request_filesystem_credentials(site_url() . '/wp-admin/', '', false, false, null);
+			}
+			ob_end_clean();
+
+			if ( WP_Filesystem($creds) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

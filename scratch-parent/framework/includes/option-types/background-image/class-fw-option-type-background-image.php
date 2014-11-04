@@ -40,6 +40,19 @@ class FW_Option_Type_Background_Image extends FW_Option_Type {
 			fw()->manifest->get_version(),
 			true
 		);
+
+		/*
+		 * ensures that the static of option type upload
+		 * and image-picker is enqueued
+		 */
+		fw()->backend->enqueue_options_static(array(
+			'background-image-dummy-upload' => array(
+				'type' => 'upload'
+			),
+			'background-image-dummy-image-picker' => array(
+				'type' => 'image-picker'
+			),
+		));
 	}
 
 	/**
