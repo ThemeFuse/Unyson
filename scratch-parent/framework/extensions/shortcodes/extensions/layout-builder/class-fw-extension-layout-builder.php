@@ -41,7 +41,7 @@ class FW_Extension_Layout_Builder extends FW_Extension
 	public function _admin_filter_fw_post_options($post_options, $post_type)
 	{
 		if (
-			post_type_supports($post_type, $this->supports_feature_name) or
+			post_type_supports($post_type, $this->supports_feature_name) ||
 			in_array($post_type, $this->get_config('supported_post_types'))
 		) {
 			$layout_builder_options = array(
@@ -71,7 +71,7 @@ class FW_Extension_Layout_Builder extends FW_Extension
 	public function _admin_action_fw_save_post_options($post_id, $post)
 	{
 		if (
-			post_type_supports($post->post_type, $this->supports_feature_name) or
+			post_type_supports($post->post_type, $this->supports_feature_name) ||
 			in_array($post->post_type, $this->get_config('supported_post_types'))
 		) {
 			$builder_shortcodes = fw_get_db_post_option($post_id, $this->builder_option_key);
@@ -100,8 +100,7 @@ class FW_Extension_Layout_Builder extends FW_Extension
 		global $post;
 
 		if (
-			post_type_supports($post->post_type, $this->supports_feature_name)
-			||
+			post_type_supports($post->post_type, $this->supports_feature_name) ||
 			in_array($post->post_type, $this->get_config('supported_post_types'))
 		) {
 			if (fw_get_db_post_option($post->ID, $this->builder_option_key .'/builder_active')) {
@@ -116,5 +115,30 @@ class FW_Extension_Layout_Builder extends FW_Extension
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Checks if a post was built with builder
+	 */
+	public function is_builder_post($post_id = '')
+	{
+		if (!$post_id) {
+			global $post;
+		} else {
+			$post = get_post($post_id);
+		}
+
+		if (!$post) {
+			return false;
+		}
+
+		if (
+			post_type_supports($post->post_type, $this->supports_feature_name) ||
+			in_array($post->post_type, $this->get_config('supported_post_types'))
+		) {
+			return (bool) fw_get_db_post_option($post->ID, $this->builder_option_key .'/builder_active');
+		} else {
+			return false;
+		}
 	}
 }

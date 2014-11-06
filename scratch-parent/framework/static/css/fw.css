@@ -2826,6 +2826,11 @@ body.rtl .fw-options-modal .media-frame-content > form .fw-options-tabs-contents
 
 .qtip.qtip-fw .qtip-content a {
 	color: #5fc5ee;
+	text-decoration: underline;
+}
+
+.qtip.qtip-fw .qtip-content a:hover {
+	text-decoration: none;
 }
 
 .qtip.qtip-fw .qtip-content iframe {

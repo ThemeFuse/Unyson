@@ -4,9 +4,9 @@
  */
 ?>
 
+<a name="fw-framework"></a>
+<h3><?php _e('Framework', 'fw') ?></h3>
 <?php if ($updates['framework']): ?>
-	<a name="fw-framework"></a>
-	<h3><?php _e('Framework', 'fw') ?></h3>
 	<?php if (is_wp_error($updates['framework'])): ?>
 		<p class="wp-ui-text-notification"><?php echo $updates['framework']->get_error_message() ?></p>
 	<?php else: ?>
@@ -20,6 +20,8 @@
 			<p><input class="button" type="submit" value="<?php echo esc_attr(__('Update Framework', 'fw')) ?>" name="update"></p>
 		</form>
 	<?php endif; ?>
+<?php else: ?>
+	<p><?php echo sprintf(__('You have the latest version of %s.', 'fw'), fw()->manifest->get_name()) ?></p>
 <?php endif; ?>
 
 <?php if ($updates['theme']): ?>

@@ -428,6 +428,8 @@ final class _FW_Component_Backend
 
 	public function _print_settings_page()
 	{
+		echo '<h2>'. __('Theme Settings', 'fw') .'</h2><p></p>';
+
 		echo '<div class="wrap">';
 
 		$this->settings_form->render();

@@ -50,7 +50,7 @@ class FW_Option_Type_SEO_Tags extends FW_Option_Type {
 		$version = fw()->manifest->get_version();
 
 		wp_enqueue_style( 'fw-option-' . $this->get_type(), $css_uri, array(), $version );
-		wp_enqueue_script( 'fw-option-' . $this->get_type(), $js_uri, array('jquery', 'jquery-ui', 'jquery-ui-autocomplete'), $version, true );
+		wp_enqueue_script( 'fw-option-' . $this->get_type(), $js_uri, array('jquery', 'jquery-ui-autocomplete'), $version, true );
 		wp_localize_script( 'fw-option-' . $this->get_type(), 'fw_ext_seo_tags', $tags_names );
 
 		fw()->backend->option_type( 'text' )->enqueue_static();
