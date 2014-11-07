@@ -64,7 +64,9 @@ class FW_Cache
 
 	protected static function memory_exceeded()
 	{
-		return memory_get_usage() >= self::get_memory_limit() - self::$min_free_memory;
+		return memory_get_usage(false) >= self::get_memory_limit() - self::$min_free_memory;
+
+		// about memory_get_usage(false) http://stackoverflow.com/a/16239377/1794248
 	}
 
 	/**
@@ -103,9 +105,11 @@ class FW_Cache
 			return;
 		}
 
+		self::free_memory();
+
 		fw_aks($keys, $value, self::$cache, $keys_delimiter);
 
-		self::free_memory(); // call it every time to take care about memory
+		self::free_memory();
 	}
 
 	/**
@@ -117,7 +121,7 @@ class FW_Cache
 	{
 		fw_aku($keys, self::$cache, $keys_delimiter);
 
-		self::free_memory(); // call it every time to take care about memory
+		self::free_memory();
 	}
 
 	/**
@@ -138,12 +142,14 @@ class FW_Cache
 			trigger_error('First key must not be empty', E_USER_ERROR);
 		}
 
+		self::free_memory();
+
 		$value = fw_akg($keys, self::$cache, self::$not_found_value, $keys_delimiter);
 
-		self::free_memory(); // call it every time to take care about memory
+		self::free_memory();
 
 		if ($value === self::$not_found_value) {
-			throw new FW_Cache_Not_Found_Exception('Cache key not found: '. $keys);
+			throw new FW_Cache_Not_Found_Exception();
 		}
 
 		return $value;

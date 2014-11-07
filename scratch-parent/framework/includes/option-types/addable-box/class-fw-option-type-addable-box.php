@@ -76,12 +76,15 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 
 	/**
 	 * @internal
+	 * {@inheritdoc}
 	 */
 	protected function _get_value_from_input($option, $input_value)
 	{
 		if (!is_array($input_value)) {
 			return $option['value'];
 		}
+
+		$option['limit'] = intval($option['limit']);
 
 		$value = array();
 
@@ -98,6 +101,10 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 			}
 
 			$value[] = $current_value;
+
+			if ($option['limit'] && count($value) === $option['limit']) {
+				break;
+			}
 		}
 
 		return $value;
@@ -111,7 +118,8 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 		return array(
 			'value' => array(),
 			'box-controls' => array(),
-			'box-options' => array()
+			'box-options' => array(),
+			'limit' => 0,
 		);
 	}
 }

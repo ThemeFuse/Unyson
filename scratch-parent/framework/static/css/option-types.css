@@ -71,6 +71,10 @@ textarea.fw-option-type-textarea {
 	margin-bottom: 6px;
 }
 
+.fw-option-width-small {
+	width: 100px !important;
+}
+
 
 /* modal fixes */
 

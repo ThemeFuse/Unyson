@@ -794,7 +794,7 @@ final class _FW_Component_Backend
 		unset($collected['tabs']);
 
 		if (!empty($collected['boxes'])) {
-			echo '<div class="fw-postboxes">';
+			echo '<div class="fw-postboxes metabox-holder">';
 
 			foreach ($collected['boxes'] as $id => &$box) {
 				// prepare attributes

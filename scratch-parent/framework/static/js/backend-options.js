@@ -87,6 +87,11 @@ jQuery(document).ready(function($){
 			addPostboxToggles($boxes);
 		}, 100);
 
+		/**
+		 * leave open only first boxes
+		 */
+		data.$elements.find('.fw-postboxes > .fw-postbox:not(:first-child)').addClass('closed');
+
 		$boxes.addClass('fw-postbox-initialized');
 
 		setTimeout(function(){

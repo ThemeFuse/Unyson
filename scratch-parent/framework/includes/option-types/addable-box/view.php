@@ -92,8 +92,14 @@ unset($attr['value']);
 		);
 	?>">
 	<div class="fw-option-boxes-controls">
-		<button type="button" onclick="return false" class="button fw-option-boxes-add-button" data-increment="<?php echo ++$i ?>"><?php
-			_e('Add', 'fw')
-		?></button>
+		<?php
+		echo fw_html_tag('button', array(
+			'type'    => 'button',
+			'onclick' => 'return false;',
+			'class'   => 'button fw-option-boxes-add-button',
+			'data-increment' => ++$i,
+			'data-limit'     => intval($option['limit'])
+		), __('Add', 'fw'));
+		?>
 	</div>
 </div>

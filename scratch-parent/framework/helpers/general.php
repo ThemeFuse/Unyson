@@ -514,16 +514,23 @@ function fw_locate_theme_path($rel_path) {
  * Use this function to not include files directly and to not give access to current context variables (like $this)
  * @param string $file_path
  * @param array $view_variables
+ * @param bool $return In some cases, for memory saving reasons, you can disable the use of output buffering
  * @return string HTML
  */
-function fw_render_view($file_path, $view_variables = array()) {
+function fw_render_view($file_path, $view_variables = array(), $return = true) {
 	extract($view_variables, EXTR_REFS);
 
-	ob_start();
+	unset($view_variables);
 
-	require $file_path;
+	if ($return) {
+		ob_start();
 
-	return ob_get_clean();
+		require $file_path;
+
+		return ob_get_clean();
+	} else {
+		require $file_path;
+	}
 }
 
 /**
