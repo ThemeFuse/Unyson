@@ -613,6 +613,7 @@ $options = array(
 				),
 			),
 		),
+		'limit' => 3,
 	),
 	'demo_group' => array(
 		'type' => 'group',

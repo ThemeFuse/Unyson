@@ -31,7 +31,7 @@ unset($attr['value']);
 ?>
 <div <?php echo fw_attr_to_html($attr) ?>>
 	<?php $i = 0; ?>
-	<div class="fw-option-boxes">
+	<div class="fw-option-boxes metabox-holder">
 		<?php foreach ($data['value'] as $value_index => &$values): ?>
 			<?php $i++; ?>
 			<div class="fw-option-box">
@@ -92,8 +92,14 @@ unset($attr['value']);
 		);
 	?>">
 	<div class="fw-option-boxes-controls">
-		<button type="button" onclick="return false" class="button fw-option-boxes-add-button" data-increment="<?php echo ++$i ?>"><?php
-			_e('Add', 'fw')
-		?></button>
+		<?php
+		echo fw_html_tag('button', array(
+			'type'    => 'button',
+			'onclick' => 'return false;',
+			'class'   => 'button fw-option-boxes-add-button',
+			'data-increment' => ++$i,
+			'data-limit'     => intval($option['limit'])
+		), __('Add', 'fw'));
+		?>
 	</div>
 </div>

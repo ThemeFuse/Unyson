@@ -214,16 +214,31 @@ final class _FW_Component_Backend
 
 		{
 			wp_register_style(
+				'qtip',
+				fw_get_framework_directory_uri('/static/libs/qtip/css/jquery.qtip.min.css'),
+				array(),
+				fw()->manifest->get_version()
+			);
+			wp_register_script(
+				'qtip',
+				fw_get_framework_directory_uri('/static/libs/qtip/jquery.qtip.min.js'),
+				array('jquery'),
+				fw()->manifest->get_version()
+			);
+		}
+
+		{
+			wp_register_style(
 				'fw',
 				fw_get_framework_directory_uri('/static/css/fw.css'),
-				array(),
+				array('qtip'),
 				fw()->manifest->get_version()
 			);
 
 			wp_register_script(
 				'fw',
 				fw_get_framework_directory_uri('/static/js/fw.js'),
-				array('jquery', 'fw-events', 'backbone'),
+				array('jquery', 'fw-events', 'backbone', 'qtip'),
 				fw()->manifest->get_version(),
 				true
 			);
@@ -238,31 +253,16 @@ final class _FW_Component_Backend
 			wp_register_style(
 				'fw-backend-options',
 				fw_get_framework_directory_uri('/static/css/backend-options.css'),
-				array('fw', 'qtip'),
+				array('fw'),
 				fw()->manifest->get_version()
 			);
 
 			wp_register_script(
 				'fw-backend-options',
 				fw_get_framework_directory_uri('/static/js/backend-options.js'),
-				array('fw-events', 'postbox', 'qtip', 'jquery-ui-tabs', 'fw'),
+				array('fw-events', 'postbox', 'jquery-ui-tabs', 'fw'),
 				fw()->manifest->get_version(),
 				true
-			);
-		}
-
-		{
-			wp_register_style(
-				'qtip',
-				fw_get_framework_directory_uri('/static/libs/qtip/css/jquery.qtip.min.css'),
-				array(),
-				fw()->manifest->get_version()
-			);
-			wp_register_script(
-				'qtip',
-				fw_get_framework_directory_uri('/static/libs/qtip/jquery.qtip.min.js'),
-				array('jquery'),
-				fw()->manifest->get_version()
 			);
 		}
 
@@ -428,6 +428,8 @@ final class _FW_Component_Backend
 
 	public function _print_settings_page()
 	{
+		echo '<h2>'. __('Theme Settings', 'fw') .'</h2><p></p>';
+
 		echo '<div class="wrap">';
 
 		$this->settings_form->render();
@@ -792,7 +794,7 @@ final class _FW_Component_Backend
 		unset($collected['tabs']);
 
 		if (!empty($collected['boxes'])) {
-			echo '<div class="fw-postboxes">';
+			echo '<div class="fw-postboxes metabox-holder">';
 
 			foreach ($collected['boxes'] as $id => &$box) {
 				// prepare attributes

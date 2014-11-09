@@ -111,6 +111,19 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 					$picker['right-choice']['value'] => array()
 				));
 				break;
+			case 'select':
+				// we need to treat the case with optgroups
+				$collected_choices = array();
+				foreach ($picker['choices'] as $key => $value) {
+					if (is_array($value) && isset($value['choices'])) {
+						// we have an optgroup
+						$collected_choices = array_merge($collected_choices, $value['choices']);
+					} else {
+						$collected_choices[$key] = $value;
+					}
+				}
+				$picker_choices = array_intersect_key($option['choices'], $collected_choices);
+				break;
 			default:
 				$picker_choices = array_intersect_key($option['choices'], $picker['choices']);
 		}
@@ -196,9 +209,23 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 					$picker['right-choice']['value'] => array()
 				));
 				break;
+			case 'select':
+				// we need to treat the case with optgroups
+				$collected_choices = array();
+				foreach ($picker['choices'] as $key => $choice_value) {
+					if (is_array($choice_value) && isset($choice_value['choices'])) {
+						// we have an optgroup
+						$collected_choices = array_merge($collected_choices, $choice_value['choices']);
+					} else {
+						$collected_choices[$key] = $choice_value;
+					}
+				}
+				$choices = array_intersect_key($option['choices'], $collected_choices);
+				break;
 			default:
 				$choices = array_intersect_key($option['choices'], $picker['choices']);
 		}
+
 		foreach ($choices as $choice_id => $options) {
 
 			foreach ($options as $option_id => $option) {

@@ -87,6 +87,11 @@ jQuery(document).ready(function($){
 			addPostboxToggles($boxes);
 		}, 100);
 
+		/**
+		 * leave open only first boxes
+		 */
+		data.$elements.find('.fw-postboxes > .fw-postbox:not(:first-child)').addClass('closed');
+
 		$boxes.addClass('fw-postbox-initialized');
 
 		setTimeout(function(){
@@ -136,118 +141,10 @@ jQuery(document).ready(function($){
 	 * Help tips (i)
 	 */
 	(function(){
-		/**
-		 * Trigger custom event with delay when mouse left (i) and popup
-		 * @param $i
-		 */
-		function initHide($i) {
-			var api = $i.qtip('api');
-
-			var hideTimeout = 0;
-			var hideDelay = 200;
-
-			var hide = function(){
-				clearTimeout(hideTimeout);
-
-				hideTimeout = setTimeout(function(){
-					$i.trigger('fw-backend-options-tip:hide');
-				}, hideDelay);
-			};
-
-			{
-				api.elements.tooltip
-					.on('mouseenter', function(){
-						clearTimeout(hideTimeout);
-					})
-					.on('mouseleave', function(){
-						hide();
-					});
-
-				$i
-					.on('mouseenter', function(){
-						clearTimeout(hideTimeout);
-					})
-					.on('mouseleave', function(){
-						hide();
-					});
-			}
-		};
-
-		var idIncrement = 1;
-
-		function initHelps($helps) {
-			$helps.each(function(){
-				var $i = $(this);
-
-				var id = 'fw-backend-options-tip-'+ idIncrement++;
-
-				var hideInitialized = false;
-
-				$i.qtip({
-					id: id,
-					position: {
-						viewport: $(document.body),
-						at: 'top center',
-						my: 'bottom center',
-						adjust: {
-							y: 2
-						}
-					},
-					style: {
-						classes: $i.hasClass('dashicons-info')
-							? 'qtip-fw fw-backend-options-tip fw-backend-options-tip-info'
-							: 'qtip-fw fw-backend-options-tip',
-						tip: {
-							width: 12,
-							height: 5
-						}
-					},
-					show: {
-						solo: true,
-						event: 'mouseover',
-						effect: function(offset) {
-							// fix tip position
-							setTimeout(function(){
-								offset.elements.tooltip.css('top',
-									(parseInt(offset.elements.tooltip.css('top')) + 5) + 'px'
-								);
-							}, 12);
-
-							if (!hideInitialized) {
-								initHide($i);
-
-								hideInitialized = true;
-							}
-
-							$(this).fadeIn(300);
-						}
-					},
-					hide: {
-						event: 'fw-backend-options-tip:hide',
-						effect: function(offset) {
-							$(this).fadeOut(300, function(){
-								/**
-								 * Reset tip content html.
-								 * Needed for video tips, after hide the video should stop.
-								 */
-								api.elements.content.html($i.attr('title'))
-							});
-						}
-					}
-				});
-
-				$i.on('remove', function(){
-					api.hide();
-				});
-
-				var api = $i.qtip('api');
-			});
-		};
-
 		fwEvents.on('fw:options:init', function (data) {
 			var $helps = data.$elements.find('.fw-option-help:not(.initialized)');
 
-			initHelps($helps);
+			fw.qtip($helps);
 
 			$helps.addClass('initialized');
 		});

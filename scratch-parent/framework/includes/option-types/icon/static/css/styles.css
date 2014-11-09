@@ -63,6 +63,7 @@
 	border: 1px solid #e1e1e1;
 	margin: 0 0 -1px -1px;
 	padding: 0.5em;
+	background-color: #ffffff;
 }
 body.rtl .fw-option-type-icon .fontawesome-icon-list i {
 	float: right;

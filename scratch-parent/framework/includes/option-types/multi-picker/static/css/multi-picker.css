@@ -30,6 +30,14 @@
 	border-bottom-width: 0px;
 }
 
+.fw-option-type-multi-picker .fw-option-type-multi > .fw-backend-option:first-child {
+	padding-top: 0;
+}
+
+.fw-option-type-multi-picker .fw-option-type-multi > .fw-backend-option:not(:last-child) {
+	padding-bottom: 0;
+}
+
 .fw-option-type-multi-picker > .picker-group.fw-show-borders {
 	border-bottom-width: 1px;
 }

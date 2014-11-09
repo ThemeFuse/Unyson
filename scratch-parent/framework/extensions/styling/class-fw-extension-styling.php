@@ -67,7 +67,7 @@ class FW_Extension_Styling extends FW_Extension {
 
 	public function render_styling_settings_page() {
 		echo '<div class="wrap" style="opacity:0">';
-		echo '<h2>' . __( 'Styling', 'fw' ) . '</h2>';
+		echo '<h2>' . __( 'Styling', 'fw' ) . '</h2><p></p>';
 		$this->form->render();
 		echo '</div>';
 	}

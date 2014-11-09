@@ -81,11 +81,12 @@ if ( empty( $option['choices'] ) ) {
 		echo fw()->backend->option_type( 'upload' )->render(
 			'custom',
 			array(
-				'type'  => 'upload',
-				'value' => ( $data['value']['type'] === 'custom' ) ? $data['value']['custom'] : '',
+				'type'  => 'upload'
 			),
 			array(
-				'value'       => ( $data['value']['type'] === 'custom' ) ? $data['value']['custom'] : '',
+				'value'       => ( $data['value']['type'] === 'custom' )
+									? array('attachment_id' => $data['value']['custom'])
+									: '',
 				'id_prefix'   => $data['id_prefix'] . $id . '-',
 				'name_prefix' => $data['name_prefix'] . '[' . $id . ']',
 			)
