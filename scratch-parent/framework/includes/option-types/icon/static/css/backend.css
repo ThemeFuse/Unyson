@@ -6,6 +6,10 @@
 	max-height: 10.1em;
 }
 
+.fw-option-type-icon .option-type-icon-list:first-child {
+	margin-top: 0;
+}
+
 .fw-option-type-icon .option-type-icon-list:after {
 	content: '';
 	display: block;

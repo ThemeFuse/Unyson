@@ -32,12 +32,11 @@ ksort($groups);
 
 	<div class="js-option-type-icon-container">
 
+		<?php if (count($groups) > 1): ?>
 		<div class="fw-backend-option-fixed-width">
 			<select class="js-option-type-icon-dropdown">
 				<?php
-					if (count($groups) > 1) {
-						echo fw_html_tag('option', array('value' => 'all'), htmlspecialchars(__('All Categories', 'fw')));
-					}
+					echo fw_html_tag('option', array('value' => 'all'), htmlspecialchars(__('All Categories', 'fw')));
 					foreach ($groups as $group_id => $group_title) {
 						$selected = (isset($set['icons'][$data['value']]['group']) && $set['icons'][$data['value']]['group'] === $group_id);
 						echo fw_html_tag('option', array('value' => $group_id, 'selected' => $selected), htmlspecialchars($group_title));
@@ -45,6 +44,7 @@ ksort($groups);
 				?>
 			</select>
 		</div>
+		<?php endif; ?>
 
 		<div class="option-type-icon-list js-option-type-icon-list <?php echo esc_attr($set['container-class']) ?>">
 			<?php

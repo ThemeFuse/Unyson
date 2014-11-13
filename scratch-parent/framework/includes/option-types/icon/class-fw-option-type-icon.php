@@ -47,15 +47,15 @@ class FW_Option_Type_Icon extends FW_Option_Type
 
 			unset($sets);
 
-			if (!isset($this->enqueued_font_styles_src[ $set['font_style_src'] ])) {
+			if (!isset($this->enqueued_font_styles_src[ $set['font-style-src'] ])) {
 				wp_enqueue_style(
 					"fw-option-type-{$this->get_type()}-font-{$option['set']}",
-					$set['font_style_src'],
+					$set['font-style-src'],
 					array(),
 					fw()->manifest->get_version()
 				);
 
-				$this->enqueued_font_styles_src[ $set['font_style_src'] ] = true;
+				$this->enqueued_font_styles_src[ $set['font-style-src'] ] = true;
 			}
 		}
 	}
@@ -134,7 +134,7 @@ class FW_Option_Type_Icon extends FW_Option_Type
 	private function generate_unknown_set($icon)
 	{
 		return array(
-			'font_style_src'  => 'data:text/css;charset=utf-8;base64,LyoqLw==',
+			'font-style-src'  => 'data:text/css;charset=utf-8;base64,LyoqLw==',
 			'container-class' => '',
 			'groups' => array(
 				'unknown' => __('Unknown Set', 'fw'),
@@ -149,7 +149,7 @@ class FW_Option_Type_Icon extends FW_Option_Type
 	{
 		return array(
 			'font-awesome' => array( // http://fortawesome.github.io/Font-Awesome/icons
-				'font_style_src' => fw_get_framework_directory_uri('/static/libs/font-awesome/css/font-awesome.min.css'),
+				'font-style-src' => fw_get_framework_directory_uri('/static/libs/font-awesome/css/font-awesome.min.css'),
 				'container-class' => 'fa-lg', // some fonts need special wrapper class to display properly
 				'groups' => array(
 					'web-app' => __('Web Application Icons', 'fw'),
