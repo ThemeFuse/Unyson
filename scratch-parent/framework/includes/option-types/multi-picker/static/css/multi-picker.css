@@ -30,7 +30,7 @@
 	border-bottom-width: 0px;
 }
 
-.fw-option-type-multi-picker .fw-option-type-multi > .fw-backend-option:first-child {
+.fw-option-type-multi-picker.fw-option-type-multi-picker-without-borders .fw-option-type-multi > .fw-backend-option:first-child {
 	padding-top: 0;
 }
 

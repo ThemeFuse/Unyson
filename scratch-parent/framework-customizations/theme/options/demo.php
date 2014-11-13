@@ -275,7 +275,7 @@ $options = array(
 	'demo_icon' => array(
 		'label' => __('Icon', 'fw'),
 		'type'  => 'icon',
-		'value' => 'fa-linux',
+		'value' => 'fa fa-linux',
 		'desc'  => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
 		'help'  => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
 			__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),

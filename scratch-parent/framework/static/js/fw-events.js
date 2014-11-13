@@ -108,7 +108,7 @@ var fwEvents = new (function(){
 	 * Trigger event
 	 *
 	 * @public
-	 * @param {String }event
+	 * @param {String} event
 	 * @param {Object} [data]
 	 */
 	this.trigger = function(event, data) {
@@ -129,5 +129,18 @@ var fwEvents = new (function(){
 		changeIndentation(-1);
 
 		log('╰─ '+ event, data);
+	};
+
+	/**
+	 * Check if an event has listeners
+	 * @param {String} [event]
+	 * @return {Boolean}
+	 */
+	this.hasListeners = function(event) {
+		if (!eventsBox._events) {
+			return false;
+		}
+
+		return !!eventsBox._events[event];
 	};
 })();

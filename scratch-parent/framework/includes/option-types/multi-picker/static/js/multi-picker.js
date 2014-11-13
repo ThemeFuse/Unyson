@@ -2,8 +2,8 @@
 	var init = function() {
 		var $this = $(this),
 			elements = {
-				$pickerGroup: $this.find('.picker-group'),
-				$choicesGroups: $this.find('.choice-group')
+				$pickerGroup: $this.find('> .picker-group'),
+				$choicesGroups: $this.find('> .choice-group')
 			},
 			chooseGroup = function(groupId) {
 				elements.$choicesGroups

@@ -23,6 +23,11 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 				)
 			),
 			'choices' => array(),
+			'hide_picker' => false,
+			/**
+			 * Display separators between options
+			 */
+			'show_borders' => false,
 			'value' => array()
 		);
 	}
@@ -63,6 +68,12 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 	{
 		$options_array = $this->prepare_option($id, $option);
 		unset($option['attr']['name'], $option['attr']['value']);
+
+		if ($option['show_borders']) {
+			$option['attr']['class'] .= ' fw-option-type-multi-picker-with-borders';
+		} else {
+			$option['attr']['class'] .= ' fw-option-type-multi-picker-without-borders';
+		}
 
 		return '<div ' . fw_attr_to_html($option['attr']) . '>' .
 			fw()->backend->render_options($options_array, $data['value'], array(
