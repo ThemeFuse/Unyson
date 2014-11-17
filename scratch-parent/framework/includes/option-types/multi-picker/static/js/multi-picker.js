@@ -6,10 +6,15 @@
 				$choicesGroups: $this.find('> .choice-group')
 			},
 			chooseGroup = function(groupId) {
-				elements.$choicesGroups
-					.removeClass('chosen')
-					.filter('.choice-' + groupId)
-					.addClass('chosen');
+				var $choicesToReveal = elements.$choicesGroups.filter('.choice-' + groupId);
+				elements.$choicesGroups.removeClass('chosen');
+				$choicesToReveal.addClass('chosen');
+
+				if ($choicesToReveal.length) {
+					$this.addClass('has-choice');
+				} else {
+					$this.removeClass('has-choice');
+				}
 			},
 			pickerType = elements.$pickerGroup.attr('class').match(/picker-type-(\S+)/)[1],
 			flows = {

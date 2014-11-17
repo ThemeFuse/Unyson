@@ -58,3 +58,7 @@
 .fw-force-xs .fw-option-type-multi-upload.images-only .thumb.no-image {
     display: none;
 }
+
+.fw-option-type-multi-upload.images-only .no-image-img {
+	cursor: pointer;
+}

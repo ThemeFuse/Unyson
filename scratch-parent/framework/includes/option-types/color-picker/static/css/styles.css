@@ -10,7 +10,6 @@ input.fw-option-type-color-picker {
 
 input.fw-option-type-color-picker.iris-error {
 	background-color: #ffebe8;
-	border-left: none;
 	border-color: #c00;
 	color: #000;
 }

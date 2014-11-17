@@ -88,6 +88,10 @@
 			frame.open();
 		});
 
+		elements.$container.on('click', '.no-image-img', function() {
+			elements.$uploadButton.trigger('click');
+		});
+
 		elements.$thumb.on('click', '.clear-uploads-thumb', function(e) {
 			elements.$input.val('');
 			elements.$uploadButton.text(l10n.buttonAdd);

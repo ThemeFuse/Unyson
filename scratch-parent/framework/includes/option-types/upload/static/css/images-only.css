@@ -40,3 +40,7 @@
 .fw-option-type-upload.images-only p {
 	margin-bottom: 0;
 }
+
+.fw-option-type-upload.images-only .no-image-img {
+	cursor: pointer;
+}

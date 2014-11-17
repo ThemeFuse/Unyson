@@ -1,0 +1,27 @@
+.fw-option-type-radio-text .predefined,
+.fw-option-type-radio-text .predefined .fw-option-type-radio,
+.fw-option-type-radio-text .predefined .fw-option-type-radio div,
+.fw-option-type-radio-text .custom {
+	display: inline-block;
+}
+
+.fw-option-type-radio-text .predefined {
+	vertical-align: middle;
+}
+
+.fw-option-type-radio-text .predefined .fw-option-type-radio div {
+	margin-left: 10px;
+}
+
+.fw-option-type-radio-text .predefined .fw-option-type-radio div:first-child {
+	margin-left: inherit;
+}
+
+.fw-option-type-radio-text .custom input.fw-option-type-text{
+	width: 100px;
+	margin-left: 10px;
+}
+
+.fw-option-type-radio-text .custom input.fw-option-type-text:first-child{
+	margin: 0;
+}

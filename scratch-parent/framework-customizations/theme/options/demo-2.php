@@ -11,6 +11,16 @@ $options = array(
 			__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
 		),
 	),
+	'demo_short_text_2' => array(
+		'label' => __('Short Text', 'fw'),
+		'type'  => 'short-text',
+		'value' => '7',
+		'desc'  => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+		'help'  => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+			__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+			__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+		),
+	),
 	'demo_password_2' => array(
 		'label' => __('Password', 'fw'),
 		'type'  => 'password',
@@ -139,6 +149,25 @@ $options = array(
 			__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
 		),
 	),
+	'demo_short_select_2' => array(
+		'label' => __('Short Select', 'fw'),
+		'type'  => 'short-select',
+		'value' => '7',
+		'desc'  => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+		'choices' => array(
+			'1' => '1',
+			'2' => '2',
+			'3' => '3',
+			'4' => '4',
+			'5' => '5',
+			'6' => '6',
+			'7' => '7',
+		),
+		'help'  => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+			__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+			__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+		),
+	),
 	'demo_select_multiple_2' => array(
 		'label' => __('Select Multiple', 'fw'),
 		'type'  => 'select-multiple',
@@ -235,6 +264,21 @@ $options = array(
 			'c1'  => __('Radio 1 Custom Text', 'fw'),
 			'c2'  => __('Radio 2 Custom Text', 'fw'),
 			'c3'  => __('Radio 3 Custom Text', 'fw'),
+		),
+		'help'  => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+			__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+			__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+		),
+	),
+	'demo_radio_text_2' => array(
+		'label' => __('Radio Text', 'fw'),
+		'type'  => 'radio-text',
+		'value' => '75',
+		'desc'  => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+		'choices' => array(
+			'25'  => __('25%', 'fw'),
+			'50'  => __('50%', 'fw'),
+			'100' => __('100%', 'fw'),
 		),
 		'help'  => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
 			__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),

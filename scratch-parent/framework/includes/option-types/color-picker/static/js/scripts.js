@@ -1,5 +1,5 @@
 jQuery(document).ready(function($){
-	jQuery(document.body).click(function (e) {
+	$(document.body).click(function (e) {
 		if (!$(e.target).is('.fw-option-type-color-picker, .iris-picker, .iris-picker-inner, .iris-palette')) {
 			$('.fw-option-type-color-picker.initialized').iris('hide');
 		}
@@ -23,9 +23,11 @@ jQuery(document).ready(function($){
 		return yiq < 128;
 	}
 
+	var colorRegex = /^#[a-f0-9]{3}([a-f0-9]{3})?$/;
+
 	fwEvents.on('fw:options:init', function (data) {
 		data.$elements.find('input.fw-option-type-color-picker:not(.initialized)').each(function(){
-			var $input = jQuery(this);
+			var $input = $(this);
 
 			$input.iris({
 				hide: false,
@@ -46,15 +48,25 @@ jQuery(document).ready(function($){
 				palettes: true
 			});
 
-			$input.addClass('initialized');
+			$input.on('change keyup blur', function(){
+				/**
+				 * iris::change is not triggered when the input is empty or color is wrong
+				 */
+				if (!colorRegex.test($input.val())) {
+					$input.css('background-color', '');
+					$input.css('color', '');
+				}
+			});
 
 			$input.iris('hide');
 
 			var color = $input.val();
 
-			if (/^#[a-f0-9]{6}$/.test(color)) {
+			if (colorRegex.test(color)) {
 				$input.iris('color', color);
 			}
+
+			$input.addClass('initialized');
 		});
 
 		jQuery('.fw-inner').on('click', '.fw-option-type-color-picker', function () {

@@ -38,7 +38,7 @@ body.rtl .fw-option-type-icon .option-type-icon-list i {
 
 .fw-option-type-icon .option-type-icon-list i.active,
 .fw-option-type-icon .option-type-icon-list i:hover {
-	background: #2ea2cc;
+	background: #0074a2;
 	color: #fff;
 	cursor: pointer;
 }

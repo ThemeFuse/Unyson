@@ -88,7 +88,7 @@ body.rtl .fw-options-tabs-first-level > .fw-options-tabs-list ul li {
 }
 
 .fw-options-tabs-wrapper .metabox-holder {
-	padding: 0 !important; /* to rewrite: #wpbody-content .metabox-holder */
+	padding-top: 0 !important; /* to rewrite: #wpbody-content .metabox-holder */
 	margin: 0 !important; /* to rewrite: #wpbody-content .metabox-holder */
 }
 

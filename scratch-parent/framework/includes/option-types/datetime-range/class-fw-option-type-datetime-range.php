@@ -27,14 +27,16 @@ class FW_Option_Type_Datetime_Range extends FW_Option_Type {
 					'maxDate' => '2038/01/19',
 					'format'  => 'Y/m/d H:i',
 					'timepicker'  => true,
-					'datepicker'  => true
-					),
+					'datepicker'  => true,
+					'scrollInput' => false,
+				),
 				'to' => array(
 					'minDate' => '1970/01/01',
 					'maxDate' => '2038/01/19',
 					'format'  => 'Y/m/d H:i',
 					'timepicker'  => true,
-					'datepicker'  => true
+					'datepicker'  => true,
+					'scrollInput' => false,
 				)
 			),
 			'value' => array(
@@ -74,6 +76,10 @@ class FW_Option_Type_Datetime_Range extends FW_Option_Type {
 			}  else {
 				$datetime_picker['format'] = 'Y/m/d H:i';
 				$datetime_picker['moment-format'] = 'YYYY/MM/DD HH:mm';
+			}
+
+			if (!isset($datetime_picker['scrollInput'])) {
+				$datetime_picker['scrollInput'] = false;
 			}
 		}
 

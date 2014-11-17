@@ -10,7 +10,7 @@
 	<input type="hidden" <?php echo fw_attr_to_html($input_attr); ?>/>
 	<?php if ($is_empty): ?>
 		<div class="thumb">
-			<img src="<?php echo fw_get_framework_directory_uri('/static/img/no-image.png'); ?>" alt="no-image.png"/>
+			<img src="<?php echo fw_get_framework_directory_uri('/static/img/no-image.png'); ?>" class="no-image-img" alt="<?php esc_attr_e('No image', 'fw') ?>"/>
 		</div>
 	<?php else: ?>
 		<?php
@@ -26,7 +26,7 @@
 	<?php endif; ?>
 	<p><a href="#"><?php echo $is_empty ? $l10n['button_add'] : $l10n['button_edit']; ?></a></p>
 	<br class="thumb-template-empty fw-hidden" data-template="<?php ob_start(); ?>
-		<img src="<?php echo fw_get_framework_directory_uri('/static/img/no-image.png'); ?>" alt="no-image.png"/>
+		<img src="<?php echo fw_get_framework_directory_uri('/static/img/no-image.png'); ?>" class="no-image-img" alt="<?php esc_attr_e('No image', 'fw') ?>"/>
 	<?php echo fw_htmlspecialchars(ob_get_clean()) ?>">
 	<br class="thumb-template-not-empty fw-hidden" data-template="<?php ob_start(); ?>
 		<img src="<%= data.src %>" alt="<%= data.alt %>"/>

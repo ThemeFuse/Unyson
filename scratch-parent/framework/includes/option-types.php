@@ -99,6 +99,34 @@ class FW_Option_Type_Text extends FW_Option_Type
 }
 FW_Option_Type::register('FW_Option_Type_Text');
 
+class FW_Option_Type_Short_Text extends FW_Option_Type_Text
+{
+	public function get_type()
+	{
+		return 'short-text';
+	}
+
+	/**
+	 * @internal
+	 */
+	protected function _render($id, $option, $data)
+	{
+		$option['attr']['class'] .= ' fw-option-width-short';
+
+		return parent::_render($id, $option, $data);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 * @internal
+	 */
+	public function _get_backend_width_type()
+	{
+		return 'auto';
+	}
+}
+FW_Option_Type::register('FW_Option_Type_Short_Text');
+
 class FW_Option_Type_Password extends FW_Option_Type
 {
 	public function get_type()
@@ -192,10 +220,6 @@ class FW_Option_Type_Textarea extends FW_Option_Type
 }
 FW_Option_Type::register('FW_Option_Type_Textarea');
 
-/**
- * Required keys:
- *  'html' => '<div> ... </div>'
- */
 class FW_Option_Type_Html extends FW_Option_Type
 {
 	public function get_type()
@@ -368,12 +392,6 @@ FW_Option_Type::register('FW_Option_Type_Checkbox');
 
 /**
  * Checkboxes list
- *
- * Required keys:
- * * 'choices' => array(
- *      'value' => 'Text',
- *      ...
- *   )
  */
 class FW_Option_Type_Checkboxes extends FW_Option_Type
 {
@@ -471,12 +489,6 @@ FW_Option_Type::register('FW_Option_Type_Checkboxes');
 
 /**
  * Radio list
- *
- * Required option keys:
- * * 'choices' => array(
- *      'value' => 'Text',
- *      ...
- *   )
  */
 class FW_Option_Type_Radio extends FW_Option_Type
 {
@@ -567,12 +579,6 @@ FW_Option_Type::register('FW_Option_Type_Radio');
 
 /**
  * Select
- *
- * Required keys:
- * * 'choices' => array(
- *      'value' => 'Text',
- *      ...
- *   )
  */
 class FW_Option_Type_Select extends FW_Option_Type
 {
@@ -707,14 +713,36 @@ class FW_Option_Type_Select extends FW_Option_Type
 }
 FW_Option_Type::register('FW_Option_Type_Select');
 
+class FW_Option_Type_Short_Select extends FW_Option_Type_Select
+{
+	public function get_type()
+	{
+		return 'short-select';
+	}
+
+	/**
+	 * @internal
+	 */
+	protected function _render($id, $option, $data)
+	{
+		$option['attr']['class'] .= ' fw-option-width-short';
+
+		return parent::_render($id, $option, $data);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 * @internal
+	 */
+	public function _get_backend_width_type()
+	{
+		return 'auto';
+	}
+}
+FW_Option_Type::register('FW_Option_Type_Short_Select');
+
 /**
  * Select Multiple
- *
- * Required keys:
- * * 'choices' => array(
- *      'value' => 'Text',
- *      ...
- *   )
  */
 class FW_Option_Type_Select_Multiple extends FW_Option_Type_Select
 {
@@ -850,3 +878,4 @@ require $dir .'/option-types/multi-select/class-fw-option-type-multi-select.php'
 require $dir .'/option-types/map/class-fw-option-type-map.php';
 require $dir .'/option-types/datetime-range/class-fw-option-type-datetime-range.php';
 require $dir .'/option-types/datetime-picker/class-fw-option-type-datetime-picker.php';
+require $dir .'/option-types/radio-text/class-fw-option-type-radio-text.php';

@@ -6,7 +6,7 @@ class FW_Option_Type_Icon extends FW_Option_Type
 	 * Prevent enqueue same font style twice, in case it is used in multiple sets
 	 * @var array
 	 */
-	private $enqueued_font_styles_src = array();
+	private $enqueued_font_styles = array();
 
 	public function get_type()
 	{
@@ -47,7 +47,12 @@ class FW_Option_Type_Icon extends FW_Option_Type
 
 			unset($sets);
 
-			if (!isset($this->enqueued_font_styles_src[ $set['font-style-src'] ])) {
+			/**
+			 * user hash as array key instead of src, because src can be a very long data-url string
+			 */
+			$style_hash = md5($set['font-style-src']);
+
+			if (!isset($this->enqueued_font_styles[ $style_hash ])) {
 				wp_enqueue_style(
 					"fw-option-type-{$this->get_type()}-font-{$option['set']}",
 					$set['font-style-src'],
@@ -55,7 +60,7 @@ class FW_Option_Type_Icon extends FW_Option_Type
 					fw()->manifest->get_version()
 				);
 
-				$this->enqueued_font_styles_src[ $set['font-style-src'] ] = true;
+				$this->enqueued_font_styles[ $style_hash ] = true;
 			}
 		}
 	}

@@ -265,8 +265,7 @@
 				.addClass('fw-option-initialized');
 		});
 
-	})
-
+	});
 
 })(jQuery, fwEvents);
 

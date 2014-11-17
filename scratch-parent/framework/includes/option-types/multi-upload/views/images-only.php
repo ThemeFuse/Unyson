@@ -11,7 +11,7 @@
 	<div class="thumbs-container">
 		<?php if ($is_empty): ?>
 			<div class="thumb no-image">
-				<img src="<?php echo fw_get_framework_directory_uri('/static/img/no-image.png'); ?>" alt="no-image.png"/>
+				<img src="<?php echo fw_get_framework_directory_uri('/static/img/no-image.png'); ?>" class="no-image-img" alt="<?php esc_attr_e('No image', 'fw') ?>"/>
 			</div>
 		<?php else: ?>
 			<?php $decoded_ids = json_decode($input_attr['value']); ?>
@@ -32,7 +32,7 @@
 	<p><a href="#"><?php echo $is_empty ? $l10n['button_add'] : $l10n['button_edit']; ?></a></p>
 	<br class="thumb-template-empty fw-hidden" data-template="<?php ob_start(); ?>
 		<div class="thumb no-image">
-			<img src="<?php echo fw_get_framework_directory_uri('/static/img/no-image.png'); ?>" alt="no-image.png"/>
+			<img src="<?php echo fw_get_framework_directory_uri('/static/img/no-image.png'); ?>" class="no-image-img" alt="<?php esc_attr_e('No image', 'fw') ?>"/>
 		</div>
 	<?php echo fw_htmlspecialchars(ob_get_clean()) ?>">
 	<br class="thumb-template-not-empty fw-hidden" data-template="<?php ob_start(); ?>
