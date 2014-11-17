@@ -6,14 +6,17 @@
  * @var string $sortable_image url
  */
 $attr = $option['attr'];
+
+// must contain characters that will remain the same after htmlspecialchars()
+$increment_template  = '###-addable-popup-increment-###';
 ?>
 <div <?php echo fw_attr_to_html($attr); ?>>
 
 	<div class="items-wrapper">
 		<div class="item default">
 			<div class="input-wrapper">
-				<?php echo fw()->backend->option_type('hidden')->render('', array('value' => '{{-json}}'), array(
-					'id_prefix' => $data['id_prefix'] . $id . '-' . '{{=i}}' . '-',
+				<?php echo fw()->backend->option_type('hidden')->render('', array('value' => '[]'), array(
+					'id_prefix' => $data['id_prefix'] . $id . '-' . $increment_template . '-',
 					'name_prefix' => $data['name_prefix'] . '[' . $id . ']',
 				));?>
 			</div>

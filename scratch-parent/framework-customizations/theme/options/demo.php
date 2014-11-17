@@ -639,7 +639,7 @@ $options = array(
 			'demo_text' => array(
 				'label' => __('Text', 'fw'),
 				'type'  => 'text',
-				'value' => 'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium',
+				'value' => 'Lorem ipsum dolor sit amet',
 				'desc'  => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
 				'help'  => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
 					__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
@@ -657,6 +657,7 @@ $options = array(
 				),
 			),
 		),
+		'template' => '{{=demo_text}}',
 		'limit' => 3,
 	),
 	'demo_group' => array(

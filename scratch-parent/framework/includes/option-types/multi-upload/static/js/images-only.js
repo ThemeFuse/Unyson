@@ -107,7 +107,7 @@
 			frame.open();
 		});
 
-		elements.$container.on('click', '.no-image-img', function() {
+		elements.$container.on('click', '.no-image-img, .thumb img', function() {
 			elements.$uploadButton.trigger('click');
 		});
 

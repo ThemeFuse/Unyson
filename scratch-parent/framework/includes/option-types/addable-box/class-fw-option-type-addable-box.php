@@ -36,6 +36,19 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 		return true;
 	}
 
+	/*
+	 * Puts each option into a separate array
+	 * to keep their order inside the modal dialog
+	 */
+	private function transform_options($options)
+	{
+		$new_options = array();
+		foreach ($options as $id => $option) {
+			$new_options[] = array($id => $option);
+		}
+		return $new_options;
+	}
+
 	/**
 	 * @internal
 	 * {@inheritdoc}
@@ -50,7 +63,7 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 		{
 			$controls = array_merge(
 				array(
-					'delete' => '<small class="dashicons dashicons-no-alt" title="'. esc_attr(__('Remove', 'fw')) .'"></small>'
+					'delete' => '<small class="dashicons dashicons-no-alt" title="'. esc_attr__('Remove', 'fw') .'"></small>'
 				),
 				$option['box-controls']
 			);
@@ -66,11 +79,25 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 			}
 		}
 
+		// Use only groups and options
+		{
+			$collected = array();
+			fw_collect_first_level_options($collected, $option['box-options']);
+			$box_options =& $collected['groups_and_options'];
+			unset($collected);
+		}
+
+		$option['attr']['data-for-js'] = base64_encode(json_encode(array(
+			'options'     => $this->transform_options($box_options),
+			'template'    => $option['template'],
+		)));
+
 		return fw_render_view(fw_get_framework_directory('/includes/option-types/'. $this->get_type() .'/view.php'), array(
-			'id'        => $id,
-			'option'    => $option,
-			'data'      => $data,
-			'controls'  => $controls,
+			'id'          => $id,
+			'option'      => $option,
+			'data'        => $data,
+			'controls'    => $controls,
+			'box_options' => $box_options,
 		));
 	}
 
@@ -120,6 +147,7 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 			'box-controls' => array(),
 			'box-options' => array(),
 			'limit' => 0,
+			'template' => '',
 		);
 	}
 }

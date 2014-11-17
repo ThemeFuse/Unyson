@@ -696,7 +696,7 @@ final class _FW_Component_Backend
 		wp_send_json_success(array(
 			'values' => fw_get_options_values_from_input(
 				$options,
-				FW_Request::POST($name_prefix, array())
+				FW_Request::POST(fw_html_attr_name_to_array_multi_key($name_prefix), array())
 			)
 		));
 	}

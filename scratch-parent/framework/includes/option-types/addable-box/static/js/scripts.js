@@ -97,6 +97,119 @@ jQuery(document).ready(function ($) {
 		}
 	};
 
+	/**
+	 * Update box title using the 'template' option parameter and box option values
+	 */
+	var titleUpdater = {
+		pendingClass: 'fw-option-type-addable-box-pending-title-update',
+		isBusy: false,
+		template: function(template, vars) {
+			try {
+				/**
+				 * may throw error in in template is used an option id added after some items was already saved
+				 */
+				return _.template(
+					$.trim(template),
+					vars,
+					{
+						evaluate: /\{\{(.+?)\}\}/g,
+						interpolate: /\{\{=(.+?)\}\}/g,
+						escape: /\{\{-(.+?)\}\}/g
+					}
+				);
+			} catch (e) {
+				return '[Template Error] '+ e.message;
+			}
+		},
+		/**
+		 * Update the given box title, or find a pending box
+		 * @public
+		 */
+		update: function($box) {
+			if (this.isBusy) {
+				return;
+			}
+
+			if (typeof $box == 'undefined') {
+				$box = $(optionTypeClass +' .'+ this.pendingClass +':first');
+			}
+
+			if (!$box.length) {
+				return;
+			}
+
+			var data = JSON.parse(atob(
+				$box.closest(optionTypeClass).attr('data-for-js')
+			));
+
+			data.template = $.trim(data.template);
+
+			if (!data.template.length) {
+				delete data;
+				return;
+			}
+
+			var $dataWrapper = $box.closest('.fw-option-box');
+
+			var values = $dataWrapper.attr('data-values');
+
+			if (values) {
+				// box after refresh
+				$dataWrapper.removeAttr('data-values');
+
+				$box.removeClass(titleUpdater.pendingClass);
+
+				$box.find('> h3.hndle span:not([class])').first().text(
+					this.template(data.template, JSON.parse(values))
+				);
+
+				delete data;
+				this.update();
+				return;
+			}
+
+			this.isBusy = true;
+
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: [
+					'action=fw_backend_options_get_values',
+					'options='+ encodeURIComponent(JSON.stringify(data.options)),
+					'name_prefix='+ encodeURIComponent($dataWrapper.attr('data-name-prefix')),
+					$box.find('> .inside > .fw-option-box-options').find('input, select, textarea').serialize()
+				].join('&'),
+				dataType: 'json'
+			}).done(_.bind(function (response, status, xhr) {
+				this.isBusy = false;
+				$box.removeClass(titleUpdater.pendingClass);
+
+				var template = '';
+
+				if (response.success) {
+					template = this.template(data.template, response.data.values);
+				} else {
+					template = '[Ajax Error] '+ response.data.message
+				}
+
+				$box.find('> h3.hndle span:not([class])').first().text(template);
+
+				delete data;
+
+				this.update();
+			}, this)).fail(_.bind(function (xhr, status, error) {
+				this.isBusy = false;
+				$box.removeClass(titleUpdater.pendingClass);
+
+				$box.find('> h3.hndle span:not([class])').first().text('[Server Error] '+ status +': '+ error.message);
+
+				delete data;
+
+				this.update();
+			}, this));
+		}
+	};
+
 	fwEvents.on('fw:options:init', function (data) {
 		var $elements = data.$elements.find(optionTypeClass +':not(.fw-option-initialized)');
 
@@ -145,6 +258,19 @@ jQuery(document).ready(function ($) {
 		// close postboxes and attach event listener
 		$elements.find('> .fw-option-boxes > .fw-option-box > .fw-postbox').addClass('closed');
 
+		$elements.on('fw:box:close', '> .fw-option-boxes > .fw-option-box > .fw-postbox', function(){
+			// later a script will pick it by this class and will update the title via ajax
+			$(this).addClass(titleUpdater.pendingClass);
+
+			/*
+			$(this).find('> h3.hndle span:not([class])').first().html(
+				$('<img>').attr('src', fw.img.loadingSpinner)
+			);
+			*/
+
+			titleUpdater.update($(this));
+		});
+
 		methods.initControls($elements);
 
 		$elements.each(function(){
@@ -168,5 +294,7 @@ jQuery(document).ready(function ($) {
 				})
 			});
 		}, 100);
+
+		titleUpdater.update();
 	});
 });

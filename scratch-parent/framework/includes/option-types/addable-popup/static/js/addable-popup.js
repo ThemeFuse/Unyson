@@ -56,17 +56,22 @@
 				},
 				createItem: function (values) {
 					var $clonedItem = nodes.getDefaultItem(),
-						$clonedInput = $clonedItem.find('.input-wrapper'),
-						$inputTemplate = $(_.template(
-							$.trim($clonedInput.html()),
-							{json: JSON.stringify(values), i: utils.countItems()},
-							{
-								evaluate: /\{\{(.+?)\}\}/g,
-								interpolate: /\{\{=(.+?)\}\}/g,
-								escape: /\{\{-(.+?)\}\}/g
-							}
-						)),
-						$itemTemplate = _.template(
+						$clonedInput = $clonedItem.find('.input-wrapper');
+
+					var $inputTemplate = $(
+						$.trim($clonedInput.html()).split('###-addable-popup-increment-###').join(utils.countItems())
+					);
+					$inputTemplate.attr('value', JSON.stringify(values));
+
+					$clonedInput.find('input').replaceWith($inputTemplate);
+
+					var template = '';
+
+					try {
+						/**
+						 * may throw error in in template is used an option id added after some items was already saved
+						 */
+						template = _.template(
 							$.trim(data.template),
 							values,
 							{
@@ -75,8 +80,12 @@
 								escape: /\{\{-(.+?)\}\}/g
 							}
 						);
-					$clonedInput.find('input').replaceWith($inputTemplate);
-					$clonedItem.find('.content').html($itemTemplate);
+					} catch (e) {
+						template = '[Template Error] '+ e.message;
+					}
+
+					$clonedItem.find('.content').html(template);
+
 					return $clonedItem;
 				},
 				addNewItem: function (values) {

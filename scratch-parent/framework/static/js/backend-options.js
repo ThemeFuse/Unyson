@@ -23,7 +23,14 @@ jQuery(document).ready(function($){
 			$boxes
 				.off('click'+ eventNamespace) // remove already attached, just to be sure, prevent multiple execution
 				.on('click'+ eventNamespace, '> h3.hndle, > .handlediv', function(e){
-					$(this).closest('.fw-postbox').toggleClass('closed');
+					var $box = $(this).closest('.fw-postbox');
+
+					$box.toggleClass('closed');
+
+					var isClosed = $box.hasClass('closed');
+
+					$box.trigger('fw:box:'+ (isClosed ? 'close' : 'open'));
+					$box.trigger('fw:box:toggle-closed', {isClosed: isClosed});
 				});
 
 			/**

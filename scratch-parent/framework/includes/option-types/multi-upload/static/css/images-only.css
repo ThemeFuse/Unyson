@@ -25,6 +25,7 @@
 	display: block;
 	width: 100%;
 	height: 100%;
+	cursor: pointer;
 }
 .fw-option-type-multi-upload.images-only .thumb a {
 	position: absolute;
@@ -46,7 +47,9 @@
 	display: none;
 }
 .fw-option-type-multi-upload.images-only .thumb a:before {
-	margin-left: -1px;
+	position: absolute;
+	left: -1px;
+	top: -3px;
 }
 
 /* Upload link */

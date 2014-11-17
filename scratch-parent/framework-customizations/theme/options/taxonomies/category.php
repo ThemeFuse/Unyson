@@ -520,6 +520,94 @@ $options = array(
 			'defaultTime'   => '12:00'
 		)
 	),
+	'demo_addable_popup' => array(
+		'label' => __('Addable Popup', 'fw'),
+		'type' => 'addable-popup',
+		'desc'  => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+		'template' => '{{=demo_text}}',
+		'popup-options' => array(
+			'demo_text' => array(
+				'label' => __('Text', 'fw'),
+				'type' => 'text',
+				'value' => 'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium',
+				'desc' => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+				'help' => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+					__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+					__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+				),
+			),
+			'demo_image_picker' => array(
+				'label' => __('Image Picker', 'fw'),
+				'type'  => 'image-picker',
+				'value' => '',
+				'desc'  => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+				'choices' => array(
+					'choice-1' => array(
+						'label' => __('First Image', 'fw'),
+						'small' => array(
+							'height' => 70,
+							'src' => get_template_directory_uri() .'/images/image-picker-demo/thumb1.jpg'
+						),
+						'large' => array(
+							'height' => 214,
+							'src' => get_template_directory_uri() .'/images/image-picker-demo/tooltip1.jpg'
+						),
+					),
+					'choice-2' => array(
+						'label' => __('Second Image', 'fw'),
+						'small' => array(
+							'height' => 70,
+							'src' => get_template_directory_uri() .'/images/image-picker-demo/thumb2.jpg'
+						),
+						'large' => array(
+							'height' => 214,
+							'src' => get_template_directory_uri() .'/images/image-picker-demo/tooltip2.jpg'
+						),
+					),
+				),
+				'help' => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+					__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+					__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+				),
+			),
+			'demo_upload_images' => array(
+				'label' => __('Single Upload (Images Only)', 'fw'),
+				'desc' => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+				'type' => 'upload',
+				'help' => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+					__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+					__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+				),
+			),
+			'demo_addable_popup_inner' => array(
+				'label' => __('Addable Popup', 'fw'),
+				'type' => 'addable-popup',
+				'desc'  => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+				'template' => 'Title color-picker value : {{=demo_color_picker}}',
+				'popup-options' => array(
+					'demo_multi_upload_images' => array(
+						'label' => __('Multi Upload (images only)', 'fw'),
+						'desc' => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+						'type' => 'multi-upload',
+						'help' => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+							__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+							__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+						),
+					),
+					'demo_color_picker' => array(
+						'label' => __('Color Picker', 'fw'),
+						'type' => 'color-picker',
+						'value' => '',
+						'desc' => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+						'help' => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+							__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+							__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+						),
+					)
+				)
+			),
+		),
+	),
 	'demo_addable_option' => array(
 		'label' => __('Addable Option', 'fw'),
 		'type'  => 'addable-option',
@@ -532,5 +620,42 @@ $options = array(
 			__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
 			__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
 		)
+	),
+	'demo_addable_box' => array(
+		'label' => __('Addable Box', 'fw'),
+		'type'  => 'addable-box',
+		'value' => array(),
+		'desc'  => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+		'help'  => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+			__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+			__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+		),
+		'box-controls' => array(
+			//'custom' => '<small class="dashicons dashicons-smiley" title="Custom"></small>',
+		),
+		'box-options'   => array(
+			'demo_text' => array(
+				'label' => __('Text', 'fw'),
+				'type'  => 'text',
+				'value' => 'Lorem ipsum dolor sit amet',
+				'desc'  => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+				'help'  => sprintf("%s \n\n'\"<br/><br/>\n\n <b>%s</b>",
+					__('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+					__('Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 'fw')
+				),
+			),
+			'demo_textarea' => array(
+				'label' => __('Textarea', 'fw'),
+				'type'  => 'textarea',
+				'value' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+				'desc'  => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
+				'help'  => array(
+					'icon' => 'video',
+					'html' => '<iframe width="420" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>'
+				),
+			),
+		),
+		'template' => '{{=demo_text}}',
+		'limit' => 3,
 	),
 );

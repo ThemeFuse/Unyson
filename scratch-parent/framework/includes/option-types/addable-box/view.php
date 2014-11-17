@@ -4,19 +4,12 @@
  * @var  array $option
  * @var  array $data
  * @var  array $controls
+ * @var  array $box_options
  */
 
 $attr = $option['attr'];
 unset($attr['name']);
 unset($attr['value']);
-
-// Use only groups and options
-{
-	$collected = array();
-	fw_collect_first_level_options($collected, $option['box-options']);
-	$box_options =& $collected['groups_and_options'];
-	unset($collected);
-}
 
 // generate controls html
 {
@@ -34,13 +27,15 @@ unset($attr['value']);
 	<div class="fw-option-boxes metabox-holder">
 		<?php foreach ($data['value'] as $value_index => &$values): ?>
 			<?php $i++; ?>
-			<div class="fw-option-box">
+			<div class="fw-option-box" data-name-prefix="<?php echo fw_htmlspecialchars($data['name_prefix'] .'['. $id .']['. $i .']') ?>" data-values="<?php echo fw_htmlspecialchars(json_encode($values)) ?>">
 				<?php ob_start() ?>
 				<div class="fw-option-box-options fw-force-xs">
-					<?php echo fw()->backend->render_options($box_options, $values, array(
+					<?php
+					echo fw()->backend->render_options($box_options, $values, array(
 						'id_prefix'   => $data['id_prefix'] . $id .'-'. $i .'-',
 						'name_prefix' => $data['name_prefix'] .'['. $id .']['. $i .']',
-					)) ?>
+					));
+					?>
 				</div>
 				<?php
 				echo fw()->backend->render_box(
@@ -48,7 +43,10 @@ unset($attr['value']);
 					'͏&nbsp;',
 					ob_get_clean(),
 					array(
-						'html_after_title' => $controls_html
+						'html_after_title' => $controls_html,
+						'attr' => array(
+							'class' => 'fw-option-type-addable-box-pending-title-update',
+						),
 					)
 				);
 				?>
@@ -74,7 +72,7 @@ unset($attr['value']);
 		$increment_template = '###-addable-box-increment-###';
 
 		echo fw_htmlspecialchars(
-			'<div class="fw-option-box">'.
+			'<div class="fw-option-box" data-name-prefix="'. fw_htmlspecialchars($data['name_prefix'] .'['. $id .']['. $increment_template .']') .'">'.
 				fw()->backend->render_box(
 					$data['id_prefix'] . $id .'-'. $increment_template .'-box',
 					'͏&nbsp;',
@@ -85,7 +83,7 @@ unset($attr['value']);
 						)).
 					'</div>',
 					array(
-						'html_after_title' => $controls_html
+						'html_after_title' => $controls_html,
 					)
 				).
 			'</div>'
