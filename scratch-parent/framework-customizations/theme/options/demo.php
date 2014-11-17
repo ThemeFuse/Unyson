@@ -526,7 +526,7 @@ $options = array(
 		'label' => __('Addable Popup', 'fw'),
 		'type' => 'addable-popup',
 		'desc'  => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
-		'template' => '{{=demo_text}}',
+		'template' => '{{- demo_text }}',
 		'popup-options' => array(
 			'demo_text' => array(
 				'label' => __('Text', 'fw'),
@@ -585,7 +585,7 @@ $options = array(
 				'label' => __('Addable Popup', 'fw'),
 				'type' => 'addable-popup',
 				'desc'  => __('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'fw'),
-				'template' => 'Title color-picker value : {{=demo_color_picker}}',
+				'template' => 'Title color-picker value : {{- demo_color_picker }}',
 				'popup-options' => array(
 					'demo_multi_upload_images' => array(
 						'label' => __('Multi Upload (images only)', 'fw'),
@@ -657,7 +657,7 @@ $options = array(
 				),
 			),
 		),
-		'template' => '{{=demo_text}}',
+		'template' => '{{- demo_text }}',
 		'limit' => 3,
 	),
 	'demo_group' => array(

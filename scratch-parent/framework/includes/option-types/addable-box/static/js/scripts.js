@@ -159,7 +159,7 @@ jQuery(document).ready(function ($) {
 
 				$box.removeClass(titleUpdater.pendingClass);
 
-				$box.find('> h3.hndle span:not([class])').first().text(
+				$box.find('> h3.hndle span:not([class])').first().html(
 					this.template(data.template, JSON.parse(values))
 				);
 
@@ -192,7 +192,7 @@ jQuery(document).ready(function ($) {
 					template = '[Ajax Error] '+ response.data.message
 				}
 
-				$box.find('> h3.hndle span:not([class])').first().text(template);
+				$box.find('> h3.hndle span:not([class])').first().html(template);
 
 				delete data;
 
