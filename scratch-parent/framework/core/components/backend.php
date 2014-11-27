@@ -721,6 +721,44 @@ final class _FW_Component_Backend
 
 		$data['submit']['html'] = '<button class="button-primary button-large">'. __('Save', 'fw') .'</button>';
 
+		{
+			$focus_tab_input_name = '_focus_tab';
+			$focus_tab_id = trim( FW_Request::POST($focus_tab_input_name, FW_Request::GET($focus_tab_input_name, '')) );
+
+			echo fw_html_tag('input', array(
+				'type'  => 'hidden',
+				'name'  => $focus_tab_input_name,
+				'value' => $focus_tab_id,
+			));
+
+			echo
+				'<script type="text/javascript">' .
+				'jQuery(function($){' .
+				'  fwEvents.one("fw:options:init", function(){' .
+				'    var $form = $("#fw_form_fw_settings");'.
+				'    var inputName = "'. esc_js($focus_tab_input_name) .'";'.
+				'    $form.on("click", ".fw-options-tabs-wrapper > .fw-options-tabs-list > ul > li > a", function(){'.
+				'      var tabId = $(this).attr("href").replace(/^\\#/, "");'.
+				'      $form.find("input[name=\'"+ inputName +"\']").val(tabId);'.
+				'    });'.
+				'    '.
+				'    /* "wait" after tabs initialized */' .
+				'    setTimeout(function(){' .
+				'      var focusTabId = $.trim("'. esc_js($focus_tab_id) .'");'.
+				'      if (!focusTabId.length) return;'.
+				'      var $tabLink = $(".fw-options-tabs-wrapper > .fw-options-tabs-list > ul > li > a[href=\'#"+ focusTabId +"\']");'.
+				'      while ($tabLink.length) {'.
+				'        $tabLink.trigger("click");'.
+				'        $tabLink = $tabLink'.
+				'          .closest(".fw-options-tabs-wrapper").parent().closest(".fw-options-tabs-wrapper")'.
+				'          .find("> .fw-options-tabs-list > ul > li > a[href=\'#"+ $tabLink.closest(".fw-options-tab").attr("id") +"\']");'.
+				'      }'.
+				'    }, 200);' .
+				'  });' .
+				'});' .
+				'</script>';
+		}
+
 		return $data;
 	}
 
@@ -747,7 +785,20 @@ final class _FW_Component_Backend
 
 		FW_Flash_Messages::add('fw_settings_form_saved', __('Options successfully saved', 'fw'), 'success');
 
-		$data['redirect'] = fw_current_url();
+		$redirect_url = fw_current_url();
+
+		{
+			$focus_tab_input_name = '_focus_tab';
+			$focus_tab_id         = trim( FW_Request::POST( $focus_tab_input_name ) );
+
+			if (!empty($focus_tab_id)) {
+				$redirect_url = add_query_arg($focus_tab_input_name, $focus_tab_id,
+					remove_query_arg($focus_tab_input_name, $redirect_url)
+				);
+			}
+		}
+
+		$data['redirect'] = $redirect_url;
 
 		do_action('fw_settings_form_saved');
 

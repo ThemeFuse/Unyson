@@ -60,7 +60,9 @@ textarea.fw-option-type-textarea {
 
 
 .fw-backend-option-input-type-text .fw-option-help-in-input,
+.fw-backend-option-input-type-short-text .fw-option-help-in-input,
 .fw-backend-option-input-type-select .fw-option-help-in-input,
+.fw-backend-option-input-type-short-select .fw-option-help-in-input,
 .fw-backend-option-input-type-password .fw-option-help-in-input {
 	top: 4px !important;
 }
@@ -117,11 +119,6 @@ textarea.fw-option-type-textarea {
 	select.fw-option-type-select-multiple {
 		height: auto !important;
 	}
-}
-
-.fw-options-modal .media-frame input[type=radio]:checked:before {
-	width: 8px;
-	height: 8px;
 }
 
 /* end: modal fixes */

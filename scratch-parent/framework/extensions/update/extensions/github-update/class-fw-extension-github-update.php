@@ -7,12 +7,32 @@
  */
 class FW_Extension_Github_Update extends FW_Ext_Update_Service
 {
+	/**
+	 * Handle framework, theme and extensions that has this key in manifest
+	 * @var string
+	 */
 	private $manifest_key = 'github_update';
+
+	/**
+	 * Check if manifest key format is correct 'user/repo'
+	 * @var string
+	 */
 	private $manifest_key_regex = '/^([^\s\/]+)\/([^\s\/]+)$/';
 
-	private $transient_expiration = 3600;
+	/**
+	 * How long to cache server responses
+	 * @var int seconds
+	 */
+	private $transient_expiration = 86400;
 
 	private $download_timeout = 300;
+
+	/**
+	 * Used when there is internet connection problems
+	 * To prevent site being blocked on every refresh, this fake version will be cached in the transient
+	 * @var string
+	 */
+	private $fake_latest_version = '0.0.0';
 
 	/**
 	 * @internal
@@ -23,11 +43,32 @@ class FW_Extension_Github_Update extends FW_Ext_Update_Service
 
 	private function fetch_latest_version($user_slash_repo)
 	{
+		/**
+		 * If at least one request failed, do not do any other requests, to prevent site being blocked on every refresh.
+		 * This may happen on localhost when develop your theme and you have no internet connection.
+		 * Then this method will return a fake '0.0.0' version, it will be cached by the transient
+		 * and will not bother you until the transient will expire, then a new request will be made.
+		 * @var bool
+		 */
+		static $no_internet_connection = false;
+
+		if ($no_internet_connection) {
+			return $this->fake_latest_version;
+		}
+
 		$http = new WP_Http();
 
 		$response = $http->get('https://api.github.com/repos/'. $user_slash_repo .'/releases');
 
 		unset($http);
+
+		if (is_wp_error($response)) {
+			if ($response->get_error_code() === 'http_request_failed') {
+				$no_internet_connection = true;
+			}
+
+			return $response;
+		}
 
 		if (wp_remote_retrieve_response_code($response) !== 200) {
 			return new WP_Error('fw_ext_update_github_fetch_failed', __('Failed to contact Github.', 'fw'));
@@ -97,10 +138,15 @@ class FW_Extension_Github_Update extends FW_Ext_Update_Service
 		}
 
 		if (is_wp_error($latest_version)) {
-			return $latest_version;
+			if ($latest_version->get_error_code() === 'http_request_failed') {
+				// internet connection problems, use and cache fake version to prevent requests on every refresh
+				$cache = array_merge($cache, array($user_slash_repo => $this->fake_latest_version));
+			} else {
+				return $latest_version;
+			}
+		} else {
+			$cache = array_merge($cache, array($user_slash_repo => $latest_version));
 		}
-
-		$cache = array_merge($cache, array($user_slash_repo => $latest_version));
 
 		set_site_transient(
 			$transient_id,
@@ -127,10 +173,26 @@ class FW_Extension_Github_Update extends FW_Ext_Update_Service
 
 		unset($http);
 
-		if (wp_remote_retrieve_response_code($response) !== 200) {
+		$response_code = wp_remote_retrieve_response_code($response);
+
+		if ($response_code !== 200) {
+			if ($response_code === 403) {
+				$json_response = json_decode($response['body'], true);
+
+				if ($json_response) {
+					return new WP_Error(
+						'fw_ext_update_github_download_releases_failed',
+						__('Github error:', 'fw') .' '. $json_response['message']
+					);
+				}
+			}
+
 			return new WP_Error(
 				'fw_ext_update_github_download_releases_failed',
-				sprintf(__('Failed to access Github repository "%s" releases.', 'fw'), $user_slash_repo)
+				sprintf(
+					__( 'Failed to access Github repository "%s" releases. (Response code: %d)', 'fw' ),
+					$user_slash_repo, $response_code
+				)
 			);
 		}
 
