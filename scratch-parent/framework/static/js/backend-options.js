@@ -48,14 +48,9 @@ jQuery(document).ready(function($){
 		function hideBoxEmptyTitles($boxes) {
 			$boxes.find('> h3.hndle > span').each(function(){
 				var $this = $(this);
-				var name  = $.trim($this.text());
 
-				if (!name.length) {
+				if (!$.trim($this.html()).length) {
 					$this.closest('.postbox').addClass('fw-postbox-without-name');
-				} else if (name == '&nbsp;') {
-					// developer tried to set &nbsp; but htmlspecialchars made it as text
-					// make it as html
-					$this.html('&nbsp;');
 				}
 			});
 		}

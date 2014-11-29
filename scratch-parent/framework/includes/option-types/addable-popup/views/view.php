@@ -8,7 +8,7 @@
 $attr = $option['attr'];
 
 // must contain characters that will remain the same after htmlspecialchars()
-$increment_template  = '###-addable-popup-increment-###';
+$increment_placeholder = '###-addable-popup-increment-'. fw_rand_md5() .'-###';
 ?>
 <div <?php echo fw_attr_to_html($attr); ?>>
 
@@ -16,7 +16,7 @@ $increment_template  = '###-addable-popup-increment-###';
 		<div class="item default">
 			<div class="input-wrapper">
 				<?php echo fw()->backend->option_type('hidden')->render('', array('value' => '[]'), array(
-					'id_prefix' => $data['id_prefix'] . $id . '-' . $increment_template . '-',
+					'id_prefix' => $data['id_prefix'] . $id . '-' . $increment_placeholder . '-',
 					'name_prefix' => $data['name_prefix'] . '[' . $id . ']',
 				));?>
 			</div>
@@ -41,6 +41,13 @@ $increment_template  = '###-addable-popup-increment-###';
 		<?php endforeach; ?>
 	</div>
 	<!--<div class="dashicons dashicons-plus add-new-item"></div>-->
-	<button type="button" class="button add-new-item" onclick="return false;">Add</button>
+	<?php
+	echo fw_html_tag('button', array(
+		'type' => 'button',
+		'class' => 'button add-new-item',
+		'onclick' => 'return false;',
+		'data-increment-placeholder' => $increment_placeholder,
+	), __('Add', 'fw'));
+	?>
 </div>
 

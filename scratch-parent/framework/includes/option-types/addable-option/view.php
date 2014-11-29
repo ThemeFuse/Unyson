@@ -57,7 +57,7 @@ unset($attr['value']);
 		$values = array();
 
 		// must contain characters that will remain the same after htmlspecialchars()
-		$increment_template = '###-addable-option-increment-###';
+		$increment_placeholder = '###-addable-option-increment-'. fw_rand_md5() .'-###';
 
 		echo fw_htmlspecialchars(
 			'<tr class="fw-option-type-addable-option-option">
@@ -66,7 +66,7 @@ unset($attr['value']);
 				</td>
 				<td class="td-option fw-force-xs">'.
 					fw()->backend->option_type($option['option']['type'])->render(
-						$increment_template,
+						$increment_placeholder,
 						$option['option'],
 						array(
 							'id_prefix'   => $data['id_prefix'] . $id .'--option-',
@@ -80,9 +80,14 @@ unset($attr['value']);
 			</tr>'
 		);
 	?>">
-	<div>
-		<button type="button" class="button fw-option-type-addable-option-add" onclick="return false;" data-increment="<?php echo $i ?>"><?php
-			_e('Add', 'fw')
-		?></button>
+	<div><?php
+		echo fw_html_tag('button', array(
+			'type' => 'button',
+			'class' => 'button fw-option-type-addable-option-add',
+			'onclick' => 'return false;',
+			'data-increment' => $i,
+			'data-increment-placeholder' => $increment_placeholder,
+		), __('Add', 'fw'));
+	?>
 	</div>
 </div>

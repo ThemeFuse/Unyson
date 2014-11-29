@@ -50,7 +50,7 @@ jQuery(document).ready(function ($) {
 
 			var $newOption = $(
 				$option.find('.default-addable-option-template:first').attr('data-template')
-					.split('###-addable-option-increment-###').join(String(increment))
+					.split( $button.attr('data-increment-placeholder') ).join( String(increment) )
 			);
 
 			// animation

@@ -92,8 +92,8 @@ class FW_WP_Filesystem
 
 		$path = fw_fix_path($path);
 
-		$real_abspath = untrailingslashit(fw_fix_path(ABSPATH));
-		$wp_filesystem_abspath = untrailingslashit($wp_filesystem->abspath());
+		$real_abspath = fw_fix_path(ABSPATH);
+		$wp_filesystem_abspath = fw_fix_path($wp_filesystem->abspath());
 		$relative_path = preg_replace('/^'. preg_quote($real_abspath, '/') .'/', '', $path);
 
 		return $wp_filesystem_abspath . $relative_path;
@@ -114,8 +114,8 @@ class FW_WP_Filesystem
 
 		$wp_filesystem_path = fw_fix_path($wp_filesystem_path);
 
-		$real_abspath = untrailingslashit(fw_fix_path(ABSPATH));
-		$wp_filesystem_abspath = untrailingslashit($wp_filesystem->abspath());
+		$real_abspath = fw_fix_path(ABSPATH);
+		$wp_filesystem_abspath = fw_fix_path($wp_filesystem->abspath());
 		$relative_path = preg_replace('/^'. preg_quote($wp_filesystem_abspath, '/') .'/', '', $wp_filesystem_path);
 
 		return $real_abspath . $relative_path;

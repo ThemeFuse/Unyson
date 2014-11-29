@@ -40,7 +40,7 @@ unset($attr['value']);
 				<?php
 				echo fw()->backend->render_box(
 					$data['id_prefix'] . $id .'-'. $i .'-box',
-					'͏&nbsp;',
+					'&nbsp;',
 					ob_get_clean(),
 					array(
 						'html_after_title' => $controls_html,
@@ -69,17 +69,17 @@ unset($attr['value']);
 		$values = array();
 
 		// must contain characters that will remain the same after htmlspecialchars()
-		$increment_template = '###-addable-box-increment-###';
+		$increment_placeholder = '###-addable-box-increment-'. fw_rand_md5() .'-###';
 
 		echo fw_htmlspecialchars(
-			'<div class="fw-option-box" data-name-prefix="'. fw_htmlspecialchars($data['name_prefix'] .'['. $id .']['. $increment_template .']') .'">'.
+			'<div class="fw-option-box" data-name-prefix="'. fw_htmlspecialchars($data['name_prefix'] .'['. $id .']['. $increment_placeholder .']') .'">'.
 				fw()->backend->render_box(
-					$data['id_prefix'] . $id .'-'. $increment_template .'-box',
-					'͏&nbsp;',
+					$data['id_prefix'] . $id .'-'. $increment_placeholder .'-box',
+					'&nbsp;',
 					'<div class="fw-option-box-options fw-force-xs">'.
 						fw()->backend->render_options($box_options, $values, array(
-							'id_prefix'   => $data['id_prefix'] . $id .'-'. $increment_template .'-',
-							'name_prefix' => $data['name_prefix'] .'['. $id .']['. $increment_template .']',
+							'id_prefix'   => $data['id_prefix'] . $id .'-'. $increment_placeholder .'-',
+							'name_prefix' => $data['name_prefix'] .'['. $id .']['. $increment_placeholder .']',
 						)).
 					'</div>',
 					array(
@@ -96,7 +96,8 @@ unset($attr['value']);
 			'onclick' => 'return false;',
 			'class'   => 'button fw-option-boxes-add-button',
 			'data-increment' => ++$i,
-			'data-limit'     => intval($option['limit'])
+			'data-increment-placeholder' => $increment_placeholder,
+			'data-limit' => intval($option['limit']),
 		), __('Add', 'fw'));
 		?>
 	</div>

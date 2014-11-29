@@ -8,7 +8,7 @@
 	 * Convert to Unix style directory separators
 	 */
 	function fw_fix_path($path) {
-		return str_replace(array('//', '\\'), array('/', '/'), $path);
+		return untrailingslashit( str_replace(array('//', '\\'), array('/', '/'), $path) );
 	}
 
 	/** Child theme related functions */

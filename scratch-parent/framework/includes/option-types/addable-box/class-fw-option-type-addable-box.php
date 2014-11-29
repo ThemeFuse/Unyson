@@ -87,10 +87,10 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 			unset($collected);
 		}
 
-		$option['attr']['data-for-js'] = base64_encode(json_encode(array(
+		$option['attr']['data-for-js'] = json_encode(array(
 			'options'     => $this->transform_options($box_options),
 			'template'    => $option['template'],
-		)));
+		));
 
 		return fw_render_view(fw_get_framework_directory('/includes/option-types/'. $this->get_type() .'/view.php'), array(
 			'id'          => $id,

@@ -45,11 +45,11 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 	{
 		unset($option['attr']['name'], $option['attr']['value']);
 
-		$option['attr']['data-for-js'] = base64_encode(json_encode(array(
+		$option['attr']['data-for-js'] = json_encode(array(
 			'title' => empty($option['popup-title']) ? $option['label'] : $option['popup-title'],
 			'options' => $this->transform_options($option['popup-options']),
 			'template' => $option['template']
-		)));
+		));
 
 		$sortable_image = fw_get_framework_directory_uri('/static/img/sort-vertically.png');
 

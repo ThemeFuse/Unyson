@@ -11,7 +11,7 @@
 					return $defaultItem.clone().removeClass('default');
 				}
 			},
-			data = JSON.parse(atob(nodes.$optionWrapper.attr('data-for-js'))),
+			data = JSON.parse(nodes.$optionWrapper.attr('data-for-js')),
 			utils = {
 				modal: new fw.OptionsModal({
 					title: data.title,
@@ -59,7 +59,8 @@
 						$clonedInput = $clonedItem.find('.input-wrapper');
 
 					var $inputTemplate = $(
-						$.trim($clonedInput.html()).split('###-addable-popup-increment-###').join(utils.countItems())
+						$.trim($clonedInput.html())
+							.split( nodes.$addButton.attr('data-increment-placeholder') ).join(utils.countItems())
 					);
 					$inputTemplate.attr('value', JSON.stringify(values));
 

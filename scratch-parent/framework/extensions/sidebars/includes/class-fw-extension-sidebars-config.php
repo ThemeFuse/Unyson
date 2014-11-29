@@ -31,6 +31,7 @@ class _FW_Extension_Sidebars_Config
 	'front_page_slug'  => array(
 		'order_option'  => 1,
 		'name'                  => 'Pages with Front-Page template',
+		'check_priority' => 'last' // type string  'first' | 'last'
 		'conditional_tag'		=> array(
 			'callback'				=> 'is_page_template',
 			'params'                => array('page-templates/front-page.php')
@@ -82,23 +83,28 @@ class _FW_Extension_Sidebars_Config
 				'conditional_tags' => array(
 					'is_front_page'     => array(
 						'name'          => __('Home Page', 'fw'),
-						'order_option'  => 3
+						'order_option'  => 3,
+						'check_priority' => 'first'
 					),
 					'is_search'         => array(
 						'name'          => __('Search Page', 'fw'),
-						'order_option'  => 2
+						'order_option'  => 2,
+						'check_priority' => 'last'
 					),
 					'is_404'            => array(
 						'name'          => __('404 Page', 'fw'),
-						'order_option'  => 4
+						'order_option'  => 4,
+						'check_priority' => 'last'
 					),
 					'is_author'         => array(
 						'name'          => __('Author Page', 'fw'),
-						'order_option'  => 1
+						'order_option'  => 1,
+						'check_priority' => 'last'
 					),
 					'is_archive'        => array(
 						'name'          => __('Archive Page','fw'),
-						'order_option'  => 5
+						'order_option'  => 5,
+						'check_priority' => 'last'
 					)
 				)
 			)
@@ -205,7 +211,7 @@ class _FW_Extension_Sidebars_Config
 	 */
 	public function get_conditional_tags_labels($with_ordering = false)
 	{
-		$cts = fw_akg('select_options/conditional_tags', $this->config, array());
+		$cts = $this->get_conditional_tags();
 
 		if ($with_ordering) {
 			uasort($cts, array($this, 'conditional_tag_cmp'));
@@ -388,9 +394,18 @@ class _FW_Extension_Sidebars_Config
 		return (isset($this->config['sidebar_positions'][$position]) and is_array($this->config['sidebar_positions'][$position]));
 	}
 
-	public function get_conditional_tags()
+	public function get_conditional_tags($priority = null)
 	{
-		return fw_akg('select_options/conditional_tags', $this->config, array());
+		$conditional_tags = apply_filters('fw_ext_sidebars_post_types', fw_akg('select_options/conditional_tags', $this->config, array()) ) ;
+
+		if ($priority) {
+			foreach($conditional_tags as $key => $conditional_tag) {
+				if ($conditional_tag['check_priority'] != $priority) {
+					unset($conditional_tags[$key]);
+				}
+			}
+		}
+		return $conditional_tags;
 	}
 
 	/**

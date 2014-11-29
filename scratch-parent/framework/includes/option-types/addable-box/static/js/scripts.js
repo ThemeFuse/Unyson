@@ -138,9 +138,9 @@ jQuery(document).ready(function ($) {
 				return;
 			}
 
-			var data = JSON.parse(atob(
+			var data = JSON.parse(
 				$box.closest(optionTypeClass).attr('data-for-js')
-			));
+			);
 
 			data.template = $.trim(data.template);
 
@@ -221,8 +221,8 @@ jQuery(document).ready(function ($) {
 			var increment = parseInt($button.attr('data-increment'));
 
 			var $newBox = $(
-				$option.find('.default-box-template:first').attr('data-template')
-					.split('###-addable-box-increment-###').join(String(increment))
+				$option.find('> .default-box-template').attr('data-template')
+					.split( $button.attr('data-increment-placeholder') ).join( String(increment) )
 			);
 
 			$button.attr('data-increment', increment + 1);

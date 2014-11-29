@@ -13,12 +13,6 @@
 	overflow: hidden;
 	height: 2em;
 }
-.adaptive-switch,
-.adaptive-switch .switch-inner {
-	-webkit-border-radius: 1000px;
-	-moz-border-radius: 1000px;
-	border-radius: 1000px;
-}
 
 .adaptive-switch label.switch-label {
 	display: block;;
@@ -63,6 +57,7 @@
 	left: 0;
 	height: 100%;
 	width: 100%;
+
 }
 .adaptive-switch .switch-dot div {
 	width: 2em;
@@ -79,10 +74,6 @@
 	height: 2em;
 	width: 2em;
 	display: inline-block;
-
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	border-radius: 50%;
 }
 
 .adaptive-switch .switch-dot,
@@ -90,6 +81,19 @@
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+}
+
+.adaptive-switch,
+.adaptive-switch .switch-inner,
+.adaptive-switch .switch-dot {
+	-webkit-border-radius: 1000px;
+	-moz-border-radius: 1000px;
+	border-radius: 1000px;
+}
+.adaptive-switch .switch-dot div span {
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
 }
 
 .adaptive-switch ::-moz-selection {
