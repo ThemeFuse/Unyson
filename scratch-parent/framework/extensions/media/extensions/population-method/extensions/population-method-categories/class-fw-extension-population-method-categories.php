@@ -135,7 +135,7 @@ class FW_Extension_Population_Method_Categories extends FW_Extension implements 
 					'slider_type' => $slider_name,
 					'population_method' => $population_method,
 					'post_id' => $post_id,
-					'extra' => array(),
+					'extra' => isset($meta['custom-settings']) ? $meta['custom-settings'] : array(),
 				)
 			);
 
@@ -180,6 +180,7 @@ class FW_Extension_Population_Method_Categories extends FW_Extension implements 
 
 				array_push($collector['slides'], array(
 					'title' => get_the_title(),
+					'post_id' => get_the_id(),
 					'src' => wp_get_attachment_url(get_post_thumbnail_id(get_the_ID())),
 					'desc' => get_the_excerpt(),
 					'extra' => array()
