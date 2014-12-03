@@ -1,0 +1,23 @@
+.fw-option-type-addable-popup .item{
+	position: relative;
+	background-color: #fff;
+	min-height: 40px;
+	cursor: pointer;
+}
+
+.fw-option-type-addable-popup .item .content{
+	padding: 12px 30px;
+
+}
+
+.fw-option-type-addable-popup .item:not(.default):not(.disabled) + .item:not(.default):not(.disabled){
+	border-top: 1px dashed #E1E1E1;
+}
+
+.fw-option-type-addable-popup .items-wrapper{
+	border: 1px solid #e1e1e1;
+}
+
+.fw-option-type-addable-popup .item.disabled{
+	background-color: #f8f8f8;
+}

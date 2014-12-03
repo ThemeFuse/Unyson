@@ -1,0 +1,9 @@
+.fw-option-type-upload .media-modal {
+	z-index: 170001;
+}
+.fw-option-type-upload .media-modal-backdrop {
+	z-index: 170000;
+}
+.fw-option-type-upload .delete-attachment {
+	display: none;
+}

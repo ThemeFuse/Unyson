@@ -1,0 +1,20 @@
+.fw-backend-option-type-multi {
+	padding: 0 !important;
+}
+
+.fw-option-type-multi > .fw-backend-option {
+	border-bottom-width: 0;
+}
+
+
+/* show options separator borders */
+
+.fw-option-type-multi.fw-option-type-multi-show-borders > .fw-backend-option {
+	border-bottom-width: 1px;
+}
+
+.fw-option-type-multi.fw-option-type-multi-show-borders > .fw-backend-option:last-child {
+	border-bottom-width: 0;
+}
+
+/* end: show options separator borders */

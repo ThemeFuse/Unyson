@@ -1,0 +1,92 @@
+.fw-option-type-image-picker .ui-tooltip {
+	width: 100px;
+}
+
+.fw-option-type-image-picker ul.thumbnails.image_picker_selector {
+	overflow: auto;
+	list-style-image: none;
+	list-style-position: outside;
+	list-style-type: none;
+	padding: 0;
+	margin: 0 0 -5px 0;
+}
+
+.fw-option-type-image-picker ul.thumbnails.image_picker_selector li.group_title {
+	float: none;
+}
+
+.fw-option-type-image-picker ul.thumbnails.image_picker_selector li {
+	margin: 0 5px 5px 0;
+	float: left;
+}
+
+.fw-option-type-image-picker ul.thumbnails.image_picker_selector li:last-child {
+	margin-right: 0;
+}
+
+.fw-option-type-image-picker ul.thumbnails.image_picker_selector li:hover {
+	cursor: pointer;
+}
+
+.fw-option-type-image-picker ul.thumbnails.image_picker_selector li .thumbnail {
+	overflow: hidden;
+	-webkit-user-select: none;
+	border-radius: 2px;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
+.fw-option-type-image-picker ul.thumbnails.image_picker_selector li .thumbnail img {
+	-webkit-user-drag: none;
+}
+
+.fw-option-type-image-picker ul.thumbnails.image_picker_selector li .thumbnail.selected {
+	border: 3px solid #64bd1f;
+}
+
+.fw-option-type-image-picker ul.thumbnails.image_picker_selector li .thumbnail {
+	line-height: 0;
+	border: 3px solid transparent;
+}
+
+.fw-option-type-image-picker ul.thumbnails.image_picker_selector li .thumbnail.selected:hover {
+	border: 3px solid #64bd1f;
+}
+
+.fw-option-type-image-picker ul.thumbnails.image_picker_selector li .thumbnail:hover {
+	border: 3px solid #dddddd;
+}
+
+.fw-option-type-image-picker li .thumbnail {
+	position: relative;
+	padding: 2px;
+}
+
+.fw-option-type-image-picker ul.thumbnails.image_picker_selector li .thumbnail.selected:after {
+	content: "\f147";
+	font-family: dashicons;
+	background-color: #64bd1f;
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	border-top-left-radius: 2px;
+	color: #fff;
+	line-height: normal;
+	font-size: 20px;
+	padding: 1px 0 0 1px;
+}
+
+.fw-option-type-image-picker .pre-loaded-images {
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+	position: absolute;
+}
+
+.fw-option-type-image-picker select{
+	display: none;
+}
+
+.qtip .qtip-content img.fw-option-type-image-picker-large-image {
+	display: block;
+}

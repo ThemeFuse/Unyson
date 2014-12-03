@@ -1,0 +1,180 @@
+.fw-extensions-list a {
+	text-decoration: none;
+}
+
+.fw-extensions-no-active {
+	margin: 75px 0;
+}
+
+.fw-extensions-no-active .fw-text-muted {
+	color: #9d9d9d;
+}
+
+.fw-extensions-no-active .fw-extensions-title-icon .dashicons {
+	color: #d3d3d3;
+	font-size: 46px;
+	width: auto;
+	height: auto;
+	line-height: 35px;
+}
+
+.fw-extensions-list .fw-extensions-list-item {
+	padding: 0 15px 15px 0;
+	vertical-align: top;
+	display: inline-block;
+	float: none;
+	margin: 0 -1px;
+}
+
+.fw-extensions-list .fw-extensions-list-item > .inner {
+	padding: 20px;
+	background-color: #ffffff;
+	border: 1px solid #dedede;
+	position: relative;
+}
+
+.fw-extensions-list .fw-extensions-list-item > .inner > p:last-child {
+	margin-bottom: 0;
+}
+
+.fw-extensions-list .fw-extensions-list-item img.fw-extensions-list-item-thumbnail {
+	display: block;
+}
+
+.fw-extensions-list .fw-extensions-list-item .fw-extensions-list-item-title {
+	margin-top: 0;
+}
+
+.fw-extensions-list .fw-extensions-list-item .fw-extensions-list-item-details p:last-child,
+.fw-extensions-list .fw-extensions-list-item .fw-extensions-list-item-title:last-child {
+	margin-bottom: 0;
+}
+
+.fw-extensions-list .fw-extensions-list-item .fw-extensions-list-item-details {
+	padding-right: 5px;
+}
+
+@media (max-width: 782px) {
+	.fw-extensions-list .fw-extensions-list-item {
+		padding-right: 0;
+	}
+
+	.fw-extensions-list .fw-extensions-list-item table,
+	.fw-extensions-list .fw-extensions-list-item table tbody,
+	.fw-extensions-list .fw-extensions-list-item table tr,
+	.fw-extensions-list .fw-extensions-list-item table td {
+		display: block;
+	}
+
+	.fw-extensions-list .fw-extensions-list-item table tr:before,
+	.fw-extensions-list .fw-extensions-list-item table tr:after {
+		display: table;
+		content: " ";
+	}
+
+	.fw-extensions-list .fw-extensions-list-item table tr:after {
+		clear: both;
+	}
+
+	.fw-extensions-list .fw-extensions-list-item td {
+		float: left;
+		clear: both;
+		width: 100%;
+		padding-bottom: 20px;
+
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+
+	.fw-extensions-list .fw-extensions-list-item td:last-child {
+		padding-bottom: 0;
+	}
+
+	.fw-extensions-list .fw-extensions-list-item .fw-text-center {
+		text-align: left;
+	}
+
+	body.rtl .fw-extensions-list .fw-extensions-list-item .fw-text-center {
+		text-align: right;
+	}
+}
+
+
+@media (min-width: 783px) {
+	hr.fw-extensions-lists-separator {
+		margin: 22px 0 30px;
+		margin-right: 15px; /* same as .fw-extensions-list .fw-extensions-list-item padding-right */
+	}
+}
+
+
+/* disabled style */
+
+.fw-extensions-list .fw-extensions-list-item .fw-extension-disabled {
+	display: none;
+	background: rgba(255, 255, 255, 0.5) url("img/disabled-bg.png");
+	border: 1px solid #ffffff;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.fw-extensions-list .fw-extensions-list-item.disabled .fw-extension-disabled {
+	display: block;
+}
+
+.fw-extensions-list .fw-extensions-list-item .fw-extension-disabled .fw-extension-disabled-panel {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background: #ffffff;
+	padding: 20px;
+	line-height: 28px;
+}
+
+@media (max-width: 782px) {
+	.fw-extensions-list .fw-extensions-list-item.disabled > .inner {
+		min-height: 320px;
+	}
+}
+
+/* end: disabled style */
+
+
+/* tip content */
+
+.fw-extension-tip-content {
+	padding: 15px;
+	max-width: 380px;
+}
+
+.fw-extension-tip-content ul.fw-extension-requirements {
+	margin: 0;
+}
+
+.fw-extension-tip-content ul.fw-extension-requirements li:last-child {
+	margin-bottom: 0;
+}
+
+/* end: tip content */
+
+
+/* form ajax loading */
+
+.fw-extensions-list .fw-extensions-list-item .ajax-form-loading {
+	display: inline-block;
+	margin: -2px 0;
+	padding-left: 7px;
+}
+
+.fw-extensions-list .fw-extensions-list-item .ajax-form-loading img {
+	vertical-align: middle;
+	display: inline-block;
+	margin-top: -2px;
+}
+
+/* end: form ajax loading */

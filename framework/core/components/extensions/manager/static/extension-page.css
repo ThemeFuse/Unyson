@@ -1,0 +1,23 @@
+#fw-extension-page .fw-extension-page-title {
+	padding-right: 0;
+}
+
+#fw-extension-page .fw-extension-page-title .button,
+#fw-extension-page .fw-extension-page-title .button-primary,
+#fw-extension-page .fw-extension-page-title .button-primary:active {
+	vertical-align: middle;
+}
+
+#fw-extension-page .fw-flash-message + br {
+	display: none;
+}
+
+
+#fw-extension-docs.fw-postbox > .insider {
+	margin-top: 0 !important;
+}
+
+#fw-extension-docs hr {
+	margin-left: -27px;
+	margin-right: -27px;
+}

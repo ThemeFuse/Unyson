@@ -1,0 +1,125 @@
+/*
+Styles for options type from option-types.php file, that has no own style.css
+*/
+
+
+/* placeholder */
+
+.fw-option ::-webkit-input-placeholder {
+	font-style: italic;
+	line-height: 1.4em;
+}
+
+.fw-option ::-moz-placeholder {
+	font-style: italic;
+	line-height: 1.4em;
+}
+
+.fw-option :-ms-input-placeholder {
+	font-style: italic;
+	line-height: 1.4em;
+}
+
+.fw-option :-moz-placeholder {
+	font-style: italic;
+	line-height: 1.4em;
+}
+
+.fw-option::-webkit-input-placeholder {
+	font-style: italic;
+	line-height: 1.4em;
+}
+
+.fw-option::-moz-placeholder {
+	font-style: italic;
+	line-height: 1.4em;
+}
+
+.fw-option:-ms-input-placeholder {
+	font-style: italic;
+	line-height: 1.4em;
+}
+
+.fw-option:-moz-placeholder {
+	font-style: italic;
+	line-height: 1.4em;
+}
+
+/* end: placeholder */
+
+
+textarea.fw-option-type-textarea {
+	max-width: 100%;
+	min-width: 100%;
+}
+
+
+.fw-backend-option-type-hidden {
+	display: none;
+}
+
+
+.fw-backend-option-input-type-text .fw-option-help-in-input,
+.fw-backend-option-input-type-short-text .fw-option-help-in-input,
+.fw-backend-option-input-type-select .fw-option-help-in-input,
+.fw-backend-option-input-type-short-select .fw-option-help-in-input,
+.fw-backend-option-input-type-password .fw-option-help-in-input {
+	top: 4px !important;
+}
+
+
+.fw-option-type-checkboxes > div,
+.fw-option-type-radio > div {
+	margin-bottom: 6px;
+}
+
+
+.fw-option-width-short {
+	width: 100px !important;
+}
+
+
+/* modal fixes */
+
+.fw-options-modal .media-frame input[type=email],
+.fw-options-modal .media-frame input[type=number],
+.fw-options-modal .media-frame input[type=password],
+.fw-options-modal .media-frame input[type=search],
+.fw-options-modal .media-frame input[type=text],
+.fw-options-modal .media-frame input[type=url],
+.fw-options-modal .media-frame select,
+.fw-options-modal .media-frame textarea {
+	font-size: 14px;
+}
+
+.fw-options-modal .media-frame select {
+	line-height: 28px;
+	height: 28px;
+	padding: 2px;
+	margin: 1px;
+}
+
+.fw-options-modal .media-frame select[multiple] {
+	height: auto;
+}
+
+.fw-options-modal .media-frame input,
+.fw-options-modal .media-frame textarea {
+	padding: 3px 5px;
+	line-height: 15px;
+}
+
+
+@media (max-width: 782px) {
+	.fw-option-type-checkboxes label,
+	.fw-option-type-radio label {
+		vertical-align: middle;
+		line-height: 2.2em;
+	}
+
+	select.fw-option-type-select-multiple {
+		height: auto !important;
+	}
+}
+
+/* end: modal fixes */

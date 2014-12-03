@@ -1,0 +1,30 @@
+.fw-option-maps-tab.second {
+	display: none;
+}
+
+@media (min-width: 783px) {
+	.fw-option-maps-tab.second .inner {
+		padding-right: 10px;
+	}
+
+	.fw-force-xs .fw-option-maps-tab.second .inner {
+		padding-right: 0;
+	}
+}
+
+.fw-option-type-map .map-googlemap {
+	height: 218px;
+}
+
+.fw-option-type-map .fw-option-map-inputs {
+	margin-bottom: 10px;
+}
+
+.fw-option-maps-toggle {
+	font-size: 12px;
+	text-decoration: none;
+}
+
+.pac-container {
+	z-index: 160005;
+}

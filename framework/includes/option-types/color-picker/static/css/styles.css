@@ -1,0 +1,24 @@
+input.fw-option-type-color-picker {
+	width: 70px !important;
+}
+
+@media (max-width: 782px) {
+	input.fw-option-type-color-picker {
+		width: 100px !important;
+	}
+}
+
+input.fw-option-type-color-picker.iris-error {
+	background-color: #ffebe8;
+	border-color: #c00;
+	color: #000;
+}
+
+.fw-inner .iris-picker.iris-border {
+	z-index: 999;
+	position: absolute;
+}
+
+.fw-backend-option-input-type-color-picker .fw-option-help-in-input {
+	top: 4px !important;
+}

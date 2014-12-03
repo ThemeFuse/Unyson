@@ -1,0 +1,262 @@
+.fw-backend-option-input-type-typography .fw-option-help-in-input {
+	top: 4px !important;
+}
+
+@media (max-width: 782px) {
+	.fw-option-type-typography .fw-option-typography-option {
+		padding-top: 5px;
+	}
+
+	.fw-option-type-typography .fw-option-typography-option:first-child {
+		padding-top: 0;
+	}
+}
+
+@media (min-width: 783px) {
+	.fw-option-type-typography .fw-option-typography-option {
+		padding-right: 5px;
+	}
+	body.rtl .fw-option-type-typography .fw-option-typography-option {
+		padding-right: 0;
+		padding-left: 5px;
+	}
+
+	.fw-option-type-typography .fw-option-typography-option:last-child,
+	.fw-force-xs .fw-option-type-typography .fw-option-typography-option {
+		padding-right: 0;
+	}
+	body.rtl .fw-option-type-typography .fw-option-typography-option:last-child,
+	body.rtl .fw-force-xs .fw-option-type-typography .fw-option-typography-option {
+		padding-left: 0;
+	}
+
+	.fw-force-xs .fw-option-type-typography .fw-option-typography-option {
+		padding-top: 5px;
+	}
+}
+
+.fw-option-type-typography .fw-option-typography-option input,
+.fw-option-type-typography .fw-option-typography-option select {
+	display: inline-block;
+	margin: 0;
+	width: 100%;
+}
+
+
+/* Color */
+
+@media (min-width: 783px) {
+	.fw-option-type-typography .fw-option-typography-option-color input {
+		height: 28px;
+	}
+}
+
+
+/* Size */
+
+.fw-option-typography-option-size-input {
+	width: 62px;
+}
+
+
+/* Style */
+
+select.fw-option-typography-option-style-input {
+	width: 98px;
+}
+
+
+/* Family */
+
+.fw-option-type-typography .fw-option-typography-option-family-input {
+	background: #fff;
+}
+
+.fw-option-type-typography .fw-option-typography-option-family-input .selectize-input {
+	height: 32px;
+}
+
+.fw-option-type-typography .fw-option-typography-option-family-input .selectize-input.dropdown-active::before {
+	background: none;
+	height: 0;
+}
+
+.fw-option-type-typography .fw-option-typography-option-family .selectize-control.single .selectize-input:after {
+	right: 8px;
+	margin-top: -2px;
+	border-width: 6px 3px 0 3px;
+	border-color: #000000 transparent transparent transparent;
+}
+body.rtl .fw-option-type-typography .fw-option-typography-option-family .selectize-control.single .selectize-input:after {
+	right: auto;
+	left: 8px;
+}
+
+@media (max-width: 782px) {
+	.fw-option-type-typography .fw-option-typography-option-family .selectize-control.single .selectize-input:after {
+		right: 6px;
+	}
+
+	.fw-option-typography-option.fw-option-typography-option-family,
+	.fw-option-type-typography .fw-option-typography-option-family-input {
+		width: 100%;
+		margin-right: 0;
+	}
+}
+
+.fw-option-type-typography .fw-option-typography-option-family-input:focus,
+.fw-option-type-typography .fw-option-typography-option-family-input.single .selectize-input.focus {
+	/*border: 1px solid #5b9dd9;
+
+	-webkit-box-shadow: 0 0 2px rgba(30,140,190,.8);
+	box-shadow: 0 0 2px rgba(30,140,190,.8);*/
+
+	-webkit-transition: .05s border-color ease-in-out;
+	transition: .05s border-color ease-in-out;
+}
+
+.fw-option-type-typography .selectize-dropdown.fw-option-typography-option-family-input {
+	width: 335px !important;
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, .07);
+	border: 1px solid #ddd;
+}
+
+.fw-option-type-typography .selectize-dropdown .selectize-dropdown-content div {
+	height: 30px;
+	background-color: #fff;
+	cursor: pointer;
+	border-bottom: 1px solid #ddd;
+	line-height: 30px;
+}
+
+.fw-option-type-typography .selectize-dropdown .selectize-dropdown-content div div.preview {
+	display: block;
+	font-size: 15px;
+	padding-left: 10px;
+	height: 30px;
+	width: 125px;
+	float: right;
+	border: none;
+	background: transparent url(../images/google-fonts.png);
+}
+
+.fw-option-type-typography .selectize-dropdown .selectize-dropdown-content div.option span {
+	border: none;
+	background: none;
+	color: red;
+}
+
+.fw-option-type-typography .selectize-dropdown .selectize-dropdown-content div:hover,
+.fw-option-type-typography .selectize-dropdown .selectize-dropdown-content div div.preview:hover {
+	background-color: #f0f0f0;
+}
+
+.fw-option-type-typography .selectize-dropdown.single {
+	border: 1px solid #ddd;
+}
+
+.fw-option-type-typography .selectize-control.single .selectize-input {
+	background: none;
+	margin: 0;
+	vertical-align: middle;
+	border: 1px solid #dddddd;
+	color: #333333;
+	height: 28px;
+	line-height: 27px;
+	font-size: 14px;
+	padding: 0 6px;
+
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, .07);
+	-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .07);
+	-moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .07);
+
+	border-radius: 0;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+}
+
+@media (max-width: 782px) {
+	.fw-option-type-typography .selectize-dropdown.fw-option-typography-option-family-input {
+		width: 100%!important;
+	}
+
+	.fw-option-type-typography .selectize-dropdown .selectize-dropdown-content div div.preview {
+		width: 165px;
+	}
+
+	.fw-option-type-typography .selectize-control.single .selectize-input {
+		height: 36px;
+		font-size: 16px;
+		line-height: 34px;
+	}
+
+	#edittag .fw-option-type-typography .selectize-control.single .selectize-input {
+		padding: 0 14px;
+	}
+}
+
+.fw-option-type-typography div.selectize-input.items.full.has-options.has-items {
+	background: none;
+}
+
+.fw-option-type-typography .selectize-dropdown .selectize-dropdown-content {
+	border: 1px solid #ddd;
+}
+
+.fw-option-type-typography .selectize-control .selectize-dropdown {
+	border: none;
+	top: 33px !important;
+}
+
+@media (max-width: 782px) {
+	.fw-option-type-typography .selectize-control .selectize-dropdown {
+		top: 41px !important;
+	}
+}
+
+
+.fw-force-xs .fw-option-type-typography .fw-option-typography-option-style,
+.fw-force-xs .fw-option-type-typography .fw-option-typography-option-color,
+.fw-force-xs .fw-option-type-typography .fw-option-typography-option-color .fw-option-type-color-picker {
+	width: 100% !important;
+}
+
+@media (max-width: 782px) {
+	.fw-option-type-typography .fw-option-typography-option-style,
+	.fw-option-type-typography .fw-option-typography-option-color,
+	.fw-option-type-typography .fw-option-typography-option-color .fw-option-type-color-picker {
+		width: 100% !important;
+	}
+}
+
+
+/*
+Fix: for color picker width too small or too big
+Solution: Set color fixed size, and font-style to calculate its width
+
+font-style: fw-col-sm-3 = 25%
+color:      fw-col-sm-2 = 16.66666667%
+
+25% + 16.66666667% = 41.66666667%
+*/
+
+@media (min-width: 783px) {
+	.fw-option-type-typography .fw-option-typography-option-color {
+		width: 70px; /* should be same width as option type color-picker */
+	}
+
+	.fw-option-type-typography .fw-option-typography-option-style {
+		width: calc(41.66666667% - 70px); /* minus width of option type color-picker */
+	}
+}
+
+
+/* Disable Selectize search */
+
+.fw-option-type-typography .fw-option-typography-option .selectize-control.single .selectize-input input {
+	display: none;
+}
+
+.fw-option-type-typography .fw-option-typography-option .selectize-control.single .selectize-input.input-active {
+	 cursor: default;
+}

@@ -1,0 +1,46 @@
+.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox {
+	min-width: 100%;
+}
+
+.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox > h3.hndle {
+	cursor: move !important; /* to rewrite .fw-postbox h3.hndle */
+	word-break: break-all; /* if box text is too long, do not move controls outside box */
+}
+
+#wpbody-content .fw-option-type-addable-box .metabox-holder {
+	padding: 0;
+	margin: 0;
+}
+
+.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box {
+	margin-bottom: 20px;
+}
+
+.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox > h3.hndle span:after {
+	content: '\00a0'; /* &nbsp; - when title is empty, box has too small (broken) height */
+}
+
+.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox > h3.hndle img {
+	vertical-align: middle;
+}
+
+
+/* Controls */
+
+.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box h3.hndle .fw-html-after-title {
+	float: right;
+	position: relative; /* fix .handlediv::before padding that goes on top of the content from .fw-html-after-title */
+	padding-right: 3px;
+}
+
+.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box h3.hndle .fw-option-box-controls .fw-option-box-control {
+	text-decoration: none;
+}
+
+.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box h3.hndle .fw-option-box-controls .fw-option-box-control-wrapper {
+	color: #cccccc;
+}
+
+/* end: Controls */
+
+

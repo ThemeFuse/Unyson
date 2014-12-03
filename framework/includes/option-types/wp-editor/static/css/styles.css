@@ -1,0 +1,4 @@
+/** Fix textarea border color on edit tag page */
+#edittag .fw-option-type-wp-editor textarea.wp-editor-area {
+	border: 0;
+}
