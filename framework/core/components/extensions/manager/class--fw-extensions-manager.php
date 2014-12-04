@@ -900,6 +900,7 @@ final class _FW_Extensions_Manager
 				fw_render_view(dirname(__FILE__) .'/views/install-form.php', array(
 					'extension_titles' => $install_data['all'],
 					'list_page_link' => $this->get_link(),
+					'supported' => $supported
 				), false);
 
 				echo '</form>';
