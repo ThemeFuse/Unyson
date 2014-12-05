@@ -56,31 +56,48 @@ foreach ($lists['active'] as $name => &$data) {
 	<div class="fw-row fw-extensions-list">
 		<?php $something_displayed = false; ?>
 		<?php
-		foreach ($lists['supported'] as $name => &$data) {
-			if (isset($displayed[$name])) {
-				continue;
-			} elseif (isset($lists['installed'][$name])) {
-				if (true !== fw_akg('display', $lists['installed'][$name]['manifest'], $display_default_value)) {
+		{
+			$theme_extensions = array();
+
+			foreach ($lists['disabled'] as $name => &$data) {
+				if ($data['source'] == 'framework') {
 					continue;
 				}
-			} elseif (!isset($lists['available'][$name])) {
-				/*trigger_error(
-					sprintf(__('Supported extension "%s" is not available.', 'fw'), $name)
-				);*/
-				continue;
+
+				$theme_extensions[$name] = array(
+					'name' => fw_akg('name', $data['manifest'], fw_id_to_title($name)),
+					'description' => fw_akg('description', $data['manifest'], '')
+				);
 			}
 
-			fw_render_view($extension_view_path, array(
-				'name' => $name,
-				'title' => $data['name'],
-				'description' => $data['description'],
-				'link' => $link,
-				'lists' => &$lists,
-				'nonces' => $nonces,
-				'default_thumbnail' => $default_thumbnail,
-			), false);
+			foreach (($theme_extensions + $lists['supported']) as $name => $data) {
+				if (isset($displayed[$name])) {
+					continue;
+				} elseif (isset($lists['installed'][$name])) {
+					if (true !== fw_akg('display', $lists['installed'][$name]['manifest'], $display_default_value)) {
+						continue;
+					}
+				} elseif (!isset($lists['available'][$name])) {
+					/*trigger_error(
+						sprintf(__('Supported extension "%s" is not available.', 'fw'), $name)
+					);*/
+					continue;
+				}
 
-			$displayed[$name] = $something_displayed = true;
+				fw_render_view($extension_view_path, array(
+					'name' => $name,
+					'title' => $data['name'],
+					'description' => $data['description'],
+					'link' => $link,
+					'lists' => &$lists,
+					'nonces' => $nonces,
+					'default_thumbnail' => $default_thumbnail,
+				), false);
+
+				$displayed[$name] = $something_displayed = true;
+			}
+
+			unset($theme_extensions);
 		}
 
 		foreach ($lists['disabled'] as $name => &$data) {

@@ -328,8 +328,8 @@ final class _FW_Extensions_Manager
 
 			$extensions = array();
 
-			foreach ($search_paths as $path) {
-				$this->read_extensions($path, $extensions);
+			foreach ($search_paths as $source => $path) {
+				$this->read_extensions($source, $path, $extensions);
 			}
 
 			FW_Cache::set($cache_key, $extensions);
@@ -340,11 +340,12 @@ final class _FW_Extensions_Manager
 
 	/**
 	 * used by $this->get_installed_extensions()
+	 * @param string $source
 	 * @param string $path
 	 * @param array $list
 	 * @param null|string $parent_extension_name
 	 */
-	private function read_extensions($path, &$list, $parent_extension_name = null)
+	private function read_extensions($source, $path, &$list, $parent_extension_name = null)
 	{
 		$paths = glob($path .'/*', GLOB_ONLYDIR | GLOB_NOSORT);
 
@@ -363,6 +364,7 @@ final class _FW_Extensions_Manager
 				));
 
 				$list[$extension_name] = array(
+					'source'   => $source,
 					'path'     => $extension_path,
 					'manifest' => $vars['manifest'],
 					'children' => array(),
@@ -379,6 +381,7 @@ final class _FW_Extensions_Manager
 			}
 
 			$this->read_extensions(
+				$source,
 				$extension_path .'/extensions',
 				$list,
 				$extension_name

@@ -77,7 +77,16 @@ if (isset($lists['available'][$name])) {
 						unset( $_links );
 					}
 					?>
-					<?php if ( isset($lists['supported'][$name]) && (($installed_data && !$is_active) || $available_data) ): ?>
+					<?php
+					if (
+						!$is_active // do not show the "Compatible" text is extension is already active
+						&&
+						(
+							isset($lists['supported'][$name]) // is listed in the supported extensions list in theme manifest
+							||
+							($installed_data && $installed_data['source'] !== 'framework') // is located in the theme
+						)
+					): ?>
 						<p><em><strong><span class="dashicons dashicons-yes"></span> <?php _e('Compatible', 'fw') ?></strong> <?php _e('with your current theme', 'fw') ?></em></p>
 					<?php endif; ?>
 				</td>
@@ -93,6 +102,14 @@ if (isset($lists['available'][$name])) {
 								<?php wp_nonce_field($nonces['activate']['action'], $nonces['activate']['name']); ?>
 								<input class="button" type="submit" value="<?php esc_attr_e('Activate', 'fw'); ?>"/>
 							</form>
+							<?php
+							/**
+							 * Do not show the "Delete extension" button if the extension is not in the available list.
+							 * If you delete such extension you will not be able to install it back.
+							 * Most often these will be extensions located in the theme.
+							 */
+							if ($available_data):
+							?>
 							<form action="<?php echo esc_attr($link) ?>&sub-page=delete&extension=<?php echo esc_attr($name) ?>"
 							      method="post"
 							      class="fw-extension-ajax-form"
@@ -102,6 +119,7 @@ if (isset($lists['available'][$name])) {
 									<a href="#" onclick="jQuery(this).closest('form').submit(); return false;" data-remove-extension="<?php echo esc_attr($name) ?>" ><?php _e('Remove', 'fw'); ?></a>
 								</p>
 							</form>
+							<?php endif; ?>
 						</div>
 					<?php elseif ($available_data): ?>
 						<form action="<?php echo esc_attr($link) ?>&sub-page=install&extension=<?php echo esc_attr($name) ?>" method="post" class="fw-extension-ajax-form">
