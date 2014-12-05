@@ -1,0 +1,4 @@
+/framework/extensions/*
+
+!/framework/extensions/blog/
+!/framework/extensions/update/
