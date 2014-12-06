@@ -736,10 +736,9 @@ final class _FW_Extensions_Manager
 						foreach ($parent_extensions as $parent_extension_name) {
 							$current_extension_path .= '/extensions/'. $parent_extension_name;
 
-							$activate_extensions[$parent_extension_name] = array();
-
 							if (isset($installed_extensions[$parent_extension_name])) {
 								// skip already installed extensions
+								$activate_extensions[$parent_extension_name] = array();
 								continue;
 							}
 
@@ -780,6 +779,8 @@ final class _FW_Extensions_Manager
 									$install_data['all'][$parent_extension_name]
 								)
 							);
+
+							$activate_extensions[$parent_extension_name] = array();
 
 							/**
 							 * Read again all extensions
