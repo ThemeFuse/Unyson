@@ -93,7 +93,7 @@ jQuery(function($){
 							window.location.reload();
 						} else {
 							if (true) {
-								var $lastMessage = $content.find('p:last-child');
+								var $lastMessage = $content.find('> p').last();
 
 								if ($lastMessage.find('a').length) {
 									// this is not message, these are link printed by WP_Upgrader_Skin::after()
