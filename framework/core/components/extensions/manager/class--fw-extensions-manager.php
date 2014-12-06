@@ -152,7 +152,7 @@ final class _FW_Extensions_Manager
 			wp_send_json_error();
 		}
 
-		if (FW_WP_Filesystem::has_direct_access()) {
+		if (FW_WP_Filesystem::has_direct_access(fw_get_framework_directory('/extensions'))) {
 			wp_send_json_success();
 		} else {
 			wp_send_json_error();
@@ -205,6 +205,7 @@ final class _FW_Extensions_Manager
 			return;
 		}
 
+		// a directory outside the plugin
 		$tmp_dir = FW_WP_Filesystem::real_path_to_filesystem_path(
 			fw_fix_path(WP_CONTENT_DIR) .'/tmp/fw-plugin-update-extensions-backup'
 		);
@@ -253,8 +254,9 @@ final class _FW_Extensions_Manager
 			return;
 		}
 
+		// a directory outside the plugin
 		$tmp_dir = FW_WP_Filesystem::real_path_to_filesystem_path(
-			fw_fix_path( WP_CONTENT_DIR ) . '/tmp/fw-plugin-update-extensions-backup'
+			fw_fix_path( WP_CONTENT_DIR ) .'/tmp/fw-plugin-update-extensions-backup'
 		);
 		$extensions_dir = FW_WP_Filesystem::real_path_to_filesystem_path(
 			fw_get_framework_directory( '/extensions' )
@@ -389,11 +391,9 @@ final class _FW_Extensions_Manager
 		}
 	}
 
-	private function get_tmp_dir()
+	private function get_tmp_dir($append = '')
 	{
-		return FW_WP_Filesystem::real_path_to_filesystem_path(
-			fw_fix_path(WP_CONTENT_DIR) .'/tmp/fw-extension-download'
-		);
+		return apply_filters('fw_tmp_dir', fw_fix_path(WP_CONTENT_DIR) .'/tmp') . $append;
 	}
 
 	/**
@@ -884,10 +884,12 @@ final class _FW_Extensions_Manager
 				/** @var WP_Filesystem_Base $wp_filesystem */
 				global $wp_filesystem;
 
-				if ($wp_filesystem->exists($this->get_tmp_dir())) {
-					if ( ! $wp_filesystem->rmdir( $this->get_tmp_dir(), true ) ) {
+				$wp_fs_tmp_dir = FW_WP_Filesystem::real_path_to_filesystem_path($this->get_tmp_dir());
+
+				if ($wp_filesystem->exists($wp_fs_tmp_dir)) {
+					if ( ! $wp_filesystem->rmdir( $wp_fs_tmp_dir, true ) ) {
 						$skin->error(
-							sprintf( __( 'Cannot remove temporary directory: %s', 'fw' ), $this->get_tmp_dir() )
+							sprintf( __( 'Cannot remove temporary directory: %s', 'fw' ), $wp_fs_tmp_dir )
 						);
 						break;
 					}
@@ -1592,7 +1594,7 @@ final class _FW_Extensions_Manager
 
 		// create temporary directory
 		{
-			$wp_fs_tmp_dir = $this->get_tmp_dir();
+			$wp_fs_tmp_dir = FW_WP_Filesystem::real_path_to_filesystem_path($this->get_tmp_dir());
 
 			if ($wp_filesystem->exists($wp_fs_tmp_dir)) {
 				// just in case it already exists, clear everything, it may contain old files

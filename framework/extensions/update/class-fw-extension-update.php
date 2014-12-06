@@ -62,7 +62,7 @@ class FW_Extension_Update extends FW_Extension
 	private function get_wp_fs_tmp_dir()
 	{
 		return FW_WP_Filesystem::real_path_to_filesystem_path(
-			fw_fix_path(WP_CONTENT_DIR) .'/tmp/fw-ext-update'
+			apply_filters('fw_tmp_dir', fw_fix_path(WP_CONTENT_DIR) .'/tmp') .'/fw-ext-update'
 		);
 	}
 
