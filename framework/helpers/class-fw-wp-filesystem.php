@@ -83,10 +83,10 @@ class FW_WP_Filesystem
 
 	/**
 	 * Convert real file path to WP Filesystem path
-	 * @param string $path
+	 * @param string $real_path
 	 * @return string
 	 */
-	final public static function real_path_to_filesystem_path($path) {
+	final public static function real_path_to_filesystem_path($real_path) {
 		/** @var WP_Filesystem_Base $wp_filesystem */
 		global $wp_filesystem;
 
@@ -94,11 +94,11 @@ class FW_WP_Filesystem
 			trigger_error('Filesystem is not available', E_USER_ERROR);
 		}
 
-		$path = fw_fix_path($path);
-
+		$real_path = fw_fix_path($real_path);
 		$real_abspath = fw_fix_path(ABSPATH);
 		$wp_filesystem_abspath = fw_fix_path($wp_filesystem->abspath());
-		$relative_path = preg_replace('/^'. preg_quote($real_abspath, '/') .'/', '', $path);
+
+		$relative_path = preg_replace('/^'. preg_quote($real_abspath, '/') .'/', '', $real_path);
 
 		return $wp_filesystem_abspath . $relative_path;
 	}
@@ -117,9 +117,9 @@ class FW_WP_Filesystem
 		}
 
 		$wp_filesystem_path = fw_fix_path($wp_filesystem_path);
-
-		$real_abspath = fw_fix_path(ABSPATH);
 		$wp_filesystem_abspath = fw_fix_path($wp_filesystem->abspath());
+		$real_abspath = fw_fix_path(ABSPATH);
+
 		$relative_path = preg_replace('/^'. preg_quote($wp_filesystem_abspath, '/') .'/', '', $wp_filesystem_path);
 
 		return $real_abspath . $relative_path;
@@ -127,9 +127,10 @@ class FW_WP_Filesystem
 
 	/**
 	 * Check if there is direct filesystem access, so we can make changes without asking the credentials via form
+	 * @param string|null $context
 	 * @return bool
 	 */
-	final public static function has_direct_access()
+	final public static function has_direct_access($context = null)
 	{
 		/** @var WP_Filesystem_Base $wp_filesystem */
 		global $wp_filesystem;
@@ -138,10 +139,10 @@ class FW_WP_Filesystem
 			return $wp_filesystem->method === 'direct';
 		}
 
-		if (get_filesystem_method() === 'direct') {
+		if (get_filesystem_method(array(), $context) === 'direct') {
 			ob_start();
 			{
-				$creds = request_filesystem_credentials(site_url() . '/wp-admin/', '', false, false, null);
+				$creds = request_filesystem_credentials(admin_url(), '', false, $context, null);
 			}
 			ob_end_clean();
 
@@ -178,6 +179,7 @@ class FW_WP_Filesystem
 					 * It's a unix style path staring with '/' -> ''
 					 * On windows it starts with 'C:/' -> 'C:'
 					 */
+					$path = '/';
 				} else {
 					trigger_error('Invalid path: '. $wp_filesystem_dir_path, E_USER_WARNING);
 					return false;
@@ -187,9 +189,9 @@ class FW_WP_Filesystem
 				$path = '';
 			}
 
-			$loop_counter++;
+			$path .= ($loop_counter === 1 ? '' : '/') . $dir_name;
 
-			$path .= '/' . $dir_name;
+			$loop_counter++;
 
 			if ($check_if_exists) {
 				if ($wp_filesystem->is_dir($path)) {
