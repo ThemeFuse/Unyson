@@ -211,6 +211,15 @@ function fw_print($value) {
 			line-height: 16px;
 			text-align: left;
 		}
+
+		div.fw_print_r_group {
+			background: #111;
+			margin: 10px 30px;
+			padding: 1px;
+		}
+		div.fw_print_r_group div.fw_print_r {
+			margin: 9px;
+		}
 		</style>';
 		echo str_replace(array('  ', "\n"), '', ob_get_clean());
 
@@ -222,9 +231,11 @@ function fw_print($value) {
 		echo fw_htmlspecialchars(FW_Dumper::dump($value));
 		echo '</pre></div>';
 	} else {
+		echo '<div class="fw_print_r_group">';
 		foreach (func_get_args() as $param) {
 			fw_print($param);
 		}
+		echo '</div>';
 	}
 }
 
