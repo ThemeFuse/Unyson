@@ -170,24 +170,26 @@ class FW_WP_Filesystem
 
 		$path = '';
 		$check_if_exists = true;
-		$firs_loop = true;
+		$loop_counter = 1;
 		foreach (explode('/', $wp_filesystem_dir_path) as $dir_name) {
 			if (empty($dir_name)) {
-				if ($firs_loop) {
+				if ($loop_counter === 1) {
 					/**
-					 * It's a unix style path staring with '/'
-					 * (On windows it starts with 'C:/')
+					 * It's a unix style path staring with '/' -> ''
+					 * On windows it starts with 'C:/' -> 'C:'
 					 */
-					$path = '/';
 				} else {
 					trigger_error('Invalid path: '. $wp_filesystem_dir_path, E_USER_WARNING);
 					return false;
 				}
+			} elseif ($loop_counter === 2 && $path === '/') {
+				// prevent multiple slash prefix '//var/www'
+				$path = '';
 			}
 
-			$path .= ($firs_loop ? '' : '/') . $dir_name;
+			$loop_counter++;
 
-			$firs_loop = false;
+			$path .= '/' . $dir_name;
 
 			if ($check_if_exists) {
 				if ($wp_filesystem->is_dir($path)) {
