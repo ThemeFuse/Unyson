@@ -29,14 +29,25 @@ class FW_Extension_Update extends FW_Extension
 	 */
 	protected function _init()
 	{
-		if (current_user_can('update_themes') || current_user_can('update_plugins')) {
-			$this->context = get_template_directory();
+		{
+			$has_access = (current_user_can('update_themes') || current_user_can('update_plugins'));
 
-			$this->add_actions();
-			$this->add_filters();
-		} else {
-			return false; // prevent child extensions activation
+			if ($has_access) {
+				if (is_multisite() && !is_network_admin()) {
+					// only network admin can change files that affects the entire network
+					$has_access = false;
+				}
+			}
+
+			if (!$has_access) {
+				return false; // prevent child extensions activation
+			}
 		}
+
+		$this->context = get_template_directory();
+
+		$this->add_actions();
+		$this->add_filters();
 	}
 
 	private function add_actions()
