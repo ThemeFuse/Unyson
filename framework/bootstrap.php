@@ -1,8 +1,7 @@
 <?php if (!defined('ABSPATH')) die('Forbidden');
 
 /**
- * Loads the framework
- * Include this file in theme/functions.php
+ * Load the framework
  */
 
 if (defined('FW')) {

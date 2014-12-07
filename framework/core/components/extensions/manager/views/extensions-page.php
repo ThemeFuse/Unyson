@@ -5,6 +5,7 @@
  * @var array $nonces
  * @var mixed $display_default_value
  * @var string $default_thumbnail
+ * @var bool $can_install
  */
 
 $dir = dirname(__FILE__);
@@ -42,6 +43,7 @@ foreach ($lists['active'] as $name => &$data) {
 				'lists' => &$lists,
 				'nonces' => $nonces,
 				'default_thumbnail' => $default_thumbnail,
+				'can_install' => $can_install,
 			), false);
 
 			$displayed[$name] = true;
@@ -77,11 +79,15 @@ foreach ($lists['active'] as $name => &$data) {
 					if (true !== fw_akg('display', $lists['installed'][$name]['manifest'], $display_default_value)) {
 						continue;
 					}
-				} elseif (!isset($lists['available'][$name])) {
-					/*trigger_error(
-						sprintf(__('Supported extension "%s" is not available.', 'fw'), $name)
-					);*/
-					continue;
+				} else {
+					if (isset($lists['available'][$name])) {
+						if (!$can_install) {
+							continue;
+						}
+					} else {
+						//trigger_error(sprintf(__('Supported extension "%s" is not available.', 'fw'), $name));
+						continue;
+					}
 				}
 
 				fw_render_view($extension_view_path, array(
@@ -92,6 +98,7 @@ foreach ($lists['active'] as $name => &$data) {
 					'lists' => &$lists,
 					'nonces' => $nonces,
 					'default_thumbnail' => $default_thumbnail,
+					'can_install' => $can_install,
 				), false);
 
 				$displayed[$name] = $something_displayed = true;
@@ -115,40 +122,45 @@ foreach ($lists['active'] as $name => &$data) {
 				'lists' => &$lists,
 				'nonces' => $nonces,
 				'default_thumbnail' => $default_thumbnail,
+				'can_install' => $can_install,
 			), false);
 
 			$displayed[$name] = $something_displayed = true;
 		}
 
-		foreach ($lists['available'] as $name => &$data) {
-			if (isset($displayed[$name])) {
-				continue;
-			} elseif (isset($lists['installed'][$name])) {
-				continue;
-			} elseif ($data['display'] !== true) {
-				continue;
-			}
-
-			/**
-			 * fixme: remove this in the future when this extensions will look good on any theme
-			 */
-			if (in_array($name, array('styling', 'megamenu'))) {
-				if (isset($lists['supported'][$name]) || (defined('WP_DEBUG') && WP_DEBUG)) { } else {
+		if ($can_install) {
+			foreach ( $lists['available'] as $name => &$data ) {
+				if ( isset( $displayed[ $name ] ) ) {
+					continue;
+				} elseif ( isset( $lists['installed'][ $name ] ) ) {
+					continue;
+				} elseif ( $data['display'] !== true ) {
 					continue;
 				}
+
+				/**
+				 * fixme: remove this in the future when this extensions will look good on any theme
+				 */
+				if ( in_array( $name, array( 'styling', 'megamenu' ) ) ) {
+					if ( isset( $lists['supported'][ $name ] ) || ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ) {
+					} else {
+						continue;
+					}
+				}
+
+				fw_render_view( $extension_view_path, array(
+					'name'              => $name,
+					'title'             => $data['name'],
+					'description'       => $data['description'],
+					'link'              => $link,
+					'lists'             => &$lists,
+					'nonces'            => $nonces,
+					'default_thumbnail' => $default_thumbnail,
+					'can_install'       => $can_install,
+				), false );
+
+				$something_displayed = true;
 			}
-
-			fw_render_view($extension_view_path, array(
-				'name' => $name,
-				'title' => $data['name'],
-				'description' => $data['description'],
-				'link' => $link,
-				'lists' => &$lists,
-				'nonces' => $nonces,
-				'default_thumbnail' => $default_thumbnail,
-			), false);
-
-			$something_displayed = true;
 		}
 		?>
 	</div>

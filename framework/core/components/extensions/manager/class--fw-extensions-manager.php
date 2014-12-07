@@ -31,37 +31,91 @@ final class _FW_Extensions_Manager
 			return;
 		}
 
-		if (!current_user_can($this->get_capability())) {
+		// In any case/permission, make sure to not miss the plugin update actions to prevent extensions delete
+		{
+			add_action('fw_plugin_pre_update', array($this, '_action_plugin_pre_update'));
+			add_action('fw_plugin_post_update', array($this, '_action_plugin_post_update'));
+		}
+
+		if (!$this->can_activate() && !$this->can_install()) {
 			return;
 		}
 
+		/** Actions */
 		{
 			add_action('fw_init', array($this, '_action_fw_init'));
 			add_action('admin_menu', array($this, '_action_admin_menu'));
+			add_action('network_admin_menu', array($this, '_action_admin_menu'));
 			add_action('admin_footer', array($this, '_action_admin_footer'));
-			add_action('fw_plugin_pre_update', array($this, '_action_plugin_pre_update'));
-			add_action('fw_plugin_post_update', array($this, '_action_plugin_post_update'));
-			add_action('wp_ajax_fw_extensions_check_direct_fs_access', array($this, '_action_ajax_check_direct_fs_access'));
 			add_action('admin_enqueue_scripts', array($this, '_action_enqueue_menu_icon_style'));
 
-			/**
-			 * as late as possible, but to be able to make redirects (content not started)
-			 */
-			add_action('current_screen', array($this, '_action_check_if_plugin_was_activated'), 100);
+			if ($this->can_install()) {
+				add_action('wp_ajax_fw_extensions_check_direct_fs_access', array($this, '_action_ajax_check_direct_fs_access'));
+
+				// as late as possible, but to be able to make redirects (content not started)
+				add_action('current_screen', array($this, '_action_check_if_plugin_was_activated'), 100);
+			}
 		}
 
+		/** Filters */
 		{
 			add_filter('fw_plugin_action_list', array($this, '_filter_plugin_action_list'));
 		}
 	}
 
 	/**
-	 * Capability that has access to the extensions page and all its functionality
-	 * @return string
+	 * If current user can:
+	 * - activate extension
+	 * - disable extensions
+	 * - save extension settings options
+	 * @return bool
 	 */
-	private function get_capability()
+	private function can_activate()
 	{
-		return 'update_plugins';
+		static $can_activate = null;
+
+		if ($can_activate === null) {
+			$can_activate = current_user_can('activate_plugins');
+
+			if ($can_activate) {
+				// also you can use this method to get the capability
+				$can_activate = 'activate_plugins';
+			}
+
+			if (!$can_activate) {
+				// make sure if can install, then also can activate. (can install) > (can activate)
+				$can_activate = $this->can_install();
+			}
+		}
+
+		return $can_activate;
+	}
+
+	/**
+	 * If current user can:
+	 * - install extensions
+	 * - delete extensions
+	 * @return bool
+	 */
+	private function can_install()
+	{
+		static $can_install = null;
+
+		if ($can_install === null) {
+			$can_install = current_user_can('install_plugins');
+
+			if (is_multisite() && !is_network_admin()) {
+				// only network admin can change files that affects the entire network
+				$can_install = false;
+			}
+
+			if ($can_install) {
+				// also you can use this method to get the capability
+				$can_install = 'install_plugins';
+			}
+		}
+
+		return $can_install;
 	}
 
 	private function get_page_slug()
@@ -148,7 +202,8 @@ final class _FW_Extensions_Manager
 	 */
 	public function _action_ajax_check_direct_fs_access()
 	{
-		if (!current_user_can($this->get_capability())) {
+		if (!$this->can_install()) {
+			// if can't install, no need to know if has access or not
 			wp_send_json_error();
 		}
 
@@ -164,14 +219,6 @@ final class _FW_Extensions_Manager
 	 */
 	public function _action_check_if_plugin_was_activated()
 	{
-		if (!is_admin()) {
-			return;
-		}
-
-		if (!current_user_can($this->get_capability())) {
-			return;
-		}
-
 		{
 			$option_name = '_fw_plugin_activated';
 
@@ -414,7 +461,7 @@ final class _FW_Extensions_Manager
 			return;
 		}
 
-		if (!current_user_can($this->get_capability())) {
+		if (!$this->can_activate()) {
 			return;
 		}
 
@@ -475,54 +522,55 @@ final class _FW_Extensions_Manager
 	 */
 	public function _action_admin_menu()
 	{
+		$capability = $this->can_activate();
+
+		if (!$capability) {
+			return;
+		}
+
+		$data = array(
+			'title'            => fw()->manifest->get_name(),
+			'capability'       => $capability,
+			'slug'             => $this->get_page_slug(),
+			'content_callback' => array($this, '_display_page'),
+		);
+
 		/**
-		 * Extensions page
+		 * Use this action if you what to add the extensions page in a custom place in menu
+		 * Usage example http://pastebin.com/2iWVRPAU
+		 */
+		do_action('fw_backend_add_custom_extensions_menu', $data);
+
+		/**
+		 * check if menu was added in the action above
 		 */
 		{
-			$data = array(
-				'title'            => fw()->manifest->get_name(),
-				'capability'       => $this->get_capability(),
-				'slug'             => $this->get_page_slug(),
-				'content_callback' => array($this, '_display_page'),
-			);
+			global $_registered_pages;
 
-			/**
-			 * Use this action if you what to add the extensions page in a custom place in menu
-			 * Usage example http://pastebin.com/2iWVRPAU
-			 */
-			do_action('fw_backend_add_custom_extensions_menu', $data);
+			$menu_exists = false;
 
-			/**
-			 * check if menu was added in the action above
-			 */
-			{
-				global $_registered_pages;
-
-				$menu_exists = false;
-
-				if (!empty($_registered_pages)) {
-					foreach ( $_registered_pages as $hookname => $b ) {
-						if ( strpos( $hookname, $data['slug'] ) !== false ) {
-							$menu_exists = true;
-							break;
-						}
+			if (!empty($_registered_pages)) {
+				foreach ( $_registered_pages as $hookname => $b ) {
+					if ( strpos( $hookname, $data['slug'] ) !== false ) {
+						$menu_exists = true;
+						break;
 					}
 				}
 			}
+		}
 
-			if ($menu_exists) {
-				//
-			} else {
-				add_menu_page(
-					$data['title'],
-					$data['title'],
-					$data['capability'],
-					$data['slug'],
-					$data['content_callback'],
-					'none',
-					3
-				);
-			}
+		if ($menu_exists) {
+			//
+		} else {
+			add_menu_page(
+				$data['title'],
+				$data['title'],
+				$data['capability'],
+				$data['slug'],
+				$data['content_callback'],
+				'none',
+				3
+			);
 		}
 	}
 
@@ -656,6 +704,7 @@ final class _FW_Extensions_Manager
 				'activate' => $this->get_nonce('activate'),
 				'deactivate' => $this->get_nonce('deactivate'),
 			),
+			'can_install' => $this->can_install(),
 		), false);
 
 		echo '</div>';
@@ -665,6 +714,18 @@ final class _FW_Extensions_Manager
 
 	private function display_install_page()
 	{
+		$flash_id = 'fw_extensions_install';
+
+		if (!$this->can_install()) {
+			FW_Flash_Messages::add(
+				$flash_id,
+				__('You are not allowed to install extensions.', 'fw'),
+				'error'
+			);
+			$this->js_redirect();
+			return;
+		}
+
 		if (array_key_exists('supported', $_GET)) {
 			$supported = true;
 
@@ -680,8 +741,6 @@ final class _FW_Extensions_Manager
 		}
 
 		unset($extension_names);
-
-		$flash_id = 'fw_extensions_install';
 
 		if (is_wp_error($install_data)) {
 			FW_Flash_Messages::add($flash_id, $install_data->get_error_message(), 'error');
@@ -936,6 +995,18 @@ final class _FW_Extensions_Manager
 
 	private function display_delete_page()
 	{
+		$flash_id = 'fw_extensions_delete';
+
+		if (!$this->can_install()) {
+			FW_Flash_Messages::add(
+				$flash_id,
+				__('You are not allowed to delete extensions.', 'fw'),
+				'error'
+			);
+			$this->js_redirect();
+			return;
+		}
+
 		$installed_extensions = $this->get_installed_extensions();
 
 		$extensions = array_fill_keys(array_map('trim', explode(',', FW_Request::GET('extension', ''))), array());
@@ -963,7 +1034,7 @@ final class _FW_Extensions_Manager
 			} while(false);
 
 			if ($error) {
-				FW_Flash_Messages::add('fw_extensions_delete', $error, 'error');
+				FW_Flash_Messages::add($flash_id, $error, 'error');
 				$this->js_redirect();
 				return;
 			}
@@ -1103,6 +1174,8 @@ final class _FW_Extensions_Manager
 
 		$installed_extensions = $this->get_installed_extensions();
 
+		$flash_id = 'fw_extension_page';
+
 		{
 			$error = '';
 
@@ -1119,7 +1192,7 @@ final class _FW_Extensions_Manager
 			} while(false);
 
 			if ($error) {
-				FW_Flash_Messages::add('fw_extension_page', $error, 'error');
+				FW_Flash_Messages::add($flash_id, $error, 'error');
 				$this->js_redirect();
 				return;
 			}
@@ -1183,7 +1256,7 @@ final class _FW_Extensions_Manager
 		echo '</div>';
 
 		if ($error) {
-			FW_Flash_Messages::add('fw_extension_page', $error, 'error');
+			FW_Flash_Messages::add($flash_id, $error, 'error');
 			$this->js_redirect();
 			return;
 		}
@@ -1518,7 +1591,7 @@ final class _FW_Extensions_Manager
 	public function _extension_settings_form_validate($errors)
 	{
 		do {
-			if (!current_user_can($this->get_capability())) {
+			if (!current_user_can($this->can_activate())) {
 				$errors[] = __('You are not allowed to save extensions settings.', 'fw');
 				break;
 			}
@@ -2036,7 +2109,15 @@ final class _FW_Extensions_Manager
 		static $cache_link = null;
 
 		if ($cache_link === null) {
-			$cache_link = menu_page_url($this->get_page_slug(), false);
+			$cache_link = menu_page_url( $this->get_page_slug(), false );
+
+			// https://core.trac.wordpress.org/ticket/28226
+			if (is_multisite() && is_network_admin()) {
+				$cache_link = self_admin_url(
+					// extract relative link
+					preg_replace('/^'. preg_quote(admin_url(), '/') .'/', '', $cache_link)
+				);
+			}
 		}
 
 		return $cache_link;
