@@ -64,7 +64,7 @@ class FW_Option_Type_Typography extends FW_Option_Type
 			fw()->manifest->get_version()
 		);
 
-		wp_localize_script('fw-option-' . $this->get_type(), 'googleFonts', $this->get_fonts());
+		wp_localize_script('fw-option-' . $this->get_type(), 'fw_typography_fonts', $this->get_fonts());
 	}
 
 	/**

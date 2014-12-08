@@ -1,11 +1,11 @@
-/*global googleFonts */
+/*global fw_typography_fonts */
 ( function ($) {
 	$(document).ready(function () {
 		var fontsHTML = '';
-		_.each(googleFonts['standard'], function (item) {
+		_.each(fw_typography_fonts['standard'], function (item) {
 			fontsHTML += '<option value="' + item + '">' + item + '</option>';
 		});
-		_.each(googleFonts['google'], function (item) {
+		_.each(fw_typography_fonts['google'], function (item) {
 			fontsHTML += '<option value="' + item['family'] + '">' + item['family'] + '</option>';
 		});
 
@@ -15,8 +15,8 @@
 					$(this).html(fontsHTML).val($(this).attr('data-value')).selectize({
 						render: {
 							option: function (item) {
-								if (googleFonts['google'].hasOwnProperty(item.value)) {
-									var background = (typeof googleFonts['google'][item.value].position === "number") ? 'style="background-position: 0 -' + googleFonts['google'][item.value].position + 'px;' : 'style="background: none;';
+								if (fw_typography_fonts['google'].hasOwnProperty(item.value)) {
+									var background = (typeof fw_typography_fonts['google'][item.value].position === "number") ? 'style="background-position: 0 -' + fw_typography_fonts['google'][item.value].position + 'px;' : 'style="background: none;';
 									return '<div data-value="' + item.value + '" data-selectable="" class="option">' + item.text + '<div class="preview" ' + background + '"></div></div>';
 								} else {
 									return '<div data-value="' + item.value + '" data-selectable="" class="option">' + item.text + '<div class="preview" style="background: none; font-family: ' + item.value + '">' + item.value + '</div></div>';
@@ -25,8 +25,8 @@
 						},
 						onChange: function (selected) {
 							var html = '';
-							if (googleFonts['google'].hasOwnProperty(selected)) {
-								var font = googleFonts['google'][selected];
+							if (fw_typography_fonts['google'].hasOwnProperty(selected)) {
+								var font = fw_typography_fonts['google'][selected];
 								_.each(font.variants, function (variant) {
 									html += '<option value="' + variant + '">' + fw.capitalizeFirstLetter(variant) + '</option>';
 								});
