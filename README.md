@@ -1,10 +1,10 @@
 # Unyson Framework
 
-[Unyson](http://unyson.themefuse.com/) is a framework for [WordPress](http://wordpress.org/) that facilitates development of a theme.
+[Unyson](http://unyson.themefuse.com/) is a framework for [WordPress](http://wordpress.org/) that facilitates the development of a theme.
 
 This framework was created from the ground up by the team behind [ThemeFuse](http://themefuse.com/) from the desire to empower developers to build outstanding WordPress themes fast and easy.
 
-To get started, check out http://unyson.themefuse.com/!
+To get started, check out the [Scratch Theme](https://github.com/ThemeFuse/Scratch-Theme).
 
 If you are not a developer, please use the [Unyson plugin page](https://wordpress.org/plugins/unyson/) on WordPress.org.
 
@@ -43,7 +43,7 @@ A good bug report includes full details to easily understand the issue you are h
 
 ## Documentation
 
-Unyson's documentation is available on http://unyson-docs.themefuse.com/.
+Unyson's documentation is available on http://unyson-docs.themefuse.com/
 
 ## Copyright and license
 
