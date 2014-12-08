@@ -84,6 +84,9 @@ Yes; Unyson will work with any theme.
 
 == Changelog ==
 
+= 2.1.4 =
+* Improvements for 'fw_google_fonts' filter, is used to expand the list of available Google fonts.
+
 = 2.1.3 =
 * Multi-site: Only network administrator can install/remove/update extensions
 
