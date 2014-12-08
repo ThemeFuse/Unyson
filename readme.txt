@@ -28,6 +28,8 @@ A simple and easy way to build a powerful website.
 * **Feedback.** We've added a way for users to submit reviews and ratings for events, projects, etc.
 * **Learning.** Create courses, lessons and quizzes for your online training site.
 
+To get started, check out the [Scratch Theme](https://github.com/ThemeFuse/Scratch-Theme).
+
 **Get involved**
 
 Developers can contribute to the source code on the [Unyson GitHub Repository](https://github.com/ThemeFuse/Unyson/blob/master/CONTRIBUTING.md).
