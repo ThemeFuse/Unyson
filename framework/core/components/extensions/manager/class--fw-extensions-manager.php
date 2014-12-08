@@ -75,11 +75,11 @@ final class _FW_Extensions_Manager
 		static $can_activate = null;
 
 		if ($can_activate === null) {
-			$can_activate = current_user_can('activate_plugins');
+			$can_activate = current_user_can('manage_options');
 
 			if ($can_activate) {
 				// also you can use this method to get the capability
-				$can_activate = 'activate_plugins';
+				$can_activate = 'manage_options';
 			}
 
 			if (!$can_activate) {
