@@ -63,8 +63,9 @@ class FW_Option_Type_Typography extends FW_Option_Type
 			array('jquery', 'underscore', 'fw', 'fw-selectize'),
 			fw()->manifest->get_version()
 		);
-
-		wp_localize_script('fw-option-' . $this->get_type(), 'fw_typography_fonts', $this->get_fonts());
+		$fw_typography_fonts = $this->get_fonts();
+		wp_localize_script('fw-option-' . $this->get_type(), 'fw_typography_fonts', $fw_typography_fonts);
+		wp_localize_script('fw-option-' . $this->get_type(), 'googleFonts', $fw_typography_fonts['google']);
 	}
 
 	/**
