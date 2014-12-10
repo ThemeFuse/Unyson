@@ -63,6 +63,17 @@
 	<?php else: ?>
 		<?php
 		$one_update_mode = fw()->extensions->get('update')->get_config('extensions_as_one_update');
+
+		foreach ($updates['extensions'] as $extension) {
+			if (is_wp_error($extension)) {
+				/**
+				 * Cancel the "One update mode" and display all extensions list table with details
+				 * if at least one extension has an error that needs to be visible
+				 */
+				$one_update_mode = false;
+				break;
+			}
+		}
 		?>
 		<form id="fw-ext-update-extensions" method="post" action="update-core.php?action=fw-update-extensions">
 			<div class="fw-ext-update-extensions-form-detailed" <?php if ($one_update_mode): ?>style="display: none;"<?php endif; ?>>

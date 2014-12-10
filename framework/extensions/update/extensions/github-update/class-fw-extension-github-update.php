@@ -70,8 +70,35 @@ class FW_Extension_Github_Update extends FW_Ext_Update_Service
 			return $response;
 		}
 
-		if (intval(wp_remote_retrieve_response_code($response)) !== 200) {
-			return new WP_Error('fw_ext_update_github_fetch_failed', __('Failed to contact Github.', 'fw'));
+		if (($response_code = intval(wp_remote_retrieve_response_code($response))) !== 200) {
+			if ($response_code === 403) {
+				$json_response = json_decode($response['body'], true);
+
+				if ($json_response) {
+					return new WP_Error(
+						'fw_ext_update_github_fetch_releases_failed',
+						__('Github error:', 'fw') .' '. $json_response['message']
+					);
+				}
+			}
+
+			if ($response_code) {
+				return new WP_Error(
+					'fw_ext_update_github_fetch_releases_failed',
+					sprintf(
+						__( 'Failed to access Github repository "%s" releases. (Response code: %d)', 'fw' ),
+						$user_slash_repo, $response_code
+					)
+				);
+			} else {
+				return new WP_Error(
+					'fw_ext_update_github_fetch_releases_failed',
+					sprintf(
+						__( 'Failed to access Github repository "%s" releases.', 'fw' ),
+						$user_slash_repo
+					)
+				);
+			}
 		}
 
 		$releases = json_decode($response['body'], true);
@@ -108,8 +135,7 @@ class FW_Extension_Github_Update extends FW_Ext_Update_Service
 			);
 		}
 
-		$theme_id = preg_replace('[^a-z0-9_]', '_', fw()->theme->manifest->get_id());
-		$transient_id = 'fw_ext_upd_gh_'. $theme_id .'_fw'; // the length must be 45 characters or less
+		$transient_id = 'fw_ext_upd_gh_fw'; // the length must be 45 characters or less
 
 		if ($force_check) {
 			delete_site_transient($transient_id);
@@ -138,12 +164,11 @@ class FW_Extension_Github_Update extends FW_Ext_Update_Service
 		}
 
 		if (is_wp_error($latest_version)) {
-			if ($latest_version->get_error_code() === 'http_request_failed') {
-				// internet connection problems, use and cache fake version to prevent requests on every refresh
-				$cache = array_merge($cache, array($user_slash_repo => $this->fake_latest_version));
-			} else {
-				return $latest_version;
-			}
+			/**
+			 * Internet connection problems or Github API requests limit reached.
+			 * Cache fake version to prevent requests to Github API on every refresh.
+			 */
+			$cache = array_merge($cache, array($user_slash_repo => $this->fake_latest_version));
 		} else {
 			$cache = array_merge($cache, array($user_slash_repo => $latest_version));
 		}
