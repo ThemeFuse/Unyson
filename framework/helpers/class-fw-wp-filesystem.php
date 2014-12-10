@@ -167,8 +167,6 @@ class FW_WP_Filesystem
 			trigger_error('Filesystem is not available', E_USER_ERROR);
 		}
 
-		$wp_filesystem_dir_path = fw_fix_path($wp_filesystem_dir_path);
-
 		/**
 		 * Begin path verification starting with ABSPATH not the root '/' path.
 		 * On servers where user has permissions only in his home directory.
@@ -176,19 +174,21 @@ class FW_WP_Filesystem
 		 * the $wp_filesystem->is_dir($path) or $wp_filesystem->exists($path) will always return false.
 		 */
 		$path = fw_fix_path($wp_filesystem->abspath());
+		$wp_filesystem_dir_path = fw_fix_path($wp_filesystem_dir_path);
+		$abs_rel_path = preg_replace('/^'. preg_quote($path, '/') .'/', '', $wp_filesystem_dir_path);
 
 		if (
-			$wp_filesystem_dir_path === $path
+			empty($abs_rel_path) // this happens when $wp_filesystem_dir_path === abspath
 			||
-			fw_strlen($wp_filesystem_dir_path) < fw_strlen($path)
+			$abs_rel_path === $wp_filesystem_dir_path // this happens when $wp_filesystem_dir_path is outside abspath
 		) {
-			trigger_error('Cannot create directory outside the abspath: '. $wp_filesystem_dir_path, E_USER_WARNING);
+			trigger_error('Cannot create directory "'. $wp_filesystem_dir_path .'". It must be inside ABSPATH', E_USER_WARNING);
 			return false;
 		}
 
-		$abs_rel_path = preg_replace('/^'. preg_quote($path, '/') .'/', '', $wp_filesystem_dir_path);
-
+		// improvement: do not check directory for existence if it's known that sure it doesn't exist
 		$check_if_exists = true;
+
 		foreach (explode('/', ltrim($abs_rel_path, '/')) as $dir_name) {
 			$path .= '/' . $dir_name;
 
@@ -197,7 +197,7 @@ class FW_WP_Filesystem
 					// do nothing if exists
 					continue;
 				} else {
-					// do not check anymore, next directories sure does not exists
+					// do not check anymore, next directories sure doesn't exist
 					$check_if_exists = false;
 				}
 			}
