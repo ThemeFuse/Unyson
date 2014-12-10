@@ -180,7 +180,7 @@ class FW_WP_Filesystem
 		if (
 			$wp_filesystem_dir_path === $path
 			||
-		    fw_strlen($wp_filesystem_dir_path) < fw_strlen($path)
+			fw_strlen($wp_filesystem_dir_path) < fw_strlen($path)
 		) {
 			trigger_error('Cannot create directory outside the abspath: '. $wp_filesystem_dir_path, E_USER_WARNING);
 			return false;
