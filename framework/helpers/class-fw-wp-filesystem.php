@@ -169,29 +169,28 @@ class FW_WP_Filesystem
 
 		$wp_filesystem_dir_path = fw_fix_path($wp_filesystem_dir_path);
 
-		$path = '';
+		/**
+		 * Begin path verification starting with ABSPATH not the root '/' path.
+		 * On servers where user has permissions only in his home directory.
+		 * When you try to check a directory (outside home directory) that you have no permissions,
+		 * the $wp_filesystem->is_dir($path) or $wp_filesystem->exists($path) will always return false.
+		 */
+		$path = fw_fix_path($wp_filesystem->abspath());
+
+		if (
+			$wp_filesystem_dir_path === $path
+			||
+		    fw_strlen($wp_filesystem_dir_path) < fw_strlen($path)
+		) {
+			trigger_error('Cannot create directory outside the abspath: '. $wp_filesystem_dir_path, E_USER_WARNING);
+			return false;
+		}
+
+		$abs_rel_path = preg_replace('/^'. preg_quote($path, '/') .'/', '', $wp_filesystem_dir_path);
+
 		$check_if_exists = true;
-		$loop_counter = 1;
-		foreach (explode('/', $wp_filesystem_dir_path) as $dir_name) {
-			if (empty($dir_name)) {
-				if ($loop_counter === 1) {
-					/**
-					 * It's a unix style path staring with '/' -> ''
-					 * On windows it starts with 'C:/' -> 'C:'
-					 */
-					$path = '/';
-				} else {
-					trigger_error('Invalid path: '. $wp_filesystem_dir_path, E_USER_WARNING);
-					return false;
-				}
-			} elseif ($loop_counter === 2 && $path === '/') {
-				// prevent multiple slash prefix '//var/www'
-				$path = '';
-			}
-
-			$path .= ($loop_counter === 1 ? '' : '/') . $dir_name;
-
-			$loop_counter++;
+		foreach (explode('/', ltrim($abs_rel_path, '/')) as $dir_name) {
+			$path .= '/' . $dir_name;
 
 			if ($check_if_exists) {
 				if ($wp_filesystem->is_dir($path)) {
