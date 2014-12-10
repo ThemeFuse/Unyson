@@ -85,7 +85,7 @@ Yes; Unyson will work with any theme.
 == Changelog ==
 
 = 2.1.5 =
-* Added `intval()` to all `wp_remote_retrieve_response_code()`. On some servers the function returns a string instead of int and the `$code === 200` verification fails.
+* Added `intval()` to all `wp_remote_retrieve_response_code()`. On some servers this function returns a string instead of int and the `$code === 200` verification fails.
 
 = 2.1.4 =
 * Improvements for the `fw_google_fonts` filter used to expand the list of available Google fonts. [#100](https://github.com/ThemeFuse/Unyson/issues/100)
