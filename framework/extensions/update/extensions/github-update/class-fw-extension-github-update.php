@@ -70,7 +70,7 @@ class FW_Extension_Github_Update extends FW_Ext_Update_Service
 			return $response;
 		}
 
-		if (wp_remote_retrieve_response_code($response) !== 200) {
+		if (intval(wp_remote_retrieve_response_code($response)) !== 200) {
 			return new WP_Error('fw_ext_update_github_fetch_failed', __('Failed to contact Github.', 'fw'));
 		}
 
@@ -173,7 +173,7 @@ class FW_Extension_Github_Update extends FW_Ext_Update_Service
 
 		unset($http);
 
-		$response_code = wp_remote_retrieve_response_code($response);
+		$response_code = intval(wp_remote_retrieve_response_code($response));
 
 		if ($response_code !== 200) {
 			if ($response_code === 403) {
@@ -246,7 +246,7 @@ class FW_Extension_Github_Update extends FW_Ext_Update_Service
 
 		unset($http);
 
-		if (wp_remote_retrieve_response_code($response) !== 200) {
+		if (intval(wp_remote_retrieve_response_code($response)) !== 200) {
 			return new WP_Error(
 				'fw_ext_update_github_download_failed',
 				sprintf(__('Cannot download %s zip.', 'fw'), $title)

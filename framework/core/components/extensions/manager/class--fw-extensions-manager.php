@@ -1704,7 +1704,7 @@ final class _FW_Extensions_Manager
 
 						unset($http);
 
-						$response_code = wp_remote_retrieve_response_code($response);
+						$response_code = intval(wp_remote_retrieve_response_code($response));
 
 						if ($response_code !== 200) {
 							if ($response_code === 403) {
@@ -1767,7 +1767,7 @@ final class _FW_Extensions_Manager
 
 						unset($http);
 
-						if (($response_code = wp_remote_retrieve_response_code($response)) !== 200) {
+						if (($response_code = intval(wp_remote_retrieve_response_code($response))) !== 200) {
 							if ($response_code) {
 								return new WP_Error(
 									$wp_error_id,
