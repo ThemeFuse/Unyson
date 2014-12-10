@@ -169,6 +169,15 @@ class FW_Extension_Github_Update extends FW_Ext_Update_Service
 			 * Cache fake version to prevent requests to Github API on every refresh.
 			 */
 			$cache = array_merge($cache, array($user_slash_repo => $this->fake_latest_version));
+
+			/**
+			 * Show the error to the user because it is not visible elsewhere
+			 */
+			FW_Flash_Messages::add(
+				'fw_ext_github_update_error',
+				$latest_version->get_error_message(),
+				'error'
+			);
 		} else {
 			$cache = array_merge($cache, array($user_slash_repo => $latest_version));
 		}
