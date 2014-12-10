@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio
 Requires at least: 4.0.0
 Tested up to: 4.0.1
-Stable tag: 2.1.5
+Stable tag: 2.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,9 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.1.6 =
+* Fixed the "Cannot create temporary directory" error that happened on some servers where the user have no permissions to access files outside the abspath or home directory.
 
 = 2.1.5 =
 * Added `intval()` to all `wp_remote_retrieve_response_code()`. On some servers this function returns a string instead of int and the `$code === 200` verification fails.
