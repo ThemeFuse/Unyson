@@ -1620,11 +1620,13 @@ final class _FW_Extensions_Manager
 	{
 		$extension = fw()->extensions->get(FW_Request::POST('fw_extension_name'));
 
+		$options_before_save = (array)fw_get_db_ext_settings_option($extension->get_name());
+
 		fw_set_db_ext_settings_option(
 			$extension->get_name(),
 			null,
 			array_merge(
-				(array)fw_get_db_ext_settings_option($extension->get_name()),
+				$options_before_save,
 				fw_get_options_values_from_input(
 					$extension->get_settings_options()
 				)
@@ -1638,6 +1640,8 @@ final class _FW_Extensions_Manager
 		);
 
 		$data['redirect'] = fw_current_url();
+
+		do_action('fw_extension_settings_form_saved', $extension->get_name(), $options_before_save);
 
 		return $data;
 	}
