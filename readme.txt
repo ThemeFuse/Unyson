@@ -85,7 +85,7 @@ Yes; Unyson will work with any theme.
 == Changelog ==
 
 = 2.1.7 =
-* Fixed read_path<->wp_filesystem_path conversion on installations with custom plugins directory (Bedrock WordPress Stack).
+* Fixed read_path&lt;-&gt;wp_filesystem_path conversion on installations with custom plugins directory (Bedrock WordPress Stack).
 
 = 2.1.6 =
 * Fixed the "Cannot create temporary directory" error that happened on some servers where the user have no permissions to access files outside the abspath or home directory.
