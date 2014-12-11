@@ -13,12 +13,6 @@ class FW_Extension_Update extends FW_Extension
 	}
 
 	/**
-	 * For which directory to request write permissions from Filesystem API
-	 * @var string
-	 */
-	private $context;
-
-	/**
 	 * File names to skip (do not delete or change) during the update process
 	 * @var array
 	 */
@@ -43,8 +37,6 @@ class FW_Extension_Update extends FW_Extension
 				return false; // prevent child extensions activation
 			}
 		}
-
-		$this->context = get_template_directory();
 
 		$this->add_actions();
 		$this->add_filters();
@@ -686,7 +678,7 @@ class FW_Extension_Update extends FW_Extension
 		$skin->header();
 
 		do {
-			if (!FW_WP_Filesystem::request_access($this->context, fw_current_url(), array($nonce_name))) {
+			if (!FW_WP_Filesystem::request_access(fw_get_framework_directory(), fw_current_url(), array($nonce_name))) {
 				break;
 			}
 
@@ -754,7 +746,7 @@ class FW_Extension_Update extends FW_Extension
 		$skin->header();
 
 		do {
-			if (!FW_WP_Filesystem::request_access($this->context, fw_current_url(), array($nonce_name))) {
+			if (!FW_WP_Filesystem::request_access(get_template_directory(), fw_current_url(), array($nonce_name))) {
 				break;
 			}
 
@@ -853,7 +845,11 @@ class FW_Extension_Update extends FW_Extension
 				$_POST[$form_input_name] = wp_slash(json_encode($extensions_list));
 			}
 
-			if (!FW_WP_Filesystem::request_access($this->context, fw_current_url(), array($nonce_name, $form_input_name))) {
+			if (!FW_WP_Filesystem::request_access(
+				fw_get_framework_directory('/extensions'),
+				fw_current_url(),
+				array($nonce_name, $form_input_name))
+			) {
 				{ // revert hack changes
 					$_POST[$form_input_name] = $original_post_value;
 					unset($original_post_value);
