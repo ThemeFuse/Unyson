@@ -27,7 +27,8 @@
 	border-bottom-width: 0px !important;
 }
 
-.fw-option-type-multi-picker > .picker-group {
+.fw-option-type-multi-picker:not(.fw-option-type-multi-picker-with-borders) > .picker-group,
+.fw-option-type-multi-picker.fw-option-type-multi-picker-with-borders:not(.has-choice) > .picker-group {
 	border-bottom-width: 0px;
 	padding-bottom: 0;
 }
@@ -37,7 +38,7 @@
 }
 
 .fw-option-type-multi-picker .fw-option-type-multi > .fw-backend-option,
-.fw-option-type-multi-picker.has-choice > .picker-group {
+.fw-option-type-multi-picker.has-choice:not(.fw-option-type-multi-picker-with-borders) > .picker-group {
 	padding-bottom: 0;
 }
 
