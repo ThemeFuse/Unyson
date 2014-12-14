@@ -41,6 +41,8 @@ fw.intval = function(val)
  * @param {String} string
  */
 fw.md5 = (function(){
+	"use strict";
+
 	/*
 	 * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
 	 * Digest Algorithm, as defined in RFC 1321.
@@ -55,7 +57,7 @@ fw.md5 = (function(){
 	var hex_chr = "0123456789abcdef";
 	function rhex(num)
 	{
-		str = "";
+		var str = "", j;
 		for(j = 0; j <= 3; j++)
 			str += hex_chr.charAt((num >> (j * 8 + 4)) & 0x0F) +
 			hex_chr.charAt((num >> (j * 8)) & 0x0F);
@@ -68,8 +70,9 @@ fw.md5 = (function(){
 	 */
 	function str2blks_MD5(str)
 	{
-		nblk = ((str.length + 8) >> 6) + 1;
-		blks = new Array(nblk * 16);
+		var nblk = ((str.length + 8) >> 6) + 1,
+			blks = new Array(nblk * 16),
+			i;
 		for(i = 0; i < nblk * 16; i++) blks[i] = 0;
 		for(i = 0; i < str.length; i++)
 			blks[i >> 2] |= str.charCodeAt(i) << ((i % 4) * 8);
@@ -127,11 +130,13 @@ fw.md5 = (function(){
 	 */
 	function calcMD5(str)
 	{
-		x = str2blks_MD5(str);
-		a =  1732584193;
-		b = -271733879;
-		c = -1732584194;
-		d =  271733878;
+		var x = str2blks_MD5(str);
+		var a =  1732584193;
+		var b = -271733879;
+		var c = -1732584194;
+		var d =  271733878;
+
+		var i, olda, oldb, oldc, oldd;
 
 		for(i = 0; i < x.length; i += 16)
 		{
