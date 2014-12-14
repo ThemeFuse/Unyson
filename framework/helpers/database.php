@@ -15,7 +15,7 @@
 	 */
 	function fw_get_db_settings_option( $option_id = null, $default_value = null, $get_original_value = null ) {
 		$value = FW_WP_Option::get(
-			'fw_theme_settings_options:'. fw()->theme->manifest->get_id(),
+			'fw_theme_settings_options:' . fw()->theme->manifest->get_id(),
 			$option_id, $default_value, $get_original_value
 		);
 
@@ -58,7 +58,7 @@
 	 */
 	function fw_set_db_settings_option( $option_id = null, $value ) {
 		FW_WP_Option::set(
-			'fw_theme_settings_options:'. fw()->theme->manifest->get_id(),
+			'fw_theme_settings_options:' . fw()->theme->manifest->get_id(),
 			$option_id, $value
 		);
 	}
@@ -69,14 +69,25 @@
 	/**
 	 * Get post option value from the database
 	 *
-	 * @param int $post_id
+	 * @param null|int $post_id
 	 * @param string|null $option_id Specific option id (accepts multikey). null - all options
 	 * @param null|mixed $default_value If no option found in the database, this value will be returned
 	 * @param null|bool $get_original_value Original value is that with no translations and other changes
 	 *
 	 * @return mixed|null
 	 */
-	function fw_get_db_post_option( $post_id, $option_id = null, $default_value = null, $get_original_value = null ) {
+	function fw_get_db_post_option( $post_id = null, $option_id = null, $default_value = null, $get_original_value = null ) {
+		if ( ! $post_id ) {
+			/** @var WP_Post $post */
+			global $post;
+
+			if ( ! $post ) {
+				return $default_value;
+			} else {
+				$post_id = $post->ID;
+			}
+		}
+
 		$option_id = 'fw_options' . ( $option_id !== null ? '/' . $option_id : '' );
 
 		return FW_WP_Meta::get( 'post', $post_id, $option_id, $default_value, $get_original_value );
@@ -85,11 +96,22 @@
 	/**
 	 * Set post option value in database
 	 *
-	 * @param int $post_id
+	 * @param null|int $post_id
 	 * @param string|null $option_id Specific option id (accepts multikey). null - all options
 	 * @param $value
 	 */
-	function fw_set_db_post_option( $post_id, $option_id = null, $value ) {
+	function fw_set_db_post_option( $post_id = null, $option_id = null, $value ) {
+		if ( ! $post_id ) {
+			/** @var WP_Post $post */
+			global $post;
+
+			if ( ! $post ) {
+				return;
+			} else {
+				$post_id = $post->ID;
+			}
+		}
+
 		$option_id = 'fw_options' . ( $option_id !== null ? '/' . $option_id : '' );
 
 		FW_WP_Meta::set( 'post', $post_id, $option_id, $value );
@@ -218,7 +240,7 @@
 			return null;
 		}
 
-		$value = FW_WP_Option::get( 'fw_ext_settings_options:'. $extension_name, $option_id, $default_value, $get_original_value );
+		$value = FW_WP_Option::get( 'fw_ext_settings_options:' . $extension_name, $option_id, $default_value, $get_original_value );
 
 		if ( is_null( $value ) ) {
 			/**
@@ -226,7 +248,7 @@
 			 * Extract the default values from the options array and try to find there the option id
 			 */
 
-			$cache_key = 'fw_default_options_values/ext_settings:'. $extension_name;
+			$cache_key = 'fw_default_options_values/ext_settings:' . $extension_name;
 
 			try {
 				$all_options_values = FW_Cache::get( $cache_key );
@@ -265,18 +287,20 @@
 			return;
 		}
 
-		FW_WP_Option::set( 'fw_ext_settings_options:'. $extension_name, $option_id, $value );
+		FW_WP_Option::set( 'fw_ext_settings_options:' . $extension_name, $option_id, $value );
 	}
 }
 
 {
 	/**
 	 * Get user meta set by specific extension
+	 *
 	 * @param int $user_id
 	 * @param string $extension_name
 	 *
 	 * If the extension doesn't exist or is disabled, or meta key doesn't exist, returns null,
 	 * else returns the meta key value
+	 *
 	 * @return mixed|null
 	 */
 	function fw_get_db_extension_user_data( $user_id, $extension_name ) {
@@ -299,6 +323,7 @@
 	 * @param mixed $value
 	 *
 	 * In case the extension doesn't exist or is disabled, or the value is equal to previous, returns false
+	 *
 	 * @return bool|int
 	 */
 	function fw_set_db_extension_user_data( $user_id, $extension_name, $value ) {
@@ -309,6 +334,7 @@
 		}
 		$data                    = get_user_meta( $user_id, 'fw_data', true );
 		$data[ $extension_name ] = $value;
+
 		return fw_update_user_meta( $user_id, 'fw_data', $data );
 	}
 }
