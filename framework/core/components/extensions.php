@@ -122,10 +122,15 @@ final class _FW_Component_Extensions
 		foreach ($dirs as $extension_dir) {
 			$extension_name = basename($extension_dir);
 
-			if (isset($all_extensions_tree[$extension_name])) {
+			if (isset($all_extensions[$extension_name])) {
 				if ($all_extensions[$extension_name]->get_parent() !== $parent) {
 					// extension with the same name exists in another tree
-					trigger_error('Extension "'. $extension_name .'" already loaded', E_USER_ERROR);
+					trigger_error(
+						'Extension "'. $extension_name .'" is already defined '.
+						'in "'. $all_extensions[$extension_name]->get_declared_path() .'" '.
+						'found again in "'. $extension_dir .'"',
+						E_USER_ERROR
+					);
 				}
 
 				// this is a directory with customizations for an extension
