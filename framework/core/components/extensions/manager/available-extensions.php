@@ -210,16 +210,4 @@ $extensions = array(
 			),
 		),
 	),
-	'social' => array(
-		'display'     => true,
-		'parent'      => null,
-		'name'        => __( 'Social', 'fw' ),
-		'description' => __( 'This extension offers the opportunity to work with social networks.', 'fw' ),
-		'thumbnail'   => $thumbnails_uri . '/styling.jpg',
-		'download'    => array(
-			'github' => array(
-				'user_repo' => $github_account . '/Unyson-Social-Extension',
-			),
-		),
-	),
 );
