@@ -68,7 +68,7 @@ if (isset($lists['available'][$name])) {
 
 						if ( $is_active && file_exists( $installed_data['path'] . '/readme.md.php' ) ) {
 							if ( isset($lists['supported'][$name]) ) {
-								// no sense to teach how to install the extension if theme is already configured and extension marked as compatible
+								// no sense to teach how to install the extension if theme is already configured and the is extension marked as compatible
 							} else {
 								$_links[] = '<a href="' . esc_attr( $link ) . '&sub-page=extension&extension=' . esc_attr( $name ) . '&tab=docs">' . __( 'Install Instructions', 'fw' ) . '</a>';
 							}
