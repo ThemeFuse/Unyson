@@ -138,7 +138,6 @@ class FW_Flash_Messages
 
 	/**
 	 * Use this method to print messages html in frontend
-	 * @internal
 	 */
 	public static function _print_frontend()
 	{

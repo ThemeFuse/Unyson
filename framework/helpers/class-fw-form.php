@@ -43,6 +43,12 @@ class FW_Form {
 	protected $errors;
 
 	/**
+	 * If the get_errors() method was called at leas once
+	 * @var bool
+	 */
+	protected $errors_accessed = false;
+
+	/**
 	 * If current request is the submit of this form
 	 * @var bool
 	 */
@@ -389,7 +395,14 @@ class FW_Form {
 			return array( '~' => true );
 		}
 
+		$this->errors_accessed = true;
+
 		return $this->errors;
+	}
+
+	public function errors_accessed()
+	{
+		return $this->errors_accessed;
 	}
 
 	/**
@@ -422,6 +435,7 @@ class FW_Form {
 if ( is_admin() ) {
 	/**
 	 * Display form errors in admin side
+	 * @internal
 	 */
 	function _action_show_fw_form_errors_in_admin() {
 		$form = FW_Form::get_submitted();
@@ -434,6 +448,32 @@ if ( is_admin() ) {
 			FW_Flash_Messages::add( 'fw-form-admin-' . $input_name, $error_message, 'error' );
 		}
 	}
-
 	add_action( 'wp_loaded', '_action_show_fw_form_errors_in_admin', 111 );
+} else {
+	/**
+	 * Detect if form errors was not displayed in frontend then display them with default design
+	 * Do nothing if the theme already displayed the errors
+	 * @internal
+	 */
+	function _action_show_fw_form_errors_in_frontend() {
+		$form = FW_Form::get_submitted();
+
+		if ( ! $form || $form->is_valid() ) {
+			return;
+		}
+
+		if ( $form->errors_accessed() ) {
+			// already displayed in theme
+			return;
+		}
+
+		foreach ($form->get_errors() as $input_name => $error_message) {
+			FW_Flash_Messages::add(
+				'fw-form-error-'. $input_name,
+				$error_message,
+				'error'
+			);
+		}
+	}
+	add_action( 'wp_footer', '_action_show_fw_form_errors_in_frontend', 22 );
 }
