@@ -67,7 +67,11 @@ if (isset($lists['available'][$name])) {
 						}
 
 						if ( $is_active && file_exists( $installed_data['path'] . '/readme.md.php' ) ) {
-							$_links[] = '<a href="' . esc_attr( $link ) . '&sub-page=extension&extension=' . esc_attr( $name ) . '&tab=docs">' . __( 'Install Instructions', 'fw' ) . '</a>';
+							if ( isset($lists['supported'][$name]) ) {
+								// no sense to teach how to install the extension if theme is already configured and extension marked as compatible
+							} else {
+								$_links[] = '<a href="' . esc_attr( $link ) . '&sub-page=extension&extension=' . esc_attr( $name ) . '&tab=docs">' . __( 'Install Instructions', 'fw' ) . '</a>';
+							}
 						}
 
 						if ( ! empty( $_links ) ):
@@ -80,13 +84,9 @@ if (isset($lists['available'][$name])) {
 					?>
 					<?php
 					if (
-						!$is_active // do not show the "Compatible" text is extension is already active
-						&&
-						(
-							isset($lists['supported'][$name]) // is listed in the supported extensions list in theme manifest
-							||
-							($installed_data && $installed_data['source'] !== 'framework') // is located in the theme
-						)
+						isset($lists['supported'][$name]) // is listed in the supported extensions list in theme manifest
+						||
+						($installed_data && $installed_data['source'] !== 'framework') // is located in the theme
 					): ?>
 						<p><em><strong><span class="dashicons dashicons-yes"></span> <?php _e('Compatible', 'fw') ?></strong> <?php _e('with your current theme', 'fw') ?></em></p>
 					<?php endif; ?>
