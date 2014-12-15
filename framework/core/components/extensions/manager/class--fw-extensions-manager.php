@@ -1556,6 +1556,8 @@ final class _FW_Extensions_Manager
 		 */
 		$extension = $data['data']['extension'];
 
+		do_action('fw_extension_settings_form_render:'. $extension->get_name());
+
 		echo fw_html_tag('input', array(
 			'type'  => 'hidden',
 			'name'  => 'fw_extension_name',
@@ -1641,7 +1643,7 @@ final class _FW_Extensions_Manager
 
 		$data['redirect'] = fw_current_url();
 
-		do_action('fw_extension_settings_form_saved', $extension->get_name(), $options_before_save);
+		do_action('fw_extension_settings_form_saved:'. $extension->get_name(), $options_before_save);
 
 		return $data;
 	}
