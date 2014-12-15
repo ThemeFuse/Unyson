@@ -1234,6 +1234,10 @@ final class _FW_Extensions_Manager
 			'link_extension'  => $link .'&sub-page=extension',
 			'extension_title' => $extension_title,
 			'tab'             => $tab,
+			'is_supported'    =>
+				fw()->theme->manifest->get('supported_extensions/'. $extension_name, false) !== false
+				||
+				$installed_extensions[$extension_name]['source'] !== 'framework'
 		), false);
 
 		unset($installed_extensions);
