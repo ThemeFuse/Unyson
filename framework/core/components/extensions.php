@@ -19,7 +19,15 @@ final class _FW_Component_Extensions
 
 	/**
 	 * Active extensions
-	 * Only this extensions should be available for other, inactive extensions =
+	 *
+	 * On every extension activation, it will be pushed at the end of this array.
+	 * The extensions order is important when including files.
+	 * If extension A requires extension B, extension B is activated before extension A,
+	 * and all files of the extension B (hooks.php, static.php, etc.) must be included before extension A
+	 * For e.g. extension A may have in static.php:
+	 * wp_enqueue_script( 'ext-A-script', 'script.js', array( 'ext-B-script' ) );
+	 * so 'ext-B-script' must be registered before 'ext-A-script'
+	 *
 	 * @var FW_Extension[] { 'extension_name' => instance }
 	 */
 	private static $active_extensions = array();
