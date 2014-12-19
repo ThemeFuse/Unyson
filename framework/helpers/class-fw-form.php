@@ -477,9 +477,9 @@ if ( is_admin() ) {
 	}
 	add_action( 'wp_footer', '_action_show_fw_form_errors_in_frontend',
 		/**
-		 * Use priority later that the default 10.
-		 * In the docs (to customize the error messages)
-		 * will be easier to explain to use just add_action('wp_footer', ...) and not bother about priority
+		 * Use priority later than the default 10.
+		 * In docs (to customize the error messages) will be easier to explain
+		 * to use just add_action('wp_footer', ...) and not bother about priority
 		 */
 		11
 	);
