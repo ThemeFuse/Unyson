@@ -463,7 +463,7 @@ if ( is_admin() ) {
 		}
 
 		if ( $form->errors_accessed() ) {
-			// already displayed in theme
+			// already displayed
 			return;
 		}
 
@@ -475,5 +475,5 @@ if ( is_admin() ) {
 			);
 		}
 	}
-	add_action( 'wp_footer', '_action_show_fw_form_errors_in_frontend', 22 );
+	add_action( 'wp_footer', '_action_show_fw_form_errors_in_frontend', 9 );
 }

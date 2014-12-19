@@ -17,6 +17,8 @@ class FW_Flash_Messages
 
 	private static $session_key = 'fw_flash_messages';
 
+	private static $frontend_printed = false;
+
 	private static function get_messages()
 	{
 		$messages = FW_Session::get(self::$session_key);
@@ -149,12 +151,12 @@ class FW_Flash_Messages
 		foreach ($all_messages as $type => $messages) {
 			if (!empty($messages)) {
 				foreach ($messages as $id => $data) {
-					$html[$type] .= '<div class="fw-flash-message"><p>'. nl2br($data['message']) .'</p></div>';
+					$html[$type] .= '<li class="fw-flash-message">'. nl2br($data['message']) .'</li>';
 
 					unset($all_messages[$type][$id]);
 				}
 
-				$html[$type] = '<div class="fw-flash-type-'. $type .'">'. $html[$type] .'</div>';
+				$html[$type] = '<ul class="fw-flash-type-'. $type .'">'. $html[$type] .'</ul>';
 			}
 		}
 
@@ -163,6 +165,13 @@ class FW_Flash_Messages
 		echo '<div class="fw-flash-messages">';
 		echo implode("\n\n", $html);
 		echo '</div>';
+
+		self::$frontend_printed = true;
+	}
+
+	public static function _frontend_printed()
+	{
+		return self::$frontend_printed;
 	}
 }
 
@@ -193,4 +202,34 @@ if (is_admin()) {
 		}
 	}
 	add_action('send_headers', '_action_fw_flash_message_frontend_prepare', 9999);
+
+	/**
+	 * Print flash messages in frontend if this has not been done from theme
+	 */
+	function _action_fw_flash_message_frontend_print() {
+		if (FW_Flash_Messages::_frontend_printed()) {
+			return;
+		}
+
+		FW_Flash_Messages::_print_frontend();
+
+		echo
+		'<script type="text/javascript">'.
+		'  (function(){'.
+		'    if (typeof jQuery === "undefined") return;'.
+		'    jQuery(function($){'.
+		'      var $container = $("#content .entry-content:first");'.
+		'      if (!$container.length) $container = $(document.body);'.
+		'      $(".fw-flash-messages").prependTo($container);'.
+		'    });'.
+		'  })();'.
+		'</script>'.
+		'<style type="text/css">'.
+		'  .fw-flash-messages .fw-flash-type-error { color: #f00; }'.
+		'  .fw-flash-messages .fw-flash-type-warning { color: #f70; }'.
+		'  .fw-flash-messages .fw-flash-type-success { color: #070; }'.
+		'  .fw-flash-messages .fw-flash-type-info { color: #07f; }'.
+		'</style>';
+	}
+	add_action('wp_footer', '_action_fw_flash_message_frontend_print', 9999);
 }
