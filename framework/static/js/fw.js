@@ -1116,3 +1116,69 @@ jQuery.expr[':']['fw-external'] = function(obj){
 		&& !obj.href.match(/^javascript\:/)
 		&& !obj.href.match(/^$/);
 };
+
+/**
+ * Check if an event fired from an element has listeners within specified container/parent element
+ * @param $element
+ * @param {String} event
+ * @param $container
+ * @return {Boolean}
+ */
+fw.elementEventHasListenerInContainer = function ($element, event, $container) {
+	"use strict";
+
+	var events, container = $container.get(0);
+
+	/**
+	 * Check if container element has delegated event that matches the element
+	 */
+	{
+		var foundListener = false;
+
+		if (
+			(events = $container.data('events'))
+			&&
+			events[event]
+		) {
+			jQuery.each(events[event], function(i, eventData){
+				if ($element.is(eventData.selector)) {
+					foundListener = true;
+					return false;
+				}
+			});
+		}
+
+		if (foundListener) {
+			return true;
+		}
+	}
+
+	/**
+	 * Check every parent if has event listener
+	 */
+	{
+		var $currentParent = $element;
+
+		while ($currentParent.get(0) !== container) {
+			if (
+				(events = $currentParent.data('events'))
+				&&
+				events[event]
+			) {
+				return true;
+			}
+
+			$currentParent = $currentParent.parent();
+
+			if (!$currentParent.length) {
+				/**
+				 * The element doesn't exist in DOM
+				 * This means that the event was processed, so it has listener
+				 */
+				return true;
+			}
+		}
+	}
+
+	return false;
+};
