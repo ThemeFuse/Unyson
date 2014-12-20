@@ -47,3 +47,8 @@
 .fw-option-type-upload.images-only .no-image-img {
 	cursor: pointer;
 }
+
+
+.fw-backend-option-input-type-upload .fw-option-help-in-input {
+	top: 4px !important;
+}

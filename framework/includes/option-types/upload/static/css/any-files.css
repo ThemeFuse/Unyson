@@ -15,3 +15,8 @@
 .fw-option-type-upload.any-files button {
 	vertical-align: middle;
 }
+
+
+.fw-backend-option-input-type-upload .fw-option-help-in-input {
+	top: 4px !important;
+}

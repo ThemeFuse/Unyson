@@ -68,3 +68,8 @@ body.rtl .fw-option-type-addable-option tr.fw-option-type-addable-option-option.
 .fw-option-type-addable-option tr.fw-option-type-addable-option-option.ui-sortable-helper td.td-option {
 	width: calc(100% - 35px);
 }
+
+
+.fw-backend-option-input-type-addable-option .fw-option-help-in-input {
+	top: 4px !important;
+}

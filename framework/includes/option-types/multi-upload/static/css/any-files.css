@@ -8,10 +8,16 @@
 }
 .fw-option-type-multi-upload.any-files em {
 	font-style: normal;
+	vertical-align: middle;
 }
 .fw-option-type-multi-upload.any-files a {
 	outline: none;
 }
-.fw-option-type-multi-upload.any-files button {
+.fw-option-type.any-files button {
 	vertical-align: middle;
+}
+
+
+.fw-backend-option-input-type-multi-upload .fw-option-help-in-input {
+	top: 4px !important;
 }

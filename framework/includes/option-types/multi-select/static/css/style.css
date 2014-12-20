@@ -21,3 +21,7 @@
 .fw-option-type-multi-select .selectize-input.focus.input-active.dropdown-active:after {
 	border-width: 5px 5px 0 5px;
 }
+
+.fw-backend-option-input-type-multi-select .fw-option-help-in-input {
+	top: 4px !important;
+}

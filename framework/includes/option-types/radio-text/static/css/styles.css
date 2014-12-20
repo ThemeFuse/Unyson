@@ -25,3 +25,8 @@
 .fw-option-type-radio-text .custom input.fw-option-type-text:first-child{
 	margin: 0;
 }
+
+
+.fw-backend-option-input-type-radio-text .fw-option-help-in-input {
+	top: 4px !important;
+}

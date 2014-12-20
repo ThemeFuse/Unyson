@@ -16,3 +16,8 @@
 .fw-backend-option-input-type-datetime-range .fw-option-type-datetime-picker {
 	width: 150px;
 }
+
+
+.fw-backend-option-input-type-datetime-range .fw-option-help-in-input {
+	top: 4px !important;
+}
