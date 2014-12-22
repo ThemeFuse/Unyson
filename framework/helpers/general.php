@@ -219,6 +219,7 @@ function fw_print($value) {
 		}
 		div.fw_print_r_group div.fw_print_r {
 			margin: 9px;
+			border-width: 0;
 		}
 		</style>';
 		echo str_replace(array('  ', "\n"), '', ob_get_clean());
