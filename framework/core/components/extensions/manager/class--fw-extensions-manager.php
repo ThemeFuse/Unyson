@@ -48,13 +48,14 @@ final class _FW_Extensions_Manager
 			add_action('network_admin_menu', array($this, '_action_admin_menu'));
 			add_action('admin_footer', array($this, '_action_admin_footer'));
 			add_action('admin_enqueue_scripts', array($this, '_action_enqueue_menu_icon_style'));
+			// as late as possible, but to be able to make redirects (content not started)
+			add_action('current_screen', array($this, '_action_check_if_plugin_was_activated'), 100);
+			add_action('after_switch_theme', array($this, '_action_theme_switch'));
 
 			if ($this->can_install()) {
 				add_action('wp_ajax_fw_extensions_check_direct_fs_access', array($this, '_action_ajax_check_direct_fs_access'));
-
-				// as late as possible, but to be able to make redirects (content not started)
-				add_action('current_screen', array($this, '_action_check_if_plugin_was_activated'), 100);
 			}
+
 		}
 
 		/** Filters */
@@ -229,14 +230,18 @@ final class _FW_Extensions_Manager
 			delete_option($option_name);
 		}
 
-		if (!count($this->get_supported_extensions_for_install())) {
-			return;
+		$this->activate_theme_extensions();
+
+		if ($this->can_install()) {
+			if (!count($this->get_supported_extensions_for_install())) {
+				return;
+			}
+
+			$link = $this->get_link();
+
+			wp_redirect($link . '&sub-page=install&supported');
+			exit;
 		}
-
-		$link = $this->get_link();
-
-		wp_redirect($link .'&sub-page=install&supported');
-		exit;
 	}
 
 	/**
@@ -2252,5 +2257,29 @@ final class _FW_Extensions_Manager
 			array(),
 			fw()->manifest->get_version()
 		);
+	}
+
+	private function activate_theme_extensions()
+	{
+		$db_active_extensions = fw()->extensions->_get_db_active_extensions();
+
+		foreach ($this->get_installed_extensions() as $extension_name => $extension) {
+			if ($extension['source'] !== 'framework') {
+				$db_active_extensions[ $extension_name ] = array();
+			}
+		}
+
+		update_option(
+			fw()->extensions->_get_active_extensions_db_option_name(),
+			$db_active_extensions
+		);
+	}
+
+	/**
+	 * @internal
+	 */
+	public function _action_theme_switch()
+	{
+		$this->activate_theme_extensions();
 	}
 }

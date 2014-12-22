@@ -81,15 +81,7 @@ final class _FW_Component_Extensions
 	 */
 	public function _get_db_active_extensions($extension_name = null)
 	{
-		try {
-			$cache_key = 'fw_db_active_extensions';
-
-			$extensions = FW_Cache::get($cache_key);
-		} catch (FW_Cache_Not_Found_Exception $e) {
-			$extensions = get_option($this->_get_active_extensions_db_option_name(), array());
-
-			FW_Cache::set($cache_key, $extensions);
-		}
+		$extensions = get_option($this->_get_active_extensions_db_option_name(), array());
 
 		if ($extension_name) {
 			return isset($extensions[$extension_name]);
