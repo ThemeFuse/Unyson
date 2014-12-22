@@ -1848,6 +1848,19 @@ final class _FW_Extensions_Manager
 					}
 
 					{
+						$transient_name = 'fw_ext_manager_gh_ext_download';
+						$transient_ttl  = HOUR_IN_SECONDS;
+
+						$cache = get_site_transient($transient_name);
+
+						if ($cache === false) {
+							$cache = array();
+						}
+					}
+
+					if (isset($cache[ $source_data['user_repo'] ])) {
+						$download_link = $cache[ $source_data['user_repo'] ]['zipball_url'];
+					} else {
 						$http = new WP_Http();
 
 						$response = $http->get('https://api.github.com/repos/'. $source_data['user_repo'] .'/releases');
@@ -1902,6 +1915,15 @@ final class _FW_Extensions_Manager
 						$release = reset($releases);
 
 						unset($releases);
+
+						{
+							$cache[ $source_data['user_repo'] ] = array(
+								'zipball_url' => $release['zipball_url'],
+								'tag_name' => $release['tag_name']
+							);
+
+							set_site_transient($transient_name, $cache, $transient_ttl);
+						}
 
 						$download_link = $release['zipball_url'];
 
