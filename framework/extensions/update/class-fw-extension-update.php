@@ -545,6 +545,24 @@ class FW_Extension_Update extends FW_Extension
 			$source_extension_dir  = $source_dir .'/'. $ext_dir['name'];
 			$destination_extension_dir = $destination_dir .'/'. $ext_dir['name'];
 
+			{
+				$source_ext_files = $wp_filesystem->dirlist($source_extension_dir, true);
+				if ($source_ext_files === false) {
+					return new WP_Error($wp_error_id,
+						__('Cannot access directory: ', 'fw') . $source_extension_dir
+					);
+				}
+
+				if (empty($source_ext_files)) {
+					/**
+					 * Source extension directory is empty, do nothing.
+					 * This happens when the extension is a git submodule in repository
+					 * but in zip it comes as an empty directory.
+					 */
+					continue;
+				}
+			}
+
 			// prepare destination
 			{
 				// create if not exists
@@ -590,13 +608,6 @@ class FW_Extension_Update extends FW_Extension
 
 			// move files from source to destination extension directory
 			{
-				$source_ext_files = $wp_filesystem->dirlist($source_extension_dir, true);
-				if ($source_ext_files === false) {
-					return new WP_Error($wp_error_id,
-						__('Cannot access directory: ', 'fw') . $source_extension_dir
-					);
-				}
-
 				$source_has_extensions_dir = false;
 
 				foreach ($source_ext_files as $source_ext_file) {
