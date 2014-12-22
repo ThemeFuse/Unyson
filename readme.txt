@@ -2,8 +2,8 @@
 Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio
 Requires at least: 4.0.0
-Tested up to: 4.0.1
-Stable tag: 2.1.9
+Tested up to: 4.1
+Stable tag: 2.1.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,10 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.1.10 =
+* Activate theme extensions automatically on theme switch and Unyson plugin activation.
+* Cache Github API responses for one hour on extensions download to prevent the `API rate limit exceeded` error.
 
 = 2.1.9 =
 * Fixed: Extension is not installing if directory already exists but is empty.
