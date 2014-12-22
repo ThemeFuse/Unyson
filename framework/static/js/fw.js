@@ -1168,6 +1168,10 @@ fw.elementEventHasListenerInContainer = function ($element, event, $container) {
 				return true;
 			}
 
+			if ($currentParent.attr('on'+ event)) {
+				return true;
+			}
+
 			$currentParent = $currentParent.parent();
 
 			if (!$currentParent.length) {
