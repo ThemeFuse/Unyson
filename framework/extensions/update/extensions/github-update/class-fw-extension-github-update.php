@@ -23,7 +23,7 @@ class FW_Extension_Github_Update extends FW_Ext_Update_Service
 	 * How long to cache server responses
 	 * @var int seconds
 	 */
-	private $transient_expiration = 86400;
+	private $transient_expiration = DAY_IN_SECONDS;
 
 	private $download_timeout = 300;
 
