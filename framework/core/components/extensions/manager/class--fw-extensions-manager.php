@@ -731,8 +731,32 @@ final class _FW_Extensions_Manager
 			return;
 		}
 
+		$installed_extensions = $this->get_installed_extensions();
+
+		/**
+		 * Already installed extensions will be activated
+		 */
+		$activate_extensions  = array();
+
 		if (array_key_exists('supported', $_GET)) {
 			$supported = true;
+
+			/**
+			 * Add already installed extensions for activation
+			 */
+			do {
+				$supported_extensions = fw()->theme->manifest->get('supported_extensions', array());
+
+				if (empty($supported_extensions)) {
+					break;
+				}
+
+				foreach (array_keys($supported_extensions) as $extension_name) {
+					if (isset($installed_extensions[ $extension_name ])) {
+						$activate_extensions[ $extension_name ] = array();
+					}
+				}
+			} while(false);
 
 			$install_data = $this->get_install_data(
 				array_keys($this->get_supported_extensions_for_install())
@@ -740,8 +764,120 @@ final class _FW_Extensions_Manager
 		} else {
 			$supported = false;
 
+			$extension_names = array_map( 'trim', explode( ',', FW_Request::GET( 'extension', '' ) ));
+
+			/**
+			 * Add already installed extensions for activation
+			 */
+			do {
+				if (empty($extension_names)) {
+					break;
+				}
+
+				foreach ($extension_names as $extension_name) {
+					if (isset($installed_extensions[ $extension_name ])) {
+						$activate_extensions[ $extension_name ] = array();
+					}
+				}
+			} while(false);
+
 			$install_data = $this->get_install_data(
-				array_map( 'trim', explode( ',', FW_Request::GET( 'extension', '' ) ))
+				$extension_names
+			);
+		}
+
+		if (!empty($activate_extensions)) {
+			$db_active_extensions = fw()->extensions->_get_db_active_extensions();
+
+			foreach (array_keys($activate_extensions) as $extension_name) {
+				$current_extension_activation = array();
+
+				// add extension to activation only if all required extensions are installed
+				{
+					$required_extensions = array();
+					$this->collect_required_extensions($extension_name, $installed_extensions, $required_extensions);
+
+					if (array_diff_key($required_extensions, $installed_extensions)) {
+						// extension requires extensions that are not installed
+						continue;
+					} else {
+						// all required extensions are installed
+						$current_extension_activation[ $extension_name ] = array();
+
+						if (!empty($required_extensions)) {
+							$current_extension_activation = array_merge(
+								$current_extension_activation,
+								array_fill_keys(array_keys($required_extensions), array())
+							);
+						}
+					}
+				}
+
+				// activate parents
+				{
+					$current_parent = $extension_name;
+					while ($current_parent = $installed_extensions[$current_parent]['parent']) {
+						// add extension to activation only if all required extensions are installed
+						{
+							$required_extensions = array();
+							$this->collect_required_extensions($current_parent, $installed_extensions, $required_extensions);
+
+							if (array_diff_key($required_extensions, $installed_extensions)) {
+								// extension requires extensions that are not installed
+								continue 2;
+							} else {
+								// all required extensions are installed
+								$current_extension_activation[ $current_parent ] = array();
+
+								if (!empty($required_extensions)) {
+									$current_extension_activation = array_merge(
+										$current_extension_activation,
+										array_fill_keys(array_keys($required_extensions), array())
+									);
+								}
+							}
+						}
+					}
+				}
+
+				// activate children
+				{
+					foreach (
+						array_keys($this->collect_sub_extensions($extension_name, $installed_extensions))
+						as $sub_extension_name
+					) {
+						// add extension to activation only if all required extensions are installed
+						{
+							$required_extensions = array();
+							$this->collect_required_extensions($sub_extension_name, $installed_extensions, $required_extensions);
+
+							if (array_diff_key($required_extensions, $installed_extensions)) {
+								// extension requires extensions that are not installed
+								continue 2;
+							} else {
+								// all required extensions are installed
+								$current_extension_activation[ $sub_extension_name ] = array();
+
+								if (!empty($required_extensions)) {
+									$current_extension_activation = array_merge(
+										$current_extension_activation,
+										array_fill_keys(array_keys($required_extensions), array())
+									);
+								}
+							}
+						}
+					}
+
+					$db_active_extensions = array_merge(
+						$db_active_extensions,
+						$current_extension_activation
+					);
+				}
+			}
+
+			update_option(
+				fw()->extensions->_get_active_extensions_db_option_name(),
+				$db_active_extensions
 			);
 		}
 
@@ -783,7 +919,6 @@ final class _FW_Extensions_Manager
 					break;
 				}
 
-				$installed_extensions = $this->get_installed_extensions();
 				$available_extensions = $this->get_available_extensions();
 
 				$extensions_before_install = array_keys($installed_extensions);
