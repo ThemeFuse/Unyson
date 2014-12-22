@@ -1901,26 +1901,24 @@ final class _FW_Extensions_Manager
 				);
 			}
 
-			if (empty($destination_files)) {
-				// directory is empty, nothing to remove
-				return;
-			}
+			if (!empty($destination_files)) {
+				// the directory contains some files, delete everything
+				foreach ($destination_files as $file) {
+					if ($file['name'] === 'extensions' && $file['type'] === 'd') {
+						// do not touch the extensions/ directory
+						continue;
+					}
 
-			foreach ($destination_files as $file) {
-				if ($file['name'] === 'extensions' && $file['type'] === 'd') {
-					// do not touch the extensions/ directory
-					continue;
+					if (!$wp_filesystem->delete($destination_wp_fs_dir .'/'. $file['name'], true, $file['type'])) {
+						return new WP_Error(
+							$wp_error_id,
+							sprintf(__('Cannot delete "%s".', 'fw'), $destination_wp_fs_dir .'/'. $file['name'])
+						);
+					}
 				}
 
-				if (!$wp_filesystem->delete($destination_wp_fs_dir .'/'. $file['name'], true, $file['type'])) {
-					return new WP_Error(
-						$wp_error_id,
-						sprintf(__('Cannot delete "%s".', 'fw'), $destination_wp_fs_dir .'/'. $file['name'])
-					);
-				}
+				unset($destination_files);
 			}
-
-			unset($destination_files);
 		} else {
 			if (!FW_WP_Filesystem::mkdir_recursive($destination_wp_fs_dir)) {
 				return new WP_Error(
