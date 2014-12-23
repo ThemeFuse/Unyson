@@ -1,0 +1,125 @@
+.fw-option-type-slider .irs {
+	height: 55px;
+}
+
+.fw-option-type-slider .irs-with-grid {
+	height: 75px;
+}
+
+.fw-option-type-slider .irs-line {
+	height: 5px;
+	top: 33px;
+	background: #ffffff;
+	border: 2px solid #dddddd;
+	border-radius: 16px;
+	-moz-border-radius: 16px;
+}
+
+.fw-option-type-slider .irs-line-left {
+	height: 8px;
+}
+
+.fw-option-type-slider .irs-line-mid {
+	height: 8px;
+}
+
+.fw-option-type-slider .irs-line-right {
+	height: 8px;
+}
+
+.fw-option-type-slider .irs-bar {
+	height: 10px;
+	top: 33px;
+	background: #cbcbcb;
+}
+
+.fw-option-type-slider .irs-bar-edge {
+	height: 10px;
+	top: 33px;
+	width: 14px;
+	border-right: 0;
+	background: #cbcbcb;
+	border-radius: 16px 0 0 16px;
+	-moz-border-radius: 16px 0 0 16px;
+}
+
+.fw-option-type-slider .irs-shadow {
+	height: 2px;
+	top: 38px;
+	background: #000;
+	opacity: 0.3;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+
+.fw-option-type-slider .lt-ie9 .irs-shadow {
+	filter: alpha(opacity=30);
+}
+
+.fw-option-type-slider .irs-slider {
+	top: 28px;
+	width: 18px;
+	height: 18px;
+	border: none;
+	background: #787878;
+	border-radius: 18px;
+	-moz-border-radius: 27px;
+	cursor: pointer;
+}
+
+.fw-option-type-slider #irs-active-slider, .fw-option-type-slider .irs-slider:hover {
+	background: #787878;
+}
+
+.fw-option-type-slider .irs-min, .fw-option-type-slider .irs-max {
+	display: none;
+	color: #333;
+	font-size: 12px;
+	line-height: 1.333;
+	text-shadow: none;
+	top: 0;
+	padding: 1px 5px;
+	background: rgba(0, 0, 0, 0.1);
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
+.fw-option-type-slider .lt-ie9 .irs-min, .fw-option-type-slider .lt-ie9 .irs-max {
+	background: #ccc;
+}
+
+.fw-option-type-slider .irs-from, .fw-option-type-slider .irs-to, .fw-option-type-slider .irs-single {
+	color: #f1f1f1;
+	font-size: 14px;
+	line-height: 1.333;
+	text-shadow: none;
+	padding: 1px 5px;
+	background: #787878;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
+.fw-option-type-slider .lt-ie9 .irs-from, .fw-option-type-slider .lt-ie9 .irs-to, .fw-option-type-slider .lt-ie9 .irs-single {
+	background: #999;
+}
+
+.fw-option-type-slider .irs-grid {
+	height: 27px;
+}
+
+.fw-option-type-slider .irs-grid-pol {
+	opacity: 0.5;
+	background: #428bca;
+}
+
+.fw-option-type-slider .irs-grid-pol.small {
+	background: #999;
+}
+
+.fw-option-type-slider .irs-grid-text {
+	bottom: 5px;
+	color: #99a4ac;
+}
+
+.fw-option-type-slider .irs-disabled {
+}

@@ -68,7 +68,6 @@ class FW_Option_Type_Datetime_Picker extends FW_Option_Type {
 		{
 			$css_lib_uri        = fw_get_framework_directory_uri('/includes/option-types/datetime-picker/static/css/jquery.datetimepicker.css');
 			$js_lib_uri         = fw_get_framework_directory_uri('/includes/option-types/datetime-picker/static/js/jquery.datetimepicker.js');
-			$js_lib_moment_uri  = fw_get_framework_directory_uri('/includes/option-types/datetime-picker/static/js/moment.min.js');
 		}
 
 		//framework styles & js
@@ -79,8 +78,8 @@ class FW_Option_Type_Datetime_Picker extends FW_Option_Type {
 
 		wp_enqueue_style( 'fw-option-datetime-picker-lib-css', $css_lib_uri );
 		wp_enqueue_style( 'fw-option-datetime-picker-main-css', $css_main_uri );
-		wp_enqueue_script( 'fw-option-datetime-picker-lib-moment-js', $js_lib_moment_uri, array('jquery'), false, true );
-		wp_enqueue_script( 'fw-option-datetime-picker-lib-js', $js_lib_uri, array('jquery', 'fw-option-datetime-picker-lib-moment-js'), false, true );
+		wp_enqueue_script( 'fw-moment' );
+		wp_enqueue_script( 'fw-option-datetime-picker-lib-js', $js_lib_uri, array('jquery', 'fw-moment'), false, true );
 		wp_enqueue_script( 'fw-option-datetime-picker-main-js', $js_main_uri, array('jquery', 'fw-option-datetime-picker-lib-js', 'fw-events' ), false, true );
 
 		fw()->backend->option_type( 'text' )->enqueue_static();

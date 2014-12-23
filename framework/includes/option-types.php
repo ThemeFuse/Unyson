@@ -880,3 +880,4 @@ require $dir .'/option-types/datetime-range/class-fw-option-type-datetime-range.
 require $dir .'/option-types/datetime-picker/class-fw-option-type-datetime-picker.php';
 require $dir .'/option-types/radio-text/class-fw-option-type-radio-text.php';
 require $dir .'/option-types/popup/class-fw-option-type-popup.php';
+require $dir .'/option-types/slider/class-fw-option-type-slider.php';

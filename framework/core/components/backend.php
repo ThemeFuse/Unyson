@@ -334,6 +334,15 @@ final class _FW_Component_Backend
 			);
 		}
 
+		{
+			wp_register_script(
+				'fw-moment',
+				fw_get_framework_directory_uri('/static/libs/moment/moment.min.js'),
+				fw()->manifest->get_version(),
+				true
+			);
+		}
+
 		$this->static_registered = true;
 	}
 
