@@ -881,3 +881,4 @@ require $dir .'/option-types/datetime-picker/class-fw-option-type-datetime-picke
 require $dir .'/option-types/radio-text/class-fw-option-type-radio-text.php';
 require $dir .'/option-types/popup/class-fw-option-type-popup.php';
 require $dir .'/option-types/slider/class-fw-option-type-slider.php';
+require $dir .'/option-types/rgba-color-picker/class-fw-option-type-rgba-color-picker.php';
