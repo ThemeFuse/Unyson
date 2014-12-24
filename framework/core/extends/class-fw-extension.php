@@ -115,9 +115,10 @@ abstract class FW_Extension
 	/**
 	 * @param string $name View file name (without .php) from <extension>/views directory
 	 * @param  array $view_variables Keys will be variables names within view
+	 * @param   bool $return In some cases, for memory saving reasons, you can disable the use of output buffering
 	 * @return string HTML
 	 */
-	final protected function render_view($name, $view_variables = array())
+	final protected function render_view($name, $view_variables = array(), $return = true)
 	{
 		$full_path = $this->locate_path('/views/'. $name .'.php');
 
@@ -126,7 +127,7 @@ abstract class FW_Extension
 			return;
 		}
 
-		return fw_render_view($full_path, $view_variables);
+		return fw_render_view($full_path, $view_variables, $return);
 	}
 
 	/**
