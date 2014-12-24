@@ -8,7 +8,6 @@
 	fwEvents.on('fw:options:init', function (data) {
 		data.$elements.find('.fw-option-type-slider').each(function () {
 			var options = JSON.parse($(this).attr('data-fw-irs-options'));
-			console.log(options);
 			$(this).find('.fw-irs-range-slider').ionRangeSlider(_.defaults(options, defaults));
 		});
 	});

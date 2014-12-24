@@ -25,8 +25,6 @@ class FW_Option_Type_Slider extends FW_Option_Type {
 				array( 'jquery', 'fw-moment' ),
 				fw()->manifest->get_version()
 			);
-
-
 		}
 
 		wp_enqueue_style(
@@ -41,7 +39,6 @@ class FW_Option_Type_Slider extends FW_Option_Type {
 			array( 'jquery', 'underscore', 'fw-option-' . $this->get_type() . 'ion-range-slider' ),
 			fw()->manifest->get_version()
 		);
-		//wp_localize_script('fw-option-' . $this->get_type(), 'googleFonts', $fw_typography_fonts['google']);
 	}
 
 	public function get_type() {
