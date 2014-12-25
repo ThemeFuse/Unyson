@@ -1555,6 +1555,11 @@ final class _FW_Extensions_Manager
 				}
 			}
 
+			// add extensions that requires deactivated extensions
+			{
+				$this->collect_extensions_that_requires($deactivated_extensions, $deactivated_extensions);
+			}
+
 			// add not used extensions for deactivation
 			{
 				$not_used_extensions = array_fill_keys(array_keys(array_diff_key(
@@ -2447,5 +2452,46 @@ final class _FW_Extensions_Manager
 		);
 
 		return $errors;
+	}
+
+	/**
+	 * @param array $collected The found extensions {'extension_name' => array()}
+	 * @param array $extensions {'extension_name' => array()}
+	 * @param bool $all Check all extensions or only active extensions
+	 */
+	private function collect_extensions_that_requires(&$collected, $extensions, $all = false)
+	{
+		if (empty($extensions)) {
+			return;
+		}
+
+		$found_extensions = array();
+
+		foreach ($this->get_installed_extensions() as $extension_name => $extension_data) {
+			if (isset($collected[$extension_name])) {
+				continue;
+			}
+
+			if (!$all) {
+				if (!fw_ext($extension_name)) {
+					continue;
+				}
+			}
+
+			if (
+				array_intersect_key(
+					$extensions,
+					fw_akg(
+						'requirements/extensions',
+						$extension_data['manifest'],
+						array()
+					)
+				)
+			) {
+				$found_extensions[$extension_name] = $collected[$extension_name] = array();
+			}
+		}
+
+		$this->collect_extensions_that_requires($collected, $found_extensions, $all);
 	}
 }
