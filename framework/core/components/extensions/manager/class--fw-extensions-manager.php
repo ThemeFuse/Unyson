@@ -2457,9 +2457,9 @@ final class _FW_Extensions_Manager
 	/**
 	 * @param array $collected The found extensions {'extension_name' => array()}
 	 * @param array $extensions {'extension_name' => array()}
-	 * @param bool $all Check all extensions or only active extensions
+	 * @param bool $check_all Check all extensions or only active extensions
 	 */
-	private function collect_extensions_that_requires(&$collected, $extensions, $all = false)
+	private function collect_extensions_that_requires(&$collected, $extensions, $check_all = false)
 	{
 		if (empty($extensions)) {
 			return;
@@ -2472,7 +2472,7 @@ final class _FW_Extensions_Manager
 				continue;
 			}
 
-			if (!$all) {
+			if (!$check_all) {
 				if (!fw_ext($extension_name)) {
 					continue;
 				}
@@ -2492,6 +2492,6 @@ final class _FW_Extensions_Manager
 			}
 		}
 
-		$this->collect_extensions_that_requires($collected, $found_extensions, $all);
+		$this->collect_extensions_that_requires($collected, $found_extensions, $check_all);
 	}
 }
