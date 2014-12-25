@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio
 Requires at least: 4.0.0
 Tested up to: 4.1
-Stable tag: 2.1.11
+Stable tag: 2.1.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,11 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.1.12 =
+* Split the `slider` option-type into `slider` and `range-slider`
+* Added option type `rgba-color-picker`
+* Internal fixes and improvements
 
 = 2.1.11 =
 * Added option-type `slider`
