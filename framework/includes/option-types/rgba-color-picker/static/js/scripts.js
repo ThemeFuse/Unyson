@@ -45,6 +45,8 @@
 					var $transparency = $input.next('.iris-picker').find('.transparency');
 					$transparency.css('backgroundColor', ui.color.toString('no-alpha'));
 
+					$alpha_slider.slider( "option", "value", ui.color._alpha * 100 );
+
 					$input.css('background-color', ui.color.toCSS());
 					$input.css('color', ($alpha_slider.slider("value") > 40) ? ui.color.getMaxContrastColor().toCSS() : '#000000');
 				}
