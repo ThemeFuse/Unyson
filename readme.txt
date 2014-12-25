@@ -85,7 +85,7 @@ Yes; Unyson will work with any theme.
 == Changelog ==
 
 = 2.1.12 =
-* New extensions: Forms (Contact Forms), Mailer and Social
+* New extensions: Forms (Contact Forms), Mailer, Social
 * Added option type `rgba-color-picker`
 * Split the `slider` option-type into `slider` and `range-slider`
 * Internal fixes and improvements
