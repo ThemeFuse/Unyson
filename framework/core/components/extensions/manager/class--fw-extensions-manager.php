@@ -48,8 +48,7 @@ final class _FW_Extensions_Manager
 			add_action('network_admin_menu', array($this, '_action_admin_menu'));
 			add_action('admin_footer', array($this, '_action_admin_footer'));
 			add_action('admin_enqueue_scripts', array($this, '_action_enqueue_menu_icon_style'));
-			// as late as possible, but to be able to make redirects (content not started)
-			add_action('current_screen', array($this, '_action_check_if_plugin_was_activated'), 100);
+			add_action('fw_after_plugin_activate', array($this, '_action_after_plugin_activate'), 100);
 			add_action('after_switch_theme', array($this, '_action_theme_switch'));
 
 			if ($this->can_install()) {
@@ -218,18 +217,8 @@ final class _FW_Extensions_Manager
 	/**
 	 * @internal
 	 */
-	public function _action_check_if_plugin_was_activated()
+	public function _action_after_plugin_activate()
 	{
-		{
-			$option_name = '_fw_plugin_activated';
-
-			if (!get_option($option_name)) {
-				return;
-			}
-
-			delete_option($option_name);
-		}
-
 		$this->activate_theme_extensions();
 		$this->activate_extensions_if_exists(
 			array_fill_keys(

@@ -38,22 +38,71 @@ if (defined('FW')) {
 	{
 		/** @internal */
 		function _action_fw_plugin_activate() {
-			foreach ( glob( dirname( __FILE__ ) . '/framework/includes/on-plugin-activation/*.php' ) as $file ) {
-				require_once $file;
+			{
+				require_once dirname(__FILE__) .'/framework/includes/term-meta/function_fw_term_meta_setup_blog.php';
+
+				if (is_multisite() && is_network_admin()) {
+					global $wpdb;
+
+					$blogs = $wpdb->get_col( "SELECT blog_id FROM {$wpdb->blogs} WHERE site_id = '{$wpdb->siteid}'" );
+					foreach ( $blogs as $blog_id ) {
+						switch_to_blog( $blog_id );
+						_fw_term_meta_setup_blog( $blog_id );
+					}
+
+					do {} while ( restore_current_blog() );
+				} else {
+					_fw_term_meta_setup_blog();
+				}
 			}
+
+			// add special option (is used in another action)
+			update_option('_fw_plugin_activated', true);
 		}
 		register_activation_hook( __FILE__, '_action_fw_plugin_activate' );
 
 		/** @internal */
-		function _action_term_meta_new_blog( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
-			if ( is_plugin_active_for_network( plugin_basename( __FILE__ ) ) ) {
-				_fw_term_meta_setup_blog( $blog_id );
+		function _action_fw_plugin_check_if_was_activated() {
+			if (get_option('_fw_plugin_activated')) {
+				delete_option('_fw_plugin_activated');
+
+				do_action('fw_after_plugin_activate');
 			}
 		}
-		add_action( 'wpmu_new_blog', '_action_term_meta_new_blog', 10, 6 );
+		add_action('current_screen', '_action_fw_plugin_check_if_was_activated', 100);
+		// as late as possible, but to be able to make redirects (content not started)
 
 		/** @internal */
-		function _filter_check_if_plugin_pre_update( $result, $data ) {
+		function _action_fw_term_meta_new_blog( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
+			if ( is_plugin_active_for_network( plugin_basename( __FILE__ ) ) ) {
+				require_once dirname(__FILE__) .'/framework/includes/term-meta/function_fw_term_meta_setup_blog.php';
+
+				switch_to_blog( $blog_id );
+				_fw_term_meta_setup_blog();
+				do {} while ( restore_current_blog() );
+			}
+		}
+		add_action( 'wpmu_new_blog', '_action_fw_term_meta_new_blog', 10, 6 );
+
+		/**
+		 * @param int $blog_id Blog ID
+		 * @param bool $drop True if blog's table should be dropped. Default is false.
+		 * @internal
+		 */
+		function _action_fw_delete_blog( $blog_id, $drop ) {
+			if ($drop) { // delete table created by the _fw_term_meta_setup_blog() function
+				/** @var WPDB $wpdb */
+				global $wpdb;
+
+				if (property_exists($wpdb, 'fw_termmeta')) { // it should exist, but check to be sure
+					$wpdb->query("DROP TABLE IF EXISTS {$wpdb->fw_termmeta};");
+				}
+			}
+		}
+		add_action( 'delete_blog', '_action_fw_delete_blog', 10, 2 );
+
+		/** @internal */
+		function _filter_fw_check_if_plugin_pre_update( $result, $data ) {
 			if ( isset( $data['plugin'] ) && $data['plugin'] === plugin_basename( __FILE__ ) ) {
 				/**
 				 * Before plugin update
@@ -63,10 +112,10 @@ if (defined('FW')) {
 
 			return $result;
 		}
-		add_filter( 'upgrader_pre_install', '_filter_check_if_plugin_pre_update', 10, 2 );
+		add_filter( 'upgrader_pre_install', '_filter_fw_check_if_plugin_pre_update', 10, 2 );
 
 		/** @internal */
-		function _filter_check_if_plugin_post_update( $result, $data ) {
+		function _filter_fw_check_if_plugin_post_update( $result, $data ) {
 			if ( isset( $data['plugin'] ) && $data['plugin'] === plugin_basename( __FILE__ ) ) {
 				/**
 				 * After plugin update
@@ -76,13 +125,13 @@ if (defined('FW')) {
 
 			return $result;
 		}
-		add_filter( 'upgrader_post_install', '_filter_check_if_plugin_post_update', 10, 2 );
+		add_filter( 'upgrader_post_install', '_filter_fw_check_if_plugin_post_update', 10, 2 );
 
 		/** @internal */
-		function _filter_plugin_action_list( $actions ) {
+		function _filter_fw_plugin_action_list( $actions ) {
 			return apply_filters( 'fw_plugin_action_list', $actions );
 		}
-		add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), '_filter_plugin_action_list' );
+		add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), '_filter_fw_plugin_action_list' );
 
 		/** @internal */
 		function _action_fw_textdomain() {
