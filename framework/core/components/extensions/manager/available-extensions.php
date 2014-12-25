@@ -106,7 +106,7 @@ $extensions = array(
 		'display'     => true,
 		'parent'      => null,
 		'name'        => __( 'Breadcrumbs', 'fw' ),
-		'description' => __( 'Creates a simplified navigation menu for the pages that can be placed anywhere in the theme. This will make navigating around the website much easier.', 'fw' ),
+		'description' => __( 'Creates a simplified navigation menu for the pages that can be placed anywhere in the theme. This will make navigating the website much easier.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/breadcrumbs.jpg',
 		'download'    => array(
 			'github' => array(
@@ -130,7 +130,7 @@ $extensions = array(
 		'display'     => true,
 		'parent'      => null,
 		'name'        => __( 'Sidebars', 'fw' ),
-		'description' => __( 'Brings another layer of customization freedom to your website by letting you add more than one sidebar to a page, or different sidebars on different pages.', 'fw' ),
+		'description' => __( 'Brings a new layer of customization freedom to your website by letting you add more than one sidebar to a page, or different sidebars on different pages.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/sidebars.jpg',
 		'download'    => array(
 			'github' => array(
@@ -154,7 +154,7 @@ $extensions = array(
 		'display'     => true,
 		'parent'      => null,
 		'name'        => __( 'Backup', 'fw' ),
-		'description' => __( 'This extension lets you set up daily, weekly or monthly backup schedule. You will have the option to choose between a full backup or a data base only backup.', 'fw' ),
+		'description' => __( 'This extension lets you set up daily, weekly or monthly backup schedule. You can choose between a full backup or a data base only backup.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/backup.jpg',
 		'download'    => array(
 			'github' => array(
@@ -207,6 +207,42 @@ $extensions = array(
 		'download'    => array(
 			'github' => array(
 				'user_repo' => $github_account . '/Unyson-Learning-Extension',
+			),
+		),
+	),
+	'forms' => array(
+		'display'     => true,
+		'parent'      => null,
+		'name'        => __( 'Forms', 'fw' ),
+		'description' => __( 'This extension adds the possibility to create a contact form. Use the drag & drop form builder to create any contact form you\'ll ever want or need.', 'fw' ),
+		'thumbnail'   => $thumbnails_uri . '/forms.jpg',
+		'download'    => array(
+			'github' => array(
+				'user_repo' => $github_account . '/Unyson-Forms-Extension',
+			),
+		),
+	),
+	'mailer' => array(
+		'display'     => true,
+		'parent'      => null,
+		'name'        => __( 'Mailer', 'fw' ),
+		'description' => __( 'This extension will let you set some global email options and it is used by other extensions (like Forms) to send emails.', 'fw' ),
+		'thumbnail'   => $thumbnails_uri . '/mailer.jpg',
+		'download'    => array(
+			'github' => array(
+				'user_repo' => $github_account . '/Unyson-Mailer-Extension',
+			),
+		),
+	),
+	'social' => array(
+		'display'     => true,
+		'parent'      => null,
+		'name'        => __( 'Social', 'fw' ),
+		'description' => __( 'Use this extension to configure all your social related APIs. Other extensions will use the Social extension to connect to your social accounts.', 'fw' ),
+		'thumbnail'   => $thumbnails_uri . '/social.jpg',
+		'download'    => array(
+			'github' => array(
+				'user_repo' => $github_account . '/Unyson-Social-Extension',
 			),
 		),
 	),
