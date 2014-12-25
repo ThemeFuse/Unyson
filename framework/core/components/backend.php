@@ -780,6 +780,9 @@ final class _FW_Component_Backend
 				'          .closest(".fw-options-tabs-wrapper").parent().closest(".fw-options-tabs-wrapper")'.
 				'          .find("> .fw-options-tabs-list > ul > li > a[href=\'#"+ $tabLink.closest(".fw-options-tab").attr("id") +"\']");'.
 				'      }'.
+				'      '.
+				'      /* click again on focus tab to update the input value */'.
+				'      $(".fw-options-tabs-wrapper > .fw-options-tabs-list > ul > li > a[href=\'#"+ focusTabId +"\']").trigger("click");;'.
 				'    }, 200);' .
 				'  });' .
 				'});' .
