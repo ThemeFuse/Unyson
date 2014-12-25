@@ -53,7 +53,7 @@ class FW_Option_Type_Rgba_Color_Picker extends FW_Option_Type {
 	protected function _get_value_from_input( $option, $input_value ) {
 		if ( ! empty( $input_value ) ) {
 			$input_value = str_replace( ' ', '', $input_value );
-			$input_value = ( preg_match( '/^#[a-f0-9]{3}([a-f0-9]{3})?$/i', $input_value ) || preg_match( '/^rgba\(([01]?\d\d?|2[0-4]\d|25[0-5])\,([01]?\d\d?|2[0-4]\d|25[0-5])\,([01]?\d\d?|2[0-4]\d|25[0-5]),0.\d{1,2}\)$/', $input_value ) ) ? $input_value : $option['value'];;
+			$input_value = ( preg_match( '/^#[a-f0-9]{3}([a-f0-9]{3})?$/i', $input_value ) || preg_match( '/^rgba\(([01]?\d\d?|2[0-4]\d|25[0-5])\,([01]?\d\d?|2[0-4]\d|25[0-5])\,([01]?\d\d?|2[0-4]\d|25[0-5]),0.\d{1,2}\)$/', $input_value ) ) ? $input_value : $option['value'];
 		}
 
 		return (string) $input_value;
