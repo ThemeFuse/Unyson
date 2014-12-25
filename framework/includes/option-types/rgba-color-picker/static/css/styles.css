@@ -42,10 +42,6 @@ input.fw-option-type-rgba-color-picker.iris-error {
 	width: 88%;
 }
 
-.wp-picker-container a.wp-picker-open ~ div.pluto-alpha-container {
-	display: block;
-}
-
 .fw-alpha-container {
 	box-sizing: padding-box;
 	display: block;
