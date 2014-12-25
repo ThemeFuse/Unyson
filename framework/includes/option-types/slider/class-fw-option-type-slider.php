@@ -4,6 +4,7 @@
 
 /**
  * Slider
+ * -----*--
  */
 class FW_Option_Type_Slider extends FW_Option_Type {
 
@@ -49,30 +50,27 @@ class FW_Option_Type_Slider extends FW_Option_Type {
 	 * @internal
 	 */
 	protected function _render( $id, $option, $data ) {
-		if ( gettype( $option['value'] ) === 'array' ) {
-			$option['properties']['type'] = 'double';
-			$option['properties']['from'] = ( isset( $data['value']['from'] ) ) ? $data['value']['from'] : $option['value']['from'];
-			$option['properties']['to']   = ( isset( $data['value']['to'] ) ) ? $data['value']['to'] : $option['value']['to'];
-		} else {
-			$option['attr']['data-fw-irs-options']['type'] = 'single';
-			$option['properties']['from']                  = ( isset( $data['value'] ) ) ? $data['value'] : $option['value'];
-		}
-		$option['attr']['data-fw-irs-options'] = ( ! empty( $option['properties'] ) ) ? json_encode( $option['properties'] ) : array();
+		$option['properties']['type'] = 'single';
+		$option['properties']['from'] = isset( $data['value'] ) ? $data['value'] : $option['value'];
+
+		$option['attr']['data-fw-irs-options'] = json_encode(
+			$this->default_properties($option['properties'])
+		);
 
 		return fw_render_view( fw_get_framework_directory( '/includes/option-types/' . $this->get_type() . '/view.php' ), array(
 			'id'     => $id,
 			'option' => $option,
 			'data'   => $data,
-			'value'  => $this->get_processed_value( $data['value'] )
+			'value'  => $data['value']
 		) );
 	}
 
-	private function get_processed_value( $data ) {
-		if ( is_array( $data ) ) {
-			$data = implode( ';', $data );
-		}
-
-		return $data;
+	private function default_properties($properties = array()) {
+		return array_merge(array(
+			'min' => 0,
+			'max' => 100,
+			'step' => 1,
+		), $properties);
 	}
 
 	/**
@@ -81,7 +79,7 @@ class FW_Option_Type_Slider extends FW_Option_Type {
 	protected function _get_defaults() {
 		return array(
 			'value'      => 0,
-			'properties' => array()
+			'properties' => $this->default_properties(), // https://github.com/IonDen/ion.rangeSlider#settings
 		);
 	}
 
@@ -90,16 +88,8 @@ class FW_Option_Type_Slider extends FW_Option_Type {
 	 */
 	protected function _get_value_from_input( $option, $input_value ) {
 		$input_values = array_map( 'intval', explode( ';', $input_value ) );
-		if ( isset( $option['value'] ) && gettype( $option['value'] ) === 'array' ) {
-			$value = array(
-				'from' => $input_values[0],
-				'to'   => $input_values[1],
-			);
-		} else {
-			$value = $input_values[0];
-		}
 
-		return $value;
+		return $input_values[0];
 	}
 
 }
