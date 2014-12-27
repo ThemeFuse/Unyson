@@ -508,7 +508,7 @@ fw.getQueryString = function(name) {
 	 * modal.open();
 	 */
 	fw.OptionsModal = Backbone.Model.extend({
-		defaultSize: 'small',
+		defaultSize: 'small', // 'large', 'medium', 'small'
 		defaults: {
 			/** Will be transformed to array with json_decode($options, true) and sent to fw()->backend->render_options() */
 			options: [
