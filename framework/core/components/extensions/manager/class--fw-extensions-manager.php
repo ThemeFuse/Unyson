@@ -1743,7 +1743,10 @@ final class _FW_Extensions_Manager
 					} else {
 						$http = new WP_Http();
 
-						$response = $http->get('https://api.github.com/repos/'. $source_data['user_repo'] .'/releases');
+						$response = $http->get(
+							apply_filters('fw_github_api_url', 'https://api.github.com')
+							. '/repos/'. $source_data['user_repo'] .'/releases'
+						);
 
 						unset($http);
 
