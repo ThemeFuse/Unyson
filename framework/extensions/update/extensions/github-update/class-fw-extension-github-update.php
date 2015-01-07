@@ -67,7 +67,9 @@ class FW_Extension_Github_Update extends FW_Ext_Update_Service
 
 		$http = new WP_Http();
 
-		$response = $http->get('/repos/'. $user_slash_repo .'/releases');
+		$response = $http->get(
+			$this->get_github_api_url('/repos/'. $user_slash_repo .'/releases')
+		);
 
 		unset($http);
 

@@ -59,3 +59,15 @@
 	}
 	add_action('after_switch_theme', '_action_fw_setup_term_meta_after_theme_switch', 7);
 }
+
+/**
+ * Custom Github API service
+ * Provides the same responses but is "unlimited"
+ * To prevent error: Github API rate limit exceeded 60 requests per hour
+ * https://github.com/ThemeFuse/Unyson/issues/138
+ * @internal
+ */
+function _fw_filter_github_api_url($url) {
+	return 'http://github-api-cache.unyson.io';
+}
+add_filter('fw_github_api_url', '_fw_filter_github_api_url');
