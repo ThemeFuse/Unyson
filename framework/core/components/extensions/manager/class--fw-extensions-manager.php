@@ -1728,7 +1728,7 @@ final class _FW_Extensions_Manager
 					}
 
 					{
-						$transient_name = 'fw_ext_manager_gh_ext_download';
+						$transient_name = 'fw_ext_manager_gh_download';
 						$transient_ttl  = HOUR_IN_SECONDS;
 
 						$cache = get_site_transient($transient_name);
@@ -1801,7 +1801,7 @@ final class _FW_Extensions_Manager
 
 						{
 							$cache[ $source_data['user_repo'] ] = array(
-								'zipball_url' => $release['zipball_url'],
+								'zipball_url' => 'https://github.com/'. $source_data['user_repo'] .'/archive/'. $release['tag_name'] .'.zip',
 								'tag_name' => $release['tag_name']
 							);
 

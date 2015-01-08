@@ -287,9 +287,12 @@ class FW_Extension_Github_Update extends FW_Ext_Update_Service
 
 		$http = new WP_Http();
 
-		$response = $http->request($release['zipball_url'], array(
-			'timeout' => $this->download_timeout,
-		));
+		$response = $http->request(
+			'https://github.com/'. $user_slash_repo .'/archive/'. $release['tag_name'] .'.zip',
+			array(
+				'timeout' => $this->download_timeout,
+			)
+		);
 
 		unset($http);
 
