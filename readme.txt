@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio
 Requires at least: 4.0.0
 Tested up to: 4.1
-Stable tag: 2.1.13
+Stable tag: 2.1.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,9 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.1.14 =
+* Fixed extension download link to not make a request to Github API
 
 = 2.1.13 =
 * Make requests to custom Github API Cache service to prevent `Github API rate limit exceeded` error [#138](https://github.com/ThemeFuse/Unyson/issues/138)
