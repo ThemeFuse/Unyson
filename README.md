@@ -56,3 +56,5 @@ Developers can contribute to the source code. Please read our [contributor guide
 Translators can contribute new languages to Unyson through [Transifex](https://www.transifex.com/projects/p/unyson/).
 
 If you have an idea for Unyson, see the [Trello board](https://trello.com/b/Xm9TxasH/unyson-development).
+
+Theme developers can test the compatibility of their themes with new extensions updates before they are going to be released on [Unyson Extensions Approval](https://github.com/ThemeFuse/Unyson-Extensions-Approval).
