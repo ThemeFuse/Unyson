@@ -1808,7 +1808,7 @@ final class _FW_Extensions_Manager
 							set_site_transient($transient_name, $cache, $transient_ttl);
 						}
 
-						$download_link = $release['zipball_url'];
+						$download_link = $cache[ $source_data['user_repo'] ]['zipball_url'];
 
 						unset($release);
 					}
