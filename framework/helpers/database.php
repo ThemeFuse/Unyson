@@ -115,6 +115,8 @@
 		$option_id = 'fw_options' . ( $option_id !== null ? '/' . $option_id : '' );
 
 		FW_WP_Meta::set( 'post', $post_id, $option_id, $value );
+
+		fw()->backend->_sync_post_separate_meta($post_id);
 	}
 }
 
