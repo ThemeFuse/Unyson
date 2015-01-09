@@ -746,7 +746,10 @@ final class _FW_Component_Backend
 
 		echo fw()->backend->render_options($options, $values);
 
-		$data['submit']['html'] = '<button class="button-primary button-large">'. __('Save', 'fw') .'</button>';
+		$data['submit']['html'] =
+			'<input type="submit" name="_fw_save_options" value="'. esc_attr__('Save', 'fw') .'" class="button-primary button-large" />' .
+			' &nbsp;&nbsp; ' .
+			'<input type="submit" name="_fw_reset_options" value="'. esc_attr__('Reset', 'fw') .'" class="button-secondary button-large" />';
 
 		{
 			$focus_tab_input_name = '_focus_tab';
@@ -805,17 +808,32 @@ final class _FW_Component_Backend
 	{
 		$old_values = (array)fw_get_db_settings_option();
 
-		fw_set_db_settings_option(
-			null,
-			array_merge(
-				$old_values,
+		if (!empty($_POST['_fw_reset_options'])) {
+			// The "Reset" button was pressed
+			fw_set_db_settings_option(
+				null,
 				fw_get_options_values_from_input(
-					fw()->theme->get_settings_options()
+					fw()->theme->get_settings_options(),
+					array()
 				)
-			)
-		);
+			);
 
-		FW_Flash_Messages::add('fw_settings_form_saved', __('Options successfully saved', 'fw'), 'success');
+			FW_Flash_Messages::add('fw_settings_form_saved', __('The options were successfully reset', 'fw'), 'info');
+		} else {
+			fw_set_db_settings_option(
+				null,
+				array_merge(
+					$old_values,
+					fw_get_options_values_from_input(
+						fw()->theme->get_settings_options()
+					)
+				)
+			);
+
+			FW_Flash_Messages::add('fw_settings_form_saved', __('The options were successfully saved', 'fw'), 'success');
+		}
+
+		do_action('fw_settings_form_saved', $old_values);
 
 		$redirect_url = fw_current_url();
 
@@ -831,8 +849,6 @@ final class _FW_Component_Backend
 		}
 
 		$data['redirect'] = $redirect_url;
-
-		do_action('fw_settings_form_saved', $old_values);
 
 		return $data;
 	}
