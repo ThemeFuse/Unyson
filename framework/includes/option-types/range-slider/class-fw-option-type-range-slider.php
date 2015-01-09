@@ -95,12 +95,16 @@ class FW_Option_Type_Range_Slider extends FW_Option_Type {
 	 * @internal
 	 */
 	protected function _get_value_from_input( $option, $input_value ) {
-		$input_values = array_map( 'intval', explode( ';', $input_value ) );
+		if (is_null($input_value)) {
+			return $option['value'];
+		} else {
+			$input_values = array_map('intval', explode(';', $input_value));
 
-		return array(
-			'from' => $input_values[0],
-			'to'   => $input_values[1],
-		);
+			return array(
+				'from' => $input_values[0],
+				'to' => $input_values[1],
+			);
+		}
 	}
 
 }
