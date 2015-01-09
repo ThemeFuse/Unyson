@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio
 Requires at least: 4.0.0
 Tested up to: 4.1
-Stable tag: 2.1.15
+Stable tag: 2.1.16
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,8 @@ To get started, check out the [Scratch Theme](https://github.com/ThemeFuse/Scrat
 Developers can contribute to the source code on the [Unyson GitHub Repository](https://github.com/ThemeFuse/Unyson/blob/master/CONTRIBUTING.md).
 
 Translators can contribute new languages to Unyson through [Transifex](https://www.transifex.com/projects/p/unyson/).
+
+Theme developers can test the compatibility of their themes with new extensions updates before they are going to be released on [Unyson Extensions Approval](https://github.com/ThemeFuse/Unyson-Extensions-Approval).
 
 
 == Installation ==
@@ -83,6 +85,10 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.1.16 =
+* Added the "Reset" button on the Theme Settings page
+* Minor internal fixes
 
 = 2.1.15 =
 * Minor fix for extension download link
