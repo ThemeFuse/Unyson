@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio
 Requires at least: 4.0.0
 Tested up to: 4.1
-Stable tag: 2.1.16
+Stable tag: 2.1.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,9 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.1.17 =
+* Added the possibility to create a link to an extension settings page `fw()->extensions->manager->get_extension_link('{extension-name}')`
 
 = 2.1.16 =
 * Added the "Reset" button on the Theme Settings page
