@@ -63,7 +63,7 @@ final class _FW_Component_Extensions
 	/**
 	 * @var null|_FW_Extensions_Manager
 	 */
-	private $manager;
+	public $manager;
 
 	/**
 	 * Option name that stores the active extensions array

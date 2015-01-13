@@ -180,7 +180,7 @@ final class _FW_Extensions_Manager
 	 * Extensions available for download
 	 * @return array {name => data}
 	 */
-	public function get_available_extensions()
+	private function get_available_extensions()
 	{
 		try {
 			$cache_key = $this->get_cache_key( 'available_extensions' );
@@ -2485,5 +2485,15 @@ final class _FW_Extensions_Manager
 		}
 
 		$this->collect_extensions_that_requires($collected, $found_extensions, $check_all);
+	}
+
+	/**
+	 * Get extension settings page link
+	 * @param string $extension_name
+	 * @return string
+	 */
+	public function get_extension_link($extension_name)
+	{
+		return $this->get_link() .'&sub-page=extension&extension='. $extension_name;
 	}
 }
