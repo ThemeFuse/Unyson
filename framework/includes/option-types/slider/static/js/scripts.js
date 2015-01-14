@@ -2,13 +2,24 @@
 	var defaults = {
 		onChange: function (data) {
 			data.input.next('.fw-irs-range-slider-hidden-input').val(data.from + ';' + data.to);
-		}
+			data.input.closest('.fw-option-type-slider').find('span span.irs-slider.single').html(data.from);
+			data.input.closest('.fw-option-type-slider').find('.irs-bar').css('left', 0);
+		},
+		onStart: function(data) {
+			data.input.closest('.fw-option-type-slider').find('span span.irs-slider.single').html(data.from);
+		},
+		grid: true
 	};
 
 	fwEvents.on('fw:options:init', function (data) {
 		data.$elements.find('.fw-option-type-slider').each(function () {
 			var options = JSON.parse($(this).attr('data-fw-irs-options'));
-			$(this).find('.fw-irs-range-slider').ionRangeSlider(_.defaults(options, defaults));
+			var slider = $(this).find('.fw-irs-range-slider').ionRangeSlider(_.defaults(options, defaults));
+
+			setTimeout(function(slider){
+				$(slider.context).find('.irs-bar-edge').remove();
+				$(slider.context).find('.irs-bar').css('left', '0%');
+			}, 0);
 		});
 	});
 
