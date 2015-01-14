@@ -16,10 +16,10 @@
 			var options = JSON.parse($(this).attr('data-fw-irs-options'));
 			var slider = $(this).find('.fw-irs-range-slider').ionRangeSlider(_.defaults(options, defaults));
 
-			setTimeout(function(slider){
+			setTimeout(function(){
 				$(slider.context).find('.irs-bar-edge').remove();
 				$(slider.context).find('.irs-bar').css('left', '0%');
-			}, 0, slider);
+			}, 0);
 		});
 	});
 
