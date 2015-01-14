@@ -7,6 +7,9 @@
 		},
 		onStart: function(data) {
 			data.input.closest('.fw-option-type-slider').find('span span.irs-slider.single').html(data.from);
+
+			data.input.closest('.fw-option-type-slider').find('.irs-bar-edge').remove();
+			data.input.closest('.fw-option-type-slider').find('.irs-bar').css('left', '0%');
 		},
 		grid: true
 	};
