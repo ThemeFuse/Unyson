@@ -19,7 +19,7 @@
 			setTimeout(function(slider){
 				$(slider.context).find('.irs-bar-edge').remove();
 				$(slider.context).find('.irs-bar').css('left', '0%');
-			}, 0);
+			}, 0, slider);
 		});
 	});
 
