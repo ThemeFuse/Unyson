@@ -1,18 +1,21 @@
 .fw-option-type-range-slider .irs {
-	height: 55px;
+	height: 30px;
 }
 
 .fw-option-type-range-slider .irs-with-grid {
-	height: 75px;
+	height: 40px;
 }
 
 .fw-option-type-range-slider .irs-line {
 	height: 5px;
-	top: 33px;
+	top: 5px;
 	background: #ffffff;
-	border: 2px solid #dddddd;
+	border: 1px solid #ddd;
+	-webkit-box-shadow: inset 0 1px 2px rgba( 0, 0, 0, 0.07 );
+	box-shadow: inset 0 1px 2px rgba( 0, 0, 0, 0.07 );
 	border-radius: 16px;
 	-moz-border-radius: 16px;
+	-webkit-border-radius: 16px;
 }
 
 .fw-option-type-range-slider .irs-line-left {
@@ -28,19 +31,27 @@
 }
 
 .fw-option-type-range-slider .irs-bar {
-	height: 10px;
-	top: 33px;
-	background: #cbcbcb;
+	height: 7px;
+	top: 5px;
+	background: #d9ecf4;
+	-moz-box-shadow: inset 0 0 2px 1px #c4d5dc;
+	-webkit-box-shadow: inset 0 0 2px 1px #c4d5dc;
+	box-shadow: inner 0 0 1px 2px #c4d5dc;
 }
 
 .fw-option-type-range-slider .irs-bar-edge {
-	height: 10px;
+	height: 7px;
 	top: 33px;
-	width: 14px;
+	width: 16px;
 	border-right: 0;
 	background: #cbcbcb;
 	border-radius: 16px 0 0 16px;
 	-moz-border-radius: 16px 0 0 16px;
+	-webkit-border-radius: 16px 0 0 16px;
+	-moz-box-shadow: inset 0 0 2px 1px #c4d5dc;
+	-webkit-box-shadow: inset 0 0 2px 1px #c4d5dc;
+	box-shadow: inner 0 0 2px 1px #c4d5dc;
+	border-right: none;
 }
 
 .fw-option-type-range-slider .irs-shadow {
@@ -50,6 +61,7 @@
 	opacity: 0.3;
 	border-radius: 5px;
 	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 
 .fw-option-type-range-slider .lt-ie9 .irs-shadow {
@@ -57,18 +69,24 @@
 }
 
 .fw-option-type-range-slider .irs-slider {
-	top: 28px;
-	width: 18px;
-	height: 18px;
+	top: 0;
 	border: none;
-	background: #787878;
-	border-radius: 18px;
-	-moz-border-radius: 27px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
 	cursor: pointer;
+	background-color: #00709f;
+	color: #ffffff;
+	text-align: center;
+	font-size: 11px;
+	padding: 5px;
+	min-width: 16px;
+	height: 8px;
+	line-height: 8px;
 }
 
 .fw-option-type-range-slider #irs-active-slider, .fw-option-type-range-slider .irs-slider:hover {
-	background: #787878;
+	background: #00709f;
 }
 
 .fw-option-type-range-slider .irs-min, .fw-option-type-range-slider .irs-max {
@@ -82,6 +100,7 @@
 	background: rgba(0, 0, 0, 0.1);
 	border-radius: 3px;
 	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
 }
 
 .fw-option-type-range-slider .lt-ie9 .irs-min, .fw-option-type-range-slider .lt-ie9 .irs-max {
@@ -89,6 +108,7 @@
 }
 
 .fw-option-type-range-slider .irs-from, .fw-option-type-range-slider .irs-to, .fw-option-type-range-slider .irs-single {
+	display: none;
 	color: #f1f1f1;
 	font-size: 14px;
 	line-height: 1.333;
@@ -97,6 +117,7 @@
 	background: #787878;
 	border-radius: 3px;
 	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
 }
 
 .fw-option-type-range-slider .lt-ie9 .irs-from, .fw-option-type-range-slider .lt-ie9 .irs-to, .fw-option-type-range-slider .lt-ie9 .irs-single {
@@ -104,7 +125,7 @@
 }
 
 .fw-option-type-range-slider .irs-grid {
-	height: 27px;
+	height: 19px;
 }
 
 .fw-option-type-range-slider .irs-grid-pol {
@@ -117,7 +138,6 @@
 }
 
 .fw-option-type-range-slider .irs-grid-text {
-	bottom: 5px;
 	color: #99a4ac;
 }
 

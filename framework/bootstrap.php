@@ -48,6 +48,7 @@ if (defined('FW')) {
 				'database',
 				'class-fw-flash-messages',
 				'class-fw-resize',
+				'class-fw-wp-list-table'
 			)
 			as $file
 		) {
