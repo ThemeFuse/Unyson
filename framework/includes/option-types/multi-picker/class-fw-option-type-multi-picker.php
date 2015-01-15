@@ -102,7 +102,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 		$picker_key             = key($option['picker']);
 		$picker                 = $option['picker'][$picker_key];
 		$picker_type            = $picker['type'];
-		$supported_picker_types = array('select', 'radio', 'image-picker', 'switch');
+		$supported_picker_types = array('select', 'short-select', 'radio', 'image-picker', 'switch');
 		if (!in_array($picker_type, $supported_picker_types)) {
 			// TODO: think of text for error when incorrect picker type is used
 			trigger_error(
@@ -123,6 +123,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 				));
 				break;
 			case 'select':
+			case 'short-select':
 				// we need to treat the case with optgroups
 				$collected_choices = array();
 				foreach ($picker['choices'] as $key => $value) {
@@ -221,6 +222,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 				));
 				break;
 			case 'select':
+			case 'short-select':
 				// we need to treat the case with optgroups
 				$collected_choices = array();
 				foreach ($picker['choices'] as $key => $choice_value) {

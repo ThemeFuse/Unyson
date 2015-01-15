@@ -34,6 +34,9 @@
 						chooseGroup(this.value);
 					}).trigger('change');
 				},
+				'short-select': function() {
+					this.select();
+				},
 				'radio': function() {
 					elements.$pickerGroup.find(':radio').on('change', function() {
 						chooseGroup(this.value);
