@@ -173,7 +173,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type
 
 		echo '<div ' .  fw_attr_to_html($wrapper_attr) . ' >';
 
-		$option['editor_css'] .= '<style>#wp-link-wrap{z-index: 160105} #wp-link-backdrop{z-index: 160100}</style>';
+		$option['editor_css'] .=    '<style>#wp-link-wrap{z-index: 160105} #wp-link-backdrop{z-index: 160100} .mce-container.mce-panel.mce-floatpanel.mce-menu, .mce-container.mce-panel.mce-floatpanel.mce-popover, .mce-container.mce-panel.mce-floatpanel.mce-window {z-index: 160105 !important;}</style>';
 
 		wp_editor( $value, $textarea_id, array(
 			'teeny' => $option['teeny'],
