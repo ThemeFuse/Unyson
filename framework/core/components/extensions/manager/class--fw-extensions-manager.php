@@ -1830,6 +1830,14 @@ final class _FW_Extensions_Manager
 										$this->get_extension_title( $extension_name ), $response_code
 									)
 								);
+							} elseif (is_wp_error($response)) {
+								return new WP_Error(
+									$wp_error_id,
+									sprintf( __( 'Cannot download the "%s" extension zip. %s', 'fw' ),
+										$this->get_extension_title( $extension_name ),
+										$response->get_error_message()
+									)
+								);
 							} else {
 								return new WP_Error(
 									$wp_error_id,
