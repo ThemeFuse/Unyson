@@ -157,7 +157,7 @@ abstract class FW_Option_Type
 	 * Generate option's html from option array
 	 * @param  string $id
 	 * @param   array $option
-	 * @param   array $data {value => database_value|}
+	 * @param   array $data {value => $this->get_value_from_input()}
 	 * @return string HTML
 	 */
 	final public function render($id, $option, $data = array())
