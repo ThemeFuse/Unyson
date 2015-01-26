@@ -1035,7 +1035,6 @@ function fw_ext($extension_name) {
 /*
  * Return URI without scheme
  */
-function fw_get_url_without_scheme($url){
-	$parsed = parse_url($url);
-	return '//' . $parsed['host'] . $parsed['path'] . $parsed['query'].$parsed['fragment'];
+function fw_get_url_without_scheme( $url ) {
+	return preg_replace( '/^[^:]+:\/\//', '//', $url );
 }
