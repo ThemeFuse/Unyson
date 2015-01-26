@@ -1031,3 +1031,11 @@ function fw_id_to_title($id) {
 function fw_ext($extension_name) {
 	return fw()->extensions->get($extension_name);
 }
+
+/*
+ * Return URI without scheme
+ */
+function fw_get_url_without_scheme($url){
+	$parsed = parse_url($url);
+	return '//' . $parsed['host'] . $parsed['path'] . $parsed['query'].$parsed['fragment'];
+}
