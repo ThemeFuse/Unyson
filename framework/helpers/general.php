@@ -774,22 +774,27 @@ function fw_get_google_fonts() {
  * @return string Current url
  */
 function fw_current_url() {
-	static $cache = null;
-	if ($cache !== null)
-		return $cache;
+	static $url = null;
 
-	$pageURL = 'http';
+	if ($url === null) {
+		$url = 'http://';
 
-	if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')
-		$pageURL .= 's';
+		if ($_SERVER['SERVER_NAME'] === '_') { // https://github.com/ThemeFuse/Unyson/issues/126
+			$url .= $_SERVER['HTTP_HOST'];
+		} else {
+			$url .= $_SERVER['SERVER_NAME'];
+		}
 
-	$pageURL .= '://';
+		if ($_SERVER['SERVER_PORT'] != '80') {
+			$url .= ':'. $_SERVER['SERVER_PORT'];
+		}
 
-	$pageURL .= $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+		$url .= $_SERVER['REQUEST_URI'];
 
-	$cache = $pageURL;
+		$url = set_url_scheme($url);
+	}
 
-	return $cache;
+	return $url;
 }
 
 function fw_is_valid_domain_name($domain_name) {
