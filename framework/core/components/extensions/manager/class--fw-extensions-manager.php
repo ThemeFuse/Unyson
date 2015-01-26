@@ -1408,26 +1408,37 @@ final class _FW_Extensions_Manager
 
 		// search required extensions
 		{
+			$pending_required_search = $activated_extensions;
 			$not_found_required = array();
 
-			foreach ( array_keys( $activated_extensions ) as $extension_name ) {
-				unset( $required_extensions ); // reset reference
-				$required_extensions = array();
-				$this->collect_required_extensions( $extension_name, $installed_extensions, $required_extensions );
+			while ($pending_required_search) {
+				foreach (array_keys($pending_required_search) as $extension_name) {
+					unset($pending_required_search[$extension_name]);
 
-				foreach ( $required_extensions as $required_extension_name => $required_extension_data ) {
-					if (!isset($installed_extensions[$required_extension_name])) {
-						$not_found_required[$required_extension_name] = array();
-						continue;
-					}
+					unset($required_extensions); // reset reference
+					$required_extensions = array();
+					$this->collect_required_extensions($extension_name, $installed_extensions, $required_extensions);
 
-					$db_active_extensions[ $required_extension_name ] = array();
-					$activated_extensions[ $required_extension_name ] = array();
+					foreach ($required_extensions as $required_extension_name => $required_extension_data) {
+						if (!isset($installed_extensions[$required_extension_name])) {
+							$not_found_required[$required_extension_name] = array();
+							continue;
+						}
 
-					// search sub-extensions
-					foreach ($this->collect_sub_extensions($required_extension_name, $installed_extensions) as $sub_extension_name => $sub_extension_data) {
-						$db_active_extensions[ $sub_extension_name ] = array();
-						$activated_extensions[ $sub_extension_name ] = array();
+						$db_active_extensions[$required_extension_name] = array();
+						$activated_extensions[$required_extension_name] = array();
+
+						// search sub-extensions
+						foreach ($this->collect_sub_extensions($required_extension_name, $installed_extensions) as $sub_extension_name => $sub_extension_data) {
+							if (isset($activated_extensions[$sub_extension_name])) {
+								continue;
+							}
+
+							$db_active_extensions[$sub_extension_name] = array();
+							$activated_extensions[$sub_extension_name] = array();
+
+							$pending_required_search[$sub_extension_name] = array();
+						}
 					}
 				}
 			}
