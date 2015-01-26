@@ -813,7 +813,13 @@ final class _FW_Component_Backend
 			return $data;
 		}
 
-		$values = FW_Request::POST(FW_Option_Type::get_default_name_prefix(), fw_get_db_settings_option());
+		if ($values = FW_Request::POST(FW_Option_Type::get_default_name_prefix())) {
+			// This is form submit, extract correct values from $_POST values
+			$values = fw_get_options_values_from_input($options, $values);
+		} else {
+			// Extract previously saved correct values
+			$values = fw_get_db_settings_option();
+		}
 
 		echo fw()->backend->render_options($options, $values);
 
@@ -928,8 +934,8 @@ final class _FW_Component_Backend
 	 * Render options array and return the generated HTML
 	 *
 	 * @param array $options
-	 * @param array $values
-	 * @param array $options_data
+	 * @param array $values Correct values returned by fw_get_options_values_from_input()
+	 * @param array $options_data {id_prefix => ..., name_prefix => ...}
 	 * @param string $design
 	 *
 	 * @return string HTML

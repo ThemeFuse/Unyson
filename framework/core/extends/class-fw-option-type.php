@@ -31,8 +31,8 @@ abstract class FW_Option_Type
 	/**
 	 * Generate option's html from option array
 	 * @param string $id
-	 * @param array  $option
-	 * @param array  $data
+	 * @param array  $option Option array merged with _get_defaults()
+	 * @param array  $data {value => _get_value_from_input(), id_prefix => ..., name_prefix => ...}
 	 * @return string HTML
 	 * @internal
 	 */
@@ -41,7 +41,7 @@ abstract class FW_Option_Type
 	/**
 	 * Extract correct value for $option['value'] from input array
 	 * If input value is empty, will be returned $option['value']
-	 * @param array  $option
+	 * @param array $option Option array merged with _get_defaults()
 	 * @param array|string|null $input_value
 	 * @return string|array|int|bool Correct value
 	 * @internal
@@ -157,7 +157,7 @@ abstract class FW_Option_Type
 	 * Generate option's html from option array
 	 * @param  string $id
 	 * @param   array $option
-	 * @param   array $data
+	 * @param   array $data {value => database_value|}
 	 * @return string HTML
 	 */
 	final public function render($id, $option, $data = array())
