@@ -92,6 +92,7 @@ Yes; Unyson will work with any theme.
 * Option type `slider` and `range-slider` design fixes
 * Extension activation fix: Some required extensions were not added for activation
 * Fixed wrong `$data['value']` in `FW_Option_Type::_render()` when form validation fails [#188](https://github.com/ThemeFuse/Unyson/issues/188)
+* Increase timeout on extensions install [#183](https://github.com/ThemeFuse/Unyson/issues/183)
 
 = 2.1.17 =
 * Added the possibility to create a link to an extension settings page `fw()->extensions->manager->get_extension_link('{extension-name}')`

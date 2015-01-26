@@ -794,6 +794,22 @@ final class _FW_Extensions_Manager
 					break;
 				}
 
+				// increase timeout
+				if (
+					function_exists('set_time_limit')
+					&&
+					function_exists('ini_get')
+					&&
+					($timeout = intval(ini_get('max_execution_time')))
+				) {
+					$extensions_count = 0;
+					foreach ($install_data['parents'] as $extension_name => $parent_extensions) {
+						$extensions_count += count($parent_extensions);
+					}
+
+					set_time_limit($timeout + $extensions_count * 10);
+				}
+
 				$available_extensions = $this->get_available_extensions();
 
 				$extensions_before_install = array_keys($installed_extensions);
