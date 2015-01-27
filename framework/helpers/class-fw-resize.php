@@ -50,6 +50,7 @@ if ( ! class_exists( 'FW_Resize' ) ) {
 			if ( is_numeric( $attachment ) ) {
 				return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE ID=%d LIMIT 1", $attachment ), ARRAY_A );
 			} else {
+
 				$attachment = str_replace( array( 'http:', 'https:' ), '', $attachment );
 
 				return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE guid LIKE %s LIMIT 1", '%' . $wpdb->esc_like($attachment) ), ARRAY_A );
@@ -77,7 +78,6 @@ if ( ! class_exists( 'FW_Resize' ) ) {
 
 			// Get the destination file name
 			$destination_file_name = "{$dir}/{$name}-{$suffix}.{$ext}";
-
 			// No need to resize & create a new image if it already exists
 			if ( ! file_exists( $destination_file_name ) ) {
 				//Image Resize
@@ -122,7 +122,8 @@ if ( ! class_exists( 'FW_Resize' ) ) {
 						$images['resizes'][ $image_size ] = addslashes( $image_path );
 					}
 				}
-				$images['resizes'][ $suffix ] = addslashes( $saved['path'] );
+				$uploads_dir = wp_upload_dir();
+				$images['resizes'][ $suffix ] = $uploads_dir['subdir'] . '/' .  $saved['file'];
 				wp_update_attachment_metadata( $attachment_info['id'], $images );
 
 			}
@@ -148,8 +149,10 @@ if ( ! function_exists( 'fw_delete_resized_thumbnails' ) ) {
 	function fw_delete_resized_thumbnails( $id ) {
 		$images = wp_get_attachment_metadata( $id );
 		if ( ! empty( $images['resizes'] ) ) {
+			$uploads_dir = wp_upload_dir();
 			foreach ( $images['resizes'] as $image ) {
-				@unlink( $image );
+				$file = $uploads_dir['basedir'] . '/' . $image;
+				@unlink( $file );
 			}
 		}
 	}
