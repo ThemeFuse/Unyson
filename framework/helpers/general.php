@@ -1043,3 +1043,70 @@ function fw_ext($extension_name) {
 function fw_get_url_without_scheme( $url ) {
 	return preg_replace( '/^[^:]+:\/\//', '//', $url );
 }
+
+/**
+ * Try to find file path by its uri and read file contents
+ * @param string $file_uri
+ * @return bool|string false or string file contents
+ */
+function fw_read_file_by_uri($file_uri) {
+	static $base = null;
+
+	if ($base === null) {
+		$base = array();
+		$base['dir'] = WP_CONTENT_DIR;
+		$base['uri'] = ltrim(content_url(), '/');
+		$base['uri_prefix_regex'] = '/^'. preg_quote($base['uri'], '/') .'/';
+	}
+
+	$file_rel_path = preg_replace($base['uri_prefix_regex'], '', $file_uri);
+
+	if ($base['uri'] === $file_rel_path) {
+		// the file is not inside base dir
+		return false;
+	}
+
+	$file_path = $base['dir'] .'/'. $file_rel_path;
+
+	if (!file_exists($file_path)) {
+		return false;
+	}
+
+	return file_get_contents($file_path);
+}
+
+/**
+ * Try to convert
+ * href="http://.../style.css" to href="data:text/css;base64,..."
+ *
+ * @param string $href
+ * @return string
+ */
+function fw_stylesheet_href_to_data_uri($href) {
+	$stylesheet_contents = fw_read_file_by_uri($href);
+
+	if ($stylesheet_contents === false) {
+		return $href;
+	}
+
+	$dir_uri = dirname($href);
+
+	/**
+	 * Replace relative 'url(img/bg.png)'
+	 * with full 'url(http://site.com/assets/img/bg.png)'
+	 *
+	 * Do not touch if url starts with:
+	 * - 'https://'
+	 * - 'http://'
+	 * - '/' (also matches '//')
+	 * - '#' (for css property: "behavior: url(#behaveBinObject)")
+	 * - 'data:'
+	 */
+	$stylesheet_contents = preg_replace(
+		'/url\s*\((?!\s*[\'"]?(?:\/|data\:|\#|(?:https?:)?\/\/))\s*([\'"])?/',
+		'url($1'. $dir_uri .'/',
+		$stylesheet_contents
+	);
+
+	return 'data:text/css;base64,'. base64_encode($stylesheet_contents);
+}
