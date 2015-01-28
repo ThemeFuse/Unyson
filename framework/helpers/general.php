@@ -1045,9 +1045,9 @@ function fw_get_url_without_scheme( $url ) {
 }
 
 /**
- * Try to find file path by its uri and read file contents
+ * Try to find file path by its uri and read the file contents
  * @param string $file_uri
- * @return bool|string false or string file contents
+ * @return bool|string false or string - the file contents
  */
 function fw_read_file_by_uri($file_uri) {
 	static $base = null;
@@ -1076,17 +1076,20 @@ function fw_read_file_by_uri($file_uri) {
 }
 
 /**
- * Try to convert
- * href="http://.../style.css" to href="data:text/css;base64,..."
+ * Make stylesheet contents (portable) independent of directory location
+ * For e.g. replace relative paths 'url(img/bg.png)' with full paths 'url(http://site.com/assets/img/bg.png)'
  *
- * @param string $href
- * @return string
+ * @param string $href 'http://.../style.css'
+ * @param null|string $contents If not specified, will try to read from $href
+ * @return bool|string false - on failure; string - stylesheet contents
  */
-function fw_stylesheet_href_to_data_uri($href) {
-	$stylesheet_contents = fw_read_file_by_uri($href);
+function fw_make_stylesheet_portable($href, $contents = null) {
+	if (is_null($contents)) {
+		$contents = fw_read_file_by_uri($href);
 
-	if ($stylesheet_contents === false) {
-		return $href;
+		if ($contents === false) {
+			return false;
+		}
 	}
 
 	$dir_uri = dirname($href);
@@ -1102,11 +1105,11 @@ function fw_stylesheet_href_to_data_uri($href) {
 	 * - '#' (for css property: "behavior: url(#behaveBinObject)")
 	 * - 'data:'
 	 */
-	$stylesheet_contents = preg_replace(
+	$contents = preg_replace(
 		'/url\s*\((?!\s*[\'"]?(?:\/|data\:|\#|(?:https?:)?\/\/))\s*([\'"])?/',
 		'url($1'. $dir_uri .'/',
-		$stylesheet_contents
+		$contents
 	);
 
-	return 'data:text/css;base64,'. base64_encode($stylesheet_contents);
+	return $contents;
 }
