@@ -58,7 +58,7 @@ Theme developers can test the compatibility of their themes with new extensions 
 
 = Where can I find Unyson documentation? =
 
-For extending or theming Unyson, see [developers documetation](http://unyson-docs.themefuse.com/en/latest/).
+For extending or theming Unyson, see [developers documetation](http://manual.unyson.io/).
 
 = Where can I report bugs or contribute to the project? =
 
