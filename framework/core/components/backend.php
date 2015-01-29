@@ -883,20 +883,16 @@ final class _FW_Component_Backend
 
 	public function _settings_form_save($data)
 	{
+		$flash_id = 'fw_settings_form_save';
 		$old_values = (array)fw_get_db_settings_option();
 
-		if (!empty($_POST['_fw_reset_options'])) {
-			// The "Reset" button was pressed
-			fw_set_db_settings_option(
-				null,
-				fw_get_options_values_from_input(
-					fw()->theme->get_settings_options(),
-					array()
-				)
-			);
+		if (!empty($_POST['_fw_reset_options'])) { // The "Reset" button was pressed
+			fw_set_db_settings_option(null, array());
 
-			FW_Flash_Messages::add('fw_settings_form_saved', __('The options were successfully reset', 'fw'), 'info');
-		} else {
+			FW_Flash_Messages::add($flash_id, __('The options were successfully reset', 'fw'), 'info');
+
+			do_action('fw_settings_form_reset', $old_values);
+		} else { // The "Save" button was pressed
 			fw_set_db_settings_option(
 				null,
 				array_merge(
@@ -907,10 +903,10 @@ final class _FW_Component_Backend
 				)
 			);
 
-			FW_Flash_Messages::add('fw_settings_form_saved', __('The options were successfully saved', 'fw'), 'success');
-		}
+			FW_Flash_Messages::add($flash_id, __('The options were successfully saved', 'fw'), 'success');
 
-		do_action('fw_settings_form_saved', $old_values);
+			do_action('fw_settings_form_saved', $old_values);
+		}
 
 		$redirect_url = fw_current_url();
 
