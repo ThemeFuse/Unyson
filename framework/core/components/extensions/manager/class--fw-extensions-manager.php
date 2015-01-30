@@ -453,6 +453,11 @@ final class _FW_Extensions_Manager
 		));
 	}
 
+	/**
+	 * Activate extensions with $manifest['display'] = false; $manifest['standalone'] = true;
+	 * - First level extensions
+	 * - Child extensions of the active extensions
+	 */
 	private function activate_hidden_standalone_extensions()
 	{
 		if (!is_admin()) {
@@ -465,47 +470,50 @@ final class _FW_Extensions_Manager
 
 		$activate_extensions = array();
 
-		$installed_extensions = $this->get_installed_extensions();
-
 		foreach (
-			array_diff_key($installed_extensions, fw()->extensions->get_all())
+			// all disabled extensions
+			array_diff_key($this->get_installed_extensions(), fw()->extensions->get_all())
 			as $ext_name => $ext_data
 		) {
-			if ($ext_data['parent']) {
-				// process only first level extensions
+			if ($ext_data['parent'] && !fw_ext($ext_data['parent'])) {
+				// child extensions of an inactive extension
 				continue;
 			}
 
 			if (false !== fw_akg(
-					'display',
-					$ext_data['manifest'],
-					$this->manifest_default_values['display']
-				)) {
+				'display',
+				$ext_data['manifest'],
+				$this->manifest_default_values['display']
+			)) {
 				// is visible
 				continue;
 			}
 
 			if (true !== fw_akg(
-					'standalone',
-					$ext_data['manifest'],
-					$this->manifest_default_values['standalone']
-				)) {
+				'standalone',
+				$ext_data['manifest'],
+				$this->manifest_default_values['standalone']
+			)) {
 				// not standalone
 				continue;
 			}
 
-			$activate_extensions[$ext_name] = array();
+			$collected = $this->get_extensions_for_activation($ext_name);
+
+			if (is_wp_error($collected)) {
+				FW_Flash_Messages::add('fw_ext_auto_activate_hidden_standalone',
+					sprintf(__('Cannot activate hidden standalone extension %s', 'fw'),
+						fw_akg( 'name', $ext_data['manifest'], fw_id_to_title( $ext_name ) )
+					)
+				);
+				return;
+			}
+
+			$activate_extensions = array_merge($activate_extensions, $collected);
 		}
 
 		if (empty($activate_extensions)) {
 			return;
-		}
-
-		// add sub-extensions for activation
-		foreach (array_keys($activate_extensions) as $ext_name) {
-			foreach (array_keys($this->collect_sub_extensions($ext_name, $installed_extensions)) as $sub_ext_name) {
-				$activate_extensions[$sub_ext_name] = array();
-			}
 		}
 
 		$option_name = fw()->extensions->_get_active_extensions_db_option_name();
@@ -1352,6 +1360,7 @@ final class _FW_Extensions_Manager
 	private function display_activate_page()
 	{
 		$installed_extensions = $this->get_installed_extensions();
+		$db_active_extensions = fw()->extensions->_get_db_active_extensions();
 
 		$error = '';
 
@@ -1373,10 +1382,7 @@ final class _FW_Extensions_Manager
 				break;
 			}
 
-			/**
-			 * {extension_name => [parent_name, sub_parent_name, ..., extension_name]}
-			 */
-			$extensions_parents = array();
+			$extensions = array();
 
 			foreach (explode(',', $_GET['extension']) as $extension_name) {
 				if (!isset($installed_extensions[$extension_name])) {
@@ -1384,17 +1390,17 @@ final class _FW_Extensions_Manager
 					break 2;
 				}
 
-				{
-					$extensions_parents[$extension_name] = array($extension_name);
+				$collected = $this->get_extensions_for_activation($extension_name);
 
-					$current_parent = $extension_name;
-					while ($current_parent = $installed_extensions[$current_parent]['parent']) {
-						$extensions_parents[$extension_name][] = $current_parent;
-					}
-
-					$extensions_parents[$extension_name] = array_reverse($extensions_parents[$extension_name]);
+				if (is_wp_error($collected)) {
+					$error = $collected->get_error_message();
+					break 2;
 				}
+
+				$extensions = array_merge($extensions, $collected);
 			}
+
+			$db_active_extensions = array_merge($db_active_extensions, $extensions);
 		} while(false);
 
 		$flash_id = 'fw_extensions_activate_page';
@@ -1403,61 +1409,6 @@ final class _FW_Extensions_Manager
 			FW_Flash_Messages::add($flash_id, $error, 'error');
 			$this->js_redirect();
 			return;
-		}
-
-		$db_active_extensions = fw()->extensions->_get_db_active_extensions();
-
-		$activated_extensions = array();
-
-		foreach ($extensions_parents as $extension_name => $extension_parents) {
-			foreach ($extension_parents as $parent_extension_name) {
-				$db_active_extensions[ $parent_extension_name ] = array();
-				$activated_extensions[ $parent_extension_name ] = array();
-			}
-
-			// search sub-extensions
-			foreach ($this->collect_sub_extensions($extension_name, $installed_extensions) as $sub_extension_name => $sub_extension_data) {
-				$db_active_extensions[ $sub_extension_name ] = array();
-				$activated_extensions[ $sub_extension_name ] = array();
-			}
-		}
-
-		// search required extensions
-		{
-			$pending_required_search = $activated_extensions;
-			$not_found_required = array();
-
-			while ($pending_required_search) {
-				foreach (array_keys($pending_required_search) as $extension_name) {
-					unset($pending_required_search[$extension_name]);
-
-					unset($required_extensions); // reset reference
-					$required_extensions = array();
-					$this->collect_required_extensions($extension_name, $installed_extensions, $required_extensions);
-
-					foreach ($required_extensions as $required_extension_name => $required_extension_data) {
-						if (!isset($installed_extensions[$required_extension_name])) {
-							$not_found_required[$required_extension_name] = array();
-							continue;
-						}
-
-						$db_active_extensions[$required_extension_name] = array();
-						$activated_extensions[$required_extension_name] = array();
-
-						// search sub-extensions
-						foreach ($this->collect_sub_extensions($required_extension_name, $installed_extensions) as $sub_extension_name => $sub_extension_data) {
-							if (isset($activated_extensions[$sub_extension_name])) {
-								continue;
-							}
-
-							$db_active_extensions[$sub_extension_name] = array();
-							$activated_extensions[$sub_extension_name] = array();
-
-							$pending_required_search[$sub_extension_name] = array();
-						}
-					}
-				}
-			}
 		}
 
 		update_option(
@@ -2530,5 +2481,82 @@ final class _FW_Extensions_Manager
 	public function get_extension_link($extension_name)
 	{
 		return $this->get_link() .'&sub-page=extension&extension='. $extension_name;
+	}
+
+	/**
+	 * @param string $extension_name
+	 * @return array|WP_Error Extensions to merge with db active extensions list
+	 */
+	private function get_extensions_for_activation($extension_name)
+	{
+		$installed_extensions = $this->get_installed_extensions();
+
+		$wp_error_id = 'fw_ext_activation';
+
+		if (!isset($installed_extensions[$extension_name])) {
+			return new WP_Error($wp_error_id,
+				sprintf(__('Cannot activate the %s extension because it is not installed.', 'fw'), fw_id_to_title($extension_name))
+			);
+		}
+
+		{
+			$extension_parents = array($extension_name);
+
+			$current_parent = $extension_name;
+			while ($current_parent = $installed_extensions[$current_parent]['parent']) {
+				$extension_parents[] = $current_parent;
+			}
+
+			$extension_parents = array_reverse($extension_parents);
+		}
+
+		$extensions = array();
+
+		foreach ($extension_parents as $parent_extension_name) {
+			$extensions[ $parent_extension_name ] = array();
+		}
+
+		// search sub-extensions
+		foreach ($this->collect_sub_extensions($extension_name, $installed_extensions) as $sub_extension_name => $sub_extension_data) {
+			$extensions[ $sub_extension_name ] = array();
+		}
+
+		// search required extensions
+		{
+			$pending_required_search = $extensions;
+
+			while ($pending_required_search) {
+				foreach (array_keys($pending_required_search) as $pend_req_extension_name) {
+					unset($pending_required_search[$pend_req_extension_name]);
+
+					unset($required_extensions); // reset reference
+					$required_extensions = array();
+					$this->collect_required_extensions($pend_req_extension_name, $installed_extensions, $required_extensions);
+
+					foreach ($required_extensions as $required_extension_name => $required_extension_data) {
+						if (!isset($installed_extensions[$required_extension_name])) {
+							return new WP_Error($wp_error_id,
+								sprintf(__('Cannot activate the %s extension because it is not installed.', 'fw'), fw_id_to_title($required_extension_name))
+							);
+						}
+
+						$extensions[$required_extension_name] = array();
+
+						// search sub-extensions
+						foreach ($this->collect_sub_extensions($required_extension_name, $installed_extensions) as $sub_extension_name => $sub_extension_data) {
+							if (isset($extensions[$sub_extension_name])) {
+								continue;
+							}
+
+							$extensions[$sub_extension_name] = array();
+
+							$pending_required_search[$sub_extension_name] = array();
+						}
+					}
+				}
+			}
+		}
+
+		return $extensions;
 	}
 }
