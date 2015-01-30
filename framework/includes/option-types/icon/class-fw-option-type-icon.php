@@ -176,7 +176,7 @@ class FW_Option_Type_Icon extends FW_Option_Type
 					'transport' => __('Transportation Icons', 'fw'),
 					'gender' => __('Gender Icons', 'fw'),
 					'file' => __('File Type Icons', 'fw'),
-					'spinner' => __('Spinner Icons', 'fw'),
+					// 'spinner' => __('Spinner Icons', 'fw'),
 					'form' => __('Form Control Icons', 'fw'),
 					'payment' => __('Payment Icons', 'fw'),
 					'chart' => __('Chart Icons', 'fw'),
@@ -525,10 +525,10 @@ class FW_Option_Type_Icon extends FW_Option_Type
 					'fa fa-file-word-o' => array('group' => 'file'),
 
 					// Spinner Icons
-					'fa fa-fa-spin fa-circle-o-notch' => array('group' => 'spinner'),
-					'fa fa-fa-spin fa-cog' => array('group' => 'spinner'),
-					'fa fa-fa-spin fa-refresh' => array('group' => 'spinner'),
-					'fa fa-fa-spin fa-spinner' => array('group' => 'spinner'),
+					// 'fa fa-spin fa-circle-o-notch' => array('group' => 'spinner'),
+					// 'fa fa-spin fa-cog' => array('group' => 'spinner'),
+					// 'fa fa-spin fa-refresh' => array('group' => 'spinner'),
+					// 'fa fa-spin fa-spinner' => array('group' => 'spinner'),
 
 					// Form Control Icons
 					'fa fa-check-square' => array('group' => 'form'),
