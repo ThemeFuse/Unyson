@@ -622,7 +622,7 @@ function fw_extract_only_options(array $options, &$_recursion_options = array())
 }
 
 /**
- * Collect correct options from first level on the array and group them
+ * Collect correct options from the first level of the array and group them
  * @param array $collected Will be filled with found correct options
  * @param array $options
  */
@@ -659,8 +659,41 @@ function fw_collect_first_level_options(&$collected, &$options) {
 				default:
 					trigger_error('Invalid option container type: '. $option['type'], E_USER_WARNING);
 			}
-		} elseif (is_int($option_id) && is_array($option)) {
-			// array with options
+		} elseif (
+			is_int($option_id)
+			&&
+			is_array($option)
+			&&
+			/**
+			 * make sure the array key was generated automatically
+			 * and it's not an associative array with numeric keys created like this: $options[1] = array();
+			 */
+			isset($options[0])
+		) {
+			/**
+			 * Array "without key" containing options.
+			 *
+			 * This happens when options are returned into array from a function:
+			 * $options = array(
+			 *  'foo' => array('type' => 'text'),
+			 *  'bar' => array('type' => 'textarea'),
+			 *
+			 *  // this is our case
+			 *  // go inside this array and extract the options as they are on the same array level
+			 *  array(
+			 *      'hello' => array('type' => 'text'),
+			 *  ),
+			 *
+			 *  // there can be any nested arrays
+			 *  array(
+			 *      array(
+			 *          array(
+			 *              'h1' => array('type' => 'text'),
+			 *          ),
+			 *      ),
+			 *  ),
+			 * )
+			 */
 			fw_collect_first_level_options($collected, $option);
 		} elseif (isset($option['type'])) {
 			// simple option, last possible level in options array
