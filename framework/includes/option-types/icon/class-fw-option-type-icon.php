@@ -524,6 +524,8 @@ class FW_Option_Type_Icon extends FW_Option_Type
 					'fa fa-file-video-o' => array('group' => 'file'),
 					'fa fa-file-word-o' => array('group' => 'file'),
 
+					// FIXME There is need for changing HTML/CSS for spinner to work properly
+					//
 					// Spinner Icons
 					// 'fa fa-spin fa-circle-o-notch' => array('group' => 'spinner'),
 					// 'fa fa-spin fa-cog' => array('group' => 'spinner'),
