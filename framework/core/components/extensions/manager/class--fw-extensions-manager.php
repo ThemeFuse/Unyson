@@ -504,7 +504,8 @@ final class _FW_Extensions_Manager
 				FW_Flash_Messages::add('fw_ext_auto_activate_hidden_standalone',
 					sprintf(__('Cannot activate hidden standalone extension %s', 'fw'),
 						fw_akg( 'name', $ext_data['manifest'], fw_id_to_title( $ext_name ) )
-					)
+					),
+					'error'
 				);
 				return;
 			}
