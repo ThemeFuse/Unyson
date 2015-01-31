@@ -123,8 +123,18 @@ class FW_Option_Type_Typography extends FW_Option_Type
 				'family' => 'Arial',
 				'style'  => '400',
 				'color'  => '#000000'
+			),
+			'components' => array(
+				'size'   => true,
+				'family' => true,
+				'color'  => true
 			)
 		);
+	}
+
+	public function _get_backend_width_type()
+	{
+		return 'auto';
 	}
 }
 

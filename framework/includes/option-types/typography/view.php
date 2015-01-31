@@ -30,8 +30,8 @@
 ?>
 <div <?php echo fw_attr_to_html($wrapper_attr) ?>>
 
-	<div class="fw-option-typography-option fw-option-typography-option-size fw-border-box-sizing fw-col-sm-2" style="visibility: <?php echo (!isset($option['components']['size']) || $option['components']['size'] != false) ? 'visible' : 'hidden' ?>;">
-		<select data-type="size" name="<?php echo esc_attr($option['attr']['name']) ?>[size]" class="fw-option-typography-option-size-input">';
+	<div class="fw-option-typography-option fw-option-typography-option-size fw-border-box-sizing fw-col-sm-2" style="display: <?php echo (!isset($option['components']['size']) || $option['components']['size'] != false) ? 'block' : 'none' ?>;">
+		<select data-type="size" name="<?php echo esc_attr($option['attr']['name']) ?>[size]" class="fw-option-typography-option-size-input">
 		<?php for ($i = 9; $i <= 70; $i++): ?>
 			<option value="<?php echo $i ?>" <?php echo $data['value']['size'] === $i ? ' selected="selected" ' : ''; ?>><?php echo $i ?>px</option>
 		<?php endfor; ?>
@@ -39,13 +39,13 @@
 	</div>
 
 	<div class="fw-option-typography-option fw-option-typography-option-family fw-border-box-sizing fw-col-sm-5"
-	     style="visibility: <?php echo ( ! isset( $option['components']['family'] ) || $option['components']['family'] != false ) ? 'visible' : 'hidden'; ?>;">
+	     style="display: <?php echo ( ! isset( $option['components']['family'] ) || $option['components']['family'] != false ) ? 'block' : 'none'; ?>;">
 		<select data-type="family" data-value="<?php echo $data['value']['family']; ?>"
 		        name="<?php echo esc_attr( $option['attr']['name'] ) ?>[family]"
 		        class="fw-option-typography-option-family-input"></select>
 	</div>
 
-	<div class="fw-option-typography-option fw-option-typography-option-style fw-border-box-sizing fw-col-sm-3" style="visibility: <?php echo (!isset($option['components']['family']) || $option['components']['family'] != false) ? 'visible' : 'hidden'; ?>;">
+	<div class="fw-option-typography-option fw-option-typography-option-style fw-border-box-sizing fw-col-sm-3" style="display: <?php echo (!isset($option['components']['family']) || $option['components']['family'] != false) ? 'block' : 'none'; ?>;">
 		<select data-type="style" name="<?php echo esc_attr($option['attr']['name']) ?>[style]" class="fw-option-typography-option-style-input">
 		<?php if (in_array($data['value']['family'], $fonts['standard'])): ?>
 		<?php foreach (
@@ -68,7 +68,7 @@
 		</select>
 	</div>
 
-	<div class="fw-option-typography-option fw-option-typography-option-color fw-border-box-sizing fw-col-sm-2" data-type="color" style="visibility: <?php echo (!isset($option['components']['color']) || $option['components']['color'] != false) ? 'visible' : 'hidden' ?>;">
+	<div class="fw-option-typography-option fw-option-typography-option-color fw-border-box-sizing fw-col-sm-2" data-type="color" style="display: <?php echo (!isset($option['components']['color']) || $option['components']['color'] != false) ? 'block' : 'none' ?>;">
 	<?php
 	echo fw()->backend->option_type('color-picker')->render(
 		'color',

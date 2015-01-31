@@ -2,7 +2,19 @@
 	top: 4px !important;
 }
 
+.fw-backend-option-input-type-typography {
+	max-width: 428px;
+}
+
+.fw-backend-option-input-type-typography .fw-inner {
+	width: 100%;
+}
+
 @media (max-width: 782px) {
+	.fw-backend-option-input-type-typography {
+		width: 100%;
+	}
+
 	.fw-option-type-typography .fw-option-typography-option {
 		padding-top: 5px;
 	}
@@ -13,9 +25,20 @@
 }
 
 @media (min-width: 783px) {
+	.fw-backend-option-input-type-typography {
+		width: auto;
+	}
+
 	.fw-option-type-typography .fw-option-typography-option {
 		padding-right: 5px;
+		width: 167px;
 	}
+
+	.fw-option-type-typography .fw-option-typography-option.fw-option-typography-option-size {
+		padding-right: 5px;
+		width: 67px;
+	}
+
 	body.rtl .fw-option-type-typography .fw-option-typography-option {
 		padding-right: 0;
 		padding-left: 5px;
@@ -50,21 +73,6 @@
 		height: 28px;
 	}
 }
-
-
-/* Size */
-
-.fw-option-typography-option-size-input {
-	width: 62px;
-}
-
-
-/* Style */
-
-select.fw-option-typography-option-style-input {
-	width: 98px;
-}
-
 
 /* Family */
 
@@ -246,8 +254,15 @@ color:      fw-col-sm-2 = 16.66666667%
 	}
 
 	.fw-option-type-typography .fw-option-typography-option-style {
-		width: calc(41.66666667% - 70px); /* minus width of option type color-picker */
+		width: 98px;
 	}
+
+	.fw-option-type-typography .fw-option-typography-option-size {
+		width: 67px;
+	}
+/*	.fw-backend-option-input-type-typography{
+		width: 428px;
+	}*/
 }
 
 
