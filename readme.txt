@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio
 Requires at least: 4.0.0
 Tested up to: 4.1
-Stable tag: 2.1.18
+Stable tag: 2.1.19
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,13 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.1.19 =
+* Option type `icon`: Updated Font Awesome to 4.3.0
+* Option type `typography` fixes [#195](https://github.com/ThemeFuse/Unyson/issues/195)
+* Improved hidden standalone extensions auto activation [#203](https://github.com/ThemeFuse/Unyson/issues/203)
+* Fixed nested array detection in options array [#204](https://github.com/ThemeFuse/Unyson/issues/204)
+* Do not save the options when the "Reset" button was pressed on the Theme Settings page [#197](https://github.com/ThemeFuse/Unyson/issues/197)
 
 = 2.1.18 =
 * Added the `FW_WP_List_Table` class
