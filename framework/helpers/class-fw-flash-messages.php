@@ -19,12 +19,16 @@ class FW_Flash_Messages
 
 	private static $frontend_printed = false;
 
-	private static function get_messages()
+	public static function get_messages($clear = false)
 	{
 		$messages = FW_Session::get(self::$session_key);
 
 		if (!is_array($messages)) {
 			$messages = array_fill_keys(array_keys(self::$available_types), array());
+		}
+
+		if ($clear) {
+			FW_Session::set(self::$session_key, false);
 		}
 
 		return $messages;
