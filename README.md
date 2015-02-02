@@ -62,7 +62,7 @@ Theme developers can test the compatibility of their themes with new extensions 
 
 ## Extensions
 
-If you have a bug report or feature request related to an extension, below is a list of all extensions with links to their repositories:
+If you have a bug report or feature request related to a specific extension, follow one of the links below:
 
 * [Page Builder](https://github.com/ThemeFuse/Unyson-PageBuilder-Extension)
 * [Shortcodes](https://github.com/ThemeFuse/Unyson-Shortcodes-Extension)
