@@ -20,13 +20,13 @@ class FW_Option_Type_Typography extends FW_Option_Type
 	{
 		if($this->fonts === null) {
 			$this->fonts = array(
-				'standard' => array(
+				'standard' => apply_filters('fw_option_type_typography_standard_fonts', array(
 					"Arial",
 					"Verdana",
 					"Trebuchet",
 					"Georgia",
 					"Times New Roman",
-					"Tohama",
+					"Tahoma",
 					"Palatino",
 					"Helvetica",
 					"Calibri",
@@ -37,7 +37,7 @@ class FW_Option_Type_Typography extends FW_Option_Type
 					"Geneva",
 					"Impact",
 					"Serif"
-				),
+				)),
 				'google' => fw_get_google_fonts()
 			);
 		}
