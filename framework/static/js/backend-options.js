@@ -74,7 +74,7 @@ jQuery(document).ready(function($){
 			});
 
 			setTimeout(function(){
-				$elements.fadeTo('fast', 1);
+				$elements.fadeTo('fast', 1, function(){ $(this).css('opacity', ''); });
 			}, 50);
 		}
 	});
