@@ -6,11 +6,13 @@
  */
 
 {
-	if (!isset($option['label']))
-		$option['label'] = $id;
+	if (!isset($option['label'])) {
+		$option['label'] = fw_id_to_title($id);
+	}
 
-	if (!isset($option['desc']))
+	if (!isset($option['desc'])) {
 		$option['desc'] = '';
+	}
 }
 
 {
