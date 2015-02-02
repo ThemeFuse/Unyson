@@ -15,6 +15,7 @@ If you are not a developer, please use the [Unyson plugin page](https://wordpres
 * [Documentation](#documentation)
 * [Copyright and license](#copyright-and-license)
 * [Contributing to Unyson](#contributing)
+* [Extensions](#extensions)
 
 ## Installation
 
@@ -58,3 +59,29 @@ Translators can contribute new languages to Unyson through [Transifex](https://w
 If you have an idea for Unyson, see the [Trello board](https://trello.com/b/Xm9TxasH/unyson-development).
 
 Theme developers can test the compatibility of their themes with new extensions updates before they are going to be released on [Unyson Extensions Approval](https://github.com/ThemeFuse/Unyson-Extensions-Approval).
+
+## Extensions
+
+If you have a bug report or feature request related to an extension, below is a list of all extensions with links to their repositories:
+
+* [Page Builder](https://github.com/ThemeFuse/Unyson-PageBuilder-Extension)
+* [Shortcodes](https://github.com/ThemeFuse/Unyson-Shortcodes-Extension)
+* [Mega Menu](https://github.com/ThemeFuse/Unyson-MegaMenu-Extension)
+* [Sidebars](https://github.com/ThemeFuse/Unyson-Sidebars-Extension)
+* [Sliders](https://github.com/ThemeFuse/Unyson-Sliders-Extension)
+* [Portfolio](https://github.com/ThemeFuse/Unyson-Portfolio-Extension)
+* [SEO](https://github.com/ThemeFuse/Unyson-SEO-Extension)
+* [Forms](https://github.com/ThemeFuse/Unyson-Forms-Extension)
+* [Styling](https://github.com/ThemeFuse/Unyson-Styling-Extension)
+* [Feedback](https://github.com/ThemeFuse/Unyson-Feedback-Extension)
+* [Backup](https://github.com/ThemeFuse/Unyson-Backup-Extension)
+* [Breadcrumbs](https://github.com/ThemeFuse/Unyson-Breadcrumbs-Extension)
+* [Learning](https://github.com/ThemeFuse/Unyson-Learning-Extension)
+* [Events](https://github.com/ThemeFuse/Unyson-Events-Extension)
+* [Update](https://github.com/ThemeFuse/Unyson-Update-Extension)
+* [Analytics](https://github.com/ThemeFuse/Unyson-Analytics-Extension)
+* [Builder](https://github.com/ThemeFuse/Unyson-Builder-Extension)
+* [Mailer](https://github.com/ThemeFuse/Unyson-Mailer-Extension)
+* [Social](https://github.com/ThemeFuse/Unyson-Social-Extension)
+* [Population Methods](https://github.com/ThemeFuse/Unyson-PopulationMethods-Extension)
+* [Blog Posts](https://github.com/ThemeFuse/Unyson-Blog-Extension)
