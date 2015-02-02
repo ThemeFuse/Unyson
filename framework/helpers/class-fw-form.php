@@ -90,6 +90,9 @@ class FW_Form {
 				$data['attr'] = array();
 			}
 
+			$data['attr']['data-fw-form-id'] = $this->id;
+
+			/** @deprecated */
 			$data['attr']['class'] = 'fw_form_' . $this->id;
 
 			if ( isset( $data['attr']['method'] ) ) {
@@ -279,31 +282,6 @@ class FW_Form {
 	 * @param array $data
 	 */
 	public function render( $data = array() ) {
-		?>
-		<form <?php echo fw_attr_to_html( $this->attr ) ?> ><?php
-
-		if ( ! empty( $this->attr['action'] ) && $this->attr['method'] == 'get' ) {
-			/**
-			 * Add query vars from action attribute url to hidden inputs to not loose them
-			 * For cases when get_search_link() will return '.../?s=~',
-			 *  the 's' will be lost after submit and no search page will be shown
-			 */
-
-			parse_str( parse_url( $this->attr['action'], PHP_URL_QUERY ), $query_vars );
-
-			if ( ! empty( $query_vars ) ) {
-				foreach ( $query_vars as $var_name => $var_value ) {
-					?><input type="hidden" name="<?php print esc_attr( $var_name ) ?>"
-					         value="<?php print fw_htmlspecialchars( $var_value ) ?>" /><?php
-				}
-			}
-		}
-
-		?><input type="hidden" name="<?php print self::$id_input_name; ?>" value="<?php print $this->id ?>" /><?php
-		if ( $this->attr['method'] == 'post' ) {
-			wp_nonce_field( 'submit_fwf', '_nonce_' . md5( $this->id ) );
-		}
-
 		$render_data = array(
 			'submit' => array(
 				'value' => __( 'Submit', 'fw' ),
@@ -313,14 +291,18 @@ class FW_Form {
 				 */
 				'html'  => null,
 			),
-			'data'   => $data,
-			'attr'   => $this->attr,
+			'data' => $data,
+			'attr' => $this->attr,
 		);
 
 		unset( $data );
 
 		if ( $this->callbacks['render'] ) {
-			$data = call_user_func_array( $this->callbacks['render'], array( $render_data ) );
+			ob_start();
+
+			$data = call_user_func_array( $this->callbacks['render'], array( $render_data, $this ) );
+
+			$html = ob_get_clean();
 
 			if ( empty( $data ) ) {
 				// fix if returned wrong data from callback
@@ -332,14 +314,49 @@ class FW_Form {
 			unset( $data );
 		}
 
-		// In filter can be defined custom html for submit button
-		if ( isset( $render_data['submit']['html'] ) ):
-			print $render_data['submit']['html'];
-		else:
-			?><input type="submit" value="<?php print $render_data['submit']['value'] ?>"><?php
-		endif;
+		echo '<form '. fw_attr_to_html( $render_data['attr'] ) .' >';
 
-		?></form><?php
+		echo fw_html_tag('input', array(
+			'type'  => 'hidden',
+			'name'  => self::$id_input_name,
+			'value' => $this->id,
+		));
+
+		if ( $render_data['attr']['method'] == 'post' ) {
+			wp_nonce_field( 'submit_fwf', '_nonce_' . md5( $this->id ) );
+		}
+
+		if ( ! empty( $render_data['attr']['action'] ) && $render_data['attr']['method'] == 'get' ) {
+			/**
+			 * Add query vars from the action attribute url to hidden inputs to not loose them
+			 */
+
+			parse_str( parse_url( $render_data['attr']['action'], PHP_URL_QUERY ), $query_vars );
+
+			if ( ! empty( $query_vars ) ) {
+				foreach ( $query_vars as $var_name => $var_value ) {
+					echo fw_html_tag('input', array(
+						'type'  => 'hidden',
+						'name'  => $var_name,
+						'value' => $var_value,
+					));
+				}
+			}
+		}
+
+		echo $html;
+
+		// In filter can be defined custom html for submit button
+		if ( isset( $render_data['submit']['html'] ) ) {
+			echo $render_data['submit']['html'];
+		} else {
+			echo fw_html_tag('input', array(
+				'type' => 'submit',
+				'value' => $render_data['submit']['value']
+			));
+		}
+
+		echo '</form>';
 	}
 
 	/**
