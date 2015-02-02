@@ -17,14 +17,14 @@ class FW_Option_Type_Slider extends FW_Option_Type {
 			wp_enqueue_style(
 				'fw-option-' . $this->get_type() . 'ion-range-slider',
 				fw_get_framework_directory_uri( '/includes/option-types/' . $this->get_type() . '/static/libs/ion-range-slider/ion.rangeSlider.css' ),
-				fw()->manifest->get_version()
+				'2.0.3'
 			);
 
 			wp_enqueue_script(
 				'fw-option-' . $this->get_type() . 'ion-range-slider',
 				fw_get_framework_directory_uri( '/includes/option-types/' . $this->get_type() . '/static/libs/ion-range-slider/ion.rangeSlider.min.js' ),
 				array( 'jquery', 'fw-moment' ),
-				fw()->manifest->get_version()
+				'2.0.3'
 			);
 		}
 
@@ -37,7 +37,7 @@ class FW_Option_Type_Slider extends FW_Option_Type {
 		wp_enqueue_script(
 			'fw-option-' . $this->get_type(),
 			fw_get_framework_directory_uri( '/includes/option-types/' . $this->get_type() . '/static/js/scripts.js' ),
-			array( 'jquery', 'underscore', 'fw-option-' . $this->get_type() . 'ion-range-slider' ),
+			array( 'jquery',  'fw-events', 'underscore', 'fw-option-' . $this->get_type() . 'ion-range-slider' ),
 			fw()->manifest->get_version()
 		);
 	}

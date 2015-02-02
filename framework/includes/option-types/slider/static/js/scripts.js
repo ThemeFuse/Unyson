@@ -1,4 +1,4 @@
-(function ($) {
+(function ($, fwEvents) {
 	var defaults = {
 		onChange: function (data) {
 			data.input.next('.fw-irs-range-slider-hidden-input').val(data.from + ';' + data.to);
@@ -18,4 +18,4 @@
 		});
 	});
 
-})(jQuery);
+})(jQuery, fwEvents);
