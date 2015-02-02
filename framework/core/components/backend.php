@@ -824,9 +824,22 @@ final class _FW_Component_Backend
 		echo fw()->backend->render_options($options, $values);
 
 		$data['submit']['html'] =
-			'<input type="submit" name="_fw_save_options" value="'. esc_attr__('Save', 'fw') .'" class="button-primary button-large" />' .
+			fw_html_tag('input', array(
+				'type' => 'submit',
+				'name' => '_fw_save_options',
+				'value' => __('Save', 'fw'),
+				'class' => 'button-primary button-large',
+			)) .
 			' &nbsp;&nbsp; ' .
-			'<input type="submit" name="_fw_reset_options" value="'. esc_attr__('Reset', 'fw') .'" class="button-secondary button-large" />';
+			fw_html_tag('input', array(
+				'type' => 'submit',
+				'name' => '_fw_reset_options',
+				'value' => __('Reset', 'fw'),
+				'class' => 'button-secondary button-large',
+				'onclick' => "if (!confirm('". esc_js(
+						__("Click OK to reset.\nAll settings will be lost and replaced with default settings!", 'fw')
+					) ."')) return false;"
+			));
 
 		{
 			$focus_tab_input_name = '_focus_tab';
