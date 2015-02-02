@@ -21,7 +21,7 @@
 
 		if ( is_null( $value ) ) {
 			/**
-			 * Maybe the options was never saved or the given option id does not exists
+			 * Maybe the options was never saved or the given option id does not exist
 			 * Extract the default values from the options array and try to find there the option id
 			 */
 
