@@ -238,7 +238,7 @@ class FW_Form {
 				$this->save();
 
 				wp_send_json_success( array(
-					'flash_messages' => FW_Flash_Messages::get_messages(true)
+					'flash_messages' => FW_Flash_Messages::_get_messages(true)
 				) );
 			} else {
 				wp_send_json_error( array(

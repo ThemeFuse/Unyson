@@ -19,16 +19,12 @@ class FW_Flash_Messages
 
 	private static $frontend_printed = false;
 
-	public static function get_messages($clear = false)
+	private static function get_messages()
 	{
 		$messages = FW_Session::get(self::$session_key);
 
-		if (!is_array($messages)) {
+		if (empty($messages) || !is_array($messages)) {
 			$messages = array_fill_keys(array_keys(self::$available_types), array());
-		}
-
-		if ($clear) {
-			FW_Session::set(self::$session_key, false);
 		}
 
 		return $messages;
@@ -189,6 +185,19 @@ class FW_Flash_Messages
 	public static function _frontend_printed()
 	{
 		return self::$frontend_printed;
+	}
+
+	public static function _get_messages($clear = false)
+	{
+		self::process_pending_remove_ids();
+
+		$messages = self::get_messages();
+
+		if ($clear) {
+			self::set_messages(array());
+		}
+
+		return $messages;
 	}
 }
 
