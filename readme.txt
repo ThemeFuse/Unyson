@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio
 Requires at least: 4.0.0
 Tested up to: 4.1
-Stable tag: 2.1.19
+Stable tag: 2.1.20
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,13 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.1.20 =
+* Added warning on Theme Settings reset [^](http://static.md/0fcf01628eddab75fdbedb3a24784db3.png)
+* `FW_Form`: Form attributes can be changed in the render method
+* Option type `slider` and `range-slider` fixes [#210](https://github.com/ThemeFuse/Unyson/issues/210)
+* Option type `typography`: Added filter on standard fonts [#212](https://github.com/ThemeFuse/Unyson/issues/212)
+* Minor internal fixes
 
 = 2.1.19 =
 * Option type `icon`: Updated Font Awesome to 4.3.0
