@@ -329,6 +329,7 @@ final class _FW_Component_Backend
 			wp_register_script(
 				'fw-uri',
 				fw_get_framework_directory_uri('/static/libs/uri/URI.js'),
+				array(),
 				fw()->manifest->get_version(),
 				true
 			);
@@ -338,6 +339,17 @@ final class _FW_Component_Backend
 			wp_register_script(
 				'fw-moment',
 				fw_get_framework_directory_uri('/static/libs/moment/moment.min.js'),
+				array(),
+				fw()->manifest->get_version(),
+				true
+			);
+		}
+
+		{
+			wp_register_script(
+				'fw-form-helpers',
+				fw_get_framework_directory_uri('/static/js/fw-form-helpers.js'),
+				array('jquery'),
 				fw()->manifest->get_version(),
 				true
 			);
@@ -801,12 +813,6 @@ final class _FW_Component_Backend
 
 	public function _settings_form_render($data)
 	{
-		/**
-		 * wp moves flash message error with js after first h2
-		 * if there are no h2 on the page it shows them wrong
-		 */
-		echo '<h2 class="fw-hidden"></h2>';
-
 		$options = fw()->theme->get_settings_options();
 
 		if (empty($options)) {
@@ -821,7 +827,13 @@ final class _FW_Component_Backend
 			$values = fw_get_db_settings_option();
 		}
 
-		echo fw()->backend->render_options($options, $values);
+		wp_enqueue_script('fw-form-helpers');
+
+		fw_render_view(fw_get_framework_directory('/views/backend-settings-form.php'), array(
+			'options' => $options,
+			'values'  => $values,
+			'focus_tab_input_name' => '_focus_tab',
+		), false);
 
 		$data['submit']['html'] =
 			fw_html_tag('input', array(
@@ -840,47 +852,6 @@ final class _FW_Component_Backend
 						__("Click OK to reset.\nAll settings will be lost and replaced with default settings!", 'fw')
 					) ."')) return false;"
 			));
-
-		{
-			$focus_tab_input_name = '_focus_tab';
-			$focus_tab_id = trim( FW_Request::POST($focus_tab_input_name, FW_Request::GET($focus_tab_input_name, '')) );
-
-			echo fw_html_tag('input', array(
-				'type'  => 'hidden',
-				'name'  => $focus_tab_input_name,
-				'value' => $focus_tab_id,
-			));
-
-			echo
-				'<script type="text/javascript">' .
-				'jQuery(function($){' .
-				'  fwEvents.one("fw:options:init", function(){' .
-				'    var $form = $("form.fw_form_fw_settings:first");'.
-				'    var inputName = "'. esc_js($focus_tab_input_name) .'";'.
-				'    $form.on("click", ".fw-options-tabs-wrapper > .fw-options-tabs-list > ul > li > a", function(){'.
-				'      var tabId = $(this).attr("href").replace(/^\\#/, "");'.
-				'      $form.find("input[name=\'"+ inputName +"\']").val(tabId);'.
-				'    });'.
-				'    '.
-				'    /* "wait" after tabs initialized */' .
-				'    setTimeout(function(){' .
-				'      var focusTabId = $.trim("'. esc_js($focus_tab_id) .'");'.
-				'      if (!focusTabId.length) return;'.
-				'      var $tabLink = $(".fw-options-tabs-wrapper > .fw-options-tabs-list > ul > li > a[href=\'#"+ focusTabId +"\']");'.
-				'      while ($tabLink.length) {'.
-				'        $tabLink.trigger("click");'.
-				'        $tabLink = $tabLink'.
-				'          .closest(".fw-options-tabs-wrapper").parent().closest(".fw-options-tabs-wrapper")'.
-				'          .find("> .fw-options-tabs-list > ul > li > a[href=\'#"+ $tabLink.closest(".fw-options-tab").attr("id") +"\']");'.
-				'      }'.
-				'      '.
-				'      /* click again on focus tab to update the input value */'.
-				'      $(".fw-options-tabs-wrapper > .fw-options-tabs-list > ul > li > a[href=\'#"+ focusTabId +"\']").trigger("click");;'.
-				'    }, 200);' .
-				'  });' .
-				'});' .
-				'</script>';
-		}
 
 		return $data;
 	}

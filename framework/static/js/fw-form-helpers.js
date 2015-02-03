@@ -87,7 +87,13 @@ var fwForm = {
 				return;
 			}
 
-			var $form = $(this);
+			var $form = $(this),
+				$submitButton = $form.find('input[type="submit"][name]:focus');
+
+			if (!$form.is('form[data-fw-form-id]')) {
+				console.error('This is not a FW_Form');
+				return;
+			}
 
 			opts.hideErrors($form);
 			opts.loading(true, $form);
@@ -96,7 +102,7 @@ var fwForm = {
 			jQuery.ajax({
 				type: "POST",
 				url: opts.ajaxUrl,
-				data: $form.serialize(),
+				data: $form.serialize() + ($submitButton.length ? '&'+ $submitButton.attr('name') +'='+ $submitButton.attr('value') : ''),
 				dataType: 'json'
 			}).done(function(r){
 				isBusy = false;
