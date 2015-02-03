@@ -484,7 +484,7 @@ class FW_Option_Type_Checkboxes extends FW_Option_Type
 	protected function _get_defaults()
 	{
 		return array(
-			'inline'  => false, //Set this parameter to true in case you want all checkbox inputs to be rendered inline
+			'inline'  => false, // Set this parameter to true in case you want all checkbox inputs to be rendered inline
 			'value'   => array(),
 			'choices' => array()
 		);
@@ -579,7 +579,7 @@ class FW_Option_Type_Radio extends FW_Option_Type
 	protected function _get_defaults()
 	{
 		return array(
-			'inline'   => false, //Set this parameter to true in case you want all radio inputs to be rendered inline
+			'inline'   => false, // Set this parameter to true in case you want all radio inputs to be rendered inline
 			'value'   => '',
 			'choices' => array()
 		);
