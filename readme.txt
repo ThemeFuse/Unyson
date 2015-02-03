@@ -91,6 +91,7 @@ Yes; Unyson will work with any theme.
 * `FW_Form`: Form attributes can be changed in the render method
 * Option type `slider` and `range-slider` fixes [#210](https://github.com/ThemeFuse/Unyson/issues/210)
 * Option type `typography`: Added filter on standard fonts [#212](https://github.com/ThemeFuse/Unyson/issues/212)
+* Option type `radio` and `checkboxes`: Added `inline` parameter [#216](https://github.com/ThemeFuse/Unyson/issues/216)
 * Minor internal fixes
 
 = 2.1.19 =
