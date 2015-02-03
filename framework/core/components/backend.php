@@ -833,6 +833,7 @@ final class _FW_Component_Backend
 			'options' => $options,
 			'values'  => $values,
 			'focus_tab_input_name' => '_focus_tab',
+			'reset_input_name' => '_fw_reset_options'
 		), false);
 
 		$data['submit']['html'] =
@@ -848,9 +849,6 @@ final class _FW_Component_Backend
 				'name' => '_fw_reset_options',
 				'value' => __('Reset', 'fw'),
 				'class' => 'button-secondary button-large',
-				'onclick' => "if (!confirm('". esc_js(
-						__("Click OK to reset.\nAll settings will be lost and replaced with default settings!", 'fw')
-					) ."')) return false;"
 			));
 
 		return $data;

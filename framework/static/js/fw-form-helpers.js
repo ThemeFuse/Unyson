@@ -6,6 +6,15 @@
 
 var fwForm = {
 	/**
+	 * @type {Boolean}
+	 */
+	isAdminPage: function() {
+		return typeof ajaxurl != 'undefined'
+			&& typeof adminpage != 'undefined'
+			&& typeof pagenow != 'undefined'
+			&& jQuery(document.body).hasClass('wp-admin');
+	},
+	/**
 	 * Make forms ajax submittable
 	 * @param {Object} [opts]
 	 */
@@ -28,6 +37,7 @@ var fwForm = {
 					}
 				},
 				showErrors: function ($form, errors) {
+					// Frontend
 					$.each(errors, function(inputName, message) {
 						var $input = $form.find('[name="'+ inputName +'"]').last();
 						message = '<p class="form-error" style="color: #9b4c4c;">{message}</p>'.replace('{message}', message);
@@ -48,33 +58,78 @@ var fwForm = {
 					console.error(jqXHR, textStatus, errorThrown);
 				},
 				onSuccess: function ($form, ajaxData) {
-					var html = [], typeHtml = [];
+					if (fwForm.isAdminPage()) {
+						var html = [],
+							typeHtml = [],
+							messageClass = '';
 
-					$.each(ajaxData.flash_messages, function(type, messages){
-						typeHtml = [];
+						$.each(ajaxData.flash_messages, function(type, messages){
+							typeHtml = [];
 
-						$.each(messages, function(messageId, messageData){
-							typeHtml.push(messageData.message);
+							switch (type) {
+								case 'error':
+									messageClass = 'error';
+									break;
+								case 'warning':
+									messageClass = 'update-nag';
+									break;
+								default:
+									messageClass = 'updated';
+							}
+
+							$.each(messages, function(messageId, messageData){
+								typeHtml.push('<p>'+ messageData.message +'</p>');
+							});
+
+							if (typeHtml.length) {
+								html.push(
+									'<div class="fw-flash-messages '+ messageClass +'">'+ typeHtml.join('</div><div class="fw-flash-messages '+ messageClass +'">') +'</div>'
+								);
+							}
+
+							var $pageTitle = jQuery('.wrap h2:first');
+
+							while ($pageTitle.next().is('.fw-flash-message, .fw-flash-messages, .updated, .update-nag, .error')) {
+								$pageTitle.next().remove();
+							}
+
+							$pageTitle.after('<div class="fw-flash-messages">'+ html.join('') +'</div>');
+
+							jQuery(document.body).animate({scrollTop: 0}, 300);
+						});
+					} else {
+						var html = [],
+							typeHtml = [];
+
+						$.each(ajaxData.flash_messages, function(type, messages){
+							typeHtml = [];
+
+							$.each(messages, function(messageId, messageData){
+								typeHtml.push(messageData.message);
+							});
+
+							if (typeHtml.length) {
+								html.push(
+									'<ul class="flash-messages-'+ type +'">'+
+									'    <li>'+ typeHtml.join('</li><li>') +'</li>'+
+									'</ul>'
+								);
+							}
 						});
 
-						if (typeHtml.length) {
-							html.push(
-								'<ul class="flash-messages-'+ type +'">'+
-								'    <li>'+ typeHtml.join('</li><li>') +'</li>'+
-								'</ul>'
-							);
+						if (html.length) {
+							html = html.join('');
+						} else {
+							html = '<p>Success</p>';
 						}
-					});
 
-					if (html.length) {
-						html = html.join('');
-					} else {
-						html = '<p>Success</p>';
+						$form.fadeOut(function(){
+							$form.html(html).fadeIn();
+						});
+
+						// prevent multiple submit
+						$form.on('submit', function(e){ e.preventDefault(); e.stopPropagation(); });
 					}
-
-					$form.fadeOut(function(){
-						$form.html(html).fadeIn();
-					});
 				}
 			}, opts || {}),
 			isBusy = false;
@@ -89,6 +144,11 @@ var fwForm = {
 
 			var $form = $(this),
 				$submitButton = $form.find('input[type="submit"][name]:focus');
+
+			if (!$submitButton.length) {
+				// in case you use this solution http://stackoverflow.com/a/5721762
+				$submitButton = $form.find('input[type="submit"][name][clicked]');
+			}
 
 			if (!$form.is('form[data-fw-form-id]')) {
 				console.error('This is not a FW_Form');
@@ -109,9 +169,6 @@ var fwForm = {
 				opts.loading(false, $form);
 
 				if (r.success) {
-					// prevent multiple submit
-					$form.on('submit', function(e){ e.preventDefault(); e.stopPropagation(); });
-
 					opts.onSuccess($form, r.data);
 				} else {
 					opts.showErrors($form, r.data.errors);

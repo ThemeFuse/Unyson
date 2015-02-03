@@ -3,6 +3,7 @@
  * @var array $options
  * @var array $values
  * @var string $focus_tab_input_name
+ * @var string $reset_input_name
  */
 ?>
 <!--
@@ -58,9 +59,36 @@ jQuery(function($){
 </script>
 <!-- end: focus tab -->
 
+<!-- reset warning -->
+<script type="text/javascript">
+	jQuery(function($){
+		$('form[data-fw-form-id="fw_settings"] input[name="<?php echo esc_js($reset_input_name) ?>"]').on('click.fw-reset-warning', function(e){
+			e.preventDefault();
+
+			/**
+			 * on confirm() the submit input looses focus
+			 * fwForm.isAdminPage() must be able to select the input to send it in _POST
+			 * so use alternative solution http://stackoverflow.com/a/5721762
+			 */
+			{
+				$(this).closest('form').find('input[type="submit"]').removeAttr('clicked');
+				$(this).attr('clicked', '');
+			}
+
+			if (confirm('<?php
+			echo esc_js(__("Click OK to reset.\nAll settings will be lost and replaced with default settings!", 'fw'))
+			?>')) {
+				console.log($(this).closest('form'));
+				$(this).closest('form').submit();
+			}
+		});
+	});
+</script>
+<!-- end: reset warning -->
+
 <!-- ajax submit -->
 <script type="text/javascript">
-	jQuery(function ($) { return;
+	jQuery(function ($) {
 		fwForm.initAjaxSubmit({
 			selector: 'form[data-fw-form-id="fw_settings"]',
 			ajaxUrl: ajaxurl
