@@ -324,10 +324,17 @@ abstract class FW_Manifest
 						$extension->manifest->get_name(), $extension->manifest->get_version(), $requirement
 					);
 				} else {
-					$requirement = sprintf(
-						__('%s extension is required (%s)', 'fw'),
-						ucfirst($this->not_met_requirement['extension']), $requirement
-					);
+					if (empty($requirement)) {
+						$requirement = sprintf(
+							__('%s extension is required', 'fw'),
+							ucfirst($this->not_met_requirement['extension'])
+						);
+					} else {
+						$requirement = sprintf(
+							__('%s extension is required (%s)', 'fw'),
+							ucfirst($this->not_met_requirement['extension']), $requirement
+						);
+					}
 				}
 				break;
 			default:
