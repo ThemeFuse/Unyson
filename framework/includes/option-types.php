@@ -417,6 +417,10 @@ class FW_Option_Type_Checkboxes extends FW_Option_Type
 		unset($div_attr['name']);
 		unset($div_attr['value']);
 
+		if (  $option['inline'] ) {
+			$div_attr['class'] .= ' fw-option-type-checkboxes-inline fw-clearfix';
+		}
+
 		$html = '<div '. fw_attr_to_html($div_attr) .'>';
 
 		$html .= '<input type="checkbox" name="'. esc_attr($option['attr']['name']) .'[]" value="" checked="checked" style="display: none">'.
@@ -480,6 +484,7 @@ class FW_Option_Type_Checkboxes extends FW_Option_Type
 	protected function _get_defaults()
 	{
 		return array(
+			'inline'  => false, //Set this parameter to true in case you want all checkbox inputs to be rendered inline
 			'value'   => array(),
 			'choices' => array()
 		);
@@ -513,6 +518,10 @@ class FW_Option_Type_Radio extends FW_Option_Type
 		$div_attr = $option['attr'];
 		unset($div_attr['name']);
 		unset($div_attr['value']);
+
+		if (  $option['inline'] ) {
+			$div_attr['class'] .= ' fw-option-type-radio-inline fw-clearfix';
+		}
 
 		$html = '<div '. fw_attr_to_html($div_attr) .'>';
 
@@ -570,6 +579,7 @@ class FW_Option_Type_Radio extends FW_Option_Type
 	protected function _get_defaults()
 	{
 		return array(
+			'inline'   => false, //Set this parameter to true in case you want all radio inputs to be rendered inline
 			'value'   => '',
 			'choices' => array()
 		);

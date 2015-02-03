@@ -78,6 +78,20 @@ textarea.fw-option-type-textarea {
 	width: 100px !important;
 }
 
+/* Radio amd Checkboxes inline */
+
+.fw-option-type-checkboxes.fw-option-type-checkboxes-inline > div,
+.fw-option-type-radio.fw-option-type-radio-inline > div {
+	float: left;
+	margin-right: 10px;
+}
+
+.fw-option-type-checkboxes.fw-option-type-checkboxes-inline > div:last-child,
+.fw-option-type-radio.fw-option-type-radio-inline > div:last-child {
+	margin-right: 0;
+}
+
+/* end: Radio amd Checkboxes inline */
 
 /* modal fixes */
 
