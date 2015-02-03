@@ -6,6 +6,7 @@
 
 var fwForm = {
 	/**
+	 * Make forms ajax submittable
 	 * @param {Object} [opts]
 	 */
 	initAjaxSubmit: function(opts) {
