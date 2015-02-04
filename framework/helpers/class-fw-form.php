@@ -237,8 +237,26 @@ class FW_Form {
 			if ( $this->is_valid() ) {
 				$this->save();
 
+				/**
+				 * Transform structure from
+				 * array( 'type' => array( 'message_id' => array(...) ) )
+				 * to
+				 * array( 'type' => array( 'message_id' => 'Message' ) )
+				 */
+				{
+					$flash_messages = array();
+
+					foreach (FW_Flash_Messages::_get_messages(true) as $type => $messages) {
+						$flash_messages[$type] = array();
+
+						foreach ($messages as $id => $message_data) {
+							$flash_messages[$type][$id] = $message_data['message'];
+						}
+					}
+				}
+
 				wp_send_json_success( array(
-					'flash_messages' => FW_Flash_Messages::_get_messages(true)
+					'flash_messages' => $flash_messages
 				) );
 			} else {
 				wp_send_json_error( array(

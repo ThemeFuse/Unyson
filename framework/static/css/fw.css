@@ -2590,6 +2590,17 @@ a.fw-wp-link:hover {
 	100% {opacity: 1;}
 }
 
+
+@-webkit-keyframes fwFadeIn07 {
+	0% {opacity: 0;}
+	100% {opacity: 0.7;}
+}
+
+@keyframes fwFadeIn07 {
+	0% {opacity: 0;}
+	100% {opacity: 0.7;}
+}
+
 /* end: fadeIn */
 
 /* end: Animations */
@@ -2680,13 +2691,19 @@ a.fw-wp-link:hover {
 
 .fw-options-modal > .media-modal-backdrop {
 	opacity: 0;
+
+	-webkit-transition: opacity .3s ease-in-out; /* For Safari 3.1 to 6.0 */
+	transition: opacity .3s ease-in-out;
 }
 
 .fw-options-modal.fw-options-modal-open > .media-modal-backdrop {
 	opacity: .7;
 
-	-webkit-transition: opacity .3s ease-in-out; /* For Safari 3.1 to 6.0 */
-	transition: opacity .3s ease-in-out;
+	-webkit-animation-name: fwFadeIn07;
+	animation-name: fwFadeIn07;
+
+	-webkit-animation-duration: .3s;
+	animation-duration: .3s;
 }
 
 .fw-options-modal.fw-options-modal-open > .media-modal > .media-modal-content {
@@ -2710,13 +2727,13 @@ a.fw-wp-link:hover {
 
 .fw-options-modal > .media-modal > .media-modal-close {
 	opacity: 0;
+
+	-webkit-transition: opacity .6s ease-in; /* For Safari 3.1 to 6.0 */
+	transition: opacity .6s ease-in;
 }
 
 .fw-options-modal.fw-options-modal-open > .media-modal > .media-modal-close {
 	opacity: 1;
-
-	-webkit-transition: opacity .6s ease-in; /* For Safari 3.1 to 6.0 */
-	transition: opacity .6s ease-in;
 }
 
 /* end: open animation */
@@ -2725,9 +2742,6 @@ a.fw-wp-link:hover {
 
 .fw-options-modal.fw-options-modal-closing > .media-modal-backdrop {
 	opacity: .0;
-
-	-webkit-transition: opacity .3s ease-in-out; /* For Safari 3.1 to 6.0 */
-	transition: opacity .3s ease-in-out;
 }
 
 .fw-options-modal.fw-options-modal-closing > .media-modal > .media-modal-content {
@@ -2752,9 +2766,6 @@ a.fw-wp-link:hover {
 
 .fw-options-modal.fw-options-modal-closing > .media-modal > .media-modal-close {
 	opacity: 0;
-
-	-webkit-transition: opacity .2s ease-out; /* For Safari 3.1 to 6.0 */
-	transition: opacity .2s ease-out;
 }
 
 /* end: close animation */

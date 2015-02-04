@@ -84,14 +84,49 @@ jQuery(function($){
 <!-- end: reset warning -->
 
 <!-- ajax submit -->
-<!--
 <script type="text/javascript">
-	jQuery(function ($) {
+	jQuery(function ($) { return;
+		var $popup, popup = function(show, html) {
+			if (!$popup) { // lazy init
+				$popup = $(
+					'<div class="fw-options-modal" style="display:none;">'+
+					'    <div class="media-modal wp-core-ui" style="z-index:100001;">'+
+					'        <div class="media-modal-content" style="margin: 0 auto; max-width: 500px; max-height: 300px; top: 50px;">' +
+					'            <table width="100%" height="100%"><tbody><tr><td valign="middle" class="popup-content"></td></tr><tbody></table>'+
+					'        </div>'+
+					'    </div>'+
+					'    <div class="media-modal-backdrop" style="z-index:100000;"></div>'+
+					'</div>'
+				);
+
+				$(document.body).append($popup);
+			}
+
+			if (show) {
+				$popup.find('.popup-content:first').html(html);
+				$popup.removeClass('fw-options-modal-closing');
+				$popup.addClass('fw-options-modal-open');
+				$popup.css('display', '');
+			} else {
+				$popup.addClass('fw-options-modal-closing');
+				setTimeout(function(){
+					$popup.css('display', 'none');
+					$popup.removeClass('fw-options-modal-closing');
+					$popup.removeClass('fw-options-modal-open');
+					$popup.find('.popup-content:first').html('');
+				}, 300);
+			}
+		};
+
 		fwForm.initAjaxSubmit({
 			selector: 'form[data-fw-form-id="fw_settings"]',
-			ajaxUrl: ajaxurl
+			onSuccess: function($form, ajaxData) {
+				popup(
+					true,
+					fwForm.backend.generateFlashMessagesHtml(ajaxData.flash_messages)
+				);
+			}
 		});
 	});
 </script>
--->
 <!-- end: ajax submit -->
