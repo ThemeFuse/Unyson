@@ -93,7 +93,16 @@ var fwForm = {
 								$pageTitle.next().remove();
 							}
 
-							$pageTitle.after('<div class="fw-flash-messages">'+ html.join('') +'</div>');
+							var scrollTop = jQuery(document.body).scrollTop();
+
+							$pageTitle.after(
+								'<div class="fw-flash-messages">'+
+									html.join('') +
+									(scrollTop > 300
+										? '<p><a href="#" onclick="jQuery(document.body).animate({scrollTop: '+ scrollTop +'}, 300); jQuery(this).parent().remove();">Go back</a></p>'
+										: ''
+									)+
+								'</div>');
 
 							jQuery(document.body).animate({scrollTop: 0}, 300);
 						});

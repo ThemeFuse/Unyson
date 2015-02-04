@@ -63,8 +63,6 @@ jQuery(function($){
 <script type="text/javascript">
 	jQuery(function($){
 		$('form[data-fw-form-id="fw_settings"] input[name="<?php echo esc_js($reset_input_name) ?>"]').on('click.fw-reset-warning', function(e){
-			e.preventDefault();
-
 			/**
 			 * on confirm() the submit input looses focus
 			 * fwForm.isAdminPage() must be able to select the input to send it in _POST
@@ -75,11 +73,10 @@ jQuery(function($){
 				$(this).attr('clicked', '');
 			}
 
-			if (confirm('<?php
-			echo esc_js(__("Click OK to reset.\nAll settings will be lost and replaced with default settings!", 'fw'))
+			if (!confirm('<?php
+				echo esc_js(__("Click OK to reset.\nAll settings will be lost and replaced with default settings!", 'fw'))
 			?>')) {
-				console.log($(this).closest('form'));
-				$(this).closest('form').submit();
+				e.preventDefault();
 			}
 		});
 	});
@@ -87,6 +84,7 @@ jQuery(function($){
 <!-- end: reset warning -->
 
 <!-- ajax submit -->
+<!--
 <script type="text/javascript">
 	jQuery(function ($) {
 		fwForm.initAjaxSubmit({
@@ -95,4 +93,5 @@ jQuery(function($){
 		});
 	});
 </script>
+-->
 <!-- end: ajax submit -->
