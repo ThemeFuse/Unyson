@@ -211,7 +211,7 @@ $extensions = array(
 		),
 	),
 	'forms' => array(
-		'display'     => true,
+		'display'     => false,
 		'parent'      => null,
 		'name'        => __( 'Forms', 'fw' ),
 		'description' => __( 'This extension adds the possibility to create a contact form. Use the drag & drop form builder to create any contact form you\'ll ever want or need.', 'fw' ),
@@ -223,7 +223,7 @@ $extensions = array(
 		),
 	),
 	'mailer' => array(
-		'display'     => true,
+		'display'     => false,
 		'parent'      => null,
 		'name'        => __( 'Mailer', 'fw' ),
 		'description' => __( 'This extension will let you set some global email options and it is used by other extensions (like Forms) to send emails.', 'fw' ),
