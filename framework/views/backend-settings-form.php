@@ -86,7 +86,7 @@ jQuery(function($){
 
 <!-- ajax submit -->
 <script type="text/javascript">
-	jQuery(function ($) { return;
+	jQuery(function ($) {
 		function generateFlashMessagesHtml(flashMessages) {
 			var html = [],
 				typeHtml = [],
@@ -110,7 +110,7 @@ jQuery(function($){
 						break;
 					case 'success':
 						typeMessageClass = 'fw-text-success';
-						typeIconClass = 'dashicons dashicons-yes';
+						typeIconClass = 'dashicons dashicons-star-filled';
 						typeTitle = '<?php echo esc_js(__('Done', 'fw')) ?>';
 						break;
 					case 'info':
@@ -125,8 +125,8 @@ jQuery(function($){
 				jQuery.each(messages, function(messageId, message){
 					typeHtml.push(
 						'<li>'+
-							'<h2 class="'+ typeMessageClass +'"><span class="'+ typeIconClass +'"></span> <strong>'+ typeTitle +'</strong></h2>'+
-							'<p class="'+ typeMessageClass +'">'+ message +'</p>'+
+							'<h2 class="'+ typeMessageClass +'" style="font-size: 22px;"><span class="'+ typeIconClass +'"></span> '+ typeTitle +'</h2>'+
+							'<p class="fw-text-muted" style="font-size: 13px; line-height: 19px;"><em>'+ message +'</em></p>'+
 						'</li>'
 					);
 				});
@@ -163,10 +163,10 @@ jQuery(function($){
 
 					fw.soleModal.show(
 						'fw-options-ajax-save-loading',
-						'<h2 class="fw-text-muted">'+
-							'<img src="'+ fw.img.loadingSpinner +'" style="vertical-align: bottom;" /> <strong>'+ title +'</strong>'+
+						'<h2 class="fw-text-muted" style="font-size: 22px;">'+
+							'<img src="'+ fw.img.loadingSpinner +'" style="vertical-align: bottom;" /> '+ title +
 						'</h2>'+
-						'<p class="fw-text-muted">'+ description +'</p>',
+						'<p class="fw-text-muted" style="font-size: 13px; line-height: 19px;"><em>'+ description +'</em></p>',
 						{hide: -30000}
 					);
 				} else {
