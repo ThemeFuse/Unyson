@@ -2684,6 +2684,11 @@ a.fw-wp-link:hover {
 	border-right: 1px solid #ccc;
 }
 
+.fw-options-modal .media-modal-close:focus {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
 
 /* modal animations */
 
@@ -2728,12 +2733,15 @@ a.fw-wp-link:hover {
 .fw-options-modal > .media-modal > .media-modal-close {
 	opacity: 0;
 
-	-webkit-transition: opacity .6s ease-in; /* For Safari 3.1 to 6.0 */
-	transition: opacity .6s ease-in;
+	-webkit-transition: opacity .3s ease-in; /* For Safari 3.1 to 6.0 */
+	transition: opacity .3s ease-in;
 }
 
 .fw-options-modal.fw-options-modal-open > .media-modal > .media-modal-close {
 	opacity: 1;
+
+	-webkit-transition-duration: .6s;
+	transition-duration: .6s;
 }
 
 /* end: open animation */
@@ -2766,6 +2774,9 @@ a.fw-wp-link:hover {
 
 .fw-options-modal.fw-options-modal-closing > .media-modal > .media-modal-close {
 	opacity: 0;
+
+	-webkit-transition-duration: .1s;
+	transition-duration: .1s;
 }
 
 /* end: close animation */
