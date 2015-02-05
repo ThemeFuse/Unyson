@@ -86,6 +86,51 @@ jQuery(function($){
 <!-- ajax submit -->
 <script type="text/javascript">
 	jQuery(function ($) { return;
+		function generateFlashMessagesHtml(flashMessages) {
+			var html = [],
+				typeHtml = [],
+				messageClass = '',
+				iconClass = '';
+
+			jQuery.each(flashMessages, function(type, messages){
+				typeHtml = [];
+
+				switch (type) {
+					case 'error':
+						messageClass = 'fw-text-danger';
+						iconClass = 'dashicons dashicons-dismiss';
+						break;
+					case 'warning':
+						messageClass = 'fw-text-warning';
+						iconClass = 'dashicons dashicons-no-alt';
+						break;
+					case 'success':
+						messageClass = 'fw-text-success';
+						iconClass = 'dashicons dashicons-yes';
+						break;
+					case 'info':
+						messageClass = 'fw-text-info';
+						iconClass = 'dashicons dashicons-info';
+						break;
+					default:
+						messageClass = '';
+						iconClass = '';
+				}
+
+				jQuery.each(messages, function(messageId, message){
+					typeHtml.push('<li><h3 class="'+ messageClass +'"><span class="'+ iconClass +'"></span> '+ message +'</h3></li>');
+				});
+
+				if (typeHtml.length) {
+					html.push(
+						'<ul>'+ typeHtml.join('</ul><ul>') +'</ul>'
+					);
+				}
+			});
+
+			return html.join('');
+		}
+
 		fwForm.initAjaxSubmit({
 			selector: 'form[data-fw-form-id="fw_settings"]',
 			loading: function(show) {
@@ -102,8 +147,8 @@ jQuery(function($){
 			onSuccess: function($form, ajaxData) {
 				fw.soleModal.show(
 					'fw-options-ajax-save-success',
-					fwForm.backend.generateFlashMessagesHtml(ajaxData.flash_messages),
-					{hide: 10000}
+					generateFlashMessagesHtml(ajaxData.flash_messages),
+					{hide: 3000}
 				);
 			}
 		});

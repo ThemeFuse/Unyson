@@ -2697,7 +2697,7 @@ a.fw-wp-link:hover {
 }
 
 .fw-options-modal.fw-options-modal-open > .media-modal-backdrop {
-	opacity: .7;
+	opacity: .7; /* must be the same as in .media-modal-backdrop {} wp style */
 
 	-webkit-animation-name: fwFadeIn07;
 	animation-name: fwFadeIn07;

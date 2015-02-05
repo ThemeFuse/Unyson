@@ -1191,6 +1191,19 @@ fw.elementEventHasListenerInContainer = function ($element, event, $container) {
  * Simple modal
  * Meant to display success/error messages
  * Can be called multiple times,all calls will be pushed to queue and displayed one-by-one
+ *
+ * Usage:
+ *
+ * // open modal with close button and wait for user to close it
+ * fw.soleModal.show('unique-id', 'Hello World!');
+ *
+ * // open modal with close button but auto hide it after 3 seconds
+ * fw.soleModal.show('unique-id', 'Hello World!', {hide: 3000});
+ *
+ * // open modal without close button and auto hide it after 3 seconds
+ * fw.soleModal.show('unique-id', 'Hello World!', {hide: -3000});
+ *
+ * fw.soleModal.hide('unique-id');
  */
 fw.soleModal = (function(){
 	var inst = {
@@ -1212,6 +1225,7 @@ fw.soleModal = (function(){
 		pendingHide: false,
 		animationTime: 300,
 		$modal: null,
+		backdropOpacity: 0.7, // must be the same as in .fw-options-modal{} style
 		lazyInit: function(){
 			if (this.$modal) {
 				return false;
@@ -1219,11 +1233,11 @@ fw.soleModal = (function(){
 
 			this.$modal = jQuery(
 				'<div class="fw-options-modal" style="display:none;">'+
-				'    <div class="media-modal wp-core-ui" style="z-index:100001;">'+
-				'        <div class="media-modal-content" style="margin: 0 auto; max-width: 500px; max-height: 300px; top: 50px;">' +
+				'    <div class="media-modal wp-core-ui" style="z-index:100001; margin: auto; max-width: 500px; max-height: 300px;">'+
+				'        <div class="media-modal-content">' +
 				'            <a class="media-modal-close" href="#" onclick="return false;"><span class="media-modal-icon"></span></a>'+
 				'            <table width="100%" height="100%"><tbody><tr>'+
-				'                <td valign="middle" class="fw-sole-modal-content"><!-- modal content --></td>'+
+				'                <td valign="middle" class="fw-sole-modal-content fw-text-center"><!-- modal content --></td>'+
 				'            </tr><tbody></table>'+
 				'        </div>'+
 				'    </div>'+
@@ -1231,13 +1245,24 @@ fw.soleModal = (function(){
 				'</div>'
 			);
 
-			this.$modal.find('.media-modal-close:first').on('click', _.bind(function(){
+			( this.$getCloseButton().add(this.$getBackdrop()) ).on('click', _.bind(function(){
+				if (this.current && this.current.hide < 0) {
+					// manual close not is allowed
+					return;
+				}
+
 				this.hide();
 			}, this));
 
 			jQuery(document.body).append(this.$modal);
 
 			return true;
+		},
+		$getBackdrop: function() {
+			return this.$modal.find('.media-modal-backdrop:first');
+		},
+		$getCloseButton: function() {
+			return this.$modal.find('.media-modal-close:first');
 		},
 		setContent: function(html) {
 			this.lazyInit();
@@ -1260,6 +1285,9 @@ fw.soleModal = (function(){
 
 				if (this.closingTimeout) {
 					// it will open automatically after closing animation will finish
+					if (this.queue.length) {
+						this.$getBackdrop().css('opacity', this.backdropOpacity);
+					}
 					return false;
 				}
 
@@ -1283,10 +1311,16 @@ fw.soleModal = (function(){
 				if (this.current) {
 					// currently the modal is open, add to queue
 					this.queue.push(opts);
+
+					if (this.closingTimeout) {
+						// it will open automatically after closing animation will finish
+						this.$getBackdrop().css('opacity', this.backdropOpacity);
+					}
 					return true;
 				} else {
 					if (this.closingTimeout) {
 						// it will open automatically after closing animation will finish
+						this.$getBackdrop().css('opacity', this.backdropOpacity);
 						return true;
 					}
 
@@ -1300,11 +1334,13 @@ fw.soleModal = (function(){
 			this.$modal.removeClass('fw-options-modal-closing');
 			this.$modal.addClass('fw-options-modal-open');
 			this.$modal.css('display', '');
-			this.$modal.find('a.media-modal-close:first').css('display', '');
+			this.$getCloseButton().css('display', '');
 
 			clearTimeout(this.openingTimeout);
 			this.openingTimeout = setTimeout(_.bind(function(){
 				this.openingTimeout = null;
+
+				this.$getBackdrop().css('opacity', '');
 
 				if (this.pendingHide) {
 					clearTimeout(this.pendingHide);
@@ -1322,7 +1358,7 @@ fw.soleModal = (function(){
 
 				if (this.current.hide) {
 					if (this.current.hide < 0) {
-						this.$modal.find('a.media-modal-close:first').css('display', 'none');
+						this.$getCloseButton().css('display', 'none');
 					}
 
 					this.hideTimeout = setTimeout(_.bind(function(){
@@ -1364,6 +1400,13 @@ fw.soleModal = (function(){
 
 			clearTimeout(this.hideTimeout);
 
+			if (this.queue.length) {
+				// after hide the modal will be displayed again, do not hide backdrop
+				this.$getBackdrop().css('opacity', this.backdropOpacity);
+			} else {
+				this.$getBackdrop().css('opacity', '');
+			}
+
 			this.$modal.addClass('fw-options-modal-closing');
 
 			clearTimeout(this.closingTimeout);
@@ -1374,9 +1417,6 @@ fw.soleModal = (function(){
 				this.$modal.css('display', 'none');
 				this.$modal.removeClass('fw-options-modal-open');
 				this.$modal.removeClass('fw-options-modal-closing');
-
-				// remove focus from the close button (to prevent press it with enter multiple times)
-				this.$modal.find('a.media-modal-close:first').blur().css('display', 'none');
 
 				this.setContent('');
 
