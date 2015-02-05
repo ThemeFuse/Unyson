@@ -1186,3 +1186,216 @@ fw.elementEventHasListenerInContainer = function ($element, event, $container) {
 
 	return false;
 };
+
+/**
+ * Simple modal
+ * Meant to display success/error messages
+ * Can be called multiple times,all calls will be pushed to queue and displayed one-by-one
+ */
+fw.soleModal = (function(){
+	var inst = {
+		queue: [
+			/*
+			{
+				id: 'hello'
+				html: 'Hello <b>World</b>!'
+				hide: 0000 // auto hide timeout in ms // set <0 to hide the close button
+			}
+			*/
+		],
+		/** @type {Object|null} */
+		current: null,
+		hideTimeout: null,
+		openingTimeout: null,
+		closingTimeout: null,
+		/** @type {Boolean|Number} also used as timeout id */
+		pendingHide: false,
+		animationTime: 300,
+		$modal: null,
+		lazyInit: function(){
+			if (this.$modal) {
+				return false;
+			}
+
+			this.$modal = jQuery(
+				'<div class="fw-options-modal" style="display:none;">'+
+				'    <div class="media-modal wp-core-ui" style="z-index:100001;">'+
+				'        <div class="media-modal-content" style="margin: 0 auto; max-width: 500px; max-height: 300px; top: 50px;">' +
+				'            <a class="media-modal-close" href="#" onclick="return false;"><span class="media-modal-icon"></span></a>'+
+				'            <table width="100%" height="100%"><tbody><tr>'+
+				'                <td valign="middle" class="fw-sole-modal-content"><!-- modal content --></td>'+
+				'            </tr><tbody></table>'+
+				'        </div>'+
+				'    </div>'+
+				'    <div class="media-modal-backdrop" style="z-index:100000;"></div>'+
+				'</div>'
+			);
+
+			this.$modal.find('.media-modal-close:first').on('click', _.bind(function(){
+				this.hide();
+			}, this));
+
+			jQuery(document.body).append(this.$modal);
+
+			return true;
+		},
+		setContent: function(html) {
+			this.lazyInit();
+
+			this.$modal.find('.fw-sole-modal-content:first').html(html || '&nbsp;');
+		},
+		/**
+		 * Show modal
+		 * Call without arguments to display next from queue
+		 * @param {String} [id]
+		 * @param {String} [html]
+		 * @param {Object} [opts]
+		 * @return {Boolean}
+		 */
+		show: function (id, html, opts) {
+			if (typeof id == 'undefined') {
+				if (this.current) {
+					return false;
+				}
+
+				if (this.closingTimeout) {
+					// it will open automatically after closing animation will finish
+					return false;
+				}
+
+				this.current = this.queue.shift();
+
+				if (!this.current) {
+					return false;
+				}
+			} else {
+				// make sure to remove this id from queue (if was added previously)
+				this.queue = _.filter(this.queue, function (item) { return item.id != id; });
+
+				{
+					opts = opts || {};
+
+					opts.id = id;
+					opts.html = html;
+					opts.hide = opts.hide || 0;
+				}
+
+				if (this.current) {
+					// currently the modal is open, add to queue
+					this.queue.push(opts);
+					return true;
+				} else {
+					if (this.closingTimeout) {
+						// it will open automatically after closing animation will finish
+						return true;
+					}
+
+					this.current = opts;
+				}
+			}
+
+			this.setContent(this.current.html);
+
+			// open modal
+			this.$modal.removeClass('fw-options-modal-closing');
+			this.$modal.addClass('fw-options-modal-open');
+			this.$modal.css('display', '');
+			this.$modal.find('a.media-modal-close:first').css('display', '');
+
+			clearTimeout(this.openingTimeout);
+			this.openingTimeout = setTimeout(_.bind(function(){
+				this.openingTimeout = null;
+
+				if (this.pendingHide) {
+					clearTimeout(this.pendingHide);
+					this.pendingHide = setTimeout(_.bind(function(){
+						if (this.pendingHide) {
+							this.pendingHide = false;
+							this.hide();
+						}
+					}, this), this.animationTime);
+				}
+			}, this), this.animationTime);
+
+			{
+				clearTimeout(this.hideTimeout);
+
+				if (this.current.hide) {
+					if (this.current.hide < 0) {
+						this.$modal.find('a.media-modal-close:first').css('display', 'none');
+					}
+
+					this.hideTimeout = setTimeout(_.bind(function(){
+						this.hide();
+					}, this), Math.abs(this.current.hide));
+				}
+			}
+
+			return true;
+		},
+		/**
+		 * @param {String} [id]
+		 * @returns {boolean}
+		 */
+		hide: function(id) {
+			if (typeof id == 'undefined') {
+				// hide current
+			} else {
+				if (this.current && this.current.id == id) {
+					// this id is currently displayed, hide it
+				} else {
+					// remove id from queue
+					this.queue = _.filter(this.queue, function (item) { return item.id != id; });
+					return true;
+				}
+			}
+
+			if (this.closingTimeout) {
+				// closing animation not finished
+				return false;
+			}
+
+			if (this.openingTimeout) {
+				this.pendingHide = true;
+				return true;
+			} else {
+				this.pendingHide = false;
+			}
+
+			clearTimeout(this.hideTimeout);
+
+			this.$modal.addClass('fw-options-modal-closing');
+
+			clearTimeout(this.closingTimeout);
+			// after the closing animation finished
+			this.closingTimeout = setTimeout(_.bind(function(){
+				this.closingTimeout = null;
+
+				this.$modal.css('display', 'none');
+				this.$modal.removeClass('fw-options-modal-open');
+				this.$modal.removeClass('fw-options-modal-closing');
+
+				// remove focus from the close button (to prevent press it with enter multiple times)
+				this.$modal.find('a.media-modal-close:first').blur().css('display', 'none');
+
+				this.setContent('');
+
+				this.current = null;
+
+				// show next
+				this.show();
+			}, this), this.animationTime);
+
+			return true;
+		}
+	};
+
+	return {
+		show: function(id, html, opts) {
+			inst.show(id, html, opts);
+		},
+		hide: function(id){
+			inst.hide(id);
+		}
+	};
+})();

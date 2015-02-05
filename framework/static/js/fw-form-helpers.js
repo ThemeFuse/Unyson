@@ -52,7 +52,7 @@ var fwForm = {
 			},
 			onAjaxError: function(jqXHR, textStatus, errorThrown) {
 				console.error(jqXHR, textStatus, errorThrown);
-				alert('Ajax error (details are in console)');
+				alert('Ajax error (more details in console)');
 			},
 			onSuccess: function ($form, ajaxData) {
 				if (isAdmin) {
