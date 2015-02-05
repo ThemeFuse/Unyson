@@ -1233,8 +1233,8 @@ fw.soleModal = (function(){
 
 			this.$modal = jQuery(
 				'<div class="fw-options-modal" style="display:none;">'+
-				'    <div class="media-modal wp-core-ui" style="z-index:100001; margin: auto; max-width: 500px; max-height: 300px;">'+
-				'        <div class="media-modal-content">' +
+				'    <div class="media-modal wp-core-ui" style="z-index:100001; margin: auto; width: 400px; height: 200px;">'+
+				'        <div class="media-modal-content" style="min-height: 200px;">' +
 				'            <a class="media-modal-close" href="#" onclick="return false;"><span class="media-modal-icon"></span></a>'+
 				'            <table width="100%" height="100%"><tbody><tr>'+
 				'                <td valign="middle" class="fw-sole-modal-content fw-text-center"><!-- modal content --></td>'+
