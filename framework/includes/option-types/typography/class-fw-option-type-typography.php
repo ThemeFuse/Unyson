@@ -57,6 +57,9 @@ class FW_Option_Type_Typography extends FW_Option_Type
 			array('fw-selectize'),
 			fw()->manifest->get_version()
 		);
+
+		fw()->backend->option_type('color-picker')->enqueue_static();
+
 		wp_enqueue_script(
 			'fw-option-' . $this->get_type(),
 			fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/js/scripts.js'),
