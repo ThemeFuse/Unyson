@@ -24,7 +24,7 @@ echo fw_html_tag('input', array(
 ));
 ?>
 <script type="text/javascript">
-jQuery(function($){ return;
+jQuery(function($){
 	fwEvents.one("fw:options:init", function(){
 		var $form = $('form[data-fw-form-id="fw_settings"]:first');
 
@@ -85,7 +85,7 @@ jQuery(function($){ return;
 
 <!-- ajax submit -->
 <script type="text/javascript">
-	jQuery(function ($) {
+	jQuery(function ($) { return;
 		fwForm.initAjaxSubmit({
 			selector: 'form[data-fw-form-id="fw_settings"]',
 			loading: function(show) {
