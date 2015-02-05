@@ -77,6 +77,7 @@ jQuery(function($){
 				echo esc_js(__("Click OK to reset.\nAll settings will be lost and replaced with default settings!", 'fw'))
 			?>')) {
 				e.preventDefault();
+				$(this).removeAttr('clicked');
 			}
 		});
 	});
@@ -142,18 +143,30 @@ jQuery(function($){
 
 		fwForm.initAjaxSubmit({
 			selector: 'form[data-fw-form-id="fw_settings"]',
-			loading: function(show) {
+			loading: function(show, $form, $submitButton) {
 				if (show) {
+					var title, description;
+
+					if ($submitButton.length && $submitButton.attr('name') == '<?php echo esc_js($reset_input_name) ?>') {
+						title = '<?php echo esc_js(__('Resetting', 'fw')) ?>';
+						description =
+							'<?php echo esc_js(__('We are currently resetting your settings.', 'fw')) ?>'+
+							'<br/>'+
+							'<?php echo esc_js(__('This may take a few moments.', 'fw')) ?>';
+					} else {
+						title = '<?php echo esc_js(__('Saving', 'fw')) ?>';
+						description =
+							'<?php echo esc_js(__('We are currently saving your settings.', 'fw')) ?>'+
+							'<br/>'+
+							'<?php echo esc_js(__('This may take a few moments.', 'fw')) ?>';
+					}
+
 					fw.soleModal.show(
 						'fw-options-ajax-save-loading',
 						'<h2 class="fw-text-muted">'+
-							'<img src="'+ fw.img.loadingSpinner +'" style="vertical-align: bottom;" /> <strong><?php echo esc_js(__('Saving', 'fw')) ?></strong>'+
+							'<img src="'+ fw.img.loadingSpinner +'" style="vertical-align: bottom;" /> <strong>'+ title +'</strong>'+
 						'</h2>'+
-						'<p class="fw-text-muted">'+
-							'<?php echo esc_js(__('We are currently saving your settings.', 'fw')) ?>'+
-							'<br/>'+
-							'<?php echo esc_js(__('This may take a few moments.', 'fw')) ?>'+
-						'</p>',
+						'<p class="fw-text-muted">'+ description +'</p>',
 						{hide: -30000}
 					);
 				} else {

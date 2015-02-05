@@ -13,7 +13,7 @@ var fwForm = {
 		var opts = jQuery.extend({
 			selector: 'form[data-fw-form-id]',
 			ajaxUrl: (typeof ajaxurl == 'undefined') ? '/wp-admin/admin-ajax.php' : ajaxurl,
-			loading: function (show, $form) {
+			loading: function (show, $form, $submitButton) {
 				$form.css('position', 'relative');
 				$form.find('> .fw-form-loading').remove();
 
@@ -102,7 +102,7 @@ var fwForm = {
 			}
 
 			opts.hideErrors($form);
-			opts.loading(true, $form);
+			opts.loading(true, $form, $submitButton);
 			isBusy = true;
 
 			jQuery.ajax({
@@ -112,7 +112,7 @@ var fwForm = {
 				dataType: 'json'
 			}).done(function(r){
 				isBusy = false;
-				opts.loading(false, $form);
+				opts.loading(false, $form, $submitButton);
 
 				if (r.success) {
 					opts.onSuccess($form, r.data);
@@ -121,7 +121,7 @@ var fwForm = {
 				}
 			}).fail(function(jqXHR, textStatus, errorThrown){
 				isBusy = false;
-				opts.loading(false, $form);
+				opts.loading(false, $form, $submitButton);
 				opts.onAjaxError(jqXHR, textStatus, errorThrown);
 			});
 		});
