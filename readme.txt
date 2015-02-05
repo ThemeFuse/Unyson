@@ -87,7 +87,7 @@ Yes; Unyson will work with any theme.
 == Changelog ==
 
 = 2.1.21 =
-* Made `forms` and `mailer` extensions hidden.
+* Made the `forms` and `mailer` extensions hidden.
 
 = 2.1.20 =
 * Added warning on Theme Settings reset [^](http://static.md/0fcf01628eddab75fdbedb3a24784db3.png)

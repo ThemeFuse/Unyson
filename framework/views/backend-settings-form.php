@@ -89,36 +89,45 @@ jQuery(function($){
 		function generateFlashMessagesHtml(flashMessages) {
 			var html = [],
 				typeHtml = [],
-				messageClass = '',
-				iconClass = '';
+				typeMessageClass = '',
+				typeIconClass = '',
+				typeTitle = '';
 
 			jQuery.each(flashMessages, function(type, messages){
 				typeHtml = [];
 
 				switch (type) {
 					case 'error':
-						messageClass = 'fw-text-danger';
-						iconClass = 'dashicons dashicons-dismiss';
+						typeMessageClass = 'fw-text-danger';
+						typeIconClass = 'dashicons dashicons-dismiss';
+						typeTitle = '<?php echo esc_js(__('Ah, Sorry', 'fw')) ?>';
 						break;
 					case 'warning':
-						messageClass = 'fw-text-warning';
-						iconClass = 'dashicons dashicons-no-alt';
+						typeMessageClass = 'fw-text-warning';
+						typeIconClass = 'dashicons dashicons-no-alt';
+						typeTitle = '<?php echo esc_js(__('Ah, Sorry', 'fw')) ?>';
 						break;
 					case 'success':
-						messageClass = 'fw-text-success';
-						iconClass = 'dashicons dashicons-yes';
+						typeMessageClass = 'fw-text-success';
+						typeIconClass = 'dashicons dashicons-yes';
+						typeTitle = '<?php echo esc_js(__('Done', 'fw')) ?>';
 						break;
 					case 'info':
-						messageClass = 'fw-text-info';
-						iconClass = 'dashicons dashicons-info';
+						typeMessageClass = 'fw-text-info';
+						typeIconClass = 'dashicons dashicons-info';
+						typeTitle = '<?php echo esc_js(__('Done', 'fw')) ?>';
 						break;
 					default:
-						messageClass = '';
-						iconClass = '';
+						typeMessageClass = typeIconClass = typeTitle = '';
 				}
 
 				jQuery.each(messages, function(messageId, message){
-					typeHtml.push('<li><h3 class="'+ messageClass +'"><span class="'+ iconClass +'"></span> '+ message +'</h3></li>');
+					typeHtml.push(
+						'<li>'+
+							'<h2 class="'+ typeMessageClass +'"><span class="'+ typeIconClass +'"></span> <strong>'+ typeTitle +'</strong></h2>'+
+							'<p class="'+ typeMessageClass +'">'+ message +'</p>'+
+						'</li>'
+					);
 				});
 
 				if (typeHtml.length) {
@@ -137,7 +146,14 @@ jQuery(function($){
 				if (show) {
 					fw.soleModal.show(
 						'fw-options-ajax-save-loading',
-						'<p class="fw-text-center"><img src="'+ fw.img.loadingSpinner +'" ></p>',
+						'<h2 class="fw-text-muted">'+
+							'<img src="'+ fw.img.loadingSpinner +'" style="vertical-align: bottom;" /> <strong><?php echo esc_js(__('Saving', 'fw')) ?></strong>'+
+						'</h2>'+
+						'<p class="fw-text-muted">'+
+							'<?php echo esc_js(__('We are currently saving your settings.', 'fw')) ?>'+
+							'<br/>'+
+							'<?php echo esc_js(__('This may take a few moments.', 'fw')) ?>'+
+						'</p>',
 						{hide: -30000}
 					);
 				} else {

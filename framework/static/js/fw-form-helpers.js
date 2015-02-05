@@ -92,6 +92,8 @@ var fwForm = {
 			if (!$submitButton.length) {
 				// in case you use this solution http://stackoverflow.com/a/5721762
 				$submitButton = $form.find('input[type="submit"][name][clicked]');
+
+				$submitButton.removeAttr('clicked');
 			}
 
 			if (!$form.is('form[data-fw-form-id]')) {
