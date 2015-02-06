@@ -110,7 +110,8 @@ jQuery(function($){
 					fw.soleModal.show(
 						'fw-options-ajax-save-loading',
 						'<h2 class="fw-text-muted">'+
-							'<img src="'+ fw.img.loadingSpinner +'" style="vertical-align: bottom;" /> '+ title +
+							'<img src="'+ fw.img.loadingSpinner +'" style="vertical-align: bottom;" /> '+
+							title +
 						'</h2>'+
 						'<p class="fw-text-muted"><em>'+ description +'</em></p>',
 						{autoHide: 30000, allowClose: false}
@@ -123,7 +124,7 @@ jQuery(function($){
 				fw.soleModal.show(
 					'fw-options-ajax-save-success',
 					fw.soleModal.renderFlashMessages(ajaxData.flash_messages),
-					{autoHide: 3000}
+					{autoHide: 3000, showCloseButton: false}
 				);
 			}
 		});

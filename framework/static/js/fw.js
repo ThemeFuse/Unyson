@@ -1212,21 +1212,19 @@ fw.soleModal = (function(){
 				autoHide: 0000 // auto hide timeout in ms
 				allowClose: true // useful when you make an ajax and must force the user to wait until it will finish
 				showCloseButton: true // false will hide the button, but the user will still be able to click on backdrop to close it
-				width: '350px'
-				height: '200px'
+				width: 350
+				height: 200
 			}
 			*/
 		],
 		/** @type {Object|null} */
 		current: null,
-		autoHideTimeout: null,
-		openingTimeout: null,
-		closingTimeout: null,
-		/** @type {Boolean|Number} also used as timeout id */
-		pendingHide: false,
 		animationTime: 300,
 		$modal: null,
 		backdropOpacity: 0.7, // must be the same as in .fw-modal style
+		currentMethod: '',
+		currentMethodTimeoutId: 0,
+		pendingMethod: '',
 		lazyInit: function(){
 			if (this.$modal) {
 				return false;
@@ -1260,15 +1258,22 @@ fw.soleModal = (function(){
 			return true;
 		},
 		$getBackdrop: function() {
+			this.lazyInit();
+
 			return this.$modal.find('.media-modal-backdrop:first');
 		},
 		$getCloseButton: function() {
+			this.lazyInit();
+
 			return this.$modal.find('.media-modal-close:first');
+		},
+		$getContent: function() {
+			return this.$modal.find('.fw-sole-modal-content:first');
 		},
 		setContent: function(html) {
 			this.lazyInit();
 
-			this.$modal.find('.fw-sole-modal-content:first').html(html || '&nbsp;');
+			this.$getContent().html(html || '&nbsp;');
 		},
 		/**
 		 * Show modal
@@ -1276,165 +1281,150 @@ fw.soleModal = (function(){
 		 * @param {String} [id]
 		 * @param {String} [html]
 		 * @param {Object} [opts]
-		 * @return {Boolean}
+		 * @returns {Boolean}
 		 */
 		show: function (id, html, opts) {
-			if (typeof id == 'undefined') {
-				if (this.current) {
-					return false;
-				}
-
-				if (this.closingTimeout) {
-					// it will open automatically after closing animation will finish
-					if (this.queue.length) {
-						this.$getBackdrop().css('opacity', this.backdropOpacity);
-					}
-					return false;
-				}
-
-				this.current = this.queue.shift();
-
-				if (!this.current) {
-					return false;
-				}
-			} else {
+			if (typeof id != 'undefined') {
 				// make sure to remove this id from queue (if was added previously)
 				this.queue = _.filter(this.queue, function (item) { return item.id != id; });
 
 				{
-					opts = opts || {};
+					opts = jQuery.extend({
+						autoHide: 0,
+						allowClose: true,
+						showCloseButton: true,
+						width: 350,
+						height: 200
+					}, opts || {});
 
 					opts.id = id;
 					opts.html = html;
-					opts.autoHide = opts.autoHide || 0;
-					opts.allowClose = opts.allowClose || true;
-					opts.showCloseButton = (opts.showCloseButton || true) && opts.allowClose;
-					opts.width = opts.width || '350px';
-					opts.height = opts.height || '200px';
+					opts.showCloseButton = opts.showCloseButton && opts.allowClose;
 				}
 
-				if (this.current) {
-					// currently the modal is open, add to queue
-					this.queue.push(opts);
+				this.queue.push(opts);
 
-					if (this.closingTimeout) {
-						// it will open automatically after closing animation will finish
-						this.$getBackdrop().css('opacity', this.backdropOpacity);
-					}
-					return true;
-				} else {
-					if (this.closingTimeout) {
-						this.queue.push(opts);
-
-						// it will open automatically after closing animation will finish
-						this.$getBackdrop().css('opacity', this.backdropOpacity);
-
-						return true;
-					}
-
-					this.current = opts;
-				}
+				return this.show();
 			}
+
+			if (this.currentMethod) {
+				return false;
+			}
+
+			if (this.current) {
+				return false;
+			}
+
+			this.currentMethod = '';
+
+			this.current = this.queue.shift();
+
+			if (!this.current) {
+				this.hide();
+				return false;
+			}
+
+			this.currentMethod = 'show';
 
 			this.setContent(this.current.html);
 
-			// open modal
+			this.$getCloseButton().css('display', this.current.showCloseButton ? '' : 'none');
+
 			this.$modal.removeClass('fw-modal-closing');
 			this.$modal.addClass('fw-modal-open');
+
 			this.$modal.css('display', '');
-			this.$getCloseButton().css('display', '');
 
 			// set size
-			{
+			if (
+				this.$modal.find('> .media-modal').height() != this.current.height
+				||
+				this.$modal.find('> .media-modal').width() != this.current.width
+			) {
 				this.$modal.find('> .media-modal').animate({
-					'height': this.current.height,
-					'width': this.current.width
+					'height': this.current.height +'px',
+					'width': this.current.width +'px'
 				}, this.animationTime);
 
 				this.$modal.find('> .media-modal > .media-modal-content').animate({
-					'min-height': this.current.height
+					'min-height': this.current.height +'px'
 				}, this.animationTime);
 			}
 
-			clearTimeout(this.openingTimeout);
-			this.openingTimeout = setTimeout(_.bind(function(){
-				this.openingTimeout = null;
+			this.currentMethodTimeoutId = setTimeout(_.bind(function() {
+				this.currentMethod = '';
 
-				this.$getBackdrop().css('opacity', '');
-
-				if (this.pendingHide) {
-					clearTimeout(this.pendingHide);
-					this.pendingHide = setTimeout(_.bind(function(){
-						if (this.pendingHide) {
-							this.pendingHide = false;
-							this.hide();
-						}
-					}, this), this.animationTime);
+				if (this.pendingMethod == 'hide') {
+					this.pendingMethod = '';
+					return this.hide();
 				}
-			}, this), this.animationTime);
-
-			{
-				clearTimeout(this.autoHideTimeout);
 
 				if (this.current.autoHide > 0) {
-					if (!this.current.showCloseButton) {
-						this.$getCloseButton().css('display', 'none');
-					}
+					this.currentMethod = 'auto-hide';
 
-					this.autoHideTimeout = setTimeout(_.bind(function(){
+					this.currentMethodTimeoutId = setTimeout(_.bind(function () {
+						this.currentMethod = '';
 						this.hide();
-					}, this), Math.abs(this.current.autoHide));
+					}, this), this.current.autoHide);
 				}
-			}
-
-			return true;
+			}, this), this.animationTime * 2);
 		},
 		/**
 		 * @param {String} [id]
 		 * @returns {boolean}
 		 */
 		hide: function(id) {
-			if (typeof id == 'undefined') {
-				// hide current
-			} else {
+			if (typeof id != 'undefined') {
 				if (this.current && this.current.id == id) {
 					// this id is currently displayed, hide it
 				} else {
 					// remove id from queue
-					this.queue = _.filter(this.queue, function (item) { return item.id != id; });
+					this.queue = _.filter(this.queue, function (item) {
+						return item.id != id;
+					});
 					return true;
 				}
 			}
 
-			if (this.closingTimeout) {
-				// closing animation not finished
+			if (this.currentMethod) {
+				if (this.currentMethod == 'show') {
+					this.pendingMethod = 'hide';
+					return true;
+				} else if (this.currentMethod == 'hide') {
+					return false;
+				} else {
+					clearTimeout(this.currentMethodTimeoutId);
+				}
+			}
+
+			this.currentMethod = '';
+
+			if (!this.current) {
+				// nothing to hide
 				return false;
 			}
 
-			if (this.openingTimeout) {
-				this.pendingHide = true;
-				return true;
-			} else {
-				this.pendingHide = false;
-			}
-
-			clearTimeout(this.autoHideTimeout);
+			this.currentMethod = 'hide';
 
 			if (this.queue.length) {
-				// after hide the modal will be displayed again, do not hide backdrop
-				this.$getBackdrop().css('opacity', this.backdropOpacity);
-			} else {
-				this.$getBackdrop().css('opacity', '');
+				// replace content
+				this.$getContent().fadeOut('fast', _.bind(function(){
+					this.currentMethod = '';
+					this.current = null;
+					this.show();
+					this.$getContent().fadeIn('fast');
+				}, this));
+
+				return true;
 			}
 
 			this.$modal.addClass('fw-modal-closing');
 
-			clearTimeout(this.closingTimeout);
-			// after the closing animation finished
-			this.closingTimeout = setTimeout(_.bind(function(){
-				this.closingTimeout = null;
+			this.currentMethodTimeoutId = setTimeout(_.bind(function(){
+				this.currentMethod = '';
 
 				this.$modal.css('display', 'none');
+
 				this.$modal.removeClass('fw-modal-open');
 				this.$modal.removeClass('fw-modal-closing');
 
@@ -1442,11 +1432,15 @@ fw.soleModal = (function(){
 
 				this.current = null;
 
-				// show next
-				this.show();
+				if (this.pendingMethod) {
+					if (this.pendingMethod == 'show') {
+						this.pendingMethod = '';
+						this.show();
+					} else {
+						this.pendingMethod = '';
+					}
+				}
 			}, this), this.animationTime);
-
-			return true;
 		}
 	};
 
