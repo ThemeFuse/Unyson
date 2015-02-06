@@ -102,7 +102,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 		$picker_key             = key($option['picker']);
 		$picker                 = $option['picker'][$picker_key];
 		$picker_type            = $picker['type'];
-		$supported_picker_types = array('select', 'short-select', 'radio', 'image-picker', 'switch');
+		$supported_picker_types = array('select', 'short-select', 'radio', 'image-picker', 'switch', 'color-palette');
 		if (!in_array($picker_type, $supported_picker_types)) {
 			// TODO: think of text for error when incorrect picker type is used
 			trigger_error(
