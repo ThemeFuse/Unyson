@@ -125,8 +125,8 @@ jQuery(function($){
 				jQuery.each(messages, function(messageId, message){
 					typeHtml.push(
 						'<li>'+
-							'<h2 class="'+ typeMessageClass +'" style="font-size: 22px;"><span class="'+ typeIconClass +'"></span> '+ typeTitle +'</h2>'+
-							'<p class="fw-text-muted" style="font-size: 13px; line-height: 19px;"><em>'+ message +'</em></p>'+
+							'<h2 class="'+ typeMessageClass +'"><span class="'+ typeIconClass +'"></span> '+ typeTitle +'</h2>'+
+							'<p class="fw-text-muted"><em>'+ message +'</em></p>'+
 						'</li>'
 					);
 				});
@@ -163,11 +163,11 @@ jQuery(function($){
 
 					fw.soleModal.show(
 						'fw-options-ajax-save-loading',
-						'<h2 class="fw-text-muted" style="font-size: 22px;">'+
+						'<h2 class="fw-text-muted">'+
 							'<img src="'+ fw.img.loadingSpinner +'" style="vertical-align: bottom;" /> '+ title +
 						'</h2>'+
-						'<p class="fw-text-muted" style="font-size: 13px; line-height: 19px;"><em>'+ description +'</em></p>',
-						{hide: -30000}
+						'<p class="fw-text-muted"><em>'+ description +'</em></p>',
+						{autoHide: 30000, allowClose: false}
 					);
 				} else {
 					fw.soleModal.hide('fw-options-ajax-save-loading');
@@ -177,7 +177,7 @@ jQuery(function($){
 				fw.soleModal.show(
 					'fw-options-ajax-save-success',
 					generateFlashMessagesHtml(ajaxData.flash_messages),
-					{hide: 3000}
+					{autoHide: 3000}
 				);
 			}
 		});

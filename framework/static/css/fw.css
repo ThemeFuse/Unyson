@@ -2818,6 +2818,29 @@ body.rtl .fw-options-modal .media-frame-content > form .fw-options-tabs-contents
 /* end: OptionsModal */
 
 
+/* SoleModal */
+
+.fw-sole-modal > .media-modal {
+	z-index: 100001;
+	margin: auto;
+}
+
+.fw-sole-modal > .media-modal-backdrop {
+	z-index: 100000;
+}
+
+.fw-sole-modal .fw-sole-modal-content h2 {
+	font-size: 22px;
+}
+
+.fw-sole-modal .fw-sole-modal-content p {
+	font-size: 13px;
+	line-height: 19px;
+}
+
+/* end: SoleModal */
+
+
 /* qtip custom style */
 
 .qtip.qtip-fw {

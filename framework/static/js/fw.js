@@ -1198,10 +1198,7 @@ fw.elementEventHasListenerInContainer = function ($element, event, $container) {
  * fw.soleModal.show('unique-id', 'Hello World!');
  *
  * // open modal with close button but auto hide it after 3 seconds
- * fw.soleModal.show('unique-id', 'Hello World!', {hide: 3000});
- *
- * // open modal without close button and auto hide it after 3 seconds
- * fw.soleModal.show('unique-id', 'Hello World!', {hide: -3000});
+ * fw.soleModal.show('unique-id', 'Hello World!', {autoHide: 3000});
  *
  * fw.soleModal.hide('unique-id');
  */
@@ -1212,13 +1209,17 @@ fw.soleModal = (function(){
 			{
 				id: 'hello'
 				html: 'Hello <b>World</b>!'
-				hide: 0000 // auto hide timeout in ms // set <0 to hide the close button
+				autoHide: 0000 // auto hide timeout in ms
+				allowClose: true // useful when you make an ajax and must force the user to wait until it will finish
+				showCloseButton: true // false will hide the button, but the user will still be able to click on backdrop to close it
+				width: '350px'
+				height: '200px'
 			}
 			*/
 		],
 		/** @type {Object|null} */
 		current: null,
-		hideTimeout: null,
+		autoHideTimeout: null,
 		openingTimeout: null,
 		closingTimeout: null,
 		/** @type {Boolean|Number} also used as timeout id */
@@ -1233,7 +1234,7 @@ fw.soleModal = (function(){
 
 			this.$modal = jQuery(
 				'<div class="fw-modal fw-sole-modal" style="display:none;">'+
-				'    <div class="media-modal wp-core-ui" style="z-index:100001; margin: auto; width: 400px; height: 200px;">'+
+				'    <div class="media-modal wp-core-ui" style="width: 350px; height: 200px;">'+
 				'        <div class="media-modal-content" style="min-height: 200px;">' +
 				'            <a class="media-modal-close" href="#" onclick="return false;"><span class="media-modal-icon"></span></a>'+
 				'            <table width="100%" height="100%"><tbody><tr>'+
@@ -1241,12 +1242,12 @@ fw.soleModal = (function(){
 				'            </tr><tbody></table>'+
 				'        </div>'+
 				'    </div>'+
-				'    <div class="media-modal-backdrop" style="z-index:100000;"></div>'+
+				'    <div class="media-modal-backdrop"></div>'+
 				'</div>'
 			);
 
 			( this.$getCloseButton().add(this.$getBackdrop()) ).on('click', _.bind(function(){
-				if (this.current && this.current.hide < 0) {
+				if (this.current && !this.current.allowClose) {
 					// manual close not is allowed
 					return;
 				}
@@ -1305,7 +1306,11 @@ fw.soleModal = (function(){
 
 					opts.id = id;
 					opts.html = html;
-					opts.hide = opts.hide || 0;
+					opts.autoHide = opts.autoHide || 0;
+					opts.allowClose = opts.allowClose || true;
+					opts.showCloseButton = (opts.showCloseButton || true) && opts.allowClose;
+					opts.width = opts.width || '350px';
+					opts.height = opts.height || '200px';
 				}
 
 				if (this.current) {
@@ -1319,8 +1324,11 @@ fw.soleModal = (function(){
 					return true;
 				} else {
 					if (this.closingTimeout) {
+						this.queue.push(opts);
+
 						// it will open automatically after closing animation will finish
 						this.$getBackdrop().css('opacity', this.backdropOpacity);
+
 						return true;
 					}
 
@@ -1335,6 +1343,18 @@ fw.soleModal = (function(){
 			this.$modal.addClass('fw-modal-open');
 			this.$modal.css('display', '');
 			this.$getCloseButton().css('display', '');
+
+			// set size
+			{
+				this.$modal.find('> .media-modal').animate({
+					'height': this.current.height,
+					'width': this.current.width
+				}, this.animationTime);
+
+				this.$modal.find('> .media-modal > .media-modal-content').animate({
+					'min-height': this.current.height
+				}, this.animationTime);
+			}
 
 			clearTimeout(this.openingTimeout);
 			this.openingTimeout = setTimeout(_.bind(function(){
@@ -1354,16 +1374,16 @@ fw.soleModal = (function(){
 			}, this), this.animationTime);
 
 			{
-				clearTimeout(this.hideTimeout);
+				clearTimeout(this.autoHideTimeout);
 
-				if (this.current.hide) {
-					if (this.current.hide < 0) {
+				if (this.current.autoHide > 0) {
+					if (!this.current.showCloseButton) {
 						this.$getCloseButton().css('display', 'none');
 					}
 
-					this.hideTimeout = setTimeout(_.bind(function(){
+					this.autoHideTimeout = setTimeout(_.bind(function(){
 						this.hide();
-					}, this), Math.abs(this.current.hide));
+					}, this), Math.abs(this.current.autoHide));
 				}
 			}
 
@@ -1398,7 +1418,7 @@ fw.soleModal = (function(){
 				this.pendingHide = false;
 			}
 
-			clearTimeout(this.hideTimeout);
+			clearTimeout(this.autoHideTimeout);
 
 			if (this.queue.length) {
 				// after hide the modal will be displayed again, do not hide backdrop
