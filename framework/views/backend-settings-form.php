@@ -87,60 +87,6 @@ jQuery(function($){
 <!-- ajax submit -->
 <script type="text/javascript">
 	jQuery(function ($) {
-		function generateFlashMessagesHtml(flashMessages) {
-			var html = [],
-				typeHtml = [],
-				typeMessageClass = '',
-				typeIconClass = '',
-				typeTitle = '';
-
-			jQuery.each(flashMessages, function(type, messages){
-				typeHtml = [];
-
-				switch (type) {
-					case 'error':
-						typeMessageClass = 'fw-text-danger';
-						typeIconClass = 'dashicons dashicons-dismiss';
-						typeTitle = '<?php echo esc_js(__('Ah, Sorry', 'fw')) ?>';
-						break;
-					case 'warning':
-						typeMessageClass = 'fw-text-warning';
-						typeIconClass = 'dashicons dashicons-no-alt';
-						typeTitle = '<?php echo esc_js(__('Ah, Sorry', 'fw')) ?>';
-						break;
-					case 'success':
-						typeMessageClass = 'fw-text-success';
-						typeIconClass = 'dashicons dashicons-star-filled';
-						typeTitle = '<?php echo esc_js(__('Done', 'fw')) ?>';
-						break;
-					case 'info':
-						typeMessageClass = 'fw-text-info';
-						typeIconClass = 'dashicons dashicons-info';
-						typeTitle = '<?php echo esc_js(__('Done', 'fw')) ?>';
-						break;
-					default:
-						typeMessageClass = typeIconClass = typeTitle = '';
-				}
-
-				jQuery.each(messages, function(messageId, message){
-					typeHtml.push(
-						'<li>'+
-							'<h2 class="'+ typeMessageClass +'"><span class="'+ typeIconClass +'"></span> '+ typeTitle +'</h2>'+
-							'<p class="fw-text-muted"><em>'+ message +'</em></p>'+
-						'</li>'
-					);
-				});
-
-				if (typeHtml.length) {
-					html.push(
-						'<ul>'+ typeHtml.join('</ul><ul>') +'</ul>'
-					);
-				}
-			});
-
-			return html.join('');
-		}
-
 		fwForm.initAjaxSubmit({
 			selector: 'form[data-fw-form-id="fw_settings"]',
 			loading: function(show, $form, $submitButton) {
@@ -176,7 +122,7 @@ jQuery(function($){
 			onSuccess: function($form, ajaxData) {
 				fw.soleModal.show(
 					'fw-options-ajax-save-success',
-					generateFlashMessagesHtml(ajaxData.flash_messages),
+					fw.soleModal.renderFlashMessages(ajaxData.flash_messages),
 					{autoHide: 3000}
 				);
 			}

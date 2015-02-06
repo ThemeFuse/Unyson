@@ -29,7 +29,7 @@ var fwForm = {
 			showErrors: function ($form, errors) {
 				if (isAdmin) {
 					fwForm.backend.showFlashMessages(
-						fwForm.backend.generateFlashMessagesHtml({error: errors})
+						fwForm.backend.renderFlashMessages({error: errors})
 					);
 				} else {
 					// Frontend
@@ -57,10 +57,10 @@ var fwForm = {
 			onSuccess: function ($form, ajaxData) {
 				if (isAdmin) {
 					fwForm.backend.showFlashMessages(
-						fwForm.backend.generateFlashMessagesHtml(ajaxData.flash_messages)
+						fwForm.backend.renderFlashMessages(ajaxData.flash_messages)
 					);
 				} else {
-					var html = fwForm.frontend.generateFlashMessagesHtml(ajaxData.flash_messages);
+					var html = fwForm.frontend.renderFlashMessages(ajaxData.flash_messages);
 
 					if (!html.length) {
 						html = '<p>Success</p>';
@@ -143,7 +143,7 @@ var fwForm = {
 		 * @param {Object} flashMessages
 		 * @returns {string}
 		 */
-		generateFlashMessagesHtml: function(flashMessages) {
+		renderFlashMessages: function(flashMessages) {
 			var html = [],
 				typeHtml = [],
 				messageClass = '';
@@ -182,7 +182,7 @@ var fwForm = {
 		 * @param {Object} flashMessages
 		 * @returns {string}
 		 */
-		generateFlashMessagesHtml: function(flashMessages) {
+		renderFlashMessages: function(flashMessages) {
 			var html = [],
 				typeHtml = [],
 				messageClass = '';

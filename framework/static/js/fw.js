@@ -1456,6 +1456,62 @@ fw.soleModal = (function(){
 		},
 		hide: function(id){
 			inst.hide(id);
+		},
+		/**
+		 * Generate flash messages html for soleModal content
+		 */
+		renderFlashMessages: function (flashMessages) {
+			var html = [],
+				typeHtml = [],
+				typeMessageClass = '',
+				typeIconClass = '',
+				typeTitle = '';
+
+			jQuery.each(flashMessages, function(type, messages){
+				typeHtml = [];
+
+				switch (type) {
+					case 'error':
+						typeMessageClass = 'fw-text-danger';
+						typeIconClass = 'dashicons dashicons-dismiss';
+						typeTitle = _fw_localized.l10n.ah_sorry;
+						break;
+					case 'warning':
+						typeMessageClass = 'fw-text-warning';
+						typeIconClass = 'dashicons dashicons-no-alt';
+						typeTitle = _fw_localized.l10n.ah_sorry;
+						break;
+					case 'success':
+						typeMessageClass = 'fw-text-success';
+						typeIconClass = 'dashicons dashicons-star-filled';
+						typeTitle = _fw_localized.l10n.done;
+						break;
+					case 'info':
+						typeMessageClass = 'fw-text-info';
+						typeIconClass = 'dashicons dashicons-info';
+						typeTitle = _fw_localized.l10n.done;
+						break;
+					default:
+						typeMessageClass = typeIconClass = typeTitle = '';
+				}
+
+				jQuery.each(messages, function(messageId, message){
+					typeHtml.push(
+						'<li>'+
+							'<h2 class="'+ typeMessageClass +'"><span class="'+ typeIconClass +'"></span> '+ typeTitle +'</h2>'+
+							'<p class="fw-text-muted"><em>'+ message +'</em></p>'+
+						'</li>'
+					);
+				});
+
+				if (typeHtml.length) {
+					html.push(
+						'<ul>'+ typeHtml.join('</ul><ul>') +'</ul>'
+					);
+				}
+			});
+
+			return html.join('');
 		}
 	};
 })();
