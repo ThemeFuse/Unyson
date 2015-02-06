@@ -597,7 +597,7 @@ fw.getQueryString = function(name) {
 						stackSize     = modalsStack.getSize(),
 						$close        = $modalWrapper.find('.media-modal-close');
 
-					$modalWrapper.addClass('fw-options-modal');
+					$modalWrapper.addClass('fw-modal fw-options-modal');
 
 					/*
 					 * if the modal has specified what size it wants to have
@@ -640,7 +640,7 @@ fw.getQueryString = function(name) {
 							clearTimeout(closingTimeout);
 
 							// begin css animation
-							$modalWrapper.addClass('fw-options-modal-closing');
+							$modalWrapper.addClass('fw-modal-closing');
 
 							closingTimeout = setTimeout(function(){
 								closingTimeout = 0;
@@ -654,7 +654,7 @@ fw.getQueryString = function(name) {
 								$backdrop.trigger('click');
 
 								// remove animation class
-								$modalWrapper.removeClass('fw-options-modal-closing');
+								$modalWrapper.removeClass('fw-modal-closing');
 
 								preventOriginalClose();
 							},
@@ -687,7 +687,7 @@ fw.getQueryString = function(name) {
 				this.frame.on('open', function() {
 					var $modalWrapper = modal.frame.modal.$el;
 
-					$modalWrapper.addClass('fw-options-modal-open');
+					$modalWrapper.addClass('fw-modal-open');
 
 					modalsStack.push($modalWrapper.find('.media-modal'));
 
@@ -713,7 +713,7 @@ fw.getQueryString = function(name) {
 					 */
 					modal.set('html', '');
 
-					modal.frame.modal.$el.removeClass('fw-options-modal-open');
+					modal.frame.modal.$el.removeClass('fw-modal-open');
 
 					modalsStack.pop();
 				});
@@ -1225,14 +1225,14 @@ fw.soleModal = (function(){
 		pendingHide: false,
 		animationTime: 300,
 		$modal: null,
-		backdropOpacity: 0.7, // must be the same as in .fw-options-modal{} style
+		backdropOpacity: 0.7, // must be the same as in .fw-modal style
 		lazyInit: function(){
 			if (this.$modal) {
 				return false;
 			}
 
 			this.$modal = jQuery(
-				'<div class="fw-options-modal" style="display:none;">'+
+				'<div class="fw-modal fw-sole-modal" style="display:none;">'+
 				'    <div class="media-modal wp-core-ui" style="z-index:100001; margin: auto; width: 400px; height: 200px;">'+
 				'        <div class="media-modal-content" style="min-height: 200px;">' +
 				'            <a class="media-modal-close" href="#" onclick="return false;"><span class="media-modal-icon"></span></a>'+
@@ -1331,8 +1331,8 @@ fw.soleModal = (function(){
 			this.setContent(this.current.html);
 
 			// open modal
-			this.$modal.removeClass('fw-options-modal-closing');
-			this.$modal.addClass('fw-options-modal-open');
+			this.$modal.removeClass('fw-modal-closing');
+			this.$modal.addClass('fw-modal-open');
 			this.$modal.css('display', '');
 			this.$getCloseButton().css('display', '');
 
@@ -1407,7 +1407,7 @@ fw.soleModal = (function(){
 				this.$getBackdrop().css('opacity', '');
 			}
 
-			this.$modal.addClass('fw-options-modal-closing');
+			this.$modal.addClass('fw-modal-closing');
 
 			clearTimeout(this.closingTimeout);
 			// after the closing animation finished
@@ -1415,8 +1415,8 @@ fw.soleModal = (function(){
 				this.closingTimeout = null;
 
 				this.$modal.css('display', 'none');
-				this.$modal.removeClass('fw-options-modal-open');
-				this.$modal.removeClass('fw-options-modal-closing');
+				this.$modal.removeClass('fw-modal-open');
+				this.$modal.removeClass('fw-modal-closing');
 
 				this.setContent('');
 

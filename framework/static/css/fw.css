@@ -2619,6 +2619,103 @@ a.fw-wp-link:hover {
 /* end: WP Modal */
 
 
+/* modal */
+
+.fw-modal .media-modal-close:focus {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+/* open animation */
+
+.fw-modal > .media-modal-backdrop {
+	opacity: 0;
+
+	-webkit-transition: opacity .3s ease-in-out; /* For Safari 3.1 to 6.0 */
+	transition: opacity .3s ease-in-out;
+}
+
+.fw-modal.fw-modal-open > .media-modal-backdrop {
+	opacity: .7; /* must be the same as in .media-modal-backdrop {} wp style */
+
+	-webkit-animation-name: fwFadeIn07;
+	animation-name: fwFadeIn07;
+
+	-webkit-animation-duration: .3s;
+	animation-duration: .3s;
+}
+
+.fw-modal.fw-modal-open > .media-modal > .media-modal-content {
+	animation: fwGrowIn .3s ease-in-out;
+	animation-iteration-count: 1;
+
+	-webkit-animation: fwGrowIn .3s ease-in-out;
+	-webkit-animation-iteration-count: 1;
+
+	-moz-animation: fwGrowIn .3s ease-in-out;
+	-moz-animation-iteration-count: 1;
+
+	-o-animation: fwGrowIn .3s ease-in-out;
+	-o-animation-iteration-count: 1;
+
+	-ms-animation: fwGrowIn .3s ease-in-out;
+	-ms-animation-iteration-count: 1;
+}
+
+.fw-modal > .media-modal > .media-modal-close {
+	opacity: 0;
+
+	-webkit-transition: opacity .3s ease-in; /* For Safari 3.1 to 6.0 */
+	transition: opacity .3s ease-in;
+}
+
+.fw-modal.fw-modal-open > .media-modal > .media-modal-close {
+	opacity: 1;
+
+	-webkit-transition-duration: .6s;
+	transition-duration: .6s;
+}
+
+/* end: open animation */
+
+/* close animation */
+
+.fw-modal.fw-modal-closing > .media-modal-backdrop {
+	opacity: .0;
+}
+
+.fw-modal.fw-modal-closing > .media-modal > .media-modal-content {
+	animation: fwGrowOut .3s ease-in-out;
+	animation-iteration-count: 1;
+
+	-webkit-animation: fwGrowOut .3s ease-in-out;
+	-webkit-animation-iteration-count: 1;
+
+	-moz-animation: fwGrowOut .3s ease-in-out;
+	-moz-animation-iteration-count: 1;
+
+	-o-animation: fwGrowOut .3s ease-in-out;
+	-o-animation-iteration-count: 1;
+
+	-ms-animation: fwGrowOut .3s ease-in-out;
+	-ms-animation-iteration-count: 1;
+
+	-webkit-animation-fill-mode: forwards; /* Chrome, Safari, Opera */
+	animation-fill-mode: forwards;
+}
+
+.fw-modal.fw-modal-closing > .media-modal > .media-modal-close {
+	opacity: 0;
+
+	-webkit-transition-duration: .1s;
+	transition-duration: .1s;
+}
+
+/* end: close animation */
+
+/* end: modal */
+
+
 /* OptionsModal */
 
 .fw-options-modal.fw-options-modal-medium > .media-modal {
@@ -2684,109 +2781,6 @@ a.fw-wp-link:hover {
 	border-right: 1px solid #ccc;
 }
 
-.fw-options-modal .media-modal-close:focus {
-	-webkit-box-shadow: none;
-	box-shadow: none;
-}
-
-
-/* modal animations */
-
-/* open animation */
-
-.fw-options-modal > .media-modal-backdrop {
-	opacity: 0;
-
-	-webkit-transition: opacity .3s ease-in-out; /* For Safari 3.1 to 6.0 */
-	transition: opacity .3s ease-in-out;
-}
-
-.fw-options-modal.fw-options-modal-open > .media-modal-backdrop {
-	opacity: .7; /* must be the same as in .media-modal-backdrop {} wp style */
-
-	-webkit-animation-name: fwFadeIn07;
-	animation-name: fwFadeIn07;
-
-	-webkit-animation-duration: .3s;
-	animation-duration: .3s;
-}
-
-.fw-options-modal.fw-options-modal-open > .media-modal > .media-modal-content {
-	animation: fwGrowIn .3s ease-in-out;
-	animation-iteration-count: 1;
-
-	-webkit-animation: fwGrowIn .3s ease-in-out;
-	-webkit-animation-iteration-count: 1;
-
-	-moz-animation: fwGrowIn .3s ease-in-out;
-	-moz-animation-iteration-count: 1;
-
-	-o-animation: fwGrowIn .3s ease-in-out;
-	-o-animation-iteration-count: 1;
-
-	-ms-animation: fwGrowIn .3s ease-in-out;
-	-ms-animation-iteration-count: 1;
-}
-
-/* fix: close button is not animated on modal open */
-
-.fw-options-modal > .media-modal > .media-modal-close {
-	opacity: 0;
-
-	-webkit-transition: opacity .3s ease-in; /* For Safari 3.1 to 6.0 */
-	transition: opacity .3s ease-in;
-}
-
-.fw-options-modal.fw-options-modal-open > .media-modal > .media-modal-close {
-	opacity: 1;
-
-	-webkit-transition-duration: .6s;
-	transition-duration: .6s;
-}
-
-/* end: open animation */
-
-/* close animation */
-
-.fw-options-modal.fw-options-modal-closing > .media-modal-backdrop {
-	opacity: .0;
-}
-
-.fw-options-modal.fw-options-modal-closing > .media-modal > .media-modal-content {
-	animation: fwGrowOut .3s ease-in-out;
-	animation-iteration-count: 1;
-
-	-webkit-animation: fwGrowOut .3s ease-in-out;
-	-webkit-animation-iteration-count: 1;
-
-	-moz-animation: fwGrowOut .3s ease-in-out;
-	-moz-animation-iteration-count: 1;
-
-	-o-animation: fwGrowOut .3s ease-in-out;
-	-o-animation-iteration-count: 1;
-
-	-ms-animation: fwGrowOut .3s ease-in-out;
-	-ms-animation-iteration-count: 1;
-
-	-webkit-animation-fill-mode: forwards; /* Chrome, Safari, Opera */
-	animation-fill-mode: forwards;
-}
-
-.fw-options-modal.fw-options-modal-closing > .media-modal > .media-modal-close {
-	opacity: 0;
-
-	-webkit-transition-duration: .1s;
-	transition-duration: .1s;
-}
-
-/* end: close animation */
-
-/* fix: close button */
-
-
-/* end: modal animations */
-
-
 /* Hide last border */
 
 .fw-options-modal .media-frame-content > form {
@@ -2820,7 +2814,6 @@ body.rtl .fw-options-modal .media-frame-content > form .fw-options-tabs-contents
 }
 
 /* end: Hide last border */
-
 
 /* end: OptionsModal */
 
