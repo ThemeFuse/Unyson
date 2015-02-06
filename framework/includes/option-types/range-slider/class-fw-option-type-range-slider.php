@@ -54,8 +54,9 @@ class FW_Option_Type_Range_Slider extends FW_Option_Type {
 		$option['properties']['from'] = ( isset( $data['value']['from'] ) ) ? $data['value']['from'] : $option['value']['from'];
 		$option['properties']['to']   = ( isset( $data['value']['to'] ) ) ? $data['value']['to'] : $option['value']['to'];
 
-		if ($option['properties']['from'] > $option['properties']['to']) {
-			$option['properties']['from'] = $option['properties']['to'];
+		if ( isset( $option['properties']['values'] ) && is_array( $option['properties']['values'] ) ) {
+			$option['properties']['from'] = array_search( $option['properties']['from'], $option['properties']['values'] );
+			$option['properties']['to']   = array_search( $option['properties']['to'], $option['properties']['values'] );
 		}
 
 		$option['attr']['data-fw-irs-options'] = json_encode(
@@ -98,7 +99,7 @@ class FW_Option_Type_Range_Slider extends FW_Option_Type {
 		if (is_null($input_value)) {
 			return $option['value'];
 		} else {
-			$input_values = array_map('intval', explode(';', $input_value));
+			$input_values = ( isset( $option['properties']['values'] ) && is_array( $option['properties']['values'] ) ) ? explode( ';', $input_value ) : array_map( 'intval', explode( ';', $input_value ) );
 
 			return array(
 				'from' => $input_values[0],

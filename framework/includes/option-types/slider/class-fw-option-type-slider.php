@@ -53,6 +53,10 @@ class FW_Option_Type_Slider extends FW_Option_Type {
 		$option['properties']['type'] = 'single';
 		$option['properties']['from'] = isset( $data['value'] ) ? $data['value'] : $option['value'];
 
+		if(isset($option['properties']['values']) && is_array($option['properties']['values'])){
+			$option['properties']['from'] = array_search($option['properties']['from'], $option['properties']['values']);
+		}
+
 		$option['attr']['data-fw-irs-options'] = json_encode(
 			$this->default_properties($option['properties'])
 		);
@@ -90,7 +94,7 @@ class FW_Option_Type_Slider extends FW_Option_Type {
 		if (is_null($input_value)) {
 			return $option['value'];
 		} else {
-			$input_values = array_map('intval', explode(';', $input_value));
+			$input_values = (isset($option['properties']['values']) && is_array($option['properties']['values'])) ? explode(';', $input_value) : array_map('intval', explode(';', $input_value));
 
 			return $input_values[0];
 		}
