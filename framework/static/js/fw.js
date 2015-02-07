@@ -1214,6 +1214,7 @@ fw.soleModal = (function(){
 				showCloseButton: true // false will hide the button, but the user will still be able to click on backdrop to close it
 				width: 350
 				height: 200
+				hidePrevious: false // just replace the modal content or hide the previous modal and open it again with new content
 			}
 			*/
 		],
@@ -1275,6 +1276,36 @@ fw.soleModal = (function(){
 
 			this.$getContent().html(html || '&nbsp;');
 		},
+		runPendingMethod: function() {
+			if (this.currentMethod) {
+				return false;
+			}
+
+			if (!this.pendingMethod) {
+				if (this.queue.length) {
+					// there are messages to display
+					this.pendingMethod = 'show';
+				} else {
+					return false;
+				}
+			}
+
+			var pendingMethod = this.pendingMethod;
+
+			this.pendingMethod = '';
+
+			if (pendingMethod == 'hide') {
+				this.hide();
+				return true;
+			} else if (pendingMethod == 'show') {
+				this.show();
+				return true;
+			} else {
+				console.warn('Unknown pending method:', pendingMethod);
+				this.hide();
+				return false;
+			}
+		},
 		/**
 		 * Show modal
 		 * Call without arguments to display next from queue
@@ -1294,7 +1325,8 @@ fw.soleModal = (function(){
 						allowClose: true,
 						showCloseButton: true,
 						width: 350,
-						height: 200
+						height: 200,
+						hidePrevious: false
 					}, opts || {});
 
 					// hide close button if close is not allowed
@@ -1358,14 +1390,12 @@ fw.soleModal = (function(){
 			this.currentMethodTimeoutId = setTimeout(_.bind(function() {
 				this.currentMethod = '';
 
-				if (this.pendingMethod == 'hide') {
-					this.pendingMethod = '';
-					return this.hide();
+				if (this.runPendingMethod()) {
+					return;
 				}
 
 				if (this.current.autoHide > 0) {
 					this.currentMethod = 'auto-hide';
-
 					this.currentMethodTimeoutId = setTimeout(_.bind(function () {
 						this.currentMethod = '';
 						this.hide();
@@ -1391,13 +1421,13 @@ fw.soleModal = (function(){
 			}
 
 			if (this.currentMethod) {
-				if (this.currentMethod == 'show') {
+				if (this.currentMethod == 'hide') {
+					return false;
+				} else if (this.currentMethod == 'auto-hide') {
+					clearTimeout(this.currentMethodTimeoutId);
+				} else {
 					this.pendingMethod = 'hide';
 					return true;
-				} else if (this.currentMethod == 'hide') {
-					return false;
-				} else {
-					clearTimeout(this.currentMethodTimeoutId);
 				}
 			}
 
@@ -1405,12 +1435,12 @@ fw.soleModal = (function(){
 
 			if (!this.current) {
 				// nothing to hide
-				return false;
+				return this.runPendingMethod();;
 			}
 
 			this.currentMethod = 'hide';
 
-			if (this.queue.length) {
+			if (this.queue.length && !this.queue[0].hidePrevious) {
 				// replace content
 				this.$getContent().fadeOut('fast', _.bind(function(){
 					this.currentMethod = '';
@@ -1436,14 +1466,7 @@ fw.soleModal = (function(){
 
 				this.current = null;
 
-				if (this.pendingMethod) {
-					if (this.pendingMethod == 'show') {
-						this.pendingMethod = '';
-						this.show();
-					} else {
-						this.pendingMethod = '';
-					}
-				}
+				this.runPendingMethod();
 			}, this), this.animationTime);
 		}
 	};

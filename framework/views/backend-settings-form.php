@@ -124,14 +124,36 @@ jQuery(function($){
 				}
 			},
 			onSuccess: function($form, ajaxData) {
+				/**
+				 * do not display the "Done" message
+				 * (users will click often on the save button, it's obvious it was saved if no error is shown)
+				 */
+				delete ajaxData.flash_messages.success.fw_settings_form_save;
+
+				if (
+					_.isEmpty(ajaxData.flash_messages.error)
+					&&
+					_.isEmpty(ajaxData.flash_messages.warning)
+					&&
+					_.isEmpty(ajaxData.flash_messages.info)
+					&&
+					_.isEmpty(ajaxData.flash_messages.success)
+				) {
+					// nothing to display
+					return;
+				}
+
+				var noErrors = _.isEmpty(ajaxData.flash_messages.error) && _.isEmpty(ajaxData.flash_messages.warning);
+
 				fw.soleModal.show(
 					'fw-options-ajax-save-success',
-					fw.soleModal.renderFlashMessages(ajaxData.flash_messages),
+					'<div style="margin: 0 35px;">'+ fw.soleModal.renderFlashMessages(ajaxData.flash_messages) +'</div>',
 					{
-						autoHide: (_.isEmpty(ajaxData.flash_messages.error) && _.isEmpty(ajaxData.flash_messages.error))
+						autoHide: noErrors
 							? 1000 // hide fast the message if everything went fine
 							: 10000,
-						showCloseButton: false
+						showCloseButton: false,
+						hidePrevious: noErrors ? false : true
 					}
 				);
 			}
