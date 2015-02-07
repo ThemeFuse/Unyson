@@ -1336,19 +1336,21 @@ fw.soleModal = (function(){
 			this.$modal.css('display', '');
 
 			// set size
-			if (
-				this.$modal.find('> .media-modal').height() != this.current.height
-				||
-				this.$modal.find('> .media-modal').width() != this.current.width
-			) {
-				this.$modal.find('> .media-modal').animate({
-					'height': this.current.height +'px',
-					'width': this.current.width +'px'
-				}, this.animationTime);
+			{
+				var $size = this.$modal.find('> .media-modal');
 
-				this.$modal.find('> .media-modal > .media-modal-content').animate({
-					'min-height': this.current.height +'px'
-				}, this.animationTime);
+				if (
+					$size.height() != this.current.height
+					||
+					$size.width() != this.current.width
+				) {
+					$size.animate({
+						'height': this.current.height +'px',
+						'width': this.current.width +'px'
+					}, this.animationTime);
+				}
+
+				$size = undefined;
 			}
 
 			this.currentMethodTimeoutId = setTimeout(_.bind(function() {
