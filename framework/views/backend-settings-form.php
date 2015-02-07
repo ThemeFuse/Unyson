@@ -87,6 +87,10 @@ jQuery(function($){
 <!-- ajax submit -->
 <script type="text/javascript">
 	jQuery(function ($) {
+		<?php if (!fw()->theme->get_config('settings_form_ajax_submit', true)): ?>
+		return; // ajax submit is disabled in theme config
+		<?php endif; ?>
+
 		fwForm.initAjaxSubmit({
 			selector: 'form[data-fw-form-id="fw_settings"]',
 			loading: function(show, $form, $submitButton) {
