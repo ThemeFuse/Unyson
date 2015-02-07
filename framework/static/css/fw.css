@@ -2827,6 +2827,12 @@ body.rtl .fw-options-modal .media-frame-content > form .fw-options-tabs-contents
 
 .fw-sole-modal > .media-modal-backdrop {
 	z-index: 100000;
+	background-color: transparent;
+}
+
+.fw-sole-modal > .media-modal > .media-modal-content {
+	-webkit-box-shadow: 0 1px 10px rgba(0,0,0,.25);
+	box-shadow: 0 0px 10px rgba(0,0,0,.25);
 }
 
 .fw-sole-modal .fw-sole-modal-content h2 {

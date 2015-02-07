@@ -114,7 +114,10 @@ jQuery(function($){
 							title +
 						'</h2>'+
 						'<p class="fw-text-muted"><em>'+ description +'</em></p>',
-						{autoHide: 30000, allowClose: false}
+						{
+							autoHide: 30000,
+							allowClose: false
+						}
 					);
 				} else {
 					fw.soleModal.hide('fw-options-ajax-save-loading');
@@ -124,7 +127,12 @@ jQuery(function($){
 				fw.soleModal.show(
 					'fw-options-ajax-save-success',
 					fw.soleModal.renderFlashMessages(ajaxData.flash_messages),
-					{autoHide: 3000, showCloseButton: false}
+					{
+						autoHide: (_.isEmpty(ajaxData.flash_messages.error) && _.isEmpty(ajaxData.flash_messages.error))
+							? 1000 // hide fast the message if everything went fine
+							: 10000,
+						showCloseButton: false
+					}
 				);
 			}
 		});

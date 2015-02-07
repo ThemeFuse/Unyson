@@ -1297,9 +1297,11 @@ fw.soleModal = (function(){
 						height: 200
 					}, opts || {});
 
+					// hide close button if close is not allowed
+					opts.showCloseButton = opts.showCloseButton && opts.allowClose;
+
 					opts.id = id;
 					opts.html = html;
-					opts.showCloseButton = opts.showCloseButton && opts.allowClose;
 				}
 
 				this.queue.push(opts);
