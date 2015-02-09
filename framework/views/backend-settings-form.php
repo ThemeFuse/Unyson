@@ -164,11 +164,6 @@ jQuery(function($){
 						setTimeout(function(){
 							elements.$form.css('visibility', 'hidden');
 
-							if (replaceFormHtml === false) {
-								// ajax is not finished yet
-								return;
-							}
-
 							if (typeof replaceFormHtml == 'function') {
 								// ajax finished loading and set this variable as function
 								replaceFormHtml();
@@ -188,7 +183,7 @@ jQuery(function($){
 
 						if ($form.length) {
 							// this callback will be executed after the fadeOut effect will finish
-							replaceFormHtml = function() {
+							var replaceFormHtmlFunction = function() {
 								var focusTabId = elements.$form.find("input[name='<?php echo esc_js($focus_tab_input_name); ?>']").val();
 								var scrollTop = jQuery(document.body).scrollTop();
 
@@ -221,14 +216,22 @@ jQuery(function($){
 								}
 							};
 
-							if (replaceFormHtml === true) {
-								// fade callback was already executed
-								replaceFormHtml();
+							if (replaceFormHtml === true) { // fadeOut effect finished
+								replaceFormHtmlFunction();
+							} else {
+								replaceFormHtml = replaceFormHtmlFunction;
 							}
+
+							replaceFormHtmlFunction = undefined;
 						} else {
 							alert('Can\'t find the form in the ajax response');
 						}
 					}).fail(function(jqXHR, textStatus, errorThrown){
+						elements.$form.css({
+							'opacity': '',
+							'transition': '',
+							'visibility': ''
+						});
 						alert('Ajax error (more details in console)');
 						console.error(jqXHR, textStatus, errorThrown);
 					});
