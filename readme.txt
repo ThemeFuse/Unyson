@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.1
-Stable tag: 2.1.21
+Stable tag: 2.1.22
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -86,6 +86,11 @@ Yes; Unyson will work with any theme.
 
 == Changelog ==
 
+= 2.1.22 =
+* Theme Settings form ajax submit [#198](https://github.com/ThemeFuse/Unyson/issues/198)
+* Added javascript helper `fw.soleModal()`
+* Minor fixes
+
 = 2.1.21 =
 * Made the `forms` and `mailer` extensions hidden.
 
@@ -95,7 +100,7 @@ Yes; Unyson will work with any theme.
 * Option type `slider` and `range-slider` fixes [#210](https://github.com/ThemeFuse/Unyson/issues/210)
 * Option type `typography`: Added filter on standard fonts [#212](https://github.com/ThemeFuse/Unyson/issues/212)
 * Option type `radio` and `checkboxes`: Added `inline` parameter [#216](https://github.com/ThemeFuse/Unyson/issues/216)
-* Minor internal fixes
+* Minor fixes
 
 = 2.1.19 =
 * Option type `icon`: Updated Font Awesome to 4.3.0
@@ -117,7 +122,7 @@ Yes; Unyson will work with any theme.
 
 = 2.1.16 =
 * Added the "Reset" button on the Theme Settings page
-* Minor internal fixes
+* Minor fixes
 
 = 2.1.15 =
 * Minor fix for extension download link
