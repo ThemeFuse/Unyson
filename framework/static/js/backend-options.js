@@ -2,6 +2,29 @@
  * Included on pages where backend options are rendered
  */
 
+var fwBackendOptions = {
+	/**
+	 * Open a tab or sub-tab
+	 */
+	openTab: function(tabId) {
+		if (!tabId) {
+			return;
+		}
+
+		var $tabLink = jQuery(".fw-options-tabs-wrapper > .fw-options-tabs-list > ul > li > a[href=\'#"+ tabId +"\']");
+
+		while ($tabLink.length) {
+			$tabLink.trigger("click");
+			$tabLink = $tabLink
+				.closest(".fw-options-tabs-wrapper").parent().closest(".fw-options-tabs-wrapper")
+				.find("> .fw-options-tabs-list > ul > li > a[href=\'#"+ $tabLink.closest(".fw-options-tab").attr("id") +"\']");
+		}
+
+		// click again on focus tab to update the input value
+		jQuery(".fw-options-tabs-wrapper > .fw-options-tabs-list > ul > li > a[href=\'#"+ tabId +"\']").trigger("click");;
+	}
+};
+
 jQuery(document).ready(function($){
 	/**
 	 * Functions

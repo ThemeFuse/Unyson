@@ -13,12 +13,12 @@ var fwForm = {
 		var opts = jQuery.extend({
 			selector: 'form[data-fw-form-id]',
 			ajaxUrl: (typeof ajaxurl == 'undefined') ? '/wp-admin/admin-ajax.php' : ajaxurl,
-			loading: function (show, $form, $submitButton) {
-				$form.css('position', 'relative');
-				$form.find('> .fw-form-loading').remove();
+			loading: function (elements, show) {
+				elements.$form.css('position', 'relative');
+				elements.$form.find('> .fw-form-loading').remove();
 
 				if (show) {
-					$form.append(
+					elements.$form.append(
 						'<div'+
 						' class="fw-form-loading"'+
 						' style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1);"'+
@@ -26,15 +26,15 @@ var fwForm = {
 					);
 				}
 			},
-			showErrors: function ($form, errors) {
+			onErrors: function (elements, data) {
 				if (isAdmin) {
 					fwForm.backend.showFlashMessages(
-						fwForm.backend.renderFlashMessages({error: errors})
+						fwForm.backend.renderFlashMessages({error: data.errors})
 					);
 				} else {
 					// Frontend
-					jQuery.each(errors, function (inputName, message) {
-						var $input = $form.find('[name="' + inputName + '"]').last();
+					jQuery.each(data.errors, function (inputName, message) {
+						var $input = elements.$form.find('[name="' + inputName + '"]').last();
 						message = '<p class="form-error" style="color: #9b2922;">{message}</p>'.replace('{message}', message);
 
 						if ($input.length) {
@@ -42,19 +42,19 @@ var fwForm = {
 							$input.parent().after(message);
 						} else {
 							// if input not found, show message in form
-							$form.prepend(message);
+							elements.$form.prepend(message);
 						}
 					});
 				}
 			},
-			hideErrors: function ($form) {
-				$form.find('.form-error').remove();
+			hideErrors: function (elements) {
+				elements.$form.find('.form-error').remove();
 			},
-			onAjaxError: function(jqXHR, textStatus, errorThrown) {
-				console.error(jqXHR, textStatus, errorThrown);
+			onAjaxError: function(elements, data) {
+				console.error(data.jqXHR, data.textStatus, data.errorThrown);
 				alert('Ajax error (more details in console)');
 			},
-			onSuccess: function ($form, ajaxData) {
+			onSuccess: function (elements, ajaxData) {
 				if (isAdmin) {
 					fwForm.backend.showFlashMessages(
 						fwForm.backend.renderFlashMessages(ajaxData.flash_messages)
@@ -66,12 +66,12 @@ var fwForm = {
 						html = '<p>Success</p>';
 					}
 
-					$form.fadeOut(function(){
-						$form.html(html).fadeIn();
+					elements.$form.fadeOut(function(){
+						elements.$form.html(html).fadeIn();
 					});
 
 					// prevent multiple submit
-					$form.on('submit', function(e){ e.preventDefault(); e.stopPropagation(); });
+					elements.$form.on('submit', function(e){ e.preventDefault(); e.stopPropagation(); });
 				}
 			}
 		}, opts || {}),
@@ -86,23 +86,33 @@ var fwForm = {
 				return;
 			}
 
-			var $form = jQuery(this),
-				$submitButton = $form.find('input[type="submit"][name]:focus');
-
-			if (!$submitButton.length) {
-				// in case you use this solution http://stackoverflow.com/a/5721762
-				$submitButton = $form.find('input[type="submit"][name][clicked]');
-
-				$submitButton.removeAttr('clicked');
-			}
+			var $form = jQuery(this);
 
 			if (!$form.is('form[data-fw-form-id]')) {
 				console.error('This is not a FW_Form');
 				return;
 			}
 
-			opts.hideErrors($form);
-			opts.loading(true, $form, $submitButton);
+			// get submit button
+			{
+				var $submitButton = $form.find('input[type="submit"][name]:focus')
+
+				if (!$submitButton.length) {
+					// in case you use this solution http://stackoverflow.com/a/5721762
+					$submitButton = $form.find('input[type="submit"][name][clicked]');
+				}
+
+				// make sure to remove the "clicked" attribute to prevent accidental settings reset
+				$form.find('input[type="submit"][name][clicked]').removeAttr('clicked');
+			}
+
+			var elements = {
+				$form: $form,
+				$submitButton: $submitButton
+			};
+
+			opts.hideErrors(elements);
+			opts.loading(elements, true);
 			isBusy = true;
 
 			jQuery.ajax({
@@ -112,17 +122,21 @@ var fwForm = {
 				dataType: 'json'
 			}).done(function(r){
 				isBusy = false;
-				opts.loading(false, $form, $submitButton);
+				opts.loading(elements, false);
 
 				if (r.success) {
-					opts.onSuccess($form, r.data);
+					opts.onSuccess(elements, r.data);
 				} else {
-					opts.showErrors($form, r.data.errors);
+					opts.onErrors(elements, r.data);
 				}
 			}).fail(function(jqXHR, textStatus, errorThrown){
 				isBusy = false;
-				opts.loading(false, $form, $submitButton);
-				opts.onAjaxError(jqXHR, textStatus, errorThrown);
+				opts.loading(elements, false);
+				opts.onAjaxError(elements, {
+					jqXHR: jqXHR,
+					textStatus: textStatus,
+					errorThrown: errorThrown
+				});
 			});
 		});
 	},

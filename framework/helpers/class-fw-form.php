@@ -234,34 +234,58 @@ class FW_Form {
 		$this->validate();
 
 		if ( $this->is_ajax() ) {
+			$json_data = array();
+
 			if ( $this->is_valid() ) {
-				$this->save();
+				$json_data['save_data'] = $this->save();
+			} else {
+				$json_data['errors'] = $this->get_errors();
+			}
 
-				/**
-				 * Transform structure from
-				 * array( 'type' => array( 'message_id' => array(...) ) )
-				 * to
-				 * array( 'type' => array( 'message_id' => 'Message' ) )
-				 */
-				{
-					$flash_messages = array();
+			/**
+			 * Transform flash messages structure from
+			 * array( 'type' => array( 'message_id' => array(...) ) )
+			 * to
+			 * array( 'type' => array( 'message_id' => 'Message' ) )
+			 */
+			{
+				$flash_messages = array();
 
-					foreach (FW_Flash_Messages::_get_messages(true) as $type => $messages) {
-						$flash_messages[$type] = array();
+				foreach (FW_Flash_Messages::_get_messages(true) as $type => $messages) {
+					$flash_messages[$type] = array();
 
-						foreach ($messages as $id => $message_data) {
-							$flash_messages[$type][$id] = $message_data['message'];
-						}
+					foreach ($messages as $id => $message_data) {
+						$flash_messages[$type][$id] = $message_data['message'];
 					}
 				}
 
-				wp_send_json_success( array(
-					'flash_messages' => $flash_messages
-				) );
+				$json_data['flash_messages'] = $flash_messages;
+			}
+
+			/**
+			 * Important!
+			 * We can't send form html in response:
+			 *
+			 * ob_start();
+			 * $this->render();
+			 * $json_data['html'] = ob_get_clean();
+			 *
+			 * because the render() method is not called within this class
+			 * but by the code that created and owns the $form,
+			 * and it's usually called with some custom data $this->render(array(...))
+			 * that it's impossible to know here which data is that.
+			 * If we will call $this->render(); without data, this may throw errors because
+			 * the render callback may expect some custom data.
+			 * Also it may be called or not, depending on the owner code inner logic.
+			 *
+			 * The only way to get the latest form html on ajax submit
+			 * is to make a new ajax GET to current page and extract form html from the response.
+			 */
+
+			if ( $this->is_valid() ) {
+				wp_send_json_success($json_data);
 			} else {
-				wp_send_json_error( array(
-					'errors' => $this->get_errors()
-				) );
+				wp_send_json_error($json_data);
 			}
 		} else {
 			if ( ! $this->is_valid() ) {

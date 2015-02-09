@@ -1,6 +1,5 @@
 (function ($, _, fwEvents, window) {
-
-	addablePopup = function () {
+	var addablePopup = function () {
 		var $this = $(this),
 			$defaultItem = $this.find('.item.default'),
 			nodes = {

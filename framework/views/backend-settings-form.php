@@ -6,11 +6,6 @@
  * @var string $reset_input_name
  */
 ?>
-<!--
-wp moves flash message error with js after first h2
-if there are no h2 on the page it shows them wrong
--->
-<h2 class="fw-hidden"></h2>
 
 <?php echo fw()->backend->render_options($options, $values); ?>
 
@@ -30,29 +25,13 @@ jQuery(function($){
 
 		$form.on("click", ".fw-options-tabs-wrapper > .fw-options-tabs-list > ul > li > a", function(){
 			$form.find("input[name='<?php echo esc_js($focus_tab_input_name); ?>']").val(
-				$(this).attr("href").replace(/^\\#/, "") // tab id
+				$(this).attr("href").replace(/^#/, "") // tab id
 			);
 		});
 
 		/* "wait" after tabs initialized */
 		setTimeout(function(){
-			var focusTabId = $.trim("<?php echo esc_js($focus_tab_id) ?>");
-
-			if (!focusTabId.length) {
-				return;
-			}
-
-			var $tabLink = $(".fw-options-tabs-wrapper > .fw-options-tabs-list > ul > li > a[href=\'#"+ focusTabId +"\']");
-
-			while ($tabLink.length) {
-				$tabLink.trigger("click");
-				$tabLink = $tabLink
-					.closest(".fw-options-tabs-wrapper").parent().closest(".fw-options-tabs-wrapper")
-					.find("> .fw-options-tabs-list > ul > li > a[href=\'#"+ $tabLink.closest(".fw-options-tab").attr("id") +"\']");
-			}
-
-			// click again on focus tab to update the input value
-			$(".fw-options-tabs-wrapper > .fw-options-tabs-list > ul > li > a[href=\'#"+ focusTabId +"\']").trigger("click");;
+			fwBackendOptions.openTab($.trim("<?php echo esc_js($focus_tab_id) ?>"));
 		}, 200);
 	});
 });
@@ -62,7 +41,7 @@ jQuery(function($){
 <!-- reset warning -->
 <script type="text/javascript">
 	jQuery(function($){
-		$('form[data-fw-form-id="fw_settings"] input[name="<?php echo esc_js($reset_input_name) ?>"]').on('click.fw-reset-warning', function(e){
+		$(document.body).on('click.fw-reset-warning', 'form[data-fw-form-id="fw_settings"] input[name="<?php echo esc_js($reset_input_name) ?>"]', function(e){
 			/**
 			 * on confirm() the submit input looses focus
 			 * fwForm.isAdminPage() must be able to select the input to send it in _POST
@@ -91,13 +70,19 @@ jQuery(function($){
 		return; // ajax submit is disabled in theme config
 		<?php endif; ?>
 
+		function isReset($submitButton) {
+			return $submitButton.length && $submitButton.attr('name') == '<?php echo esc_js($reset_input_name) ?>';
+		}
+
+		var formSelector = 'form[data-fw-form-id="fw_settings"]';
+
 		fwForm.initAjaxSubmit({
-			selector: 'form[data-fw-form-id="fw_settings"]',
-			loading: function(show, $form, $submitButton) {
+			selector: formSelector,
+			loading: function(elements, show) {
 				if (show) {
 					var title, description;
 
-					if ($submitButton.length && $submitButton.attr('name') == '<?php echo esc_js($reset_input_name) ?>') {
+					if (isReset(elements.$submitButton)) {
 						title = '<?php echo esc_js(__('Resetting', 'fw')) ?>';
 						description =
 							'<?php echo esc_js(__('We are currently resetting your settings.', 'fw')) ?>'+
@@ -127,39 +112,127 @@ jQuery(function($){
 					fw.soleModal.hide('fw-options-ajax-save-loading');
 				}
 			},
-			onSuccess: function($form, ajaxData) {
+			onSuccess: function(elements, ajaxData) {
 				/**
-				 * do not display the "Done" message
-				 * (users will click often on the save button, it's obvious it was saved if no error is shown)
+				 * Display messages
 				 */
-				delete ajaxData.flash_messages.success.fw_settings_form_save;
+				do {
+					/**
+					 * Don't display the "Settings successfully saved" message
+					 * users will click often on the Save button, it's obvious it was saved if no error is shown.
+					 */
+					delete ajaxData.flash_messages.success.fw_settings_form_save;
 
-				if (
-					_.isEmpty(ajaxData.flash_messages.error)
-					&&
-					_.isEmpty(ajaxData.flash_messages.warning)
-					&&
-					_.isEmpty(ajaxData.flash_messages.info)
-					&&
-					_.isEmpty(ajaxData.flash_messages.success)
-				) {
-					// nothing to display
-					return;
-				}
-
-				var noErrors = _.isEmpty(ajaxData.flash_messages.error) && _.isEmpty(ajaxData.flash_messages.warning);
-
-				fw.soleModal.show(
-					'fw-options-ajax-save-success',
-					'<div style="margin: 0 35px;">'+ fw.soleModal.renderFlashMessages(ajaxData.flash_messages) +'</div>',
-					{
-						autoHide: noErrors
-							? 1000 // hide fast the message if everything went fine
-							: 10000,
-						showCloseButton: false,
-						hidePrevious: noErrors ? false : true
+					if (
+						_.isEmpty(ajaxData.flash_messages.error)
+						&&
+						_.isEmpty(ajaxData.flash_messages.warning)
+						&&
+						_.isEmpty(ajaxData.flash_messages.info)
+						&&
+						_.isEmpty(ajaxData.flash_messages.success)
+					) {
+						// no messages to display
+						break;
 					}
-				);
+
+					var noErrors = _.isEmpty(ajaxData.flash_messages.error) && _.isEmpty(ajaxData.flash_messages.warning);
+
+					fw.soleModal.show(
+						'fw-options-ajax-save-success',
+						'<div style="margin: 0 35px;">'+ fw.soleModal.renderFlashMessages(ajaxData.flash_messages) +'</div>',
+						{
+							autoHide: noErrors
+								? 1000 // hide fast the message if everything went fine
+								: 10000,
+							showCloseButton: false,
+							hidePrevious: noErrors ? false : true // close and open popup when there are errors
+						}
+					);
+				} while(false);
+
+				/**
+				 * Refresh form html on Reset
+				 */
+				if (isReset(elements.$submitButton)) {
+					var replaceFormHtml = false;
+
+					// fadeOut
+					{
+						elements.$form.css('transition', 'opacity ease .3s');
+						elements.$form.css('opacity', '0');
+						setTimeout(function(){
+							elements.$form.css('visibility', 'hidden');
+
+							if (replaceFormHtml === false) {
+								// ajax is not finished yet
+								return;
+							}
+
+							if (typeof replaceFormHtml == 'function') {
+								// ajax finished loading and set this variable as function
+								replaceFormHtml();
+							}
+
+							// this marks that the fade callback was executed
+							replaceFormHtml = true;
+						}, 300);
+					}
+
+					jQuery.ajax({
+						type: "GET",
+						dataType: 'text'
+					}).done(function(html){
+						var $form = jQuery(formSelector, html);
+						html = undefined; // not needed anymore
+
+						if ($form.length) {
+							// this callback will be executed after the fadeOut effect will finish
+							replaceFormHtml = function() {
+								var focusTabId = elements.$form.find("input[name='<?php echo esc_js($focus_tab_input_name); ?>']").val();
+								var scrollTop = jQuery(document.body).scrollTop();
+
+								// replace form html
+								{
+									elements.$form.css({
+										'display': 'block',
+										'height': elements.$form.height() +'px'
+									});
+									elements.$form.get(0).innerHTML = $form.get(0).innerHTML;
+									$form = undefined; // not needed anymore
+									elements.$form.css({
+										'display': '',
+										'height': ''
+									});
+								}
+
+								fwEvents.trigger('fw:options:init', {$elements: elements.$form});
+
+								fwBackendOptions.openTab(focusTabId);
+								jQuery(document.body).scrollTop(scrollTop);
+
+								// fadeIn
+								{
+									elements.$form.css('opacity', '');
+									setTimeout(function(){
+										elements.$form.css('transition', '');
+										elements.$form.css('visibility', '');
+									}, 300);
+								}
+							};
+
+							if (replaceFormHtml === true) {
+								// fade callback was already executed
+								replaceFormHtml();
+							}
+						} else {
+							alert('Can\'t find the form in the ajax response');
+						}
+					}).fail(function(jqXHR, textStatus, errorThrown){
+						alert('Ajax error (more details in console)');
+						console.error(jqXHR, textStatus, errorThrown);
+					});
+				}
 			}
 		});
 	});
