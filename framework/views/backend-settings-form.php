@@ -104,13 +104,19 @@ jQuery(function($){
 						'</h2>'+
 						'<p class="fw-text-muted"><em>'+ description +'</em></p>',
 						{
-							autoHide: 30000,
+							autoHide: 60000,
 							allowClose: false
 						}
 					);
 				} else {
-					fw.soleModal.hide('fw-options-ajax-save-loading');
+					// fw.soleModal.hide('fw-options-ajax-save-loading'); // we need to show loading until the form reset ajax will finish
 				}
+			},
+			onErrors: function() {
+				fw.soleModal.hide('fw-options-ajax-save-loading');
+			},
+			onAjaxError: function() {
+				fw.soleModal.hide('fw-options-ajax-save-loading');
 			},
 			onSuccess: function(elements, ajaxData) {
 				/**
@@ -155,37 +161,27 @@ jQuery(function($){
 				 * Refresh form html on Reset
 				 */
 				if (isReset(elements.$submitButton)) {
-					var replaceFormHtml = false;
-
-					// fadeOut
-					{
-						elements.$form.css('transition', 'opacity ease .3s');
-						elements.$form.css('opacity', '0');
-						setTimeout(function(){
-							elements.$form.css('visibility', 'hidden');
-
-							if (typeof replaceFormHtml == 'function') {
-								// ajax finished loading and set this variable as function
-								replaceFormHtml();
-							}
-
-							// this marks that the fade callback was executed
-							replaceFormHtml = true;
-						}, 300);
-					}
-
 					jQuery.ajax({
 						type: "GET",
 						dataType: 'text'
 					}).done(function(html){
+						fw.soleModal.hide('fw-options-ajax-save-loading');
+
 						var $form = jQuery(formSelector, html);
 						html = undefined; // not needed anymore
 
-						if ($form.length) {
-							// this callback will be executed after the fadeOut effect will finish
-							var replaceFormHtmlFunction = function() {
+						if (!$form.length) {
+							alert('Can\'t find the form in the ajax response');
+							return;
+						}
+
+						// waitSoleModalFadeOut -> formFadeOut -> formReplace -> formFadeIn
+						setTimeout(function(){
+							elements.$form.css('transition', 'opacity ease .3s');
+							elements.$form.css('opacity', '0');
+							setTimeout(function() {
 								var focusTabId = elements.$form.find("input[name='<?php echo esc_js($focus_tab_input_name); ?>']").val();
-								var scrollTop = jQuery(document.body).scrollTop();
+								var scrollTop = jQuery(window).scrollTop();
 
 								// replace form html
 								{
@@ -199,12 +195,14 @@ jQuery(function($){
 										'display': '',
 										'height': ''
 									});
+									elements.$form.find('.fw-options-tabs-wrapper').css('opacity', '');
 								}
 
 								fwEvents.trigger('fw:options:init', {$elements: elements.$form});
 
 								fwBackendOptions.openTab(focusTabId);
-								jQuery(document.body).scrollTop(scrollTop);
+
+								jQuery(window).scrollTop(scrollTop);
 
 								// fadeIn
 								{
@@ -214,27 +212,20 @@ jQuery(function($){
 										elements.$form.css('visibility', '');
 									}, 300);
 								}
-							};
-
-							if (replaceFormHtml === true) { // fadeOut effect finished
-								replaceFormHtmlFunction();
-							} else {
-								replaceFormHtml = replaceFormHtmlFunction;
-							}
-
-							replaceFormHtmlFunction = undefined;
-						} else {
-							alert('Can\'t find the form in the ajax response');
-						}
+							}, 300);
+						}, 300);
 					}).fail(function(jqXHR, textStatus, errorThrown){
+						fw.soleModal.hide('fw-options-ajax-save-loading');
 						elements.$form.css({
 							'opacity': '',
 							'transition': '',
 							'visibility': ''
 						});
-						alert('Ajax error (more details in console)');
 						console.error(jqXHR, textStatus, errorThrown);
+						alert('Ajax error (more details in console)');
 					});
+				} else {
+					fw.soleModal.hide('fw-options-ajax-save-loading');
 				}
 			}
 		});
