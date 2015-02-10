@@ -17,6 +17,7 @@
 	width: 100%;
 	height: 100%;
 	cursor: pointer;
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAJklEQVR42mPYu3fvf2IwsYBh1MBRA4elgcQqJNbiUQNHDRyWBgIADHKfXDnCoBQAAAAASUVORK5CYII=');
 }
 .fw-option-type-upload.images-only .thumb a {
 	position: absolute;
