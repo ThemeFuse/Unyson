@@ -599,32 +599,19 @@ fw.getQueryString = function(name) {
 
 					$modalWrapper.addClass('fw-modal fw-options-modal');
 
-					/*
-					 * if the modal has specified what size it wants to have
-					 * we obey, if not then we set a default size in case it is
-					 * the first modal in the stack, or scale it down if it isn't
-					 */
 					if (_.indexOf(['large', 'medium', 'small'], size) !== -1) {
 						$modalWrapper.addClass('fw-options-modal-' + size);
 					} else {
-						var $topModal = modalsStack.peek();
-						if ($topModal) {
-							var topModalPositions = _.map(
-								$topModal.css(['top', 'bottom', 'left', 'right']),
-								parseFloat
-							);
-							$modal.css({
-								top:    topModalPositions[0] + 30,
-								bottom: topModalPositions[1] + 30,
-								left:   topModalPositions[2] + 30,
-								right:  topModalPositions[3] + 30
-							});
-						} else {
-							$modalWrapper.addClass('fw-options-modal-' + modal.defaultSize);
-						}
+						$modalWrapper.addClass('fw-options-modal-' + modal.defaultSize);
 					}
 
-					/*
+					if (stackSize) {
+						$modal.css({
+							border: (stackSize * 30) +'px solid transparent'
+						});
+					}
+
+					/**
 					 * adjust the z-index for the new frame's backdrop and modal
 					 * (160000 is what wp sets for its modals)
 					 */

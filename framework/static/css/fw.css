@@ -2718,40 +2718,36 @@ a.fw-wp-link:hover {
 
 /* OptionsModal */
 
-.fw-options-modal.fw-options-modal-medium > .media-modal {
-	left: 15%;
-	right: 15%;
+/* sizes */
+
+.fw-options-modal.fw-options-modal-small > .media-modal,
+.fw-options-modal.fw-options-modal-medium > .media-modal,
+.fw-options-modal.fw-options-modal-large > .media-modal {
+	margin: auto;
+
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .fw-options-modal.fw-options-modal-small > .media-modal {
-	top: 20%;
-	bottom: 20%;
-	left: 20%;
-	right: 20%;
+	max-width: 750px;
+	max-height: 500px;
 }
 
-@media (min-width: 1824px) {
-	.fw-options-modal.fw-options-modal-large > .media-modal {
-		top: 10%;
-		bottom: 10%;
-		left: 10%;
-		right: 10%;
-	}
-
-	.fw-options-modal.fw-options-modal-medium > .media-modal {
-		top: 15%;
-		bottom: 15%;
-		left: 20%;
-		right: 20%;
-	}
-
-	.fw-options-modal.fw-options-modal-small > .media-modal {
-		top: 29%;
-		bottom: 29%;
-		left: 29%;
-		right: 29%;
-	}
+.fw-options-modal.fw-options-modal-medium > .media-modal {
+	max-width: 840px;
+	max-height: 660px;
 }
+
+.fw-options-modal.fw-options-modal-large > .media-modal {
+	max-width: 1200px;
+	max-height: 800px;
+}
+
+/* end: sizes */
+
+/* tabs fixes */
 
 .fw-options-modal .fw-options-tabs-first-level > .fw-options-tabs-list {
 	padding-top: 20px;
@@ -2780,6 +2776,8 @@ a.fw-wp-link:hover {
 	background: #fff;
 	border-right: 1px solid #ccc;
 }
+
+/* end: tabs fixes */
 
 /* Hide last border */
 
