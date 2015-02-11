@@ -17,16 +17,30 @@
 			<?php endif; ?>
 		</h2>
 		<div class="form-header-buttons">
-			<a href="#" onclick="return false;" class="submit-button-clear"><i class="fa fa-cog"></i><?php _e('Reset Options', 'fw') ?></a>
+			<?php
+			echo fw_html_tag('input', array(
+				'type' => 'submit',
+				'name' => '_fw_reset_options',
+				'value' => __('Reset Options', 'fw'),
+				'class' => 'button-secondary button-large submit-button-reset',
+			))
+			?>
 			<i class="submit-button-separator"></i>
-			<a href="#" onclick="return false;" class="submit-button-save"><?php _e('Save Changes', 'fw') ?></a>
+			<?php
+			echo fw_html_tag('input', array(
+				'type' => 'submit',
+				'name' => '_fw_save_options',
+				'value' => __('Save Changes', 'fw'),
+				'class' => 'button-primary button-large submit-button-save',
+			))
+			?>
 		</div>
 	</div>
 	<script type="text/javascript">
 		jQuery(function($){
-			// styles are loaded in footer and are applied after page load
-			setTimeout(function(){
-				$('.fw-settings-form-header').fadeTo('fast', 1, function(){ $(this).css('opacity', ''); });
+			fwEvents.on("fw:options:init", function(data){
+				// styles are loaded in footer and are applied after page load
+				data.$elements.find('.fw-settings-form-header').fadeTo('fast', 1, function(){ $(this).css('opacity', ''); });
 			}, 300);
 		});
 	</script>
@@ -220,7 +234,6 @@ jQuery(function($){
 										'display': '',
 										'height': ''
 									});
-									elements.$form.find('.fw-options-tabs-wrapper').css('opacity', '');
 								}
 
 								fwEvents.trigger('fw:options:init', {$elements: elements.$form});

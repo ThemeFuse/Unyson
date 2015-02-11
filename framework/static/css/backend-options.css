@@ -367,6 +367,7 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	position: relative;
 	height: 70px;
 	background: #0073a4;
+	margin-top: 20px;
 }
 
 .fw-backend-vertical-tabs .fw-settings-form-header a:focus {
@@ -394,7 +395,7 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	margin-left: 9px;
 	font-size: 12px;
 	font-weight: 300;
-	color: white;
+	color: #fff;
 	opacity: .6;
 	white-space: nowrap;
 }
@@ -405,37 +406,36 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	right: 22px;
 }
 
+.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons input {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	vertical-align: middle;
+}
+
+.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons input:active {
+	vertical-align: middle;
+}
+
 .fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons .submit-button-separator {
-	content: "";
-	float: left;
-	display: block;
-	margin: 6px 15px;
+	margin: 0 12px;
+	color: #358eb6;
+	border: 1px solid #358eb6;
+	border-width: 0 1px;
+	display: inline-block;
 	height: 14px;
-	width: 2px;
-	background: #338fb6;
-	font-size: 0;
+	vertical-align: middle;
 }
 
-.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons a {
-	float: left;
-	display: block;
-	position: relative;
-	text-decoration: none;
-}
-
-.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons .submit-button-clear {
-	padding: 0 4px;
-	margin-right: -4px;
+.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons .submit-button-reset {
+	padding: 0;
 	height: 26px;
 	line-height: 26px;
 	color: #fff;
+	background-color: transparent;
+	border-width: 0;
 }
 
-.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons .submit-button-clear i.fa {
-	margin-right: 5px;
-}
-
-.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons .submit-button-clear:hover {
+.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons .submit-button-reset:hover {
 	text-decoration: underline;
 }
 

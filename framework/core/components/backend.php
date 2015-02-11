@@ -838,12 +838,10 @@ final class _FW_Component_Backend
 
 		wp_enqueue_script('fw-form-helpers');
 
-		if (fw()->theme->get_config('settings_form_vertical_tabs')) {
-			if (empty($data['attr']['class'])) {
-				$data['attr']['class'] = 'fw-backend-vertical-tabs';
-			} else {
-				$data['attr']['class'] .= ' fw-backend-vertical-tabs';
-			}
+		$vertical_tabs = fw()->theme->get_config('settings_form_vertical_tabs');
+
+		if ($vertical_tabs) {
+			$data['attr']['class'] = 'fw-backend-vertical-tabs';
 		}
 
 		fw_render_view(fw_get_framework_directory('/views/backend-settings-form.php'), array(
@@ -852,32 +850,24 @@ final class _FW_Component_Backend
 			'focus_tab_input_name' => '_focus_tab',
 			'reset_input_name' => '_fw_reset_options',
 			'ajax_submit' => fw()->theme->get_config('settings_form_ajax_submit'),
-			'vertical_tabs' => fw()->theme->get_config('settings_form_vertical_tabs'),
+			'vertical_tabs' => $vertical_tabs,
 		), false);
 
-
-		if (false) {
-			$data['submit']['html'] =
-				fw_html_tag('input', array(
-					'type' => 'submit',
-					'name' => '_fw_save_options',
-					'value' => __('Save', 'fw'),
-					'class' => 'button-primary button-large',
-				)) .
-				' &nbsp;&nbsp; ' .
-				fw_html_tag('input', array(
-					'type' => 'submit',
-					'name' => '_fw_reset_options',
-					'value' => __('Reset', 'fw'),
-					'class' => 'button-secondary button-large',
-				));
-		} else {
-			$data['submit']['html'] =
-				'<div class="form-footer-buttons">' .
-				'    <input type="submit" name="_fw_save_options" value="'. esc_attr__('Save Changes', 'fw') .'" class="button-primary button-large" />' .
-				'    <input type="submit" name="_fw_reset_options" value="' . esc_attr__('Reset', 'fw') . '" class="button-secondary button-large" />' .
-				'</div>';
-		}
+		$data['submit']['html'] = '<div class="form-footer-buttons">' .
+			fw_html_tag('input', array(
+				'type' => 'submit',
+				'name' => '_fw_save_options',
+				'value' => __('Save Changes', 'fw'),
+				'class' => 'button-primary button-large',
+			)) .
+			($vertical_tabs ? '' : ' &nbsp;&nbsp; ') .
+			fw_html_tag('input', array(
+				'type' => 'submit',
+				'name' => '_fw_reset_options',
+				'value' => __('Reset Options', 'fw'),
+				'class' => 'button-secondary button-large',
+			)) .
+		'</div>';
 
 		return $data;
 	}
