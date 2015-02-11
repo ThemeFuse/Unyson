@@ -5,35 +5,39 @@
  * @var string $focus_tab_input_name
  * @var string $reset_input_name
  * @var bool $ajax_submit
- * @var bool $vertical_tabs
+ * @var bool $side_tabs
  */
 ?>
 
-<?php if ($vertical_tabs): ?>
-	<div class="fw-settings-form-header" style="opacity:0;">
-		<h2><?php echo fw()->theme->manifest->get_name() ?>
-			<?php if (fw()->theme->manifest->get('author')): ?>
-			<small><?php _e('by', 'fw') ?> <?php echo fw()->theme->manifest->get('author') ?></small>
-			<?php endif; ?>
-		</h2>
-		<div class="form-header-buttons">
-			<?php
-			echo fw_html_tag('input', array(
-				'type' => 'submit',
-				'name' => '_fw_reset_options',
-				'value' => __('Reset Options', 'fw'),
-				'class' => 'button-secondary button-large submit-button-reset',
-			))
-			?>
-			<i class="submit-button-separator"></i>
-			<?php
-			echo fw_html_tag('input', array(
-				'type' => 'submit',
-				'name' => '_fw_save_options',
-				'value' => __('Save Changes', 'fw'),
-				'class' => 'button-primary button-large submit-button-save',
-			))
-			?>
+<?php if ($side_tabs): ?>
+	<div class="fw-settings-form-header fw-row" style="opacity:0;">
+		<div class="fw-col-xs-12 fw-col-sm-6">
+			<h2><?php echo fw()->theme->manifest->get_name() ?>
+				<?php if (fw()->theme->manifest->get('author')): ?>
+					<small><?php _e('by', 'fw') ?> <?php echo fw()->theme->manifest->get('author') ?></small>
+				<?php endif; ?>
+			</h2>
+		</div>
+		<div class="fw-col-xs-12 fw-col-sm-6">
+			<div class="form-header-buttons">
+				<?php
+				echo fw_html_tag('input', array(
+					'type' => 'submit',
+					'name' => '_fw_reset_options',
+					'value' => __('Reset Options', 'fw'),
+					'class' => 'button-secondary button-large submit-button-reset',
+				))
+				?>
+				<i class="submit-button-separator"></i>
+				<?php
+				echo fw_html_tag('input', array(
+					'type' => 'submit',
+					'name' => '_fw_save_options',
+					'value' => __('Save Changes', 'fw'),
+					'class' => 'button-primary button-large submit-button-save',
+				))
+				?>
+			</div>
 		</div>
 	</div>
 	<script type="text/javascript">

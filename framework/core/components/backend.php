@@ -464,7 +464,7 @@ final class _FW_Component_Backend
 	{
 		echo '<div class="wrap">';
 
-		if (fw()->theme->get_config('settings_form_vertical_tabs')) {
+		if (fw()->theme->get_config('settings_form_side_tabs')) {
 			// this is needed for flash messages (admin notices) to be displayed properly
 			echo '<h2 class="fw-hidden"></h2>';
 		} else {
@@ -838,10 +838,10 @@ final class _FW_Component_Backend
 
 		wp_enqueue_script('fw-form-helpers');
 
-		$vertical_tabs = fw()->theme->get_config('settings_form_vertical_tabs');
+		$side_tabs = fw()->theme->get_config('settings_form_side_tabs');
 
-		if ($vertical_tabs) {
-			$data['attr']['class'] = 'fw-backend-vertical-tabs';
+		if ($side_tabs) {
+			$data['attr']['class'] = 'fw-backend-side-tabs';
 		}
 
 		fw_render_view(fw_get_framework_directory('/views/backend-settings-form.php'), array(
@@ -850,7 +850,7 @@ final class _FW_Component_Backend
 			'focus_tab_input_name' => '_focus_tab',
 			'reset_input_name' => '_fw_reset_options',
 			'ajax_submit' => fw()->theme->get_config('settings_form_ajax_submit'),
-			'vertical_tabs' => $vertical_tabs,
+			'side_tabs' => $side_tabs,
 		), false);
 
 		$data['submit']['html'] = '<div class="form-footer-buttons">' .
@@ -860,7 +860,7 @@ final class _FW_Component_Backend
 				'value' => __('Save Changes', 'fw'),
 				'class' => 'button-primary button-large',
 			)) .
-			($vertical_tabs ? '' : ' &nbsp;&nbsp; ') .
+			($side_tabs ? '' : ' &nbsp;&nbsp; ') .
 			fw_html_tag('input', array(
 				'type' => 'submit',
 				'name' => '_fw_reset_options',

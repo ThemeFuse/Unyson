@@ -162,7 +162,6 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 
 @media (max-width: 782px) {
 	.fw-options-tabs-first-level > .fw-options-tabs-list ul li {
-		margin-top: 3px;
 		float: none;
 	}
 
@@ -175,19 +174,15 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	}
 }
 
-/* Vertical tabs */
+/* Side tabs */
 
-.fw-backend-vertical-tabs .fw-options-tabs-wrapper .fw-options-tabs-contents {
-	margin-top: 0 !important;
-}
-
-.fw-backend-vertical-tabs .fw-options-tabs-first-level {
-	background: #222;
+.fw-backend-side-tabs .fw-options-tabs-first-level {
+	background: #e3e3e3;
 	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
 	box-shadow: 0 1px 2px rgba(0,0,0,.05);
 }
 
-.fw-backend-vertical-tabs .fw-options-tabs-first-level > .fw-options-tabs-list {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list {
 	margin: 0;
 	padding: 0;
 	float: left;
@@ -195,12 +190,12 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	border-bottom: none;
 }
 
-.fw-backend-vertical-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents {
 	margin-left: 198px !important;
 	background: #fff;
 }
 
-.fw-backend-vertical-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner {
 	width: 100%;
 	min-height: 100%;
 	border-right: 1px solid #e5e5e5;
@@ -209,12 +204,12 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	padding-bottom: 70px;
 }
 
-.fw-backend-vertical-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li {
 	float: none;
 	margin-right: 0;
 }
 
-.fw-backend-vertical-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab {
 	position: relative;
 	outline: none;
 	margin: 0;
@@ -223,16 +218,15 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	height: 44px;
 	line-height: 44px;
 	border: none;
-	border-bottom: 1px solid #323232;
+	border-bottom: 1px solid #d3d3d3;
 	font-size: 14px;
 	font-weight: 100;
-	color: #eee;
+	color: #333;
 	-webkit-box-shadow: none;
 	box-shadow: none;
-	background: #222;
 }
 
-.fw-backend-vertical-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab i.fa {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab i.fa {
 	position: absolute;
 	left: 8px;
 	top: 0;
@@ -245,33 +239,33 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	text-align: center;
 }
 
-.fw-backend-vertical-tabs .fw-options-tabs-first-level > .fw-options-tabs-list .ui-tabs-nav a:hover {
-	background: #111;
-	color: #45bbe6;
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list .ui-tabs-nav a:hover {
+	background: #dadada;
+	color: #0073a4;
 }
 
-.fw-backend-vertical-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab,
-.fw-backend-vertical-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab:hover {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab,
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab:hover {
 	margin: 0;
-	background: #0074a2;
-	border-bottom-color: #0074a2;
+	background: #bdbdbd;
+	border-bottom-color: #b1b1b1;
 	color: #fff;
 }
 
-.fw-backend-vertical-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab,
-.fw-backend-vertical-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab:hover {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab,
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab:hover {
 	margin-top: 0;
 }
 
-.fw-backend-vertical-tabs .fw-options-tabs-contents .fw-options-tabs-list {
+.fw-backend-side-tabs .fw-options-tabs-contents .fw-options-tabs-list {
 	padding: 0;
 }
 
-.fw-backend-vertical-tabs .fw-options-tabs-contents .fw-options-tabs-list ul li:after {
+.fw-backend-side-tabs .fw-options-tabs-contents .fw-options-tabs-list ul li:after {
 	content: none;
 }
 
-.fw-backend-vertical-tabs .fw-options-tabs-contents .fw-options-tabs-list ul {
+.fw-backend-side-tabs .fw-options-tabs-contents .fw-options-tabs-list ul {
 	padding: 0;
 	margin: 0;
 	margin-bottom: 20px;
@@ -281,8 +275,8 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	border-bottom: 1px solid #e5e5e5;
 }
 
-.fw-backend-vertical-tabs .fw-options-tabs-contents .fw-options-tabs-list ul li a.nav-tab,
-.fw-backend-vertical-tabs .fw-options-tabs-contents .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+.fw-backend-side-tabs .fw-options-tabs-contents .fw-options-tabs-list ul li a.nav-tab,
+.fw-backend-side-tabs .fw-options-tabs-contents .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 	margin: 0;
 	padding: 0 24px;
 	border: none;
@@ -295,28 +289,32 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	outline: none;
 }
 
-.fw-backend-vertical-tabs .fw-options-tabs-contents .fw-options-tabs-list ul li a.nav-tab {
+.fw-backend-side-tabs .fw-options-tabs-contents .fw-options-tabs-list ul li a.nav-tab {
 	background: transparent;
 	color: #000;
 }
 
-.fw-backend-vertical-tabs .fw-options-tabs-contents .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+.fw-backend-side-tabs .fw-options-tabs-contents .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 	background: #fff;
 	height: 45px;
 }
 
-.fw-backend-vertical-tabs .fw-options-tabs-contents .fw-options-tabs-list ul > li a:hover {
+.fw-backend-side-tabs .fw-options-tabs-contents .fw-options-tabs-list ul > li a:hover {
 	color: #0073a4;
 }
 
+.fw-backend-side-tabs .fw-options-tabs-wrapper .fw-options-tabs-contents {
+	margin-top: 0 !important;
+}
 
-.fw-backend-vertical-tabs .postbox {
+
+.fw-backend-side-tabs .postbox {
 	border: none;
 	-webkit-box-shadow: none;
 	box-shadow: none;
 }
 
-.fw-backend-vertical-tabs .metabox-holder h3 {
+.fw-backend-side-tabs .metabox-holder h3 {
 	position: relative;
 	padding: 0 25px;
 	height: 47px;
@@ -326,7 +324,7 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	color: #0073a4;
 }
 
-.fw-backend-vertical-tabs .metabox-holder h3:after {
+.fw-backend-side-tabs .metabox-holder h3:after {
 	content: "";
 	display: block;
 	position: absolute;
@@ -336,25 +334,25 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	border-bottom: 1px solid #eee;
 }
 
-.fw-backend-vertical-tabs .metabox-holder h3 .handlediv {
+.fw-backend-side-tabs .metabox-holder h3 .handlediv {
 	display: none;
 }
 
 @media (max-width: 782px) {
-	.fw-backend-vertical-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li{
+	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li{
 		margin-top: 0;
 	}
 
-	.fw-backend-vertical-tabs .fw-options-tabs-first-level > .fw-options-tabs-list {
+	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list {
 		overflow: hidden;
 		width: 47px;
 	}
 
-	.fw-backend-vertical-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents {
+	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents {
 		margin-left: 47px !important;
 	}
 
-	.fw-backend-vertical-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab i.fa {
+	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab i.fa {
 		width: 47px;
 		left: 0;
 	}
@@ -363,35 +361,31 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 
 /* form header */
 
-.fw-backend-vertical-tabs .fw-settings-form-header {
-	position: relative;
-	height: 70px;
+.fw-backend-side-tabs .fw-settings-form-header {
 	background: #0073a4;
 	margin-top: 20px;
 }
 
-.fw-backend-vertical-tabs .fw-settings-form-header a:focus {
+.fw-backend-side-tabs .fw-settings-form-header a:focus {
 	outline: none;
 	-webkit-box-shadow: none;
 	box-shadow: none;
 }
 
-.fw-backend-vertical-tabs .fw-settings-form-header h2 {
-	position: absolute;
-	padding: 0;
-	left: 29px;
-	top: 20px;
+.fw-backend-side-tabs .fw-settings-form-header > div {
+	padding: 20px 20px 20px 30px;
+}
+
+.fw-backend-side-tabs .fw-settings-form-header h2 {
+	position: relative;
 	font-size: 27px;
 	font-weight: 300;
 	line-height: 1;
-	color: white;
+	color: #fff;
+	padding: 0;
 }
 
-.fw-backend-vertical-tabs .fw-settings-form-header h2 small {
-	display: block;
-	position: absolute;
-	left: 100%;
-	bottom: 0;
+.fw-backend-side-tabs .fw-settings-form-header h2 small {
 	margin-left: 9px;
 	font-size: 12px;
 	font-weight: 300;
@@ -400,23 +394,21 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	white-space: nowrap;
 }
 
-.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons {
-	position: absolute;
-	top: 22px;
-	right: 22px;
+.fw-backend-side-tabs .fw-settings-form-header .form-header-buttons {
+	text-align: right;
 }
 
-.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons input {
+.fw-backend-side-tabs .fw-settings-form-header .form-header-buttons input {
 	-webkit-box-shadow: none;
 	box-shadow: none;
 	vertical-align: middle;
 }
 
-.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons input:active {
+.fw-backend-side-tabs .fw-settings-form-header .form-header-buttons input:active {
 	vertical-align: middle;
 }
 
-.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons .submit-button-separator {
+.fw-backend-side-tabs .fw-settings-form-header .form-header-buttons .submit-button-separator {
 	margin: 0 12px;
 	color: #358eb6;
 	border: 1px solid #358eb6;
@@ -426,7 +418,7 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	vertical-align: middle;
 }
 
-.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons .submit-button-reset {
+.fw-backend-side-tabs .fw-settings-form-header .form-header-buttons .submit-button-reset {
 	padding: 0;
 	height: 26px;
 	line-height: 26px;
@@ -435,11 +427,11 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	border-width: 0;
 }
 
-.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons .submit-button-reset:hover {
+.fw-backend-side-tabs .fw-settings-form-header .form-header-buttons .submit-button-reset:hover {
 	text-decoration: underline;
 }
 
-.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons .submit-button-save {
+.fw-backend-side-tabs .fw-settings-form-header .form-header-buttons .submit-button-save {
 	padding: 0 18px;
 	height: 26px;
 	line-height: 26px;
@@ -447,13 +439,13 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	color: #0073a4;
 }
 
-.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons .submit-button-save:hover {
+.fw-backend-side-tabs .fw-settings-form-header .form-header-buttons .submit-button-save:hover {
 	background: #e3e3e3;
 }
 
 @media (max-width: 782px) {
-	.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons {
-		margin-left: 47px;
+	.fw-backend-side-tabs .fw-settings-form-header > div:first-child {
+		padding-bottom: 0;
 	}
 }
 
@@ -461,22 +453,22 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 
 /* footer buttons */
 
-.fw-backend-vertical-tabs .form-footer-buttons {
+.fw-backend-side-tabs .form-footer-buttons {
 	position: relative;
-	height: 68px;
+	min-height: 68px;
 	border-top: 1px solid #eee;
 	margin: -70px 0 0 198px;
 	background: #f7f7f7;
 	overflow: hidden;
 }
 
-.fw-backend-vertical-tabs .form-footer-buttons .button-primary {
+.fw-backend-side-tabs .form-footer-buttons .button-primary {
 	border-color: #01658d;
 	background: #0074a2;
 	color: #fff;
 }
 
-.fw-backend-vertical-tabs .form-footer-buttons input[type="submit"] {
+.fw-backend-side-tabs .form-footer-buttons input[type="submit"] {
 	margin: 20px 0 0 26px;
 	float: left;
 	-webkit-box-shadow: none;
@@ -486,14 +478,14 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 }
 
 @media (max-width: 782px) {
-	.fw-backend-vertical-tabs .fw-settings-form-header .form-header-buttons {
+	.fw-backend-side-tabs .form-footer-buttons {
 		margin-left: 47px;
 	}
 }
 
 /* end: footer buttons */
 
-/* end: Vertical tabs */
+/* end: Side tabs */
 
 /* end: Tabs */
 
@@ -620,6 +612,15 @@ body.rtl .fw-postbox > .inside > .fw-backend-options-last-border-hider {
 	max-width: 100%;
 }
 
+@media (max-width: 782px) {
+	.fw-backend-option-design-default > .fw-backend-option-input.width-type-fixed > .fw-inner,
+	.fw-backend-option-design-taxonomy > td > .fw-backend-option-input.width-type-fixed > .fw-inner,
+	.fw-backend-option-fixed-width {
+		width: 100%;
+		max-width: 428px;
+	}
+}
+
 .fw-backend-option-design-default > .fw-backend-option-input.width-type-fixed > .fw-inner,
 .fw-backend-option-design-taxonomy > td > .fw-backend-option-input.width-type-fixed > .fw-inner {
 
@@ -723,7 +724,6 @@ body.rtl .fw-backend-option-design-default > .fw-backend-option-desc > .fw-inner
 /* .fw-force-xs have design like on mobile */
 
 .fw-force-xs .fw-options-tabs-first-level > .fw-options-tabs-list ul li {
-	margin-top: 3px;
 	float: none;
 }
 

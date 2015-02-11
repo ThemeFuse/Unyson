@@ -140,8 +140,8 @@ final class _FW_Component_Theme
 			$config = array(
 				/** Toggle Theme Settings form ajax submit */
 				'settings_form_ajax_submit' => true,
-				/** Toggle Theme Settings vertical tabs */
-				'settings_form_vertical_tabs' => false,
+				/** Toggle Theme Settings side tabs */
+				'settings_form_side_tabs' => false,
 			);
 
 			if (file_exists(fw_get_template_customizations_directory('/theme/config.php'))) {
