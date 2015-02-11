@@ -137,7 +137,12 @@ final class _FW_Component_Theme
 		try {
 			$config = FW_Cache::get($cache_key);
 		} catch (FW_Cache_Not_Found_Exception $e) {
-			$config = array();
+			$config = array(
+				/** Toggle Theme Settings form ajax submit */
+				'settings_form_ajax_submit' => true,
+				/** Toggle Theme Settings vertical tabs */
+				'settings_form_vertical_tabs' => false,
+			);
 
 			if (file_exists(fw_get_template_customizations_directory('/theme/config.php'))) {
 				$variables = fw_get_variables_from_file(fw_get_template_customizations_directory('/theme/config.php'), array('cfg' => null));

@@ -4,8 +4,33 @@
  * @var array $values
  * @var string $focus_tab_input_name
  * @var string $reset_input_name
+ * @var bool $ajax_submit
+ * @var bool $vertical_tabs
  */
 ?>
+
+<?php if ($vertical_tabs): ?>
+	<div class="fw-settings-form-header" style="opacity:0;">
+		<h2><?php echo fw()->theme->manifest->get_name() ?>
+			<?php if (fw()->theme->manifest->get('author')): ?>
+			<small><?php _e('by', 'fw') ?> <?php echo fw()->theme->manifest->get('author') ?></small>
+			<?php endif; ?>
+		</h2>
+		<div class="form-header-buttons">
+			<a href="#" onclick="return false;" class="submit-button-clear"><i class="fa fa-cog"></i><?php _e('Reset Options', 'fw') ?></a>
+			<i class="submit-button-separator"></i>
+			<a href="#" onclick="return false;" class="submit-button-save"><?php _e('Save Changes', 'fw') ?></a>
+		</div>
+	</div>
+	<script type="text/javascript">
+		jQuery(function($){
+			// styles are loaded in footer and are applied after page load
+			setTimeout(function(){
+				$('.fw-settings-form-header').fadeTo('fast', 1, function(){ $(this).css('opacity', ''); });
+			}, 300);
+		});
+	</script>
+<?php endif; ?>
 
 <?php echo fw()->backend->render_options($options, $values); ?>
 
@@ -48,7 +73,7 @@ jQuery(function($){
 			 * so use alternative solution http://stackoverflow.com/a/5721762
 			 */
 			{
-				$(this).closest('form').find('input[type="submit"]').removeAttr('clicked');
+				$(this).closest('form').find('input[type="submit"][clicked]').removeAttr('clicked');
 				$(this).attr('clicked', '');
 			}
 
@@ -66,7 +91,7 @@ jQuery(function($){
 <!-- ajax submit -->
 <script type="text/javascript">
 	jQuery(function ($) {
-		<?php if (!fw()->theme->get_config('settings_form_ajax_submit', true)): ?>
+		<?php if (!$ajax_submit): ?>
 		return; // ajax submit is disabled in theme config
 		<?php endif; ?>
 
