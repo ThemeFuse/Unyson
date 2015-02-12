@@ -1,5 +1,7 @@
 # Unyson Framework
 
+[![Join the chat at https://gitter.im/ThemeFuse/Unyson](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ThemeFuse/Unyson?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [Unyson](http://unyson.themefuse.com/) is a framework for [WordPress](http://wordpress.org/) that facilitates the development of a theme.
 
 This framework was created from the ground up by the team behind [ThemeFuse](http://themefuse.com/) from the desire to empower developers to build outstanding WordPress themes fast and easy.
