@@ -331,6 +331,16 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	margin-top: 0 !important;
 }
 
+/* hide last option border */
+.fw-backend-side-tabs .fw-options-tabs-wrapper .fw-options-tabs-contents > .fw-inner:after {
+	content: ' ';
+	display: block;
+	width: 100%;
+	height: 1px;
+	border-bottom: 1px solid #FFFFFF;
+	margin-top: -2px;
+	position: relative;
+}
 
 .fw-backend-side-tabs .postbox {
 	border: none;
@@ -488,7 +498,7 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 .fw-backend-side-tabs .fw-settings-form-header .form-header-buttons .submit-button-save {
 	padding: 0 18px;
 	height: 26px;
-	line-height: 26px;
+	line-height: 24px;
 	background: #fff;
 	color: #0074a2;
 }
