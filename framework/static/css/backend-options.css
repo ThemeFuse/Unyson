@@ -93,7 +93,7 @@ body.rtl .fw-options-tabs-first-level > .fw-options-tabs-list ul li {
 }
 
 .fw-options-tabs-wrapper .metabox-holder,
-.fw-postboxes.metabox-holder {
+.fw-backend-postboxes.metabox-holder {
 	padding-top: 0 !important; /* to rewrite: #wpbody-content .metabox-holder */
 	margin: 0 !important; /* to rewrite: #wpbody-content .metabox-holder */
 }
@@ -352,17 +352,17 @@ form.fw-settings-form.fw-backend-side-tabs {
 	position: relative;
 }
 
-.fw-backend-side-tabs .postbox {
+.fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox {
 	border: none;
 	-webkit-box-shadow: none;
 	box-shadow: none;
 }
 
-.fw-backend-side-tabs .postbox.closed {
+.fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox.closed {
 	margin-bottom: 0;
 }
 
-.fw-backend-side-tabs .metabox-holder h3 {
+.fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > h3 {
 	position: relative;
 	padding: 0 25px;
 	height: 47px;
@@ -372,7 +372,7 @@ form.fw-settings-form.fw-backend-side-tabs {
 	color: #0074a2;
 }
 
-.fw-backend-side-tabs .metabox-holder h3:after {
+.fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > h3:after {
 	content: "";
 	display: block;
 	position: absolute;
@@ -383,11 +383,11 @@ form.fw-settings-form.fw-backend-side-tabs {
 	z-index: 1;
 }
 
-.fw-backend-side-tabs .metabox-holder h3 .handlediv {
+.fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > h3 .handlediv {
 	display: none;
 }
 
-.fw-backend-side-tabs .postbox .handlediv:before {
+.fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > .handlediv:before {
 	top: 4px;
 }
 
@@ -448,7 +448,7 @@ form.fw-settings-form.fw-backend-side-tabs {
 		padding: 0;
 	}
 
-	.fw-backend-side-tabs .postbox .handlediv:before {
+	.fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > .handlediv:before {
 		top: 2px;
 	}
 }
@@ -579,7 +579,7 @@ form.fw-settings-form.fw-backend-side-tabs {
 }
 
 .fw-backend-side-tabs .fw-backend-option + .form-footer-buttons,
-.fw-backend-side-tabs fw-postboxes + .form-footer-buttons {
+.fw-backend-side-tabs .fw-backend-postboxes + .form-footer-buttons {
 	margin-top: -1px; /* hide last option border */
 }
 
@@ -621,7 +621,7 @@ form#post .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-ac
 	border-bottom-color: #FFFFFF;
 }
 
-form#post .fw-options-tabs-contents .fw-postboxes {
+form#post .fw-options-tabs-contents .fw-backend-postboxes {
 	padding: 0 10px;
 }
 
