@@ -177,14 +177,19 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 /* Side tabs */
 
 .fw-backend-side-tabs .fw-options-tabs-first-level {
-	background: #e3e3e3;
+	background:
+	#fff
+	url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAAABCAYAAAAo/lyUAAAAIklEQVQ4T2N8/Pjxf4ZRMBoCoyEwGgKjITAaAqMhMKRDAACcIAOqH7nZlwAAAABJRU5ErkJgggAA') /* #e3e3e3 500x1 */
+	-302px /* 198-500 */
+	0
+	repeat-y;
 	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
 	box-shadow: 0 1px 2px rgba(0,0,0,.05);
 }
 
 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list {
 	margin: 0;
-	padding: 0;
+	padding: 0 0 45px;
 	float: left;
 	width: 198px;
 	border-bottom: none;
@@ -207,6 +212,8 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li {
 	float: none;
 	margin-right: 0;
+	border: 1px solid #d3d3d3;
+	border-width: 0 0 1px;
 }
 
 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab {
@@ -218,7 +225,6 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	height: 44px;
 	line-height: 44px;
 	border: none;
-	border-bottom: 1px solid #d3d3d3;
 	font-size: 14px;
 	font-weight: 100;
 	color: #333;
@@ -244,17 +250,26 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	color: #0073a4;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab,
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab:hover {
-	margin: 0;
-	background: #bdbdbd;
-	border-bottom-color: #b1b1b1;
-	color: #fff;
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active {
+	border-color: #b1b1b1;
+}
+
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active {
+	margin-top: -1px;
+	border-width: 1px 0;
+	position: relative;
+}
+
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active:first-child {
+	margin-top: 0;
+	border-top-width: 0;
 }
 
 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab,
 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab:hover {
-	margin-top: 0;
+	margin: 0;
+	background: #bdbdbd;
+	color: #fff;
 }
 
 .fw-backend-side-tabs .fw-options-tabs-contents .fw-options-tabs-list {
@@ -339,7 +354,7 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 }
 
 @media (max-width: 782px) {
-	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li{
+	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li {
 		margin-top: 0;
 	}
 
@@ -457,7 +472,7 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	position: relative;
 	min-height: 68px;
 	border-top: 1px solid #eee;
-	margin: -70px 0 0 198px;
+	margin: -69px 0 0 198px;
 	background: #f7f7f7;
 	overflow: hidden;
 }
@@ -608,17 +623,8 @@ body.rtl .fw-postbox > .inside > .fw-backend-options-last-border-hider {
 .fw-backend-option-design-default > .fw-backend-option-input.width-type-fixed > .fw-inner,
 .fw-backend-option-design-taxonomy > td > .fw-backend-option-input.width-type-fixed > .fw-inner,
 .fw-backend-option-fixed-width {
-	width: 428px;
-	max-width: 100%;
-}
-
-@media (max-width: 782px) {
-	.fw-backend-option-design-default > .fw-backend-option-input.width-type-fixed > .fw-inner,
-	.fw-backend-option-design-taxonomy > td > .fw-backend-option-input.width-type-fixed > .fw-inner,
-	.fw-backend-option-fixed-width {
-		width: 100%;
-		max-width: 428px;
-	}
+	width: 100%;
+	max-width: 428px;
 }
 
 .fw-backend-option-design-default > .fw-backend-option-input.width-type-fixed > .fw-inner,
