@@ -52,6 +52,25 @@
 
 <?php echo fw()->backend->render_options($options, $values); ?>
 
+<div class="form-footer-buttons">
+<!-- This div is required to follow after options in order to have special styles in case options will contain tabs (css adjacent selector + ) -->
+<?php
+	echo fw_html_tag('input', array(
+		'type' => 'submit',
+		'name' => '_fw_save_options',
+		'value' => __('Save Changes', 'fw'),
+		'class' => 'button-primary button-large',
+	));
+	echo ($side_tabs ? '' : ' &nbsp;&nbsp; ');
+	echo fw_html_tag('input', array(
+		'type' => 'submit',
+		'name' => '_fw_reset_options',
+		'value' => __('Reset Options', 'fw'),
+		'class' => 'button-secondary button-large',
+	));
+?>
+</div>
+
 <!-- focus tab -->
 <?php
 $focus_tab_id = trim( FW_Request::POST($focus_tab_input_name, FW_Request::GET($focus_tab_input_name, '')) );

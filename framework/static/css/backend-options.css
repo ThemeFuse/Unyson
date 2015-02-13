@@ -176,9 +176,13 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 
 /* Side tabs */
 
-.fw-backend-side-tabs .fw-options-tabs-first-level {
+form.fw-settings-form.fw-backend-side-tabs {
+	background-color: #fff;
 	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
 	box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.fw-backend-side-tabs .fw-options-tabs-first-level {
 	background:
 	#fff
 	url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAAABCAYAAAAo/lyUAAAAIklEQVQ4T2N8/Pjxf4ZRMBoCoyEwGgKjITAaAqMhMKRDAACcIAOqH7nZlwAAAABJRU5ErkJgggAA') /* #e3e3e3 500x1 */
@@ -225,7 +229,7 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	line-height: 44px;
 	border: none;
 	font-size: 14px;
-	font-weight: 100;
+	font-weight: 400;
 	color: #333;
 	-webkit-box-shadow: none;
 	box-shadow: none;
@@ -265,7 +269,6 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 
 .fw-backend-side-tabs .fw-options-tabs-contents .fw-options-tabs-list ul {
 	padding: 0;
-	margin: 0 0 20px;
 	background: #f7f7f7;
 	border-width: 1px 0;
 	clear: both;
@@ -393,6 +396,10 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 		margin-left: 0 !important;
 	}
 
+	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner {
+		padding-bottom: 0;
+	}
+
 	.fw-backend-side-tabs .fw-options-tabs-contents .fw-options-tabs-list ul {
 		height: auto;
 		border-bottom-width: 0;
@@ -501,6 +508,8 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	line-height: 24px;
 	background: #fff;
 	color: #0074a2;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
 }
 
 .fw-backend-side-tabs .fw-settings-form-header .form-header-buttons .submit-button-save:hover {
@@ -529,9 +538,15 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 	position: relative;
 	min-height: 70px;
 	border-top: 1px solid #e5e5e5;
-	margin: -71px 0 0 198px;
 	background: #f7f7f7;
-	overflow: hidden;
+}
+
+.fw-backend-side-tabs .fw-options-tabs-wrapper + .form-footer-buttons {
+	margin: -71px 0 0 198px;
+}
+
+.fw-backend-side-tabs .fw-backend-option + .form-footer-buttons {
+	margin-top: -1px; /* hide last option border */
 }
 
 .fw-backend-side-tabs .form-footer-buttons .button-primary {
@@ -550,8 +565,8 @@ body.rtl .fw-options-tabs-contents .fw-options-tabs-list ul li:first-child a.nav
 }
 
 @media (max-width: 782px) {
-	.fw-backend-side-tabs .form-footer-buttons {
-		margin-left: 0;
+	.fw-backend-side-tabs .fw-options-tabs-wrapper + .form-footer-buttons {
+		margin: 0;
 	}
 }
 
