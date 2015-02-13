@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.1
-Stable tag: 2.1.22
+Stable tag: 2.1.23
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -86,10 +86,26 @@ Yes; Unyson will work with any theme.
 
 == Changelog ==
 
+= 2.1.23 =
+* Added side tabs styles for Theme Settings page.
+
+    To enable, add in `{theme}/framework-customizations/theme/config.php`:
+
+    ```php
+    $cfg['settings_form_side_tabs'] = true;
+    ```
+
 = 2.1.22 =
-* Theme Settings form ajax submit [#198](https://github.com/ThemeFuse/Unyson/issues/198)
 * Added javascript helper `fw.soleModal()`
+* Added `framework/static/js/fw-form-helpers.js`
 * Minor fixes
+* Theme Settings form ajax submit [#198](https://github.com/ThemeFuse/Unyson/issues/198)
+
+    To disable, add in `{theme}/framework-customizations/theme/config.php`:
+
+    ```php
+    $cfg['settings_form_ajax_submit'] = false;
+    ```
 
 = 2.1.21 =
 * Made the `forms` and `mailer` extensions hidden.
