@@ -14,7 +14,16 @@
 		<div class="fw-col-xs-12 fw-col-sm-6">
 			<h2><?php echo fw()->theme->manifest->get_name() ?>
 				<?php if (fw()->theme->manifest->get('author')): ?>
-					<small><?php _e('by', 'fw') ?> <?php echo fw()->theme->manifest->get('author') ?></small>
+					<?php
+					if (fw()->theme->manifest->get('author_uri')) {
+						echo fw_html_tag('a', array(
+							'href' => fw()->theme->manifest->get('author_uri'),
+							'target' => '_blank'
+						), '<small>'. __('by', 'fw') .' '. fw()->theme->manifest->get('author') .'</small>');
+					} else {
+						echo '<small>'. fw()->theme->manifest->get('author') .'</small>';
+					}
+					?>
 				<?php endif; ?>
 			</h2>
 		</div>
