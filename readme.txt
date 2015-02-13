@@ -87,6 +87,7 @@ Yes; Unyson will work with any theme.
 == Changelog ==
 
 = 2.1.23 =
+* Improved modal sizes *(Set max-width,max-height pixels instead of top,right,bottom,left percents)*
 * Added side tabs styles for Theme Settings page.
 
     To enable, add in `{theme}/framework-customizations/theme/config.php`:
