@@ -847,6 +847,7 @@ final class _FW_Component_Backend
 			$values = fw_get_db_settings_option();
 		}
 
+		$ajax_submit = fw()->theme->get_config('settings_form_ajax_submit');
 		$side_tabs = fw()->theme->get_config('settings_form_side_tabs');
 
 		$data['attr']['class'] = 'fw-settings-form';
@@ -857,16 +858,19 @@ final class _FW_Component_Backend
 
 		$data['submit']['html'] = '<!-- -->'; // is generated in view
 
+		do_action('fw_settings_form_render', array(
+			'ajax_submit' => $ajax_submit,
+			'side_tabs' => $side_tabs,
+		));
+
 		fw_render_view(fw_get_framework_directory('/views/backend-settings-form.php'), array(
 			'options' => $options,
 			'values' => $values,
 			'focus_tab_input_name' => '_focus_tab',
 			'reset_input_name' => '_fw_reset_options',
-			'ajax_submit' => fw()->theme->get_config('settings_form_ajax_submit'),
+			'ajax_submit' => $ajax_submit,
 			'side_tabs' => $side_tabs,
 		), false);
-
-
 
 		return $data;
 	}
