@@ -194,6 +194,14 @@ final class _FW_Component_Backend
 			$this->static_registered = true;
 			return;
 		}
+		/**
+		 * Form style css switch
+		 */		
+		$settings_form_style = fw()->theme->get_config('settings_form_style');
+		if(!empty($settings_form_style)){
+			
+			$settings_form_style = '-' . fw()->theme->get_config('settings_form_style');
+		}
 
 		wp_register_script(
 			'fw-events',
@@ -260,7 +268,7 @@ final class _FW_Component_Backend
 		{
 			wp_register_style(
 				'fw-backend-options',
-				fw_get_framework_directory_uri('/static/css/backend-options.css'),
+				fw_get_framework_directory_uri('/static/css/backend-options'.$settings_form_style.'.css'),
 				array('fw'),
 				fw()->manifest->get_version()
 			);

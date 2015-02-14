@@ -197,7 +197,8 @@ abstract class FW_Option_Type
 					fw()->manifest->get_version(),
 					true
 				);
-
+				wp_enqueue_style( 'fw-font-awesome' );
+				
 				$option_types_static_enqueued = true;
 			}
 		}
