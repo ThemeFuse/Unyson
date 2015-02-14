@@ -9,7 +9,14 @@
 	<div class="fw-options-tabs-list">
 		<ul>
 		<?php foreach ($tabs as $tab_id => &$tab): ?>
-			<li><a href="#fw-options-tab-<?php echo esc_attr($tab_id) ?>" class="nav-tab fw-wp-link" ><?php echo htmlspecialchars($tab['title'], ENT_COMPAT, 'UTF-8') ?></a></li>
+			<li>
+				<a href="#fw-options-tab-<?php echo esc_attr($tab_id) ?>" class="nav-tab fw-wp-link" >
+					<?php if (isset($tab['icon'])) : ?>
+					<i class="<?php echo $tab['icon'] ?>"></i> 
+					<?php endif?>
+					<?php echo htmlspecialchars($tab['title'], ENT_COMPAT, 'UTF-8') ?>
+				</a>
+			</li>
 		<?php endforeach; ?>
 		</ul>
 		<div class="fw-clear"></div>
