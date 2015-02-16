@@ -106,7 +106,17 @@ jQuery(document).ready(function($){
 	fwEvents.on('fw:options:init', function (data) {
 		var $boxes = data.$elements.find('.fw-postbox:not(.fw-postbox-initialized)');
 
-		hideBoxEmptyTitles($boxes);
+		{
+			hideBoxEmptyTitles($boxes);
+
+			/**
+			 * some times the titles are not hidden (don't know why)
+			 * so try to hide second time just to make sure
+			 */
+			setTimeout(function(){
+				hideBoxEmptyTitles($boxes);
+			}, 300);
+		}
 
 		setTimeout(function(){
 			addPostboxToggles($boxes);
