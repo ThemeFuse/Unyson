@@ -19,7 +19,11 @@
 			$option_id, $default_value, $get_original_value
 		);
 
-		if ( is_null( $value ) ) {
+		if (
+			(!is_null($option_id) && is_null($value)) // a specific option_id was requested
+			||
+			(is_null($option_id) && empty($value)) // all options were requested but the db value is empty (this can happen after Reset)
+		) {
 			/**
 			 * Maybe the options was never saved or the given option id does not exist
 			 * Extract the default values from the options array and try to find there the option id
