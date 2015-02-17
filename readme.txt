@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.1
-Stable tag: 2.1.23
+Stable tag: 2.1.24
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,11 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.1.24 =
+* Fixed access denied on Theme Settings and Unyson pages when qTranslate is active
+* Made all boxes open when Theme Settings Side Tabs is active (with default tabs only first box is open)
+* Minor fixes
 
 = 2.1.23 =
 * Improved modal sizes *(Set max-width,max-height pixels instead of top,right,bottom,left percents)*
