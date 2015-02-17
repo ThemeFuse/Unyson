@@ -2518,7 +2518,13 @@ final class _FW_Extensions_Manager
 
 		if (!isset($installed_extensions[$extension_name])) {
 			return new WP_Error($wp_error_id,
-				sprintf(__('Cannot activate the %s extension because it is not installed.', 'fw'), fw_id_to_title($extension_name))
+				sprintf(
+					__('Cannot activate the %s extension because it is not installed. %s', 'fw'),
+					fw_id_to_title($extension_name),
+					fw_html_tag('a', array(
+						'href' => $this->get_link() .'&sub-page=install&extension='. $extension_name
+					),  __('Install', 'fw'))
+				)
 			);
 		}
 
@@ -2559,7 +2565,13 @@ final class _FW_Extensions_Manager
 					foreach ($required_extensions as $required_extension_name => $required_extension_data) {
 						if (!isset($installed_extensions[$required_extension_name])) {
 							return new WP_Error($wp_error_id,
-								sprintf(__('Cannot activate the %s extension because it is not installed.', 'fw'), fw_id_to_title($required_extension_name))
+								sprintf(
+									__('Cannot activate the %s extension because it is not installed. %s', 'fw'),
+									fw_id_to_title($required_extension_name),
+									fw_html_tag('a', array(
+										'href' => $this->get_link() .'&sub-page=install&extension='. $required_extension_name
+									),  __('Install', 'fw'))
+								)
 							);
 						}
 
