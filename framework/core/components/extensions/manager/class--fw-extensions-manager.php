@@ -914,8 +914,6 @@ final class _FW_Extensions_Manager
 						}
 					}
 
-					$skin->set_result(true);
-
 					$install_data = false;
 
 					/**
@@ -1000,6 +998,14 @@ final class _FW_Extensions_Manager
 							);
 						}
 					} while(false);
+
+					if (empty($install_data)) {
+						/**
+						 * All extensions were installed successfully and there is nothing else to install
+						 * (the "while" will exit below)
+						 */
+						$skin->set_result(true);
+					}
 				} while(!empty($install_data));
 
 				/** @var WP_Filesystem_Base $wp_filesystem */
@@ -1034,7 +1040,7 @@ final class _FW_Extensions_Manager
 			}
 		} while(false);
 
-		if (!empty($activate_extensions)) {
+		if ($skin->result && !empty($activate_extensions)) {
 			$db_active_extensions = fw()->extensions->_get_db_active_extensions();
 			$db_active_extensions += $activate_extensions;
 
