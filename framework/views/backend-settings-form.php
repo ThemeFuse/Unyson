@@ -134,13 +134,10 @@ jQuery(function($){
 </script>
 <!-- end: reset warning -->
 
+<?php if ($ajax_submit): ?>
 <!-- ajax submit -->
 <script type="text/javascript">
 	jQuery(function ($) {
-		<?php if (!$ajax_submit): ?>
-		return; // ajax submit is disabled in theme config
-		<?php endif; ?>
-
 		function isReset($submitButton) {
 			return $submitButton.length && $submitButton.attr('name') == '<?php echo esc_js($reset_input_name) ?>';
 		}
@@ -302,3 +299,22 @@ jQuery(function($){
 	});
 </script>
 <!-- end: ajax submit -->
+<?php endif; ?>
+
+<?php if ($side_tabs): ?>
+<!-- open all postboxes -->
+<script type="text/javascript">
+	jQuery(function ($) {
+		var execTimeoutId = 0;
+
+		fwEvents.on('fw:options:init', function(data){
+			// use timeout to be executed after the script from backend-options.js
+			clearTimeout(execTimeoutId);
+			execTimeoutId = setTimeout(function(){
+				// undo not first boxes auto close
+				data.$elements.find('.fw-backend-postboxes > .fw-postbox:not(:first-child)').removeClass('closed');
+			}, 10);
+		});
+	});
+</script>
+<?php endif; ?>
