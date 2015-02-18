@@ -241,23 +241,56 @@ if (is_admin()) {
 			return;
 		}
 
-		echo
-		'<script type="text/javascript">'.
-		'  (function(){'.
-		'    if (typeof jQuery === "undefined") return;'.
-		'    jQuery(function($){'.
-		'      var $container = $("#content .entry-content:first");'.
-		'      if (!$container.length) $container = $(document.body);'.
-		'      $(".fw-flash-messages").prependTo($container);'.
-		'    });'.
-		'  })();'.
-		'</script>'.
-		'<style type="text/css">'.
-		'  .fw-flash-messages .fw-flash-type-error { color: #f00; }'.
-		'  .fw-flash-messages .fw-flash-type-warning { color: #f70; }'.
-		'  .fw-flash-messages .fw-flash-type-success { color: #070; }'.
-		'  .fw-flash-messages .fw-flash-type-info { color: #07f; }'.
-		'</style>';
+		?>
+		<script type="text/javascript">
+			(function(){
+				if (typeof jQuery === "undefined") {
+					return;
+				}
+
+				jQuery(function($){
+					var $container;
+
+					// Try to find content element
+					{
+						var selector, selectors = [
+							'#content .entry-content',
+							'.fw-page-builder-content',
+							'#content',
+							'.content',
+							'#main'
+						];
+
+						while (selector = selectors.shift()) {
+							$container = $(selector +':first')
+
+							if ($container.length) {
+								break;
+							}
+						}
+					}
+
+					if (!$container.length) {
+						// Try to find main page H1 container
+						$container = $('h1:first').parent();
+					}
+
+					if (!$container.length) {
+						// If nothing found, just add to body
+						$container = $(document.body);
+					}
+
+					$(".fw-flash-messages").prependTo($container);
+				});
+			})();
+		</script>
+		<style type="text/css">
+			.fw-flash-messages .fw-flash-type-error { color: #f00; }
+			.fw-flash-messages .fw-flash-type-warning { color: #f70; }
+			.fw-flash-messages .fw-flash-type-success { color: #070; }
+			.fw-flash-messages .fw-flash-type-info { color: #07f; }
+		</style>
+		<?php
 	}
 	add_action('wp_footer', '_action_fw_flash_message_frontend_print', 9999);
 }
