@@ -254,15 +254,17 @@ if (is_admin()) {
 					// Try to find content element
 					{
 						var selector, selectors = [
-							'#content .entry-content',
-							'.fw-page-builder-content',
+							'#main #content',
+							'#content #main',
+							'#main',
 							'#content',
-							'.content',
-							'#main'
+							'#content-container',
+							'#container',
+							'.container:first'
 						];
 
 						while (selector = selectors.shift()) {
-							$container = $(selector +':first')
+							$container = $(selector);
 
 							if ($container.length) {
 								break;
