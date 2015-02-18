@@ -251,7 +251,7 @@ if (is_admin()) {
 				jQuery(function($){
 					var $container;
 
-					// Try to find content element
+					// Try to find the content element
 					{
 						var selector, selectors = [
 							'#main #content',
