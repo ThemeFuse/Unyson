@@ -755,11 +755,11 @@ function fw_prepare_option_value($value) {
 		return $value;
 	}
 
-	if (function_exists('qtrans_use_current_language_if_not_found_use_default_language')) {
+	if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) {
 		if (is_array($value)) {
-			array_walk_recursive($value, 'qtrans_use_current_language_if_not_found_use_default_language');
+			array_walk_recursive($value, 'qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage');
 		} else {
-			$value = qtrans_use_current_language_if_not_found_use_default_language($value);
+			$value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);
 		}
 	}
 
