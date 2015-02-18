@@ -756,11 +756,7 @@ function fw_prepare_option_value($value) {
 	}
 
 	if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) {
-		if (is_array($value)) {
-			array_walk_recursive($value, 'qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage');
-		} else {
-			$value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);
-		}
+		$value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);
 	}
 
 	return $value;
