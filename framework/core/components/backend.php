@@ -602,14 +602,13 @@ final class _FW_Component_Backend
 
 		$old_values = (array)fw_get_db_post_option($post_id);
 
-		$options_values = array_merge(
-			$old_values,
+		fw_set_db_post_option(
+			$post_id,
+			null,
 			fw_get_options_values_from_input(
 				fw()->theme->get_post_options($post->post_type)
 			)
 		);
-
-		fw_set_db_post_option($post_id, null, $options_values);
 
 		do_action('fw_save_post_options', $post_id, $post, $old_values);
 	}
@@ -702,12 +701,12 @@ final class _FW_Component_Backend
 
 		$old_values = (array)fw_get_db_term_option($term_id, $taxonomy);
 
-		fw_set_db_term_option($term_id, $taxonomy, null,
-			array_merge(
-				$old_values,
-				fw_get_options_values_from_input(
-					fw()->theme->get_taxonomy_options($taxonomy)
-				)
+		fw_set_db_term_option(
+			$term_id,
+			$taxonomy,
+			null,
+			fw_get_options_values_from_input(
+				fw()->theme->get_taxonomy_options($taxonomy)
 			)
 		);
 
@@ -918,11 +917,8 @@ final class _FW_Component_Backend
 		} else { // The "Save" button was pressed
 			fw_set_db_settings_option(
 				null,
-				array_merge(
-					$old_values,
-					fw_get_options_values_from_input(
-						fw()->theme->get_settings_options()
-					)
+				fw_get_options_values_from_input(
+					fw()->theme->get_settings_options()
 				)
 			);
 
