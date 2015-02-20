@@ -246,4 +246,16 @@ $extensions = array(
 			),
 		),
 	),
+	'translation' => array(
+		'display'     => true,
+		'parent'      => null,
+		'name'        => __( 'Translation', 'fw' ),
+		'description' => __( 'This extension lets you translate your website in any language or even add multiple languages for your users to change at their will from the front-end.', 'fw' ),
+		'thumbnail'   => $thumbnails_uri . '/translation.jpg',
+		'download'    => array(
+			'github' => array(
+				'user_repo' => $github_account . '/Unyson-Translations-Extension',
+			),
+		),
+	),
 );
