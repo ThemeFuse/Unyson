@@ -78,6 +78,7 @@ If you have a bug report or feature request related to a specific extension, fol
 * [Breadcrumbs](https://github.com/ThemeFuse/Unyson-Breadcrumbs-Extension)
 * [Learning](https://github.com/ThemeFuse/Unyson-Learning-Extension)
 * [Events](https://github.com/ThemeFuse/Unyson-Events-Extension)
+* [Translation](https://github.com/ThemeFuse/Unyson-Translation-Extension)
 * [Update](https://github.com/ThemeFuse/Unyson-Update-Extension)
 * [Analytics](https://github.com/ThemeFuse/Unyson-Analytics-Extension)
 * [Builder](https://github.com/ThemeFuse/Unyson-Builder-Extension)
