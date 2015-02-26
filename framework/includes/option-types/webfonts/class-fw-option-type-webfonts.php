@@ -14,13 +14,13 @@ class FW_Option_Type_Webfonts extends FW_Option_Type
 	 */
 	private $fonts;
 
-	public function dnp_get_google_fonts() {
-		$cache_key = 'dnp_google_fonts';
+	public function fw_get_google_fonts() {
+		$cache_key = 'fw_google_fonts';
 
 		try {
 			return FW_Cache::get($cache_key);
 		} catch (FW_Cache_Not_Found_Exception $e) {
-			$fonts = apply_filters('dnp_google_fonts',
+			$fonts = apply_filters('fw_google_fonts',
 				include( fw_get_framework_directory( '/includes/option-types/'. $this->get_type() . '/static/fonts/google-fonts.php') )
 			);
 
@@ -45,7 +45,7 @@ class FW_Option_Type_Webfonts extends FW_Option_Type
 	{
 		if($this->fonts === null) {
 			$this->fonts = array(
-				'google' => $this->dnp_get_google_fonts()
+				'google' => $this->fw_get_google_fonts()
 			);
 		}
 
@@ -71,9 +71,9 @@ class FW_Option_Type_Webfonts extends FW_Option_Type
 			array('jquery', 'underscore', 'fw', 'fw-selectize'),
 			fw()->manifest->get_version()
 		);
-		$dnp_typography_fonts = $this->get_fonts();
+		$google_fonts = $this->get_fonts();
 		
-		wp_localize_script('fw-option-' . $this->get_type(), 'dnp_typography_fonts', $dnp_typography_fonts);
+		wp_localize_script('fw-option-' . $this->get_type(), 'fw_google_fonts', $google_fonts);
 	}
 
 	

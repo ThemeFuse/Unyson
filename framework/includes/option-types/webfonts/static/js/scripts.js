@@ -1,8 +1,8 @@
-/*global dnp_typography_fonts */
+/*global fw_google_fonts */
 ( function ($) {
 	$(document).ready(function () {
 		var fontsHTML = [];
-		var gfonts = dnp_typography_fonts['google'];
+		var gfonts = fw_google_fonts['google'];
 				
 		_.each(gfonts, function (item) {
 			fontsHTML += '<option value="' + item['family'] + '">' + item['family'] + '</option>';
