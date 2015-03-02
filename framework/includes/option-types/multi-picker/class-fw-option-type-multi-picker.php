@@ -38,18 +38,17 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 	 */
 	protected function _enqueue_static($id, $option, $data)
 	{
-		$css_path = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/css/');
-		$js_path  = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/js/');
+		$uri = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type());
 
 		wp_enqueue_style(
 			'fw-option-type' . $this->get_type(),
-			$css_path . 'multi-picker.css',
+			$uri . '/static/css/multi-picker.css',
 			array(),
 			fw()->manifest->get_version()
 		);
 		wp_enqueue_script(
 			'fw-option-type' . $this->get_type(),
-			$js_path . 'multi-picker.js',
+			$uri . '/static/js/multi-picker.js',
 			array('jquery', 'fw-events'),
 			fw()->manifest->get_version(),
 			true
@@ -91,20 +90,23 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 	private function prepare_option($id, $option)
 	{
 		if (empty($option['picker'])) {
-			// TODO: think of text for error when no picker is set
 			trigger_error(
 				sprintf(__('No \'picker\' key set for multi-picker option: %s', 'fw'), $id),
 				E_USER_ERROR
 			);
 		}
 
-		reset($option['picker']);
-		$picker_key             = key($option['picker']);
-		$picker                 = $option['picker'][$picker_key];
-		$picker_type            = $picker['type'];
-		$supported_picker_types = array('select', 'short-select', 'radio', 'image-picker', 'switch', 'color-palette');
+		{
+			reset($option['picker']);
+			$picker_key             = key($option['picker']);
+			$picker                 = $option['picker'][$picker_key];
+			$picker_type            = $picker['type'];
+		}
+
+		$supported_picker_types = array('select', 'short-select', 'radio', 'image-picker', 'switch',
+			'color-palette' // fixme: this is a temporary hardcode for a ThemeFuse theme option-type, think a way to allow other option-types here
+		);
 		if (!in_array($picker_type, $supported_picker_types)) {
-			// TODO: think of text for error when incorrect picker type is used
 			trigger_error(
 				sprintf(
 					__('Invalid picker type for multi-picker option %s, only pickers of types %s are supported', 'fw'),
@@ -141,24 +143,21 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 		}
 
 		$hide_picker = '';
-		$show_borders  = '';
-
-		//set default value if nothing isset
-//		if (empty($option['controls']['value'])) {
-//			reset($groups);
-//			$option['controls']['value'] = key($groups);
-//		}
+		$show_borders = '';
 
 		if (
-			1 === count($picker_choices)      &&
-			isset($option['hide_picker'])   &&
+			1 === count($picker_choices)
+			&&
+			isset($option['hide_picker'])
+			&&
 			true === $option['hide_picker']
 		) {
-			$hide_picker = 'fw-hidden ';
+			$hide_picker = 'fw-hidden';
 		}
 
 		if (
-			isset($option['show_borders']) &&
+			isset($option['show_borders'])
+			&&
 			true === $option['show_borders']
 		) {
 			$show_borders = 'fw-show-borders';
@@ -188,7 +187,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 				'type'    => 'group',
 				'desc'    => false,
 				'label'   => false,
-				'attr'    => array('class' => $show_borders.' '.$hide_picker . ' picker-group picker-type-' . $picker_type),
+				'attr'    => array('class' => $show_borders .' '. $hide_picker .' picker-group picker-type-'. $picker_type),
 				'options' => array($picker_key => $picker)
 			)
 		);
@@ -201,13 +200,15 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 	 */
 	protected function _get_value_from_input($option, $input_value)
 	{
+		{
+			reset($option['picker']);
+			$picker_key  = key($option['picker']);
+			$picker_type = $option['picker'][$picker_key]['type'];
+			$picker      = $option['picker'][$picker_key];
+		}
+
 		$value = array();
 
-		// picker
-		reset($option['picker']);
-		$picker_key  = key($option['picker']);
-		$picker_type = $option['picker'][$picker_key]['type'];
-		$picker      = $option['picker'][$picker_key];
 		$value[$picker_key] = fw()->backend->option_type($picker_type)->get_value_from_input(
 			$picker,
 			isset($input_value[$picker_key]) ? $input_value[$picker_key] : null
@@ -241,7 +242,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 
 		foreach ($choices as $choice_id => $options) {
 
-			foreach ($options as $option_id => $option) {
+			foreach (fw_extract_only_options($options) as $option_id => $option) {
 				$value[$choice_id][$option_id] = fw()->backend->option_type($option['type'])->get_value_from_input(
 					$option,
 					isset($input_value[$choice_id][$option_id]) ? $input_value[$choice_id][$option_id] : null
