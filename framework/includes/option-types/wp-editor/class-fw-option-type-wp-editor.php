@@ -45,6 +45,10 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			 * string
 			 */
 			'value'         => '',
+			/**
+			 * string
+			 */
+			'size' => 'small' // small, large
 		);
 	}
 
@@ -168,7 +172,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			'data-tmce-extended' => json_encode( $this->get_extended_preset( $option ) ),
 		) );
 
-		echo '<div ' . fw_attr_to_html( $wrapper_attr ) . ' >';
+		echo '<div ' . fw_attr_to_html( $wrapper_attr ) . ' data-width-type="' . $option['size'] . '">';
 
 		$option['editor_css'] .= '<style>#wp-link-wrap{z-index: 160105} #wp-link-backdrop{z-index: 160100} .mce-container.mce-panel.mce-floatpanel.mce-menu, .mce-container.mce-panel.mce-floatpanel.mce-popover, .mce-container.mce-panel.mce-floatpanel.mce-window {z-index: 160105 !important;}</style>';
 
@@ -286,6 +290,14 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 		}
 
 		return $value;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function _get_backend_width_type()
+	{
+		return 'auto';
 	}
 }
 

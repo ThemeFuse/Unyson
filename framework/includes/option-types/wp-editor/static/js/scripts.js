@@ -2,6 +2,18 @@
 
 	var init = function() {
 
+		var width = jQuery(this).data('width-type');
+
+		if (width == 'large') {
+			jQuery(this).parents('.fw-backend-option-input-type-wp-editor')
+				.removeClass('width-type-auto')
+				.addClass('width-type-full');
+		} else {
+			jQuery(this).parents('.fw-backend-option-input-type-wp-editor')
+				.removeClass('width-type-auto')
+				.addClass('width-type-fixed');
+		}
+
 		var $textareaWrapper = $(this),
 			$textarea = $textareaWrapper.find('textarea');
 
