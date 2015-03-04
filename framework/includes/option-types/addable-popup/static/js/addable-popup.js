@@ -14,7 +14,8 @@
 			utils = {
 				modal: new fw.OptionsModal({
 					title: data.title,
-					options: data.options
+					options: data.options,
+					size : data.size
 				}),
 				countItems: function () {
 					return nodes.$itemsWrapper.find('.item:not(.default)').length;

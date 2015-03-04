@@ -508,7 +508,6 @@ fw.getQueryString = function(name) {
 	 * modal.open();
 	 */
 	fw.OptionsModal = Backbone.Model.extend({
-		defaultSize: 'small', // 'large', 'medium', 'small'
 		defaults: {
 			/** Will be transformed to array with json_decode($options, true) and sent to fw()->backend->render_options() */
 			options: [
@@ -529,7 +528,8 @@ fw.getQueryString = function(name) {
 			 * Content html
 			 * @private
 			 */
-			html: ''
+			html: '',
+			size: 'small' // small, medium, large
 		},
 		/**
 		 * Properties created in .initialize():
@@ -602,7 +602,7 @@ fw.getQueryString = function(name) {
 					if (_.indexOf(['large', 'medium', 'small'], size) !== -1) {
 						$modalWrapper.addClass('fw-options-modal-' + size);
 					} else {
-						$modalWrapper.addClass('fw-options-modal-' + modal.defaultSize);
+						$modalWrapper.addClass('fw-options-modal-' + modal.defaults.size);
 					}
 
 					if (stackSize) {
