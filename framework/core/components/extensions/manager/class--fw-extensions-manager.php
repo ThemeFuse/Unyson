@@ -1445,11 +1445,11 @@ final class _FW_Extensions_Manager
 	 * After refresh they should be active, if all dependencies will be met and if parent-extension::_init() will not return false
 	 * @param array $extensions {'ext_1' => array(), 'ext_2' => array(), ...}
 	 * @param bool $cancel_on_error
-	 *		false: return {'ext_1' => true|WP_Error, 'ext_2' => true|WP_Error, ...}
-	 *		true:  return first WP_Error or true on success
+	 *        false: return {'ext_1' => true|WP_Error, 'ext_2' => true|WP_Error, ...}
+	 *        true:  return first WP_Error or true on success
 	 * @return WP_Error|bool|array
-	 *		 true:  when all extensions succeeded
-	 *		 array: when some/all failed
+	 *         true:  when all extensions succeeded
+	 *         array: when some/all failed
 	 */
 	public function activate_extensions(array $extensions, $cancel_on_error = false)
 	{
@@ -1527,13 +1527,11 @@ final class _FW_Extensions_Manager
 
 		update_option(
 			fw()->extensions->_get_active_extensions_db_option_name(),
-			array_merge(fw()->extensions->_get_db_active_extensions(), $extensions)
+			array_merge(fw()->extensions->_get_db_active_extensions(), $extensions_for_activation)
 		);
 
-		foreach ($result as $extension_name => $extension_result) {
-			if ($extension_result === true) {
-				do_action('fw_extension_activation', $extension_name);
-			}
+		foreach ($extensions_for_activation as $extension_name => $not_used_var) {
+			do_action('fw_extension_activation', $extension_name);
 		}
 
 		if ($has_errors) {
@@ -1598,77 +1596,155 @@ final class _FW_Extensions_Manager
 				break;
 			}
 
-			/**
-			 * {extension_name => [parent_name, sub_parent_name, ..., extension_name]}
-			 */
-			$extensions_parents = array();
+			$deactivation_result = $this->deactivate_extensions(
+				array_fill_keys(explode(',', $_GET['extension']), array())
+			);
 
-			foreach (explode(',', $_GET['extension']) as $extension_name) {
-				if (!isset($installed_extensions[$extension_name])) {
-					$error = sprintf(__( 'Extension "%s" does not exist.' , 'fw' ), $this->get_extension_title($extension_name));
-					break 2;
-				}
+			if (is_wp_error($deactivation_result)) {
+				$error = $deactivation_result->get_error_message();
+			} elseif (is_array($deactivation_result)) {
+				$error = array();
 
-				{
-					$extensions_parents[$extension_name] = array($extension_name);
-
-					$current_parent = $extension_name;
-					while ($current_parent = $installed_extensions[$current_parent]['parent']) {
-						$extensions_parents[$extension_name][] = $current_parent;
+				foreach ($deactivation_result as $extension_name => $extension_result) {
+					if (is_wp_error($extension_result)) {
+						$error[] = $extension_result->get_error_message();
 					}
-
-					$extensions_parents[$extension_name] = array_reverse($extensions_parents[$extension_name]);
 				}
+
+				$error = '<ul><li>'. implode('</li><li>', $error) .'</li></ul>';
 			}
 		} while(false);
 
-		$flash_id = 'fw_extensions_activate_page';
-
 		if ($error) {
-			FW_Flash_Messages::add($flash_id, $error, 'error');
-			$this->js_redirect();
-			return;
+			FW_Flash_Messages::add(
+				'fw_extensions_activate_page',
+				$error,
+				'error'
+			);
 		}
 
-		$db_active_extensions = fw()->extensions->_get_db_active_extensions();
+		$this->js_redirect();
+	}
 
-		$deactivated_extensions = array();
+	/**
+	 * Remove extensions from active extensions list in database
+	 * After refresh they will be inactive
+	 * @param array $extensions {'ext_1' => array(), 'ext_2' => array(), ...}
+	 * @param bool $cancel_on_error
+	 *        false: return {'ext_1' => true|WP_Error, 'ext_2' => true|WP_Error, ...}
+	 *        true:  return first WP_Error or true on success
+	 * @return WP_Error|bool|array
+	 *         true:  when all extensions succeeded
+	 *         array: when some/all failed
+	 */
+	public function deactivate_extensions(array $extensions, $cancel_on_error = false)
+	{
+		if (!$this->can_activate()) {
+			return new WP_Error(
+				'access_denied',
+				__('You have no permissions to deactivate extensions', 'fw')
+			);
+		}
 
-		{
-			// add sub-extensions for deactivation
-			foreach ($extensions_parents as $extension_name => $extension_parents) {
-				unset($db_active_extensions[$extension_name]);
-				$deactivated_extensions[$extension_name] = array();
+		if (empty($extensions)) {
+			return new WP_Error(
+				'no_extensions',
+				__('No extensions provided', 'fw')
+			);
+		}
 
-				foreach ($this->collect_sub_extensions($extension_name, $installed_extensions) as $sub_extension_name => $sub_extension_data) {
-					unset($db_active_extensions[ $sub_extension_name ]);
-					$deactivated_extensions[ $sub_extension_name ] = array();
+		$installed_extensions = $this->get_installed_extensions();
+
+		$result = $extensions_for_deactivation = array();
+		$has_errors = false;
+
+		foreach ($extensions as $extension_name => $not_used_var) {
+			if (!isset($installed_extensions[$extension_name])) {
+				$result[$extension_name] = new WP_Error(
+					'extension_not_installed',
+					sprintf(__( 'Extension "%s" does not exist.' , 'fw' ), $this->get_extension_title($extension_name))
+				);
+				$has_errors = true;
+
+				if ($cancel_on_error) {
+					break;
+				} else {
+					continue;
 				}
 			}
 
-			// add extensions that requires deactivated extensions
-			{
-				$this->collect_extensions_that_requires($deactivated_extensions, $deactivated_extensions);
+			$current_deactivating_extensions = array(
+				$extension_name => array()
+			);
+
+			// add sub-extensions for deactivation
+			foreach ($this->collect_sub_extensions($extension_name, $installed_extensions) as $sub_extension_name => $sub_extension_data) {
+				$current_deactivating_extensions[ $sub_extension_name ] = array();
 			}
 
-			// add not used extensions for deactivation
-			{
-				$not_used_extensions = array_fill_keys(array_keys(array_diff_key(
-					$installed_extensions,
-					$this->get_used_extensions($deactivated_extensions, array_keys(fw()->extensions->get_all()))
-				)), array());
+			// add extensions that requires deactivated extensions
+			$this->collect_extensions_that_requires($current_deactivating_extensions, $current_deactivating_extensions);
 
-				$deactivated_extensions = array_merge($deactivated_extensions, $not_used_extensions);
-				$db_active_extensions = array_diff_key($db_active_extensions, $not_used_extensions);
+			$extensions_for_deactivation = array_merge(
+				$extensions_for_deactivation,
+				$current_deactivating_extensions
+			);
+
+			unset($current_deactivating_extensions);
+
+			$result[$extension_name] = true;
+		}
+
+		if (
+			$cancel_on_error
+			&&
+			$has_errors
+		) {
+			if (
+				($last_result = end($result))
+				&&
+				is_wp_error($last_result)
+			) {
+				return $last_result;
+			} else {
+				// this should not happen, but just to be sure (for the future, if the code above will be changed)
+				return new WP_Error(
+					'deactivation_failed',
+					_n('Cannot deactivate extension', 'Cannot activate extensions', count($extensions), 'fw')
+				);
 			}
 		}
 
-		update_option(
-			fw()->extensions->_get_active_extensions_db_option_name(),
-			$db_active_extensions
+		// add not used extensions for deactivation
+		$extensions_for_deactivation = array_merge($extensions_for_deactivation,
+			array_fill_keys(
+				array_keys(
+					array_diff_key(
+						$installed_extensions,
+						$this->get_used_extensions($extensions_for_deactivation, array_keys(fw()->extensions->get_all()))
+					)
+				),
+				array()
+			)
 		);
 
-		$this->js_redirect();
+		update_option(
+			fw()->extensions->_get_active_extensions_db_option_name(),
+			array_diff_key(
+				fw()->extensions->_get_db_active_extensions(),
+				$extensions_for_deactivation
+			)
+		);
+
+		foreach ($extensions_for_deactivation as $extension_name => $not_used_var) {
+			do_action('fw_extension_deactivation', $extension_name);
+		}
+
+		if ($has_errors) {
+			return $result;
+		} else {
+			return true;
+		}
 	}
 
 	/**
