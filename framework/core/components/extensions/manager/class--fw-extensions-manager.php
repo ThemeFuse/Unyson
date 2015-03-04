@@ -70,7 +70,7 @@ final class _FW_Extensions_Manager
 	 * - save extension settings options
 	 * @return bool
 	 */
-	private function can_activate()
+	public function can_activate()
 	{
 		static $can_activate = null;
 
@@ -97,7 +97,7 @@ final class _FW_Extensions_Manager
 	 * - delete extensions
 	 * @return bool
 	 */
-	private function can_install()
+	public function can_install()
 	{
 		static $can_install = null;
 
@@ -1380,7 +1380,7 @@ final class _FW_Extensions_Manager
 					'type'  => 'html-full',
 					'html'  => $this->get_markdown_parser()->text(
 						fw_render_view($docs_path, array())
-					)
+					),
 				),
 			))
 		);
@@ -1388,9 +1388,6 @@ final class _FW_Extensions_Manager
 
 	private function display_activate_page()
 	{
-		$installed_extensions = $this->get_installed_extensions();
-		$db_active_extensions = fw()->extensions->_get_db_active_extensions();
-
 		$error = '';
 
 		do {
@@ -1411,42 +1408,140 @@ final class _FW_Extensions_Manager
 				break;
 			}
 
-			$extensions = array();
+            $activation_result = $this->activate_extensions(
+                array_fill_keys(explode(',', $_GET['extension']), array())
+            );
 
-			foreach (explode(',', $_GET['extension']) as $extension_name) {
-				if (!isset($installed_extensions[$extension_name])) {
-					$error = sprintf(__('Extension "%s" does not exist.', 'fw'), $this->get_extension_title($extension_name));
-					break 2;
-				}
+            if (is_wp_error($activation_result)) {
+                $error = $activation_result->get_error_message();
+            } elseif (is_array($activation_result)) {
+                $error = array();
 
-				$collected = $this->get_extensions_for_activation($extension_name);
+                foreach ($activation_result as $extension_name => $extension_result) {
+                    if (is_wp_error($extension_result)) {
+                        $error[] = $extension_result->get_error_message();
+                    }
+                }
 
-				if (is_wp_error($collected)) {
-					$error = $collected->get_error_message();
-					break 2;
-				}
-
-				$extensions = array_merge($extensions, $collected);
-			}
-
-			$db_active_extensions = array_merge($db_active_extensions, $extensions);
+                $error = '<ul><li>'. implode('</li><li>', $error) .'</li></ul>';
+            }
 		} while(false);
 
-		$flash_id = 'fw_extensions_activate_page';
-
 		if ($error) {
-			FW_Flash_Messages::add($flash_id, $error, 'error');
+			FW_Flash_Messages::add(
+                'fw_extensions_activate_page',
+                $error,
+                'error'
+            );
 			$this->js_redirect();
 			return;
 		}
 
-		update_option(
-			fw()->extensions->_get_active_extensions_db_option_name(),
-			$db_active_extensions
-		);
-
 		$this->js_redirect();
 	}
+
+    /**
+     * Add extensions to active extensions list in database
+     * After refresh they should be active, if all dependencies will be met and if parent-extension::_init() will not return false
+     * @param array $extensions {'ext_1' => array(), 'ext_2' => array(), ...}
+     * @param bool $cancel_on_error
+     *        false: return {'ext_1' => true|WP_Error, 'ext_2' => true|WP_Error, ...}
+     *        true:  return first WP_Error or true on success
+     * @return WP_Error|bool|array
+     *         true:  when all extensions succeeded
+     *         array: when some/all failed
+     */
+    public function activate_extensions(array $extensions, $cancel_on_error = false)
+    {
+        if (!$this->can_activate()) {
+            return new WP_Error(
+                'access_denied',
+                __('You have no permissions to activate extensions', 'fw')
+            );
+        }
+
+        if (empty($extensions)) {
+            return new WP_Error(
+                'no_extensions',
+                __('No extensions provided', 'fw')
+            );
+        }
+
+        $installed_extensions = $this->get_installed_extensions();
+
+        $result = $extensions_for_activation = array();
+        $has_errors = false;
+
+        foreach ($extensions as $extension_name => $not_used_var) {
+            if (!isset($installed_extensions[$extension_name])) {
+                $result[$extension_name] = new WP_Error(
+                    'extension_not_installed',
+                    sprintf(__('Extension "%s" does not exist.', 'fw'), $this->get_extension_title($extension_name))
+                );
+                $has_errors = true;
+
+                if ($cancel_on_error) {
+                    break;
+                } else {
+                    continue;
+                }
+            }
+
+            $collected = $this->get_extensions_for_activation($extension_name);
+
+            if (is_wp_error($collected)) {
+                $result[$extension_name] = $collected;
+                $has_errors = true;
+
+                if ($cancel_on_error) {
+                    break;
+                } else {
+                    continue;
+                }
+            }
+
+            $extensions_for_activation = array_merge($extensions_for_activation, $collected);
+
+            $result[$extension_name] = true;
+        }
+
+        if (
+            $cancel_on_error
+            &&
+            $has_errors
+        ) {
+            if (
+                ($last_result = end($result))
+                &&
+                is_wp_error($last_result)
+            ) {
+                return $last_result;
+            } else {
+                // this should not happen, but just to be sure (for the future, if the code above will be changed)
+                return new WP_Error(
+                    'activation_failed',
+                    _n('Cannot activate extension', 'Cannot activate extensions', count($extensions), 'fw')
+                );
+            }
+        }
+
+        update_option(
+            fw()->extensions->_get_active_extensions_db_option_name(),
+            array_merge(fw()->extensions->_get_db_active_extensions(), $extensions)
+        );
+
+        foreach ($result as $extension_name => $extension_result) {
+            if ($extension_result === true) {
+                do_action('fw_extension_activation', $extension_name);
+            }
+        }
+
+        if ($has_errors) {
+            return $result;
+        } else {
+            return true;
+        }
+    }
 
 	private function collect_sub_extensions($ext_name, &$installed_extensions)
 	{
@@ -1579,6 +1674,7 @@ final class _FW_Extensions_Manager
 	/**
 	 * @param array $data
 	 * @return array
+     * @internal
 	 */
 	public function _extension_settings_form_render($data)
 	{
@@ -1620,6 +1716,7 @@ final class _FW_Extensions_Manager
 	/**
 	 * @param array $errors
 	 * @return array
+     * @internal
 	 */
 	public function _extension_settings_form_validate($errors)
 	{
@@ -1648,6 +1745,7 @@ final class _FW_Extensions_Manager
 	/**
 	 * @param array $data
 	 * @return array
+     * @internal
 	 */
 	public function _extension_settings_form_save($data)
 	{
@@ -2157,6 +2255,11 @@ final class _FW_Extensions_Manager
 		return $supported_extensions;
 	}
 
+    /**
+     * @param $actions
+     * @return array
+     * @internal
+     */
 	public function _filter_plugin_action_list($actions)
 	{
 		return array_merge(
@@ -2282,7 +2385,7 @@ final class _FW_Extensions_Manager
 		$this->activate_hidden_standalone_extensions();
 	}
 
-	private function get_extension_title($extension_name)
+	public function get_extension_title($extension_name)
 	{
 		$installed_extensions = $this->get_installed_extensions();
 
@@ -2526,7 +2629,7 @@ final class _FW_Extensions_Manager
 			return new WP_Error($wp_error_id,
 				sprintf(
 					__('Cannot activate the %s extension because it is not installed. %s', 'fw'),
-					fw_id_to_title($extension_name),
+					$this->get_extension_title($extension_name),
 					fw_html_tag('a', array(
 						'href' => $this->get_link() .'&sub-page=install&extension='. $extension_name
 					),  __('Install', 'fw'))
@@ -2573,7 +2676,7 @@ final class _FW_Extensions_Manager
 							return new WP_Error($wp_error_id,
 								sprintf(
 									__('Cannot activate the %s extension because it is not installed. %s', 'fw'),
-									fw_id_to_title($required_extension_name),
+									$this->get_extension_title($required_extension_name),
 									fw_html_tag('a', array(
 										'href' => $this->get_link() .'&sub-page=install&extension='. $required_extension_name
 									),  __('Install', 'fw'))
