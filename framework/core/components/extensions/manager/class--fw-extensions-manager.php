@@ -538,10 +538,10 @@ final class _FW_Extensions_Manager
 		}
 
 		$data = array(
-			'title'            => fw()->manifest->get_name(),
-			'capability'       => $capability,
-			'slug'             => $this->get_page_slug(),
-			'content_callback' => array($this, '_display_page'),
+			'title'             => fw()->manifest->get_name(),
+			'capability'        => $capability,
+			'slug'              => $this->get_page_slug(),
+			'content_callback'  => array($this, '_display_page'),
 		);
 
 		/**
@@ -1408,31 +1408,31 @@ final class _FW_Extensions_Manager
 				break;
 			}
 
-            $activation_result = $this->activate_extensions(
-                array_fill_keys(explode(',', $_GET['extension']), array())
-            );
+			$activation_result = $this->activate_extensions(
+				array_fill_keys(explode(',', $_GET['extension']), array())
+			);
 
-            if (is_wp_error($activation_result)) {
-                $error = $activation_result->get_error_message();
-            } elseif (is_array($activation_result)) {
-                $error = array();
+			if (is_wp_error($activation_result)) {
+				$error = $activation_result->get_error_message();
+			} elseif (is_array($activation_result)) {
+				$error = array();
 
-                foreach ($activation_result as $extension_name => $extension_result) {
-                    if (is_wp_error($extension_result)) {
-                        $error[] = $extension_result->get_error_message();
-                    }
-                }
+				foreach ($activation_result as $extension_name => $extension_result) {
+					if (is_wp_error($extension_result)) {
+						$error[] = $extension_result->get_error_message();
+					}
+				}
 
-                $error = '<ul><li>'. implode('</li><li>', $error) .'</li></ul>';
-            }
+				$error = '<ul><li>'. implode('</li><li>', $error) .'</li></ul>';
+			}
 		} while(false);
 
 		if ($error) {
 			FW_Flash_Messages::add(
-                'fw_extensions_activate_page',
-                $error,
-                'error'
-            );
+				'fw_extensions_activate_page',
+				$error,
+				'error'
+			);
 			$this->js_redirect();
 			return;
 		}
@@ -1440,108 +1440,108 @@ final class _FW_Extensions_Manager
 		$this->js_redirect();
 	}
 
-    /**
-     * Add extensions to active extensions list in database
-     * After refresh they should be active, if all dependencies will be met and if parent-extension::_init() will not return false
-     * @param array $extensions {'ext_1' => array(), 'ext_2' => array(), ...}
-     * @param bool $cancel_on_error
-     *        false: return {'ext_1' => true|WP_Error, 'ext_2' => true|WP_Error, ...}
-     *        true:  return first WP_Error or true on success
-     * @return WP_Error|bool|array
-     *         true:  when all extensions succeeded
-     *         array: when some/all failed
-     */
-    public function activate_extensions(array $extensions, $cancel_on_error = false)
-    {
-        if (!$this->can_activate()) {
-            return new WP_Error(
-                'access_denied',
-                __('You have no permissions to activate extensions', 'fw')
-            );
-        }
+	/**
+	 * Add extensions to active extensions list in database
+	 * After refresh they should be active, if all dependencies will be met and if parent-extension::_init() will not return false
+	 * @param array $extensions {'ext_1' => array(), 'ext_2' => array(), ...}
+	 * @param bool $cancel_on_error
+	 *		false: return {'ext_1' => true|WP_Error, 'ext_2' => true|WP_Error, ...}
+	 *		true:  return first WP_Error or true on success
+	 * @return WP_Error|bool|array
+	 *		 true:  when all extensions succeeded
+	 *		 array: when some/all failed
+	 */
+	public function activate_extensions(array $extensions, $cancel_on_error = false)
+	{
+		if (!$this->can_activate()) {
+			return new WP_Error(
+				'access_denied',
+				__('You have no permissions to activate extensions', 'fw')
+			);
+		}
 
-        if (empty($extensions)) {
-            return new WP_Error(
-                'no_extensions',
-                __('No extensions provided', 'fw')
-            );
-        }
+		if (empty($extensions)) {
+			return new WP_Error(
+				'no_extensions',
+				__('No extensions provided', 'fw')
+			);
+		}
 
-        $installed_extensions = $this->get_installed_extensions();
+		$installed_extensions = $this->get_installed_extensions();
 
-        $result = $extensions_for_activation = array();
-        $has_errors = false;
+		$result = $extensions_for_activation = array();
+		$has_errors = false;
 
-        foreach ($extensions as $extension_name => $not_used_var) {
-            if (!isset($installed_extensions[$extension_name])) {
-                $result[$extension_name] = new WP_Error(
-                    'extension_not_installed',
-                    sprintf(__('Extension "%s" does not exist.', 'fw'), $this->get_extension_title($extension_name))
-                );
-                $has_errors = true;
+		foreach ($extensions as $extension_name => $not_used_var) {
+			if (!isset($installed_extensions[$extension_name])) {
+				$result[$extension_name] = new WP_Error(
+					'extension_not_installed',
+					sprintf(__('Extension "%s" does not exist.', 'fw'), $this->get_extension_title($extension_name))
+				);
+				$has_errors = true;
 
-                if ($cancel_on_error) {
-                    break;
-                } else {
-                    continue;
-                }
-            }
+				if ($cancel_on_error) {
+					break;
+				} else {
+					continue;
+				}
+			}
 
-            $collected = $this->get_extensions_for_activation($extension_name);
+			$collected = $this->get_extensions_for_activation($extension_name);
 
-            if (is_wp_error($collected)) {
-                $result[$extension_name] = $collected;
-                $has_errors = true;
+			if (is_wp_error($collected)) {
+				$result[$extension_name] = $collected;
+				$has_errors = true;
 
-                if ($cancel_on_error) {
-                    break;
-                } else {
-                    continue;
-                }
-            }
+				if ($cancel_on_error) {
+					break;
+				} else {
+					continue;
+				}
+			}
 
-            $extensions_for_activation = array_merge($extensions_for_activation, $collected);
+			$extensions_for_activation = array_merge($extensions_for_activation, $collected);
 
-            $result[$extension_name] = true;
-        }
+			$result[$extension_name] = true;
+		}
 
-        if (
-            $cancel_on_error
-            &&
-            $has_errors
-        ) {
-            if (
-                ($last_result = end($result))
-                &&
-                is_wp_error($last_result)
-            ) {
-                return $last_result;
-            } else {
-                // this should not happen, but just to be sure (for the future, if the code above will be changed)
-                return new WP_Error(
-                    'activation_failed',
-                    _n('Cannot activate extension', 'Cannot activate extensions', count($extensions), 'fw')
-                );
-            }
-        }
+		if (
+			$cancel_on_error
+			&&
+			$has_errors
+		) {
+			if (
+				($last_result = end($result))
+				&&
+				is_wp_error($last_result)
+			) {
+				return $last_result;
+			} else {
+				// this should not happen, but just to be sure (for the future, if the code above will be changed)
+				return new WP_Error(
+					'activation_failed',
+					_n('Cannot activate extension', 'Cannot activate extensions', count($extensions), 'fw')
+				);
+			}
+		}
 
-        update_option(
-            fw()->extensions->_get_active_extensions_db_option_name(),
-            array_merge(fw()->extensions->_get_db_active_extensions(), $extensions)
-        );
+		update_option(
+			fw()->extensions->_get_active_extensions_db_option_name(),
+			array_merge(fw()->extensions->_get_db_active_extensions(), $extensions)
+		);
 
-        foreach ($result as $extension_name => $extension_result) {
-            if ($extension_result === true) {
-                do_action('fw_extension_activation', $extension_name);
-            }
-        }
+		foreach ($result as $extension_name => $extension_result) {
+			if ($extension_result === true) {
+				do_action('fw_extension_activation', $extension_name);
+			}
+		}
 
-        if ($has_errors) {
-            return $result;
-        } else {
-            return true;
-        }
-    }
+		if ($has_errors) {
+			return $result;
+		} else {
+			return true;
+		}
+	}
 
 	private function collect_sub_extensions($ext_name, &$installed_extensions)
 	{
@@ -1674,7 +1674,7 @@ final class _FW_Extensions_Manager
 	/**
 	 * @param array $data
 	 * @return array
-     * @internal
+	 * @internal
 	 */
 	public function _extension_settings_form_render($data)
 	{
@@ -1716,7 +1716,7 @@ final class _FW_Extensions_Manager
 	/**
 	 * @param array $errors
 	 * @return array
-     * @internal
+	 * @internal
 	 */
 	public function _extension_settings_form_validate($errors)
 	{
@@ -1745,7 +1745,7 @@ final class _FW_Extensions_Manager
 	/**
 	 * @param array $data
 	 * @return array
-     * @internal
+	 * @internal
 	 */
 	public function _extension_settings_form_save($data)
 	{
@@ -2255,11 +2255,11 @@ final class _FW_Extensions_Manager
 		return $supported_extensions;
 	}
 
-    /**
-     * @param $actions
-     * @return array
-     * @internal
-     */
+	/**
+	 * @param $actions
+	 * @return array
+	 * @internal
+	 */
 	public function _filter_plugin_action_list($actions)
 	{
 		return array_merge(
