@@ -44,7 +44,9 @@ A good bug report includes full details to easily understand the issue you are h
 
 ## Documentation
 
-Unyson's documentation is available on http://manual.unyson.io/
+Unyson's documentation is available on http://manual.unyson.io/.
+
+You can help us improve the documentation by contributing to this [Github repository](https://github.com/ThemeFuse/Unyson-Documentation).
 
 ## Copyright and license
 
