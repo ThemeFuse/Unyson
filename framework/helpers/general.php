@@ -725,6 +725,11 @@ function fw_get_options_values_from_input(array $options, $input_array = null) {
 			$option,
 			isset($input_array[$id]) ? $input_array[$id] : null
 		);
+
+		if (is_null($values[$id])) {
+			// do not save null values
+			unset($values[$id]);
+		}
 	}
 
 	return $values;
