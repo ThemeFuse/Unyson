@@ -475,7 +475,7 @@ final class _FW_Extensions_Manager
 						do_action('fw_extensions_after_activation', $succeeded_extensions);
 					}
 					if (!empty($failed_extensions)) {
-						do_action('fw_extensions_activation_failed', $extension_name);
+						do_action('fw_extensions_activation_failed', $failed_extensions);
 					}
 				}
 			}
@@ -503,7 +503,7 @@ final class _FW_Extensions_Manager
 						do_action('fw_extensions_after_deactivation', $succeeded_extensions);
 					}
 					if (!empty($failed_extensions)) {
-						do_action('fw_extensions_deactivation_failed', $extension_name);
+						do_action('fw_extensions_deactivation_failed', $failed_extensions);
 					}
 				}
 			}
