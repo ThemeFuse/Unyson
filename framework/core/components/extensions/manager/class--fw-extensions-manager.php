@@ -452,24 +452,27 @@ final class _FW_Extensions_Manager
 		));
 
 		if (is_admin() && $this->can_activate()) {
-			/**
-			 * Fire the 'fw_extensions_after_activation' action
-			 */
-			{
-				$db_wp_option_name = 'fw_activated_extensions';
+			$db_wp_option_name = 'fw_extensions_activation';
 
-				if ($db_wp_option_value = get_option($db_wp_option_name, array())) {
+			if ($db_wp_option_value = get_option($db_wp_option_name, array())) {
+				$db_wp_option_value = array_merge(array(
+					'activated' => array(),
+					'deactivated' => array(),
+				), $db_wp_option_value);
+
+				/**
+				 * Fire the 'fw_extensions_after_activation' action
+				 */
+				if ($db_wp_option_value['activated']) {
 					$succeeded_extensions = $failed_extensions = array();
 
-					foreach ($db_wp_option_value as $extension_name => $not_used_var) {
+					foreach ($db_wp_option_value['activated'] as $extension_name => $not_used_var) {
 						if (fw_ext($extension_name)) {
 							$succeeded_extensions[$extension_name] = array();
 						} else {
 							$failed_extensions[$extension_name] = array();
 						}
 					}
-
-					delete_option($db_wp_option_name);
 
 					if (!empty($succeeded_extensions)) {
 						do_action('fw_extensions_after_activation', $succeeded_extensions);
@@ -478,26 +481,20 @@ final class _FW_Extensions_Manager
 						do_action('fw_extensions_activation_failed', $failed_extensions);
 					}
 				}
-			}
 
-			/**
-			 * Fire the 'fw_extensions_after_deactivation' action
-			 */
-			{
-				$db_wp_option_name = 'fw_deactivated_extensions';
-
-				if ($db_wp_option_value = get_option($db_wp_option_name, array())) {
+				/**
+				 * Fire the 'fw_extensions_after_deactivation' action
+				 */
+				if ($db_wp_option_value['deactivated']) {
 					$succeeded_extensions = $failed_extensions = array();
 
-					foreach ($db_wp_option_value as $extension_name => $not_used_var) {
+					foreach ($db_wp_option_value['deactivated'] as $extension_name => $not_used_var) {
 						if (!fw_ext($extension_name)) {
 							$succeeded_extensions[$extension_name] = array();
 						} else {
 							$failed_extensions[$extension_name] = array();
 						}
 					}
-
-					delete_option($db_wp_option_name);
 
 					if (!empty($succeeded_extensions)) {
 						do_action('fw_extensions_after_deactivation', $succeeded_extensions);
@@ -506,6 +503,8 @@ final class _FW_Extensions_Manager
 						do_action('fw_extensions_deactivation_failed', $failed_extensions);
 					}
 				}
+
+				delete_option($db_wp_option_name);
 			}
 		}
 	}
@@ -1118,6 +1117,108 @@ final class _FW_Extensions_Manager
 		$skin->footer();
 	}
 
+	/**
+	 * Download (and activate) extensions
+	 * After refresh they should be active, if all dependencies will be met and if parent-extension::_init() will not return false
+	 * @param array $extensions {'ext_1' => array(), 'ext_2' => array(), ...}
+	 * @param array $opts
+	 * @return WP_Error|bool|array
+	 *         true:  when all extensions succeeded
+	 *         array: when some/all failed
+	 */
+	public function install_extensions(array $extensions, $opts = array())
+	{
+		{
+			$opts = array_merge(array(
+				/**
+				 * @type bool
+				 * false: return {'ext_1' => true|WP_Error, 'ext_2' => true|WP_Error, ...}
+				 * true:  return first WP_Error or true on success
+				 */
+				'cancel_on_error' => false,
+				/**
+				 * @type bool todo: use it
+				 */
+				'activate' => false,
+				/**
+				 * @type bool|callable todo: use it
+				 */
+				'verbose' => false,
+			), $opts);
+
+			$cancel_on_error = $opts['cancel_on_error'];
+
+			unset($opts);
+		}
+
+		if (!$this->can_install()) {
+			return new WP_Error(
+				'access_denied',
+				__('You have no permissions to install extensions', 'fw')
+			);
+		}
+
+		if (empty($extensions)) {
+			return new WP_Error(
+				'no_extensions',
+				__('No extensions provided', 'fw')
+			);
+		}
+
+		$installed_extensions = $this->get_installed_extensions();
+
+		$result = array();
+		$has_errors = false;
+
+		foreach ($extensions as $extension_name => $not_used_var) {
+			if (isset($installed_extensions[$extension_name])) {
+				$result[$extension_name] = new WP_Error(
+					'extension_installed',
+					sprintf(__('Extension "%s" is already installed.', 'fw'), $this->get_extension_title($extension_name))
+				);
+				$has_errors = true;
+
+				if ($cancel_on_error) {
+					break;
+				} else {
+					continue;
+				}
+			}
+
+			// ...
+
+			$result[$extension_name] = true;
+		}
+
+		if (
+			$cancel_on_error
+			&&
+			$has_errors
+		) {
+			if (
+				($last_result = end($result))
+				&&
+				is_wp_error($last_result)
+			) {
+				return $last_result;
+			} else {
+				// this should not happen, but just to be sure (for the future, if the code above will be changed)
+				return new WP_Error(
+					'installation_failed',
+					_n('Cannot install extension', 'Cannot install extensions', count($extensions), 'fw')
+				);
+			}
+		}
+
+		do_action('fw_extensions_install', $result);
+
+		if ($has_errors) {
+			return $result;
+		} else {
+			return true;
+		}
+	}
+
 	private function display_delete_page()
 	{
 		$flash_id = 'fw_extensions_delete';
@@ -1598,14 +1699,22 @@ final class _FW_Extensions_Manager
 		 * Prepare db wp option used to fire the 'fw_extensions_after_activation' action on next refresh
 		 */
 		{
-			$db_wp_option_name = 'fw_activated_extensions';
-			$db_wp_option_value = get_option($db_wp_option_name, array());
+			$db_wp_option_name = 'fw_extensions_activation';
+			$db_wp_option_value = get_option($db_wp_option_name, array(
+				'activated' => array(),
+				'deactivated' => array(),
+			));
 
 			/**
 			 * Keep adding to the existing value instead of resetting it on each method call
 			 * in case the method will be called multiple times
 			 */
-			$db_wp_option_value = array_merge($db_wp_option_value, $extensions_for_activation);
+			$db_wp_option_value['activated'] = array_merge($db_wp_option_value['activated'], $extensions_for_activation);
+
+			/**
+			 * Remove activated extensions from deactivated
+			 */
+			$db_wp_option_value['deactivated'] = array_diff_key($db_wp_option_value['deactivated'], $db_wp_option_value['activated']);
 
 			update_option($db_wp_option_name, $db_wp_option_value);
 		}
@@ -1825,14 +1934,22 @@ final class _FW_Extensions_Manager
 		 * Prepare db wp option used to fire the 'fw_extensions_after_deactivation' action on next refresh
 		 */
 		{
-			$db_wp_option_name = 'fw_deactivated_extensions';
-			$db_wp_option_value = get_option($db_wp_option_name, array());
+			$db_wp_option_name = 'fw_extensions_activation';
+			$db_wp_option_value = get_option($db_wp_option_name, array(
+				'activated' => array(),
+				'deactivated' => array(),
+			));
 
 			/**
 			 * Keep adding to the existing value instead of resetting it on each method call
 			 * in case the method will be called multiple times
 			 */
-			$db_wp_option_value = array_merge($db_wp_option_value, $extensions_for_deactivation);
+			$db_wp_option_value['deactivated'] = array_merge($db_wp_option_value['deactivated'], $extensions_for_deactivation);
+
+			/**
+			 * Remove deactivated extensions from activated
+			 */
+			$db_wp_option_value['activated'] = array_diff_key($db_wp_option_value['activated'], $db_wp_option_value['deactivated']);
 
 			update_option($db_wp_option_name, $db_wp_option_value);
 		}
