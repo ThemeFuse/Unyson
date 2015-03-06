@@ -811,11 +811,10 @@ final class _FW_Extensions_Manager
 			return;
 		}
 
-		$installed_extensions = $this->get_installed_extensions();
-
 		if (array_key_exists('supported', $_GET)) {
 			$supported = true;
 
+			// fixme: really needed?
 			$this->activate_extensions_if_exists(
 				array_fill_keys(
 					array_keys(fw()->theme->manifest->get('supported_extensions', array())),
@@ -823,32 +822,19 @@ final class _FW_Extensions_Manager
 				)
 			);
 
-			$install_data = $this->get_install_data(
-				array_keys($this->get_supported_extensions_for_install())
-			);
+			$extension_names = array_keys($this->get_supported_extensions_for_install());
 		} else {
 			$supported = false;
 
 			$extension_names = array_map( 'trim', explode( ',', FW_Request::GET( 'extension', '' ) ));
 
+			// fixme: really needed?
 			$this->activate_extensions_if_exists(
 				array_fill_keys(
 					$extension_names,
 					array()
 				)
 			);
-
-			$install_data = $this->get_install_data(
-				$extension_names
-			);
-
-			unset($extension_names);
-		}
-
-		if (is_wp_error($install_data)) {
-			FW_Flash_Messages::add($flash_id, $install_data->get_error_message(), 'error');
-			$this->js_redirect();
-			return;
 		}
 
 		{
@@ -881,188 +867,37 @@ final class _FW_Extensions_Manager
 					break;
 				}
 
-				// increase timeout
-				if (
-					function_exists('set_time_limit')
-					&&
-					function_exists('ini_get')
-					&&
-					($timeout = intval(ini_get('max_execution_time')))
-				) {
-					$extensions_count = 0;
-					foreach ($install_data['parents'] as $extension_name => $parent_extensions) {
-						$extensions_count += count($parent_extensions);
+				$install_result = $this->install_extensions(
+					array_fill_keys($extension_names, array())
+				);
+
+				if (is_wp_error($install_result)) {
+					$skin->error($install_result);
+					break;
+				} elseif (is_array($install_result)) {
+					$error = array();
+
+					foreach ($install_result as $extension_name => $extension_result) {
+						if (is_wp_error($extension_result)) {
+							$error[] = $extension_result->get_error_message();
+						}
 					}
 
-					set_time_limit($timeout + $extensions_count * 10);
+					$error = '<ul><li>'. implode('</li><li>', $error) .'</li></ul>';
+
+					$skin->error($error);
+					break;
+				} elseif ($install_result === true) {
+					$skin->set_result(true);
+					$skin->feedback(
+						_n(
+							'Extension successfully installed',
+							'Extensions successfully installed',
+							count($extension_names),
+							'fw'
+						)
+					);
 				}
-
-				$available_extensions = $this->get_available_extensions();
-
-				$extensions_before_install = array_keys($installed_extensions);
-
-				$activate_extensions = array();
-
-				do {
-					/**
-					 * Install parent extensions and the extension
-					 */
-					foreach ($install_data['parents'] as $extension_name => $parent_extensions) {
-						$current_extension_path = fw_get_framework_directory();
-
-						foreach ($parent_extensions as $parent_extension_name) {
-							$current_extension_path .= '/extensions/'. $parent_extension_name;
-
-							if (isset($installed_extensions[$parent_extension_name])) {
-								// skip already installed extensions
-								$activate_extensions[$parent_extension_name] = array();
-								continue;
-							}
-
-							$skin->feedback(
-								sprintf(__('Downloading the "%s" extension...', 'fw'),
-									$install_data['all'][$parent_extension_name]
-								)
-							);
-
-							$wp_fw_downloaded_dir = $this->download(
-								$parent_extension_name,
-								$available_extensions[$parent_extension_name]
-							);
-
-							if (is_wp_error($wp_fw_downloaded_dir)) {
-								$skin->error($wp_fw_downloaded_dir);
-								break 3;
-							}
-
-							$skin->feedback(
-								sprintf(__('Installing the "%s" extension...', 'fw'),
-									$install_data['all'][$parent_extension_name]
-								)
-							);
-
-							$merge_result = $this->merge_extension(
-								$wp_fw_downloaded_dir,
-								FW_WP_Filesystem::real_path_to_filesystem_path($current_extension_path)
-							);
-
-							if (is_wp_error($merge_result)) {
-								$skin->error($merge_result);
-								break 3;
-							}
-
-							$skin->feedback(
-								sprintf(__('%s extension successfully installed.', 'fw'),
-									$install_data['all'][$parent_extension_name]
-								)
-							);
-
-							$activate_extensions[$parent_extension_name] = array();
-
-							/**
-							 * Read again all extensions
-							 * The downloaded extension may contain more sub extensions
-							 */
-							{
-								unset($installed_extensions);
-								$installed_extensions = $this->get_installed_extensions( true );
-							}
-						}
-					}
-
-					$install_data = false;
-
-					/**
-					 * Collect newly installed extensions required extensions
-					 */
-					do {
-						$new_extensions = array_diff(
-							array_keys($installed_extensions),
-							$extensions_before_install
-						);
-
-						if (empty($new_extensions)) {
-							break;
-						}
-
-						$activate_extensions += array_fill_keys($new_extensions, array());
-
-						$extensions_before_install = array_keys($installed_extensions);
-
-						$required_extensions = array();
-
-						foreach ($new_extensions as $extension_name) {
-							$extension_required_extensions = fw_akg(
-								'requirements/extensions',
-								$installed_extensions[$extension_name]['manifest'],
-								array()
-							);
-
-							if (empty($extension_required_extensions)) {
-								continue;
-							}
-
-							foreach ($extension_required_extensions as $required_extension_name => $required_extension_data) {
-								$activate_extensions[$required_extension_name] = array();
-
-								if (isset($installed_extensions[$required_extension_name])) {
-									continue;
-								}
-
-								$required_extensions[$required_extension_name] = true;
-							}
-						}
-
-						if (empty($required_extensions)) {
-							break;
-						}
-
-						$required_extensions = array_keys($required_extensions);
-
-						$install_data = $this->get_install_data($required_extensions);
-
-						if (is_wp_error($install_data)) {
-							$skin->feedback(
-								sprintf(
-									_n(
-										'Installed extensions has required extension: %s.',
-										'Installed extensions has required extensions: %s.',
-										count($required_extensions), 'fw'
-									),
-									implode(', ', $required_extensions)
-								)
-							);
-							$skin->error($install_data);
-							$install_data = false;
-							break 2;
-						} else {
-							$required_extensions_titles = array();
-							foreach ($required_extensions as $required_extension_name) {
-								$required_extensions_titles[$required_extension_name]
-									= $available_extensions[$required_extension_name]['name'];
-							}
-
-							$skin->feedback(
-								sprintf(
-									_n(
-										'Installed extensions has required extension: %s. Installing...',
-										'Installed extensions has required extensions: %s. Installing...',
-										count($required_extensions_titles), 'fw'
-									),
-									implode(', ', $required_extensions_titles)
-								)
-							);
-						}
-					} while(false);
-
-					if (empty($install_data)) {
-						/**
-						 * All extensions were installed successfully and there is nothing else to install
-						 * (the "while" will exit below)
-						 */
-						$skin->set_result(true);
-					}
-				} while(!empty($install_data));
 
 				/** @var WP_Filesystem_Base $wp_filesystem */
 				global $wp_filesystem;
@@ -1096,7 +931,7 @@ final class _FW_Extensions_Manager
 			}
 		} while(false);
 
-		if ($skin->result && !empty($activate_extensions)) {
+		/*if ($skin->result && !empty($activate_extensions)) {
 			$db_active_extensions = fw()->extensions->_get_db_active_extensions();
 			$db_active_extensions += $activate_extensions;
 
@@ -1112,7 +947,7 @@ final class _FW_Extensions_Manager
 				fw()->extensions->_get_active_extensions_db_option_name(),
 				$db_active_extensions
 			);
-		}
+		}*/
 
 		$skin->footer();
 	}
@@ -1147,6 +982,7 @@ final class _FW_Extensions_Manager
 			), $opts);
 
 			$cancel_on_error = $opts['cancel_on_error'];
+			$verbose = $opts['verbose'];
 
 			unset($opts);
 		}
@@ -1165,12 +1001,41 @@ final class _FW_Extensions_Manager
 			);
 		}
 
+		global $wp_filesystem;
+
+		if (!$wp_filesystem) {
+			return new WP_Error(
+				'fs_not_initialized',
+				__('WP Filesystem is not initialized', 'fw')
+			);
+		}
+
+		/**
+		 * increase timeout
+		 */
+		if (
+			function_exists('set_time_limit')
+			&&
+			function_exists('ini_get')
+			&&
+			($timeout = intval(ini_get('max_execution_time')))
+		) {
+			set_time_limit($timeout + 60 * 3);
+		}
+
+		$available_extensions = $this->get_available_extensions();
 		$installed_extensions = $this->get_installed_extensions();
 
-		$result = array();
+		$result = $downloaded_extensions = array();
 		$has_errors = false;
 
-		foreach ($extensions as $extension_name => $not_used_var) {
+		while (!empty($extensions)) {
+			$not_used_var = reset($extensions);
+			$extension_name = key($extensions);
+			unset($extensions[$extension_name]);
+
+			$extensions_before_install = array_keys($installed_extensions);
+
 			if (isset($installed_extensions[$extension_name])) {
 				$result[$extension_name] = new WP_Error(
 					'extension_installed',
@@ -1185,9 +1050,203 @@ final class _FW_Extensions_Manager
 				}
 			}
 
-			// ...
+			if (!isset($available_extensions[ $extension_name ])) {
+				$result[$extension_name] = new WP_Error(
+					'extension_not_available',
+					sprintf(
+						__('Extension "%s" is not available for install.', 'fw'),
+						$this->get_extension_title($extension_name)
+					)
+				);
+				$has_errors = true;
+
+				if ($cancel_on_error) {
+					break;
+				} else {
+					continue;
+				}
+			}
+
+			/**
+			 * Find parent extensions
+			 * they will be installed if does not exist
+			 */
+			{
+				$parents = array($extension_name);
+
+				$current_parent = $extension_name;
+				while (!empty($available_extensions[$current_parent]['parent'])) {
+					$current_parent = $available_extensions[$current_parent]['parent'];
+
+					if (!isset($available_extensions[$current_parent])) {
+						$result[$extension_name] = new WP_Error(
+							'parent_extension_not_available',
+							sprintf(
+								__('Parent extension "%s" not available.', 'fw'),
+								$this->get_extension_title($current_parent)
+							)
+						);
+						$has_errors = true;
+
+						if ($cancel_on_error) {
+							break 2;
+						} else {
+							continue 2;
+						}
+					}
+
+					$parents[] = $current_parent;
+				}
+
+				$parents = array_reverse($parents);
+			}
+
+			/**
+			 * Install parent extensions and the extension
+			 */
+			{
+				$current_extension_path = fw_get_framework_directory();
+
+				foreach ($parents as $parent_extension_name) {
+					$current_extension_path .= '/extensions/'. $parent_extension_name;
+
+					if (isset($installed_extensions[$parent_extension_name])) {
+						// skip already installed extensions
+						continue;
+					}
+
+					if ($verbose) {
+						$verbose_message = sprintf(__('Downloading the "%s" extension...', 'fw'),
+							$this->get_extension_title($parent_extension_name)
+						);
+
+						if (is_callable($verbose)) {
+							call_user_func_array($verbose, array($verbose_message, 'info'));
+						} else {
+							echo fw_html_tag('p', array(), $verbose_message);
+						}
+					}
+
+					$wp_fw_downloaded_dir = $this->download(
+						$parent_extension_name,
+						$available_extensions[$parent_extension_name]
+					);
+
+					if (is_wp_error($wp_fw_downloaded_dir)) {
+						if ($verbose) {
+							$verbose_message = $wp_fw_downloaded_dir->get_error_message();
+
+							if (is_callable($verbose)) {
+								call_user_func_array($verbose, array($verbose_message, 'error'));
+							} else {
+								echo fw_html_tag('p', array(), $verbose_message);
+							}
+						}
+
+						$result[$extension_name] = $wp_fw_downloaded_dir;
+						$has_errors = true;
+
+						if ($cancel_on_error) {
+							break 2;
+						} else {
+							continue 2;
+						}
+					}
+
+					if ($verbose) {
+						$verbose_message = sprintf(__('Installing the "%s" extension...', 'fw'),
+							$this->get_extension_title($parent_extension_name)
+						);
+
+						if (is_callable($verbose)) {
+							call_user_func_array($verbose, array($verbose_message, 'info'));
+						} else {
+							echo fw_html_tag('p', array(), $verbose_message);
+						}
+					}
+
+					$merge_result = $this->merge_extension(
+						$wp_fw_downloaded_dir,
+						FW_WP_Filesystem::real_path_to_filesystem_path($current_extension_path)
+					);
+
+					if (is_wp_error($merge_result)) {
+						if ($verbose) {
+							$verbose_message = $merge_result->get_error_message();
+
+							if (is_callable($verbose)) {
+								call_user_func_array($verbose, array($verbose_message, 'error'));
+							} else {
+								echo fw_html_tag('p', array(), $verbose_message);
+							}
+						}
+
+						$result[$extension_name] = $merge_result;
+						$has_errors = true;
+
+						if ($cancel_on_error) {
+							break 2;
+						} else {
+							continue 2;
+						}
+					}
+
+					if ($verbose) {
+						$verbose_message = sprintf(__('The %s extension has been successfully installed.', 'fw'),
+							$this->get_extension_title($parent_extension_name)
+						);
+
+						if (is_callable($verbose)) {
+							call_user_func_array($verbose, array($verbose_message, 'info'));
+						} else {
+							echo fw_html_tag('p', array(), $verbose_message);
+						}
+					}
+
+					$downloaded_extensions[$parent_extension_name] = array();
+
+					/**
+					 * Read again all extensions
+					 * The downloaded extension may contain more sub extensions
+					 */
+					{
+						unset($installed_extensions);
+						$installed_extensions = $this->get_installed_extensions(true);
+					}
+				}
+			}
 
 			$result[$extension_name] = true;
+
+			/**
+			 * Collect required extensions of the newly installed extensions
+			 */
+			foreach (
+				// new extensions
+				array_diff(
+					array_keys($installed_extensions),
+					$extensions_before_install
+				)
+				as $new_extension_name
+			) {
+				foreach (
+					array_keys(
+						fw_akg(
+							'requirements/extensions',
+							$installed_extensions[$new_extension_name]['manifest'],
+							array()
+						)
+					)
+					as $required_extension_name
+				) {
+					if (isset($installed_extensions[$required_extension_name])) {
+						// already installed
+						continue;
+					}
+
+					$extensions[$required_extension_name] = array();
+				}
+			}
 		}
 
 		if (
