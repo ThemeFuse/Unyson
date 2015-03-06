@@ -117,7 +117,7 @@ final class _FW_Extensions_Manager
 		return $can_install;
 	}
 
-	private function get_page_slug()
+	public function get_page_slug()
 	{
 		return 'fw-extensions';
 	}
@@ -558,12 +558,21 @@ final class _FW_Extensions_Manager
 
 			if (is_wp_error($collected)) {
 				if (defined('WP_DEBUG') && WP_DEBUG) {
-					FW_Flash_Messages::add('fw_ext_auto_activate_hidden_standalone',
-						sprintf(__('Cannot activate hidden standalone extension %s', 'fw'),
-							fw_akg('name', $ext_data['manifest'], fw_id_to_title($ext_name))
-						),
-						'error'
-					);
+					if (
+						fw_current_screen_match(array(
+							'only' => array(
+								array('parent_base' => $this->get_page_slug())
+							)
+						))
+					) {
+						// display this warning only on Unyson extensions page
+						FW_Flash_Messages::add('fw_ext_auto_activate_hidden_standalone',
+							sprintf(__('Cannot activate hidden standalone extension %s', 'fw'),
+								fw_akg('name', $ext_data['manifest'], fw_id_to_title($ext_name))
+							),
+							'error'
+						);
+					}
 				}
 				return;
 			}
@@ -822,19 +831,20 @@ final class _FW_Extensions_Manager
 				)
 			);
 
-			$extension_names = array_keys($this->get_supported_extensions_for_install());
+			$extensions = array_fill_keys(
+				array_keys($this->get_supported_extensions_for_install()),
+				array()
+			);
 		} else {
 			$supported = false;
 
-			$extension_names = array_map( 'trim', explode( ',', FW_Request::GET( 'extension', '' ) ));
+			$extensions = array_fill_keys(
+				array_map( 'trim', explode( ',', FW_Request::GET( 'extension', '' ) )),
+				array()
+			);
 
 			// fixme: really needed?
-			$this->activate_extensions_if_exists(
-				array_fill_keys(
-					$extension_names,
-					array()
-				)
-			);
+			$this->activate_extensions_if_exists($extensions);
 		}
 
 		{
@@ -846,8 +856,8 @@ final class _FW_Extensions_Manager
 
 			$skin = new _FW_Extensions_Install_Upgrader_Skin(array(
 				'title' => $supported
-					? _n('Install Compatible Extension', 'Install Compatible Extensions', count($install_data['all']), 'fw')
-					: _n('Install Extension', 'Install Extensions', count($install_data['all']), 'fw'),
+					? _n('Install Compatible Extension', 'Install Compatible Extensions', count($extensions), 'fw')
+					: _n('Install Extension', 'Install Extensions', count($extensions), 'fw'),
 			));
 		}
 
@@ -868,7 +878,10 @@ final class _FW_Extensions_Manager
 				}
 
 				$install_result = $this->install_extensions(
-					array_fill_keys($extension_names, array())
+					$extensions,
+					array(
+						'verbose' => $skin
+					)
 				);
 
 				if (is_wp_error($install_result)) {
@@ -889,14 +902,6 @@ final class _FW_Extensions_Manager
 					break;
 				} elseif ($install_result === true) {
 					$skin->set_result(true);
-					$skin->feedback(
-						_n(
-							'Extension successfully installed',
-							'Extensions successfully installed',
-							count($extension_names),
-							'fw'
-						)
-					);
 				}
 
 				/** @var WP_Filesystem_Base $wp_filesystem */
@@ -921,8 +926,13 @@ final class _FW_Extensions_Manager
 
 				wp_nonce_field($nonce['action'], $nonce['name']);
 
+				$extension_titles = array();
+				foreach ($extensions as $extension_name => $not_used_var) {
+					$extension_titles[$extension_name] = $this->get_extension_title($extension_name);
+				}
+
 				fw_render_view(dirname(__FILE__) .'/views/install-form.php', array(
-					'extension_titles' => $install_data['all'],
+					'extension_titles' => $extension_titles,
 					'list_page_link' => $this->get_link(),
 					'supported' => $supported
 				), false);
@@ -972,16 +982,17 @@ final class _FW_Extensions_Manager
 				 */
 				'cancel_on_error' => false,
 				/**
-				 * @type bool todo: use it
+				 * @type bool Activate installed extensions
 				 */
-				'activate' => false,
+				'activate' => true,
 				/**
-				 * @type bool|callable todo: use it
+				 * @type bool|WP_Upgrader_Skin
 				 */
 				'verbose' => false,
 			), $opts);
 
-			$cancel_on_error = $opts['cancel_on_error'];
+			$cancel_on_error = $opts['cancel_on_error']; // fixme: remove successfully installed extensions before error?
+			$activate = $opts['activate'];
 			$verbose = $opts['verbose'];
 
 			unset($opts);
@@ -1120,8 +1131,8 @@ final class _FW_Extensions_Manager
 							$this->get_extension_title($parent_extension_name)
 						);
 
-						if (is_callable($verbose)) {
-							call_user_func_array($verbose, array($verbose_message, 'info'));
+						if (is_subclass_of($verbose, 'WP_Upgrader_Skin')) {
+							$verbose->feedback($verbose_message);
 						} else {
 							echo fw_html_tag('p', array(), $verbose_message);
 						}
@@ -1136,8 +1147,8 @@ final class _FW_Extensions_Manager
 						if ($verbose) {
 							$verbose_message = $wp_fw_downloaded_dir->get_error_message();
 
-							if (is_callable($verbose)) {
-								call_user_func_array($verbose, array($verbose_message, 'error'));
+							if (is_subclass_of($verbose, 'WP_Upgrader_Skin')) {
+								$verbose->error($verbose_message);
 							} else {
 								echo fw_html_tag('p', array(), $verbose_message);
 							}
@@ -1158,8 +1169,8 @@ final class _FW_Extensions_Manager
 							$this->get_extension_title($parent_extension_name)
 						);
 
-						if (is_callable($verbose)) {
-							call_user_func_array($verbose, array($verbose_message, 'info'));
+						if (is_subclass_of($verbose, 'WP_Upgrader_Skin')) {
+							$verbose->feedback($verbose_message);
 						} else {
 							echo fw_html_tag('p', array(), $verbose_message);
 						}
@@ -1174,8 +1185,8 @@ final class _FW_Extensions_Manager
 						if ($verbose) {
 							$verbose_message = $merge_result->get_error_message();
 
-							if (is_callable($verbose)) {
-								call_user_func_array($verbose, array($verbose_message, 'error'));
+							if (is_subclass_of($verbose, 'WP_Upgrader_Skin')) {
+								$verbose->error($verbose_message);
 							} else {
 								echo fw_html_tag('p', array(), $verbose_message);
 							}
@@ -1196,8 +1207,8 @@ final class _FW_Extensions_Manager
 							$this->get_extension_title($parent_extension_name)
 						);
 
-						if (is_callable($verbose)) {
-							call_user_func_array($verbose, array($verbose_message, 'info'));
+						if (is_subclass_of($verbose, 'WP_Upgrader_Skin')) {
+							$verbose->feedback($verbose_message);
 						} else {
 							echo fw_html_tag('p', array(), $verbose_message);
 						}
@@ -1249,6 +1260,76 @@ final class _FW_Extensions_Manager
 			}
 		}
 
+		if ($activate) {
+			$activate_extensions = array();
+
+			foreach ($result as $extension_name => $extension_result) {
+				if (!is_wp_error($extension_result)) {
+					$activate_extensions[$extension_name] = array();
+				}
+			}
+
+			if (!empty($activate_extensions)) {
+				if ($verbose) {
+					$verbose_message = _n(
+						'Activating extension...',
+						'Activating extensions...',
+						count($activate_extensions),
+						'fw'
+					);
+
+					if (is_subclass_of($verbose, 'WP_Upgrader_Skin')) {
+						$verbose->feedback($verbose_message);
+					} else {
+						echo fw_html_tag('p', array(), $verbose_message);
+					}
+				}
+
+				$activation_result = $this->activate_extensions($activate_extensions);
+
+				if ($verbose) {
+					if (is_wp_error($activation_result)) {
+						if (is_subclass_of($verbose, 'WP_Upgrader_Skin')) {
+							$verbose->error($activation_result->get_error_message());
+						} else {
+							echo fw_html_tag('p', array(), $activation_result->get_error_message());
+						}
+					} elseif (is_array($activation_result)) {
+						$verbose_message = array();
+
+						foreach ($activation_result as $extension_name => $extension_result) {
+							if (is_wp_error($extension_result)) {
+								$verbose_message[] = $extension_result->get_error_message();
+							}
+						}
+
+						$verbose_message = '<ul><li>' . implode('</li><li>', $verbose_message) . '</li></ul>';
+
+						if (is_subclass_of($verbose, 'WP_Upgrader_Skin')) {
+							$verbose->error($verbose_message);
+						} else {
+							echo fw_html_tag('p', array(), $verbose_message);
+						}
+					} elseif ($activation_result === true) {
+						$verbose_message = _n(
+							'Extension has been successfully activated.',
+							'Extensions has been successfully activated.',
+							count($activate_extensions),
+							'fw'
+						);
+
+						if (is_subclass_of($verbose, 'WP_Upgrader_Skin')) {
+							$verbose->feedback($verbose_message);
+						} else {
+							echo fw_html_tag('p', array(), $verbose_message);
+						}
+					}
+				}
+			}
+		}
+
+		do_action('fw_extensions_install', $result);
+
 		if (
 			$cancel_on_error
 			&&
@@ -1268,8 +1349,6 @@ final class _FW_Extensions_Manager
 				);
 			}
 		}
-
-		do_action('fw_extensions_install', $result);
 
 		if ($has_errors) {
 			return $result;
@@ -1412,7 +1491,7 @@ final class _FW_Extensions_Manager
 						);
 					} else {
 						$skin->feedback(
-							sprintf(__('%s extension successfully delete.', 'fw'), $extension_title)
+							sprintf(__('%s extension has been successfully deleted.', 'fw'), $extension_title)
 						);
 
 						$skin->set_result(true);
@@ -2493,92 +2572,6 @@ final class _FW_Extensions_Manager
 				return $merge_result;
 			}
 		}
-	}
-
-	/**
-	 * @param array $extension_names
-	 * @return array|WP_Error
-	 */
-	private function get_install_data($extension_names)
-	{
-		$installed_extensions = $this->get_installed_extensions();
-		$available_extensions = $this->get_available_extensions();
-
-		$error = '';
-
-		do {
-			foreach ($extension_names as $i => $extension_name) {
-				if (empty($extension_name)) {
-					unset($extension_names[$i]);
-					continue;
-				}
-
-				if (!isset($available_extensions[ $extension_name ])) {
-					$error = sprintf(__('Extension "%s" is not available for install.', 'fw'), $this->get_extension_title($extension_name));
-					break 2;
-				}
-
-				if (isset($installed_extensions[ $extension_name ])) {
-					$error = sprintf(__('Extension "%s" is already installed.', 'fw'), $this->get_extension_title($extension_name));
-					break 2;
-				}
-			}
-
-			if (empty($extension_names)) {
-				$error = __('No extensions to install.', 'fw');
-				break;
-			}
-
-			/**
-			 * Find extensions parents that will be installed if does not exist
-			 */
-			{
-				$extensions_and_parents = array();
-				$extensions_for_install = array();
-
-				foreach ($extension_names as $extension_name) {
-					$current_parent = $extension_name;
-					$extensions_and_parents[$extension_name] = array($extension_name);
-
-					$extensions_for_install[$current_parent] = $available_extensions[$current_parent]['name'];
-
-					while (!empty($available_extensions[$current_parent]['parent'])) {
-						$current_parent = $available_extensions[$current_parent]['parent'];
-
-						if (!isset($available_extensions[$current_parent])) {
-							$error = sprintf(
-								__('Extension "%s" has parent extension "%s" that is not available.', 'fw'),
-								$this->get_extension_title($extension_name), $current_parent
-							);
-							break 3;
-						}
-
-						$extensions_and_parents[$extension_name][] = $current_parent;
-
-						if (!isset($installed_extensions[$current_parent])) {
-							$extensions_for_install[ $current_parent ] = $available_extensions[ $current_parent ]['name'];
-						}
-					}
-
-					$extensions_and_parents[$extension_name] = array_reverse($extensions_and_parents[$extension_name]);
-				}
-			}
-		} while(false);
-
-		if ($error) {
-			return new WP_Error('fw_extensions_install_data', $error);
-		}
-
-		return array(
-			/**
-			 * {extension_name: [parent_name, sub_parent_name, ..., extension_name]}
-			 */
-			'parents' => $extensions_and_parents,
-			/**
-			 * {extension_name: Title}
-			 */
-			'all' => $extensions_for_install,
-		);
 	}
 
 	private function get_supported_extensions_for_install()
