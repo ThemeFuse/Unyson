@@ -974,78 +974,111 @@ final class _FW_Component_Backend
 
 		fw_collect_first_level_options($collected, $options);
 
-		ob_start();
-
-		if (!empty($collected['tabs'])) {
-			fw_render_view(fw_get_framework_directory('/views/backend-tabs.php'), array(
-				'tabs'   => &$collected['tabs'],
-				'values' => &$values,
-				'options_data' => $options_data,
-			), false);
+		if (empty($collected['all'])) {
+			return false;
 		}
-		unset($collected['tabs']);
 
-		if (!empty($collected['boxes'])) {
-			echo '<div class="fw-backend-postboxes metabox-holder">';
+		$html = '';
 
-			foreach ($collected['boxes'] as $id => &$box) {
-				// prepare attributes
-				{
-					$attr = isset($box['attr']) ? $box['attr'] : array();
+		$option = reset($collected['all']);
 
-					unset($attr['id']); // do not allow id overwrite, it is sent in first argument of render_box()
+		$collected_type = $option['type'];
+		$collected_type_options = array(
+			$option['id'] => &$option['option']
+		);
+
+		while ($collected_type_options) {
+			$option = next($collected['all']);
+
+			if ($option) {
+				if ($option['type'] === $collected_type) {
+					$collected_type_options[$option['id']] = &$option['option'];
+					continue;
 				}
-
-				echo $this->render_box(
-					'fw-options-box-'. $id,
-					empty($box['title']) ? ' ' : $box['title'],
-					$this->render_options($box['options'], $values, $options_data),
-					array(
-						'attr' => $attr
-					)
-				);
 			}
 
-			echo '</div>';
-		}
-		unset($collected['boxes']);
+			switch ($collected_type) {
+				case 'tab':
+					$html .= fw_render_view(fw_get_framework_directory('/views/backend-tabs.php'), array(
+						'tabs'         => &$collected_type_options,
+						'values'       => &$values,
+						'options_data' => $options_data,
+					));
+					break;
+				case 'box':
+					$html .= '<div class="fw-backend-postboxes metabox-holder">';
 
-		if (!empty($collected['groups_and_options'])) {
-			foreach ($collected['groups_and_options'] as $id => &$option) {
-				if (isset($option['options'])) { // group
-					// prepare attributes
-					{
-						$attr = isset($option['attr']) ? $option['attr'] : array();
+					foreach ($collected_type_options as $id => &$box) {
+						// prepare attributes
+						{
+							$attr = isset($box['attr']) ? $box['attr'] : array();
 
-						$attr['id'] = 'fw-backend-options-group-'. esc_attr($id);
-
-						if (!isset($attr['class'])) {
-							$attr['class'] = 'fw-backend-options-group';
-						} else {
-							$attr['class'] = 'fw-backend-options-group '. $attr['class'];
+							unset($attr['id']); // do not allow id overwrite, it is sent in first argument of render_box()
 						}
+
+						$html .= $this->render_box(
+							'fw-options-box-'. $id,
+							empty($box['title']) ? ' ' : $box['title'],
+							$this->render_options($box['options'], $values, $options_data),
+							array(
+								'attr' => $attr
+							)
+						);
 					}
 
-					echo '<div '. fw_attr_to_html($attr) .'>';
-					echo $this->render_options($option['options'], $values, $options_data);
-					echo '</div>';
-				} else { // option
-					$data = $options_data;
+					$html .= '</div>';
+					break;
+				case 'group':
+					foreach ($collected_type_options as $id => &$group) {
+						// prepare attributes
+						{
+							$attr = isset($group['attr']) ? $group['attr'] : array();
 
-					$data['value'] = isset($values[$id]) ? $values[$id] : null;
+							$attr['id'] = 'fw-backend-options-group-' . $id;
 
-					echo $this->render_option(
-						$id,
-						$option,
-						$data,
-						$design
-					);
-				}
+							if (!isset($attr['class'])) {
+								$attr['class'] = 'fw-backend-options-group';
+							} else {
+								$attr['class'] = 'fw-backend-options-group ' . $attr['class'];
+							}
+						}
+
+						$html .= '<div ' . fw_attr_to_html($attr) . '>';
+						$html .= $this->render_options($group['options'], $values, $options_data);
+						$html .= '</div>';
+					}
+					break;
+				case 'option':
+					foreach ($collected_type_options as $id => &$_option) {
+						$data = $options_data;
+
+						$data['value'] = isset($values[$id]) ? $values[$id] : null;
+
+						$html .= $this->render_option(
+							$id,
+							$_option,
+							$data,
+							$design
+						);
+					}
+					break;
+				default:
+					$html .= '<p><em>'. __('Unknown collected type', 'fw') .': '. $collected_type .'</em></p>';
+			}
+
+			unset($collected_type, $collected_type_options);
+
+			if ($option) {
+				$collected_type = $option['type'];
+				$collected_type_options = array(
+					$option['id'] => &$option['option']
+				);
+			} else {
+				$collected_type_options = array();
 			}
 		}
-		unset($collected['options']);
 
-		return ob_get_clean();
+		return $html;
 	}
 
 	/**
