@@ -70,7 +70,7 @@
 				value: Color($input.val())._alpha * 100,
 				range: "max",
 				step: 1,
-				min: 1,
+				min: 0,
 				max: 100,
 				slide: function (event, ui) {
 					$(this).find('.ui-slider-handle').text(ui.value);

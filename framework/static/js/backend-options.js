@@ -106,30 +106,20 @@ jQuery(document).ready(function($){
 	fwEvents.on('fw:options:init', function (data) {
 		var $boxes = data.$elements.find('.fw-postbox:not(.fw-postbox-initialized)');
 
-		{
-			hideBoxEmptyTitles($boxes);
-
-			/**
-			 * some times the titles are not hidden (don't know why)
-			 * so try to hide second time just to make sure
-			 */
-			setTimeout(function(){
-				hideBoxEmptyTitles($boxes);
-			}, 300);
-		}
-
-		setTimeout(function(){
-			addPostboxToggles($boxes);
-		}, 100);
-
 		/**
 		 * leave open only first boxes
 		 */
-		data.$elements.find('.fw-backend-postboxes > .fw-postbox:not(:first-child)').addClass('closed');
+		$boxes.filter('.fw-backend-postboxes > .fw-postbox:not(:first-child)').addClass('closed');
 
 		$boxes.addClass('fw-postbox-initialized');
 
 		setTimeout(function(){
+			addPostboxToggles($boxes);
+
+			hideBoxEmptyTitles(
+				$boxes.filter('.fw-backend-postboxes > .fw-postbox')
+			);
+
 			// trigger on box custom event for others to do something after box initialized
 			$boxes.trigger('fw-options-box:initialized');
 		}, 100);

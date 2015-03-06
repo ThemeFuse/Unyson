@@ -54,7 +54,6 @@ final class _FW_Extensions_Manager
 			if ($this->can_install()) {
 				add_action('wp_ajax_fw_extensions_check_direct_fs_access', array($this, '_action_ajax_check_direct_fs_access'));
 			}
-
 		}
 
 		/** Filters */
@@ -451,6 +450,64 @@ final class _FW_Extensions_Manager
 			'validate' => array($this, '_extension_settings_form_validate'),
 			'save'     => array($this, '_extension_settings_form_save'),
 		));
+
+		if (is_admin() && $this->can_activate()) {
+			/**
+			 * Fire the 'fw_extensions_after_activation' action
+			 */
+			{
+				$db_wp_option_name = 'fw_activated_extensions';
+
+				if ($db_wp_option_value = get_option($db_wp_option_name, array())) {
+					$succeeded_extensions = $failed_extensions = array();
+
+					foreach ($db_wp_option_value as $extension_name => $not_used_var) {
+						if (fw_ext($extension_name)) {
+							$succeeded_extensions[$extension_name] = array();
+						} else {
+							$failed_extensions[$extension_name] = array();
+						}
+					}
+
+					delete_option($db_wp_option_name);
+
+					if (!empty($succeeded_extensions)) {
+						do_action('fw_extensions_after_activation', $succeeded_extensions);
+					}
+					if (!empty($failed_extensions)) {
+						do_action('fw_extensions_activation_failed', $failed_extensions);
+					}
+				}
+			}
+
+			/**
+			 * Fire the 'fw_extensions_after_deactivation' action
+			 */
+			{
+				$db_wp_option_name = 'fw_deactivated_extensions';
+
+				if ($db_wp_option_value = get_option($db_wp_option_name, array())) {
+					$succeeded_extensions = $failed_extensions = array();
+
+					foreach ($db_wp_option_value as $extension_name => $not_used_var) {
+						if (!fw_ext($extension_name)) {
+							$succeeded_extensions[$extension_name] = array();
+						} else {
+							$failed_extensions[$extension_name] = array();
+						}
+					}
+
+					delete_option($db_wp_option_name);
+
+					if (!empty($succeeded_extensions)) {
+						do_action('fw_extensions_after_deactivation', $succeeded_extensions);
+					}
+					if (!empty($failed_extensions)) {
+						do_action('fw_extensions_deactivation_failed', $failed_extensions);
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -1530,9 +1587,30 @@ final class _FW_Extensions_Manager
 			array_merge(fw()->extensions->_get_db_active_extensions(), $extensions_for_activation)
 		);
 
+		// remove already active extensions
 		foreach ($extensions_for_activation as $extension_name => $not_used_var) {
-			do_action('fw_extension_activation', $extension_name);
+			if (fw_ext($extension_name)) {
+				unset($extensions_for_activation[$extension_name]);
+			}
 		}
+
+		/**
+		 * Prepare db wp option used to fire the 'fw_extensions_after_activation' action on next refresh
+		 */
+		{
+			$db_wp_option_name = 'fw_activated_extensions';
+			$db_wp_option_value = get_option($db_wp_option_name, array());
+
+			/**
+			 * Keep adding to the existing value instead of resetting it on each method call
+			 * in case the method will be called multiple times
+			 */
+			$db_wp_option_value = array_merge($db_wp_option_value, $extensions_for_activation);
+
+			update_option($db_wp_option_name, $db_wp_option_value);
+		}
+
+		do_action('fw_extensions_before_activation', $extensions_for_activation);
 
 		if ($has_errors) {
 			return $result;
@@ -1736,9 +1814,30 @@ final class _FW_Extensions_Manager
 			)
 		);
 
+		// remove already inactive extensions
 		foreach ($extensions_for_deactivation as $extension_name => $not_used_var) {
-			do_action('fw_extension_deactivation', $extension_name);
+			if (!fw_ext($extension_name)) {
+				unset($extensions_for_deactivation[$extension_name]);
+			}
 		}
+
+		/**
+		 * Prepare db wp option used to fire the 'fw_extensions_after_deactivation' action on next refresh
+		 */
+		{
+			$db_wp_option_name = 'fw_deactivated_extensions';
+			$db_wp_option_value = get_option($db_wp_option_name, array());
+
+			/**
+			 * Keep adding to the existing value instead of resetting it on each method call
+			 * in case the method will be called multiple times
+			 */
+			$db_wp_option_value = array_merge($db_wp_option_value, $extensions_for_deactivation);
+
+			update_option($db_wp_option_name, $db_wp_option_value);
+		}
+
+		do_action('fw_extensions_before_deactivation', $extensions_for_deactivation);
 
 		if ($has_errors) {
 			return $result;

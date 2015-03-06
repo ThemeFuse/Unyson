@@ -725,6 +725,11 @@ function fw_get_options_values_from_input(array $options, $input_array = null) {
 			$option,
 			isset($input_array[$id]) ? $input_array[$id] : null
 		);
+
+		if (is_null($values[$id])) {
+			// do not save null values
+			unset($values[$id]);
+		}
 	}
 
 	return $values;
@@ -923,7 +928,11 @@ function fw_human_time($seconds)
 }
 
 function fw_strlen($string) {
-	return mb_strlen($string, 'UTF-8');
+	if (function_exists('mb_strlen')) {
+		return mb_strlen($string, 'UTF-8');
+	} else {
+		return strlen($string);
+	}
 }
 
 /**
@@ -1052,7 +1061,11 @@ function fw_secure_rand($length)
  */
 function fw_id_to_title($id) {
 	// mb_ucfirst()
-	$id = mb_strtoupper(mb_substr($id, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($id, 1, mb_strlen($id, 'UTF-8'), 'UTF-8');
+	if (function_exists('mb_strtoupper') && function_exists('mb_substr') && function_exists('mb_strlen')) {
+		$id = mb_strtoupper(mb_substr($id, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($id, 1, mb_strlen($id, 'UTF-8'), 'UTF-8');
+	} else {
+		$id = strtoupper(substr($id, 0, 1)) . substr($id, 1, strlen($id));
+	}
 
 	return str_replace(array('_', '-'), ' ', $id);
 }
