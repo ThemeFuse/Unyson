@@ -17,7 +17,7 @@ $count = count($extension_names);
 
 <ul class="ul-disc">
 	<?php foreach ($extension_names as $extension_name): ?>
-		<li><strong><?php echo fw_akg('name', $installed_extensions[ $extension_name ]['manifest'], fw_id_to_title($extension_name)); ?></strong></li>
+		<li><strong><?php echo fw()->extensions->manager->get_extension_title($extension_name); ?></strong></li>
 	<?php endforeach; ?>
 </ul>
 
@@ -48,6 +48,7 @@ $count = count($extension_names);
 	<ul class="code">
 		<?php $replace_regex = '/^'. preg_quote(fw_get_framework_directory('/extensions'), '/') .'/'; ?>
 		<?php foreach ($extension_names as $extension_name): ?>
+			<?php if (!isset($installed_extensions[$extension_name])) continue; ?>
 			<li><?php echo preg_replace($replace_regex, '', $installed_extensions[$extension_name]['path']) ?>/</li>
 		<?php endforeach; ?>
 	</ul>

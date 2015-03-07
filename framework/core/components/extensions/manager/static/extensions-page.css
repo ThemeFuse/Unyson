@@ -52,6 +52,7 @@
 
 .fw-extensions-list .fw-extensions-list-item .fw-extension-list-item-table {
 	display: table;
+	width: 100%;
 }
 
 .fw-extensions-list .fw-extensions-list-item .fw-extension-list-item-table > .fw-extension-list-item-table-row {
@@ -103,6 +104,10 @@
 		margin-right: 15px; /* same as .fw-extensions-list .fw-extensions-list-item padding-right */
 	}
 
+	.fw-extensions-list .fw-extensions-list-item .fw-extension-list-item-table > .fw-extension-list-item-table-row > .fw-extension-list-item-table-cell:first-child,
+	.fw-extensions-list .fw-extensions-list-item .fw-extension-list-item-table > .fw-extension-list-item-table-row > .fw-extension-list-item-table-cell:last-child {
+		width: 10px;
+	}
 
 	.fw-extensions-list .fw-extensions-list-item .fw-extension-list-item-table > .fw-extension-list-item-table-row > .fw-extension-list-item-table-cell:not(:first-child) {
 		padding-left: 20px;

@@ -878,12 +878,7 @@ final class _FW_Extensions_Manager
 					break;
 				}
 
-				$install_result = $this->install_extensions(
-					$extensions,
-					array(
-						'verbose' => $skin
-					)
-				);
+				$install_result = $this->install_extensions($extensions, array('verbose' => $skin));
 
 				if (is_wp_error($install_result)) {
 					$skin->error($install_result);
@@ -1350,38 +1345,7 @@ final class _FW_Extensions_Manager
 			return;
 		}
 
-		$installed_extensions = $this->get_installed_extensions();
-
 		$extensions = array_fill_keys(array_map('trim', explode(',', FW_Request::GET('extension', ''))), array());
-
-		{
-			$error = '';
-
-			do {
-				foreach ($extensions as $extension_name => $x) {
-					if (empty($extension_name)) {
-						unset($extensions[$extension_name]);
-						continue;
-					}
-
-					if (!isset($installed_extensions[ $extension_name ])) {
-						$error = sprintf(__('Extension "%s" is not installed.', 'fw'), $this->get_extension_title($extension_name));
-						break 2;
-					}
-				}
-
-				if (empty($extensions)) {
-					$error = __('No extensions to delete.', 'fw');
-					break;
-				}
-			} while(false);
-
-			if ($error) {
-				FW_Flash_Messages::add($flash_id, $error, 'error');
-				$this->js_redirect();
-				return;
-			}
-		}
 
 		{
 			if (!class_exists('_FW_Extensions_Delete_Upgrader_Skin')) {
@@ -1411,83 +1375,24 @@ final class _FW_Extensions_Manager
 					break;
 				}
 
-				{
-					// add sub-extensions for deletion
-					foreach (array_keys($extensions) as $extension_name) {
-						foreach ($this->collect_sub_extensions($extension_name, $installed_extensions) as $sub_extension_name => $sub_extension_data) {
-							$extensions[ $sub_extension_name ] = array();
+				$uninstall_result = $this->uninstall_extensions($extensions, array('verbose' => $skin));
+
+				if (is_wp_error($uninstall_result)) {
+					$skin->error($uninstall_result);
+				} elseif (is_array($uninstall_result)) {
+					$error = array();
+
+					foreach ($uninstall_result as $extension_name => $extension_result) {
+						if (is_wp_error($extension_result)) {
+							$error[] = $extension_result->get_error_message();
 						}
 					}
 
-					// add not used extensions for deletion
-					{
-						$not_used_extensions = array_fill_keys(array_keys(array_diff_key(
-							$installed_extensions,
-							$this->get_used_extensions($extensions, array_keys($installed_extensions))
-						)), array());
+					$error = '<ul><li>'. implode('</li><li>', $error) .'</li></ul>';
 
-						$extensions = array_merge($extensions, $not_used_extensions);
-					}
-				}
-
-				/** @var WP_Filesystem_Base $wp_filesystem */
-				global $wp_filesystem;
-
-				foreach ($extensions as $extension_name => $x) {
-					if (!isset($installed_extensions[ $extension_name ])) {
-						$skin->error(sprintf(__('Extension "%s" is not installed.', 'fw'), $this->get_extension_title($extension_name)));
-						continue;
-					}
-
-					if (
-						!isset($installed_extensions[ $extension_name ]['path'])
-						||
-						empty($installed_extensions[ $extension_name ]['path'])
-					) {
-						// this happens sometimes, but I don't know why
-						fw_print($extension_name, $installed_extensions);
-						die;
-					}
-
-					$extension_title = $this->get_extension_title($extension_name);
-
-					$wp_fs_extension_path = FW_WP_Filesystem::real_path_to_filesystem_path(
-						$installed_extensions[ $extension_name ]['path']
-					);
-
-					if (!$wp_filesystem->exists($wp_fs_extension_path)) {
-						// already deleted, maybe because it was a sub-extension of an deleted extension
-						continue;
-					}
-
-					$skin->feedback(
-						sprintf(__('Deleting the "%s" extension...', 'fw'), $extension_title)
-					);
-
-					if (!$wp_filesystem->delete($wp_fs_extension_path, true, 'd')) {
-						$skin->error(
-							sprintf(__('Cannot delete the "%s" extension.', 'fw'), $extension_title)
-						);
-					} else {
-						$skin->feedback(
-							sprintf(__('%s extension has been successfully deleted.', 'fw'), $extension_title)
-						);
-
-						$skin->set_result(true);
-					}
-				}
-
-				// remove from active list the deleted extensions
-				{
-					$db_active_extensions = fw()->extensions->_get_db_active_extensions();
-					$db_active_extensions = array_diff_key($db_active_extensions, $extensions);
-
-					update_option(
-						fw()->extensions->_get_active_extensions_db_option_name(),
-						$db_active_extensions
-					);
-
-					unset($db_active_extensions);
+					$skin->error($error);
+				} elseif ($uninstall_result === true) {
+					$skin->set_result(true);
 				}
 
 				$skin->after(array(
@@ -1500,7 +1405,7 @@ final class _FW_Extensions_Manager
 
 				fw_render_view(dirname(__FILE__) .'/views/delete-form.php', array(
 					'extension_names' => array_keys($extensions),
-					'installed_extensions' => $installed_extensions,
+					'installed_extensions' => $this->get_installed_extensions(),
 					'list_page_link' => $this->get_link(),
 				), false);
 
@@ -1509,6 +1414,217 @@ final class _FW_Extensions_Manager
 		} while(false);
 
 		$skin->footer();
+	}
+
+	/**
+	 * Remove extensions
+	 * @param array $extensions {'ext_1' => array(), 'ext_2' => array(), ...}
+	 * @param array $opts
+	 * @return WP_Error|bool|array
+	 *         true:  when all extensions succeeded
+	 *         array: when some/all failed
+	 */
+	public function uninstall_extensions(array $extensions, $opts = array())
+	{
+		{
+			$opts = array_merge(array(
+				/**
+				 * @type bool
+				 * false: return {'ext_1' => true|WP_Error, 'ext_2' => true|WP_Error, ...}
+				 * true:  return first WP_Error or true on success
+				 */
+				'cancel_on_error' => false,
+				/**
+				 * @type bool|WP_Upgrader_Skin
+				 */
+				'verbose' => false,
+			), $opts);
+
+			$cancel_on_error = $opts['cancel_on_error']; // fixme: install back successfully removed extensions before error?
+			$verbose = $opts['verbose'];
+
+			unset($opts);
+		}
+
+		if (!$this->can_install()) {
+			return new WP_Error(
+				'access_denied',
+				__('You have no permissions to uninstall extensions', 'fw')
+			);
+		}
+
+		if (empty($extensions)) {
+			return new WP_Error(
+				'no_extensions',
+				__('No extensions provided', 'fw')
+			);
+		}
+
+		/** @var WP_Filesystem_Base $wp_filesystem */
+		global $wp_filesystem;
+
+		if (!$wp_filesystem) {
+			return new WP_Error(
+				'fs_not_initialized',
+				__('WP Filesystem is not initialized', 'fw')
+			);
+		}
+
+		$installed_extensions = $this->get_installed_extensions();
+		$extensions_before_uninstall = array_fill_keys(array_keys($installed_extensions), array());
+
+		$result = $uninstalled_extensions = array();
+		$has_errors = false;
+
+		while (!empty($extensions)) {
+			$not_used_var = reset($extensions);
+			$extension_name = key($extensions);
+			unset($extensions[$extension_name]);
+
+			$extension_title = $this->get_extension_title($extension_name);
+
+			if (!isset($installed_extensions[ $extension_name ])) {
+				// already deleted
+				$result[$extension_name] = true;
+				continue;
+			}
+
+			if (
+				!isset($installed_extensions[ $extension_name ]['path'])
+				||
+				empty($installed_extensions[ $extension_name ]['path'])
+			) {
+				/**
+				 * This happens sometimes, but I don't know why
+				 * If the script will continue, it will delete the root folder
+				 */
+				fw_print(
+					'Please report this to https://github.com/ThemeFuse/Unyson/issues',
+					$extension_name,
+					$installed_extensions
+				);
+				die;
+			}
+
+			$wp_fs_extension_path = FW_WP_Filesystem::real_path_to_filesystem_path(
+				$installed_extensions[ $extension_name ]['path']
+			);
+
+			if (!$wp_filesystem->exists($wp_fs_extension_path)) {
+				// already deleted, maybe because it was a sub-extension of an deleted extension
+				$result[$extension_name] = true;
+				continue;
+			}
+
+			if ($verbose) {
+				$verbose_message = sprintf(__('Deleting the "%s" extension...', 'fw'), $extension_title);
+
+				if (is_subclass_of($verbose, 'WP_Upgrader_Skin')) {
+					$verbose->feedback($verbose_message);
+				} else {
+					echo fw_html_tag('p', array(), $verbose_message);
+				}
+			}
+
+			if (!$wp_filesystem->delete($wp_fs_extension_path, true, 'd')) {
+				$result[$extension_name] = new WP_Error(
+					'cannot_delete_directory',
+					sprintf(__('Cannot delete the "%s" extension.', 'fw'), $extension_title)
+				);
+				$has_errors = true;
+
+				if ($cancel_on_error) {
+					break;
+				} else {
+					continue;
+				}
+			} else {
+				if ($verbose) {
+					$verbose_message = sprintf(
+						__('The %s extension has been successfully deleted.', 'fw'),
+						$extension_title
+					);
+
+					if (is_subclass_of($verbose, 'WP_Upgrader_Skin')) {
+						$verbose->feedback($verbose_message);
+					} else {
+						echo fw_html_tag('p', array(), $verbose_message);
+					}
+				}
+
+				$result[$extension_name] = true;
+			}
+
+			/**
+			 * Read again all extensions
+			 * The delete extension may contain more sub extensions
+			 */
+			{
+				unset($installed_extensions);
+				$installed_extensions = $this->get_installed_extensions(true);
+			}
+
+			/**
+			 * Add for deletion not used extensions
+			 * For e.g. standalone=false extension that were required by the deleted extension
+			 *          and now are not required by any other extension
+			 */
+			{
+				$not_used_extensions = array_fill_keys(
+					array_keys(
+						array_diff_key(
+							$installed_extensions,
+							$this->get_used_extensions($extensions, array_keys($installed_extensions))
+						)
+					),
+					array()
+				);
+
+				$extensions = array_merge($extensions, $not_used_extensions);
+			}
+		}
+
+		do_action('fw_extensions_uninstall', $result);
+
+		if (
+			$cancel_on_error
+			&&
+			$has_errors
+		) {
+			if (
+				($last_result = end($result))
+				&&
+				is_wp_error($last_result)
+			) {
+				return $last_result;
+			} else {
+				// this should not happen, but just to be sure (for the future, if the code above will be changed)
+				return new WP_Error(
+					'uninstall_failed',
+					_n('Cannot uninstall extension', 'Cannot uninstall extensions', count($extensions), 'fw')
+				);
+			}
+		}
+
+		// remove from active list the deleted extensions
+		{
+			update_option(
+				fw()->extensions->_get_active_extensions_db_option_name(),
+				array_diff_key(
+					fw()->extensions->_get_db_active_extensions(),
+					array_diff_key(
+						$extensions_before_uninstall,
+						$installed_extensions
+					)
+				)
+			);
+		}
+
+		if ($has_errors) {
+			return $result;
+		} else {
+			return true;
+		}
 	}
 
 	private function display_extension_page()
@@ -1964,6 +2080,9 @@ final class _FW_Extensions_Manager
 
 		foreach ($extensions as $extension_name => $not_used_var) {
 			if (!isset($installed_extensions[$extension_name])) {
+				// anyway remove from the active list
+				$extensions_for_deactivation[$extension_name] = array();
+
 				$result[$extension_name] = new WP_Error(
 					'extension_not_installed',
 					sprintf(__( 'Extension "%s" does not exist.' , 'fw' ), $this->get_extension_title($extension_name))
@@ -2692,8 +2811,10 @@ final class _FW_Extensions_Manager
 		foreach (array_keys($skip_extensions) as $skip_extension_name) {
 			unset($used_extensions[$skip_extension_name]);
 
-			foreach ($this->collect_sub_extensions($skip_extension_name, $installed_extensions) as $sub_extension_name => $sub_extension_data) {
-				unset($used_extensions[$sub_extension_name]);
+			if (isset($installed_extensions[$skip_extension_name])) {
+				foreach ($this->collect_sub_extensions($skip_extension_name, $installed_extensions) as $sub_extension_name => $sub_extension_data) {
+					unset($used_extensions[$sub_extension_name]);
+				}
 			}
 		}
 
