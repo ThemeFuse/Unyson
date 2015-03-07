@@ -82,6 +82,11 @@ body.rtl .fw-options-tabs-first-level > .fw-options-tabs-list ul li {
 	border-bottom-color: #f1f1f1;
 }
 
+.fw-postbox .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab,
+.postbox-with-fw-options .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+	border-bottom-color: #fff;
+}
+
 .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab:hover {
 	background: 0 0;
 }
@@ -616,10 +621,6 @@ form.fw-settings-form.fw-backend-side-tabs {
 /* Boxes */
 
 /* Fixes for edit post page */
-
-form#post .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
-	border-bottom-color: #FFFFFF;
-}
 
 form#post .fw-options-tabs-contents .fw-backend-postboxes {
 	padding: 0 10px;

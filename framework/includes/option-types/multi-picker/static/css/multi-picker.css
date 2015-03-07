@@ -3,6 +3,16 @@
 	padding-right: 0;
 }
 
+/* hide last inner option border */
+.fw-postbox .fw-option-type-multi-picker > .fw-backend-options-group.choice-group:after,
+.postbox-with-fw-options .fw-option-type-multi-picker > .fw-backend-options-group.choice-group:after {
+	content: ' ';
+	display: block;
+	border-top: 1px solid #fff;
+	top: -1px;
+	position: relative;
+}
+
 .fw-option-type-multi-picker > .choice-group {
 	display: none;
 	padding-bottom: 0;
@@ -23,10 +33,6 @@
 	border-bottom-width: 1px;
 }
 
-.fw-option-type-multi-picker > .choice-group .fw-show-borders .fw-backend-option:last-child {
-	border-bottom-width: 0px !important;
-}
-
 .fw-option-type-multi-picker:not(.fw-option-type-multi-picker-with-borders) > .picker-group,
 .fw-option-type-multi-picker.fw-option-type-multi-picker-with-borders:not(.has-choice) > .picker-group {
 	border-bottom-width: 0px;
@@ -37,7 +43,7 @@
 	padding-top: 0;
 }
 
-.fw-option-type-multi-picker .fw-option-type-multi > .fw-backend-option,
+.fw-option-type-multi-picker:not(.fw-option-type-multi-picker-with-borders) .fw-option-type-multi > .fw-backend-option,
 .fw-option-type-multi-picker.has-choice:not(.fw-option-type-multi-picker-with-borders) > .picker-group {
 	padding-bottom: 0;
 }
