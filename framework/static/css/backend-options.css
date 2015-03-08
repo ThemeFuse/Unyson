@@ -451,6 +451,7 @@ form.fw-settings-form.fw-backend-side-tabs {
 	.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 		margin-bottom: 0;
 		border-bottom-width: 0;
+		display: block;
 	}
 
 	.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab,
