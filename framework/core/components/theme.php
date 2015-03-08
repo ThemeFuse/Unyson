@@ -2,7 +2,7 @@
 
 /**
  * Theme Component
- * Works with framework-customizations/theme directory
+ * Works with framework customizations / theme directory
  */
 final class _FW_Component_Theme
 {
