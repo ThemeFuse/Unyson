@@ -145,6 +145,7 @@ body.rtl .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-t
 	padding: 0;
 	margin: 0 5px;
 	font-size: 13px;
+	line-height: 16px;
 	font-weight: normal;
 }
 
@@ -165,7 +166,6 @@ body.rtl .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-t
 	padding: 0;
 	border: none;
 	color: #000;
-	font-size: 13px;
 }
 
 .fw-options-tabs-contents > .fw-inner > .fw-options-tab {
@@ -177,12 +177,12 @@ body.rtl .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-t
 		float: none;
 	}
 
-	.fw-options-tabs-wrapper > .fw-options-tabs-list ul li a {
+	.fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab {
 		display: block;
 	}
 
 	.fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab {
-		margin: 0 5px;
+		display: inline;
 	}
 }
 
