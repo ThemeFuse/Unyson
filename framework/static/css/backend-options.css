@@ -19,6 +19,12 @@ Included on pages where backend options are rendered
 	max-width: 100%;
 }
 
+.fw-backend-postboxes.metabox-holder,
+#wpbody-content .fw-backend-postboxes.metabox-holder {
+	padding-top: 0;
+}
+
+
 /* Tabs */
 
 .fw-options-tabs-list ul,
@@ -96,50 +102,49 @@ body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
 	box-shadow: none;
 }
 
-.fw-options-tabs-wrapper .metabox-holder,
-.fw-backend-postboxes.metabox-holder {
-	padding-top: 0 !important; /* to rewrite: #wpbody-content .metabox-holder */
-	margin: 0 !important; /* to rewrite: #wpbody-content .metabox-holder */
+.fw-options-tabs-wrapper > .fw-options-tabs-contents,
+#wpbody-content .metabox-holder.fw-options-tabs-contents {
+	padding-top: 0;
 }
 
-.fw-options-tabs-wrapper .fw-options-tabs-contents {
-	margin-top: 20px !important; /* to rewrite: .fw-options-tabs-wrapper .metabox-holder */
+.fw-options-tabs-wrapper > .fw-options-tabs-contents {
+	margin-top: 20px;
 }
 
-.fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
+.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
 	padding: 0 0 0 5px;
 	border-bottom-width: 0;
 }
-body.rtl .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
+body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
 	padding: 0 5px 0 0;
 }
 
-.postbox .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
+.postbox .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
 	padding: 0 0 0 25px;
 }
-body.rtl .postbox .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
+body.rtl .postbox .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
 	padding: 0 25px 0 0;
 }
 
-.fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li:after {
+.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li:after {
 	content: '|';
 }
 
-.fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li:last-child:after {
+.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li:last-child:after {
 	content: none;
 }
 
-.fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul > li {
+.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul > li {
 	float: left;
 	color: #666;
 	margin-right: 0;
 }
-body.rtl .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul > li {
+body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul > li {
 	float: right;
 	margin-left: 0;
 }
 
-.fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab {
+.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab {
 	background: none;
 	border: none;
 	padding: 0;
@@ -149,26 +154,26 @@ body.rtl .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-t
 	font-weight: normal;
 }
 
-.fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab.fw-wp-link {
+.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab.fw-wp-link {
 	color: #0074a2;
 }
 
-.fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li:first-child a.nav-tab {
+.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li:first-child a.nav-tab {
 	margin-left: 0;
 }
-body.rtl .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li:first-child a.nav-tab {
+body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li:first-child a.nav-tab {
 	margin-left: 5px;
 	margin-right: 0;
 }
 
-.fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 	background: none;
 	padding: 0;
 	border: none;
 	color: #000;
 }
 
-.fw-options-tabs-contents > .fw-inner > .fw-options-tab {
+.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab {
 	position: relative;
 }
 
@@ -179,9 +184,10 @@ body.rtl .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-t
 
 	.fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab {
 		display: block;
+		text-align: center;
 	}
 
-	.fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab {
+	.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab {
 		display: inline;
 	}
 }
@@ -274,47 +280,51 @@ form.fw-settings-form.fw-backend-side-tabs {
 	color: #fff;
 }
 
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+	border-bottom-color: #fff;
+}
+
 .fw-backend-side-tabs .fw-options-tabs-list ul li:focus {
 	outline: none;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
 	padding: 0;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li:after {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li:after {
 	content: none;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul {
 	padding: 0;
 	background: #f7f7f7;
 	border-width: 1px 0;
 	clear: both;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul:before,
-.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul:after {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul:before,
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul:after {
 	display: table;
 	content: " ";
 }
 
-.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul:after {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul:after {
 	clear: both;
 	margin-bottom: -1px;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul,
-.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul,
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
 	border-bottom: 1px solid #e5e5e5;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
 	position: relative;
 	border-right: 1px solid #e5e5e5;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active:after {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active:after {
 	height: 1px;
 	background: #fff;
 	width: 100%;
@@ -323,8 +333,8 @@ form.fw-settings-form.fw-backend-side-tabs {
 	position: absolute;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab,
-.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab,
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 	margin: 0;
 	padding: 0 24px;
 	border: none;
@@ -336,25 +346,26 @@ form.fw-settings-form.fw-backend-side-tabs {
 	outline: none;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab {
 	background: transparent;
 	color: #000;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 	background: #fff;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul > li a.nav-tab:hover {
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul > li a.nav-tab:hover {
 	color: #0074a2;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-wrapper .fw-options-tabs-contents {
-	margin-top: 0 !important;
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents,
+.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-contents {
+	margin-top: 0;
 }
 
 /* hide last option border */
-.fw-backend-side-tabs .fw-options-tabs-wrapper .fw-options-tabs-contents > .fw-inner:after {
+.fw-backend-side-tabs .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner:after {
 	content: ' ';
 	display: block;
 	width: 100%;
@@ -432,33 +443,34 @@ form.fw-settings-form.fw-backend-side-tabs {
 		padding-bottom: 0;
 	}
 
-	.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul {
+	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul {
 		height: auto;
 		border-bottom-width: 0;
 	}
 
-	.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
 		float: none;
 		width: 100%;
 		text-align: center;
 		border-right-width: 0;
 	}
 
-	.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active:after {
+	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active:after {
 		display: none;
 	}
 
-	.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 		margin-bottom: 0;
 		border-bottom-width: 0;
 		display: block;
 	}
 
-	.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab,
-	.fw-backend-side-tabs .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab,
+	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 		width: 100%;
 		height: auto;
 		padding: 0;
+		display: block;
 	}
 
 	.fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > .handlediv:before {
@@ -630,7 +642,7 @@ form.fw-settings-form.fw-backend-side-tabs {
 
 /* Fixes for edit post page */
 
-form#post .fw-options-tabs-contents .fw-backend-postboxes {
+form#post .fw-options-tabs-wrapper > .fw-options-tabs-contents .fw-backend-postboxes {
 	padding: 0 10px;
 }
 

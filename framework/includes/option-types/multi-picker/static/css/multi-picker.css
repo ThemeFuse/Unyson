@@ -50,3 +50,17 @@
 	padding-bottom: 0;
 }
 
+/* tabs fixes */
+
+.fw-option-type-multi-picker > .choice-group .fw-options-tabs-wrapper > .fw-options-tabs-list,
+.fw-option-type-multi-picker > .choice-group .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
+	padding-top: 24px; /* same as .fw-backend-option-design-default */
+	padding-left: 27px; /* same as .fw-backend-option-design-default */
+}
+
+.fw-option-type-multi-picker > .choice-group .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
+	padding-top: 0;
+}
+
+/* end: tabs fixes */
+
