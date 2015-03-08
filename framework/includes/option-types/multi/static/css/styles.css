@@ -6,7 +6,6 @@
 	border-bottom-width: 0;
 }
 
-
 /* show options separator borders */
 
 .fw-option-type-multi.fw-option-type-multi-show-borders > .fw-backend-option {
@@ -18,3 +17,7 @@
 }
 
 /* end: show options separator borders */
+
+.fw-option-type-multi:not(.fw-option-type-multi-show-borders) > .fw-backend-option:not(:last-child) {
+	padding-bottom: 0;
+}
