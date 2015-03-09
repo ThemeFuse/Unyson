@@ -2770,17 +2770,6 @@ a.fw-wp-link:hover {
 	100% {opacity: 1;}
 }
 
-
-@-webkit-keyframes fwFadeIn07 {
-	0% {opacity: 0;}
-	100% {opacity: 0.7;}
-}
-
-@keyframes fwFadeIn07 {
-	0% {opacity: 0;}
-	100% {opacity: 0.7;}
-}
-
 /* end: fadeIn */
 
 /* end: Animations */
@@ -2818,11 +2807,8 @@ a.fw-wp-link:hover {
 .fw-modal.fw-modal-open > .media-modal-backdrop {
 	opacity: .7; /* must be the same as in .media-modal-backdrop {} wp style */
 
-	-webkit-animation-name: fwFadeIn07;
-	animation-name: fwFadeIn07;
-
-	-webkit-animation-duration: .3s;
-	animation-duration: .3s;
+	-webkit-transition: opacity .3s ease-in-out; /* For Safari 3.1 to 6.0 */
+	transition: opacity .3s ease-in-out;
 }
 
 .fw-modal.fw-modal-open > .media-modal > .media-modal-content {
