@@ -897,7 +897,7 @@ final class _FW_Component_Backend
 	public function _settings_form_validate($errors)
 	{
 		if (!current_user_can('manage_options')) {
-			$errors['_no_permission'] = __('You have no permissions to change settings options', 'fw');;
+			$errors['_no_permission'] = __('You have no permissions to change settings options', 'fw');
 		}
 
 		return $errors;
