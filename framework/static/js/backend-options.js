@@ -95,10 +95,6 @@ jQuery(document).ready(function($){
 					$this.addClass('fw-options-tabs-first-level');
 				}
 			});
-
-			setTimeout(function(){
-				$elements.fadeTo('fast', 1, function(){ $(this).css('opacity', ''); });
-			}, 50);
 		}
 	});
 
@@ -113,16 +109,14 @@ jQuery(document).ready(function($){
 
 		$boxes.addClass('fw-postbox-initialized');
 
-		setTimeout(function(){
-			addPostboxToggles($boxes);
+		hideBoxEmptyTitles(
+			$boxes.filter('.fw-backend-postboxes > .fw-postbox')
+		);
 
-			hideBoxEmptyTitles(
-				$boxes.filter('.fw-backend-postboxes > .fw-postbox')
-			);
+		addPostboxToggles($boxes);
 
-			// trigger on box custom event for others to do something after box initialized
-			$boxes.trigger('fw-options-box:initialized');
-		}, 100);
+		// trigger on box custom event for others to do something after box initialized
+		$boxes.trigger('fw-options-box:initialized');
 	});
 
 	/** Fixes */
@@ -160,6 +154,10 @@ jQuery(document).ready(function($){
 			data.$elements.find('.postbox-with-fw-options > .inside, .fw-postbox > .inside')
 				.append('<div class="fw-backend-options-last-border-hider"></div>');
 		}
+
+		hideBoxEmptyTitles(
+			data.$elements.find('.postbox-with-fw-options')
+		);
 	});
 
 	/**
@@ -174,10 +172,6 @@ jQuery(document).ready(function($){
 			$helps.addClass('initialized');
 		});
 	})();
-
-	setTimeout(function(){
-		hideBoxEmptyTitles($('.postbox-with-fw-options'));
-	}, 55);
 
 	$('#side-sortables').addClass('fw-force-xs');
 });

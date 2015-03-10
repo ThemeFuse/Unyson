@@ -713,8 +713,51 @@ final class _FW_Component_Backend
 		do_action('fw_save_term_options', $term_id, $taxonomy, $old_values);
 	}
 
-	public function _action_admin_enqueue_scripts()
+	public function _action_admin_enqueue_scripts($hook)
 	{
+		global $current_screen, $plugin_page, $post;
+
+		/**
+		 * Enqueue settings options static in <head>
+		 */
+		{
+			if ($this->_get_settings_page_slug() === $plugin_page) {
+				fw()->backend->enqueue_options_static(
+					fw()->theme->get_settings_options()
+				);
+			}
+		}
+
+		/**
+		 * Enqueue post options static in <head>
+		 */
+		{
+			if ('post' === $current_screen->base) {
+				if ($post) {
+					fw()->backend->enqueue_options_static(
+						fw()->theme->get_post_options($post->post_type)
+					);
+				}
+			}
+		}
+
+		/**
+		 * Enqueue term options static in <head>
+		 */
+		{
+			if (
+				'edit-tags' === $current_screen->base
+				&&
+				$current_screen->taxonomy
+				&&
+				!empty($_GET['tag_ID'])
+			) {
+				fw()->backend->enqueue_options_static(
+					fw()->theme->get_taxonomy_options($current_screen->taxonomy)
+				);
+			}
+		}
+
 		$this->register_static();
 	}
 
