@@ -713,7 +713,7 @@ final class _FW_Component_Backend
 		do_action('fw_save_term_options', $term_id, $taxonomy, $old_values);
 	}
 
-	public function _action_admin_enqueue_scripts($hook)
+	public function _action_admin_enqueue_scripts()
 	{
 		global $current_screen, $plugin_page, $post;
 
@@ -732,12 +732,10 @@ final class _FW_Component_Backend
 		 * Enqueue post options static in <head>
 		 */
 		{
-			if ('post' === $current_screen->base) {
-				if ($post) {
-					fw()->backend->enqueue_options_static(
-						fw()->theme->get_post_options($post->post_type)
-					);
-				}
+			if ('post' === $current_screen->base && $post) {
+				fw()->backend->enqueue_options_static(
+					fw()->theme->get_post_options($post->post_type)
+				);
 			}
 		}
 
