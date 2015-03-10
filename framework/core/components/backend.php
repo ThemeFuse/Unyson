@@ -725,6 +725,8 @@ final class _FW_Component_Backend
 				fw()->backend->enqueue_options_static(
 					fw()->theme->get_settings_options()
 				);
+
+				do_action('fw_admin_enqueue_scripts:settings');
 			}
 		}
 
@@ -736,6 +738,8 @@ final class _FW_Component_Backend
 				fw()->backend->enqueue_options_static(
 					fw()->theme->get_post_options($post->post_type)
 				);
+
+				do_action('fw_admin_enqueue_scripts:post', $post);
 			}
 		}
 
@@ -753,6 +757,8 @@ final class _FW_Component_Backend
 				fw()->backend->enqueue_options_static(
 					fw()->theme->get_taxonomy_options($current_screen->taxonomy)
 				);
+
+				do_action('fw_admin_enqueue_scripts:term', $current_screen->taxonomy);
 			}
 		}
 
