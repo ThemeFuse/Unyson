@@ -46,6 +46,7 @@ final class _Fw
 
 		require $fw_dir .'/core/extends/class-fw-extension.php';
 		require $fw_dir .'/core/extends/class-fw-option-type.php';
+		require $fw_dir .'/core/extends/interface-fw-option-handler.php'; //option handler
 
 		// components
 		{

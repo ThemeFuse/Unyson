@@ -602,12 +602,31 @@ final class _FW_Component_Backend
 
 		$old_values = (array)fw_get_db_post_option($post_id);
 
+		$handled_values = array();
+		$all_options = fw_extract_only_options(fw()->theme->get_post_options($post->post_type));
+		$options_values = fw_get_options_values_from_input( fw()->theme->get_post_options($post->post_type) );
+
+		foreach ($all_options as $option_id => $option) {
+			if (
+				isset($option['option_handler']) &&
+				$option['option_handler'] instanceof FW_Option_Handler
+			) {
+
+				/*
+				 * if the option has a custom option_handler
+				 * the saving is delegated to the handler,
+				 * so it does not go to the post_meta
+				 */
+				$option['option_handler']->save_option_value($option_id, $option, $options_values[$option_id]);
+
+				$handled_values[$option_id] = $options_values[$option_id];
+			}
+		}
+
 		fw_set_db_post_option(
 			$post_id,
 			null,
-			fw_get_options_values_from_input(
-				fw()->theme->get_post_options($post->post_type)
-			)
+			array_diff_key($options_values, $handled_values) //unset $handled_values
 		);
 
 		do_action('fw_save_post_options', $post_id, $post, $old_values);
@@ -1135,6 +1154,18 @@ final class _FW_Component_Backend
 
 		if (!isset($data['id_prefix'])) {
 			$data['id_prefix'] = FW_Option_Type::get_default_id_prefix();
+		}
+
+		if (
+			isset($option['option_handler']) &&
+			$option['option_handler'] instanceof FW_Option_Handler
+		) {
+
+			/*
+			 * if the option has a custom option_handler
+			 * then the handler provides the option's value
+			 */
+			$data['value'] = $option['option_handler']->get_option_value($id, $option, $data);
 		}
 
 		return fw_render_view(fw_get_framework_directory('/views/backend-option-design-'. $design .'.php'), array(
