@@ -33,6 +33,17 @@ Included on pages where backend options are rendered
 	padding: 0;
 }
 
+.fw-options-tabs-wrapper {
+	opacity: 0;
+}
+
+.fw-options-tabs-wrapper.ui-tabs {
+	opacity: 1;
+
+	transition: opacity ease 0.3s;
+	-webkit-transition: opacity ease 0.3s;
+}
+
 .fw-options-tabs-wrapper > .fw-options-tabs-list {
 	border-bottom: 1px solid #CCC;
 	padding: 0 10px;

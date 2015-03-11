@@ -3,5 +3,5 @@ jQuery(document).ready(function ($) {
 		fwEvents.trigger('fw:options:init', {
 			$elements: $(document.body)
 		});
-	}, 50);
+	}, 30);
 });

@@ -253,6 +253,7 @@ final class _FW_Component_Backend
 				'l10n' => array(
 					'done' => __('Done', 'fw'),
 					'ah_sorry' => __('Ah, Sorry', 'fw'),
+					'save' => __('Save', 'fw'),
 				),
 			));
 		}
@@ -734,6 +735,53 @@ final class _FW_Component_Backend
 
 	public function _action_admin_enqueue_scripts()
 	{
+		global $current_screen, $plugin_page, $post;
+
+		/**
+		 * Enqueue settings options static in <head>
+		 */
+		{
+			if ($this->_get_settings_page_slug() === $plugin_page) {
+				fw()->backend->enqueue_options_static(
+					fw()->theme->get_settings_options()
+				);
+
+				do_action('fw_admin_enqueue_scripts:settings');
+			}
+		}
+
+		/**
+		 * Enqueue post options static in <head>
+		 */
+		{
+			if ('post' === $current_screen->base && $post) {
+				fw()->backend->enqueue_options_static(
+					fw()->theme->get_post_options($post->post_type)
+				);
+
+				do_action('fw_admin_enqueue_scripts:post', $post);
+			}
+		}
+
+		/**
+		 * Enqueue term options static in <head>
+		 */
+		{
+			if (
+				'edit-tags' === $current_screen->base
+				&&
+				$current_screen->taxonomy
+				&&
+				!empty($_GET['tag_ID'])
+			) {
+				fw()->backend->enqueue_options_static(
+					fw()->theme->get_taxonomy_options($current_screen->taxonomy)
+				);
+
+				do_action('fw_admin_enqueue_scripts:term', $current_screen->taxonomy);
+			}
+		}
+
 		$this->register_static();
 	}
 

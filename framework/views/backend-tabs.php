@@ -5,7 +5,7 @@
  * @var array $options_data
  */
 ?>
-<div class="fw-options-tabs-wrapper" style="opacity:0">
+<div class="fw-options-tabs-wrapper">
 	<div class="fw-options-tabs-list">
 		<ul>
 		<?php foreach ($tabs as $tab_id => &$tab): ?>
