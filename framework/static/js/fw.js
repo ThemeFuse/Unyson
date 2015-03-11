@@ -721,7 +721,7 @@ fw.getQueryString = function(name) {
 							items: [
 								{
 									style: 'primary',
-									text: 'Save',
+									text: _fw_localized.l10n.save,
 									priority: 40,
 									click: function () {
 										fw.loading.show();

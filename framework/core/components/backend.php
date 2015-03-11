@@ -253,6 +253,7 @@ final class _FW_Component_Backend
 				'l10n' => array(
 					'done' => __('Done', 'fw'),
 					'ah_sorry' => __('Ah, Sorry', 'fw'),
+					'save' => __('Save', 'fw'),
 				),
 			));
 		}
