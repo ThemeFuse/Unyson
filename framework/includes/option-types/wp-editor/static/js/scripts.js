@@ -46,10 +46,6 @@
 			id			= $textarea.attr('id'),
 			settings	= {id: id , buttons: 'strong,em,link,block,del,ins,img,ul,ol,li,code,more,close'};
 
-		/**
-		 * set tinymce settings for modal use teeny setting
-		 */
-
 
 		var tmceCustomSettings = $textarea.parents('.fw-option-type-wp-editor').data('tinymce'),
 			tmce_teeny = $textarea.parents('.fw-option-type-wp-editor').data('tmce-teeny'),

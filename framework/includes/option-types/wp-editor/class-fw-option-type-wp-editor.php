@@ -137,7 +137,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			'toolbar3'                     => '',
 			'toolbar4'                     => '',
 			'tabfocus_elements'            => ':prev,:next',
-			'body_class'                   => 'post-type-page post-status-publish',
+			'body_class'                   => 'wp-admin',
 			'content_css'                  => $this->_get_tmce_content_css(),
 			'language'                     => $this->_get_tmce_locale(),
 			'wpautop'                      => $option['wpautop'],
@@ -318,7 +318,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 		$value = (string) $input_value;
 
 		if ( $option['wpautop'] === true ) {
-			$value = trim( wpautop( $value ) );
+			$value = preg_replace("/\n/i","", wpautop( $value ));
 		}
 
 		return $value;
