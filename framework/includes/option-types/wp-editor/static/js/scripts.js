@@ -96,7 +96,9 @@
 				initTinyMCESettings.selector = '#' + id;
 				tinymce.init(initTinyMCESettings);
 				parent.removeClass('html-active').addClass('tmce-active');
-				QTags._buttonsInit();
+				if (QTags != undefined) {
+					QTags._buttonsInit();
+				}
 			}
 			else
 			{
