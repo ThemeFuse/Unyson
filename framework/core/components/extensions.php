@@ -39,13 +39,6 @@ final class _FW_Component_Extensions
 	private static $active_extensions_tree = array();
 
 	/**
-	 * Used on extensions load
-	 * Indicates from where are currently extensions loaded
-	 * @var string|null framework|parent|child
-	 */
-	private static $current_declaring_source;
-
-	/**
 	 * @var array { 'extension_name' => array('required_by', 'required_by') }
 	 */
 	private static $extensions_required_by_extensions = array();
@@ -104,30 +97,70 @@ final class _FW_Component_Extensions
 	/**
 	 * Load extension from directory
 	 *
-	 * @param null|FW_Extension $parent
-	 * @param array $all_extensions_tree
-	 * @param FW_Extension[] $all_extensions
-	 * @param string $dir
-	 * @param string $URI
-	 * @var int $current_depth
+	 * @param array $data
 	 */
-	private static function load_extensions($dir, &$parent, &$all_extensions_tree, &$all_extensions, $URI, $current_depth)
+	private static function load_extensions($data)
 	{
-		$dirs = glob($dir .'/*', GLOB_ONLYDIR);
+		if (false) {
+			$data = array(
+				'path' => '/path/to/extension',
+				'uri' => 'https://uri.to/extension',
+				'customizations_locations' => array(
+					'/path/to/parent/theme/customizations/extensions/ext/rel/path' => 'https://uri.to/customization/path',
+					'/path/to/child/theme/customizations/extensions/ext/rel/path'  => 'https://uri.to/customization/path',
+				),
+
+				'all_extensions_tree' => array(),
+				'all_extensions' => array(),
+				'current_depth' => 1,
+				'parent' => '&$parent_extension_instance',
+			);
+		}
+
+		/**
+		 * Do not check all keys
+		 * if one not set, then sure others are not set (this is a private method)
+		 */
+		if (!isset($data['all_extensions_tree'])) {
+			$data['all_extensions_tree'] = &self::$all_extensions_tree;
+			$data['all_extensions'] = &self::$all_extensions;
+			$data['current_depth'] = 1;
+			$data['parent'] = null;
+		}
+
+		$dirs = glob($data['path'] .'/*', GLOB_ONLYDIR);
 
 		if (empty($dirs)) {
 			return;
 		}
 
+		if ($data['current_depth'] > 1) {
+			$customizations_locations = array();
+
+			foreach ($data['customizations_locations'] as $customization_path => $customization_uri) {
+				$customizations_locations[ $customization_path .'/extensions' ] = $customization_uri .'/extensions';
+			}
+
+			$data['customizations_locations'] = $customizations_locations;
+		}
+
 		foreach ($dirs as $extension_dir) {
 			$extension_name = basename($extension_dir);
 
-			if (isset($all_extensions[$extension_name])) {
-				if ($all_extensions[$extension_name]->get_parent() !== $parent) {
+			{
+				$customizations_locations = array();
+
+				foreach ($data['customizations_locations'] as $customization_path => $customization_uri) {
+					$customizations_locations[ $customization_path .'/'. $extension_name ] = $customization_uri .'/'. $extension_name;
+				}
+			}
+
+			if (isset($data['all_extensions'][$extension_name])) {
+				if ($data['all_extensions'][$extension_name]->get_parent() !== $data['parent']) {
 					// extension with the same name exists in another tree
 					trigger_error(
 						'Extension "'. $extension_name .'" is already defined '.
-						'in "'. $all_extensions[$extension_name]->get_declared_path() .'" '.
+						'in "'. $data['all_extensions'][$extension_name]->get_declared_path() .'" '.
 						'found again in "'. $extension_dir .'"',
 						E_USER_ERROR
 					);
@@ -135,28 +168,28 @@ final class _FW_Component_Extensions
 
 				// this is a directory with customizations for an extension
 
-				self::load_extensions(
-					$extension_dir .'/extensions',
-					$all_extensions[$extension_name],
-					$all_extensions_tree[$extension_name],
-					$all_extensions,
-					$URI,
-					$current_depth + 1
-				);
+				self::load_extensions(array(
+					'path' => $data['path'] .'/extensions',
+					'uri' => $data['uri'] .'/extensions',
+					'customizations_locations' => $customizations_locations,
+
+					'all_extensions_tree' => &$data['all_extensions_tree'][$extension_name],
+					'all_extensions' => &$data['all_extensions'],
+					'current_depth' => $data['current_depth'] + 1,
+					'parent' => &$data['all_extensions'][$extension_name],
+				));
 			} else {
 				$class_file_name = 'class-fw-extension-'. $extension_name .'.php';
 
 				if (file_exists($extension_dir .'/manifest.php')) {
-					$all_extensions_tree[$extension_name] = array();
+					$data['all_extensions_tree'][$extension_name] = array();
 
-					self::$extension_to_all_tree[$extension_name] =& $all_extensions_tree[$extension_name];
+					self::$extension_to_all_tree[$extension_name] = &$data['all_extensions_tree'][$extension_name];
 
-					if (file_exists($extension_dir .'/'. $class_file_name)) {
+					if (fw_include_file_isolated($extension_dir .'/'. $class_file_name)) {
 						$class_name = 'FW_Extension_'. fw_dirname_to_classname($extension_name);
-
-						require $extension_dir .'/'. $class_file_name;
 					} else {
-						$parent_class_name = get_class($parent);
+						$parent_class_name = get_class($data['parent']);
 						// check if parent extension has been defined custom Default class for its child extensions
 						if (class_exists($parent_class_name .'_Default')) {
 							$class_name = $parent_class_name .'_Default';
@@ -169,13 +202,13 @@ final class _FW_Component_Extensions
 						trigger_error('Extension "'. $extension_name .'" must extend FW_Extension class', E_USER_ERROR);
 					}
 
-					$all_extensions[$extension_name] = new $class_name(
-						$parent,
-						$extension_dir,
-						self::$current_declaring_source,
-						$URI,
-						$current_depth
-					);
+					$data['all_extensions'][$extension_name] = new $class_name(array(
+						'path' => $data['path'] .'/'. $extension_name,
+						'uri' => $data['uri'] .'/'. $extension_name,
+						'parent' => $data['parent'],
+						'depth' => $data['current_depth'],
+						'customizations_locations' => $customizations_locations,
+					));
 				} else {
 					/**
 					 * The manifest file does not exist, do not load this extension.
@@ -184,14 +217,16 @@ final class _FW_Component_Extensions
 					continue;
 				}
 
-				self::load_extensions(
-					$all_extensions[$extension_name]->get_declared_path() .'/extensions',
-					$all_extensions[$extension_name],
-					$all_extensions_tree[$extension_name],
-					$all_extensions,
-					$URI,
-					$current_depth + 1
-				);
+				self::load_extensions(array(
+					'path' => $data['all_extensions'][$extension_name]->get_path() .'/extensions',
+					'uri' => $data['all_extensions'][$extension_name]->get_uri() .'/extensions',
+					'customizations_locations' => $customizations_locations,
+
+					'parent' => &$data['all_extensions'][$extension_name],
+					'all_extensions_tree' => &$data['all_extensions_tree'][$extension_name],
+					'all_extensions' => &$data['all_extensions'],
+					'current_depth' => $data['current_depth'] + 1,
+				));
 			}
 		}
 	}
@@ -211,63 +246,18 @@ final class _FW_Component_Extensions
 			$extension = fw()->extensions->get($extension);
 		}
 
-		list(
-			$search_in_framework,
-			$search_in_parent_theme,
-			$search_in_child_theme
-		) = $extension->correct_search_in_locations(
-			true,
-			true,
-			true
-		);
+		$paths = $extension->get_customizations_locations();
+		$paths[$extension->get_path()] = $extension->get_uri();
 
-		$rel_path = $extension->get_rel_path() . $file_rel_path;
-
-		{
-			$paths = array();
-
-			if ($search_in_framework) {
-				if (file_exists($path = fw_get_framework_directory('/extensions'. $rel_path))) {
-					$paths['framework'] = $path;
-				}
-			}
-			if ($search_in_parent_theme) {
-				if (file_exists($path = fw_get_template_customizations_directory( '/extensions' . $rel_path ))) {
-					$paths['parent'] = $path;
-				}
-			}
-			if ($search_in_child_theme) {
-				if (file_exists($path = fw_get_stylesheet_customizations_directory('/extensions'. $rel_path))) {
-					$paths['child'] = $path;
-				}
-			}
-
-			if (empty($paths)) {
-				return;
-			}
-
-			if ($themeFirst) {
-				$paths = array_reverse($paths);
-			}
+		if (!$themeFirst) {
+			$paths = array_reverse($paths);
 		}
 
-		if ($onlyFirstFound) {
-			$path = array_shift($paths);
-
-			/**
-			 * This is not a view render, just used this function to include file isolated and send it some variables
-			 */
-			fw_render_view($path, array(
-				/**
-				 * For e.g. you overwrite in the child theme a file located in the framework,
-				 * but still want to include the original file from the framework.
-				 * You can accomplish that by including it manually using the $other_existing_paths variable.
-				 */
-				'other_existing_paths' => $paths
-			), false);
-		} else {
-			foreach ($paths as $location_name => $path) {
-				fw_include_file_isolated($path);
+		foreach ($paths as $path => $uri) {
+			if (fw_include_file_isolated($path . $file_rel_path)) {
+				if ($onlyFirstFound) {
+					return;
+				}
 			}
 		}
 	}
@@ -286,34 +276,15 @@ final class _FW_Component_Extensions
 			$extension = fw()->extensions->get($extension);
 		}
 
-		list(
-			$search_in_framework,
-			$search_in_parent_theme,
-			$search_in_child_theme
-		) = $extension->correct_search_in_locations(
-			true,
-			true,
-			true
-		);
+		$paths = $extension->get_customizations_locations();
+		$paths[$extension->get_path()] = $extension->get_uri();
 
-		$rel_path = $extension->get_rel_path() . $dir_rel_path;
-
-		{
-			$paths = array();
-
-			if ($search_in_framework) {
-				$paths[] = fw_get_framework_directory('/extensions'. $rel_path);
-			}
-			if ($search_in_parent_theme) {
-				$paths[] = fw_get_template_customizations_directory('/extensions'. $rel_path);
-			}
-			if ($search_in_child_theme) {
-				$paths[] = fw_get_stylesheet_customizations_directory('/extensions'. $rel_path);
-			}
+		if (!$themeFirst) {
+			$paths = array_reverse($paths);
 		}
 
-		foreach ($paths as $path) {
-			if ($files = glob($path .'/*.php')) {
+		foreach ($paths as $path => $uri) {
+			if ($files = glob($path . $dir_rel_path .'/*.php')) {
 				foreach ($files as $dir_file_path) {
 					fw_include_file_isolated($dir_file_path);
 				}
@@ -323,41 +294,50 @@ final class _FW_Component_Extensions
 
 	private function load_all_extensions()
 	{
-		$parent = null;
+		{
+			$customizations_locations = array();
 
-		self::$current_declaring_source = 'framework';
-		self::load_extensions(
-			fw_get_framework_directory('/extensions'),
-			$parent,
-			self::$all_extensions_tree,
-			self::$all_extensions,
-			fw_get_framework_directory_uri('/extensions'),
-			1
-		);
+			if (is_child_theme()) {
+				$customizations_locations[fw_get_stylesheet_customizations_directory('/extensions')]
+					= fw_get_stylesheet_customizations_directory_uri('/extensions');
+			}
 
-		self::$current_declaring_source = 'parent';
-		self::load_extensions(
-			fw_get_template_customizations_directory('/extensions'),
-			$parent,
-			self::$all_extensions_tree,
-			self::$all_extensions,
-			fw_get_template_customizations_directory_uri('/extensions'),
-			1
-		);
-
-		if (is_child_theme()) {
-			self::$current_declaring_source = 'child';
-			self::load_extensions(
-				fw_get_stylesheet_customizations_directory('/extensions'),
-				$parent,
-				self::$all_extensions_tree,
-				self::$all_extensions,
-				fw_get_stylesheet_customizations_directory_uri('/extensions'),
-				1
-			);
+			$customizations_locations[fw_get_template_customizations_directory('/extensions')]
+				= fw_get_template_customizations_directory_uri('/extensions');
 		}
 
-		self::$current_declaring_source = null;
+		self::load_extensions(array(
+			'path' => fw_get_framework_directory('/extensions'),
+			'uri' => fw_get_framework_directory_uri('/extensions'),
+			'customizations_locations' => $customizations_locations,
+		));
+
+		/**
+		 * { '/hello/world/extensions' => 'https://hello.com/world/extensions' }
+		 */
+		foreach (apply_filters('fw_extensions_locations', array()) as $path => $uri) {
+			self::load_extensions(array(
+				'path' => $path,
+				'uri' => $uri,
+				'customizations_locations' => $customizations_locations,
+			));
+		}
+
+		array_pop($customizations_locations);
+		self::load_extensions(array(
+			'path' => fw_get_template_customizations_directory('/extensions'),
+			'uri' => fw_get_template_customizations_directory_uri('/extensions'),
+			'customizations_locations' => $customizations_locations,
+		));
+
+		if (is_child_theme()) {
+			array_pop($customizations_locations);
+			self::load_extensions(array(
+				'path' => fw_get_stylesheet_customizations_directory('/extensions'),
+				'uri' => fw_get_stylesheet_customizations_directory_uri('/extensions'),
+				'customizations_locations' => $customizations_locations,
+			));
+		}
 	}
 
 	/**
@@ -583,66 +563,20 @@ final class _FW_Component_Extensions
 	}
 
 	/**
-	 * Search relative path in: child theme -> parent theme -> framework extensions directory and return full path
-	 *
-	 * @param string $rel_path '/<extension>/path_to_dir' or '/<extension>/extensions/<another_extension>/path_to_file.php'
-	 * @param   bool $search_in_framework
-	 * @param   bool $search_in_parent_theme
-	 * @param   bool $search_in_child_theme
-	 * @return false|string Full path or false if not found
+	 * @return false
+	 * @deprecated Use $extension->locate_path()
 	 */
-	public function locate_path($rel_path, $search_in_framework = true, $search_in_parent_theme = true, $search_in_child_theme = true)
+	public function locate_path()
 	{
-		if ($search_in_child_theme && is_child_theme()) {
-			if (file_exists(fw_get_stylesheet_customizations_directory('/extensions'. $rel_path))) {
-				return fw_get_stylesheet_customizations_directory('/extensions'. $rel_path);
-			}
-		}
-
-		if ($search_in_parent_theme) {
-			if (file_exists(fw_get_template_customizations_directory('/extensions'. $rel_path))) {
-				return fw_get_template_customizations_directory('/extensions'. $rel_path);
-			}
-		}
-
-		if ($search_in_framework) {
-			if (file_exists(fw_get_framework_directory('/extensions'. $rel_path))) {
-				return fw_get_framework_directory('/extensions'. $rel_path);
-			}
-		}
-
 		return false;
 	}
 
 	/**
-	 * Search relative path in: child theme -> parent theme -> framework extensions directory and return URI
-	 *
-	 * @param string $rel_path '/<extension>/path_to_dir' or '/<extension>/extensions/<another_extension>/path_to_file.php'
-	 * @param   bool $search_in_framework
-	 * @param   bool $search_in_parent_theme
-	 * @param   bool $search_in_child_theme
-	 * @return false|string URI or false if not found
+	 * @return false
+	 * @deprecated Use $extension->locate_URI()
 	 */
-	public function locate_path_URI($rel_path, $search_in_framework = true, $search_in_parent_theme = true, $search_in_child_theme = true)
+	public function locate_path_URI()
 	{
-		if ($search_in_child_theme && is_child_theme()) {
-			if (file_exists(fw_get_stylesheet_customizations_directory('/extensions'. $rel_path))) {
-				return fw_get_stylesheet_customizations_directory_uri('/extensions' . $rel_path);
-			}
-		}
-
-		if ($search_in_parent_theme) {
-			if (file_exists(fw_get_template_customizations_directory('/extensions'. $rel_path))) {
-				return fw_get_template_customizations_directory_uri('/extensions'. $rel_path);
-			}
-		}
-
-		if ($search_in_framework) {
-			if (file_exists(fw_get_framework_directory('/extensions'. $rel_path))) {
-				return fw_get_framework_directory_uri('/extensions'. $rel_path);
-			}
-		}
-
 		return false;
 	}
 }
