@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.1
-Stable tag: 2.1.25
+Stable tag: 2.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,25 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.2.0 =
+* Added the possibility to load extensions from any directory
+
+    ```
+    function _filter_my_plugin_extensions($locations) {
+        $locations['/path/to/plugin/extensions'] = 'https://uri.to/plugin/extensions';
+        return $locations;
+    }
+    add_filter('fw_extensions_locations', '_filter_my_plugin_extensions');
+    ```
+
+    **Important!** Prefix your extension names to prevent conflicts.
+
+* Removed `array_merge($old_opts, $new_opts)` from options save [#266](https://github.com/ThemeFuse/Unyson/issues/266)
+* Tabs, Boxes, Groups, Options are now displayed in the order they are in array (not grouped) [#319](https://github.com/ThemeFuse/Unyson/issues/319)
+* Option type `multi-picker` fixes [#296](https://github.com/ThemeFuse/Unyson/issues/296)
+* Added the possibility to use custom `framework-customizations` directory name [#276](https://github.com/ThemeFuse/Unyson/issues/276)
+* Minor fixes
 
 = 2.1.25 =
 * Fixed qTranslate function name
