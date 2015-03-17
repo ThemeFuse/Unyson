@@ -64,23 +64,23 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	}
 
 	private function get_teeny_preset( $option ) {
-		return array(
+		return apply_filters( 'wp_editor_settings', array(
 			'menubar'            => false,
 			'wpautop'            => $option['wpautop'],
 			'tabfocus_elements'  => ":prev,:next",
 			'toolbar1'           => "bold,italic,strikethrough,bullist,numlist,blockquote,hr,alignleft,aligncenter,alignright,link,unlink,wp_more,spellchecker,fullscreen,wp_adv",
-			'toolbar2'           => "underline,alignjustify,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo",
+			'toolbar2'           => implode(',', apply_filters( 'mce_buttons_2', array( 'formatselect', 'underline', 'alignjustify', 'forecolor', 'pastetext', 'removeformat', 'charmap', 'outdent', 'indent', 'undo', 'redo', 'wp_help' ), $option['attr']['id'] )),
 			'plugins'            => "hr,tabfocus,fullscreen,wordpress,wpeditimage",
 			'preview_styles'     => 'font-family font-size font-weight font-style text-decoration text-transform',
 			'content_css'        => $this->_get_tmce_content_css(),
 			'language'           => $this->_get_tmce_locale(),
 			'relative_urls'      => false,
 			'remove_script_host' => false,
-		);
+		), $option['attr']['id'] );
 	}
 
 	private function get_extended_preset( $option ) {
-		return array(
+		$return =  apply_filters('tiny_mce_before_init', array(
 			'theme'                        => 'modern',
 			'skin'                         => 'lightgray',
 			'formats'                      => array(
@@ -133,7 +133,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			'menubar'                      => false,
 			'indent'                       => false,
 			'toolbar1'                     => 'bold,italic,strikethrough,bullist,numlist,blockquote,hr,alignleft,aligncenter,alignright,link,unlink,wp_more,spellchecker,fullscreen,wp_adv',
-			'toolbar2'                     => 'formatselect,underline,alignjustify,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help',
+			'toolbar2'                     => implode(',', apply_filters( 'mce_buttons_2', array( 'formatselect', 'underline', 'alignjustify', 'forecolor', 'pastetext', 'removeformat', 'charmap', 'outdent', 'indent', 'undo', 'redo', 'wp_help' ), $option['attr']['id'] )),
 			'toolbar3'                     => '',
 			'toolbar4'                     => '',
 			'tabfocus_elements'            => ':prev,:next',
@@ -141,7 +141,17 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			'content_css'                  => $this->_get_tmce_content_css(),
 			'language'                     => $this->_get_tmce_locale(),
 			'wpautop'                      => $option['wpautop'],
-		);
+		), $option['attr']['id']);
+
+		foreach ( $return as $key => $item ) {
+			if ( ! is_string( $item ) ||  ! is_array( json_decode( $item, true ) ) ) {
+				continue;
+			}
+
+			$return[$key] = json_decode($item, true);
+		}
+
+		return $return;
 	}
 
 	/**
@@ -318,7 +328,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 		$value = (string) $input_value;
 
 		if ( $option['wpautop'] === true ) {
-			$value = preg_replace("/\n/i","", wpautop( $value ));
+			$value = preg_replace( "/\n/i", "", wpautop( $value ) );
 		}
 
 		return $value;
