@@ -169,8 +169,8 @@ final class _FW_Component_Extensions
 				// this is a directory with customizations for an extension
 
 				self::load_extensions(array(
-					'path' => $data['path'] .'/extensions',
-					'uri' => $data['uri'] .'/extensions',
+					'path' => $data['path'] .'/'. $extension_name .'/extensions',
+					'uri' => $data['uri'] .'/'. $extension_name .'/extensions',
 					'customizations_locations' => $customizations_locations,
 
 					'all_extensions_tree' => &$data['all_extensions_tree'][$extension_name],
