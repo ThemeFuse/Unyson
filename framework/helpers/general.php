@@ -785,6 +785,7 @@ function fw_prepare_option_value($value) {
  * @return bool
  */
 function fw_is_real_post_save($post_id) {
+
 	return !(
 		wp_is_post_revision($post_id)
 		|| wp_is_post_autosave($post_id)
