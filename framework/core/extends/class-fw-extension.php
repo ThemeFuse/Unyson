@@ -162,7 +162,7 @@ abstract class FW_Extension
 		$locations = $this->customizations_locations;
 		$locations[$this->get_path()] = $this->get_uri();
 
-		foreach ($this->customizations_locations as $path => $uri) {
+		foreach ($locations as $path => $uri) {
 			if (file_exists($path . $rel_path)) {
 				return $uri . $rel_path;
 			}
