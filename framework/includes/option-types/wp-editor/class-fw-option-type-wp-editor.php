@@ -6,6 +6,8 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	private $js_uri;
 	private $css_uri;
 
+	private $flag = false;
+
 	public function get_type() {
 		return 'wp-editor';
 	}
@@ -48,7 +50,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			/**
 			 * string
 			 */
-			'size' => 'small' // small, large
+			'size'          => 'small' // small, large
 		);
 	}
 
@@ -135,7 +137,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			'toolbar3'                     => '',
 			'toolbar4'                     => '',
 			'tabfocus_elements'            => ':prev,:next',
-			'body_class'                   => 'post-type-page post-status-publish',
+			'body_class'                   => 'wp-admin',
 			'content_css'                  => $this->_get_tmce_content_css(),
 			'language'                     => $this->_get_tmce_locale(),
 			'wpautop'                      => $option['wpautop'],
@@ -192,6 +194,11 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	 * {@inheritdoc}
 	 */
 	protected function _enqueue_static( $id, $option, $data ) {
+		add_action( 'admin_print_footer_scripts', array( $this, '_action_print_wp_editor' ), 9999 );
+
+		wp_enqueue_script( 'quicktags' );
+		wp_enqueue_style( 'buttons' );
+
 		wp_enqueue_script(
 			'fw-option-type-' . $this->get_type(),
 			$this->js_uri . '/scripts.js',
@@ -224,6 +231,30 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 		$mce_locale = get_locale();
 
 		return empty( $mce_locale ) ? 'en' : strtolower( substr( $mce_locale, 0, 2 ) );
+	}
+
+	/**
+	 * @internal
+	 **/
+	public function _action_print_wp_editor() {
+		if ( ! class_exists( '_WP_Editors' ) ) {
+			require( ABSPATH . WPINC . '/class-wp-editor.php' );
+
+			$id = 'fw-wp-editor-option-type';
+
+			$set = _WP_Editors::parse_settings( $id, array(
+				'teeny'         => true,
+				'media_buttons' => true,
+				'tinymce'       => true,
+				'editor_css'    => true,
+				'quicktags'     => true
+			) );
+
+			_WP_Editors::editor_settings( $id, $set );
+
+			_WP_Editors::enqueue_scripts();
+			_WP_Editors::editor_js();
+		}
 	}
 
 	//styles for wp-editor content
@@ -287,7 +318,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 		$value = (string) $input_value;
 
 		if ( $option['wpautop'] === true ) {
-			$value = trim( wpautop( $value ) );
+			$value = preg_replace("/\n/i","", wpautop( $value ));
 		}
 
 		return $value;
@@ -296,8 +327,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function _get_backend_width_type()
-	{
+	public function _get_backend_width_type() {
 		return 'auto';
 	}
 }

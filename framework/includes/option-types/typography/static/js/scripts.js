@@ -36,6 +36,7 @@
 							this.$dropdown.closest('.fw-option-typography-option-family').next('.fw-option-typography-option-style').find('select[data-type="style"]').html(html);
 						}
 					}).addClass('initialized');
+                    $(this).trigger('selectizeLoaded', [$(this)[0].selectize]);
 				});
 			}, 1500);
 		});

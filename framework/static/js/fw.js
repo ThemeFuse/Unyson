@@ -453,8 +453,7 @@ fw.getQueryString = function(name) {
 	return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 };
 
-(function() {
-
+(function(){
 	/*
 	 * A stack-like structure to manage chains of modals
 	 * (modals that are opened one from another)
@@ -474,6 +473,36 @@ fw.getQueryString = function(name) {
 			return this._stack.length;
 		}
 	};
+
+	var ContentView = Backbone.View.extend({
+		tagName: 'form',
+		events: {
+			'submit': 'onSubmit'
+		},
+		render: function() {
+			this.$el.html(
+				this.model.get('html')
+			);
+
+			fwEvents.trigger('fw:options:init', {$elements: this.$el});
+
+			/* options fixes */
+			{
+				// hide last border
+				this.$el.prepend('<div class="fw-backend-options-last-border-hider"></div>');
+
+				// hide last border from tabs
+				this.$el.find('.fw-options-tabs-contents > .fw-inner > .fw-options-tab')
+					.append('<div class="fw-backend-options-last-border-hider"></div>');
+			}
+		},
+		initialize: function() {
+			this.listenTo(this.model, 'change:html', this.render);
+		},
+		onSubmit: function(e) {
+			e.preventDefault();
+		}
+	});
 
 	/**
 	 * Modal to edit backend options
@@ -540,33 +569,6 @@ fw.getQueryString = function(name) {
 		 */
 		initialize: function() {
 			var modal = this;
-
-			var ContentView = Backbone.View.extend({
-				tagName: 'form',
-				attributes: {
-					'onsubmit': 'return false;'
-				},
-				render: function() {
-					this.$el.html(
-						this.model.get('html')
-					);
-
-					fwEvents.trigger('fw:options:init', {$elements: this.$el});
-
-					/* options fixes */
-					{
-						// hide last border
-						this.$el.prepend('<div class="fw-backend-options-last-border-hider"></div>');
-
-						// hide last border from tabs
-						this.$el.find('.fw-options-tabs-contents > .fw-inner > .fw-options-tab')
-							.append('<div class="fw-backend-options-last-border-hider"></div>');
-					}
-				},
-				initialize: function() {
-					this.listenTo(this.model, 'change:html', this.render);
-				}
-			});
 
 			// prepare this.frame
 			{
@@ -762,7 +764,7 @@ fw.getQueryString = function(name) {
 												 * user completed the form with data and wants to submit data
 												 * do not delete all his work
 												 */
-												alert(status+ ': '+ error.message);
+												alert(status +': '+ error.message);
 											}
 										});
 									}
