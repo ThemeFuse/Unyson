@@ -495,12 +495,56 @@ fw.getQueryString = function(name) {
 				this.$el.find('.fw-options-tabs-contents > .fw-inner > .fw-options-tab')
 					.append('<div class="fw-backend-options-last-border-hider"></div>');
 			}
+
+			this.$el.append('<input type="submit" class="fw-hidden hidden-submit" />');
 		},
 		initialize: function() {
 			this.listenTo(this.model, 'change:html', this.render);
 		},
 		onSubmit: function(e) {
 			e.preventDefault();
+
+			fw.loading.show();
+
+			jQuery.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: [
+					'action=fw_backend_options_get_values',
+					'options='+ encodeURIComponent(JSON.stringify(this.model.get('options'))),
+					'name_prefix=fw_edit_options_modal',
+					this.$el.serialize()
+				].join('&'),
+				dataType: 'json',
+				success: _.bind(function (response, status, xhr) {
+					fw.loading.hide();
+
+					if (!response.success) {
+						/**
+						 * do not replace html here
+						 * user completed the form with data and wants to submit data
+						 * do not delete all his work
+						 */
+						alert('Error: '+ response.data.message);
+						return;
+					}
+
+					this.model.set('values', response.data.values);
+
+					// simulate click on close button to fire animations
+					this.model.frame.modal.$el.find('.media-modal-close').trigger('click');
+				}, this),
+				error: function (xhr, status, error) {
+					fw.loading.hide();
+
+					/**
+					 * do not replace html here
+					 * user completed the form with data and wants to submit data
+					 * do not delete all his work
+					 */
+					alert(status +': '+ error.message);
+				}
+			});
 		}
 	});
 
@@ -726,47 +770,12 @@ fw.getQueryString = function(name) {
 									text: _fw_localized.l10n.save,
 									priority: 40,
 									click: function () {
-										fw.loading.show();
-
-										jQuery.ajax({
-											url: ajaxurl,
-											type: 'POST',
-											data: [
-												'action=fw_backend_options_get_values',
-												'options='+ encodeURIComponent(JSON.stringify(modal.get('options'))),
-												'name_prefix=fw_edit_options_modal',
-												modal.contentView.$el.serialize()
-											].join('&'),
-											dataType: 'json',
-											success: function (response, status, xhr) {
-												fw.loading.hide();
-
-												if (!response.success) {
-													/**
-													 * do not replace html here
-													 * user completed the form with data and wants to submit data
-													 * do not delete all his work
-													 */
-													alert('Error: '+ response.data.message);
-													return;
-												}
-
-												modal.set('values', response.data.values);
-
-												// simulate click on close button to fire animations
-												modal.frame.modal.$el.find('.media-modal-close').trigger('click');
-											},
-											error: function (xhr, status, error) {
-												fw.loading.hide();
-
-												/**
-												 * do not replace html here
-												 * user completed the form with data and wants to submit data
-												 * do not delete all his work
-												 */
-												alert(status +': '+ error.message);
-											}
-										});
+										/**
+										 * Simulate form submit
+										 * Important: Empty input[required] must not start form submit
+										 *     and must show default browser warning popup "This field is required"
+										 */
+										modal.contentView.$el.find('input[type="submit"].hidden-submit').trigger('click');
 									}
 								}
 							]
