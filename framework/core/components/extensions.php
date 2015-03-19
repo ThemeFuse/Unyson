@@ -54,6 +54,11 @@ final class _FW_Component_Extensions
 	private static $extension_to_active_tree = array();
 
 	/**
+	 * @var FW_Access_Key
+	 */
+	private static $access_key;
+
+	/**
 	 * @var null|_FW_Extensions_Manager
 	 */
 	public $manager;
@@ -103,6 +108,7 @@ final class _FW_Component_Extensions
 	{
 		if (false) {
 			$data = array(
+				'rel_path' => '/extension',
 				'path' => '/path/to/extension',
 				'uri' => 'https://uri.to/extension',
 				'customizations_locations' => array(
@@ -125,6 +131,7 @@ final class _FW_Component_Extensions
 			$data['all_extensions_tree'] = &self::$all_extensions_tree;
 			$data['all_extensions'] = &self::$all_extensions;
 			$data['current_depth'] = 1;
+			$data['rel_path'] = '';
 			$data['parent'] = null;
 		}
 
@@ -169,6 +176,7 @@ final class _FW_Component_Extensions
 				// this is a directory with customizations for an extension
 
 				self::load_extensions(array(
+					'rel_path' => $data['rel_path'] .'/'. $extension_name .'/extensions',
 					'path' => $data['path'] .'/'. $extension_name .'/extensions',
 					'uri' => $data['uri'] .'/'. $extension_name .'/extensions',
 					'customizations_locations' => $customizations_locations,
@@ -203,6 +211,7 @@ final class _FW_Component_Extensions
 					}
 
 					$data['all_extensions'][$extension_name] = new $class_name(array(
+						'rel_path' => $data['rel_path'] .'/'. $extension_name,
 						'path' => $data['path'] .'/'. $extension_name,
 						'uri' => $data['uri'] .'/'. $extension_name,
 						'parent' => $data['parent'],
@@ -218,6 +227,7 @@ final class _FW_Component_Extensions
 				}
 
 				self::load_extensions(array(
+					'rel_path' => $data['all_extensions'][$extension_name]->get_rel_path() .'/extensions',
 					'path' => $data['all_extensions'][$extension_name]->get_path() .'/extensions',
 					'uri' => $data['all_extensions'][$extension_name]->get_uri() .'/extensions',
 					'customizations_locations' => $customizations_locations,
@@ -294,6 +304,11 @@ final class _FW_Component_Extensions
 
 	private function load_all_extensions()
 	{
+		/**
+		 * { '/hello/world/extensions' => 'https://hello.com/world/extensions' }
+		 */
+		$custom_locations = apply_filters('fw_extensions_locations', array());
+
 		{
 			$customizations_locations = array();
 
@@ -304,6 +319,8 @@ final class _FW_Component_Extensions
 
 			$customizations_locations[fw_get_template_customizations_directory('/extensions')]
 				= fw_get_template_customizations_directory_uri('/extensions');
+
+			$customizations_locations += $custom_locations;
 		}
 
 		self::load_extensions(array(
@@ -312,10 +329,8 @@ final class _FW_Component_Extensions
 			'customizations_locations' => $customizations_locations,
 		));
 
-		/**
-		 * { '/hello/world/extensions' => 'https://hello.com/world/extensions' }
-		 */
-		foreach (apply_filters('fw_extensions_locations', array()) as $path => $uri) {
+		foreach ($custom_locations as $path => $uri) {
+			unset($customizations_locations[$path]);
 			self::load_extensions(array(
 				'path' => $path,
 				'uri' => $uri,
@@ -429,7 +444,7 @@ final class _FW_Component_Extensions
 		self::include_extension_file_all_locations($extension_name, '/helpers.php');
 		self::include_extension_file_all_locations($extension_name, '/hooks.php');
 
-		if (self::$all_extensions[$extension_name]->_call_init() !== false) {
+		if (self::$all_extensions[$extension_name]->_call_init(self::$access_key) !== false) {
 			$this->activate_extensions($extension_name);
 		}
 
@@ -497,6 +512,8 @@ final class _FW_Component_Extensions
 	 */
 	public function _init()
 	{
+		self::$access_key = new FW_Access_Key('fw_extensions');
+
 		$this->load_all_extensions();
 		$this->add_actions();
 	}

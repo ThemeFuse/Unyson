@@ -35,6 +35,11 @@ abstract class FW_Extension
 	/**
 	 * @var string
 	 */
+	private $rel_path;
+
+	/**
+	 * @var string
+	 */
 	private $path;
 
 	/**
@@ -66,10 +71,11 @@ abstract class FW_Extension
 			self::$access_key = new FW_Access_Key('extension');
 		}
 
-		$this->path   = $data['path'];
-		$this->uri    = $data['uri'];
-		$this->parent = $data['parent'];
-		$this->depth  = $data['depth'];
+		$this->rel_path = $data['rel_path'];
+		$this->path     = $data['path'];
+		$this->uri      = $data['uri'];
+		$this->parent   = $data['parent'];
+		$this->depth    = $data['depth'];
 		$this->customizations_locations = $data['customizations_locations'];
 
 		{
@@ -119,10 +125,15 @@ abstract class FW_Extension
 
 	/**
 	 * @internal
-	 * fixme: ask access key from caller
+	 * @param FW_Access_Key $access_key
+	 * @return mixed
 	 */
-	final public function _call_init()
+	final public function _call_init($access_key)
 	{
+		if ($access_key->get_key() !== 'fw_extensions') {
+			trigger_error(__METHOD__ .' denied', E_USER_ERROR);
+		}
+
 		return $this->_init();
 	}
 
@@ -437,12 +448,9 @@ abstract class FW_Extension
 		return $this->customizations_locations;
 	}
 
-	/**
-	 * @deprecated
-	 */
 	final public function get_rel_path()
 	{
-		return preg_replace('/^'. preg_quote(fw_get_framework_directory('/extensions'), '/') .'/', '', $this->get_path());
+		return $this->rel_path;
 	}
 
 	/**
