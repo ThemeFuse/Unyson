@@ -51,7 +51,7 @@ class FW_Option_Type_Rgba_Color_Picker extends FW_Option_Type {
 	 * @internal
 	 */
 	protected function _get_value_from_input( $option, $input_value ) {
-		if ( ! empty( $input_value ) ) {
+		if ( ! isset( $input_value ) ) {
 			$input_value = trim($input_value);
 			$input_value = (
 				preg_match( '/^#[a-f0-9]{3}([a-f0-9]{3})?$/i', $input_value )
