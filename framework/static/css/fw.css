@@ -2985,7 +2985,7 @@ body.rtl .fw-options-modal .media-frame-content > form .fw-options-tabs-contents
 /* SoleModal */
 
 .fw-sole-modal > .media-modal {
-	z-index: 100001;
+	z-index: 500000;
 	margin: auto;
 }
 
