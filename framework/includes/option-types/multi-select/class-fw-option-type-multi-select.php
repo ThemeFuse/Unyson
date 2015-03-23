@@ -137,9 +137,9 @@ class FW_Option_Type_Multi_Select extends FW_Option_Type
 				if ( empty( $names ) ) {
 					$items = $wpdb->get_results(
 						$wpdb->prepare(
-							"SELECT users.id val, users.display_name title " .
+							"SELECT users.id val, users.user_nicename title " .
 							"FROM $wpdb->users as users " .
-							"WHERE users.display_name LIKE %s " .
+							"WHERE users.user_nicename LIKE %s " .
 							"LIMIT 100",
 							'%'. $wpdb->esc_like($title) .'%'
 						)
@@ -155,9 +155,9 @@ class FW_Option_Type_Multi_Select extends FW_Option_Type
 							array($wpdb, 'prepare'),
 							array_merge(
 								array(
-									"SELECT users.id val, users.display_name title " .
+									"SELECT users.id val, users.user_nicename title " .
 									"FROM $wpdb->users as users, $wpdb->usermeta as usermeta " .
-									"WHERE users.display_name LIKE %s AND usermeta.meta_key = 'wp_capabilities' " .
+									"WHERE users.user_nicename LIKE %s AND usermeta.meta_key = 'wp_capabilities' " .
 									"AND ( ".
 									implode(' OR ', array_fill(1, count($like_user_meta), 'usermeta.meta_value LIKE %s')) .
 									" ) " .
@@ -334,7 +334,7 @@ class FW_Option_Type_Multi_Select extends FW_Option_Type
 						$ids = implode( ', ', array_unique( $ids ) );
 
 						$query = $wpdb->get_results(
-							"SELECT users.id, users.display_name title " .
+							"SELECT users.id, users.user_nicename title " .
 							"FROM $wpdb->users as users " .
 							"WHERE users.ID IN ($ids)"
 						);
