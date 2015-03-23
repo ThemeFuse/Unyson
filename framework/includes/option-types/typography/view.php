@@ -58,11 +58,11 @@
 				'700italic' => 'Bold/Italic',
 			)
 			as $key => $style): ?>
-				<option value="<?php echo esc_attr($key) ?>" <?php if ($data['value']['style'] == $key): ?>selected="selected"<?php endif; ?>><?php echo fw_htmlspecialchars($style) ?></option>
+				<option value="<?php echo esc_attr($key) ?>" <?php if ($data['value']['style'] === $key): ?>selected="selected"<?php endif; ?>><?php echo fw_htmlspecialchars($style) ?></option>
 		<?php endforeach; ?>
 		<?php else: ?>
 		<?php foreach ($fonts['google'][$data['value']['family']]['variants'] as $variant): ?>
-			<option value="<?php echo esc_attr($variant) ?>" <?php if ($data['value']['style'] == $variant): ?>selected="selected"<?php endif; ?>><?php echo fw_htmlspecialchars(ucfirst($variant)) ?></option>
+			<option value="<?php echo esc_attr($variant) ?>" <?php if ($data['value']['style'] === $variant): ?>selected="selected"<?php endif; ?>><?php echo fw_htmlspecialchars(ucfirst($variant)) ?></option>
 		<?php endforeach; ?>
 		<?php endif; ?>
 		</select>
