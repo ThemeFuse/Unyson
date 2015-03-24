@@ -85,7 +85,7 @@ if (isset($lists['available'][$name])) {
 					if (
 						isset($lists['supported'][$name]) // is listed in the supported extensions list in theme manifest
 						||
-						($installed_data && $installed_data['source'] !== 'framework') // is located in the theme
+						($installed_data && $installed_data['is']['theme']) // is located in the theme
 					): ?>
 						<p><em><strong><span class="dashicons dashicons-yes"></span> <?php _e('Compatible', 'fw') ?></strong> <?php _e('with your current theme', 'fw') ?></em></p>
 					<?php endif; ?>

@@ -302,55 +302,98 @@ final class _FW_Component_Extensions
 		}
 	}
 
-	private function load_all_extensions()
+	public function get_locations()
 	{
-		/**
-		 * { '/hello/world/extensions' => 'https://hello.com/world/extensions' }
-		 */
-		$custom_locations = apply_filters('fw_extensions_locations', array());
+		$cache_key = 'fw_extensions_locations';
 
-		{
-			$customizations_locations = array();
+		try {
+			return FW_Cache::get($cache_key);
+		} catch (FW_Cache_Not_Found_Exception $e) {
+			/**
+			 * { '/hello/world/extensions' => 'https://hello.com/world/extensions' }
+			 */
+			$custom_locations = apply_filters('fw_extensions_locations', array());
 
-			if (is_child_theme()) {
-				$customizations_locations[fw_get_stylesheet_customizations_directory('/extensions')]
-					= fw_get_stylesheet_customizations_directory_uri('/extensions');
+			{
+				$customizations_locations = array();
+
+				if (is_child_theme()) {
+					$customizations_locations[fw_get_stylesheet_customizations_directory('/extensions')]
+						= fw_get_stylesheet_customizations_directory_uri('/extensions');
+				}
+
+				$customizations_locations[fw_get_template_customizations_directory('/extensions')]
+					= fw_get_template_customizations_directory_uri('/extensions');
+
+				$customizations_locations += $custom_locations;
 			}
 
-			$customizations_locations[fw_get_template_customizations_directory('/extensions')]
-				= fw_get_template_customizations_directory_uri('/extensions');
+			$locations = array();
 
-			$customizations_locations += $custom_locations;
-		}
-
-		self::load_extensions(array(
-			'path' => fw_get_framework_directory('/extensions'),
-			'uri' => fw_get_framework_directory_uri('/extensions'),
-			'customizations_locations' => $customizations_locations,
-		));
-
-		foreach ($custom_locations as $path => $uri) {
-			unset($customizations_locations[$path]);
-			self::load_extensions(array(
-				'path' => $path,
-				'uri' => $uri,
+			$locations[ fw_get_framework_directory('/extensions') ] = array(
+				'path' => fw_get_framework_directory('/extensions'),
+				'uri' => fw_get_framework_directory_uri('/extensions'),
 				'customizations_locations' => $customizations_locations,
-			));
-		}
+				'is' => array(
+					'framework' => true,
+					'custom' => false,
+					'theme' => false,
+				),
+			);
 
-		array_pop($customizations_locations);
-		self::load_extensions(array(
-			'path' => fw_get_template_customizations_directory('/extensions'),
-			'uri' => fw_get_template_customizations_directory_uri('/extensions'),
-			'customizations_locations' => $customizations_locations,
-		));
+			foreach ($custom_locations as $path => $uri) {
+				unset($customizations_locations[$path]);
+				$locations[ $path ] = array(
+					'path' => $path,
+					'uri' => $uri,
+					'customizations_locations' => $customizations_locations,
+					'is' => array(
+						'framework' => false,
+						'custom' => true,
+						'theme' => false,
+					),
+				);
+			}
 
-		if (is_child_theme()) {
 			array_pop($customizations_locations);
-			self::load_extensions(array(
-				'path' => fw_get_stylesheet_customizations_directory('/extensions'),
-				'uri' => fw_get_stylesheet_customizations_directory_uri('/extensions'),
+			$locations[ fw_get_template_customizations_directory('/extensions') ] = array(
+				'path' => fw_get_template_customizations_directory('/extensions'),
+				'uri' => fw_get_template_customizations_directory_uri('/extensions'),
 				'customizations_locations' => $customizations_locations,
+				'is' => array(
+					'framework' => false,
+					'custom' => false,
+					'theme' => true,
+				),
+			);
+
+			if (is_child_theme()) {
+				array_pop($customizations_locations);
+				$locations[ fw_get_stylesheet_customizations_directory('/extensions') ] = array(
+					'path' => fw_get_stylesheet_customizations_directory('/extensions'),
+					'uri' => fw_get_stylesheet_customizations_directory_uri('/extensions'),
+					'customizations_locations' => $customizations_locations,
+					'is' => array(
+						'framework' => false,
+						'custom' => false,
+						'theme' => true,
+					),
+				);
+			}
+
+			FW_Cache::set($cache_key, $locations);
+
+			return $locations;
+		}
+	}
+
+	private function load_all_extensions()
+	{
+		foreach ($this->get_locations() as $location) {
+			self::load_extensions(array(
+				'path' => $location['path'],
+				'uri' => $location['uri'],
+				'customizations_locations' => $location['customizations_locations'],
 			));
 		}
 	}
@@ -409,6 +452,7 @@ final class _FW_Component_Extensions
 				}
 			}
 		}
+		unset($sub_extensions);
 	}
 
 	/**

@@ -51,20 +51,13 @@ unset($attr['value']);
 				);
 				?>
 			</div>
-		<?php endforeach; ?>
+		<?php endforeach; unset($values); ?>
 	</div>
 	<br class="default-box-template fw-hidden" data-template="<?php
 		/**
 		 * Place template in attribute to prevent it to be treated as html
 		 * when this option will be used inside another option template
 		 */
-
-		/**
-		 * This is a reference.
-		 * Unset before replacing with new value
-		 * to prevent changing value to what it refers
-		 */
-		unset($values);
 
 		$values = array();
 

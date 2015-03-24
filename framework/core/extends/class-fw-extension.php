@@ -274,6 +274,7 @@ abstract class FW_Extension
 		foreach ($active_tree as $extension_name => &$sub_extensions) {
 			$result[$extension_name] = fw()->extensions->get($extension_name);
 		}
+		unset($sub_extensions);
 
 		return $result;
 	}

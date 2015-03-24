@@ -25,6 +25,7 @@ foreach ($lists['active'] as $name => &$data) {
 
 	$display_active_extensions[$name] = &$data;
 }
+unset($data);
 ?>
 <?php if (empty($display_active_extensions)): ?>
 	<div class="fw-extensions-no-active">
@@ -48,6 +49,7 @@ foreach ($lists['active'] as $name => &$data) {
 
 			$displayed[$name] = true;
 		}
+		unset($data);
 		?>
 	</div>
 <?php endif; ?>
@@ -62,7 +64,7 @@ foreach ($lists['active'] as $name => &$data) {
 			$theme_extensions = array();
 
 			foreach ($lists['disabled'] as $name => &$data) {
-				if ($data['source'] == 'framework') {
+				if (!$data['is']['theme']) {
 					continue;
 				}
 
@@ -71,8 +73,9 @@ foreach ($lists['active'] as $name => &$data) {
 					'description' => fw_akg('description', $data['manifest'], '')
 				);
 			}
+			unset($data);
 
-			foreach (($theme_extensions + $lists['supported']) as $name => $data) {
+			foreach ($theme_extensions + $lists['supported'] as $name => $data) {
 				if (isset($displayed[$name])) {
 					continue;
 				} elseif (isset($lists['installed'][$name])) {
@@ -127,6 +130,7 @@ foreach ($lists['active'] as $name => &$data) {
 
 			$displayed[$name] = $something_displayed = true;
 		}
+		unset($data);
 
 		if ($can_install) {
 			foreach ( $lists['available'] as $name => &$data ) {
@@ -161,6 +165,7 @@ foreach ($lists['active'] as $name => &$data) {
 
 				$something_displayed = true;
 			}
+			unset($data);
 		}
 		?>
 	</div>

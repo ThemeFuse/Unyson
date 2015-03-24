@@ -544,6 +544,7 @@ final class _FW_Component_Backend {
 
 			unset( $box[ $id ] ); // free memory
 		}
+		unset($box);
 	}
 
 	/**
@@ -1098,6 +1099,7 @@ final class _FW_Component_Backend {
 							)
 						);
 					}
+					unset($box);
 
 					$html .= '</div>';
 					break;
@@ -1120,6 +1122,7 @@ final class _FW_Component_Backend {
 						$html .= $this->render_options( $group['options'], $values, $options_data );
 						$html .= '</div>';
 					}
+					unset($group);
 					break;
 				case 'option':
 					foreach ( $collected_type_options as $id => &$_option ) {
@@ -1134,6 +1137,7 @@ final class _FW_Component_Backend {
 							$design
 						);
 					}
+					unset($_option);
 					break;
 				default:
 					$html .= '<p><em>' . __( 'Unknown collected type', 'fw' ) . ': ' . $collected_type . '</em></p>';

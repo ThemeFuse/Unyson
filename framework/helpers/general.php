@@ -611,6 +611,7 @@ function fw_extract_only_options(array $options, &$_recursion_options = array())
 			$recursion['level']--;
 		}
 	}
+	unset($option);
 
 	if ($recursion['level'] == 0) {
 		$result =& $recursion['result'];
@@ -715,6 +716,7 @@ function fw_collect_first_level_options(&$collected, &$options) {
 			trigger_error('Invalid option: '. $option_id, E_USER_WARNING);
 		}
 	}
+	unset($option);
 }
 
 /**

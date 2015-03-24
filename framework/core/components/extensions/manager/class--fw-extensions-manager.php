@@ -347,7 +347,6 @@ final class _FW_Extensions_Manager
 	 * Scan all directories for extensions
 	 *
 	 * @param bool $reset_cache
-	 *
 	 * @return array
 	 */
 	private function get_installed_extensions($reset_cache = false)
@@ -361,21 +360,16 @@ final class _FW_Extensions_Manager
 		try {
 			return FW_Cache::get($cache_key);
 		} catch (FW_Cache_Not_Found_Exception $e) {
-			{
-				$search_paths = array(
-					'framework' => fw_get_framework_directory('/extensions'),
-					'parent' => fw_get_template_customizations_directory('/extensions'),
-				);
-
-				if (is_child_theme()) {
-					$search_paths['child'] = fw_get_stylesheet_customizations_directory('/extensions');
-				}
-			}
-
 			$extensions = array();
 
-			foreach ($search_paths as $source => $path) {
-				$this->read_extensions($source, $path, $extensions);
+			foreach (fw()->extensions->get_locations() as $location) {
+				// leave only used keys
+				$location = array(
+					'path' => $location['path'],
+					'is'   => $location['is'],
+				);
+
+				$this->read_extensions($location, $extensions);
 			}
 
 			FW_Cache::set($cache_key, $extensions);
@@ -386,36 +380,35 @@ final class _FW_Extensions_Manager
 
 	/**
 	 * used by $this->get_installed_extensions()
-	 * @param string $source
-	 * @param string $path
+	 * @param string $location
 	 * @param array $list
 	 * @param null|string $parent_extension_name
 	 */
-	private function read_extensions($source, $path, &$list, $parent_extension_name = null)
+	private function read_extensions($location, &$list, $parent_extension_name = null)
 	{
-		$paths = glob($path .'/*', GLOB_ONLYDIR | GLOB_NOSORT);
+		$paths = glob($location['path'] .'/*', GLOB_ONLYDIR | GLOB_NOSORT);
 
 		if (empty($paths)) {
 			return;
 		}
 
-		foreach ($paths as $i => $extension_path) {
+		foreach ($paths as $extension_path) {
 			$extension_name = basename($extension_path);
 
 			if (isset($list[$extension_name])) {
-				// extension already
+				// extension already found
 			} elseif (file_exists($extension_path .'/manifest.php')) {
 				$vars = fw_get_variables_from_file($extension_path .'/manifest.php', array(
 					'manifest' => array(),
 				));
 
 				$list[$extension_name] = array(
-					'source'   => $source,
 					'path'     => $extension_path,
 					'manifest' => $vars['manifest'],
 					'children' => array(),
 					'active'   => (bool)fw()->extensions->get($extension_name),
 					'parent'   => $parent_extension_name,
+					'is'       => $location['is'],
 				);
 
 				if ($parent_extension_name) {
@@ -426,9 +419,11 @@ final class _FW_Extensions_Manager
 				continue;
 			}
 
+			$sub_extension_location = $location;
+			$sub_extension_location['path'] .= '/extensions';
+
 			$this->read_extensions(
-				$source,
-				$extension_path .'/extensions',
+				$sub_extension_location,
 				$list,
 				$extension_name
 			);
@@ -1696,7 +1691,7 @@ final class _FW_Extensions_Manager
 			'is_supported'    =>
 				fw()->theme->manifest->get('supported_extensions/'. $extension_name, false) !== false
 				||
-				$installed_extensions[$extension_name]['source'] !== 'framework'
+				$installed_extensions[$extension_name]['is']['theme']
 		), false);
 
 		unset($installed_extensions);
@@ -2806,6 +2801,7 @@ final class _FW_Extensions_Manager
 				}
 			}
 		}
+		unset($inst_ext_data);
 
 		// remove all skipped extensions and sub-extension from used extensions
 		foreach (array_keys($skip_extensions) as $skip_extension_name) {
@@ -2866,7 +2862,7 @@ final class _FW_Extensions_Manager
 		$db_active_extensions = fw()->extensions->_get_db_active_extensions();
 
 		foreach ($this->get_installed_extensions() as $extension_name => $extension) {
-			if ($extension['source'] !== 'framework') {
+			if ($extension['is']['theme']) {
 				$db_active_extensions[ $extension_name ] = array();
 			}
 		}
