@@ -358,6 +358,63 @@ class FW_Form {
 			unset( $data );
 		}
 
+		// display form errors in frontend
+		do {
+			if (is_admin()) {
+				// errors in admin side are displayed by a script at the end of this file
+				break;
+			}
+
+			$submitted_form = FW_Form::get_submitted();
+
+			if ( ! $submitted_form ) {
+				break;
+			}
+
+			if ( $submitted_form->get_id() !== $this->get_id() ) {
+				// the submitted form is not current form
+				break;
+			}
+
+			unset($submitted_form); // not needed anymore, below will be used only with $this (because it's the same form)
+
+			if ( $this->is_valid() ) {
+				break;
+			}
+
+			/**
+			 * Use this action to customize errors display in your theme
+			 */
+			do_action('fw_form_display_errors_frontend', $this);
+
+			if ( $this->errors_accessed() ) {
+				// already displayed, prevent/cancel default display
+				break;
+			}
+
+			$errors = $this->get_errors();
+
+			if (empty($errors)) {
+				break;
+			}
+
+			echo '<ul class="fw-form-errors">';
+
+			foreach ($errors as $input_name => $error_message) {
+				echo fw_html_tag(
+					'li',
+					array(
+						'data-input-name' => $input_name,
+					),
+					$error_message
+				);
+			}
+
+			echo '</ul>';
+
+			unset($errors);
+		} while(false);
+
 		echo '<form '. fw_attr_to_html( $render_data['attr'] ) .' >';
 
 		echo fw_html_tag('input', array(
@@ -498,7 +555,7 @@ if ( is_admin() ) {
 	 * Display form errors in admin side
 	 * @internal
 	 */
-	function _action_show_fw_form_errors_in_admin() {
+	function _action_fw_form_show_errors_in_admin() {
 		$form = FW_Form::get_submitted();
 
 		if ( ! $form || $form->is_valid() ) {
@@ -509,39 +566,20 @@ if ( is_admin() ) {
 			FW_Flash_Messages::add( 'fw-form-admin-' . $input_name, $error_message, 'error' );
 		}
 	}
-	add_action( 'wp_loaded', '_action_show_fw_form_errors_in_admin', 111 );
+	add_action( 'wp_loaded', '_action_fw_form_show_errors_in_admin', 111 );
 } else {
 	/**
-	 * Detect if form errors was not displayed in frontend then display them with default design
-	 * Do nothing if the theme already displayed the errors
+	 * to disable this use remove_action('wp_print_styles', '_action_fw_form_frontend_default_styles');
 	 * @internal
 	 */
-	function _action_show_fw_form_errors_in_frontend() {
+	function _action_fw_form_frontend_default_styles() {
 		$form = FW_Form::get_submitted();
 
 		if ( ! $form || $form->is_valid() ) {
 			return;
 		}
 
-		if ( $form->errors_accessed() ) {
-			// already displayed
-			return;
-		}
-
-		foreach ($form->get_errors() as $input_name => $error_message) {
-			FW_Flash_Messages::add(
-				'fw-form-error-'. $input_name,
-				$error_message,
-				'error'
-			);
-		}
+		echo '<style type="text/css">.fw-form-errors { color: #bf0000; }</style>';
 	}
-	add_action( 'wp_footer', '_action_show_fw_form_errors_in_frontend',
-		/**
-		 * Use priority later than the default 10.
-		 * In docs (to customize the error messages) will be easier to explain
-		 * to use just add_action('wp_footer', ...) and not bother about priority
-		 */
-		11
-	);
+	add_action( 'wp_print_styles', '_action_fw_form_frontend_default_styles' );
 }
