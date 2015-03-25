@@ -63,6 +63,8 @@ class FW_Option_Type_Icon extends FW_Option_Type
 				$this->enqueued_font_styles[ $style_hash ] = true;
 			}
 		}
+
+		return true;
 	}
 
 	/**
