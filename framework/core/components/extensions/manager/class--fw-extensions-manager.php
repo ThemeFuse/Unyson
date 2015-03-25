@@ -420,7 +420,7 @@ final class _FW_Extensions_Manager
 			}
 
 			$sub_extension_location = $location;
-			$sub_extension_location['path'] .= '/extensions';
+			$sub_extension_location['path'] .= '/'. $extension_name .'/extensions';
 
 			$this->read_extensions(
 				$sub_extension_location,
