@@ -34,11 +34,15 @@ body.rtl .fw-option-type-icon .option-type-icon-list i {
 	display: inline-block;
 }
 
-.fw-option-type-icon .option-type-icon-list i.active,
 .fw-option-type-icon .option-type-icon-list i:hover {
 	background: #0074a2;
 	color: #fff;
 	cursor: pointer;
+}
+.fw-option-type-icon .option-type-icon-list i.active:hover,
+.fw-option-type-icon .option-type-icon-list i.active{
+	background: #64bd1f;
+	color: #fff;
 }
 
 .fw-option-type-icon .fw-backend-option {
