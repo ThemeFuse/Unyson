@@ -87,7 +87,7 @@ Yes; Unyson will work with any theme.
 == Changelog ==
 
 = 2.2.3 =
-* Fixed [#397](https://github.com/ThemeFuse/Unyson/issues/397), [#394](https://github.com/ThemeFuse/Unyson/issues/394), [#389](https://github.com/ThemeFuse/Unyson/issues/389), [384](https://github.com/ThemeFuse/Unyson/issues/384), [#355](https://github.com/ThemeFuse/Unyson/issues/355)
+* Fixed [#397](https://github.com/ThemeFuse/Unyson/issues/397), [#394](https://github.com/ThemeFuse/Unyson/issues/394), [#389](https://github.com/ThemeFuse/Unyson/issues/389), [#384](https://github.com/ThemeFuse/Unyson/issues/384), [#355](https://github.com/ThemeFuse/Unyson/issues/355)
 * Added option type `runnable` [code](https://github.com/ThemeFuse/Unyson/blob/master/framework/includes/option-types/runnable/class-fw-option-type-runnable.php)
 
 = 2.2.2 =
