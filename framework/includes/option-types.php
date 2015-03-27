@@ -893,4 +893,3 @@ require $dir .'/option-types/popup/class-fw-option-type-popup.php';
 require $dir .'/option-types/slider/class-fw-option-type-slider.php';
 require $dir .'/option-types/range-slider/class-fw-option-type-range-slider.php';
 require $dir .'/option-types/rgba-color-picker/class-fw-option-type-rgba-color-picker.php';
-require $dir .'/option-types/runnable/class-fw-option-type-runnable.php';

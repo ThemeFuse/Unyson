@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.1
-Stable tag: 2.2.3
+Stable tag: 2.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -86,9 +86,12 @@ Yes; Unyson will work with any theme.
 
 == Changelog ==
 
+= 2.2.4 =
+* Removed option type `runnable` [#399](https://github.com/ThemeFuse/Unyson/issues/399)
+
 = 2.2.3 =
 * Fixed [#397](https://github.com/ThemeFuse/Unyson/issues/397), [#394](https://github.com/ThemeFuse/Unyson/issues/394), [#389](https://github.com/ThemeFuse/Unyson/issues/389), [#384](https://github.com/ThemeFuse/Unyson/issues/384), [#355](https://github.com/ThemeFuse/Unyson/issues/355)
-* Added option type `runnable` [code](https://github.com/ThemeFuse/Unyson/blob/master/framework/includes/option-types/runnable/class-fw-option-type-runnable.php)
+* Added option type `runnable`
 
 = 2.2.2 =
 * Added experimental `$option['option_handler']` [636ed56](https://github.com/ThemeFuse/Unyson/commit/636ed56fe499a4e855b5f49198747460833539a3)
