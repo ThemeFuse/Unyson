@@ -783,6 +783,12 @@ function fw_prepare_option_value($value) {
 /**
  * This function is used in 'save_post' action
  *
+ * Used to check if current post save is a regular "Save" button press
+ * not a revision, auto-save or something else
+ *
+ * todo: make sure it is correct to ignore revision and auto-save.
+ * todo: maybe we use wrong (too simplified) the 'save_post' action, maybe we should do something like this http://bit.ly/1xkbmml ?
+ *
  * @param $post_id
  * @return bool
  */
