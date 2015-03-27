@@ -617,8 +617,8 @@ final class _FW_Component_Backend {
 		$old_values = (array) fw_get_db_post_option( $original_id );
 
 		$handled_values = array();
-		$all_options = fw_extract_only_options(fw()->theme->get_post_options($post->post_type));
-		$options_values = fw_get_options_values_from_input( fw()->theme->get_post_options($post->post_type) );
+		$all_options = fw_extract_only_options(fw()->theme->get_post_options($original_post->post_type));
+		$options_values = fw_get_options_values_from_input( fw()->theme->get_post_options($original_post->post_type) );
 
 		foreach ($all_options as $option_id => $option) {
 			if (
