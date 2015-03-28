@@ -1401,17 +1401,23 @@ final class _FW_Component_Backend {
 	 */
 	public function option_type( $option_type ) {
 		if ( is_array( $this->option_types_pending_registration ) ) {
-			// This method is called first time. Register pending option types
-			$pending_option_types = $this->option_types_pending_registration;
+			// This method is called first time
 
-			// clear this property, so register_option_type() will not add option types to pending anymore
-			$this->option_types_pending_registration = false;
+			do_action('fw_option_types_init');
 
-			foreach ( $pending_option_types as $option_type_class ) {
-				$this->register_option_type( $option_type_class );
+			// Register pending option types
+			{
+				$pending_option_types = $this->option_types_pending_registration;
+
+				// clear this property, so register_option_type() will not add option types to pending anymore
+				$this->option_types_pending_registration = false;
+
+				foreach ( $pending_option_types as $option_type_class ) {
+					$this->register_option_type( $option_type_class );
+				}
+
+				unset( $pending_option_types );
 			}
-
-			unset( $pending_option_types );
 		}
 
 		if ( isset( $this->option_types[ $option_type ] ) ) {

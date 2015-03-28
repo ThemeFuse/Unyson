@@ -1,6 +1,7 @@
 <?php if (!defined('FW')) die('Forbidden');
+
 /**
- * Define default framework option types
+ * Simple option types (without scripts, styles or views)
  *
  * Convention: Simple options like text|select|input|textarea, should always generate only input, without div wrappers
  */
@@ -864,32 +865,3 @@ class FW_Option_Type_Select_Multiple extends FW_Option_Type_Select
 	}
 }
 FW_Option_Type::register('FW_Option_Type_Select_Multiple');
-
-
-$dir = dirname(__FILE__);
-
-require $dir .'/option-types/icon/class-fw-option-type-icon.php';
-require $dir .'/option-types/image-picker/class-fw-option-type-image-picker.php';
-require $dir .'/option-types/upload/class-fw-option-type-upload.php';
-require $dir .'/option-types/color-picker/class-fw-option-type-color-picker.php';
-require $dir .'/option-types/gradient/class-fw-option-type-gradient.php';
-require $dir .'/option-types/background-image/class-fw-option-type-background-image.php';
-require $dir .'/option-types/multi/class-fw-option-type-multi.php';
-require $dir .'/option-types/switch/class-fw-option-type-switch.php';
-require $dir .'/option-types/typography/class-fw-option-type-typography.php';
-require $dir .'/option-types/multi-upload/class-fw-option-type-multi-upload.php';
-require $dir .'/option-types/multi-picker/class-fw-option-type-multi-picker.php';
-require $dir .'/option-types/wp-editor/class-fw-option-type-wp-editor.php';
-require $dir .'/option-types/date-picker/class-fw-option-type-wp-date-picker.php';
-require $dir .'/option-types/addable-option/class-fw-option-type-addable-option.php';
-require $dir .'/option-types/addable-box/class-fw-option-type-addable-box.php';
-require $dir .'/option-types/addable-popup/class-fw-option-type-addable-popup.php';
-require $dir .'/option-types/multi-select/class-fw-option-type-multi-select.php';
-require $dir .'/option-types/map/class-fw-option-type-map.php';
-require $dir .'/option-types/datetime-range/class-fw-option-type-datetime-range.php';
-require $dir .'/option-types/datetime-picker/class-fw-option-type-datetime-picker.php';
-require $dir .'/option-types/radio-text/class-fw-option-type-radio-text.php';
-require $dir .'/option-types/popup/class-fw-option-type-popup.php';
-require $dir .'/option-types/slider/class-fw-option-type-slider.php';
-require $dir .'/option-types/range-slider/class-fw-option-type-range-slider.php';
-require $dir .'/option-types/rgba-color-picker/class-fw-option-type-rgba-color-picker.php';

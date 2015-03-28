@@ -4,6 +4,22 @@
  */
 
 /**
+ * Load option types
+ * @internal
+ */
+function _action_fw_init_option_types() {
+	require_once dirname(__FILE__) .'/option-types/init.php';
+}
+add_action('fw_option_types_init', '_action_fw_init_option_types');
+
+/**
+ * This option type has `add_action('wp_ajax_...`
+ */
+if (is_admin()) {
+	require_once dirname(__FILE__) . '/option-types/multi-select/class-fw-option-type-multi-select.php';
+}
+
+/**
  * Term Meta
  */
 {

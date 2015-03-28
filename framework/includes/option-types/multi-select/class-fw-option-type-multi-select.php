@@ -2,6 +2,8 @@
 	die( 'Forbidden' );
 }
 
+if (!class_exists('FW_Option_Type_Multi_Select')):
+
 /**
  * Select multiple choices from different sources: posts, taxonomies, users or custom array
  */
@@ -425,3 +427,5 @@ class FW_Option_Type_Multi_Select extends FW_Option_Type
 FW_Option_Type::register( 'FW_Option_Type_Multi_Select' );
 
 add_action( 'wp_ajax_admin_action_get_ajax_response', array( "FW_Option_Type_Multi_Select", '_admin_action_get_ajax_response' ) );
+
+endif;

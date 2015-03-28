@@ -58,7 +58,7 @@ if (defined('FW')) {
 		/**
 		 * Load includes
 		 */
-		foreach (array('hooks', 'option-types') as $file) {
+		foreach (array('hooks') as $file) {
 			require $fw_dir .'/includes/'. $file .'.php';
 		}
 
