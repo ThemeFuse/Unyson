@@ -246,7 +246,7 @@ $extensions = array(
 			),
 		),
 	),
-	/*'translation' => array(
+	'translation' => array(
 		'display'     => true,
 		'parent'      => null,
 		'name'        => __( 'Translations', 'fw' ),
@@ -257,5 +257,5 @@ $extensions = array(
 				'user_repo' => $github_account . '/Unyson-Translation-Extension',
 			),
 		),
-	),*/
+	),
 );
