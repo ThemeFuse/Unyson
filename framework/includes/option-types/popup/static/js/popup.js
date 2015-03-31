@@ -15,7 +15,8 @@
 			utils = {
 				modal: new fw.OptionsModal({
 					title: data.title,
-					options: data.options
+					options: data.options,
+					size : data.size
 				}),
 				editItem: function (item, values) {
 					item.find('input').val( JSON.stringify( values ) );

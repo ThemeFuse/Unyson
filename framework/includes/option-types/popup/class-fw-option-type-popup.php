@@ -56,7 +56,8 @@ class FW_Option_Type_Popup extends FW_Option_Type
 		$option['attr']['data-for-js'] = json_encode( array(
 			'title'   => ( isset( $option['popup-title'] ) ) ? $option['popup-title'] : ( string ) $option['label'],
 			'options' => $this->transform_options( $option['popup-options'] ),
-			'button'  => $option['button']
+			'button'  => $option['button'],
+			'size' => $option['size']
 		) );
 
 		if ( ! empty( $data['value'] )) {
