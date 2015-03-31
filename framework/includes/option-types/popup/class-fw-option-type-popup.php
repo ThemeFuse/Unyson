@@ -1,9 +1,16 @@
-<?php if ( ! defined( 'FW' ) ) {
+<?php if ( ! defined( 'FW' )) {
 	die( 'Forbidden' );
 }
 
-class FW_Option_Type_Popup extends FW_Option_Type {
-	public function _get_backend_width_type() {
+/**
+ * Unyson option type that allows to group option in a popup window
+ *
+ * Class FW_Option_Type_Popup
+ */
+class FW_Option_Type_Popup extends FW_Option_Type
+{
+	public function _get_backend_width_type()
+	{
 		return 'fixed';
 	}
 
@@ -11,17 +18,17 @@ class FW_Option_Type_Popup extends FW_Option_Type {
 	 * @internal
 	 * {@inheritdoc}
 	 */
-	protected function _enqueue_static($id, $option, $data)
+	protected function _enqueue_static( $id, $option, $data )
 	{
 		wp_enqueue_style(
 			'fw-option-' . $this->get_type(),
-			fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/css/styles.css'),
+			fw_get_framework_directory_uri( '/includes/option-types/' . $this->get_type() . '/static/css/styles.css' ),
 			array( 'fw' )
 		);
 
 		wp_enqueue_script(
 			'fw-option-' . $this->get_type(),
-			fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/js/' . $this->get_type() . '.js'),
+			fw_get_framework_directory_uri( '/includes/option-types/' . $this->get_type() . '/static/js/' . $this->get_type() . '.js' ),
 			array( 'underscore', 'fw-events', 'jquery-ui-sortable', 'fw' ),
 			false,
 			true
@@ -42,45 +49,44 @@ class FW_Option_Type_Popup extends FW_Option_Type {
 	 * @return string HTML
 	 * @internal
 	 */
-	protected function _render( $id, $option, $data ) {
+	protected function _render( $id, $option, $data )
+	{
 		unset( $option['attr']['name'], $option['attr']['value'] );
 
-		$option['attr']['data-for-js'] = json_encode(array(
-			'title'   => ( $option['popup-title'] ) ? $option['popup-title'] : $option['label'],
+		$option['attr']['data-for-js'] = json_encode( array(
+			'title'   => ( isset( $option['popup-title'] ) ) ? $option['popup-title'] : ( string ) $option['label'],
 			'options' => $this->transform_options( $option['popup-options'] ),
 			'button'  => $option['button']
-		));
+		) );
 
-		if (!empty($data['value'])) {
-			if (is_array($data['value'])) {
-				$data['value'] = json_encode($data['value']);
+		if ( ! empty( $data['value'] )) {
+			if (is_array( $data['value'] )) {
+				$data['value'] = json_encode( $data['value'] );
 			}
 		} else {
 			$data['value'] = '';
 		}
 
-		$sortable_image = fw_get_framework_directory_uri('/static/img/sort-vertically.png');
+		$sortable_image = fw_get_framework_directory_uri( '/static/img/sort-vertically.png' );
 
-		return fw_render_view( fw_get_framework_directory('/includes/option-types/' . $this->get_type() . '/views/view.php' ), compact( 'id', 'option', 'data', 'sortable_image' ) );
+		return fw_render_view( fw_get_framework_directory( '/includes/option-types/' . $this->get_type() . '/views/view.php' ),
+			compact( 'id', 'option', 'data', 'sortable_image' ) );
 	}
-
-	/*
-		 * Puts each option into a separate array
-		 * to keep it's order inside the modal dialog
-		 */
 
 	/**
 	 * Option's unique type, used in option array in 'type' key
 	 * @return string
 	 */
-	public function get_type() {
+	public function get_type()
+	{
 		return 'popup';
 	}
 
-	private function transform_options( $options ) {
+	private function transform_options( $options )
+	{
 		$new_options = array();
-		foreach ( $options as $id => $option ) {
-			if (is_int($id)) {
+		foreach ($options as $id => $option) {
+			if (is_int( $id )) {
 				/**
 				 * this happens when in options array are loaded external options using fw()->theme->get_options()
 				 * and the array looks like this
@@ -91,7 +97,7 @@ class FW_Option_Type_Popup extends FW_Option_Type {
 				 */
 				$new_options[] = $option;
 			} else {
-				$new_options[] = array($id => $option);
+				$new_options[] = array( $id => $option );
 			}
 		}
 
@@ -108,8 +114,10 @@ class FW_Option_Type_Popup extends FW_Option_Type {
 	 * @return string|array|int|bool Correct value
 	 * @internal
 	 */
-	protected function _get_value_from_input( $option, $input_value ) {
+	protected function _get_value_from_input( $option, $input_value )
+	{
 		$values = json_decode( $input_value, true );
+
 		return $values;
 	}
 
@@ -127,11 +135,28 @@ class FW_Option_Type_Popup extends FW_Option_Type {
 	 * )
 	 * @internal
 	 */
-	protected function _get_defaults() {
+	protected function _get_defaults()
+	{
 		return array(
+			/*
+			 * Popup button text
+			 */
+			'button'        => __( 'Edit', 'fw' ),
+
+			/*
+			 * Title text that will appear in popup header
+			 */
+			'popup-title'   => null,
+
+			/*
+			 * Array of options that you need to add in the popup
+			 */
 			'popup-options' => array(),
-			'button'    => __( 'Edit', 'fw' ),
-			'value' => ''
+
+			/*
+			 * Array of default values for the popup options
+			 */
+			'value'         => array()
 		);
 	}
 
