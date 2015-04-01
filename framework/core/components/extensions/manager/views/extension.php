@@ -36,8 +36,23 @@ if (isset($lists['available'][$name])) {
 		$thumbnail = fw_akg('thumbnail', $lists['installed'][$name]['manifest'], $thumbnail);
 	}
 }
+
+$is_compatible =
+	isset($lists['supported'][$name]) // is listed in the supported extensions list in theme manifest
+	||
+	($installed_data && $installed_data['is']['theme']); // is located in the theme
+
+$wrapper_class = 'fw-col-xs-12 fw-col-lg-6 fw-extensions-list-item';
+
+if ($installed_data && !$is_active) {
+	$wrapper_class .= ' disabled';
+}
+
+if (!$installed_data && !$is_compatible) {
+	$wrapper_class .= ' not-compatible';
+}
 ?>
-<div class="fw-col-xs-12 fw-col-lg-6 fw-extensions-list-item<?php if ($installed_data && !$is_active): ?> disabled<?php endif; ?>" id="fw-ext-<?php echo esc_attr($name) ?>">
+<div class="<?php echo esc_attr($wrapper_class) ?>" id="fw-ext-<?php echo esc_attr($name) ?>">
 	<div class="inner">
 		<div class="fw-extension-list-item-table">
 			<div class="fw-extension-list-item-table-row">
@@ -81,12 +96,7 @@ if (isset($lists['available'][$name])) {
 						unset( $_links );
 					}
 					?>
-					<?php
-					if (
-						isset($lists['supported'][$name]) // is listed in the supported extensions list in theme manifest
-						||
-						($installed_data && $installed_data['is']['theme']) // is located in the theme
-					): ?>
+					<?php if ($is_compatible): ?>
 						<p><em><strong><span class="dashicons dashicons-yes"></span> <?php _e('Compatible', 'fw') ?></strong> <?php _e('with your current theme', 'fw') ?></em></p>
 					<?php endif; ?>
 				</div>
