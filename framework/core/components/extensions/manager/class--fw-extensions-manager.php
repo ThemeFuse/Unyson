@@ -780,7 +780,7 @@ final class _FW_Extensions_Manager
 
 		echo '<h2>'. sprintf(__('%s Extensions', 'fw'), fw()->manifest->get_name()) .'</h2><br/>';
 
-		echo '<div id="fw-extensions-list-wrapper" style="opacity: 0;" '. (empty($lists['supported']) ? '' : 'class="hide-not-compat-ext"') .'>';
+		echo '<div id="fw-extensions-list-wrapper" style="opacity:0;">';
 
 		fw_render_view(dirname(__FILE__) .'/views/extensions-page.php', array(
 			'lists' => &$lists,

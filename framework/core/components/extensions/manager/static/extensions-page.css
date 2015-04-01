@@ -188,20 +188,3 @@
 }
 
 /* end: form ajax loading */
-
-/* show/hide not compatible extensions */
-
-#fw-extensions-list-wrapper .toggle-not-compat-ext-btn:focus {
-	box-shadow: none;
-}
-
-#fw-extensions-list-wrapper .toggle-not-compat-ext-btn .the-show-text,
-#fw-extensions-list-wrapper.hide-not-compat-ext .toggle-not-compat-ext-btn .the-hide-text {
-	display: none;
-}
-
-#fw-extensions-list-wrapper.hide-not-compat-ext .toggle-not-compat-ext-btn .the-show-text {
-	display: inline;
-}
-
-/* end: show/hide not compatible extensions */
