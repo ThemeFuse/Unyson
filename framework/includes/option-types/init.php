@@ -20,7 +20,6 @@ require $dir . '/date-picker/class-fw-option-type-wp-date-picker.php';
 require $dir . '/addable-option/class-fw-option-type-addable-option.php';
 require $dir . '/addable-box/class-fw-option-type-addable-box.php';
 require $dir . '/addable-popup/class-fw-option-type-addable-popup.php';
-require $dir . '/multi-select/class-fw-option-type-multi-select.php';
 require $dir . '/map/class-fw-option-type-map.php';
 require $dir . '/datetime-range/class-fw-option-type-datetime-range.php';
 require $dir . '/datetime-picker/class-fw-option-type-datetime-picker.php';
@@ -29,3 +28,6 @@ require $dir . '/popup/class-fw-option-type-popup.php';
 require $dir . '/slider/class-fw-option-type-slider.php';
 require $dir . '/range-slider/class-fw-option-type-range-slider.php';
 require $dir . '/rgba-color-picker/class-fw-option-type-rgba-color-picker.php';
+if (!class_exists('FW_Option_Type_Multi_Select')) {
+  require $dir . '/multi-select/class-fw-option-type-multi-select.php';
+}
