@@ -48,6 +48,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			 */
 			'value'         => '',
 			/**
+			 * Set the editor size: small - small box, large - full size
 			 * string
 			 */
 			'size'          => 'small' // small, large
