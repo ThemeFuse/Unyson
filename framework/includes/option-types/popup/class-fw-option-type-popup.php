@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'FW' )) {
+<?php if ( ! defined( 'FW' ) ) {
 	die( 'Forbidden' );
 }
 
@@ -7,10 +7,8 @@
  *
  * Class FW_Option_Type_Popup
  */
-class FW_Option_Type_Popup extends FW_Option_Type
-{
-	public function _get_backend_width_type()
-	{
+class FW_Option_Type_Popup extends FW_Option_Type {
+	public function _get_backend_width_type() {
 		return 'fixed';
 	}
 
@@ -18,8 +16,7 @@ class FW_Option_Type_Popup extends FW_Option_Type
 	 * @internal
 	 * {@inheritdoc}
 	 */
-	protected function _enqueue_static( $id, $option, $data )
-	{
+	protected function _enqueue_static( $id, $option, $data ) {
 		wp_enqueue_style(
 			'fw-option-' . $this->get_type(),
 			fw_get_framework_directory_uri( '/includes/option-types/' . $this->get_type() . '/static/css/styles.css' ),
@@ -49,19 +46,18 @@ class FW_Option_Type_Popup extends FW_Option_Type
 	 * @return string HTML
 	 * @internal
 	 */
-	protected function _render( $id, $option, $data )
-	{
+	protected function _render( $id, $option, $data ) {
 		unset( $option['attr']['name'], $option['attr']['value'] );
 
 		$option['attr']['data-for-js'] = json_encode( array(
 			'title'   => ( isset( $option['popup-title'] ) ) ? $option['popup-title'] : ( string ) $option['label'],
 			'options' => $this->transform_options( $option['popup-options'] ),
 			'button'  => $option['button'],
-			'size' => $option['size']
+			'size'    => $option['size']
 		) );
 
-		if ( ! empty( $data['value'] )) {
-			if (is_array( $data['value'] )) {
+		if ( ! empty( $data['value'] ) ) {
+			if ( is_array( $data['value'] ) ) {
 				$data['value'] = json_encode( $data['value'] );
 			}
 		} else {
@@ -78,16 +74,14 @@ class FW_Option_Type_Popup extends FW_Option_Type
 	 * Option's unique type, used in option array in 'type' key
 	 * @return string
 	 */
-	public function get_type()
-	{
+	public function get_type() {
 		return 'popup';
 	}
 
-	private function transform_options( $options )
-	{
+	private function transform_options( $options ) {
 		$new_options = array();
-		foreach ($options as $id => $option) {
-			if (is_int( $id )) {
+		foreach ( $options as $id => $option ) {
+			if ( is_int( $id ) ) {
 				/**
 				 * this happens when in options array are loaded external options using fw()->theme->get_options()
 				 * and the array looks like this
@@ -115,9 +109,21 @@ class FW_Option_Type_Popup extends FW_Option_Type
 	 * @return string|array|int|bool Correct value
 	 * @internal
 	 */
-	protected function _get_value_from_input( $option, $input_value )
-	{
-		$values = json_decode( $input_value, true );
+	protected function _get_value_from_input( $option, $input_value ) {
+		if ( empty( $input_value ) ) {
+			$values = array();
+
+			if ( ! isset( $option['popup-options'] ) ) {
+				return array();
+			}
+
+			foreach ( $option['popup-options'] as $key => $op ) {
+				$values[ $key ] = isset( $op['value'] ) ? $op['value'] : null;
+			}
+
+		} else {
+			$values = json_decode( $input_value, true );
+		}
 
 		return $values;
 	}
@@ -136,24 +142,20 @@ class FW_Option_Type_Popup extends FW_Option_Type
 	 * )
 	 * @internal
 	 */
-	protected function _get_defaults()
-	{
+	protected function _get_defaults() {
 		return array(
 			/*
 			 * Popup button text
 			 */
 			'button'        => __( 'Edit', 'fw' ),
-
 			/*
 			 * Title text that will appear in popup header
 			 */
 			'popup-title'   => null,
-
 			/*
 			 * Array of options that you need to add in the popup
 			 */
 			'popup-options' => array(),
-
 			/*
 			 * Array of default values for the popup options
 			 */
