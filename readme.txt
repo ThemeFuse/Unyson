@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.1
-Stable tag: 2.2.6
+Stable tag: 2.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,12 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.2.7 =
+* Option type `popup` fixes
+* Added "Show/Hide other extensions" button [#307](https://github.com/ThemeFuse/Unyson/issues/307)
+* `fw.soleModal` added `afterOpen` and `afterClose` callbacks [#379](https://github.com/ThemeFuse/Unyson/issues/379)
+* Fixed [#432](https://github.com/ThemeFuse/Unyson/issues/432), [#408](https://github.com/ThemeFuse/Unyson/issues/408)
 
 = 2.2.6 =
 * Fixed [#404](https://github.com/ThemeFuse/Unyson/issues/404)
