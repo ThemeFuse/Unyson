@@ -1213,6 +1213,8 @@ fw.soleModal = (function(){
 				width: 350
 				height: 200
 				hidePrevious: false // just replace the modal content or hide the previous modal and open it again with new content
+				afterOpen: function(){}
+				afterClose: function(){}
 			}
 			*/
 		],
@@ -1324,7 +1326,9 @@ fw.soleModal = (function(){
 						showCloseButton: true,
 						width: 350,
 						height: 200,
-						hidePrevious: false
+						hidePrevious: false,
+						afterOpen: function(){},
+						afterClose: function(){}
 					}, opts || {});
 
 					// hide close button if close is not allowed
@@ -1386,6 +1390,8 @@ fw.soleModal = (function(){
 			}
 
 			this.currentMethodTimeoutId = setTimeout(_.bind(function() {
+				this.current.afterOpen();
+
 				this.currentMethod = '';
 
 				if (this.runPendingMethod()) {
@@ -1441,6 +1447,8 @@ fw.soleModal = (function(){
 			if (this.queue.length && !this.queue[0].hidePrevious) {
 				// replace content
 				this.$getContent().fadeOut('fast', _.bind(function(){
+					this.current.afterClose();
+
 					this.currentMethod = '';
 					this.current = null;
 					this.show();
@@ -1453,6 +1461,8 @@ fw.soleModal = (function(){
 			this.$modal.addClass('fw-modal-closing');
 
 			this.currentMethodTimeoutId = setTimeout(_.bind(function(){
+				this.current.afterClose();
+
 				this.currentMethod = '';
 
 				this.$modal.css('display', 'none');
