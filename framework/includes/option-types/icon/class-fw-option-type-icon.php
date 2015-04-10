@@ -141,7 +141,7 @@ class FW_Option_Type_Icon extends FW_Option_Type
 	private function generate_unknown_set($icon)
 	{
 		return array(
-			'font-style-src'  => 'data:text/css;charset=utf-8;base64,LyoqLw==',
+			'font-style-src'  => 'data:text/css;charset=utf-8;base64,LyoqLw==', // fixme: WP will transform this to `http://domain.com/data:text/css;...`
 			'container-class' => '',
 			'groups' => array(
 				'unknown' => __('Unknown Set', 'fw'),
