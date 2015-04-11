@@ -30,15 +30,15 @@
 		<?php endif; ?>
 	</div>
 	<p><a href="#"><?php echo $is_empty ? $l10n['button_add'] : $l10n['button_edit']; ?></a></p>
-	<br class="thumb-template-empty fw-hidden" data-template="<?php ob_start(); ?>
-		<div class="thumb no-image">
-			<img src="<?php echo fw_get_framework_directory_uri('/static/img/no-image.png'); ?>" class="no-image-img" alt="<?php esc_attr_e('No image', 'fw') ?>"/>
-		</div>
-	<?php echo fw_htmlspecialchars(ob_get_clean()) ?>">
-	<br class="thumb-template-not-empty fw-hidden" data-template="<?php ob_start(); ?>
-		<div class="thumb" data-attid="<%= data.id %>" data-origsrc="<%= data.originalSrc %>">
-			<img src="<%= data.src %>" alt="<%= data.alt %>"/>
-			<a href="#" class="dashicons fw-x clear-uploads-thumb"></a>
-		</div>
-	<?php echo fw_htmlspecialchars(ob_get_clean()) ?>">
+	<br class="thumb-template-empty fw-hidden" data-template="<?php echo fw_htmlspecialchars(
+		'<div class="thumb no-image">'.
+			'<img src="'. fw_get_framework_directory_uri('/static/img/no-image.png') .'" class="no-image-img" alt="'. esc_attr__('No image', 'fw') .'"/>'.
+		'</div>'
+	); ?>">
+	<br class="thumb-template-not-empty fw-hidden" data-template="<?php echo fw_htmlspecialchars(
+		'<div class="thumb" data-attid="<%= data.id %>" data-origsrc="<%- data.originalSrc %>">'.
+			'<img src="<%- data.src %>" alt="<%- data.alt %>"/>'.
+			'<a href="#" class="dashicons fw-x clear-uploads-thumb"></a>'.
+		'</div>'
+	); ?>">
 </div>
