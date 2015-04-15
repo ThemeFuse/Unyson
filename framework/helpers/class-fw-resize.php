@@ -57,7 +57,7 @@ if ( ! class_exists( 'FW_Resize' ) ) {
 			}
 		}
 
-		public function process( $attachment, $width, $height, $crop = false ) {
+		public function process( $attachment, $width = false, $height = false, $crop = false ) {
 
 			$attachment_info = $this->get_attachment_info( $attachment );
 
@@ -73,6 +73,22 @@ if ( ! class_exists( 'FW_Resize' ) ) {
 			$name = wp_basename( $file_path, ".$ext" );
 			$name = preg_replace( '/(.+)(\-\d+x\d+)$/', '$1', $name );
 
+			{
+				if ( ! $width || ! $height ) {
+					$editor       = wp_get_image_editor( $file_path );
+					$size         = $editor->get_size();
+					$orig_width   = $size['width'];
+					$orig_height  = $size['height'];
+					if ( ! $height && $width ) {
+						$height = round( ( $orig_height * $width ) / $orig_width );
+					} elseif ( ! $width && $height ) {
+						$width = round( ( $orig_width * $height ) / $orig_height );
+					} else {
+						return $attachment;
+					}
+				}
+			}
+
 			// Suffix applied to filename
 			$suffix = "{$width}x{$height}";
 
@@ -81,7 +97,7 @@ if ( ! class_exists( 'FW_Resize' ) ) {
 			// No need to resize & create a new image if it already exists
 			if ( ! file_exists( $destination_file_name ) ) {
 				//Image Resize
-				$editor = wp_get_image_editor( $file_path );
+				$editor = (isset($editor)) ? $editor : wp_get_image_editor( $file_path );
 
 				if ( is_wp_error( $editor ) ) {
 					return new WP_Error( 'wp_image_editor', 'WP Image editor can\'t resize this attachment', $attachment );
@@ -137,7 +153,7 @@ if ( ! class_exists( 'FW_Resize' ) ) {
 }
 
 if ( ! function_exists( 'fw_resize' ) ) {
-	function fw_resize( $url, $width, $height, $crop = false ) {
+	function fw_resize( $url, $width = false, $height = false, $crop = false ) {
 		$fw_resize = FW_Resize::getInstance();
 		$response  = $fw_resize->process( $url, $width, $height, $crop );
 
