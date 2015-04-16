@@ -156,6 +156,12 @@ class FW_Option_Type_Popup extends FW_Option_Type {
 			 * Array of options that you need to add in the popup
 			 */
 			'popup-options' => array(),
+
+			/*
+			 * Popup size
+			 */
+			'size' => 'medium',
+
 			/*
 			 * Array of default values for the popup options
 			 */
