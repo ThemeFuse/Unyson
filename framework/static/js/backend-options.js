@@ -105,7 +105,7 @@ jQuery(document).ready(function($){
 		/**
 		 * leave open only first boxes
 		 */
-		$boxes.filter('.fw-backend-postboxes > .fw-postbox:not(:first-child)').addClass('closed');
+		$boxes.filter('.fw-backend-postboxes > .fw-postbox:not(:first-child):not(.prevent-auto-close)').addClass('closed');
 
 		$boxes.addClass('fw-postbox-initialized');
 
