@@ -183,8 +183,7 @@ class FW_Option_Type_Upload extends FW_Option_Type
 	protected function _get_value_from_input($option, $input_value)
 	{
 		if (empty($input_value)) {
-			$defaults = $this->get_defaults();
-			return $defaults['value'];
+			return $option['value'];
 		} else {
 			return $this->get_attachment_info($input_value);
 		}

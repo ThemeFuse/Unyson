@@ -103,7 +103,6 @@ class FW_Option_Type_Switch extends FW_Option_Type
 	protected function _get_value_from_input($option, $input_value)
 	{
 		if (is_null($input_value)) {
-			// input value is not present
 			return $option['value'];
 		} else {
 			if ($input_value) {

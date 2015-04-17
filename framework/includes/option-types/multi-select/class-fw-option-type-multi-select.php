@@ -418,6 +418,10 @@ class FW_Option_Type_Multi_Select extends FW_Option_Type
 	 * @internal
 	 */
 	protected function _get_value_from_input( $option, $input_value ) {
+		if (is_null($input_value)) {
+			return $option['value'];
+		}
+
 		$value = explode( '/*/', $input_value );
 
 		return empty( $input_value ) ? array() : $value;

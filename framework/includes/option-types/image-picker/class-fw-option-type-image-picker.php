@@ -171,6 +171,10 @@ class Fw_Option_Type_Image_Picker extends FW_Option_Type
 	 */
 	protected function _get_value_from_input($option, $input_value)
 	{
+		if (is_null($input_value)) {
+			return $option['value'];
+		}
+
 		if (!isset($option['choices'][$input_value])) {
 			if (
 				empty($option['choices']) ||

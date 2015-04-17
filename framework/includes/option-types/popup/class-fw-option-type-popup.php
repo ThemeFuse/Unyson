@@ -117,10 +117,7 @@ class FW_Option_Type_Popup extends FW_Option_Type {
 				return array();
 			}
 
-			foreach ( $option['popup-options'] as $key => $op ) {
-				$values[ $key ] = isset( $op['value'] ) ? $op['value'] : null;
-			}
-
+			$values = fw_get_options_values_from_input($option['popup-options'], array());
 		} else {
 			$values = json_decode( $input_value, true );
 		}

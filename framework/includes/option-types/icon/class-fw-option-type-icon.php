@@ -92,6 +92,10 @@ class FW_Option_Type_Icon extends FW_Option_Type
 	 */
 	protected function _get_value_from_input($option, $input_value)
 	{
+		if (is_null($input_value)) {
+			return $option['value'];
+		}
+
 		$sets = $this->get_sets();
 
 		if (isset($sets[ $option['set'] ])) {
@@ -102,7 +106,7 @@ class FW_Option_Type_Icon extends FW_Option_Type
 
 		unset($sets);
 
-		if (is_null($input_value) || !isset($set['icons'][ $input_value ])) {
+		if (!isset($set['icons'][ $input_value ])) {
 			$input_value = $option['value'];
 		}
 
