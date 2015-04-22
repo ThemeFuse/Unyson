@@ -603,6 +603,11 @@ final class _FW_Component_Backend {
 			return;
 		}
 
+		if (intval(FW_Request::POST('post_ID')) != $post_id) {
+			// the $_POST values belongs to another post, do not save them into this one
+			return;
+		}
+
 		if ( wp_is_post_autosave( $post_id ) ) {
 			$original_id   = wp_is_post_autosave( $post_id );
 			$original_post = get_post( $original_id );
