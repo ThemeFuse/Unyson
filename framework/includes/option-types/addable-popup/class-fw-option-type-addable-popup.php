@@ -50,6 +50,7 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 			'options' => $this->transform_options($option['popup-options']),
 			'template' => $option['template'],
 			'size' => $option['size'],
+			'limit' => $option['limit']
 		));
 
 		$sortable_image = fw_get_framework_directory_uri('/static/img/sort-vertically.png');
@@ -105,7 +106,13 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 			return $option['value'];
 		}
 
+		$option['limit'] = intval($option['limit']);
+
 		$values = array_map('json_decode', $input_value, array_fill(0, count($input_value), true));
+
+		if($option['limit']){
+			$values= array_slice($values, 0 , $option['limit']);
+		}
 
 		return $values;
 	}
@@ -133,6 +140,7 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 			),
 			'template' => '',
 			'popup-title' => null,
+			'limit' => 0,
 			'size' => 'small' // small, medium, large
 		);
 	}

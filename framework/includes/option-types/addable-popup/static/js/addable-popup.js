@@ -23,6 +23,10 @@
 				removeDefaultItem: function () {
 					nodes.$itemsWrapper.find('.item.default').remove();
 				},
+				toogleNodes : function(){
+					utils.toogleItemsWrapper();
+					utils.toogleAddButton();
+				},
 				toogleItemsWrapper: function () {
 
 					if (utils.countItems() === 0) {
@@ -31,9 +35,16 @@
 						nodes.$itemsWrapper.show();
 					}
 				},
+				toogleAddButton: function(){
+					if(data.limit !== 0 ){
+						(utils.countItems() >= data.limit ) ?
+							nodes.$addButton.hide() :
+							nodes.$addButton.show();
+					}
+				},
 				init: function () {
 					utils.initItemsTemplates();
-					utils.toogleItemsWrapper();
+					utils.toogleNodes();
 					utils.removeDefaultItem();
 					utils.initSortable();
 				},
@@ -101,7 +112,7 @@
 			e.stopPropagation();
 			e.preventDefault();
 			$(this).closest('.item').remove();
-			utils.toogleItemsWrapper();
+			utils.toogleNodes();
 		});
 
 		nodes.$itemsWrapper.on('click', '.item', function (e) {
@@ -129,7 +140,7 @@
 		utils.modal.on('change:values', function (modal, values) {
 			if (!modal.get('edit')) {
 				utils.addNewItem(values);
-				utils.toogleItemsWrapper();
+				utils.toogleNodes();
 			} else {
 				utils.editItem(utils.modal.get('itemRef'), values);
 			}
