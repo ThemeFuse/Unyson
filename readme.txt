@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.1
-Stable tag: 2.2.7
+Stable tag: 2.2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,17 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.2.8 =
+* Fixed [#453](https://github.com/ThemeFuse/Unyson/issues/453)
+* Improved option type `multi-picker` html render [#442](https://github.com/ThemeFuse/Unyson/issues/442)
+* Option type `rgba-color-picker` optimizations [#442](https://github.com/ThemeFuse/Unyson/issues/442)
+* `fw_resize()` improvements [#447](https://github.com/ThemeFuse/Unyson/issues/447)
+* Fixed [#445](https://github.com/ThemeFuse/Unyson/issues/445)
+* Added the possibility to prevent box auto-close [#466](https://github.com/ThemeFuse/Unyson/issues/466)
+* Fixed the `_get_value_from_input()` method in some option types [#275](https://github.com/ThemeFuse/Unyson/issues/275#issuecomment-94084590)
+* Added the `limit` parameter for option type `addable-popup` [#478](https://github.com/ThemeFuse/Unyson/issues/478)
+* Fixed popup position in IE [#483](https://github.com/ThemeFuse/Unyson/issues/483)
 
 = 2.2.7 =
 * Option type `popup` fixes
