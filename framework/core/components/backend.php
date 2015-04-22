@@ -597,7 +597,7 @@ final class _FW_Component_Backend {
 	 * @param bool $update
 	 */
 	public function _action_save_post( $post_id, $post, $update ) {
-		if (intval(FW_Request::POST('post_ID')) === intval($post_id)) { fw_print('Hey'); die;
+		if (intval(FW_Request::POST('post_ID')) === intval($post_id)) {
 			/**
 			 * This happens on regular post edit form submit
 			 * All data from $_POST belongs this $post
