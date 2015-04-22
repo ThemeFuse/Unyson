@@ -2894,6 +2894,7 @@ a.fw-wp-link:hover {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+	width: 100%;
 }
 
 .fw-options-modal.fw-options-modal-small > .media-modal {
