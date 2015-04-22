@@ -737,6 +737,11 @@ final class _FW_Component_Backend {
 			return; // this is not real term form submit, abort save
 		}
 
+		if (intval(FW_Request::POST('tag_ID')) != $term_id) {
+			// the $_POST values belongs to another term, do not save them into this one
+			return;
+		}
+
 		$old_values = (array) fw_get_db_term_option( $term_id, $taxonomy );
 
 		fw_set_db_term_option(
