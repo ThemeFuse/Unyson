@@ -42,11 +42,11 @@ class FW_WP_Option
 			FW_Cache::set($cache_key, $values);
 		}
 
-		if (empty($specific_multi_key)) {
-			return $values[$get_original_value ? 'original' : 'prepared'];
-		} else {
-			return fw_akg($specific_multi_key, $values[$get_original_value ? 'original' : 'prepared'], $default_value);
-		}
+		return fw_akg(
+			($get_original_value ? 'original' : 'prepared') . (empty($specific_multi_key) ? '' : '/'. $specific_multi_key),
+			$values,
+			$default_value
+		);
 	}
 
 	/**

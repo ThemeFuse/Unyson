@@ -33,10 +33,13 @@ class FW_WP_Meta {
 		$key       = array_shift( $multi_key );
 		$multi_key = implode( '/', $multi_key );
 
+		/*
 		// Make sure meta is added to the post, not a revision.
+		// fixme: why make sure? but I want to set post meta for a revision, how to do that?
 		if ( $meta_type === 'post' && $the_post = wp_is_post_revision( $object_id ) ) {
 			$object_id = $the_post;
 		}
+		*/
 
 		$cache_key = self::$cache_key . '/' . $meta_type . '/' . $object_id . '/' . $key;
 
@@ -101,10 +104,10 @@ class FW_WP_Meta {
 			FW_Cache::set( $cache_key, $values );
 		}
 
-		if ( empty( $multi_key ) ) {
-			return $values[ $get_original_value ? 'original' : 'prepared' ];
-		} else {
-			return fw_akg( $multi_key, $values[ $get_original_value ? 'original' : 'prepared' ], $default_value );
-		}
+		return fw_akg(
+			($get_original_value ? 'original' : 'prepared') . (empty($multi_key) ? '' : '/'. $multi_key),
+			$values,
+			$default_value
+		);
 	}
 }
