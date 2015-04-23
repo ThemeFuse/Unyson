@@ -715,6 +715,8 @@ final class _FW_Component_Backend {
 				/**
 				 * This is revision creation on every post save/update
 				 * Copy options meta from original post to revision
+				 *
+				 * fixme: this is created before original_post_id options will be saved, so here we have access only to old value, we will be one step back
 				 */
 				fw_set_db_post_option(
 					$post_id,
