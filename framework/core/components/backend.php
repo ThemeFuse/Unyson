@@ -131,7 +131,7 @@ final class _FW_Component_Backend {
 		add_action( 'init', array( $this, '_action_init' ), 20 );
 		add_action( 'admin_enqueue_scripts', array( $this, '_action_admin_enqueue_scripts' ), 8 );
 
-		add_action( 'save_post', array( $this, '_action_save_post' ), 10, 3 );
+		add_action( 'save_post', array( $this, '_action_save_post' ), 9, 3 );
 		add_action( 'wp_restore_post_revision', array( $this, '_action_restore_post_revision' ), 10, 2 );
 
 		// render and submit options from javascript
@@ -632,38 +632,9 @@ final class _FW_Component_Backend {
 	 * @param bool $update
 	 */
 	public function _action_save_post( $post_id, $post, $update ) {
-		if ($original_post_id = wp_is_post_revision( $post_id )) {
-			$original_post = get_post($original_post_id);
-
-			if ($update) {
-				// fixme: this will ever happen? I think it's impossible/no-sense to edit/update a revision
-				ob_start();
-				fw_print(
-					'Revision update',
-					FW_Request::POST(),
-					$post_id,
-					fw_get_db_post_option($post_id, null, array()),
-					fw_get_db_post_option($original_post_id, null, array()),
-					$post,
-					$original_post
-				);
-				FW_Flash_Messages::add(fw_rand_md5(), ob_get_clean());
-			} else {
-				/**
-				 * This is revision creation
-				 * Copy options meta from original post to revision
-				 */
-				fw_set_db_post_option(
-					$post_id,
-					null,
-					fw_get_db_post_option($original_post_id, null, array())
-				);
-			}
-		} elseif ($original_post_id = wp_is_post_autosave( $post_id )) {
-			fw_print('Autosave'); die;
-		} elseif (intval(FW_Request::POST('post_ID')) == $post_id) {
+		if (intval(FW_Request::POST('post_ID')) == $post_id) {
 			/**
-			 * This happens on regular post edit form submit
+			 * This happens on regular post form submit
 			 * All data from $_POST belongs this $post
 			 * so we save them in its post meta
 			 */
@@ -697,12 +668,67 @@ final class _FW_Component_Backend {
 			);
 
 			do_action( 'fw_save_post_options', $post_id, $post, $old_values );
-			return;
+		} elseif ($original_post_id = wp_is_post_revision( $post_id )) {
+			$original_post = get_post($original_post_id);
+
+			if ($update) {
+				if (false) {
+					ob_start();
+					fw_print(
+						'Revision update',
+						FW_Request::POST(),
+						$post_id,
+						$original_post_id,
+						fw_get_db_post_option($post_id, null, array()),
+						fw_get_db_post_option($original_post_id, null, array()),
+						$post,
+						$original_post
+					);
+					FW_Flash_Messages::add(fw_rand_md5(), ob_get_clean());
+				}
+
+				if (
+					intval(FW_Request::POST('post_ID')) == $original_post_id
+				) {
+					/**
+					 * This happens on Preview
+					 * $_POST contains the latest form input values
+					 */
+
+					$current_values = fw_get_options_values_from_input(
+						fw()->theme->get_post_options($original_post->post_type)
+					);
+
+					fw_set_db_post_option(
+						$post_id,
+						null,
+						array_diff_key( // remove handled values
+							$current_values,
+							$this->process_options_handlers(
+								fw()->theme->get_post_options($original_post->post_type),
+								$current_values
+							)
+						)
+					);
+				}
+			} else {
+				/**
+				 * This is revision creation on every post save/update
+				 * Copy options meta from original post to revision
+				 */
+				fw_set_db_post_option(
+					$post_id,
+					null,
+					fw_get_db_post_option($original_post_id, null, array())
+				);
+			}
+		} elseif ($original_post_id = wp_is_post_autosave( $post_id )) {
+			fw_print('Autosave'); die; // fixme: I don't know how to test this. The script never entered in this if
 		} else {
 			/**
 			 * This happens on:
 			 * - post add (auto-draft): do nothing
-			 * - revision restore: do nothing, that is handled by the _action_restore_post_revision() method
+			 * - revision restore: do nothing, that is handled by the 'wp_restore_post_revision' action
 			 */
 
 			if (false) {
@@ -710,9 +736,7 @@ final class _FW_Component_Backend {
 				fw_print(
 					$update,
 					FW_Request::POST(),
-					intval($post_id),
-					'Autosave:' . wp_is_post_autosave($post_id),
-					'Revision:' . wp_is_post_revision($post_id),
+					$post_id,
 					(array)fw_get_db_post_option($post_id, null, array()),
 					$post
 				);
@@ -727,14 +751,18 @@ final class _FW_Component_Backend {
 	 */
 	public function _action_restore_post_revision($post_id, $revision_id)
 	{
+		$old_values = (array)fw_get_db_post_option($post_id, null, array());
+
 		/**
 		 * Copy options meta from revision to post
 		 */
 		fw_set_db_post_option(
 			$post_id,
 			null,
-			fw_get_db_post_option($revision_id, null, array())
+			(array)fw_get_db_post_option($revision_id, null, array())
 		);
+
+		do_action( 'fw_restore_post_options', $post_id, $revision_id, $old_values );
 	}
 
 	/**
