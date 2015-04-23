@@ -6,6 +6,9 @@
  * Backend functionality
  */
 final class _FW_Component_Backend {
+
+	private $revision = array();
+
 	/** @var callable */
 	private $print_meta_box_content_callback;
 
@@ -131,6 +134,7 @@ final class _FW_Component_Backend {
 		add_action( 'init', array( $this, '_action_init' ), 20 );
 		add_action( 'admin_enqueue_scripts', array( $this, '_action_admin_enqueue_scripts' ), 8 );
 
+		add_action( 'wp_creating_autosave', array( $this, '_action_trigger_wp_create_autosave') );
 		add_action( 'save_post', array( $this, '_action_save_post' ), 9, 3 );
 		add_action( 'wp_restore_post_revision', array( $this, '_action_restore_post_revision' ), 10, 2 );
 
@@ -667,6 +671,21 @@ final class _FW_Component_Backend {
 				)
 			);
 
+			/**
+			 * This is revision creation on every post save/update
+			 * Copy options meta from original post to revision
+			 *
+			 * fixme: this is created before original_post_id options will be saved, so here we have access only to old value, we will be one step back
+			 */
+			if ( !empty( $this->revision) ) {
+				fw_set_db_post_option(
+					$this->revision[$post_id],
+					null,
+					fw_get_db_post_option($post_id, null, array())
+				);
+				$this->revision = null;
+			}
+
 			do_action( 'fw_save_post_options', $post_id, $post, $old_values );
 		} elseif ($original_post_id = wp_is_post_revision( $post_id )) {
 			$original_post = get_post($original_post_id);
@@ -712,17 +731,7 @@ final class _FW_Component_Backend {
 					);
 				}
 			} else {
-				/**
-				 * This is revision creation on every post save/update
-				 * Copy options meta from original post to revision
-				 *
-				 * fixme: this is created before original_post_id options will be saved, so here we have access only to old value, we will be one step back
-				 */
-				fw_set_db_post_option(
-					$post_id,
-					null,
-					fw_get_db_post_option($original_post_id, null, array())
-				);
+				$this->revision[$original_post_id] = $post_id;
 			}
 		} elseif ($original_post_id = wp_is_post_autosave( $post_id )) {
 			fw_print('Autosave'); die; // fixme: I don't know how to test this. The script never entered in this if
@@ -745,6 +754,51 @@ final class _FW_Component_Backend {
 				FW_Flash_Messages::add(fw_rand_md5(), ob_get_clean());
 			}
 		}
+	}
+
+	/**
+	 * @param array $autosave
+	 *
+	 * @internal
+	 **/
+	public function _action_trigger_wp_create_autosave( $autosave ) {
+		add_action( 'save_post', array( $this, '_action_update_autosave_options' ), 10, 2 );
+	}
+
+	/**
+	 * @param int $post_id
+	 * @param WP_Post $post
+	 *
+	 * @internal
+	 **/
+	public function _action_update_autosave_options( $post_id, $post ) {
+		remove_action( 'save_post', array( $this, '_action_update_autosave_options' ) );
+		remove_action( 'save_post', array( $this, '_action_save_post' ) );
+
+		$parent = get_post($post->post_parent);
+
+		if ( ! $parent instanceof WP_Post ) {
+			return;
+		}
+
+		$current_values = fw_get_options_values_from_input(
+			fw()->theme->get_post_options($parent->post_type)
+		);
+
+		fw_set_db_post_option(
+			$post->ID,
+			null,
+			array_diff_key( // remove handled values
+				$current_values,
+				$this->process_options_handlers(
+					fw()->theme->get_post_options($parent->post_type),
+					$current_values
+				)
+			)
+		);
+
+		do_action( 'fw_save_autosave_options', $post_id, $post );
+		add_action( 'save_post', array( $this, '_action_save_post' ), 10, 3 );
 	}
 
 	/**
