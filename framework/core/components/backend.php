@@ -7,8 +7,6 @@
  */
 final class _FW_Component_Backend {
 
-	private $revision = array();
-
 	/** @var callable */
 	private $print_meta_box_content_callback;
 
@@ -37,6 +35,11 @@ final class _FW_Component_Backend {
 	private $undefined_option_type;
 
 	private $static_registered = false;
+
+	/**
+	 * @var array {revision_post_id => original_post_id}
+	 */
+	private $updated_revisions = array();
 
 	/**
 	 * @internal
@@ -135,7 +138,7 @@ final class _FW_Component_Backend {
 		add_action( 'admin_enqueue_scripts', array( $this, '_action_admin_enqueue_scripts' ), 8 );
 
 		add_action( 'wp_creating_autosave', array( $this, '_action_trigger_wp_create_autosave') );
-		add_action( 'save_post', array( $this, '_action_save_post' ), 9, 3 );
+		add_action( 'save_post', array( $this, '_action_save_post' ), 7, 3 );
 		add_action( 'wp_restore_post_revision', array( $this, '_action_restore_post_revision' ), 10, 2 );
 
 		// render and submit options from javascript
@@ -672,21 +675,20 @@ final class _FW_Component_Backend {
 			);
 
 			/**
-			 * This is revision creation on every post save/update
-			 * Copy options meta from original post to revision
-			 *
-			 * fixme: this is created before original_post_id options will be saved, so here we have access only to old value, we will be one step back
+			 * @deprecated
+			 * Use the 'fw_post_options_update' action
 			 */
-			if ( !empty( $this->revision) ) {
+			do_action( 'fw_save_post_options', $post_id, $post, $old_values );
+
+			while ( $revision_id = array_search($post_id, $this->updated_revisions) ) {
+				// copy options meta from original post to revision
 				fw_set_db_post_option(
-					$this->revision[$post_id],
+					$revision_id,
 					null,
 					fw_get_db_post_option($post_id, null, array())
 				);
-				$this->revision = null;
+				unset($this->updated_revisions[$revision_id]);
 			}
-
-			do_action( 'fw_save_post_options', $post_id, $post, $old_values );
 		} elseif ($original_post_id = wp_is_post_revision( $post_id )) {
 			$original_post = get_post($original_post_id);
 
@@ -731,28 +733,16 @@ final class _FW_Component_Backend {
 					);
 				}
 			} else {
-				$this->revision[$original_post_id] = $post_id;
+				$this->updated_revisions[$post_id] = $original_post_id;
 			}
 		} elseif ($original_post_id = wp_is_post_autosave( $post_id )) {
-			fw_print('Autosave'); die; // fixme: I don't know how to test this. The script never entered in this if
+			// fixme: I don't know how to test this. The script never entered in this if
 		} else {
 			/**
 			 * This happens on:
 			 * - post add (auto-draft): do nothing
 			 * - revision restore: do nothing, that is handled by the 'wp_restore_post_revision' action
 			 */
-
-			if (false) {
-				ob_start();
-				fw_print(
-					$update,
-					FW_Request::POST(),
-					$post_id,
-					(array)fw_get_db_post_option($post_id, null, array()),
-					$post
-				);
-				FW_Flash_Messages::add(fw_rand_md5(), ob_get_clean());
-			}
 		}
 	}
 

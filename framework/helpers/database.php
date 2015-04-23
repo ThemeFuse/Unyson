@@ -105,6 +105,8 @@
 	 * @param $value
 	 */
 	function fw_set_db_post_option( $post_id = null, $option_id = null, $value ) {
+		$post_id = intval($post_id);
+
 		if ( ! $post_id ) {
 			/** @var WP_Post $post */
 			global $post;
@@ -116,11 +118,40 @@
 			}
 		}
 
+		$sub_keys = explode('/', $option_id);
+		$base_key = array_shift($sub_keys);
+
 		$option_id = 'fw_options' . ( $option_id !== null ? '/' . $option_id : '' );
 
 		FW_WP_Meta::set( 'post', $post_id, $option_id, $value );
 
 		fw()->backend->_sync_post_separate_meta($post_id);
+
+		do_action('fw_post_options_update',
+			$post_id,
+			/**
+			 * Option id
+			 * First level multi-key
+			 *
+			 * For e.g.
+			 *
+			 * if $option_id is 'hello/world/7'
+			 * this will be 'hello'
+			 */
+			$base_key,
+			/**
+			 * The remaining sub-keys
+			 *
+			 * For e.g.
+			 *
+			 * if $option_id is 'hello/world/7'
+			 * $option_id_keys will be array('world', '7')
+			 *
+			 * if $option_id is 'hello'
+			 * $option_id_keys will be array()
+			 */
+			$sub_keys
+		);
 	}
 }
 
