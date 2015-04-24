@@ -13,11 +13,11 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 		 */
 		protected function _get_defaults() {
 			return array(
-				'value'      => array(),
+				'value'       => array(),
 				/**
 				 * Available options: array, posts, taxonomy, users
 				 */
-				'population' => 'array',
+				'population'  => 'array',
 				/**
 				 * Set post types, taxonomies, user roles to search for
 				 *
@@ -33,16 +33,21 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				 * 'population' => 'array'
 				 * 'source' => '' // will populate with 'choices' array
 				 */
-				'source'     => '',
+				'source'      => '',
+				/**
+				 * Set the number of posts/users/taxonomies that multi-select will be prepopulated
+				 * Or set the value to false in order to disable this functionality.
+				 */
+				'prepopulate' => 10,
 				/**
 				 * An array with the available choices
 				 * Used only when 'population' => 'array'
 				 */
-				'choices'    => array( /* 'value' => 'Title' */ ),
+				'choices'     => array( /* 'value' => 'Title' */ ),
 				/**
 				 * Set maximum items number that can be selected
 				 */
-				'limit'      => 100,
+				'limit'       => 100,
 			);
 		}
 
@@ -215,6 +220,20 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 							$source     = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
 							$population = 'posts';
 
+							if ( isset( $option['prepopulate'] )
+							     && ( $number = (int) ( $option['prepopulate'] ) ) > 0
+							) {
+								$posts = get_posts( array(
+									'post_type'      => $option['source'],
+									'posts_per_page' => $number
+								) );
+
+								if ( ! empty( $posts ) || ! is_wp_error( $posts ) ) {
+									$items = wp_list_pluck( $posts, 'post_title', 'ID' );
+								}
+								unset( $posts );
+							}
+
 							if ( empty( $data['value'] ) ) {
 								break;
 							}
@@ -237,17 +256,29 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 								break;
 							}
 
-							$items = array();
-
 							foreach ( $query as $post ) {
 								$items[ $post->ID ] = $post->post_title;
 							}
+
 						}
 						break;
 					case 'taxonomy' :
 						if ( isset( $option['source'] ) ) {
 							$population = 'taxonomy';
 							$source     = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
+
+							if ( isset( $option['prepopulate'] )
+							     && ( $number = (int) ( $option['prepopulate'] ) ) > 0
+							) {
+								$terms = get_terms( $option['source'], array(
+									'number' => $number
+								) );
+
+								if ( ! empty( $terms ) || ! is_wp_error( $terms ) ) {
+									$items = wp_list_pluck( $terms, 'name', 'term_id' );
+								}
+								unset( $terms );
+							}
 
 							if ( empty( $data['value'] ) ) {
 								break;
@@ -295,6 +326,20 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 						 */
 						global $wpdb;
 						$population = 'users';
+
+						if ( isset( $option['prepopulate'] )
+						     && ( $number = (int) ( $option['prepopulate'] ) ) > 0
+						) {
+							$users = get_users( array(
+								'role'   => $option['source'],
+								'number' => $number
+							) );
+
+							if ( ! empty( $users ) || ! is_wp_error( $users ) ) {
+								$items = wp_list_pluck( $users, 'user_nicename', 'ID' );
+							}
+							unset( $users );
+						}
 
 						if ( isset( $option['source'] ) && ! empty( $option['source'] ) ) {
 							$source = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
