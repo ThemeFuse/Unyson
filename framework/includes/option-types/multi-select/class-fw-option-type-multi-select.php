@@ -222,11 +222,15 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 
 							if ( isset( $option['prepopulate'] )
 							     && ( $number = (int) ( $option['prepopulate'] ) ) > 0
+							     && ! empty( $source )
 							) {
-								$posts = get_posts( array(
-									'post_type'      => $option['source'],
-									'posts_per_page' => $number
-								) );
+
+								$posts = $wpdb->get_results(
+									"SELECT posts.ID, posts.post_title " .
+									"FROM $wpdb->posts as posts " .
+									"WHERE post_type IN ('" . implode( "', ", $source ) . "') " .
+									"ORDER BY post_date DESC LIMIT $number"
+								);
 
 								if ( ! empty( $posts ) || ! is_wp_error( $posts ) ) {
 									$items = wp_list_pluck( $posts, 'post_title', 'ID' );
@@ -264,15 +268,23 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 						break;
 					case 'taxonomy' :
 						if ( isset( $option['source'] ) ) {
+							/**
+							 * @var WPDB $wpdb
+							 */
+							global $wpdb;
 							$population = 'taxonomy';
 							$source     = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
 
-							if ( isset( $option['prepopulate'] )
+							if ( isset( $option['prepopulate'] ) && ! empty( $source )
 							     && ( $number = (int) ( $option['prepopulate'] ) ) > 0
 							) {
-								$terms = get_terms( $option['source'], array(
-									'number' => $number
-								) );
+								$terms = $wpdb->get_results(
+									"SELECT terms.term_id, terms.name " .
+									"FROM $wpdb->terms as terms, $wpdb->term_taxonomy as taxonomies " .
+									"WHERE taxonomies.taxonomy IN ('" . implode( "', ", $source ) . "') " .
+									"AND terms.term_id = taxonomies.term_id " .
+									"AND taxonomies.term_id = taxonomies.term_taxonomy_id"
+								);
 
 								if ( ! empty( $terms ) || ! is_wp_error( $terms ) ) {
 									$items = wp_list_pluck( $terms, 'name', 'term_id' );
@@ -330,10 +342,15 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 						if ( isset( $option['prepopulate'] )
 						     && ( $number = (int) ( $option['prepopulate'] ) ) > 0
 						) {
-							$users = get_users( array(
-								'role'   => $option['source'],
-								'number' => $number
-							) );
+							$users = $wpdb->get_results(
+								"SELECT DISTINCT users.ID, users.user_nicename " .
+								"FROM $wpdb->users as users, $wpdb->usermeta usermeta " .
+								( ! empty( $source )
+									? "WHERE usermeta.meta_key = 'wp_capabilities'" .
+									  " AND usermeta.meta_value IN ('" . implode( "', ", $source ) . "')" .
+									  " AND usermeta.user_id = users.ID"
+									: '' ) . " LIMIT $number"
+							);
 
 							if ( ! empty( $users ) || ! is_wp_error( $users ) ) {
 								$items = wp_list_pluck( $users, 'user_nicename', 'ID' );
@@ -362,7 +379,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 							$in_sources = implode( ' OR ', $in_sources );
 
 							$query = $wpdb->get_results(
-								"SELECT users.id, users.display_name title " .
+								"SELECT users.id, users.user_nicename title " .
 								"FROM $wpdb->users as users, $wpdb->usermeta usermeta " .
 								"WHERE users.ID IN ($ids) AND usermeta.meta_key = 'wp_capabilities' AND ( $in_sources ) " .
 								"AND usermeta.user_id = users.ID"
