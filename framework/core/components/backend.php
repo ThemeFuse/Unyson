@@ -37,13 +37,6 @@ final class _FW_Component_Backend {
 	private $static_registered = false;
 
 	/**
-	 * Some revisions are created before the original post is saved
-	 * Remember them in this array and copy the options on original post save
-	 * @var array {revision_post_id => original_post_id}
-	 */
-	private $revisions_waiting_original_options_meta = array();
-
-	/**
 	 * @internal
 	 */
 	public function _get_settings_page_slug() {
@@ -762,9 +755,6 @@ final class _FW_Component_Backend {
 			null,
 			(array)fw_get_db_post_option($revision_id, null, array())
 		);
-		ob_start();
-		fw_print('Restore', $revision_id, $post_id);
-		FW_Flash_Messages::add(fw_rand_md5(), ob_get_clean());
 	}
 
 	/**
@@ -784,9 +774,6 @@ final class _FW_Component_Backend {
 				array()
 			)
 		);
-		ob_start();
-		fw_print('Revision', $revision_id);
-		FW_Flash_Messages::add(fw_rand_md5(), ob_get_clean());
 	}
 
 	/**
