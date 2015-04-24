@@ -127,6 +127,9 @@
 
 		fw()->backend->_sync_post_separate_meta($post_id);
 
+		/**
+		 * @since 2.2.8
+		 */
 		do_action('fw_post_options_update',
 			$post_id,
 			/**
