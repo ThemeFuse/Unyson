@@ -144,7 +144,11 @@ class FW_WP_Filesystem
 				continue;
 			}
 
-			$relative_path = preg_replace($prefix_regex, '', $real_path);
+			if ($base_real_path === '/') {
+				$relative_path = $real_path;
+			} else {
+				$relative_path = preg_replace($prefix_regex, '', $real_path);
+			}
 
 			return $base_wp_filesystem_path . $relative_path;
 		}
@@ -175,7 +179,11 @@ class FW_WP_Filesystem
 				continue;
 			}
 
-			$relative_path = preg_replace($prefix_regex, '', $wp_filesystem_path);
+			if ($base_wp_filesystem_path === '/') {
+				$relative_path = $wp_filesystem_path;
+			} else {
+				$relative_path = preg_replace($prefix_regex, '', $wp_filesystem_path);
+			}
 
 			return $base_real_path . $relative_path;
 		}
@@ -253,13 +261,20 @@ class FW_WP_Filesystem
 			return false;
 		}
 
-		$rel_path = preg_replace('/^'. preg_quote($path, '/') .'/', '', $wp_filesystem_dir_path);
+		if ($path === '/') {
+			$rel_path = $wp_filesystem_dir_path;
+		} else {
+			$rel_path = preg_replace('/^'. preg_quote($path, '/') .'/', '', $wp_filesystem_dir_path);
+		}
 
 		// improvement: do not check directory for existence if it's known that sure it doesn't exist
 		$check_if_exists = true;
 
 		foreach (explode('/', ltrim($rel_path, '/')) as $dir_name) {
 			$path .= '/' . $dir_name;
+
+			// When WP FS abspath is '/', $path can be '//wp-content'. Fix it '/wp-content'
+			$path = fw_fix_path($path);
 
 			if ($check_if_exists) {
 				if ($wp_filesystem->is_dir($path)) {
