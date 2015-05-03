@@ -7,7 +7,7 @@ class FW_WP_Filesystem
 	 * @param string $context
 	 * @param string $url
 	 * @param array $extra_fields
-	 * @return null|bool
+	 * @return null|bool // todo: Create a new method that will return WP_Error with message on failure
 	 *      null  - if has no access and the input credentials form was displayed
 	 *      false - if user submitted wrong credentials
 	 *      true  - if we have filesystem access
