@@ -714,7 +714,7 @@ final class _FW_Component_Backend {
 	 **/
 	public function _action_update_autosave_options( $post_id, $post ) {
 		remove_action( 'save_post', array( $this, '_action_update_autosave_options' ) );
-		remove_action( 'save_post', array( $this, '_action_save_post' ) );
+		remove_action( 'save_post', array( $this, '_action_save_post' ), 7 );
 
 		$parent = get_post($post->post_parent);
 
