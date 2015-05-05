@@ -19,7 +19,7 @@ If you are not a developer, please use the [Unyson plugin page](https://wordpres
 
 ## Installation
 
-1. [Download the latest release](https://github.com/ThemeFuse/Unyson/releases/latest)
+1. [ ![Download](https://static.md/c1cea378c63f839fbede18687134423f.jpeg) ](https://github.com/ThemeFuse/Unyson/releases/latest)
 2. Extract the archive to the `/wp-content/plugins/unyson/` directory
 3. Activate the Unyson plugin through the 'Plugins' menu in WordPress
 4. Configure the plugin by going to the Unyson menu that appears in your admin menu
