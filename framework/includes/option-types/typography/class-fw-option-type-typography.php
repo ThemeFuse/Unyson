@@ -107,7 +107,7 @@ class FW_Option_Type_Typography extends FW_Option_Type
 		$values = array(
 			'size' => ($components['size']) ? (isset($input_value['size'])) ? intval($input_value['size']) : intval($option['value']['size']) : false,
 			'family' => ($components['family']) ? (isset($input_value['family'])) ? $input_value['family'] : $option['value']['family'] : false,
-			'style' => ($components['family']) ? (isset($input_value['style'])) ? $input_value['style'] : $option['value']['style'] : false,
+			'style' => ($components['style']) ? (isset($input_value['style'])) ? $input_value['style'] : $option['value']['style'] : false,
 			'color' => ($components['color']) ? (isset($input_value['color']) && preg_match('/^#[a-f0-9]{6}$/i', $input_value['color'])) ? $input_value['color'] : $option['value']['color'] : false,
 		);
 
