@@ -100,15 +100,14 @@ final class _FW_Component_Backend {
 	 * @internal
 	 */
 	public function _init() {
-		if ( ! is_admin() ) {
-			return;
-		}
 
-		$this->settings_form = new FW_Form( 'fw_settings', array(
-			'render'   => array( $this, '_settings_form_render' ),
-			'validate' => array( $this, '_settings_form_validate' ),
-			'save'     => array( $this, '_settings_form_save' ),
-		) );
+		if ( is_admin() ) {
+			$this->settings_form = new FW_Form('fw_settings', array(
+				'render' => array($this, '_settings_form_render'),
+				'validate' => array($this, '_settings_form_validate'),
+				'save' => array($this, '_settings_form_save'),
+			));
+		}
 
 		$this->add_actions();
 		$this->add_filters();
@@ -121,25 +120,31 @@ final class _FW_Component_Backend {
 	}
 
 	private function add_actions() {
-		add_action( 'admin_menu', array( $this, '_action_admin_menu' ) );
-		add_action( 'add_meta_boxes', array( $this, '_action_create_post_meta_boxes' ), 10, 2 );
-		add_action( 'init', array( $this, '_action_init' ), 20 );
-		add_action( 'admin_enqueue_scripts', array( $this, '_action_admin_enqueue_scripts' ), 8 );
+		if ( is_admin() ) {
+			add_action('admin_menu', array($this, '_action_admin_menu'));
+			add_action('add_meta_boxes', array($this, '_action_create_post_meta_boxes'), 10, 2);
+			add_action('init', array($this, '_action_init'), 20);
+			add_action('admin_enqueue_scripts', array($this, '_action_admin_enqueue_scripts'), 8);
 
-		add_action( 'save_post', array( $this, '_action_save_post' ), 7, 3 );
-		add_action( 'wp_restore_post_revision', array( $this, '_action_restore_post_revision' ), 10, 2 );
-		add_action( '_wp_put_post_revision', array( $this, '_action__wp_put_post_revision' ) );
-		add_action( 'wp_creating_autosave', array( $this, '_action_trigger_wp_create_autosave') );
+			add_action('save_post', array($this, '_action_save_post'), 7, 3);
+			add_action('wp_restore_post_revision', array($this, '_action_restore_post_revision'), 10, 2);
+			add_action('_wp_put_post_revision', array($this, '_action__wp_put_post_revision'));
+			add_action('wp_creating_autosave', array($this, '_action_trigger_wp_create_autosave'));
 
-		// render and submit options from javascript
-		{
-			add_action( 'wp_ajax_fw_backend_options_render', array( $this, '_action_ajax_options_render' ) );
-			add_action( 'wp_ajax_fw_backend_options_get_values', array( $this, '_action_ajax_options_get_values' ) );
+			// render and submit options from javascript
+			{
+				add_action('wp_ajax_fw_backend_options_render', array($this, '_action_ajax_options_render'));
+				add_action('wp_ajax_fw_backend_options_get_values', array($this, '_action_ajax_options_get_values'));
+			}
 		}
+
+		add_action('customize_register', array($this, '_action_customize_register'));
 	}
 
 	private function add_filters() {
-		add_filter( 'update_footer', array( $this, '_filter_footer_version' ), 11 );
+		if ( is_admin() ) {
+			add_filter('update_footer', array($this, '_filter_footer_version'), 11);
+		}
 	}
 
 	/**
@@ -1174,7 +1179,6 @@ final class _FW_Component_Backend {
 		}
 
 		$collected = array();
-
 		fw_collect_first_level_options( $collected, $options );
 
 		if ( empty( $collected['all'] ) ) {
@@ -1567,6 +1571,117 @@ final class _FW_Component_Backend {
 			}
 
 			return $this->undefined_option_type;
+		}
+	}
+
+	/**
+	 * @param WP_Customize_Manager $wp_customize
+	 * @internal
+	 */
+	public function _action_customize_register($wp_customize) {
+		$this->customizer_register_options(
+			$wp_customize,
+			fw()->theme->get_settings_options() // fixme
+		);
+	}
+
+	/**
+	 * @param WP_Customize_Manager $wp_customize
+	 * @param array $options
+	 * @param array $parent_data {'type':'...','id':'...'}
+	 */
+	private function customizer_register_options($wp_customize, $options, $parent_data = array()) {
+		$collected = array();
+		fw_collect_first_level_options( $collected, $options );
+
+		if (empty($collected['all'])) {
+			return;
+		}
+
+		foreach ($collected['all'] as &$opt) {
+			switch ($opt['type']) {
+				case 'tab':
+					$args = array(
+						'title' => $opt['option']['title'],
+						'description' => empty($opt['option']['desc']) ? '' : $opt['option']['desc'],
+					);
+
+					if ($parent_data) {
+						trigger_error('Not supported panel parent, type: '. $parent_data['type'], E_USER_WARNING);
+						break;
+					}
+
+					$wp_customize->add_panel(
+						$opt['id'],
+						$args
+					);
+
+					$this->customizer_register_options(
+						$wp_customize,
+						$opt['option']['options'],
+						array(
+							'type' => 'panel',
+							'id' => $opt['id']
+						)
+					);
+					break;
+				case 'box':
+					$args = array(
+						'title' => $opt['option']['title'],
+					);
+
+					if ($parent_data) {
+						if ($parent_data['type'] === 'panel') {
+							$args['panel'] = $parent_data['id'];
+						} else {
+							trigger_error('Not supported section parent, type: '. $parent_data['type'], E_USER_WARNING);
+							break;
+						}
+					}
+
+					$wp_customize->add_section($opt['id'], $args);
+
+					$this->customizer_register_options(
+						$wp_customize,
+						$opt['option']['options'],
+						array(
+							'type' => 'section',
+							'id' => $opt['id']
+						)
+					);
+					break;
+				case 'option':
+					$wp_customize->add_setting(
+						$opt['id'],
+						array(
+							'default' => '',
+						)
+					);
+
+					$args = array(
+						'label'      => empty($opt['option']['label']) ? '' : $opt['option']['label'],
+						'settings'   => $opt['id'],
+						'type'       => 'radio',
+						'choices'    => array(
+							'a' => 'Demo A',
+							'b' => 'Demo B',
+						),
+					);
+
+					if ($parent_data) {
+						if ($parent_data['type'] === 'section') {
+							$args['section'] = $parent_data['id'];
+						} else {
+							trigger_error('Not supported control parent, type: '. $parent_data['type'], E_USER_WARNING);
+							break;
+						}
+					}
+
+					$wp_customize->add_control( $opt['id'], $args );
+					break;
+				default:
+					trigger_error('Not processed option, type: '. $opt['type'], E_USER_WARNING);
+			}
 		}
 	}
 }
