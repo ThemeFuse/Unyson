@@ -94,12 +94,6 @@ final class _FW_Component_Backend {
 
 	public function __construct() {
 		$this->print_meta_box_content_callback = create_function( '$post,$args', 'echo $args["args"];' );
-
-		{
-			$this->undefined_option_type = new FW_Option_Type_Undefined();
-
-			$this->option_types[ $this->undefined_option_type->get_type() ] = $this->undefined_option_type;
-		}
 	}
 
 	/**
@@ -1566,50 +1560,13 @@ final class _FW_Component_Backend {
 				);
 			}
 
+			if (!$this->undefined_option_type) {
+				require_once fw_get_framework_directory('/includes/option-types/class-fw-option-type-undefined.php');
+
+				$this->undefined_option_type = new FW_Option_Type_Undefined();
+			}
+
 			return $this->undefined_option_type;
 		}
-	}
-}
-
-/**
- * This will be returned when tried to get not existing option type
- * to prevent fatal errors for cases when just one option type was typed wrong
- * or any other minor bug that has no sense to crash the whole site
- */
-final class FW_Option_Type_Undefined extends FW_Option_Type {
-	public function get_type() {
-		return '';
-	}
-
-	/**
-	 * @internal
-	 * {@inheritdoc}
-	 */
-	protected function _enqueue_static( $id, $option, $data ) {
-	}
-
-	/**
-	 * @internal
-	 * {@inheritdoc}
-	 */
-	protected function _render( $id, $name, $data ) {
-		return '/* ' . __( 'UNDEFINED OPTION TYPE', 'fw' ) . ' */';
-	}
-
-	/**
-	 * @internal
-	 * {@inheritdoc}
-	 */
-	protected function _get_value_from_input( $option, $input_value ) {
-		return $option['value'];
-	}
-
-	/**
-	 * @internal
-	 */
-	protected function _get_defaults() {
-		return array(
-			'value' => array()
-		);
 	}
 }
