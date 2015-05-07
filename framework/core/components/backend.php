@@ -1579,7 +1579,7 @@ final class _FW_Component_Backend {
 	 */
 	public function _action_customize_register($wp_customize) {
 		if (is_admin()) {
-			add_action('admin_enqueue_scripts', array($this, '_action_enqueue_customizer_options_static'));
+			add_action('admin_enqueue_scripts', array($this, '_action_enqueue_customizer_static'));
 		}
 
 		$this->customizer_register_options(
@@ -1591,10 +1591,18 @@ final class _FW_Component_Backend {
 	/**
 	 * @internal
 	 */
-	public function _action_enqueue_customizer_options_static()
+	public function _action_enqueue_customizer_static()
 	{
 		fw()->backend->enqueue_options_static(
 			fw()->theme->get_settings_options() // fixme
+		);
+
+		wp_enqueue_script(
+			'fw-backend-customizer',
+			fw_get_framework_directory_uri( '/static/js/backend-customizer.js' ),
+			array( 'jquery', 'fw-events', 'backbone' ),
+			fw()->manifest->get_version(),
+			true
 		);
 	}
 
@@ -1664,30 +1672,27 @@ final class _FW_Component_Backend {
 					);
 					break;
 				case 'option':
-					$wp_customize->add_setting(
-						$opt['id'],
-						array(
-							'default' => '',
-						)
-					);
+					$setting_id = FW_Option_Type::get_default_name_prefix() .'['. $opt['id'] .']';
 
-					$args = array(
-						'label'       => empty($opt['option']['label']) ? '' : $opt['option']['label'],
-						'description' => empty($opt['option']['desc']) ? '' : $opt['option']['desc'],
-						'settings'    => $opt['id'],
-						'type'        => 'radio',
-						'choices'     => array(
-							'a' => 'Demo A',
-							'b' => 'Demo B',
-						),
-					);
+					{
+						$args = array(
+							'label'       => empty($opt['option']['label']) ? '' : $opt['option']['label'],
+							'description' => empty($opt['option']['desc']) ? '' : $opt['option']['desc'],
+							'settings'    => $setting_id,
+							'type'        => 'radio',
+							'choices'     => array(
+								'a' => 'Demo A',
+								'b' => 'Demo B',
+							),
+						);
 
-					if ($parent_data) {
-						if ($parent_data['type'] === 'section') {
-							$args['section'] = $parent_data['id'];
-						} else {
-							trigger_error('Not supported control parent, type: '. $parent_data['type'], E_USER_WARNING);
-							break;
+						if ($parent_data) {
+							if ($parent_data['type'] === 'section') {
+								$args['section'] = $parent_data['id'];
+							} else {
+								trigger_error('Not supported control parent, type: '. $parent_data['type'], E_USER_WARNING);
+								break;
+							}
 						}
 					}
 
@@ -1695,19 +1700,33 @@ final class _FW_Component_Backend {
 						require_once fw_get_framework_directory('/includes/customizer/class--fw-customizer-control-option-wrapper.php');
 					}
 
-					$wp_customize->add_control(
-						new _FW_Customizer_Control_Option_Wrapper(
-							$wp_customize,
-							$opt['id'],
-							$args,
-							array(
-								'fw_option' => $opt['option']
-							)
+					$option_defaults = fw()->backend->option_type($opt['option']['type'])->get_defaults();
+
+					$wp_customize->add_setting(
+						$setting_id,
+						array(
+							'default' => $option_defaults['value'],
+
+							// added later because we can't create control first without an existing setting
+							//'sanitize_callback' => array($control, 'setting_sanitize_callback'),
 						)
 					);
+
+					$control = new _FW_Customizer_Control_Option_Wrapper(
+						$wp_customize,
+						$opt['id'],
+						$args,
+						array(
+							'fw_option' => $opt['option']
+						)
+					);
+
+					add_filter( "customize_sanitize_{$setting_id}", array($control, 'setting_sanitize_callback'), 10, 2 );
+
+					$wp_customize->add_control($control);
 					break;
 				default:
-					trigger_error('Not supported option in customizer, type: '. $opt['type'], E_USER_WARNING);
+					//trigger_error('Not supported option in customizer, type: '. $opt['type'], E_USER_WARNING); // todo: uncomment
 			}
 		}
 	}
