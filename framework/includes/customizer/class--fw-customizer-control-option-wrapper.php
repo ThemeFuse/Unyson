@@ -11,23 +11,24 @@ class _FW_Customizer_Control_Option_Wrapper extends WP_Customize_Control {
 
 	public function render_content() {
 		?>
-		<label>
-		<?php if ( ! empty( $this->label ) ) : ?>
-			<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
-		<?php endif;
-		if ( ! empty( $this->description ) ) : ?>
-			<span class="description customize-control-description"><?php echo $this->description; ?></span>
-		<?php endif; ?>
-		</label>
 		<div>
-		<?php
+			<input type="hidden" <?php $this->link() ?> />
+			<div class="fw-force-xs">
+			<?php
 
-		echo fw()->backend->option_type($this->fw_option['type'])->render(
-			$this->id,
-			$this->fw_option
-		);
+			echo fw()->backend->render_options(
+				array(
+					$this->id => $this->fw_option
+				),
+				array(
+					// $this->id => $this->value() // fixme
+				),
+				array(),
+				'customizer'
+			);
 
-		?>
+			?>
+			</div>
 		</div>
 		<?php
 	}

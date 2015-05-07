@@ -761,6 +761,7 @@ body.rtl .fw-postbox > .inside > .fw-backend-options-last-border-hider {
 }
 
 .fw-backend-option-design-default > .fw-backend-option-input.width-type-fixed > .fw-inner,
+.fw-backend-option-design-customizer > .fw-backend-option-input.width-type-fixed > .fw-inner,
 .fw-backend-option-design-taxonomy > td > .fw-backend-option-input.width-type-fixed > .fw-inner,
 .fw-backend-option-fixed-width {
 	width: 100%;
@@ -802,6 +803,13 @@ body.rtl .fw-backend-option-design-default > .fw-backend-option-desc > .fw-inner
 	padding-right: 1px;
 }
 
+.fw-backend-option-design-customizer > .fw-backend-option-label .fw-option-help {
+	display: inline-block;
+	vertical-align: middle;
+}
+.fw-backend-option-design-customizer > .fw-backend-option-label .customize-control-title {
+	display: inline-block;
+}
 
 /* Options Groups */
 

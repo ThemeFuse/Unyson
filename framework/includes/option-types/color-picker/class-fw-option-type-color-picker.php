@@ -23,13 +23,10 @@ class FW_Option_Type_Color_Picker extends FW_Option_Type
 			fw()->manifest->get_version()
 		);
 
-		wp_enqueue_script('wp-color-picker');
-		wp_enqueue_script('fw-events');
-
 		wp_enqueue_script(
 			'fw-option-'. $this->get_type(),
 			fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/js/scripts.js'),
-			array('jquery', 'fw-events'),
+			array('jquery', 'fw-events', 'wp-color-picker'),
 			fw()->manifest->get_version(),
 			true
 		);

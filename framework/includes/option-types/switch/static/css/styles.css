@@ -20,3 +20,7 @@
 body.rtl .adaptive-switch {
 	direction: ltr;
 }
+
+.fw-backend-option-design-customizer.fw-backend-option-type-switch .adaptive-switch .switch-switcher label.switch-label {
+	line-height: inherit;
+}

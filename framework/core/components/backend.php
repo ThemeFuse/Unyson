@@ -13,7 +13,7 @@ final class _FW_Component_Backend {
 	/** @var FW_Form */
 	private $settings_form;
 
-	private $available_render_designs = array( 'default', 'taxonomy' );
+	private $available_render_designs = array( 'default', 'taxonomy', 'customizer' );
 
 	/**
 	 * Store option types for registration, until they will be required
@@ -1578,13 +1578,23 @@ final class _FW_Component_Backend {
 	 * @internal
 	 */
 	public function _action_customize_register($wp_customize) {
-		$options = fw()->theme->get_settings_options(); // fixme
-
-		fw()->backend->enqueue_options_static($options);
+		if (is_admin()) {
+			add_action('admin_enqueue_scripts', array($this, '_action_enqueue_customizer_options_static'));
+		}
 
 		$this->customizer_register_options(
 			$wp_customize,
-			$options
+			fw()->theme->get_settings_options() // fixme
+		);
+	}
+
+	/**
+	 * @internal
+	 */
+	public function _action_enqueue_customizer_options_static()
+	{
+		fw()->backend->enqueue_options_static(
+			fw()->theme->get_settings_options() // fixme
 		);
 	}
 
@@ -1662,10 +1672,11 @@ final class _FW_Component_Backend {
 					);
 
 					$args = array(
-						'label'      => empty($opt['option']['label']) ? '' : $opt['option']['label'],
-						'settings'   => $opt['id'],
-						'type'       => 'radio',
-						'choices'    => array(
+						'label'       => empty($opt['option']['label']) ? '' : $opt['option']['label'],
+						'description' => empty($opt['option']['desc']) ? '' : $opt['option']['desc'],
+						'settings'    => $opt['id'],
+						'type'        => 'radio',
+						'choices'     => array(
 							'a' => 'Demo A',
 							'b' => 'Demo B',
 						),
