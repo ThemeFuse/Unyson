@@ -198,6 +198,8 @@ function fw_print($value) {
 			padding: 0;
 			border: 1px solid #F5F5F5;
 			border-radius: 3px;
+			position: relative;
+			z-index: 11111;
 		}
 
 		div.fw_print_r pre {
