@@ -10,20 +10,6 @@
 	width: 100%;
 }
 
-@media (max-width: 782px) {
-	.fw-backend-option-input-type-typography {
-		width: 100%;
-	}
-
-	.fw-option-type-typography .fw-option-typography-option {
-		padding-top: 5px;
-	}
-
-	.fw-option-type-typography .fw-option-typography-option:first-child {
-		padding-top: 0;
-	}
-}
-
 @media (min-width: 783px) {
 	.fw-backend-option-input-type-typography {
 		width: auto;
@@ -56,6 +42,29 @@
 	.fw-force-xs .fw-option-type-typography .fw-option-typography-option {
 		padding-top: 5px;
 	}
+}
+
+@media (max-width: 782px) {
+	.fw-backend-option-input-type-typography {
+		width: 100%;
+	}
+
+	.fw-option-type-typography .fw-option-typography-option {
+		padding-top: 5px;
+	}
+
+	.fw-option-type-typography .fw-option-typography-option:first-child {
+		padding-top: 0;
+	}
+}
+.fw-force-xs .fw-backend-option-input-type-typography {
+	width: 100%;
+}
+.fw-force-xs .fw-option-type-typography .fw-option-typography-option {
+	padding-top: 5px;
+}
+.fw-force-xs .fw-option-type-typography .fw-option-typography-option:first-child {
+	padding-top: 0;
 }
 
 .fw-option-type-typography .fw-option-typography-option input,
@@ -110,6 +119,14 @@ body.rtl .fw-option-type-typography .fw-option-typography-option-family .selecti
 		width: 100%;
 		margin-right: 0;
 	}
+}
+.fw-force-xs .fw-option-type-typography .fw-option-typography-option-family .selectize-control.single .selectize-input:after {
+	right: 6px;
+}
+.fw-force-xs .fw-option-typography-option.fw-option-typography-option-family,
+.fw-force-xs .fw-option-type-typography .fw-option-typography-option-family-input {
+	width: 100%;
+	margin-right: 0;
 }
 
 .fw-option-type-typography .fw-option-typography-option-family-input:focus,
@@ -185,7 +202,7 @@ body.rtl .fw-option-type-typography .fw-option-typography-option-family .selecti
 
 @media (max-width: 782px) {
 	.fw-option-type-typography .selectize-dropdown.fw-option-typography-option-family-input {
-		width: 100%!important;
+		width: 100% !important;
 	}
 
 	.fw-option-type-typography .selectize-dropdown .selectize-dropdown-content div div.preview {
@@ -201,6 +218,20 @@ body.rtl .fw-option-type-typography .fw-option-typography-option-family .selecti
 	#edittag .fw-option-type-typography .selectize-control.single .selectize-input {
 		padding: 0 14px;
 	}
+}
+.fw-force-xs .fw-option-type-typography .selectize-dropdown.fw-option-typography-option-family-input {
+	width: 100%!important;
+}
+.fw-force-xs .fw-option-type-typography .selectize-dropdown .selectize-dropdown-content div div.preview {
+	width: 165px;
+}
+.fw-force-xs .fw-option-type-typography .selectize-control.single .selectize-input {
+	height: 36px;
+	font-size: 16px;
+	line-height: 34px;
+}
+#edittag .fw-force-xs .fw-option-type-typography .selectize-control.single .selectize-input {
+	padding: 0 14px;
 }
 
 .fw-option-type-typography div.selectize-input.items.full.has-options.has-items {
@@ -221,12 +252,8 @@ body.rtl .fw-option-type-typography .fw-option-typography-option-family .selecti
 		top: 41px !important;
 	}
 }
-
-
-.fw-force-xs .fw-option-type-typography .fw-option-typography-option-style,
-.fw-force-xs .fw-option-type-typography .fw-option-typography-option-color,
-.fw-force-xs .fw-option-type-typography .fw-option-typography-option-color .fw-option-type-color-picker {
-	width: 100% !important;
+.fw-force-xs .fw-option-type-typography .selectize-control .selectize-dropdown {
+	top: 41px !important;
 }
 
 @media (max-width: 782px) {
@@ -236,7 +263,11 @@ body.rtl .fw-option-type-typography .fw-option-typography-option-family .selecti
 		width: 100% !important;
 	}
 }
-
+.fw-force-xs .fw-option-type-typography .fw-option-typography-option-style,
+.fw-force-xs .fw-option-type-typography .fw-option-typography-option-color,
+.fw-force-xs .fw-option-type-typography .fw-option-typography-option-color .fw-option-type-color-picker {
+	width: 100% !important;
+}
 
 /*
 Fix: for color picker width too small or too big
@@ -260,9 +291,13 @@ color:      fw-col-sm-2 = 16.66666667%
 	.fw-option-type-typography .fw-option-typography-option-size {
 		width: 67px;
 	}
-/*	.fw-backend-option-input-type-typography{
+	/*.fw-backend-option-input-type-typography{
 		width: 428px;
 	}*/
+}
+
+.fw-force-xs .fw-option-type-typography .fw-option-typography-option-size {
+	width: 100%;
 }
 
 

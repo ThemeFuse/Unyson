@@ -7,6 +7,9 @@ input.fw-option-type-color-picker {
 		width: 100px !important;
 	}
 }
+.fw-force-xs input.fw-option-type-color-picker {
+	width: 100px !important;
+}
 
 input.fw-option-type-color-picker.iris-error {
 	background-color: #ffebe8;
