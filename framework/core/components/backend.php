@@ -1584,7 +1584,7 @@ final class _FW_Component_Backend {
 
 		$this->customizer_register_options(
 			$wp_customize,
-			fw()->theme->get_settings_options() // fixme
+			fw()->theme->get_customizer_options()
 		);
 	}
 
@@ -1594,7 +1594,7 @@ final class _FW_Component_Backend {
 	public function _action_enqueue_customizer_static()
 	{
 		fw()->backend->enqueue_options_static(
-			fw()->theme->get_settings_options() // fixme
+			fw()->theme->get_customizer_options()
 		);
 
 		wp_enqueue_script(
@@ -1726,7 +1726,7 @@ final class _FW_Component_Backend {
 					$wp_customize->add_control($control);
 					break;
 				default:
-					//trigger_error('Not supported option in customizer, type: '. $opt['type'], E_USER_WARNING); // todo: uncomment
+					trigger_error('Not supported option in customizer, type: '. $opt['type'], E_USER_WARNING); // todo: uncomment
 			}
 		}
 	}

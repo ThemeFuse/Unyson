@@ -2,10 +2,10 @@
 	die( 'Forbidden' );
 }
 
-/** Framework Settings Options */
+/** Theme Settings Options */
 {
 	/**
-	 * Get a framework settings option value from the database
+	 * Get a theme settings option value from the database
 	 *
 	 * @param string|null $option_id Specific option id (accepts multikey). null - all options
 	 * @param null|mixed $default_value If no option found in the database, this value will be returned
@@ -55,7 +55,7 @@
 	}
 
 	/**
-	 * Set a framework settings option value in database
+	 * Set a theme settings option value in database
 	 *
 	 * @param null $option_id Specific option id (accepts multikey). null - all options
 	 * @param mixed $value
@@ -376,5 +376,80 @@
 		$data[ $extension_name ] = $value;
 
 		return fw_update_user_meta( $user_id, 'fw_data', $data );
+	}
+}
+
+/** Customizer Framework Options */
+{
+	/**
+	 * Get a customizer framework option value from the database
+	 *
+	 * @param string|null $option_id Specific option id (accepts multikey). null - all options
+	 * @param null|mixed $default_value If no option found in the database, this value will be returned
+	 * // fixme: Maybe add this parameter? @ param null|bool $get_original_value Original value is that with no translations and other changes
+	 *
+	 * @return mixed|null
+	 */
+	function fw_get_db_customizer_option( $option_id = null, $default_value = null ) {
+		$value = get_theme_mod(FW_Option_Type::get_default_name_prefix(), array());
+
+		if (!is_null($option_id)) {
+			$value = fw_akg($option_id, $value, $default_value);
+		}
+
+		if (
+			(!is_null($option_id) && is_null($value)) // a specific option_id was requested
+			||
+			(is_null($option_id) && empty($value)) // all options were requested but the db value is empty (this can happen after Reset)
+		) {
+			/**
+			 * Maybe the options was never saved or the given option id does not exist
+			 * Extract the default values from the options array and try to find there the option id
+			 */
+
+			$cache_key = 'fw_default_options_values/customizer';
+
+			try {
+				$all_options_values = FW_Cache::get( $cache_key );
+			} catch ( FW_Cache_Not_Found_Exception $e ) {
+				// extract the default values from options array
+				$all_options_values = fw_get_options_values_from_input(
+					fw()->theme->get_customizer_options(),
+					array()
+				);
+
+				FW_Cache::set( $cache_key, $all_options_values );
+			}
+
+			if ( empty( $option_id ) ) {
+				// option id not specified, return all options values
+				return $all_options_values;
+			} else {
+				return fw_akg( $option_id, $all_options_values, $default_value );
+			}
+		} else {
+			return $value;
+		}
+	}
+
+	/**
+	 * Set a theme customizer option value in database
+	 *
+	 * @param null $option_id Specific option id (accepts multikey). null - all options
+	 * @param mixed $value
+	 */
+	function fw_set_db_customizer_option( $option_id = null, $value ) {
+		$db_value = get_theme_mod(FW_Option_Type::get_default_name_prefix(), array());
+
+		if (is_null($option_id)) {
+			$db_value = $value;
+		} else {
+			fw_aks($option_id, $value, $db_value);
+		}
+
+		set_theme_mod(
+			FW_Option_Type::get_default_name_prefix(),
+			$db_value
+		);
 	}
 }

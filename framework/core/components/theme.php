@@ -90,6 +90,21 @@ final class _FW_Component_Theme
 		}
 	}
 
+	public function get_customizer_options()
+	{
+		$cache_key = self::$cache_key .'/options/customizer';
+
+		try {
+			return FW_Cache::get($cache_key);
+		} catch (FW_Cache_Not_Found_Exception $e) {
+			$options = apply_filters('fw_customizer_options', $this->get_options('customizer'));
+
+			FW_Cache::set($cache_key, $options);
+
+			return $options;
+		}
+	}
+
 	public function get_post_options($post_type)
 	{
 		$cache_key = self::$cache_key .'/options/posts/'. $post_type;
