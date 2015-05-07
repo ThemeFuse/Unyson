@@ -100,7 +100,6 @@ final class _FW_Component_Backend {
 	 * @internal
 	 */
 	public function _init() {
-
 		if ( is_admin() ) {
 			$this->settings_form = new FW_Form('fw_settings', array(
 				'render' => array($this, '_settings_form_render'),
@@ -126,17 +125,17 @@ final class _FW_Component_Backend {
 			add_action('init', array($this, '_action_init'), 20);
 			add_action('admin_enqueue_scripts', array($this, '_action_admin_enqueue_scripts'), 8);
 
-			add_action('save_post', array($this, '_action_save_post'), 7, 3);
-			add_action('wp_restore_post_revision', array($this, '_action_restore_post_revision'), 10, 2);
-			add_action('_wp_put_post_revision', array($this, '_action__wp_put_post_revision'));
-			add_action('wp_creating_autosave', array($this, '_action_trigger_wp_create_autosave'));
-
 			// render and submit options from javascript
 			{
 				add_action('wp_ajax_fw_backend_options_render', array($this, '_action_ajax_options_render'));
 				add_action('wp_ajax_fw_backend_options_get_values', array($this, '_action_ajax_options_get_values'));
 			}
 		}
+
+		add_action('save_post', array($this, '_action_save_post'), 7, 3);
+		add_action('wp_restore_post_revision', array($this, '_action_restore_post_revision'), 10, 2);
+		add_action('_wp_put_post_revision', array($this, '_action__wp_put_post_revision'));
+		add_action('wp_creating_autosave', array($this, '_action_trigger_wp_create_autosave'));
 
 		add_action('customize_register', array($this, '_action_customize_register'));
 	}
@@ -1579,9 +1578,13 @@ final class _FW_Component_Backend {
 	 * @internal
 	 */
 	public function _action_customize_register($wp_customize) {
+		$options = fw()->theme->get_settings_options(); // fixme
+
+		fw()->backend->enqueue_options_static($options);
+
 		$this->customizer_register_options(
 			$wp_customize,
-			fw()->theme->get_settings_options() // fixme
+			$options
 		);
 	}
 
@@ -1677,10 +1680,23 @@ final class _FW_Component_Backend {
 						}
 					}
 
-					$wp_customize->add_control( $opt['id'], $args );
+					if (!class_exists('_FW_Customizer_Control_Option_Wrapper')) {
+						require_once fw_get_framework_directory('/includes/customizer/class--fw-customizer-control-option-wrapper.php');
+					}
+
+					$wp_customize->add_control(
+						new _FW_Customizer_Control_Option_Wrapper(
+							$wp_customize,
+							$opt['id'],
+							$args,
+							array(
+								'fw_option' => $opt['option']
+							)
+						)
+					);
 					break;
 				default:
-					trigger_error('Not processed option, type: '. $opt['type'], E_USER_WARNING);
+					trigger_error('Not supported option in customizer, type: '. $opt['type'], E_USER_WARNING);
 			}
 		}
 	}
