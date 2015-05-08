@@ -111,13 +111,11 @@ class FW_Option_Type_Popup extends FW_Option_Type {
 	 */
 	protected function _get_value_from_input( $option, $input_value ) {
 		if ( empty( $input_value ) ) {
-			$values = array();
-
-			if ( ! isset( $option['popup-options'] ) ) {
+			if ( empty( $option['popup-options'] ) ) {
 				return array();
 			}
 
-			$values = fw_get_options_values_from_input($option['popup-options'], array());
+			$values = fw_get_options_values_from_input($option['popup-options'], $option['value']);
 		} else {
 			$values = json_decode( $input_value, true );
 		}
