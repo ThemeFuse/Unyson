@@ -367,7 +367,7 @@ class FW_Option_Type_Checkbox extends FW_Option_Type
 	 */
 	protected function _get_value_from_input($option, $input_value)
 	{
-		return (bool)$input_value;
+		return (bool)(is_null($input_value) ? $option['value'] : $input_value);
 	}
 
 	/**
