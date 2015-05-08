@@ -115,7 +115,15 @@ class FW_Option_Type_Popup extends FW_Option_Type {
 				return array();
 			}
 
-			$values = fw_get_options_values_from_input($option['popup-options'], $option['value']);
+			$popup_options = array();
+			foreach (fw_extract_only_options($option['popup-options']) as $popup_option_id => $popup_option) {
+				if (isset($option['value'][$popup_option_id])) {
+					$popup_option['value'] = $option['value'][$popup_option_id];
+				}
+				$popup_options[ $popup_option_id ] = $popup_option;
+			}
+
+			$values = fw_get_options_values_from_input($popup_options, array());
 		} else {
 			$values = json_decode( $input_value, true );
 		}

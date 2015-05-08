@@ -283,14 +283,14 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 				$choices = array_intersect_key($option['choices'], $picker['choices']);
 		}
 
-		foreach ($choices as $choice_id => $options) {
+		foreach ($choices as $choice_id => $choice_options) {
 			if (is_null($input_value) && isset($option['value'][$choice_id])) {
 				$value[$choice_id] = $option['value'][$choice_id];
 			} else {
-				foreach (fw_extract_only_options($options) as $option_id => $option) {
-					$value[$choice_id][$option_id] = fw()->backend->option_type($option['type'])->get_value_from_input(
-						$option,
-						isset($input_value[$choice_id][$option_id]) ? $input_value[$choice_id][$option_id] : null
+				foreach (fw_extract_only_options($choice_options) as $choice_option_id => $choice_option) {
+					$value[$choice_id][$choice_option_id] = fw()->backend->option_type($choice_option['type'])->get_value_from_input(
+						$choice_option,
+						isset($input_value[$choice_id][$choice_option_id]) ? $input_value[$choice_id][$choice_option_id] : null
 					);
 				}
 			}
