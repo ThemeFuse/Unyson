@@ -658,11 +658,30 @@ fw.getQueryString = function(name) {
 					}
 
 					/**
-					 * adjust the z-index for the new frame's backdrop and modal
-					 * (160000 is what wp sets for its modals)
+					 * Adjust the z-index for the new frame's backdrop and modal
 					 */
-					$backdrop.css('z-index', 160000 + (stackSize * 2 + 1));
-					$modal.css('z-index',    160000 + (stackSize * 2 + 2));
+					{
+						$backdrop.css('z-index',
+							/**
+							 * Use modal z-index because backdrop z-index in some cases can be too smaller
+							 * and when there are 2+ modals open, first modal will cover the second backdrop
+							 *
+							 * For e.g.
+							 *
+							 * - second modal | z-index: 560003
+							 * - second backdrop | z-index: 559902
+							 *
+							 * - first modal | z-index: 560002 (This will cover the above backdrop)
+							 * - first backdrop | z-index: 559901
+							 */
+							parseInt($modal.css('z-index'))
+							+ stackSize * 2 + 1
+						);
+						$modal.css('z-index',
+							parseInt($modal.css('z-index'))
+							+ stackSize * 2 + 2
+						);
+					}
 
 					// show effect on close
 					(function(){

@@ -1,9 +1,23 @@
+/* bigger z-index: make sure it's bigger than fw.OptionsModal's z-index (but do not increase this too much to not affect others) */
+
 .fw-option-type-upload .media-modal {
 	z-index: 170001;
 }
+
 .fw-option-type-upload .media-modal-backdrop {
 	z-index: 170000;
 }
+
+.wp-customizer .fw-option-type-upload .media-modal {
+	z-index: 560101;
+}
+
+.wp-customizer .fw-option-type-upload .media-modal-backdrop {
+	z-index: 560100;
+}
+
+/* end: bigger z-index */
+
 .fw-option-type-upload .delete-attachment {
 	display: none;
 }

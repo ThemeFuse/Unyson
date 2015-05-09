@@ -2775,19 +2775,6 @@ a.fw-wp-link:hover {
 /* end: Animations */
 
 
-/* WP Modal */
-
-.media-modal {
-	z-index: 170001;
-}
-
-.media-modal-backdrop {
-	z-index: 170000;
-}
-
-/* end: WP Modal */
-
-
 /* modal */
 
 .fw-modal .media-modal-close:focus {
