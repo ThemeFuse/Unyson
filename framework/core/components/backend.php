@@ -1604,6 +1604,8 @@ final class _FW_Component_Backend {
 			fw()->manifest->get_version(),
 			true
 		);
+
+		do_action('fw_admin_enqueue_scripts:customizer');
 	}
 
 	/**
