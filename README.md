@@ -8,6 +8,8 @@ To get started, check out the [Scratch Theme](https://github.com/ThemeFuse/Scrat
 
 If you are not a developer, please use the [Unyson plugin page](https://wordpress.org/plugins/unyson/) on WordPress.org.
 
+[![Build Status](https://travis-ci.org/ThemeFuse/Unyson.svg?branch=master)](https://travis-ci.org/ThemeFuse/Unyson)
+
 ## Table of contents
 
 * [Installation](#installation)
