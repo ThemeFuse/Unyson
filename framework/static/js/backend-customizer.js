@@ -1,4 +1,4 @@
-jQuery(function($){
+jQuery(function($){ // todo: delay change trigger (slider fires it too often) or make a delay after last change (when will be realt-ime update of some text to be without delay)
 	var initialized = false,
 		init = function(){
 			if (initialized) {
