@@ -2,46 +2,26 @@
 	top: 4px !important;
 }
 
-.fw-backend-option-input-type-typography {
-	max-width: 428px;
+.fw-option-type-typography .fw-option-typography-option {
+	padding-right: 5px;
+	width: 167px;
+}
+body.rtl .fw-option-type-typography .fw-option-typography-option {
+	padding-right: 0;
+	padding-left: 5px;
 }
 
-.fw-backend-option-input-type-typography .fw-inner {
-	width: 100%;
+.fw-option-type-typography .fw-option-typography-option.fw-option-typography-option-size {
+	width: 67px;
 }
 
-@media (min-width: 783px) {
-	.fw-backend-option-input-type-typography {
-		width: auto;
-	}
-
-	.fw-option-type-typography .fw-option-typography-option {
-		padding-right: 5px;
-		width: 167px;
-	}
-
-	.fw-option-type-typography .fw-option-typography-option.fw-option-typography-option-size {
-		padding-right: 5px;
-		width: 67px;
-	}
-
-	body.rtl .fw-option-type-typography .fw-option-typography-option {
-		padding-right: 0;
-		padding-left: 5px;
-	}
-
-	.fw-option-type-typography .fw-option-typography-option:last-child,
-	.fw-force-xs .fw-option-type-typography .fw-option-typography-option {
-		padding-right: 0;
-	}
-	body.rtl .fw-option-type-typography .fw-option-typography-option:last-child,
-	body.rtl .fw-force-xs .fw-option-type-typography .fw-option-typography-option {
-		padding-left: 0;
-	}
-
-	.fw-force-xs .fw-option-type-typography .fw-option-typography-option {
-		padding-top: 5px;
-	}
+.fw-option-type-typography .fw-option-typography-option:last-child,
+.fw-force-xs .fw-option-type-typography .fw-option-typography-option {
+	padding-right: 0;
+}
+body.rtl .fw-option-type-typography .fw-option-typography-option:last-child,
+body.rtl .fw-force-xs .fw-option-type-typography .fw-option-typography-option {
+	padding-left: 0;
 }
 
 @media (max-width: 782px) {
@@ -51,10 +31,18 @@
 
 	.fw-option-type-typography .fw-option-typography-option {
 		padding-top: 5px;
+		padding-right: 0;
+	}
+	body.rtl .fw-option-type-typography .fw-option-typography-option {
+		padding-left: 0;
 	}
 
 	.fw-option-type-typography .fw-option-typography-option:first-child {
 		padding-top: 0;
+	}
+
+	.fw-option-type-typography .fw-option-typography-option.fw-option-typography-option-size {
+		width: 100%;
 	}
 }
 .fw-force-xs .fw-backend-option-input-type-typography {
@@ -62,9 +50,16 @@
 }
 .fw-force-xs .fw-option-type-typography .fw-option-typography-option {
 	padding-top: 5px;
+	padding-right: 0;
+}
+body.rtl .fw-force-xs .fw-option-type-typography .fw-option-typography-option {
+	padding-left: 0;
 }
 .fw-force-xs .fw-option-type-typography .fw-option-typography-option:first-child {
 	padding-top: 0;
+}
+.fw-force-xs .fw-option-type-typography .fw-option-typography-option.fw-option-typography-option-size {
+	width: 100%;
 }
 
 .fw-option-type-typography .fw-option-typography-option input,
@@ -205,14 +200,10 @@ body.rtl .fw-option-type-typography .fw-option-typography-option-family .selecti
 		width: 100% !important;
 	}
 
-	.fw-option-type-typography .selectize-dropdown .selectize-dropdown-content div div.preview {
-		width: 165px;
-	}
-
 	.fw-option-type-typography .selectize-control.single .selectize-input {
-		height: 36px;
 		font-size: 16px;
-		line-height: 34px;
+		height: 36px;
+		line-height: 36px;
 	}
 
 	#edittag .fw-option-type-typography .selectize-control.single .selectize-input {
@@ -222,13 +213,8 @@ body.rtl .fw-option-type-typography .fw-option-typography-option-family .selecti
 .fw-force-xs .fw-option-type-typography .selectize-dropdown.fw-option-typography-option-family-input {
 	width: 100%!important;
 }
-.fw-force-xs .fw-option-type-typography .selectize-dropdown .selectize-dropdown-content div div.preview {
-	width: 165px;
-}
 .fw-force-xs .fw-option-type-typography .selectize-control.single .selectize-input {
-	height: 36px;
 	font-size: 16px;
-	line-height: 34px;
 }
 #edittag .fw-force-xs .fw-option-type-typography .selectize-control.single .selectize-input {
 	padding: 0 14px;
@@ -246,14 +232,10 @@ body.rtl .fw-option-type-typography .fw-option-typography-option-family .selecti
 	border: none;
 	top: 33px !important;
 }
-
 @media (max-width: 782px) {
 	.fw-option-type-typography .selectize-control .selectize-dropdown {
-		top: 41px !important;
+		top: 42px !important;
 	}
-}
-.fw-force-xs .fw-option-type-typography .selectize-control .selectize-dropdown {
-	top: 41px !important;
 }
 
 @media (max-width: 782px) {
@@ -279,23 +261,23 @@ color:      fw-col-sm-2 = 16.66666667%
 25% + 16.66666667% = 41.66666667%
 */
 
-@media (min-width: 783px) {
-	.fw-option-type-typography .fw-option-typography-option-color {
-		width: 70px; /* should be same width as option type color-picker */
-	}
-
-	.fw-option-type-typography .fw-option-typography-option-style {
-		width: 98px;
-	}
-
-	.fw-option-type-typography .fw-option-typography-option-size {
-		width: 67px;
-	}
-	/*.fw-backend-option-input-type-typography{
-		width: 428px;
-	}*/
+.fw-option-type-typography .fw-option-typography-option-color {
+	width: 70px; /* should be same width as option type color-picker */
 }
 
+.fw-option-type-typography .fw-option-typography-option-style {
+	width: 98px;
+}
+
+.fw-option-type-typography .fw-option-typography-option-size {
+	width: 67px;
+}
+
+@media (max-width: 782px) {
+	.fw-option-type-typography .fw-option-typography-option-size {
+		width: 100%;
+	}
+}
 .fw-force-xs .fw-option-type-typography .fw-option-typography-option-size {
 	width: 100%;
 }

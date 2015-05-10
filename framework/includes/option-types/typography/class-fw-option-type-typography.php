@@ -136,7 +136,7 @@ class FW_Option_Type_Typography extends FW_Option_Type
 
 	public function _get_backend_width_type()
 	{
-		return 'auto';
+		return 'fixed';
 	}
 }
 
