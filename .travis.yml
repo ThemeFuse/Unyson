@@ -18,3 +18,8 @@ before_script:
 
 script:
     - phpunit -c ../tests/unit/ --exclude-group invalid
+
+notifications:
+    email:
+        on_success: never
+        on_failure: always
