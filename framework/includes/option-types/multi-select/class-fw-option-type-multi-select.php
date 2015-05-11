@@ -93,8 +93,8 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 									"SELECT ID val, post_title title " .
 									"FROM $wpdb->posts " .
 									"WHERE post_title LIKE %s " .
-									"AND post_status = 'publish' " .
-									"AND NULLIF(post_password, '') IS NULL " .
+									"AND post_status IN ( 'publish', 'private' ) " .
+									//"AND NULLIF(post_password, '') IS NULL " . todo: review
 									"AND post_type IN ( " .
 									implode( ', ', array_fill( 1, count( $names ), '%s' ) ) .
 									" ) " .
@@ -228,7 +228,8 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 								$posts = $wpdb->get_results(
 									"SELECT posts.ID, posts.post_title " .
 									"FROM $wpdb->posts as posts " .
-									"WHERE post_type IN ('" . implode( "', ", $source ) . "') " .
+									"WHERE post_type IN ('" . implode( "', '", $source ) . "') " .
+									"AND post_status IN ( 'publish', 'private' ) " .
 									"ORDER BY post_date DESC LIMIT $number"
 								);
 
@@ -247,8 +248,6 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 								$ids[] = intval( $post_id );
 							}
 							$ids = implode( ', ', array_unique( $ids ) );
-
-							//$query = new WP_Query( array( 'post__in' => $ids ) );
 
 							$query = $wpdb->get_results(
 								"SELECT posts.ID, posts.post_title " .
@@ -470,7 +469,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			foreach ( $array as $key => $item ) {
 				$return[] = array(
 					'val'   => $key,
-					'title' => $item,
+					'title' => ( $item ) ? $item : $key . ' (' . __( 'No title', 'fw' ) . ')',
 				);
 			}
 
