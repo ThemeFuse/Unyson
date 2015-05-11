@@ -36,9 +36,9 @@
 				frame.on('select', function() {
 					var attachment = frame.state().get('selection').first();
 
-					elements.$input.val(attachment.id);
 					elements.$textField.text(attachment.get('filename'));
 					elements.$uploadButton.text(l10n.buttonEdit);
+					elements.$input.val(attachment.id).trigger('change');
 					elements.$container.removeClass('empty');
 
 					fwe.trigger('fw:option-type:upload:change', {
@@ -61,9 +61,9 @@
 		});
 
 		elements.$deleteButton.on('click', function(e) {
-			elements.$input.val('');
 			elements.$textField.text('');
 			elements.$uploadButton.text(l10n.buttonAdd);
+			elements.$input.val('').trigger('change');
 			elements.$container.addClass('empty');
 
 			fwe.trigger('fw:option-type:upload:clear', {$element: elements.$container});

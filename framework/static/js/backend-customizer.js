@@ -1,31 +1,76 @@
-jQuery(function($){ // todo: delay change trigger (slider fires it too often) or make a delay after last change (when will be realt-ime update of some text to be without delay)
+jQuery(function($){
 	var initialized = false,
+		changeTimeoutId = 0,
+		/**
+		 * @type {Object} {'#options_wrapper_id':'~'}
+		 */
+		pendingChanges = {},
+		/**
+		 * Extract all input values within option and save them to the customizer input (to trigger preview update)
+		 */
+		processPendingChanges = function(){
+			$.each(pendingChanges, function(optionsWrapperId){
+				var $optionsWrapper = $('#'+ optionsWrapperId),
+					$input = $optionsWrapper.closest('.fw-backend-customizer-option').find('> input.fw-backend-customizer-option-input'),
+					newValue = JSON.stringify($optionsWrapper.find(':input').serializeArray());
+
+				if ($input.val() === newValue) {
+					return;
+				}
+
+				$input.val(newValue).trigger('change');
+			});
+
+			pendingChanges = {};
+		},
+		randomIdIncrement = 0,
 		init = function(){
 			if (initialized) {
 				return;
 			}
 
-			$('#customize-theme-controls')
-				.on('change', '.fw-backend-customizer-option > .fw-backend-customizer-option-inner', function(){
-					var $input = $(this).closest('.fw-backend-customizer-option').find('> input.fw-backend-customizer-option-input');
+			/**
+			 * Populate all <input class="fw-backend-customizer-option-input" ... /> with (initial) options values
+			 */
+			$('#customize-theme-controls .fw-backend-customizer-option').each(function(){
+				$(this).find('> input.fw-backend-customizer-option-input').val(
+					JSON.stringify(
+						$(this).find('> .fw-backend-customizer-option-inner :input').serializeArray()
+					)
+				);
+			});
 
-					/**
-					 * Extract all input values within option and save them to the customizer input (to trigger preview update)
-					 */
-					$input.val(
-						JSON.stringify(
-							$(this).find(':input').serializeArray()
-						)
-					);
+			/**
+			 * When something may be changed, removed, added; add to pending changes
+			 */
+			$('#customize-theme-controls').on(
+				'change keyup click paste',
+				'.fw-backend-customizer-option > .fw-backend-customizer-option-inner > .fw-backend-option > .fw-backend-option-input',
+				function(e){
+					clearTimeout(changeTimeoutId);
 
-					if (initialized) {
-						$input.trigger('change');
-					} else {
-						// do not trigger when inputs are populated first time on init
+					{
+						var optionsWrapperId = $(this).attr('id');
+
+						if (!optionsWrapperId) {
+							optionsWrapperId = 'rnid-'+ (++randomIdIncrement);
+							$(this).attr('id', optionsWrapperId);
+						}
+
+						pendingChanges[optionsWrapperId] = '~';
 					}
-				})
-				// update/populate all inputs first time
-				.find('.fw-backend-customizer-option > .fw-backend-customizer-option-inner').trigger('change');
+
+					changeTimeoutId = setTimeout(
+						processPendingChanges,
+						/**
+						 * Let css animations finish,
+						 * to prevent block/glitch in the middle of the animation when the iframe will reload.
+						 * Bigger than 300, which most of the css animations are.
+						 */
+						333
+					);
+				}
+			);
 
 			initialized = true;
 		};

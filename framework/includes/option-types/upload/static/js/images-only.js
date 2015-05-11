@@ -60,7 +60,6 @@
 						{variable: 'data'}
 					);
 
-					elements.$input.val(attachment.id);
 					elements.$uploadButton.text(l10n.buttonEdit);
 					elements.$thumb
 								.html(compiled)
@@ -68,6 +67,7 @@
 									'data-attid': attachment.id,
 									'data-origsrc': attachment.get('url')
 								});
+					elements.$input.val(attachment.id).trigger('change');
 					elements.$container.removeClass('empty');
 
 					fwe.trigger('fw:option-type:upload:change', {
@@ -94,11 +94,11 @@
 		});
 
 		elements.$thumb.on('click', '.clear-uploads-thumb', function(e) {
-			elements.$input.val('');
 			elements.$uploadButton.text(l10n.buttonAdd);
 			elements.$thumb
 						.html(templates.thumb.empty)
 						.removeAttr('data-attid data-origsrc');
+			elements.$input.val('').trigger('change');
 			elements.$container.addClass('empty');
 
 			fwe.trigger('fw:option-type:upload:clear', {$element: elements.$container});

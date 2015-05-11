@@ -27,7 +27,8 @@ jQuery(document).ready(function($){
 
 	fwEvents.on('fw:options:init', function (data) {
 		data.$elements.find('input.fw-option-type-color-picker:not(.initialized)').each(function(){
-			var $input = $(this);
+			var $input = $(this),
+				changeTimeoutId = 0;
 
 			$input.iris({
 				hide: false,
@@ -44,6 +45,14 @@ jQuery(document).ready(function($){
 						event   : event,
 						ui      : ui
 					});
+
+					/**
+					 * If we trigger the 'change' right here, that will block the picker (I don't know why)
+					 */
+					clearTimeout(changeTimeoutId);
+					changeTimeoutId = setTimeout(function(){
+						$input.trigger('change');
+					}, 12);
 				},
 				palettes: true
 			});

@@ -55,6 +55,7 @@
 					iris: $input.data('a8cIris'),
 					alphaSlider: $alpha_slider.data('uiSlider')
 				});
+				$input.trigger('change');
 			}
 		});
 
@@ -118,6 +119,7 @@
 					iris: $input.data('a8cIris'),
 					alphaSlider: $alpha_slider.data('uiSlider')
 				});
+				$input.trigger('change');
 			}
 		});
 
