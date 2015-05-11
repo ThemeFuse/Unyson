@@ -137,7 +137,7 @@ final class _FW_Component_Backend {
 		add_action('_wp_put_post_revision', array($this, '_action__wp_put_post_revision'));
 		add_action('wp_creating_autosave', array($this, '_action_trigger_wp_create_autosave'));
 
-		add_action('customize_register', array($this, '_action_customize_register'));
+		add_action('customize_register', array($this, '_action_customize_register'), 7);
 	}
 
 	private function add_filters() {
