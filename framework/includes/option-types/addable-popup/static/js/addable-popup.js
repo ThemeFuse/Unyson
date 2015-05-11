@@ -54,7 +54,10 @@
 						cursor: 'move',
 						distance: 2,
 						tolerance: 'pointer',
-						axis: 'y'
+						axis: 'y',
+						update: function(){
+							nodes.$optionWrapper.trigger('change'); // for customizer
+						}
 					});
 				},
 				initItemsTemplates: function () {
@@ -113,6 +116,8 @@
 			e.preventDefault();
 			$(this).closest('.item').remove();
 			utils.toogleNodes();
+
+			nodes.$optionWrapper.trigger('change'); // for customizer
 		});
 
 		nodes.$itemsWrapper.on('click', '.item', function (e) {
@@ -144,6 +149,8 @@
 			} else {
 				utils.editItem(utils.modal.get('itemRef'), values);
 			}
+
+			nodes.$optionWrapper.trigger('change'); // for customizer
 		});
 
 		utils.init();

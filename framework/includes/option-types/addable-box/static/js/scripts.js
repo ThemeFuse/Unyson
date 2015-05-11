@@ -49,6 +49,9 @@ jQuery(document).ready(function ($) {
 
 						ui.placeholder.height(height);
 					}
+				},
+				update: function(){
+					$(this).closest(optionTypeClass).trigger('change'); // for customizer
 				}
 			});
 		},

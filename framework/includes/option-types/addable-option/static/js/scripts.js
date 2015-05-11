@@ -1,4 +1,6 @@
 jQuery(document).ready(function ($) {
+	var optionClass = '.fw-option-type-addable-option';
+
 	function initSortable ($options) {
 		try {
 			$options.sortable('destroy');
@@ -25,6 +27,9 @@ jQuery(document).ready(function ($) {
 
 					ui.placeholder.height(height);
 				}
+			},
+			update: function(){
+				$(this).closest(optionClass).trigger('change'); // for customizer
 			}
 		});
 	}
@@ -35,8 +40,6 @@ jQuery(document).ready(function ($) {
 			return 'fw:option-type:addable-option:' + shortName;
 		}
 	};
-
-	var optionClass = '.fw-option-type-addable-option';
 
 	fwEvents.on('fw:options:init', function (data) {
 		var $elements = data.$elements.find(optionClass +':not(.fw-option-initialized)');
