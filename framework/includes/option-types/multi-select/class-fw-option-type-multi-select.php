@@ -228,7 +228,8 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 								$posts = $wpdb->get_results(
 									"SELECT posts.ID, posts.post_title " .
 									"FROM $wpdb->posts as posts " .
-									"WHERE post_type IN ('" . implode( "', ", $source ) . "') " .
+									"WHERE post_type IN ('" . implode( "', '", $source ) . "') " .
+									"AND post_status IN ( 'publish', 'private' ) " .
 									"ORDER BY post_date DESC LIMIT $number"
 								);
 
