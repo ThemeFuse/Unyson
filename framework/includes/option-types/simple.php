@@ -633,6 +633,10 @@ class FW_Option_Type_Select extends FW_Option_Type
 	 */
 	protected function _get_value_from_input($option, $input_value)
 	{
+		if (is_null($input_value)) {
+			return $option['value'];
+		}
+
 		if (empty($option['no-validate'])) {
 			$all_choices = $this->get_choices($option['choices']);
 
