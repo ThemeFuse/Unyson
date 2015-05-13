@@ -10,6 +10,7 @@ class _FW_Customizer_Control_Option_Wrapper extends WP_Customize_Control {
 	}
 
 	public function render_content() {
+		fw()->backend->_set_default_render_design('customizer');
 		?>
 		<div class="fw-backend-customizer-option">
 			<input class="fw-backend-customizer-option-input" type="hidden" <?php $this->link() ?> />
@@ -27,6 +28,7 @@ class _FW_Customizer_Control_Option_Wrapper extends WP_Customize_Control {
 			</div>
 		</div>
 		<?php
+		fw()->backend->_set_default_render_design();
 	}
 
 	public function setting_sanitize_callback($input) {

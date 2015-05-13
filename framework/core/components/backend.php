@@ -15,6 +15,8 @@ final class _FW_Component_Backend {
 
 	private $available_render_designs = array( 'default', 'taxonomy', 'customizer' );
 
+	private $default_render_design = 'default';
+
 	/**
 	 * Store option types for registration, until they will be required
 	 * @var array|false
@@ -1163,7 +1165,11 @@ final class _FW_Component_Backend {
 	 *
 	 * @return string HTML
 	 */
-	public function render_options( $options, $values = array(), $options_data = array(), $design = 'default' ) {
+	public function render_options( $options, $values = array(), $options_data = array(), $design = null ) {
+		if (empty($design)) {
+			$design = $this->default_render_design;
+		}
+
 		{
 			/**
 			 * register scripts and styles
@@ -1327,7 +1333,11 @@ final class _FW_Component_Backend {
 	 *
 	 * @return string
 	 */
-	public function render_option( $id, $option, $data = array(), $design = 'default' ) {
+	public function render_option( $id, $option, $data = array(), $design = null ) {
+		if (empty($design)) {
+			$design = $this->default_render_design;
+		}
+
 		/**
 		 * register scripts and styles
 		 * in case if this method is called before enqueue_scripts action
@@ -1730,6 +1740,23 @@ final class _FW_Component_Backend {
 				default:
 					trigger_error('Not supported option in customizer, type: '. $opt['type'], E_USER_WARNING); // todo: uncomment
 			}
+		}
+	}
+
+	/**
+	 * For e.g. an option-type was rendered using 'customizer' design,
+	 * but inside it uses render_options() but it doesn't know the current render design
+	 * and the options will be rendered with 'default' design.
+	 * This method allows to specify the default design that will be used if not specified on render_options()
+	 * @param null|string $design
+	 * @internal
+	 */
+	public function _set_default_render_design($design = null)
+	{
+		if (empty($design) || !in_array($design, $this->available_render_designs)) {
+			$this->default_render_design = 'default';
+		} else {
+			$this->default_render_design = $design;
 		}
 	}
 }

@@ -21,3 +21,7 @@
 .fw-option-type-multi:not(.fw-option-type-multi-show-borders) > .fw-backend-option:not(:last-child) {
 	padding-bottom: 0;
 }
+
+.fw-backend-option-type-multi.fw-backend-option-design-customizer .fw-option-type-multi > .fw-backend-option {
+	padding: 5px 0 10px;
+}

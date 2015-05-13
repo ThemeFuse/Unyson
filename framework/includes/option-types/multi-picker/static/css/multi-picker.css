@@ -50,6 +50,10 @@
 	padding-bottom: 0;
 }
 
+.fw-backend-option-type-multi-picker.fw-backend-option-design-customizer .fw-option-type-multi-picker > .picker-group {
+	padding-bottom: 10px;
+}
+
 /* tabs fixes */
 
 .fw-option-type-multi-picker > .choice-group .fw-options-tabs-wrapper > .fw-options-tabs-list,
