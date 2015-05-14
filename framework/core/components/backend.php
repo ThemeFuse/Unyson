@@ -1705,6 +1705,12 @@ final class _FW_Component_Backend {
 								trigger_error('Not supported control parent, type: '. $parent_data['type'], E_USER_WARNING);
 								break;
 							}
+						} else {
+							// the option is not placed in a section, create a section automatically
+							$args['section'] = 'fw_option_auto_section_'. $opt['id'];
+							$wp_customize->add_section($args['section'], array(
+								'title' => empty($opt['option']['label']) ? fw_id_to_title($opt['id']) : $opt['option']['label'],
+							));
 						}
 					}
 
