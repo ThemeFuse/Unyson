@@ -16,9 +16,6 @@
 		font-size: 14px;
 	}
 }
-.fw-force-xs .fw-option-type-switch .adaptive-switch {
-	font-size: 14px;
-}
 
 body.rtl .adaptive-switch {
 	direction: ltr;
