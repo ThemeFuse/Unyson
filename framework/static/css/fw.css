@@ -2778,10 +2778,18 @@ a.fw-wp-link:hover {
 /* modal */
 
 body > div:not(.fw-modal) > .media-modal {
+	z-index: 161001;
+}
+
+body > div:not(.fw-modal) > .media-modal-backdrop {
+	z-index: 161000;
+}
+
+body.wp-customizer > div:not(.fw-modal) > .media-modal {
 	z-index: 561001; /* bigger than .wp-customizer .media-modal */
 }
 
-body > div:not(.fw-modal) > .gtmedia-modal-backdrop {
+body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 	z-index: 561000;
 }
 
