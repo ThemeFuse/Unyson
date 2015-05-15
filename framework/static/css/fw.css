@@ -2777,6 +2777,14 @@ a.fw-wp-link:hover {
 
 /* modal */
 
+body > div:not(.fw-modal) > .media-modal {
+	z-index: 561001; /* bigger than .wp-customizer .media-modal */
+}
+
+body > div:not(.fw-modal) > media-modal-backdrop {
+	z-index: 561000;
+}
+
 .fw-modal .media-modal-close:focus {
 	-webkit-box-shadow: none;
 	box-shadow: none;
