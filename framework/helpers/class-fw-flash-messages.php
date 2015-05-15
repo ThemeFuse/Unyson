@@ -122,7 +122,10 @@ class FW_Flash_Messages
 		foreach ($all_messages as $type => $messages) {
 			if (!empty($messages)) {
 				foreach ($messages as $id => $data) {
-					$html[$type] .= '<div class="'. self::$available_types[$type] .' fw-flash-message"><p>'. $data['message'] .'</p></div>';
+					$html[$type] .=
+						'<div class="'. self::$available_types[$type] .' fw-flash-message">'.
+							'<p data-id="'. esc_attr($id) .'">'. $data['message'] .'</p>'.
+						'</div>';
 
 					unset($all_messages[$type][$id]);
 				}
