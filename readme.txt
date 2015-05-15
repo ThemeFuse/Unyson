@@ -88,6 +88,7 @@ Yes; Unyson will work with any theme.
 
 = 2.3.0 =
 * Options can be used in [Customizer](https://codex.wordpress.org/Theme_Customization_API) [#410](https://github.com/ThemeFuse/Unyson/issues/410)
+* Fixed [#77](https://github.com/ThemeFuse/Unyson/issues/77)
 
 = 2.2.10 =
 * Fixed [#539](https://github.com/ThemeFuse/Unyson/issues/539)
