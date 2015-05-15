@@ -2781,7 +2781,7 @@ body > div:not(.fw-modal) > .media-modal {
 	z-index: 561001; /* bigger than .wp-customizer .media-modal */
 }
 
-body > div:not(.fw-modal) > media-modal-backdrop {
+body > div:not(.fw-modal) > .gtmedia-modal-backdrop {
 	z-index: 561000;
 }
 
