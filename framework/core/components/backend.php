@@ -1723,7 +1723,9 @@ final class _FW_Component_Backend {
 					$wp_customize->add_setting(
 						$setting_id,
 						array(
-							'default' => $option_defaults['value'],
+							'default' => isset($opt['option']['value'])
+								? $opt['option']['value']
+								: $option_defaults['value'],
 
 							// added later because we can't create control first without an existing setting
 							//'sanitize_callback' => array($control, 'setting_sanitize_callback'),
