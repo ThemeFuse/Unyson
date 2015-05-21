@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.2
-Stable tag: 2.3.0
+Stable tag: 2.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,10 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.3.1 =
+* Fixed [#566](https://github.com/ThemeFuse/Unyson/issues/566)
+* Fixed: Options default values not working in Customizer [#410](https://github.com/ThemeFuse/Unyson/issues/410#issuecomment-103343955)
 
 = 2.3.0 =
 * Options can be used in [Customizer](https://codex.wordpress.org/Theme_Customization_API) [#410](https://github.com/ThemeFuse/Unyson/issues/410)
