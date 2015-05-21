@@ -781,6 +781,8 @@ class FW_Option_Type_Select_Multiple extends FW_Option_Type_Select
 
 		unset($option['attr']['value']);
 
+		$html = '<input type="hidden" name="' . $option['attr']['name'] . '" value="">';
+
 		$option['attr']['name'] .= '[]';
 		$option['attr']['multiple'] = 'multiple';
 
@@ -788,7 +790,7 @@ class FW_Option_Type_Select_Multiple extends FW_Option_Type_Select
 			$option['attr']['size'] = '7';
 		}
 
-		$html = '<select '. fw_attr_to_html($option['attr']) .'>'.
+		$html .= '<select '. fw_attr_to_html($option['attr']) .'>'.
 			$this->render_choices($option['choices'], $option['value']).
 		'</select>';
 
@@ -800,8 +802,12 @@ class FW_Option_Type_Select_Multiple extends FW_Option_Type_Select
 	 */
 	protected function _get_value_from_input($option, $input_value)
 	{
-		if (!is_array($input_value)) {
+		if (is_null($input_value)) {
 			$input_value = $option['value'];
+		}
+
+		if ( ! is_array( $input_value ) ) {
+			$input_value = array();
 		}
 
 		if (empty($option['no-validate'])) {
