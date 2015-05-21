@@ -391,44 +391,42 @@
 	 * @return mixed|null
 	 */
 	function fw_get_db_customizer_option( $option_id = null, $default_value = null ) {
-		$value = get_theme_mod(FW_Option_Type::get_default_name_prefix(), array());
+		// note: this contains only changed controls/options
+		$all_db_values = get_theme_mod(FW_Option_Type::get_default_name_prefix(), array());
 
-		if (!is_null($option_id)) {
-			$value = fw_akg($option_id, $value, $default_value);
-		}
-
-		if (
-			(!is_null($option_id) && is_null($value)) // a specific option_id was requested
-			||
-			(is_null($option_id) && empty($value)) // all options were requested but the db value is empty (this can happen after Reset)
-		) {
-			/**
-			 * Maybe the options was never saved or the given option id does not exist
-			 * Extract the default values from the options array and try to find there the option id
-			 */
-
+		// extract options default values
+		{
 			$cache_key = 'fw_default_options_values/customizer';
 
 			try {
-				$all_options_values = FW_Cache::get( $cache_key );
+				$all_default_values = FW_Cache::get( $cache_key );
 			} catch ( FW_Cache_Not_Found_Exception $e ) {
 				// extract the default values from options array
-				$all_options_values = fw_get_options_values_from_input(
+				$all_default_values = fw_get_options_values_from_input(
 					fw()->theme->get_customizer_options(),
 					array()
 				);
 
-				FW_Cache::set( $cache_key, $all_options_values );
+				FW_Cache::set( $cache_key, $all_default_values );
 			}
+		}
 
-			if ( empty( $option_id ) ) {
-				// option id not specified, return all options values
-				return $all_options_values;
-			} else {
-				return fw_akg( $option_id, $all_options_values, $default_value );
-			}
+		if (is_null($option_id)) {
+			return array_merge(
+				$all_default_values,
+				$all_db_values
+			);
 		} else {
-			return $value;
+			$base_key = explode('/', $option_id); // note: option_id can be a multi-key 'a/b/c'
+			$base_key = array_shift($base_key);
+
+			return fw_akg(
+				$option_id,
+				array_key_exists($base_key, $all_db_values)
+				? $all_db_values
+				: $all_default_values,
+				$default_value
+			);
 		}
 	}
 
