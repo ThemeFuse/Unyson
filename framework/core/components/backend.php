@@ -1718,14 +1718,10 @@ final class _FW_Component_Backend {
 						require_once fw_get_framework_directory('/includes/customizer/class--fw-customizer-control-option-wrapper.php');
 					}
 
-					$option_defaults = fw()->backend->option_type($opt['option']['type'])->get_defaults();
-
 					$wp_customize->add_setting(
 						$setting_id,
 						array(
-							'default' => isset($opt['option']['value'])
-								? $opt['option']['value']
-								: $option_defaults['value'],
+							'default' => fw()->backend->option_type($opt['option']['type'])->get_value_from_input($opt['option'], null),
 
 							// added later because we can't create control first without an existing setting
 							//'sanitize_callback' => array($control, 'setting_sanitize_callback'),
