@@ -420,11 +420,13 @@
 			$base_key = explode('/', $option_id); // note: option_id can be a multi-key 'a/b/c'
 			$base_key = array_shift($base_key);
 
+			$all_db_values = array_key_exists($base_key, $all_db_values)
+				? $all_db_values
+				: $all_default_values;
+
 			return fw_akg(
 				$option_id,
-				array_key_exists($base_key, $all_db_values)
-				? $all_db_values
-				: $all_default_values,
+				$all_db_values,
 				$default_value
 			);
 		}
