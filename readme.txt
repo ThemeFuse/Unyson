@@ -87,7 +87,7 @@ Yes; Unyson will work with any theme.
 == Changelog ==
 
 = 2.3.1 =
-* Fixed [#566](https://github.com/ThemeFuse/Unyson/issues/566)
+* Fixed [#566](https://github.com/ThemeFuse/Unyson/issues/566), [#550](https://github.com/ThemeFuse/Unyson/issues/550)
 * Fixed: Options default values not working in Customizer [#410](https://github.com/ThemeFuse/Unyson/issues/410#issuecomment-103343955)
 
 = 2.3.0 =
