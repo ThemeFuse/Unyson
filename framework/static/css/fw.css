@@ -3005,6 +3005,7 @@ body.rtl .fw-options-modal .media-frame-content > form .fw-options-tabs-contents
 
 .fw-sole-modal .fw-sole-modal-content h2 {
 	font-size: 22px;
+	line-height: initial;
 }
 
 .fw-sole-modal .fw-sole-modal-content p {
