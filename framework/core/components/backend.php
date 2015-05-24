@@ -1714,32 +1714,32 @@ final class _FW_Component_Backend {
 						}
 					}
 
+					if (!class_exists('_FW_Customizer_Setting_Option')) {
+						require_once fw_get_framework_directory('/includes/customizer/class--fw-customizer-setting-option.php');
+					}
+
 					if (!class_exists('_FW_Customizer_Control_Option_Wrapper')) {
 						require_once fw_get_framework_directory('/includes/customizer/class--fw-customizer-control-option-wrapper.php');
 					}
 
 					$wp_customize->add_setting(
-						$setting_id,
-						array(
-							'default' => fw()->backend->option_type($opt['option']['type'])->get_value_from_input($opt['option'], null),
-
-							// added later because we can't create control first without an existing setting
-							//'sanitize_callback' => array($control, 'setting_sanitize_callback'),
+						new _FW_Customizer_Setting_Option(
+							$wp_customize,
+							$setting_id,
+							array(
+								'default' => fw()->backend->option_type($opt['option']['type'])->get_value_from_input($opt['option'], null),
+								'fw_option' => $opt['option'],
+							)
 						)
 					);
 
-					$control = new _FW_Customizer_Control_Option_Wrapper(
-						$wp_customize,
-						$opt['id'],
-						$args,
-						array(
-							'fw_option' => $opt['option']
+					$wp_customize->add_control(
+						new _FW_Customizer_Control_Option_Wrapper(
+							$wp_customize,
+							$opt['id'],
+							$args
 						)
 					);
-
-					add_filter( "customize_sanitize_{$setting_id}", array($control, 'setting_sanitize_callback'), 10, 2 );
-
-					$wp_customize->add_control($control);
 					break;
 				default:
 					trigger_error('Not supported option in customizer, type: '. $opt['type'], E_USER_WARNING); // todo: uncomment
