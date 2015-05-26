@@ -570,12 +570,16 @@ function fw_get_variables_from_file($file_path, array $_variables) {
 /**
  * Use this function to not include files directly and to not give access to current context variables (like $this)
  * @param string $file_path
+ * @param bool $once
  * @return bool If was included or not
  */
-function fw_include_file_isolated($file_path) {
+function fw_include_file_isolated($file_path, $once = false) {
 	if (file_exists($file_path)) {
-		include $file_path;
-
+		if ( (bool) $once ) {
+			include_once $file_path;
+		} else {
+			include $file_path;
+		}
 		return true;
 	} else {
 		return false;
