@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.2
-Stable tag: 2.3.1
+Stable tag: 2.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,13 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.3.2 =
+* Added option-type `unique` to make possible [this](http://manual.unyson.io/en/latest/extension/shortcodes/index.html#enqueue-shortcode-dynamic-css-in-page-head)
+* Added the `fw_get_google_fonts_v2()` function
+* Fixed: The newline character in textarea option in Customizer was replaced with `'rn'` string
+* Fixed: Post options (meta) lost after Quick Edit
+* Option-type `multi-picker`: Allow support for any option type in picker ([docs](http://manual.unyson.io/en/latest/options/built-in-option-types.html#multi-picker-add-support-for-new-option-type-in-picker))
 
 = 2.3.1 =
 * Fixed [#566](https://github.com/ThemeFuse/Unyson/issues/566), [#550](https://github.com/ThemeFuse/Unyson/issues/550)
