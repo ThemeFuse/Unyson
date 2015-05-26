@@ -54,7 +54,8 @@ textarea.fw-option-type-textarea {
 }
 
 
-.fw-backend-option-type-hidden {
+.fw-backend-option-type-hidden,
+.fw-backend-option-type-unique {
 	display: none;
 }
 
