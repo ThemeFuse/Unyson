@@ -960,3 +960,95 @@ class FW_Option_Type_Select_Multiple extends FW_Option_Type_Select {
 }
 
 FW_Option_Type::register( 'FW_Option_Type_Select_Multiple' );
+
+
+class FW_Option_Type_Unique extends FW_Option_Type
+{
+	private static $ids = array();
+
+	public function get_type()
+	{
+		return 'unique';
+	}
+
+	protected function _get_defaults()
+	{
+		return array(
+			'value' => ''
+		);
+	}
+
+	protected function _render($id, $option, $data) {
+		return fw_html_tag('input', array(
+			'type' => 'hidden',
+			'name' => $option['attr']['name'],
+			'id' => $option['attr']['id'],
+			'value' => $data['value'],
+		));
+	}
+
+	protected function _init() {
+		add_action('save_post', array($this, '_action_reset_post_ids'), 8);
+	}
+
+	/**
+	 * After the post has been saved
+	 * other scripts may call wp_update_post() and the save will start again
+	 * If the unique ids array will not be reset, on the next save
+	 * the previously processed ids will all be detected as duplicate and will be regenerated
+	 *
+	 * @param $post_id
+	 * @internal
+	 */
+	public function _action_reset_post_ids($post_id)
+	{
+		if ( wp_is_post_autosave( $post_id ) ) {
+			$original_id = wp_is_post_autosave( $post_id );
+		} else if ( wp_is_post_revision( $post_id ) ) {
+			$original_id = wp_is_post_revision( $post_id );
+		} else {
+			$original_id = $post_id;
+		}
+
+		self::$ids[$post_id] = array();
+		self::$ids[$original_id] = array();
+	}
+
+	protected function _get_value_from_input($option, $input_value) {
+		if (is_null($input_value)) {
+			$id = empty($option['value']) ? fw_rand_md5() : $option['value'];
+		} else {
+			$id = $input_value;
+		}
+
+		if (empty($id) || !is_string($id)) {
+			$id = fw_rand_md5();
+		}
+
+		/**
+		 * Regenerate if found the same id again
+		 */
+		{
+			global $post;
+
+			if ($post) {
+				$post_id = $post->ID;
+			} else {
+				$post_id = '~';
+			}
+
+			if (!isset(self::$ids[$post_id])) {
+				self::$ids[$post_id] = array();
+			}
+
+			while (isset(self::$ids[$post_id][$id])) {
+				$id = fw_rand_md5();
+			}
+
+			self::$ids[$post_id][$id] = true;
+		}
+
+		return $id;
+	}
+}
+FW_Option_Type::register('FW_Option_Type_Unique');
