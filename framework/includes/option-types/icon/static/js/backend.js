@@ -11,10 +11,10 @@ jQuery(function ($) {
 
 			if ($this.hasClass('active')) {
 				$this.removeClass('active');
-				$this.closest(optionTypeClass).find('input').val('');
+				$this.closest(optionTypeClass).find('input').val('').trigger('change');
 			} else {
 				$this.addClass('active').siblings().removeClass('active');
-				$this.closest(optionTypeClass).find('input').val($this.data('value'));
+				$this.closest(optionTypeClass).find('input').val($this.data('value')).trigger('change');
 			}
 		});
 

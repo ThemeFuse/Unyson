@@ -6,7 +6,7 @@
 				$choicesGroups: $this.find('> .choice-group')
 			},
 			chooseGroup = function(groupId) {
-				var $choicesToReveal = elements.$choicesGroups.filter('.choice-' + groupId);
+				var $choicesToReveal = elements.$choicesGroups.filter('.choice-group[data-choice-key="'+ groupId +'"]');
 
 				/**
 				 * The group options html was rendered in an attribute to make page load faster.
@@ -40,8 +40,8 @@
 						var $this = $(this),
 							checked = $(this).is(':checked'),
 							value = checked
-										? $this.attr('data-switch-right-value')
-										: $this.attr('data-switch-left-value');
+									? $this.attr('data-switch-right-value')
+									: $this.attr('data-switch-left-value');
 
 						chooseGroup(value);
 					}).trigger('change');
@@ -66,10 +66,23 @@
 				}
 			};
 
-		if (!pickerType || !flows[pickerType]) {
+		if (!pickerType) {
 			console.error('unknown multi-picker type:', pickerType);
 		} else {
-			flows[pickerType]();
+			if (flows[pickerType]) {
+				flows[pickerType]();
+			} else {
+				var eventName = 'fw:option-type:multi-picker:init:'+ pickerType;
+
+				if (fwe.hasListeners(eventName)) {
+					fwe.trigger(eventName, {
+						'$pickerGroup': elements.$pickerGroup,
+						'chooseGroup': chooseGroup
+					});
+				} else {
+					console.error('uninitialized multi-picker type:', pickerType);
+				}
+			}
 		}
 	};
 

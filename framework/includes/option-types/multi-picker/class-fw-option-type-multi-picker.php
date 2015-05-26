@@ -41,13 +41,13 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 		$uri = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type());
 
 		wp_enqueue_style(
-			'fw-option-type' . $this->get_type(),
+			'fw-option-type-' . $this->get_type(),
 			$uri . '/static/css/multi-picker.css',
 			array(),
 			fw()->manifest->get_version()
 		);
 		wp_enqueue_script(
-			'fw-option-type' . $this->get_type(),
+			'fw-option-type-' . $this->get_type(),
 			$uri . '/static/js/multi-picker.js',
 			array('jquery', 'fw-events'),
 			fw()->manifest->get_version(),
@@ -126,36 +126,13 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 		return 'multi-picker';
 	}
 
-	private function prepare_option($id, $option)
-	{
-		if (empty($option['picker'])) {
-			trigger_error(
-				sprintf(__('No \'picker\' key set for multi-picker option: %s', 'fw'), $id),
-				E_USER_ERROR
-			);
-		}
-
-		{
-			reset($option['picker']);
-			$picker_key             = key($option['picker']);
-			$picker                 = $option['picker'][$picker_key];
-			$picker_type            = $picker['type'];
-		}
-
-		$supported_picker_types = array('select', 'short-select', 'radio', 'image-picker', 'switch',
-			'color-palette' // fixme: this is a temporary hardcode for a ThemeFuse theme option-type, think a way to allow other option-types here
-		);
-		if (!in_array($picker_type, $supported_picker_types)) {
-			trigger_error(
-				sprintf(
-					__('Invalid picker type for multi-picker option %s, only pickers of types %s are supported', 'fw'),
-					$id,
-					implode(', ', $supported_picker_types)
-				),
-				E_USER_ERROR
-			);
-		}
-
+	/**
+	 * @param array $option
+	 * @param array $picker
+	 * @param string $picker_type
+	 * @return array( 'choice_id' => array( Choice Options ) )
+	 */
+	private function get_picker_choices($option, $picker, $picker_type) {
 		switch($picker_type) {
 			case 'switch':
 				$picker_choices = array_intersect_key($option['choices'], array(
@@ -177,9 +154,45 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 				}
 				$picker_choices = array_intersect_key($option['choices'], $collected_choices);
 				break;
-			default:
+			case 'radio':
+			case 'image-picker':
 				$picker_choices = array_intersect_key($option['choices'], $picker['choices']);
+				break;
+			default:
+				$picker_choices = apply_filters(
+					'fw_option_type_multi_picker_choices:'. $picker_type,
+					$option['choices'],
+					array(
+						'picker' => $picker,
+						'option' => $option,
+					)
+				);
 		}
+
+		return $picker_choices;
+	}
+
+	private function prepare_option($id, $option)
+	{
+		if (empty($option['picker'])) {
+			trigger_error(
+				sprintf(__('No \'picker\' key set for multi-picker option: %s', 'fw'), $id),
+				E_USER_ERROR
+			);
+		}
+
+		{
+			reset($option['picker']);
+			$picker_key             = key($option['picker']);
+			$picker                 = $option['picker'][$picker_key];
+			$picker_type            = $picker['type'];
+		}
+
+		$picker_choices = $this->get_picker_choices(
+			$option,
+			$picker,
+			$picker_type
+		);
 
 		$hide_picker = '';
 		$show_borders = '';
@@ -207,7 +220,10 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 			if (!empty($set)) {
 				$choices_groups[$id . '-' . $key] = array(
 					'type'    => 'group',
-					'attr'    => array('class' => 'choice-group choice-' . $key),
+					'attr'    => array(
+						'class' => 'choice-group',
+						'data-choice-key' => $key,
+					),
 					'options' => array(
 						$key => array(
 							'type'          => 'multi',
@@ -257,33 +273,14 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 			);
 		}
 
-		// choices
-		switch($picker_type) {
-			case 'switch':
-				$choices = array_intersect_key($option['choices'], array(
-					$picker['left-choice']['value']  => array(),
-					$picker['right-choice']['value'] => array()
-				));
-				break;
-			case 'select':
-			case 'short-select':
-				// we need to treat the case with optgroups
-				$collected_choices = array();
-				foreach ($picker['choices'] as $key => $choice_value) {
-					if (is_array($choice_value) && isset($choice_value['choices'])) {
-						// we have an optgroup
-						$collected_choices = array_merge($collected_choices, $choice_value['choices']);
-					} else {
-						$collected_choices[$key] = $choice_value;
-					}
-				}
-				$choices = array_intersect_key($option['choices'], $collected_choices);
-				break;
-			default:
-				$choices = array_intersect_key($option['choices'], $picker['choices']);
-		}
-
-		foreach ($choices as $choice_id => $choice_options) {
+		foreach (
+			$this->get_picker_choices(
+				$option,
+				$picker,
+				$picker_type
+			)
+			as $choice_id => $choice_options
+		) {
 			if (is_null($input_value) && isset($option['value'][$choice_id])) {
 				$value[$choice_id] = $option['value'][$choice_id];
 			} else {
