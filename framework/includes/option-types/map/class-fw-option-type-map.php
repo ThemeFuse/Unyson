@@ -80,9 +80,9 @@ class FW_Option_Type_Map extends FW_Option_Type {
 			'country'     => ( isset ( $input_value['country'] ) ) ? $input_value['country'] : '',
 			'zip'         => ( isset ( $input_value['zip'] ) ) ? $input_value['zip'] : '',
 			'coordinates' => ( isset ( $input_value['coordinates'] ) )
-				? ( is_array($input_value['coordinates']) )
+				? ( is_array($input_value['coordinates']) || is_object($input_value['coordinates']) )
 					? $input_value['coordinates']
-					: json_decode($input_value['coordinates'])
+					: json_decode($input_value['coordinates'], true)
 				: ''
 		);
 
