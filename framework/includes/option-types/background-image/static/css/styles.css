@@ -1,14 +1,23 @@
-.fw-option-type-background-image .type .fw-option-type-radio div {
+.fw-option-type-background-image > .type .fw-option-type-radio div {
 	display: inline-block;
 	margin-left: 15px;
 }
 
-.fw-option-type-background-image .predefined,
-.fw-option-type-background-image .custom {
+.fw-option-type-background-image > .predefined,
+.fw-option-type-background-image > .custom {
 	margin-top: 15px;
 }
 
 .fw-option-type-background-image div.fw-option-type-radio {
 	margin: 0 0 9px -15px;
 	font-size: 14px;
+}
+
+.fw-option-type-background-image.no-choices > .type {
+	display: none;
+}
+
+.fw-option-type-background-image.no-choices > .predefined,
+.fw-option-type-background-image.no-choices > .custom {
+	margin-top: 0;
 }

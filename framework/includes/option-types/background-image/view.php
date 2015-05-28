@@ -20,9 +20,13 @@ if ( empty( $option['choices'] ) ) {
 	$option['choices'] = array();
 }
 
+if (empty( $option['choices'] )) {
+	$wrapper_attr['class'] .= ' no-choices';
+}
+
 ?>
 <div <?php echo fw_attr_to_html($wrapper_attr) ?>>
-	<div class="type" <?php if (empty( $option['choices'] )): ?>style="display: none;"<?php endif; ?>>
+	<div class="type">
 		<?php
 		echo fw()->backend->option_type( 'radio' )->render(
 			'type',
