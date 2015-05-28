@@ -129,7 +129,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			'preview_styles'               => 'font-family font-size font-weight font-style text-decoration text-transform',
 			'wpeditimage_disable_captions' => false,
 			'wpeditimage_html5_captions'   => true,
-			'plugins'                      => 'charmap,hr,media,paste,tabfocus,textcolor,fullscreen,wordpress,wpeditimage,wpgallery,wplink,wpdialogs,wpview',
+			'plugins'                      => 'charmap,hr,media,paste,tabfocus,textcolor,fullscreen,wordpress,wpeditimage,wpgallery,wplink,wpdialogs,wpview,colorpicker,textcolor',
 			'resize'                       => 'vertical',
 			'menubar'                      => false,
 			'indent'                       => false,
