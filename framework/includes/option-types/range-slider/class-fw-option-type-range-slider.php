@@ -55,40 +55,47 @@ class FW_Option_Type_Range_Slider extends FW_Option_Type {
 		$option['properties']['to']   = ( isset( $data['value']['to'] ) ) ? $data['value']['to'] : $option['value']['to'];
 
 		if ( isset( $option['properties']['values'] ) && is_array( $option['properties']['values'] ) ) {
-			$option['properties']['from'] = array_search( $option['properties']['from'], $option['properties']['values'] );
-			$option['properties']['to']   = array_search( $option['properties']['to'], $option['properties']['values'] );
+			$option['properties']['from'] = array_search( $option['properties']['from'],
+				$option['properties']['values'] );
+			$option['properties']['to']   = array_search( $option['properties']['to'],
+				$option['properties']['values'] );
 		}
 
+		$option = $this->update_option( $option );
+
 		$option['attr']['data-fw-irs-options'] = json_encode(
-			$this->default_properties($option['properties'])
+			$this->default_properties( $option['properties'] )
 		);
 
-		return fw_render_view( fw_get_framework_directory( '/includes/option-types/' . $this->get_type() . '/view.php' ), array(
-			'id'     => $id,
-			'option' => $option,
-			'data'   => $data,
-			'value'  => implode(';', (array)$data['value'])
-		) );
+		return fw_render_view( fw_get_framework_directory( '/includes/option-types/' . $this->get_type() . '/view.php' ),
+			array(
+				'id'     => $id,
+				'option' => $option,
+				'data'   => $data,
+				'value'  => implode( ';', (array) $data['value'] )
+			) );
 	}
 
-	private function default_properties($properties = array()) {
-		return array_merge(array(
-			'min' => 0,
-			'max' => 100,
+	private function default_properties( $properties = array() ) {
+		return array_merge( array(
+			'min'  => 0,
+			'max'  => 100,
 			'step' => 1,
-		), $properties);
+		), $properties );
 	}
 
 	/**
 	 * @internal
 	 */
 	protected function _get_defaults() {
+		$defaults = $this->default_properties();
+
 		return array(
-			'value' => array(
-				'from' => 0,
-				'to'   => 0,
+			'value'      => array(
+				'from' => $defaults['min'],
+				'to'   => $defaults['max'],
 			),
-			'properties' => $this->default_properties(), // https://github.com/IonDen/ion.rangeSlider#settings
+			'properties' => $defaults, // https://github.com/IonDen/ion.rangeSlider#settings
 		);
 	}
 
@@ -96,16 +103,46 @@ class FW_Option_Type_Range_Slider extends FW_Option_Type {
 	 * @internal
 	 */
 	protected function _get_value_from_input( $option, $input_value ) {
-		if (is_null($input_value)) {
+		if ( is_null( $input_value ) ) {
 			return $option['value'];
 		} else {
-			$input_values = ( isset( $option['properties']['values'] ) && is_array( $option['properties']['values'] ) ) ? explode( ';', $input_value ) : array_map( 'intval', explode( ';', $input_value ) );
+			$input_values = ( isset( $option['properties']['values'] ) && is_array( $option['properties']['values'] ) ) ? explode( ';',
+				$input_value ) : array_map( 'intval', explode( ';', $input_value ) );
 
 			return array(
 				'from' => $input_values[0],
-				'to' => $input_values[1],
+				'to'   => $input_values[1],
 			);
 		}
+	}
+
+	/**
+	 * Used to update option from and to value to be equal to max and min in case they are not defined
+	 *
+	 * @param array $option
+	 *
+	 * @return array
+	 */
+	private function update_option( $option ) {
+		if (
+			$option['value']['from'] < $option['properties']['min']
+			||
+			$option['value']['from'] > $option['properties']['max']
+		) {
+			$option['value']['from'] = $option['properties']['min'];
+			$option['properties']['from'] = $option['properties']['min'];
+		}
+
+		if (
+			$option['value']['to'] > $option['properties']['max']
+			||
+			$option['value']['to'] < $option['properties']['min']
+		) {
+			$option['value']['to'] = $option['properties']['max'];
+			$option['properties']['to'] = $option['properties']['max'];
+		}
+
+		return $option;
 	}
 
 }
