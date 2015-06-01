@@ -62,11 +62,7 @@ For extending or theming Unyson, see [developers documetation](http://manual.uny
 
 = Where can I report bugs or contribute to the project? =
 
-You can report the issue via Unyson Github Repository [Issues page](https://github.com/ThemeFuse/Unyson/issues).
-
-= Where can I request new features? =
-
-The Unyson development team actively participates on [Trello Unyson Development Board](https://trello.com/b/Xm9TxasH/unyson-development), and uses it to communicate with the outside world about its development priorities and tendencies.
+You can open issues via Unyson Github Repository [Issues page](https://github.com/ThemeFuse/Unyson/issues).
 
 = Will Unyson work with my theme? =
 
