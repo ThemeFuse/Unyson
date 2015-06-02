@@ -2356,7 +2356,7 @@ final class _FW_Extensions_Manager
 					}
 
 					{
-						$transient_name = 'fw_ext_manager_gh_download';
+						$transient_name = 'fw_ext_mngr_gh_dl';
 						$transient_ttl  = HOUR_IN_SECONDS;
 
 						$cache = get_site_transient($transient_name);
@@ -2373,7 +2373,7 @@ final class _FW_Extensions_Manager
 
 						$response = $http->get(
 							apply_filters('fw_github_api_url', 'https://api.github.com')
-							. '/repos/'. $source_data['user_repo'] .'/releases'
+							. '/repos/'. $source_data['user_repo'] .'/releases/latest'
 						);
 
 						unset($http);
@@ -2409,11 +2409,11 @@ final class _FW_Extensions_Manager
 							}
 						}
 
-						$releases = json_decode($response['body'], true);
+						$release = json_decode($response['body'], true);
 
 						unset($response);
 
-						if (empty($releases)) {
+						if (empty($release)) {
 							return new WP_Error(
 								$wp_error_id,
 								sprintf(
@@ -2422,10 +2422,6 @@ final class _FW_Extensions_Manager
 								)
 							);
 						}
-
-						$release = reset($releases);
-
-						unset($releases);
 
 						{
 							$cache[ $source_data['user_repo'] ] = array(
