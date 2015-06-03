@@ -1,0 +1,303 @@
+.fw-option.fw-option-type-typography-v2 .fw-option-typography-v2-option {
+	display: inline-block;
+	text-align: left;
+	float: inherit;
+}
+.fw-backend-option-input-type-typography-v2 .fw-option-help-in-input {
+	top: 4px !important;
+}
+
+.fw-option-type-typography-v2 .fw-option-typography-v2-option {
+	padding-right: 5px;
+	width: 167px;
+}
+body.rtl .fw-option-type-typography-v2 .fw-option-typography-v2-option {
+	padding-right: 0;
+	padding-left: 5px;
+}
+
+.fw-option-type-typography-v2 .fw-option-typography-v2-option:last-child,
+.fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option {
+	padding-right: 0;
+}
+body.rtl .fw-option-type-typography-v2 .fw-option-typography-v2-option:last-child,
+body.rtl .fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option {
+	padding-left: 0;
+}
+
+@media (max-width: 782px) {
+	.fw-backend-option-input-type-typography-v2 {
+		width: 100%;
+	}
+
+	.fw-option-type-typography-v2 .fw-option-typography-v2-option {
+		padding-top: 5px;
+		padding-right: 0;
+	}
+	body.rtl .fw-option-type-typography-v2 .fw-option-typography-v2-option {
+		padding-left: 0;
+	}
+
+	.fw-option-type-typography-v2 .fw-option-typography-v2-option:first-child {
+		padding-top: 0;
+	}
+
+	.fw-option-type-typography-v2 .fw-option-typography-v2-option.fw-option-typography-v2-option-size {
+		width: 100%;
+	}
+}
+.fw-force-xs .fw-backend-option-input-type-typography-v2 {
+	width: 100%;
+}
+.fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option {
+	padding-top: 5px;
+	padding-right: 0;
+}
+body.rtl .fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option {
+	padding-left: 0;
+}
+.fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option:first-child {
+	padding-top: 0;
+}
+.fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option.fw-option-typography-v2-option-size {
+	width: 100%;
+}
+
+.fw-option-type-typography-v2 .fw-option-typography-v2-option input,
+.fw-option-type-typography-v2 .fw-option-typography-v2-option select {
+	display: inline-block;
+	margin: 0;
+	width: 100%;
+}
+
+
+/* Color */
+
+@media (min-width: 783px) {
+	.fw-option-type-typography-v2 .fw-option-typography-v2-option-color input {
+		height: 28px;
+	}
+}
+
+/* Family */
+
+.fw-option-type-typography-v2 .fw-option-typography-v2-option-family-input {
+	background: #fff;
+}
+
+.fw-option-type-typography-v2 .fw-option-typography-v2-option-family-input .selectize-input {
+	height: 32px;
+}
+
+.fw-option-type-typography-v2 .fw-option-typography-v2-option-family-input .selectize-input.dropdown-active::before {
+	background: none;
+	height: 0;
+}
+
+.fw-option-type-typography-v2 .fw-option-typography-v2-option-family .selectize-control.single .selectize-input:after {
+	right: 8px;
+	margin-top: -2px;
+	border-width: 6px 3px 0 3px;
+	border-color: #000000 transparent transparent transparent;
+}
+body.rtl .fw-option-type-typography-v2 .fw-option-typography-v2-option-family .selectize-control.single .selectize-input:after {
+	right: auto;
+	left: 8px;
+}
+
+@media (max-width: 782px) {
+	.fw-option-type-typography-v2 .fw-option-typography-v2-option-family .selectize-control.single .selectize-input:after {
+		right: 6px;
+	}
+
+	.fw-option-typography-v2-option.fw-option-typography-v2-option-family,
+	.fw-option-type-typography-v2 .fw-option-typography-v2-option-family-input {
+		width: 100%;
+		margin-right: 0;
+	}
+}
+.fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option-family .selectize-control.single .selectize-input:after {
+	right: 6px;
+}
+.fw-force-xs .fw-option-typography-v2-option.fw-option-typography-v2-option-family,
+.fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option-family-input {
+	width: 100%;
+	margin-right: 0;
+}
+
+.fw-option-type-typography-v2 .fw-option-typography-v2-option-family-input:focus,
+.fw-option-type-typography-v2 .fw-option-typography-v2-option-family-input.single .selectize-input.focus {
+	/*border: 1px solid #5b9dd9;
+
+	-webkit-box-shadow: 0 0 2px rgba(30,140,190,.8);
+	box-shadow: 0 0 2px rgba(30,140,190,.8);*/
+
+	-webkit-transition: .05s border-color ease-in-out;
+	transition: .05s border-color ease-in-out;
+}
+
+/*.fw-option-type-typography-v2 .selectize-dropdown.fw-option-typography-v2-option-family-input {
+	width: 335px !important;
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, .07);
+	border: 1px solid #ddd;
+}*/
+
+.fw-option-type-typography-v2 .selectize-dropdown .selectize-dropdown-content div {
+	height: 30px;
+	background-color: #fff;
+	cursor: pointer;
+	border-bottom: 1px solid #ddd;
+	line-height: 30px;
+}
+
+.fw-option-type-typography-v2 .selectize-dropdown .selectize-dropdown-content div.option span {
+	border: none;
+	background: none;
+	color: red;
+}
+
+.fw-option-type-typography-v2 .selectize-dropdown .selectize-dropdown-content div:hover{
+	background-color: #f0f0f0;
+}
+
+.fw-option-type-typography-v2 .selectize-dropdown.single {
+	border: 1px solid #ddd;
+}
+
+.fw-option-type-typography-v2 .selectize-control.single .selectize-input {
+	background: none;
+	margin: 0;
+	vertical-align: middle;
+	border: 1px solid #dddddd;
+	color: #333333;
+	height: 28px;
+	line-height: 27px;
+	font-size: 14px;
+	padding: 0 6px;
+
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, .07);
+	-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .07);
+	-moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .07);
+
+	border-radius: 0;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+}
+
+@media (max-width: 782px) {
+	.fw-option-type-typography-v2 .selectize-dropdown.fw-option-typography-v2-option-family-input {
+		width: 100% !important;
+	}
+
+	.fw-option-type-typography-v2 .selectize-control.single .selectize-input {
+		font-size: 16px;
+		height: 36px;
+		line-height: 36px;
+	}
+
+	#edittag .fw-option-type-typography-v2 .selectize-control.single .selectize-input {
+		padding: 0 14px;
+	}
+}
+.fw-force-xs .fw-option-type-typography-v2 .selectize-dropdown.fw-option-typography-v2-option-family-input {
+	width: 100%!important;
+}
+.fw-force-xs .fw-option-type-typography-v2 .selectize-control.single .selectize-input {
+	font-size: 16px;
+}
+#edittag .fw-force-xs .fw-option-type-typography-v2 .selectize-control.single .selectize-input {
+	padding: 0 14px;
+}
+
+.fw-option-type-typography-v2 div.selectize-input.items.full.has-options.has-items {
+	background: none;
+}
+
+.fw-option-type-typography-v2 .selectize-dropdown .selectize-dropdown-content {
+	border: 1px solid #ddd;
+}
+
+.fw-option-type-typography-v2 .selectize-control .selectize-dropdown {
+	border: none;
+	top: 33px !important;
+}
+@media (max-width: 782px) {
+	.fw-option-type-typography-v2 .selectize-control .selectize-dropdown {
+		top: 42px !important;
+	}
+}
+
+@media (max-width: 782px) {
+	.fw-option-type-typography-v2 .fw-option-typography-v2-option-style,
+	.fw-option-type-typography-v2 .fw-option-typography-v2-option-subset,
+	.fw-option-type-typography-v2 .fw-option-typography-v2-option-variation,
+	.fw-option-type-typography-v2 .fw-option-typography-v2-option-weight,
+	.fw-option-type-typography-v2 .fw-option-typography-v2-option-size,
+	.fw-option-type-typography-v2 .fw-option-typography-v2-option-line-height,
+	.fw-option-type-typography-v2 .fw-option-typography-v2-option-letter-spacing,
+	.fw-option-type-typography-v2 .fw-option-typography-v2-option-color,
+	.fw-option-type-typography-v2 .fw-option-typography-v2-option-color .fw-option-type-color-picker {
+		width: 100% !important;
+	}
+}
+.fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option-subset,
+.fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option-variation,
+.fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option-weight,
+.fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option-style,
+.fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option-size,
+.fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option-line-height,
+.fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option-letter-spacing,
+.fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option-color,
+.fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option-color .fw-option-type-color-picker {
+	width: 100% !important;
+}
+
+/*
+Fix: for color picker width too small or too big
+Solution: Set color fixed size, and font-style to calculate its width
+
+font-style: fw-col-sm-3 = 25%
+color:      fw-col-sm-2 = 16.66666667%
+
+25% + 16.66666667% = 41.66666667%
+*/
+
+.fw-option-type-typography-v2 .fw-option-typography-v2-option-color {
+	width: 70px; /* should be same width as option type color-picker */
+}
+
+.fw-option-type-typography-v2 .fw-option-typography-v2-option-style,
+.fw-option-type-typography-v2 .fw-option-typography-v2-option-weight,
+.fw-option-type-typography-v2 .fw-option-typography-v2-option-variation,
+.fw-option-type-typography-v2 .fw-option-typography-v2-option-subset {
+	width: 120px;
+}
+
+
+.fw-option-type-typography-v2 .fw-option-typography-v2-option-size,
+.fw-option-type-typography-v2 .fw-option-typography-v2-option-line-height,
+.fw-option-type-typography-v2 .fw-option-typography-v2-option-letter-spacing {
+	width: 86px;
+}
+
+.fw-option-type-typography-v2 .fw-option-typography-v2-option-letter-spacing {
+	width: 86px;
+}
+
+@media (max-width: 782px) {
+	.fw-option-type-typography-v2 .fw-option-typography-v2-option-size {
+		width: 100%;
+	}
+}
+.fw-force-xs .fw-option-type-typography-v2 .fw-option-typography-v2-option-size {
+	width: 100%;
+}
+
+.fw-option-type-typography-v2 .fw-inner {
+	font-size: 1em;
+	padding-top: 7px;
+	padding-left: 1px;
+	padding-bottom: 10px;
+	font-style: italic;
+	color: #666;
+}

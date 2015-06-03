@@ -28,6 +28,7 @@ require $dir . '/popup/class-fw-option-type-popup.php';
 require $dir . '/slider/class-fw-option-type-slider.php';
 require $dir . '/range-slider/class-fw-option-type-range-slider.php';
 require $dir . '/rgba-color-picker/class-fw-option-type-rgba-color-picker.php';
+require $dir . '/typography-v2/class-fw-option-type-typography-v2.php';
 if (!class_exists('FW_Option_Type_Multi_Select')) {
   require $dir . '/multi-select/class-fw-option-type-multi-select.php';
 }
