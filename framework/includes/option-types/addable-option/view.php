@@ -87,7 +87,7 @@ unset($attr['value']);
 			'onclick' => 'return false;',
 			'data-increment' => $i,
 			'data-increment-placeholder' => $increment_placeholder,
-		), __('Add', 'fw'));
+		), fw_htmlspecialchars($option['add-button-text']));
 	?>
 	</div>
 </div>

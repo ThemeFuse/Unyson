@@ -47,7 +47,7 @@ $increment_placeholder = '###-addable-popup-increment-'. fw_rand_md5() .'-###';
 		'class' => 'button add-new-item',
 		'onclick' => 'return false;',
 		'data-increment-placeholder' => $increment_placeholder,
-	), __('Add', 'fw'));
+	), fw_htmlspecialchars($option['add-button-text']));
 	?>
 </div>
 

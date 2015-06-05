@@ -160,6 +160,7 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 			'box-options' => array(),
 			'limit' => 0,
 			'template' => '',
+			'add-button-text' => __('Add', 'fw'),
 		);
 	}
 }

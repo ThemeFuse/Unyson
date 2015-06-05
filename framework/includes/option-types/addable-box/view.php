@@ -91,7 +91,7 @@ unset($attr['value']);
 			'data-increment' => ++$i,
 			'data-increment-placeholder' => $increment_placeholder,
 			'data-limit' => intval($option['limit']),
-		), __('Add', 'fw'));
+		), fw_htmlspecialchars($option['add-button-text']));
 		?>
 	</div>
 </div>

@@ -141,7 +141,8 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 			'template' => '',
 			'popup-title' => null,
 			'limit' => 0,
-			'size' => 'small' // small, medium, large
+			'size' => 'small', // small, medium, large
+			'add-button-text' => __('Add', 'fw'),
 		);
 	}
 
