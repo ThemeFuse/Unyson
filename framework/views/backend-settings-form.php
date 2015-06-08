@@ -134,6 +134,27 @@ jQuery(function($){
 </script>
 <!-- end: reset warning -->
 
+<script type="text/javascript">
+	jQuery(function($){
+		fwEvents.one('fw:options:init', function(data){
+			setTimeout(
+				function(){
+					fw.warnOnUnsavedChanges($('form[data-fw-form-id="fw_settings"]:first'));
+				},
+				/**
+				 * Call this very late because some options scripts can have late timeouts
+				 * that are meant to prevent page freeze on options init.
+				 * Those scripts can change form values and that will cause alert on page leave
+				 * even if the user made no changes.
+				 * fw.warnOnUnsavedChanges() must be executed when the form initialization was finished
+				 * and the changes that will be made after that, will be made only by the user.
+				 */
+				2000
+			);
+		});
+	});
+</script>
+
 <?php if ($ajax_submit): ?>
 <!-- ajax submit -->
 <script type="text/javascript">
@@ -270,7 +291,15 @@ jQuery(function($){
 										function(){
 											fw.warnOnUnsavedChanges($('form[data-fw-form-id="fw_settings"]:first'));
 										},
-										2000 // call this very late because some options scripts can have late timeouts to make page load faster
+										/**
+										 * Call this very late because some options scripts can have late timeouts
+										 * that are meant to prevent page freeze on options init.
+										 * Those scripts can change form values and that will cause alert on page leave
+										 * even if the user made no changes.
+										 * fw.warnOnUnsavedChanges() must be executed when the form initialization was finished
+										 * and the changes that will be made after that, will be made only by the user.
+										 */
+										2000
 									);
 								});
 
@@ -328,16 +357,3 @@ jQuery(function($){
 	});
 </script>
 <?php endif; ?>
-
-<script type="text/javascript">
-	jQuery(function($){
-		fwEvents.one('fw:options:init', function(data){
-			setTimeout(
-				function(){
-					fw.warnOnUnsavedChanges($('form[data-fw-form-id="fw_settings"]:first'));
-				},
-				2000 // call this very late because some options scripts can have late timeouts to make page load faster
-			);
-		});
-	});
-</script>
