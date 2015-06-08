@@ -156,11 +156,39 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 	{
 		return array(
 			'value' => array(),
-			'box-controls' => array(),
+			/**
+			 * Buttons on box head ( near delete button X )
+			 *
+			 * On control click will be triggered a custom event 'fw:option-type:addable-box:control:click'
+			 * on wrapper div (the one that has `.fw-option-type-addable-box` class)
+			 * data about control will be in event data
+			 */
+			'box-controls' => array(
+				// 'control_id' => '<small class="dashicons dashicons-..." title="Some action"></small>'
+			),
 			'box-options' => array(),
+			/**
+			 * Limit boxes that can be added
+			 */
 			'limit' => 0,
+			/**
+			 * Box title backbonejs template
+			 * All box options are available as variables {{- box_option_id }}
+			 *
+			 * Note: Ids with - (instead of underscore _ ) will throw errors
+			 * because 'box-option-id' can't be converted to variable name
+			 *
+			 * Example: 'Hello {{- box_option_id }}'
+			 */
 			'template' => '',
 			'add-button-text' => __('Add', 'fw'),
+			/**
+			 * Makes the boxes sortable
+			 *
+			 * You can disable this in case the boxes order doesn't matter,
+			 * to not confuse the user that if changing the order will affect something.
+			 */
+			'sortable' => true,
 		);
 	}
 }

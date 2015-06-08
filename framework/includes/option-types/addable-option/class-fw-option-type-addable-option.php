@@ -18,6 +18,13 @@ class FW_Option_Type_Addable_Option extends FW_Option_Type
 				'type' => 'text',
 			),
 			'add-button-text' => __('Add', 'fw'),
+			/**
+			 * Makes the options sortable
+			 *
+			 * You can disable this in case the options order doesn't matter,
+			 * to not confuse the user that if changing the order will affect something.
+			 */
+			'sortable' => true,
 		);
 	}
 

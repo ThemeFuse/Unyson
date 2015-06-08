@@ -49,6 +49,10 @@
 					utils.initSortable();
 				},
 				initSortable: function () {
+					if (!nodes.$optionWrapper.hasClass('is-sortable')) {
+						return false;
+					}
+
 					nodes.$itemsWrapper.sortable({
 						items: '.item:not(.default)',
 						cursor: 'move',
@@ -57,6 +61,14 @@
 						axis: 'y',
 						update: function(){
 							nodes.$optionWrapper.trigger('change'); // for customizer
+						},
+						start: function(e, ui){
+							// Update the height of the placeholder to match the moving item.
+							{
+								var height = ui.item.outerHeight() - 1;
+
+								ui.placeholder.height(height);
+							}
 						}
 					});
 				},

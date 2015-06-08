@@ -6,12 +6,17 @@
  * @var string $sortable_image url
  */
 $attr = $option['attr'];
+unset($attr['name']);
+unset($attr['value']);
+
+if ($option['sortable']) {
+	$attr['class'] .= ' is-sortable';
+}
 
 // must contain characters that will remain the same after htmlspecialchars()
 $increment_placeholder = '###-addable-popup-increment-'. fw_rand_md5() .'-###';
 ?>
 <div <?php echo fw_attr_to_html($attr); ?>>
-
 	<div class="items-wrapper">
 		<div class="item default">
 			<div class="input-wrapper">
