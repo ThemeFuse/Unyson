@@ -16,7 +16,8 @@ class FW_Option_Type_Addable_Option extends FW_Option_Type
 			'value'  => array(),
 			'option' => array(
 				'type' => 'text',
-			)
+			),
+			'add-button-text' => __('Add', 'fw'),
 		);
 	}
 
