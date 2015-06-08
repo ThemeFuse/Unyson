@@ -21,6 +21,10 @@ unset($attr['value']);
 	</small>
 	<?php $controls_html = ob_get_clean();
 }
+
+if ($option['sortable']) {
+	$attr['class'] .= ' is-sortable';
+}
 ?>
 <div <?php echo fw_attr_to_html($attr) ?>>
 	<?php $i = 0; ?>

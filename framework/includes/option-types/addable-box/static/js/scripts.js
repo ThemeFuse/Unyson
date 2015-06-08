@@ -28,6 +28,10 @@ jQuery(document).ready(function ($) {
 				// happens when sortable was not initialized before
 			}
 
+			if (!$boxes.first().closest(optionTypeClass).hasClass('is-sortable')) {
+				return false;
+			}
+
 			var isMobile = $(document.body).hasClass('mobile');
 
 			$boxes.sortable({
@@ -77,7 +81,7 @@ jQuery(document).ready(function ($) {
 						default:
 							// custom control. trigger event for others to handle this
 							$control.closest(optionTypeClass).trigger(
-								methods.makeEventName('.fw-options-tabs-wrapper .fw-options-tabs-contents'), {
+								methods.makeEventName('control:click'), {
 									controlId: controlId,
 									$control: $control,
 									box: methods.getBoxDataForEvent($control.closest('.box'))
@@ -239,12 +243,13 @@ jQuery(document).ready(function ($) {
 				}, 300);
 			}
 
-			$boxes.append(
-				$newBox
-			);
+			$boxes.append($newBox);
 
 			methods.initControls($newBox);
-			methods.reInitSortable($boxes);
+
+			if ($option.hasClass('is-sortable')) {
+				methods.reInitSortable($boxes);
+			}
 
 			// remove focus form "Add" button to prevent pressing space/enter to add easy many boxes
 			$newBox.find('input,select,textarea').first().focus();
