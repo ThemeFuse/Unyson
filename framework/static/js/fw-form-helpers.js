@@ -82,7 +82,7 @@ var fwForm = {
 			e.preventDefault();
 
 			if (isBusy) {
-				console.warn('Working... Try again later.')
+				console.warn('Working... Try again later.');
 				return;
 			}
 
@@ -95,7 +95,7 @@ var fwForm = {
 
 			// get submit button
 			{
-				var $submitButton = $form.find(':submit:focus')
+				var $submitButton = $form.find(':submit:focus');
 
 				if (!$submitButton.length) {
 					// in case you use this solution http://stackoverflow.com/a/5721762
