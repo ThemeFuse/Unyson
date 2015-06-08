@@ -265,6 +265,15 @@ jQuery(function($){
 									});
 								}
 
+								fwEvents.one('fw:options:init', function(data){
+									setTimeout(
+										function(){
+											fw.warnOnUnsavedChanges($('form[data-fw-form-id="fw_settings"]:first'));
+										},
+										2000 // call this very late because some options scripts can have late timeouts to make page load faster
+									);
+								});
+
 								fwEvents.trigger('fw:options:init', {$elements: elements.$form});
 
 								fwBackendOptions.openTab(focusTabId);
@@ -293,6 +302,7 @@ jQuery(function($){
 					});
 				} else {
 					fw.soleModal.hide('fw-options-ajax-save-loading');
+					fw.warnOnUnsavedChanges($('form[data-fw-form-id="fw_settings"]:first'));
 				}
 			}
 		});
@@ -318,3 +328,16 @@ jQuery(function($){
 	});
 </script>
 <?php endif; ?>
+
+<script type="text/javascript">
+	jQuery(function($){
+		fwEvents.one('fw:options:init', function(data){
+			setTimeout(
+				function(){
+					fw.warnOnUnsavedChanges($('form[data-fw-form-id="fw_settings"]:first'));
+				},
+				2000 // call this very late because some options scripts can have late timeouts to make page load faster
+			);
+		});
+	});
+</script>
