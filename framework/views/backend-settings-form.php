@@ -119,7 +119,7 @@ jQuery(function($){
 			 * so use alternative solution http://stackoverflow.com/a/5721762
 			 */
 			{
-				$(this).closest('form').find('input[type="submit"][clicked]').removeAttr('clicked');
+				$(this).closest('form').find('[clicked]:submit').removeAttr('clicked');
 				$(this).attr('clicked', '');
 			}
 

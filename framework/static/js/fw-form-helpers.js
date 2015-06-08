@@ -95,15 +95,15 @@ var fwForm = {
 
 			// get submit button
 			{
-				var $submitButton = $form.find('input[type="submit"][name]:focus')
+				var $submitButton = $form.find(':submit:focus')
 
 				if (!$submitButton.length) {
 					// in case you use this solution http://stackoverflow.com/a/5721762
-					$submitButton = $form.find('input[type="submit"][name][clicked]');
+					$submitButton = $form.find('[clicked]:submit');
 				}
 
 				// make sure to remove the "clicked" attribute to prevent accidental settings reset
-				$form.find('input[type="submit"][name][clicked]').removeAttr('clicked');
+				$form.find('[clicked]:submit').removeAttr('clicked');
 			}
 
 			var elements = {
