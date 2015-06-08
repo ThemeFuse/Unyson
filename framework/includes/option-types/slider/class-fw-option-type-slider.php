@@ -94,9 +94,7 @@ class FW_Option_Type_Slider extends FW_Option_Type {
 		if (is_null($input_value)) {
 			return $option['value'];
 		} else {
-			$input_values = (isset($option['properties']['values']) && is_array($option['properties']['values'])) ? explode(';', $input_value) : array_map('intval', explode(';', $input_value));
-
-			return $input_values[0];
+			return intval($input_value);
 		}
 	}
 
