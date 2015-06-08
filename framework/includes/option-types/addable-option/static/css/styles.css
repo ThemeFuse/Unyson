@@ -42,6 +42,9 @@ body.rtl #edittag .form-table .fw-option-type-addable-option .fw-option-type-add
 	padding-top: 4px;
 }
 
+.fw-option-type-addable-option:not(.is-sortable) .fw-option-type-addable-option-option td.td-move {
+	display: none;
+}
 
 .fw-option-type-addable-option tr.fw-option-type-addable-option-option.ui-sortable-helper {
 	display: block;
