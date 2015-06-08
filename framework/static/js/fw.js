@@ -1563,3 +1563,49 @@ fw.soleModal = (function(){
 		}
 	};
 })();
+
+/**
+ * Alert user if the form has some changes
+ *
+ * Note: You can call this function multiple times for a form
+ *
+ * @param $form
+ * @returns {boolean}
+ */
+fw.warnOnUnsavedChanges = function($form) {
+	if (!$form.length) {
+		return false;
+	}
+
+	// use only first element
+	{
+		var form = $form.get(0);
+
+		$form = $form.first();
+	}
+
+	if (!jQuery.data(form, 'unique-id')) {
+		jQuery.data(form, 'unique-id', 'id_'+ fw.randomMD5());
+	}
+
+	var id = jQuery.data(form, 'unique-id'),
+		eventsNamespace = '.fw_form_warn_'+ id;
+
+	jQuery(window)
+		.off(eventsNamespace)
+		.on('beforeunload'+ eventsNamespace, function(e) {
+			if ($form.serialize() !== jQuery.data(form, 'saved-values')) {
+				return 'The changes you made will be lost if you navigate away from this page.';
+			}
+		});
+
+	$form
+		.off(eventsNamespace)
+		.on('submit'+ eventsNamespace, function(){
+			jQuery.data(form, 'saved-values', $form.serialize());
+		});
+
+	jQuery.data(form, 'saved-values', $form.serialize());
+
+	return true;
+};
