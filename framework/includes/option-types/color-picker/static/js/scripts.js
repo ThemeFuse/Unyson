@@ -1,7 +1,9 @@
 jQuery(document).ready(function($){
 	$(document.body).click(function (e) {
 		if (!$(e.target).is('.fw-option-type-color-picker, .iris-picker, .iris-picker-inner, .iris-palette')) {
-			$('.fw-option-type-color-picker.initialized').iris('hide');
+			try {
+				$('.fw-option-type-color-picker.initialized').iris('hide');
+			} catch (e) {}
 		}
 	});
 
