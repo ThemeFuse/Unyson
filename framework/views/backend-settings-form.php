@@ -136,21 +136,17 @@ jQuery(function($){
 
 <script type="text/javascript">
 	jQuery(function($){
-		fwEvents.one('fw:options:init', function(data){
-			setTimeout(
-				function(){
-					fw.warnOnUnsavedChanges($('form[data-fw-form-id="fw_settings"]:first'));
-				},
-				/**
-				 * Call this very late because some options scripts can have late timeouts
-				 * that are meant to prevent page freeze on options init.
-				 * Those scripts can change form values and that will cause alert on page leave
-				 * even if the user made no changes.
-				 * fw.warnOnUnsavedChanges() must be executed when the form initialization was finished
-				 * and the changes that will be made after that, will be made only by the user.
-				 */
-				2000
-			);
+		var $form = $('form[data-fw-form-id="fw_settings"]:first'),
+			timeoutId = 0;
+
+		$form.on('change.fw_settings_form_delayed_change', function(){
+			clearTimeout(timeoutId);
+			/**
+			 * Run on timeout to prevent too often trigger (and cpu load) when a bunch of changes will happen at once
+			 */
+			timeoutId = setTimeout(function () {
+				$form.trigger('fw:settings-form:delayed-change');
+			}, 333);
 		});
 	});
 </script>
@@ -286,23 +282,6 @@ jQuery(function($){
 									});
 								}
 
-								fwEvents.one('fw:options:init', function(data){
-									setTimeout(
-										function(){
-											fw.warnOnUnsavedChanges($('form[data-fw-form-id="fw_settings"]:first'));
-										},
-										/**
-										 * Call this very late because some options scripts can have late timeouts
-										 * that are meant to prevent page freeze on options init.
-										 * Those scripts can change form values and that will cause alert on page leave
-										 * even if the user made no changes.
-										 * fw.warnOnUnsavedChanges() must be executed when the form initialization was finished
-										 * and the changes that will be made after that, will be made only by the user.
-										 */
-										2000
-									);
-								});
-
 								fwEvents.trigger('fw:options:init', {$elements: elements.$form});
 
 								fwBackendOptions.openTab(focusTabId);
@@ -317,6 +296,8 @@ jQuery(function($){
 										elements.$form.css('visibility', '');
 									}, 300);
 								}
+
+								elements.$form.trigger('fw:settings-form:reset');
 							}, 300);
 						}, 300);
 					}).fail(function(jqXHR, textStatus, errorThrown){
@@ -331,7 +312,7 @@ jQuery(function($){
 					});
 				} else {
 					fw.soleModal.hide('fw-options-ajax-save-loading');
-					fw.warnOnUnsavedChanges($('form[data-fw-form-id="fw_settings"]:first'));
+					elements.$form.trigger('fw:settings-form:saved');
 				}
 			}
 		});
