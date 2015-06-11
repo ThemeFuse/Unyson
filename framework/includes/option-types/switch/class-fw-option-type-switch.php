@@ -74,6 +74,65 @@ class FW_Option_Type_Switch extends FW_Option_Type
 			}
 		}
 
+		if (
+			defined('DOING_AJAX') && DOING_AJAX
+			&&
+			in_array($data['value'], array('false', 'true'))
+			&&
+			// do not transform if there is an exact match with a choice
+			(
+				$option['left-choice']['value'] !== $data['value']
+				&&
+				$option['right-choice']['value'] !== $data['value']
+			)
+		) {
+			/**
+			 * This happens on fw.OptionsModal open/render
+			 * When the switch is used by other option types
+			 * then this script http://bit.ly/1QshDoS can't fix nested values
+			 *
+			 * Check if values is 'true' or 'false' and one of the choices values is a boolean that matches it
+			 * then transform/fix it to boolean
+			 */
+			if (
+				$data['value'] === 'true'
+				&&
+				(
+					(
+						is_bool($option['right-choice']['value'])
+						&&
+						$option['right-choice']['value'] === true
+					)
+					||
+					(
+						is_bool($option['left-choice']['value'])
+						&&
+						$option['left-choice']['value'] === true
+					)
+				)
+			) {
+				$data['value'] = true;
+			} elseif (
+				$data['value'] === 'false'
+				&&
+				(
+					(
+						is_bool($option['right-choice']['value'])
+						&&
+						$option['right-choice']['value'] === false
+					)
+					||
+					(
+						is_bool($option['left-choice']['value'])
+						&&
+						$option['left-choice']['value'] === false
+					)
+				)
+			) {
+				$data['value'] = false;
+			}
+		}
+
 		if ($data['value'] === $option['right-choice']['value']) {
 			// right choice means checked
 			$input_attr['checked'] = 'checked';
