@@ -1,7 +1,7 @@
 /*global fw_typography_v2_fonts, jQuery, _ */
 ( function ($) {
 	$(document).ready(function () {
-		var optionTypeClass = '',
+		var optionTypeClass = '.fw-option-type-typography-v2',
 			googleFonts = JSON.parse(fw_typography_v2_fonts['google']),
 			/**
 			 * [ {'value': 'Font Family', 'text': 'Font Family'} ]
