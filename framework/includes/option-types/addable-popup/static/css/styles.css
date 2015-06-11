@@ -36,3 +36,11 @@
 .fw-option-type-addable-popup .item.default{
 	display: none;
 }
+
+.fw-option-type-addable-popup:not(.is-sortable) .sort-item {
+	display: none;
+}
+
+.fw-option-type-addable-popup:not(.is-sortable) .item .content {
+	padding-left: 15px;
+}

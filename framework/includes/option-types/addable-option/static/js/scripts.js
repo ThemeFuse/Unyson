@@ -8,6 +8,10 @@ jQuery(document).ready(function ($) {
 			// happens when sortable was not initialized before
 		}
 
+		if (!$options.first().closest(optionClass).hasClass('is-sortable')) {
+			return false;
+		}
+
 		var isMobile = $(document.body).hasClass('mobile');
 
 		$options.sortable({

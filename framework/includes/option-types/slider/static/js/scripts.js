@@ -2,8 +2,7 @@
 	var defaults = {
 		onChange: function (data) {
 			var from = (data.from_value) ? data.from_value : data.from;
-			var to = (data.to_value) ? data.to_value : data.to;
-			data.input.next('.fw-irs-range-slider-hidden-input').val(from + ';' + to);
+			data.input.next('.fw-irs-range-slider-hidden-input').val(from);
 			data.input.closest('.fw-option-type-slider').find('span span.irs-slider.single').html(from);
 		},
 		onStart: function (data) {

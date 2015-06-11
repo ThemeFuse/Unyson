@@ -2,7 +2,9 @@
 (function ($) {
 	$(document.body).click(function (e) {
 		if (!$(e.target).is('.fw-option-type-rgba-color-picker, .iris-picker, .iris-picker-inner, .iris-palette, .fw-alpha-container')) {
-			$('.fw-option-type-rgba-color-picker.initialized').iris('hide');
+			try {
+				$('.fw-option-type-rgba-color-picker.initialized').iris('hide');
+			} catch (e) {}
 		}
 	});
 

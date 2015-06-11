@@ -119,7 +119,7 @@ jQuery(function($){
 			 * so use alternative solution http://stackoverflow.com/a/5721762
 			 */
 			{
-				$(this).closest('form').find('input[type="submit"][clicked]').removeAttr('clicked');
+				$(this).closest('form').find('[clicked]:submit').removeAttr('clicked');
 				$(this).attr('clicked', '');
 			}
 
@@ -133,6 +133,23 @@ jQuery(function($){
 	});
 </script>
 <!-- end: reset warning -->
+
+<script type="text/javascript">
+	jQuery(function($){
+		var $form = $('form[data-fw-form-id="fw_settings"]:first'),
+			timeoutId = 0;
+
+		$form.on('change.fw_settings_form_delayed_change', function(){
+			clearTimeout(timeoutId);
+			/**
+			 * Run on timeout to prevent too often trigger (and cpu load) when a bunch of changes will happen at once
+			 */
+			timeoutId = setTimeout(function () {
+				$form.trigger('fw:settings-form:delayed-change');
+			}, 333);
+		});
+	});
+</script>
 
 <?php if ($ajax_submit): ?>
 <!-- ajax submit -->
@@ -279,6 +296,8 @@ jQuery(function($){
 										elements.$form.css('visibility', '');
 									}, 300);
 								}
+
+								elements.$form.trigger('fw:settings-form:reset');
 							}, 300);
 						}, 300);
 					}).fail(function(jqXHR, textStatus, errorThrown){
@@ -293,6 +312,7 @@ jQuery(function($){
 					});
 				} else {
 					fw.soleModal.hide('fw-options-ajax-save-loading');
+					elements.$form.trigger('fw:settings-form:saved');
 				}
 			}
 		});
