@@ -390,6 +390,25 @@ class FW_Option_Type_Checkbox extends FW_Option_Type {
 	 * @internal
 	 */
 	protected function _render( $id, $option, $data ) {
+		if (
+			defined('DOING_AJAX') && DOING_AJAX
+			&&
+			in_array($data['value'], array('false', 'true'))
+		) {
+			/**
+			 * This happens on fw.OptionsModal open/render
+			 * When the checkbox is used by other option types
+			 * then this script http://bit.ly/1QshDoS can't fix nested values
+			 *
+			 * Check if values is 'true' or 'false' then transform/fix it to boolean
+			 */
+			if ($data['value'] === 'true') {
+				$data['value'] = true;
+			} else {
+				$data['value'] = false;
+			}
+		}
+
 		$option['value'] = (bool) $data['value'];
 
 		unset( $option['attr']['value'] );
