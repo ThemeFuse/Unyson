@@ -112,14 +112,11 @@
 					}
 				});
 
-				$option.find('.fw-option-typography-v2-option-family select[data-type="family"]').each(function () {
-					var $select = $(this),
-						value = $select.attr('data-value');
+				{
+					var $fontFamilySelect = $option.find('.fw-option-typography-v2-option-family select[data-type="family"]');
 
-					$select.removeAttr('data-value');
-
-					$select
-						.html(getFontsOptionHTML(value))
+					$fontFamilySelect
+						.html(getFontsOptionHTML($fontFamilySelect.attr('data-value')))
 						.selectize({
 							onChange: function (selected) {
 								var results = $.grep(googleFonts['items'], function (font) {
@@ -190,9 +187,9 @@
 								});
 							},
 							onDropdownOpen: function($dropdown) {
-								var selectize = $select[0].selectize;
+								var selectize = $fontFamilySelect[0].selectize;
 
-								valueOnOpen = selectize.getValue()
+								valueOnOpen = selectize.getValue();
 
 								selectize.clearOptions();
 
@@ -206,7 +203,7 @@
 								selectize.refreshOptions();
 							},
 							onDropdownClose: function($dropdown) {
-								var selectize = $select[0].selectize,
+								var selectize = $fontFamilySelect[0].selectize,
 									value = selectize.getValue();
 
 								if (!value) {
@@ -224,8 +221,10 @@
 							}
 						});
 
-					$select.trigger('selectizeLoaded', [$select[0].selectize]);
-				});
+					$fontFamilySelect.removeAttr('data-value');
+
+					$fontFamilySelect.trigger('selectizeLoaded', [$fontFamilySelect[0].selectize]);
+				}
 			}).addClass('initialized');
 		});
 	});
