@@ -479,16 +479,17 @@ class FW_Option_Type_Checkboxes extends FW_Option_Type {
 		foreach ( $option['choices'] as $value => $text ) {
 			$choice_id = $option['attr']['id'] . '-' . $value;
 
-			$html .= '<div>' .
-			         '<label for="' . esc_attr( $choice_id ) . '">' .
-			         '<input type="checkbox" ' .
-			         'name="' . esc_attr( $option['attr']['name'] ) . '[' . esc_attr( $value ) . ']" ' .
-			         'value="true" ' .
-			         'id="' . esc_attr( $choice_id ) . '" ' .
-			         ( isset( $option['value'][ $value ] ) && $option['value'][ $value ] ? 'checked="checked" ' : '' ) .
-			         '> ' . htmlspecialchars( $text, ENT_COMPAT, 'UTF-8' ) .
-			         '</label>' .
-			         '</div>';
+			$html .=
+			'<div>' .
+				'<label for="' . esc_attr( $choice_id ) . '">' .
+					'<input type="checkbox" ' .
+						'name="' . esc_attr( $option['attr']['name'] ) . '[' . esc_attr( $value ) . ']" ' .
+						'value="true" ' .
+						'id="' . esc_attr( $choice_id ) . '" ' .
+						( isset( $option['value'][ $value ] ) && $option['value'][ $value ] ? 'checked="checked" ' : '' ) .
+						'> ' . htmlspecialchars( $text, ENT_COMPAT, 'UTF-8' ) .
+				'</label>' .
+			'</div>';
 		}
 
 		$html .= '</div>';
@@ -543,7 +544,7 @@ class FW_Option_Type_Checkboxes extends FW_Option_Type {
 				// 'choice_id' => bool
 			),
 			/**
-			 * Don't use boolean keys http://bit.ly/1cQgVzk
+			 * Avoid bool or int keys http://bit.ly/1cQgVzk
 			 */
 			'choices' => array(
 				// 'choice_id' => 'Choice Label'
@@ -594,16 +595,17 @@ class FW_Option_Type_Radio extends FW_Option_Type {
 		foreach ( $option['choices'] as $value => $text ) {
 			$choice_id = $option['attr']['id'] . '-' . $value;
 
-			$html .= '<div>' .
-			         '<label for="' . esc_attr( $choice_id ) . '">' .
-			         '<input type="radio" ' .
-			         'name="' . esc_attr( $option['attr']['name'] ) . '" ' .
-			         'value="' . esc_attr( $value ) . '" ' .
-			         'id="' . esc_attr( $choice_id ) . '" ' .
-			         ( $option['value'] == $value ? 'checked="checked" ' : '' ) .
-			         '> ' . htmlspecialchars( $text, ENT_COMPAT, 'UTF-8' ) .
-			         '</label>' .
-			         '</div>';
+			$html .=
+			'<div>' .
+				'<label for="' . esc_attr( $choice_id ) . '">' .
+					'<input type="radio" ' .
+						'name="' . esc_attr( $option['attr']['name'] ) . '" ' .
+						'value="' . esc_attr( $value ) . '" ' .
+						'id="' . esc_attr( $choice_id ) . '" ' .
+						( $option['value'] == $value ? 'checked="checked" ' : '' ) .
+						'> ' . htmlspecialchars( $text, ENT_COMPAT, 'UTF-8' ) .
+				'</label>' .
+			'</div>';
 		}
 
 		$html .= '</div>';
@@ -650,7 +652,7 @@ class FW_Option_Type_Radio extends FW_Option_Type {
 			'inline'  => false, // Set this parameter to true in case you want all radio inputs to be rendered inline
 			'value'   => '', // 'choice_id'
 			/**
-			 * Don't use boolean keys http://bit.ly/1cQgVzk
+			 * Avoid bool or int keys http://bit.ly/1cQgVzk
 			 */
 			'choices' => array(
 				// 'choice_id' => 'Choice Label'
