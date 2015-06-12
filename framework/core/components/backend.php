@@ -39,6 +39,11 @@ final class _FW_Component_Backend {
 	private $static_registered = false;
 
 	/**
+	 * @var FW_Access_Key
+	 */
+	private $access_key;
+
+	/**
 	 * @internal
 	 */
 	public function _get_settings_page_slug() {
@@ -117,7 +122,15 @@ final class _FW_Component_Backend {
 	/**
 	 * @internal
 	 */
-	public function _after_components_init() {
+	public function _after_components_init() {}
+
+	private function get_access_key()
+	{
+		if (!$this->access_key) {
+			$this->access_key = new FW_Access_Key('fw_backend');
+		}
+
+		return $this->access_key;
 	}
 
 	private function add_actions() {
@@ -181,6 +194,8 @@ final class _FW_Component_Backend {
 			}
 
 			$this->option_types[ $type ] = $option_type_class;
+
+			$this->option_types[ $type ]->_call_init($this->get_access_key());
 		}
 	}
 
