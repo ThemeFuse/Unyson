@@ -1008,8 +1008,7 @@ final class _FW_Component_Backend {
 				 */
 				if ( ! is_bool(
 					fw()->backend->option_type( $option['type'] )->get_value_from_input( $option, true )
-				)
-				) {
+				) ) {
 					continue;
 				}
 

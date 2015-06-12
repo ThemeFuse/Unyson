@@ -136,7 +136,6 @@ class FW_Option_Type_Typography_v2 extends FW_Option_Type {
 	protected function _get_defaults() {
 		return array(
 			'value' => array(
-
 				'google_font'    => false,
 				'subset'         => false,
 				'variation'      => false,
