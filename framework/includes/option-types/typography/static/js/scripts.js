@@ -40,8 +40,7 @@
 				}
 
 				return fontsOptionsHTML[fontFamily];
-			},
-			valueOnOpen = '';
+			};
 
 		fwEvents.on('fw:options:init', function (data) {
 			data.$elements.find(optionTypeClass +':not(.initialized)').each(function(){
@@ -98,12 +97,10 @@
 									.next('.fw-option-typography-option-style')
 									.find('select[data-type="style"]').html(html);
 							},
-							onDropdownOpen: function($dropdown) {
+							onFocus: function() {
 								var selectize = $fontFamilySelect[0].selectize;
-
-								valueOnOpen = selectize.getValue();
-
-								selectize.clearOptions();
+								var selectedValue = selectize.getValue();
+								selectize.removeOption(selectedValue, true);
 
 								_.each(getFontsOptions(), function(option){
 									selectize.addOption({
@@ -112,15 +109,13 @@
 									});
 								});
 
-								selectize.refreshOptions();
+								selectize.setValue(selectedValue, true);
+								selectize.refreshOptions(true);
+
 							},
-							onDropdownClose: function($dropdown) {
+							onBlur: function() {
 								var selectize = $fontFamilySelect[0].selectize,
 									value = selectize.getValue();
-
-								if (!value) {
-									value = valueOnOpen;
-								}
 
 								_.each(getFontsOptions(), function(option){
 									if (value !== option.value) {
@@ -128,14 +123,14 @@
 									}
 								});
 
-								selectize.setValue(value);
 								selectize.refreshOptions(false);
+							},
+							onInitialize: function(){
+								$fontFamilySelect.removeAttr('data-value');
+
+								$fontFamilySelect.trigger('selectizeLoaded', [$fontFamilySelect[0].selectize]);
 							}
 						});
-
-					$fontFamilySelect.removeAttr('data-value');
-
-					$fontFamilySelect.trigger('selectizeLoaded', [$fontFamilySelect[0].selectize]);
 				}
 			}).addClass('initialized');
 		});
