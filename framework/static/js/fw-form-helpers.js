@@ -89,7 +89,7 @@ var fwForm = {
 			var $form = jQuery(this);
 
 			if (!$form.is('form[data-fw-form-id]')) {
-				console.error('This is not a FW_Form');
+				console.error('This is not a FW_Form', 'Selector:'. opts.selector, 'Form:', $form);
 				return;
 			}
 
