@@ -349,13 +349,26 @@ fw.md5 = (function(){
 				return false;
 			}
 
-			if (this.current.state == 'opening') {
-				this.pendingHide = true;
-				return true;
-			}
+			var forceClose = false;
 
-			if (this.current.state != 'open') {
-				return false;
+			if (this.current.state == 'opening') {
+				if (this.current.id == id) {
+					/**
+					 * If the currently opening loading was requested to hide
+					 * hide it immediately, do not wait full open.
+					 * Maybe the script that started the loading was executed so quickly
+					 * so the user don't event need to see the loading.
+					 */
+					// do nothing here, just allow the close script below to be executed
+					forceClose = true;
+				} else {
+					this.pendingHide = true;
+					return true;
+				}
+			} else {
+				if (this.current.state != 'open') {
+					return false;
+				}
 			}
 
 			this.current.state = 'closing';
@@ -382,7 +395,15 @@ fw.md5 = (function(){
 				}, this), 300);
 			}
 
-			this.$getEl().removeClass('opening closed').addClass('closing');
+			if (forceClose) {
+				this.$getEl().fadeOut('fast', _.bind(function(){
+					this.$getEl().removeClass('force-closing').addClass('closed').removeAttr('style');
+				}, this));
+
+				this.$getEl().addClass('force-closing');
+			}
+
+			this.$getEl().removeClass('closed').addClass('closing');
 		}
 	};
 
