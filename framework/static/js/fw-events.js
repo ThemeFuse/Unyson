@@ -47,6 +47,8 @@ var fwEvents = new (function(){
 	 */
 	this.debug = function(enabled) {
 		debug = Boolean(enabled);
+
+		return this;
 	};
 
 	/**
@@ -55,19 +57,19 @@ var fwEvents = new (function(){
 	this.on = function(event, callback, context) {
 		eventsBox.on(event, callback, context);
 
-		if (!debug) {
-			return;
+		if (debug) {
+			if (typeof event == 'string') {
+				// .on('event:name', callback)
+				log('✚ '+ event);
+			} else {
+				// .on({'event:name': callback})
+				_.each(event, function(_callback, _event){
+					log('✚ '+ _event);
+				});
+			}
 		}
 
-		if (typeof event == 'string') {
-			// .on('event:name', callback)
-			log('✚ '+ event);
-		} else {
-			// .on({'event:name': callback})
-			_.each(event, function(_callback, _event){
-				log('✚ '+ _event);
-			});
-		}
+		return this;
 	};
 
 	/**
@@ -76,19 +78,19 @@ var fwEvents = new (function(){
 	this.one = function(event, callback, context) {
 		eventsBox.once(event, callback);
 
-		if (!debug) {
-			return;
+		if (debug) {
+			if (typeof event == 'string') {
+				// .one('event:name', callback)
+				log('✚ ['+ event +']');
+			} else {
+				// .one({'event:name': callback})
+				_.each(event, function(_callback, _event){
+					log('✚ ['+ _event +']');
+				});
+			}
 		}
 
-		if (typeof event == 'string') {
-			// .one('event:name', callback)
-			log('✚ ['+ event +']');
-		} else {
-			// .one({'event:name': callback})
-			_.each(event, function(_callback, _event){
-				log('✚ ['+ _event +']');
-			});
-		}
+		return this;
 	};
 
 	/**
@@ -97,11 +99,11 @@ var fwEvents = new (function(){
 	this.off = function(event, callback, context) {
 		eventsBox.off(event, callback, context);
 
-		if (!debug) {
-			return;
+		if (debug) {
+			log('✖ '+ event);
 		}
 
-		log('✖ '+ event);
+		return this;
 	};
 
 	/**
@@ -129,6 +131,8 @@ var fwEvents = new (function(){
 		changeIndentation(-1);
 
 		log('╰─ '+ event, data);
+
+		return this;
 	};
 
 	/**

@@ -2688,6 +2688,14 @@ a.fw-wp-link:hover {
 	}
 }
 
+.fw-animation-grow-in {
+	-webkit-animation: fwGrowIn .3s ease-in-out;
+	-moz-animation: fwGrowIn .3s ease-in-out;
+	-ms-animation: fwGrowIn .3s ease-in-out;
+	-o-animation: fwGrowIn .3s ease-in-out;
+	animation: fwGrowIn .3s ease-in-out;
+}
+
 /* end: fwGrowIn */
 
 /* fwGrowOut */
@@ -2718,6 +2726,17 @@ a.fw-wp-link:hover {
 		-ms-transform: scale(.7);
 		transform: scale(.7);
 	}
+}
+
+.fw-animation-grow-out {
+	-webkit-animation: fwGrowOut .3s ease-in-out;
+	-moz-animation: fwGrowOut .3s ease-in-out;
+	-ms-animation: fwGrowOut .3s ease-in-out;
+	-o-animation: fwGrowOut .3s ease-in-out;
+	animation: fwGrowOut .3s ease-in-out;
+
+	-webkit-animation-fill-mode: forwards; /* Chrome, Safari, Opera */
+	animation-fill-mode: forwards;
 }
 
 /* end: fwGrowOut */
@@ -2772,6 +2791,66 @@ a.fw-wp-link:hover {
 
 /* end: fadeIn */
 
+/* fwReverseRotate180 */
+
+@-webkit-keyframes fwRotateReverse180 /* Safari and Chrome */ {
+	0% {
+		-ms-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-webkit-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	50% {
+		-ms-transform: rotate(-180deg);
+		-moz-transform: rotate(-180deg);
+		-webkit-transform: rotate(-180deg);
+		-o-transform: rotate(-180deg);
+		transform: rotate(-180deg);
+	}
+	100% {
+		-ms-transform: rotate(-360deg);
+		-moz-transform: rotate(-360deg);
+		-webkit-transform: rotate(-360deg);
+		-o-transform: rotate(-360deg);
+		transform: rotate(-360deg);
+	}
+}
+
+@keyframes fwRotateReverse180 {
+	0% {
+		-ms-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-webkit-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	50% {
+		-ms-transform: rotate(-180deg);
+		-moz-transform: rotate(-180deg);
+		-webkit-transform: rotate(-180deg);
+		-o-transform: rotate(-180deg);
+		transform: rotate(-180deg);
+	}
+	100% {
+		-ms-transform: rotate(-360deg);
+		-moz-transform: rotate(-360deg);
+		-webkit-transform: rotate(-360deg);
+		-o-transform: rotate(-360deg);
+		transform: rotate(-360deg);
+	}
+}
+
+.fw-animation-rotate-reverse-180 {
+	-webkit-animation: fwRotateReverse180 2s ease infinite;
+	-moz-animation: fwRotateReverse180 2s ease infinite;
+	-ms-animation: fwRotateReverse180 2s ease infinite;
+	-o-animation: fwRotateReverse180 2s ease infinite;
+	animation: fwRotateReverse180 2s ease infinite;
+}
+
+/* end: fwReverseRotate180 */
+
 /* end: Animations */
 
 
@@ -2815,20 +2894,11 @@ body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 }
 
 .fw-modal.fw-modal-open > .media-modal > .media-modal-content {
-	animation: fwGrowIn .3s ease-in-out;
-	animation-iteration-count: 1;
-
 	-webkit-animation: fwGrowIn .3s ease-in-out;
-	-webkit-animation-iteration-count: 1;
-
 	-moz-animation: fwGrowIn .3s ease-in-out;
-	-moz-animation-iteration-count: 1;
-
-	-o-animation: fwGrowIn .3s ease-in-out;
-	-o-animation-iteration-count: 1;
-
 	-ms-animation: fwGrowIn .3s ease-in-out;
-	-ms-animation-iteration-count: 1;
+	-o-animation: fwGrowIn .3s ease-in-out;
+	animation: fwGrowIn .3s ease-in-out;
 }
 
 .fw-modal > .media-modal > .media-modal-close {
@@ -2854,20 +2924,11 @@ body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 }
 
 .fw-modal.fw-modal-closing > .media-modal > .media-modal-content {
-	animation: fwGrowOut .3s ease-in-out;
-	animation-iteration-count: 1;
-
 	-webkit-animation: fwGrowOut .3s ease-in-out;
-	-webkit-animation-iteration-count: 1;
-
 	-moz-animation: fwGrowOut .3s ease-in-out;
-	-moz-animation-iteration-count: 1;
-
-	-o-animation: fwGrowOut .3s ease-in-out;
-	-o-animation-iteration-count: 1;
-
 	-ms-animation: fwGrowOut .3s ease-in-out;
-	-ms-animation-iteration-count: 1;
+	-o-animation: fwGrowOut .3s ease-in-out;
+	animation: fwGrowOut .3s ease-in-out;
 
 	-webkit-animation-fill-mode: forwards; /* Chrome, Safari, Opera */
 	animation-fill-mode: forwards;
@@ -3079,3 +3140,38 @@ body.rtl .fw-options-modal .media-frame-content > form .fw-options-tabs-contents
 }
 
 /* end: qtip-fw (x) button */
+
+
+/* fw.loading */
+
+#fw-loading {
+	position: fixed;
+	top: 50px;
+	right: 50px;
+	bottom: 50px;
+	left: 50px;
+	z-index: 9999999;
+	text-align: center;
+}
+
+#fw-loading.opening {
+	-webkit-animation: fwGrowIn .3s ease-in-out;
+	-moz-animation: fwGrowIn .3s ease-in-out;
+	-ms-animation: fwGrowIn .3s ease-in-out;
+	-o-animation: fwGrowIn .3s ease-in-out;
+	animation: fwGrowIn .3s ease-in-out;
+}
+
+#fw-loading.closing {
+	-webkit-animation: fwGrowOut .3s ease-in-out;
+	-moz-animation: fwGrowOut .3s ease-in-out;
+	-ms-animation: fwGrowOut .3s ease-in-out;
+	-o-animation: fwGrowOut .3s ease-in-out;
+	animation: fwGrowOut .3s ease-in-out;
+}
+
+#fw-loading img {
+	opacity: .4;
+}
+
+/* end: fw.loading */

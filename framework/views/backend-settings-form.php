@@ -9,6 +9,31 @@
  */
 ?>
 
+<script type="text/javascript">
+	(function($){
+		var fwLoadingId = 'fw-theme-settings';
+
+		{
+			fw.loading.show(fwLoadingId);
+
+			fwEvents.one('fw:options:init', function(data){
+				fw.loading.hide(fwLoadingId);
+			});
+		}
+
+		$(function($){
+			$(document.body).on({
+				'fw:settings-form:before-html-reset': function(){
+					fw.loading.show(fwLoadingId);
+				},
+				'fw:settings-form:reset': function(){
+					fw.loading.hide(fwLoadingId);
+				}
+			});
+		});
+	})(jQuery);
+</script>
+
 <?php if ($side_tabs): ?>
 	<div class="fw-settings-form-header fw-row" style="opacity:0;">
 		<div class="fw-col-xs-12 fw-col-sm-6">
@@ -51,10 +76,10 @@
 	</div>
 	<script type="text/javascript">
 		jQuery(function($){
-			fwEvents.on("fw:options:init", function(data){
+			fwEvents.one('fw:options:init', function(data){
 				// styles are loaded in footer and are applied after page load
 				data.$elements.find('.fw-settings-form-header').fadeTo('fast', 1, function(){ $(this).css('opacity', ''); });
-			}, 300);
+			});
 		});
 	</script>
 <?php endif; ?>
@@ -264,6 +289,8 @@ jQuery(function($){
 						setTimeout(function(){
 							elements.$form.css('transition', 'opacity ease .3s');
 							elements.$form.css('opacity', '0');
+							elements.$form.trigger('fw:settings-form:before-html-reset');
+
 							setTimeout(function() {
 								var focusTabId = elements.$form.find("input[name='<?php echo esc_js($focus_tab_input_name); ?>']").val();
 								var scrollTop = jQuery(window).scrollTop();
@@ -298,6 +325,8 @@ jQuery(function($){
 								}
 
 								elements.$form.trigger('fw:settings-form:reset');
+
+								fwEvents.trigger('fw:theme-settings-form:html-reset:end');
 							}, 300);
 						}, 300);
 					}).fail(function(jqXHR, textStatus, errorThrown){
