@@ -559,27 +559,27 @@ fw.getQueryString = function(name) {
 };
 
 (function(){
-	/*
-	 * A stack-like structure to manage chains of modals
-	 * (modals that are opened one from another)
-	 */
-	var modalsStack = {
-		_stack: [],
-		push: function(modal) {
-			this._stack.push(modal);
+	var fwLoadingId = 'fw-options-modal',
+		/*
+		 * A stack-like structure to manage chains of modals
+		 * (modals that are opened one from another)
+		 */
+		modalsStack = {
+			_stack: [],
+			push: function(modal) {
+				this._stack.push(modal);
+			},
+			pop: function() {
+				return this._stack.pop();
+			},
+			peek: function() {
+				return this._stack[this._stack.length - 1];
+			},
+			getSize: function() {
+				return this._stack.length;
+			}
 		},
-		pop: function() {
-			return this._stack.pop();
-		},
-		peek: function() {
-			return this._stack[this._stack.length - 1];
-		},
-		getSize: function() {
-			return this._stack.length;
-		}
-	};
-
-	var fwLoadingId = 'fw-options-modal';
+		htmlCache = {};
 
 	var ContentView = Backbone.View.extend({
 		tagName: 'form',
@@ -918,7 +918,19 @@ fw.getQueryString = function(name) {
 
 			this.updateHtml();
 		},
+		getHtmlCacheId: function() {
+			return fw.md5(
+				JSON.stringify(this.get('options')) +'~'+ JSON.stringify(this.get('values'))
+			);
+		},
 		updateHtml: function() {
+			var cacheId = this.getHtmlCacheId();
+
+			if (typeof htmlCache[cacheId] != 'undefined') {
+				this.set('html', htmlCache[cacheId]);
+				return;
+			}
+
 			fw.loading.show(fwLoadingId);
 
 			this.set('html', '');
@@ -946,6 +958,8 @@ fw.getQueryString = function(name) {
 						return;
 					}
 
+					htmlCache[cacheId] = response.data.html;
+
 					modal.set('html', response.data.html);
 				},
 				error: function (xhr, status, error) {
@@ -959,7 +973,6 @@ fw.getQueryString = function(name) {
 		 * Resize .fw-options-tabs-contents to fit entire window
 		 */
 		resizeTabsContent: function () {
-
 			var $content, $frame;
 
 			$content = this.frame.$el.find('.fw-options-tabs-first-level > .fw-options-tabs-contents');
@@ -983,7 +996,6 @@ fw.getQueryString = function(name) {
 			$frame.css('overflow-y', 'hidden');
 		}
 	});
-
 })();
 
 /*!
