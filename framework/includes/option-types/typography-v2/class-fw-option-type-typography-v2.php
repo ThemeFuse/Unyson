@@ -94,24 +94,42 @@ class FW_Option_Type_Typography_v2 extends FW_Option_Type {
 	 * @internal
 	 */
 	protected function _get_value_from_input( $option, $input_value ) {
-		if ( ! is_array( $input_value ) ) {
-			return $option['value'];
-		}
+
 		$default = $this->get_defaults();
-		$values  = array_merge( $default['value'], $option['value'], $input_value );
+		$values  = array_merge( $default['value'], $option['value'], is_array($input_value) ? $input_value : array());
 
 		if ( ! preg_match( '/^#[a-f0-9]{6}$/i', $values['color'] ) ) {
-			$values = ( isset( $option['value']['color'] ) ) ? $option['value']['color'] : $default['color'];
+			$values = ( isset( $option['value']['color'] ) ) ? $option['value']['color'] : $default['value']['color'];
 		}
 
-		if ( $this->get_google_font( $values['family'] ) ) {
-			$values['google_font'] = true;
-			$values['style']       = false;
-			$values['weight']      = false;
+		$components = array_merge( $default['components'], $option['components'] );
+		foreach ( $components as $component => $enabled ) {
+			if ( ! $enabled ) {
+				$values[ $component ] = false;
+			}
+		}
+
+		if ( $values['family'] === false ) {
+			$values = array_merge( $values, array(
+				'google_font' => false,
+				'style'       => false,
+				'weight'      => false,
+				'subset'      => false,
+				'variation'   => false
+			) );
+		} elseif ( $this->get_google_font( $values['family'] ) ) {
+			$values = array_merge( $values, array(
+				'google_font' => true,
+				'style'       => false,
+				'weight'      => false
+			) );
 		} else {
-			$values['google_font'] = false;
-			$values['subset']      = false;
-			$values['variation']   = false;
+			$values = array_merge( $values, array(
+				'google_font' => false,
+				'subset'      => false,
+				'variation'   => false
+
+			) );
 		}
 
 		return $values;
@@ -146,6 +164,13 @@ class FW_Option_Type_Typography_v2 extends FW_Option_Type {
 				'line-height'    => 15,
 				'letter-spacing' => - 1,
 				'color'          => '#000000'
+			),
+			'components' => array(
+				'family'         => true,
+				'size'           => true,
+				'line-height'    => true,
+				'letter-spacing' => true,
+				'color'          => true
 			)
 		);
 	}
