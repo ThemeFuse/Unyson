@@ -74,6 +74,17 @@
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+		(function($){
+			$('.fw-settings-form-header').css('opacity', '0');
+
+			jQuery(function($){
+				fwEvents.one('fw:options:init', function(data){
+					$('.fw-settings-form-header').fadeTo(300, 1, function(){ $(this).css('opacity', ''); });
+				});
+			});
+		})(jQuery);
+	</script>
 <?php endif; ?>
 
 <?php echo fw()->backend->render_options($options, $values); ?>
