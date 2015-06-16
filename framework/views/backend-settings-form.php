@@ -325,8 +325,6 @@ jQuery(function($){
 								}
 
 								elements.$form.trigger('fw:settings-form:reset');
-
-								fwEvents.trigger('fw:theme-settings-form:html-reset:end');
 							}, 300);
 						}, 300);
 					}).fail(function(jqXHR, textStatus, errorThrown){
