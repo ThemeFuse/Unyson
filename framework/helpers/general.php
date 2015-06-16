@@ -728,6 +728,48 @@ function fw_collect_first_level_options(&$collected, &$options) {
 }
 
 /**
+ * Removes all empty containers from array of options
+ *
+ * @param array $options
+ *
+ * @return array
+ */
+function fw_get_clean_options( $options ) {
+
+	if ( empty( $options ) || ! is_array( $options ) ) {
+		return $options;
+	}
+
+	$containers = array( 'box', 'tab', 'group' ); //TODO: update if will be added/removed container options types
+
+	foreach ( $options as $key => &$option ) {
+		if ( is_int( $key ) && is_array( $option ) && isset( $options[0] ) ) {
+			$option = fw_get_clean_options( $option );
+			continue;
+		}
+
+		if ( !isset( $option['type'] )
+		     || ! in_array( $option['type'], $containers )
+		) {
+			continue;
+		}
+
+		if ( ! isset( $option['options'] ) ) {
+			unset( $options[$key] );
+			continue;
+		}
+
+		$option['options'] = fw_get_clean_options( $option['options'] );
+
+		if ( empty( $option['options'] ) ) {
+			unset( $options[$key] );
+		}
+	}
+
+	return $options;
+}
+
+/**
  * Get correct values from input (POST) for given options
  * This values can be saved in db then replaced with $option['value'] for each option
  * @param array $options

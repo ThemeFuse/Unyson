@@ -526,7 +526,7 @@ final class _FW_Component_Backend {
 	 * @param WP_Post $post
 	 */
 	public function _action_create_post_meta_boxes( $post_type, $post ) {
-		$options = fw()->theme->get_post_options( $post_type );
+		$options = fw_get_clean_options( fw()->theme->get_post_options( $post_type ) );
 
 		if ( empty( $options ) ) {
 			return;
@@ -1212,6 +1212,7 @@ final class _FW_Component_Backend {
 		}
 
 		$collected = array();
+		$options = fw_get_clean_options( $options );
 		fw_collect_first_level_options( $collected, $options );
 
 		if ( empty( $collected['all'] ) ) {
