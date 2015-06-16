@@ -3168,6 +3168,9 @@ body.rtl .fw-options-modal .media-frame-content > form .fw-options-tabs-contents
 	-ms-animation: fwGrowOut .3s ease-in-out;
 	-o-animation: fwGrowOut .3s ease-in-out;
 	animation: fwGrowOut .3s ease-in-out;
+
+	-webkit-animation-fill-mode: forwards; /* Chrome, Safari, Opera */
+	animation-fill-mode: forwards;
 }
 
 #fw-loading img {
