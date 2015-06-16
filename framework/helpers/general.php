@@ -728,6 +728,120 @@ function fw_collect_first_level_options(&$collected, &$options) {
 }
 
 /**
+ * @param array $result
+ * @param array $options
+ * @param array $settings
+ */
+function fw_collect_options(&$result, &$options, $settings = array()) {
+	if (empty($options)) {
+		return;
+	}
+
+	if (empty($settings)) {
+		$settings = array(
+			/**
+			 * @type int Nested options level limit. For e.g. use 1 to collect only first level. -1 is for unlimited.
+			 */
+			'level_limit' => -1,
+			/**
+			 * @type bool Wrap the result/collected options in array will useful info
+			 *
+			 * If true:
+			 * $result = array(
+			 *   'id' => array(
+			 *      'level' => int, // from which nested level this option is
+			 *      'order' => int, //
+			 *      'type' => 'container|option',
+			 *      'option' => array(...),
+			 *   )
+			 * )
+			 *
+			 * If false:
+			 * $result = array(
+			 *   'id' => array(...)
+			 * )
+			 */
+			'info_wrapper' => false,
+		);
+	}
+
+	// fixme: below is not working code
+
+	if (empty($result)) {
+		$result['containers'] = // array('id' => array(...))
+		$result['options'] =    // array('id' => array(...))
+		$result['all'] =        // array('id' => array(...))
+		$result['order'] =      // array('id' => (int)increment)
+			array();
+	}
+
+	foreach ($options as $option_id => &$option) {
+		if (isset($option['options'])) { // this is a container
+			if (empty($result['containers'][ $option['type'] ])) {
+				$result['containers'][ $option['type'] ] = array();
+			}
+
+			$result['containers'][ $option['type'] ] =& $option;
+
+			$result['all'][ $option['type'] .':~:'. $option_id ] = array(
+				'type'   => $option['type'],
+				'id'     => $option_id,
+				'option' => &$option,
+			);
+		} elseif (
+			is_int($option_id)
+			&&
+			is_array($option)
+			&&
+			/**
+			 * make sure the array key was generated automatically
+			 * and it's not an associative array with numeric keys created like this: $options[1] = array();
+			 */
+			isset($options[0])
+		) {
+			/**
+			 * Array "without key" containing options.
+			 *
+			 * This happens when options are returned into array from a function:
+			 * $options = array(
+			 *  'foo' => array('type' => 'text'),
+			 *  'bar' => array('type' => 'textarea'),
+			 *
+			 *  // this is our case
+			 *  // go inside this array and extract the options as they are on the same array level
+			 *  array(
+			 *      'hello' => array('type' => 'text'),
+			 *  ),
+			 *
+			 *  // there can be any nested arrays
+			 *  array(
+			 *      array(
+			 *          array(
+			 *              'h1' => array('type' => 'text'),
+			 *          ),
+			 *      ),
+			 *  ),
+			 * )
+			 */
+			fw_collect_first_level_options($result, $option);
+		} elseif (isset($option['type'])) {
+			// simple option, last possible level in options array
+			$result['options'][$option_id] =& $option;
+			$result['groups_and_options'][$option_id] =& $option;
+
+			$result['all'][ 'option' .':~:'. $option_id ] = array(
+				'type'   => 'option',
+				'id'     => $option_id,
+				'option' => &$option,
+			);
+		} else {
+			trigger_error('Invalid option: '. $option_id, E_USER_WARNING);
+		}
+	}
+	unset($option);
+}
+
+/**
  * Removes all empty containers from array of options
  *
  * @param array $options
