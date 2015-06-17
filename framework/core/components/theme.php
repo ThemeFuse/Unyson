@@ -156,7 +156,7 @@ final class _FW_Component_Theme
 				/** Toggle Theme Settings form ajax submit */
 				'settings_form_ajax_submit' => true,
 				/** Toggle Theme Settings side tabs */
-				'settings_form_side_tabs' => false,
+				'settings_form_side_tabs' => true,
 			);
 
 			if (file_exists(fw_get_template_customizations_directory('/theme/config.php'))) {

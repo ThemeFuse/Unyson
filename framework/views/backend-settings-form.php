@@ -75,15 +75,11 @@
 		</div>
 	</div>
 	<script type="text/javascript">
-		(function($){
-			$('.fw-settings-form-header').css('opacity', '0');
-
-			jQuery(function($){
-				fwEvents.one('fw:options:init', function(data){
-					$('.fw-settings-form-header').fadeTo(300, 1, function(){ $(this).css('opacity', ''); });
-				});
+		jQuery(function($){
+			fwEvents.on('fw:options:init', function(data){
+				data.$elements.find('.fw-settings-form-header:not(.initialized)').addClass('initialized');
 			});
-		})(jQuery);
+		});
 	</script>
 <?php endif; ?>
 
