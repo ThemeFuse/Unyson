@@ -158,6 +158,7 @@
 			$sub_keys,
 			/**
 			 * Old post option(s) value
+			 * @since 2.3.3
 			 */
 			$old_value
 		);
