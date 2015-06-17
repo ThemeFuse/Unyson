@@ -1227,8 +1227,6 @@ final class _FW_Component_Backend {
 			$option['id'] => &$option['option']
 		);
 
-		fw_print($collected);
-
 		while ( $collected_type_options ) {
 			$option = next( $collected['all'] );
 
