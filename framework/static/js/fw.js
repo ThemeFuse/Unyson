@@ -248,7 +248,7 @@ fw.md5 = (function(){
 								' width="30"'+
 								' class="fw-animation-rotate-reverse-180"'+
 								' alt="Loading"' +
-								' onerror="this.onerror=null; this.src=\''+ fw.FW_URI +'/static/img/logo-100.png\';" '+
+								' onerror="this.onerror=null; this.src=\''+ fw.FW_URI +'/static/img/logo-100.png\';"'+
 								' />'+
 						'</td></tr></tbody></table>'+
 					'</div>'
