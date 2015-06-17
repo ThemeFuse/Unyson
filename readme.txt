@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.2
-Stable tag: 2.3.2
+Stable tag: 2.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -81,6 +81,23 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.3.3 =
+* Fixed [#628](https://github.com/ThemeFuse/Unyson/issues/628), [#649](https://github.com/ThemeFuse/Unyson/issues/649), [#637](https://github.com/ThemeFuse/Unyson/issues/637), [#358](https://github.com/ThemeFuse/Unyson/issues/358)
+* Added option type `typography-v2`
+* Option type `addable-option`, `addable-box` and `addable-popup`: Added the `add-button-text` and `sortable` parameters [#631](https://github.com/ThemeFuse/Unyson/issues/631)
+* Optimized option type `typography` fonts select (now it loads faster)
+* Extension download improvement: Fetch only [the latest release](https://developer.github.com/v3/repos/releases/#get-the-latest-release) instead of [all releases](https://developer.github.com/v3/repos/releases/#list-releases-for-a-repository)
+* Improved the `fw.loading` js helper. Changed the loading image.
+* Option type `range-slider`: fixed bug with default value
+* Option type `checkbox` and `switch`: Fix boolean values when the option is used in options modal inside other options
+* Call `FW_Option_Type::_init()` after the option type has been registered
+* `fw.OptionsModal`: Added html cache [#](https://github.com/ThemeFuse/Unyson/issues/675#issuecomment-112555557)
+* Added `$old_value` parameter in `'fw_post_options_update'` action
+* Added the `fw_get_image_sizes()` function
+* Enabled the `colorpicker` and `textcolor` plugins for the `wp-editor` option type
+* Option type `background-image` and `multi-picker`: minor css fixes
+* Updated `selectize.js` to `0.12.1`
 
 = 2.3.2 =
 * Added option-type `unique` to make possible [this](http://manual.unyson.io/en/latest/extension/shortcodes/index.html#enqueue-shortcode-dynamic-css-in-page-head)
