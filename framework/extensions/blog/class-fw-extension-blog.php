@@ -33,8 +33,6 @@ class FW_Extension_Blog extends FW_Extension {
 			return;
 		}
 
-		$wp_post_types[ $p ]->has_archive = true;
-
 		$wp_post_types[ $p ]->labels->name               = __( 'Blog', 'fw' );
 		$wp_post_types[ $p ]->labels->singular_name      = __( 'Blog', 'fw' );
 		$wp_post_types[ $p ]->labels->add_new            = __( 'Add blog post', 'fw' );

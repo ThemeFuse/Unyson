@@ -247,7 +247,9 @@ fw.md5 = (function(){
 							'<img src="'+ fw.img.logoSvg +'"'+
 								' width="30"'+
 								' class="fw-animation-rotate-reverse-180"'+
-								' alt="Loading" />'+
+								' alt="Loading"' +
+								' onerror="this.onerror=null; this.src=\''+ fw.FW_URI +'/static/img/logo-100.png\';"'+
+								' />'+
 						'</td></tr></tbody></table>'+
 					'</div>'
 				);
@@ -349,13 +351,26 @@ fw.md5 = (function(){
 				return false;
 			}
 
-			if (this.current.state == 'opening') {
-				this.pendingHide = true;
-				return true;
-			}
+			var forceClose = false;
 
-			if (this.current.state != 'open') {
-				return false;
+			if (this.current.state == 'opening') {
+				if (this.current.id == id) {
+					/**
+					 * If the currently opening loading was requested to hide
+					 * hide it immediately, do not wait full open.
+					 * Maybe the script that started the loading was executed so quickly
+					 * so the user don't event need to see the loading.
+					 */
+					// do nothing here, just allow the close script below to be executed
+					forceClose = true;
+				} else {
+					this.pendingHide = true;
+					return true;
+				}
+			} else {
+				if (this.current.state != 'open') {
+					return false;
+				}
 			}
 
 			this.current.state = 'closing';
@@ -382,7 +397,15 @@ fw.md5 = (function(){
 				}, this), 300);
 			}
 
-			this.$getEl().removeClass('opening closed').addClass('closing');
+			if (forceClose) {
+				this.$getEl().fadeOut('fast', _.bind(function(){
+					this.$getEl().removeClass('force-closing').addClass('closed').removeAttr('style');
+				}, this));
+
+				this.$getEl().addClass('force-closing');
+			}
+
+			this.$getEl().removeClass('closed').addClass('closing');
 		}
 	};
 
@@ -538,27 +561,27 @@ fw.getQueryString = function(name) {
 };
 
 (function(){
-	/*
-	 * A stack-like structure to manage chains of modals
-	 * (modals that are opened one from another)
-	 */
-	var modalsStack = {
-		_stack: [],
-		push: function(modal) {
-			this._stack.push(modal);
+	var fwLoadingId = 'fw-options-modal',
+		/*
+		 * A stack-like structure to manage chains of modals
+		 * (modals that are opened one from another)
+		 */
+		modalsStack = {
+			_stack: [],
+			push: function(modal) {
+				this._stack.push(modal);
+			},
+			pop: function() {
+				return this._stack.pop();
+			},
+			peek: function() {
+				return this._stack[this._stack.length - 1];
+			},
+			getSize: function() {
+				return this._stack.length;
+			}
 		},
-		pop: function() {
-			return this._stack.pop();
-		},
-		peek: function() {
-			return this._stack[this._stack.length - 1];
-		},
-		getSize: function() {
-			return this._stack.length;
-		}
-	};
-
-	var fwLoadingId = 'fw-options-modal';
+		htmlCache = {};
 
 	var ContentView = Backbone.View.extend({
 		tagName: 'form',
@@ -897,7 +920,19 @@ fw.getQueryString = function(name) {
 
 			this.updateHtml();
 		},
+		getHtmlCacheId: function() {
+			return fw.md5(
+				JSON.stringify(this.get('options')) +'~'+ JSON.stringify(this.get('values'))
+			);
+		},
 		updateHtml: function() {
+			var cacheId = this.getHtmlCacheId();
+
+			if (typeof htmlCache[cacheId] != 'undefined') {
+				this.set('html', htmlCache[cacheId]);
+				return;
+			}
+
 			fw.loading.show(fwLoadingId);
 
 			this.set('html', '');
@@ -925,6 +960,8 @@ fw.getQueryString = function(name) {
 						return;
 					}
 
+					htmlCache[cacheId] = response.data.html;
+
 					modal.set('html', response.data.html);
 				},
 				error: function (xhr, status, error) {
@@ -938,7 +975,6 @@ fw.getQueryString = function(name) {
 		 * Resize .fw-options-tabs-contents to fit entire window
 		 */
 		resizeTabsContent: function () {
-
 			var $content, $frame;
 
 			$content = this.frame.$el.find('.fw-options-tabs-first-level > .fw-options-tabs-contents');
@@ -962,7 +998,6 @@ fw.getQueryString = function(name) {
 			$frame.css('overflow-y', 'hidden');
 		}
 	});
-
 })();
 
 /*!

@@ -118,6 +118,8 @@
 			}
 		}
 
+		$old_value = fw_get_db_post_option($post_id, $option_id);
+
 		$sub_keys = explode('/', $option_id);
 		$base_key = array_shift($sub_keys);
 
@@ -153,7 +155,12 @@
 			 * if $option_id is 'hello'
 			 * $option_id_keys will be array()
 			 */
-			$sub_keys
+			$sub_keys,
+			/**
+			 * Old post option(s) value
+			 * @since 2.3.3
+			 */
+			$old_value
 		);
 	}
 }

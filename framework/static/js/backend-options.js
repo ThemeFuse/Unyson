@@ -36,7 +36,6 @@ jQuery(document).ready(function($){
 		 * (fork from /wp-admin/js/postbox.js)
 		 */
 		function addPostboxToggles($boxes) {
-
 			/** Remove events added by /wp-admin/js/postbox.js */
 			$boxes.find('h3, .handlediv').off('click.postboxes');
 
@@ -85,7 +84,6 @@ jQuery(document).ready(function($){
 
 		if ($elements.length) {
 			$elements.tabs();
-			$elements.addClass('fw-option-initialized');
 
 			$elements.each(function(){
 				var $this = $(this);
@@ -95,6 +93,8 @@ jQuery(document).ready(function($){
 					$this.addClass('fw-options-tabs-first-level');
 				}
 			});
+
+			$elements.addClass('fw-option-initialized');
 		}
 	});
 
@@ -102,18 +102,20 @@ jQuery(document).ready(function($){
 	fwEvents.on('fw:options:init', function (data) {
 		var $boxes = data.$elements.find('.fw-postbox:not(.fw-postbox-initialized)');
 
-		/**
-		 * leave open only first boxes
-		 */
-		$boxes.filter('.fw-backend-postboxes > .fw-postbox:not(:first-child):not(.prevent-auto-close)').addClass('closed');
-
-		$boxes.addClass('fw-postbox-initialized');
-
 		hideBoxEmptyTitles(
 			$boxes.filter('.fw-backend-postboxes > .fw-postbox')
 		);
 
 		addPostboxToggles($boxes);
+
+		/**
+		 * leave open only first boxes
+		 */
+		$boxes
+			.filter('.fw-backend-postboxes > .fw-postbox:not(.fw-postbox-without-name):not(:first-child):not(.prevent-auto-close)')
+			.addClass('closed');
+
+		$boxes.addClass('fw-postbox-initialized');
 
 		// trigger on box custom event for others to do something after box initialized
 		$boxes.trigger('fw-options-box:initialized');

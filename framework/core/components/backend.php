@@ -526,7 +526,7 @@ final class _FW_Component_Backend {
 	 * @param WP_Post $post
 	 */
 	public function _action_create_post_meta_boxes( $post_type, $post ) {
-		$options = fw_get_clean_options( fw()->theme->get_post_options( $post_type ) );
+		$options = fw()->theme->get_post_options( $post_type );
 
 		if ( empty( $options ) ) {
 			return;
@@ -549,6 +549,10 @@ final class _FW_Component_Backend {
 		$values = fw_get_db_post_option( $post->ID );
 
 		foreach ( $boxes as $id => &$box ) {
+			if (empty($box['options'])) {
+				continue;
+			}
+
 			$context  = isset( $box['context'] ) ? $box['context'] : 'normal';
 			$priority = isset( $box['priority'] ) ? $box['priority'] : 'default';
 
@@ -1212,7 +1216,6 @@ final class _FW_Component_Backend {
 		}
 
 		$collected = array();
-		$options = fw_get_clean_options( $options );
 		fw_collect_first_level_options( $collected, $options );
 
 		if ( empty( $collected['all'] ) ) {
@@ -1247,9 +1250,13 @@ final class _FW_Component_Backend {
 					) );
 					break;
 				case 'box':
-					$html .= '<div class="fw-backend-postboxes metabox-holder">';
+					$boxes_html = '';
 
 					foreach ( $collected_type_options as $id => &$box ) {
+						if (empty($box['options'])) {
+							continue;
+						}
+
 						// prepare attributes
 						{
 							$attr = isset( $box['attr'] ) ? $box['attr'] : array();
@@ -1257,7 +1264,7 @@ final class _FW_Component_Backend {
 							unset( $attr['id'] ); // do not allow id overwrite, it is sent in first argument of render_box()
 						}
 
-						$html .= $this->render_box(
+						$boxes_html .= $this->render_box(
 							'fw-options-box-' . $id,
 							empty( $box['title'] ) ? ' ' : $box['title'],
 							$this->render_options( $box['options'], $values, $options_data ),
@@ -1268,7 +1275,13 @@ final class _FW_Component_Backend {
 					}
 					unset($box);
 
-					$html .= '</div>';
+					if (!empty($boxes_html)) {
+						$html .= '<div class="fw-backend-postboxes metabox-holder">';
+						$html .= $boxes_html;
+						$html .= '</div>';
+					}
+
+					unset($boxes_html);
 					break;
 				case 'group':
 					foreach ( $collected_type_options as $id => &$group ) {

@@ -35,7 +35,7 @@
 </script>
 
 <?php if ($side_tabs): ?>
-	<div class="fw-settings-form-header fw-row" style="opacity:0;">
+	<div class="fw-settings-form-header fw-row">
 		<div class="fw-col-xs-12 fw-col-sm-6">
 			<h2><?php echo fw()->theme->manifest->get_name() ?>
 				<?php if (fw()->theme->manifest->get('author')): ?>
@@ -76,9 +76,8 @@
 	</div>
 	<script type="text/javascript">
 		jQuery(function($){
-			fwEvents.one('fw:options:init', function(data){
-				// styles are loaded in footer and are applied after page load
-				data.$elements.find('.fw-settings-form-header').fadeTo('fast', 1, function(){ $(this).css('opacity', ''); });
+			fwEvents.on('fw:options:init', function(data){
+				data.$elements.find('.fw-settings-form-header:not(.initialized)').addClass('initialized');
 			});
 		});
 	</script>

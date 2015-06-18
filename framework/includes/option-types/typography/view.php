@@ -25,7 +25,7 @@
 		'color'  => '#000000',
 	), (array)$option['value']);
 
-	$data['value'] = array_merge($option['value'], array_filter((array)$data['value']));
+	$data['value'] = array_merge($option['value'], is_array($data['value']) ? $data['value'] : array());
 }
 ?>
 <div <?php echo fw_attr_to_html($wrapper_attr) ?>>

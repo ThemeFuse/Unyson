@@ -21,7 +21,7 @@
 
 {
 	$option['value'] = array_merge( $defaults['value'], (array) $option['value'] );
-	$data['value']   = array_merge( $option['value'], array_filter( (array) $data['value'] ) );
+	$data['value']   = array_merge( $option['value'], is_array($data['value']) ? $data['value'] : array() );
 	$google_font     = $typography_v2->get_google_font( $data['value']['family'] );
 
 }

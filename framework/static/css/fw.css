@@ -3173,6 +3173,10 @@ body.rtl .fw-options-modal .media-frame-content > form .fw-options-tabs-contents
 	animation-fill-mode: forwards;
 }
 
+#fw-loading.closed {
+	display: none;
+}
+
 #fw-loading img {
 	opacity: .4;
 }
