@@ -785,6 +785,7 @@ function fw_collect_options(&$result, &$options, $settings = array(), $_recursio
 		$_recursion_data = array(
 			'level' => 1,
 			'access_key' => $access_key,
+			// todo: maybe add 'parent' => array('id' => '{id}', 'type' => 'container|option') ?
 		);
 	} elseif (
 		!isset($_recursion_data['access_key'])
