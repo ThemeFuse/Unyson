@@ -1,6 +1,7 @@
 #!/bin/bash
-# requirements: subversion, phpunit
+# Run the tests on your local machine
 
+# requirements: subversion, phpunit
 command -v svn >/dev/null 2>&1 || { echo >&2 "subversion is not installed. Aborting."; exit 1; }
 command -v phpunit >/dev/null 2>&1 || { echo >&2 "phpunit is not installed. Aborting."; exit 1; }
 
