@@ -731,62 +731,107 @@ function fw_collect_first_level_options(&$collected, &$options) {
  * @param array $result
  * @param array $options
  * @param array $settings
+ * @param array $_recursion_data (private) for internal use
  */
-function fw_collect_options(&$result, &$options, $settings = array()) {
+function fw_collect_options(&$result, &$options, $settings = array(), $_recursion_data = array()) {
+	static $default_settings = array(
+		/**
+		 * @type bool Wrap the result/collected options in arrays will useful info
+		 *
+		 * If true:
+		 * $result = array(
+		 *   '(container|option):{id}' => array(
+		 *      'id' => '{id}',
+		 *      'level' => int, // from which nested level this option is
+		 *      'type' => 'container|option',
+		 *      'option' => array(...),
+		 *   )
+		 * )
+		 *
+		 * If false:
+		 * $result = array(
+		 *   '{id}' => array(...),
+		 *   // Warning: There can be options and containers with the same id (array key will be replaced)
+		 * )
+		 */
+		'info_wrapper' => false,
+		/**
+		 * @type int Nested options level limit. For e.g. use 1 to collect only first level. 0 is for unlimited.
+		 */
+		'limit_level' => 0,
+		/**
+		 * @type false|array('option-type', ...) Empty array will skip all types
+		 */
+		'limit_option_types' => false,
+		/**
+		 * @type false|array('container-type', ...) Empty array will skip all types
+		 */
+		'limit_container_types' => array(),
+	);
+
+	static $access_key = null;
+
+	if (is_null($access_key)) {
+		$access_key = new FW_Access_Key('fw_collect_options');
+	}
+
 	if (empty($options)) {
 		return;
 	}
 
-	if (empty($settings)) {
-		$settings = array(
-			/**
-			 * @type int Nested options level limit. For e.g. use 1 to collect only first level. -1 is for unlimited.
-			 */
-			'level_limit' => -1,
-			/**
-			 * @type bool Wrap the result/collected options in array will useful info
-			 *
-			 * If true:
-			 * $result = array(
-			 *   'id' => array(
-			 *      'level' => int, // from which nested level this option is
-			 *      'order' => int, //
-			 *      'type' => 'container|option',
-			 *      'option' => array(...),
-			 *   )
-			 * )
-			 *
-			 * If false:
-			 * $result = array(
-			 *   'id' => array(...)
-			 * )
-			 */
-			'info_wrapper' => false,
+	$settings = array_merge($default_settings, $settings);
+
+	if (empty($_recursion_data)) {
+		$_recursion_data = array(
+			'level' => 1,
+			'access_key' => $access_key,
 		);
+	} elseif (
+		!isset($_recursion_data['access_key'])
+		||
+		!($_recursion_data['access_key'] instanceof FW_Access_Key)
+		||
+		!($_recursion_data['access_key']->get_key() === 'fw_collect_options')
+	) {
+		trigger_error('Call not allowed', E_USER_ERROR);
 	}
 
-	// fixme: below is not working code
-
-	if (empty($result)) {
-		$result['containers'] = // array('id' => array(...))
-		$result['options'] =    // array('id' => array(...))
-		$result['all'] =        // array('id' => array(...))
-		$result['order'] =      // array('id' => (int)increment)
-			array();
+	if (
+		$settings['limit_level']
+		&&
+		$_recursion_data['level'] > $settings['limit_level']
+	) {
+		return;
 	}
 
 	foreach ($options as $option_id => &$option) {
 		if (isset($option['options'])) { // this is a container
-			if (empty($result['containers'][ $option['type'] ])) {
-				$result['containers'][ $option['type'] ] = array();
-			}
+			do {
+				if (
+					is_array($settings['limit_container_types'])
+					&&
+					!in_array($option['type'], $settings['limit_container_types'])
+				) {
+					break;
+				}
 
-			$result['containers'][ $option['type'] ] =& $option;
+				if ($settings['info_wrapper']) {
+					$result['container:'. $option_id] = array(
+						'type'   => 'container',
+						'id'     => $option_id,
+						'option' => &$option,
+						'level'  => $_recursion_data['level'],
+					);
+				} else {
+					$result[$option_id] = &$option;
+				}
+			} while(false);
 
-			$result['all'][ $option['type'] .':~:'. $option_id ] = array(
-				'type'   => $option['type'],
-				'id'     => $option_id,
-				'option' => &$option,
+			fw_collect_options(
+				$result,
+				$option['options'],
+				$settings,
+				array_merge($_recursion_data, array('level' => $_recursion_data['level'] + 1))
 			);
 		} elseif (
 			is_int($option_id)
@@ -823,22 +868,30 @@ function fw_collect_options(&$result, &$options, $settings = array()) {
 			 *  ),
 			 * )
 			 */
-			fw_collect_first_level_options($result, $option);
-		} elseif (isset($option['type'])) {
-			// simple option, last possible level in options array
-			$result['options'][$option_id] =& $option;
-			$result['groups_and_options'][$option_id] =& $option;
+			fw_collect_options($result, $option, $settings, $_recursion_data);
+		} elseif (isset($option['type'])) { // option
+			if (
+				is_array($settings['limit_option_types'])
+				&&
+				!in_array($option['type'], $settings['limit_option_types'])
+			) {
+				continue;
+			}
 
-			$result['all'][ 'option' .':~:'. $option_id ] = array(
-				'type'   => 'option',
-				'id'     => $option_id,
-				'option' => &$option,
-			);
+			if ($settings['info_wrapper']) {
+				$result['option:'. $option_id] = array(
+					'type'   => 'option',
+					'id'     => $option_id,
+					'option' => &$option,
+					'level'  => $_recursion_data['level'],
+				);
+			} else {
+				$result[$option_id] = &$option;
+			}
 		} else {
 			trigger_error('Invalid option: '. $option_id, E_USER_WARNING);
 		}
 	}
-	unset($option);
 }
 
 /**
