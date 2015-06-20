@@ -11,6 +11,17 @@ Included on pages where backend options are rendered
 	position: relative;
 }
 
+.fw-backend-option {
+	opacity: 0;
+
+	transition: opacity ease 0.3s;
+	-webkit-transition: opacity ease 0.3s;
+}
+
+.fw-backend-option.initialized {
+	opacity: 1;
+}
+
 .fw-backend-option .fw-backend-option-input input[type="text"],
 .fw-backend-option .fw-backend-option-input input[type="password"],
 .fw-backend-option .fw-backend-option-input select,
@@ -213,7 +224,7 @@ body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-
 	-webkit-transition: opacity ease 0.3s;
 }
 
-.fw-postbox.fw-postbox-initialized {
+.fw-postbox.initialized {
 	opacity: 1;
 }
 
@@ -696,7 +707,7 @@ form#post .fw-options-tabs-wrapper > .fw-options-tabs-contents .fw-backend-postb
 	cursor: pointer !important; /* to rewrite .js .postbox .hndle */
 }
 
-.fw-postbox:not(.fw-postbox-initialized) h3.hndle {
+.fw-postbox:not(.initialized) h3.hndle {
 	display: none;
 }
 
