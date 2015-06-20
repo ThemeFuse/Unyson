@@ -80,7 +80,7 @@ jQuery(document).ready(function($){
 
 	/** Init tabs */
 	fwEvents.on('fw:options:init', function (data) {
-		var $elements = data.$elements.find('.fw-options-tabs-wrapper:not(.fw-option-initialized)');
+		var $elements = data.$elements.find('.fw-options-tabs-wrapper:not(.initialized)');
 
 		if ($elements.length) {
 			$elements.tabs();
@@ -94,13 +94,13 @@ jQuery(document).ready(function($){
 				}
 			});
 
-			$elements.addClass('fw-option-initialized');
+			$elements.addClass('initialized');
 		}
 	});
 
 	/** Init boxes */
 	fwEvents.on('fw:options:init', function (data) {
-		var $boxes = data.$elements.find('.fw-postbox:not(.fw-postbox-initialized)');
+		var $boxes = data.$elements.find('.fw-postbox:not(.initialized)');
 
 		hideBoxEmptyTitles(
 			$boxes.filter('.fw-backend-postboxes > .fw-postbox')
@@ -115,10 +115,17 @@ jQuery(document).ready(function($){
 			.filter('.fw-backend-postboxes > .fw-postbox:not(.fw-postbox-without-name):not(:first-child):not(.prevent-auto-close)')
 			.addClass('closed');
 
-		$boxes.addClass('fw-postbox-initialized');
+		$boxes.addClass('initialized');
 
 		// trigger on box custom event for others to do something after box initialized
 		$boxes.trigger('fw-options-box:initialized');
+	});
+
+	/** Init options */
+	fwEvents.on('fw:options:init', function (data) {
+		data.$elements.find('.fw-backend-option:not(.initialized)')
+			// do nothing, just a the initialized class to make the fadeIn css animation effect
+			.addClass('initialized');
 	});
 
 	/** Fixes */
