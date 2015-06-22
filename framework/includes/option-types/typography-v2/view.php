@@ -24,11 +24,6 @@
 	$data['value']   = array_merge( $option['value'], is_array($data['value']) ? $data['value'] : array() );
 	$google_font     = $typography_v2->get_google_font( $data['value']['family'] );
 
-	/**
-	 * This can be set manually as int and the below === verification will be false
-	 * so make sure to transform: 600 -> '600'
-	 */
-	$data['value']['variation'] = (string)$data['value']['variation'];
 }
 
 $components = (isset($option['components']) && is_array($option['components'])) ? array_merge($defaults['components'], $option['components']) : $defaults['components'];
@@ -114,7 +109,7 @@ $components = (isset($option['components']) && is_array($option['components'])) 
 				<?php if ( $google_font ) {
 					foreach ( $google_font->variants as $variant ) { ?>
 						<option value="<?php echo esc_attr( $variant ) ?>"
-						        <?php if ($data['value']['variation'] === $variant): ?>selected="selected"<?php endif; ?>><?php echo fw_htmlspecialchars( $variant ); ?></option>
+						        <?php if ($data['value']['variation'] == $variant): ?>selected="selected"<?php endif; ?>><?php echo fw_htmlspecialchars( $variant ); ?></option>
 					<?php }
 				}
 				?>
