@@ -16,22 +16,24 @@ abstract class FW_Container_Type
 	 *
 	 * @param string $id
 	 * @param array $option
+	 * @param array $values Options values (in db format, returned from get_value_from_input())
 	 * @param array $data
 	 * @param bool   Return true to call this method again on the next enqueue,
 	 *               if you have some functionality in it that depends on option parameters.
 	 *               By default this method is called only once for performance reasons.
 	 */
-	abstract protected function _enqueue_static($id, $option, $data);
+	abstract protected function _enqueue_static($id, $option, $values, $data);
 
 	/**
 	 * Generate html
 	 * @param string $id
 	 * @param array $option Option array merged with _get_defaults()
+	 * @param array $values Options values (in db format, returned from get_value_from_input())
 	 * @param array $data {id_prefix => '...', name_prefix => '...'}
 	 * @return string HTML
 	 * @internal
 	 */
-	abstract protected function _render($id, $option, $data);
+	abstract protected function _render($id, $option, $values, $data);
 
 	/**
 	 * Default option array
@@ -118,17 +120,18 @@ abstract class FW_Container_Type
 	/**
 	 * Generate html
 	 * @param  string $id
-	 * @param   array $option
-	 * @param   array $data {'id_prefix' => '...', 'name_prefix' => '...'} // fixme: 'values' - options values ?
+	 * @param   array $option // fixme: options? multiple at once? tabs can't render else
+	 * @param   array $values Options values (in db format, returned from get_value_from_input())
+	 * @param   array $data {'id_prefix' => '...', 'name_prefix' => '...'}
 	 * @return string HTML
 	 */
-	final public function render($id, $option, $data = array())
+	final public function render($id, $option, $values = array(), $data = array())
 	{
 		$this->prepare($id, $option, $data);
 
 		$this->enqueue_static($id, $option, $data);
 
-		return $this->_render($id, $option, $data);
+		return $this->_render($id, $option, $values, $data);
 	}
 
 	/**
@@ -138,10 +141,11 @@ abstract class FW_Container_Type
 	 *
 	 * @param string $id
 	 * @param array $option
+	 * @param array $values Options values (in db format, returned from get_value_from_input())
 	 * @param array $data
 	 * @return bool
 	 */
-	final public function enqueue_static($id = '', $option = array(), $data = array())
+	final public function enqueue_static($id = '', $option = array(), $values = array(), $data = array())
 	{
 		if ($this->static_enqueued) {
 			return false;
@@ -149,7 +153,7 @@ abstract class FW_Container_Type
 
 		$this->prepare($id, $option, $data);
 
-		$call_next_time = $this->_enqueue_static($id, $option, $data);
+		$call_next_time = $this->_enqueue_static($id, $option, $values, $data);
 
 		$this->static_enqueued = !$call_next_time;
 
