@@ -109,7 +109,7 @@ $components = (isset($option['components']) && is_array($option['components'])) 
 				<?php if ( $google_font ) {
 					foreach ( $google_font->variants as $variant ) { ?>
 						<option value="<?php echo esc_attr( $variant ) ?>"
-						        <?php if ($data['value']['variation'] === $variant): ?>selected="selected"<?php endif; ?>><?php echo fw_htmlspecialchars( $variant ); ?></option>
+						        <?php if ($data['value']['variation'] == $variant): ?>selected="selected"<?php endif; ?>><?php echo fw_htmlspecialchars( $variant ); ?></option>
 					<?php }
 				}
 				?>

@@ -127,9 +127,9 @@ final class _FW_Component_Theme
 		try {
 			return FW_Cache::get($cache_key);
 		} catch (FW_Cache_Not_Found_Exception $e) {
-			$options = apply_filters('fw_taxonomy_options', $this->get_options('taxonomies/'. $taxonomy),
-				$taxonomy,
-				null
+			$options = apply_filters('fw_taxonomy_options',
+				$this->get_options('taxonomies/'. $taxonomy),
+				$taxonomy
 			);
 
 			FW_Cache::set($cache_key, $options);

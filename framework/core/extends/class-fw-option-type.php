@@ -24,12 +24,10 @@ abstract class FW_Option_Type
 	 *               if you have some functionality in it that depends on option parameters.
 	 *               By default this method is called only once for performance reasons.
 	 */
-	protected function _enqueue_static($id, $option, $data)
-	{
-	}
+	protected function _enqueue_static($id, $option, $data) {}
 
 	/**
-	 * Generate option's html from option array
+	 * Generate html
 	 * @param string $id
 	 * @param array $option Option array merged with _get_defaults()
 	 * @param array $data {value => _get_value_from_input(), id_prefix => ..., name_prefix => ...}
