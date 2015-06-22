@@ -54,16 +54,6 @@ jQuery(document).ready(function($){
 					$box.trigger('fw:box:'+ (isClosed ? 'close' : 'open'));
 					$box.trigger('fw:box:toggle-closed', {isClosed: isClosed});
 				});
-
-			/**
-			 * Prevent event to be propagated to first level WordPress sortable (on edit post page)
-			 * If not prevented, boxes within options can be dragged out of parent box to first level boxes
-			 */
-			$boxes.closest('.postbox-with-fw-options')
-				.off('mousedown'+ eventNamespace) // remove already attached, just to be sure, prevent multiple execution
-				.on('mousedown'+ eventNamespace, '.fw-postbox > h3.hndle, .fw-postbox > .handlediv', function(e){
-					e.stopPropagation();
-				});
 		}
 
 		/** Remove box header if title is empty */
@@ -130,11 +120,25 @@ jQuery(document).ready(function($){
 
 	/** Fixes */
 	fwEvents.on('fw:options:init', function (data) {
-		/** add special class to first level postboxes that contains framework options */
 		{
+			var eventNamespace = '.fw-backend-postboxes';
+
 			data.$elements.find('.postbox:not(.fw-postbox) .fw-option')
 				.closest('.postbox:not(.fw-postbox)')
-				.addClass('postbox-with-fw-options');
+
+				/**
+				 * Add special class to first level postboxes that contains framework options (on post edit page)
+				 */
+				.addClass('postbox-with-fw-options')
+
+				/**
+				 * Prevent event to be propagated to first level WordPress sortable (on edit post page)
+				 * If not prevented, boxes within options can be dragged out of parent box to first level boxes
+				 */
+				.off('mousedown'+ eventNamespace) // remove already attached (happens when this script is executed multiple times on the same elements)
+				.on('mousedown'+ eventNamespace, '.fw-postbox > h3.hndle, .fw-postbox > .handlediv', function(e){
+					e.stopPropagation();
+				});
 		}
 
 		/**
