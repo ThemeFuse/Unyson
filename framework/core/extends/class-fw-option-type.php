@@ -50,7 +50,7 @@ abstract class FW_Option_Type
 	 * Default option array
 	 *
 	 * This makes possible an option array to have required only one parameter: array('type' => '...')
-	 * Other parameters are merged with array returned from this method
+	 * Other parameters are merged with the array returned by this method.
 	 *
 	 * @return array
 	 *
