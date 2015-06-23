@@ -26,14 +26,21 @@ abstract class FW_Container_Type
 
 	/**
 	 * Generate html
-	 * @param string $id
-	 * @param array $option Option array merged with _get_defaults()
+	 * @param array $containers array('option_id' => array(), ...)
+	 *              - Options arrays are merged with _get_defaults()
+	 *              - All options are 100% only current container type, no need to check if ($option['type'] === $this->get_type())
+	 *              - Are sent multiple options instead of one, because tabs (and maybe other feature containers)
+	 *                can't be rendered separately (only as a collection).
+	 *                Instead of having render_option() for those that can be rendered separately,
+	 *                and render_options() for those like tabs, was decided to make a compromise,
+	 *                only one method that always will receive an array of options,
+	 *                instead of two methods when things may become confuse and complicated.
 	 * @param array $values Options values (in db format, returned from get_value_from_input())
 	 * @param array $data {id_prefix => '...', name_prefix => '...'}
 	 * @return string HTML
 	 * @internal
 	 */
-	abstract protected function _render($id, $option, $values, $data);
+	abstract protected function _render($containers, $values, $data);
 
 	/**
 	 * Default option array
@@ -83,12 +90,11 @@ abstract class FW_Container_Type
 	/**
 	 * Fixes and prepare defaults
 	 *
-	 * @param string $id
 	 * @param array  $option
 	 * @param array  $data
 	 * @return array
 	 */
-	private function prepare(&$id, &$option, &$data)
+	private function prepare(&$option, &$data)
 	{
 		$data = array_merge(
 			array(
@@ -119,19 +125,34 @@ abstract class FW_Container_Type
 
 	/**
 	 * Generate html
-	 * @param  string $id
-	 * @param   array $option // fixme: options? multiple at once? tabs can't render else
+	 * @param   array $options array('container_id' => array(...container option...))
 	 * @param   array $values Options values (in db format, returned from get_value_from_input())
 	 * @param   array $data {'id_prefix' => '...', 'name_prefix' => '...'}
 	 * @return string HTML
 	 */
-	final public function render($id, $option, $values = array(), $data = array())
+	final public function render($options, $values = array(), $data = array())
 	{
-		$this->prepare($id, $option, $data);
+		$containers = array();
 
-		$this->enqueue_static($id, $option, $data);
+		foreach ($options as $id => &$option) {
+			if (
+				!isset($option['options'])
+				||
+				!isset($option['type'])
+				||
+				$option['type'] !== $this->get_type()
+			) {
+				continue;
+			}
 
-		return $this->_render($id, $option, $values, $data);
+			$this->prepare($option, $data);
+
+			$this->enqueue_static($id, $option, $data);
+
+			$containers[$id] = &$option;
+		}
+
+		return $this->_render($containers, $values, $data);
 	}
 
 	/**
@@ -151,7 +172,7 @@ abstract class FW_Container_Type
 			return false;
 		}
 
-		$this->prepare($id, $option, $data);
+		$this->prepare($option, $data);
 
 		$call_next_time = $this->_enqueue_static($id, $option, $values, $data);
 
