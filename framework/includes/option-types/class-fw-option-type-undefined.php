@@ -1,7 +1,7 @@
 <?php if (!defined('FW')) die('Forbidden');
 
 /**
- * This will be returned when tried to get not existing option type
+ * This will be returned when tried to get a not existing option type
  * to prevent fatal errors for cases when just one option type was typed wrong
  * or any other minor bug that has no sense to crash the whole site
  */

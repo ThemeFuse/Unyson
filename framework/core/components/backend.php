@@ -36,6 +36,25 @@ final class _FW_Component_Backend {
 	 */
 	private $undefined_option_type;
 
+	/**
+	 * Store container types for registration, until they will be required
+	 * @var array|false
+	 *      array Can have some pending container types in it
+	 *      false Container types already requested and was registered, so do not use pending anymore
+	 */
+	private $container_types_pending_registration = array();
+
+	/**
+	 * Contains all container types
+	 * @var FW_Container_Type[]
+	 */
+	private $container_types = array();
+
+	/**
+	 * @var FW_Container_Type_Undefined
+	 */
+	private $undefined_container_type;
+
 	private $static_registered = false;
 
 	/**
@@ -177,7 +196,6 @@ final class _FW_Component_Backend {
 
 			if ( ! is_subclass_of( $option_type_class, 'FW_Option_Type' ) ) {
 				trigger_error( 'Invalid option type class ' . get_class( $option_type_class ), E_USER_WARNING );
-
 				return;
 			}
 
@@ -189,13 +207,48 @@ final class _FW_Component_Backend {
 
 			if ( isset( $this->option_types[ $type ] ) ) {
 				trigger_error( 'Option type "' . $type . '" already registered', E_USER_WARNING );
-
 				return;
 			}
 
 			$this->option_types[ $type ] = $option_type_class;
 
 			$this->option_types[ $type ]->_call_init($this->get_access_key());
+		}
+	}
+
+	/**
+	 * @param string|FW_Container_Type $container_type_class
+	 *
+	 * @internal
+	 */
+	private function register_container_type( $container_type_class ) {
+		if ( is_array( $this->container_types_pending_registration ) ) {
+			// Container types never requested. Continue adding to pending
+			$this->container_types_pending_registration[] = $container_type_class;
+		} else {
+			if ( is_string( $container_type_class ) ) {
+				$container_type_class = new $container_type_class;
+			}
+
+			if ( ! is_subclass_of( $container_type_class, 'FW_Container_Type' ) ) {
+				trigger_error( 'Invalid container type class ' . get_class( $container_type_class ), E_USER_WARNING );
+				return;
+			}
+
+			/**
+			 * @var FW_Container_Type $container_type_class
+			 */
+
+			$type = $container_type_class->get_type();
+
+			if ( isset( $this->container_types[ $type ] ) ) {
+				trigger_error( 'Container type "' . $type . '" already registered', E_USER_WARNING );
+				return;
+			}
+
+			$this->container_types[ $type ] = $container_type_class;
+
+			$this->container_types[ $type ]->_call_init($this->get_access_key());
 		}
 	}
 
@@ -1579,6 +1632,20 @@ final class _FW_Component_Backend {
 	}
 
 	/**
+	 * @param FW_Access_Key $access_key
+	 * @param string|FW_Container_Type $container_type_class
+	 *
+	 * @internal
+	 */
+	public function _register_container_type( FW_Access_Key $access_key, $container_type_class ) {
+		if ( $access_key->get_key() !== 'register_container_type' ) {
+			trigger_error( 'Call denied', E_USER_ERROR );
+		}
+
+		$this->register_container_type( $container_type_class );
+	}
+
+	/**
 	 * @param string $option_type
 	 *
 	 * @return FW_Option_Type|FW_Option_Type_Undefined
@@ -1622,6 +1689,53 @@ final class _FW_Component_Backend {
 			}
 
 			return $this->undefined_option_type;
+		}
+	}
+
+	/**
+	 * @param string $container_type
+	 *
+	 * @return FW_Container_Type|FW_Container_Type_Undefined
+	 */
+	private function container_type( $container_type ) {
+		if ( is_array( $this->container_types_pending_registration ) ) {
+			// This method is called first time
+
+			do_action('fw_container_types_init');
+
+			// Register pending container types
+			{
+				$pending_container_types = $this->container_types_pending_registration;
+
+				// clear this property, so register_container_type() will not add container types to pending anymore
+				$this->container_types_pending_registration = false;
+
+				foreach ( $pending_container_types as $container_type_class ) {
+					$this->register_container_type( $container_type_class );
+				}
+
+				unset( $pending_container_types );
+			}
+		}
+
+		if ( isset( $this->container_types[ $container_type ] ) ) {
+			return $this->container_types[ $container_type ];
+		} else {
+			if ( is_admin() ) {
+				FW_Flash_Messages::add(
+					'fw-get-container-type-undefined-' . $container_type,
+					sprintf( __( 'Undefined container type: %s', 'fw' ), $container_type ),
+					'warning'
+				);
+			}
+
+			if (!$this->undefined_container_type) {
+				require_once fw_get_framework_directory('/includes/container-types/class-fw-container-type-undefined.php');
+
+				$this->undefined_container_type = new FW_Container_Type_Undefined();
+			}
+
+			return $this->undefined_container_type;
 		}
 	}
 
