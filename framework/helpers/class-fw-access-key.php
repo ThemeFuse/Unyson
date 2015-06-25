@@ -16,13 +16,13 @@
  *  //...
  * }
  */
-class FW_Access_Key
+final class FW_Access_Key
 {
 	private static $created_keys = array();
-	
+
 	private $key;
 	
-	public function get_key()
+	final public function get_key()
 	{
 		return $this->key;
 	}
