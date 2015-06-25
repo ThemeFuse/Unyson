@@ -743,7 +743,7 @@ function fw_collect_options(&$result, &$options, $settings = array(), $_recursio
 		 *   '(container|option):{id}' => array(
 		 *      'id' => '{id}',
 		 *      'level' => int, // from which nested level this option is
-		 *      'type' => 'container|option',
+		 *      'group' => 'container|option',
 		 *      'option' => array(...),
 		 *   )
 		 * )
@@ -818,7 +818,7 @@ function fw_collect_options(&$result, &$options, $settings = array(), $_recursio
 
 				if ($settings['info_wrapper']) {
 					$result['container:'. $option_id] = array(
-						'type'   => 'container',
+						'group'  => 'container',
 						'id'     => $option_id,
 						'option' => &$option,
 						'level'  => $_recursion_data['level'],
@@ -881,7 +881,7 @@ function fw_collect_options(&$result, &$options, $settings = array(), $_recursio
 
 			if ($settings['info_wrapper']) {
 				$result['option:'. $option_id] = array(
-					'type'   => 'option',
+					'group'  => 'option',
 					'id'     => $option_id,
 					'option' => &$option,
 					'level'  => $_recursion_data['level'],
