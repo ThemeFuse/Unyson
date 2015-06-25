@@ -69,7 +69,7 @@ abstract class FW_Option_Type
 	private $static_enqueued = false;
 
 	/**
-	 * Used as prefix for attribute id="{$this->id_prefix}$id"
+	 * Used as prefix for attribute id="{prefix}{option-id}"
 	 * @return string
 	 */
 	final public static function get_default_id_prefix()
@@ -78,7 +78,7 @@ abstract class FW_Option_Type
 	}
 
 	/**
-	 * Used as default prefix for attribute name="$prefix[$name]"
+	 * Used as default prefix for attribute name="prefix[name]"
 	 * Cannot contain [], it is used for $_POST[ self::get_default_name_prefix() ]
 	 * @return string
 	 */
@@ -296,7 +296,7 @@ abstract class FW_Option_Type
 		static $registration_access_key = null;
 
 		if ($registration_access_key === null) {
-			$registration_access_key = new FW_Access_Key('register_option_type');
+			$registration_access_key = new FW_Access_Key('fw_option_type');
 		}
 
 		fw()->backend->_register_option_type($registration_access_key, $option_type_class);

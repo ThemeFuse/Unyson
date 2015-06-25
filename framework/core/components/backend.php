@@ -1269,97 +1269,55 @@ final class _FW_Component_Backend {
 		}
 
 		$collected = array();
-		fw_collect_first_level_options( $collected, $options );
 
-		if ( empty( $collected['all'] ) ) {
+		fw_collect_options( $collected, $options, array(
+			'limit_option_types' => false,
+			'limit_container_types' => false,
+			'limit_level' => 1,
+			'info_wrapper' => true,
+		) );
+
+		if ( empty( $collected ) ) {
 			return false;
 		}
 
 		$html = '';
 
-		$option = reset( $collected['all'] );
+		$option = reset( $collected );
 
-		$collected_type         = $option['type'];
+		$collected_type = array(
+			'group' => $option['group'],
+			'type'  => $option['option']['type'],
+		);
 		$collected_type_options = array(
 			$option['id'] => &$option['option']
 		);
 
 		while ( $collected_type_options ) {
-			$option = next( $collected['all'] );
+			$option = next( $collected );
 
 			if ( $option ) {
-				if ( $option['type'] === $collected_type ) {
+				if (
+					$option['group'] === $collected_type['group']
+					&&
+					$option['option']['type'] === $collected_type['type']
+				) {
 					$collected_type_options[ $option['id'] ] = &$option['option'];
 					continue;
 				}
 			}
 
-			switch ( $collected_type ) {
-				case 'tab':
-					$html .= fw_render_view( fw_get_framework_directory( '/views/backend-tabs.php' ), array(
-						'tabs'         => &$collected_type_options,
-						'values'       => &$values,
-						'options_data' => $options_data,
-					) );
-					break;
-				case 'box':
-					$boxes_html = '';
-
-					foreach ( $collected_type_options as $id => &$box ) {
-						if (empty($box['options'])) {
-							continue;
-						}
-
-						// prepare attributes
-						{
-							$attr = isset( $box['attr'] ) ? $box['attr'] : array();
-
-							unset( $attr['id'] ); // do not allow id overwrite, it is sent in first argument of render_box()
-						}
-
-						$boxes_html .= $this->render_box(
-							'fw-options-box-' . $id,
-							empty( $box['title'] ) ? ' ' : $box['title'],
-							$this->render_options( $box['options'], $values, $options_data ),
-							array(
-								'attr' => $attr
-							)
-						);
-					}
-					unset($box);
-
-					if (!empty($boxes_html)) {
-						$html .= '<div class="fw-backend-postboxes metabox-holder">';
-						$html .= $boxes_html;
-						$html .= '</div>';
-					}
-
-					unset($boxes_html);
-					break;
-				case 'group':
-					foreach ( $collected_type_options as $id => &$group ) {
-						// prepare attributes
-						{
-							$attr = isset( $group['attr'] ) ? $group['attr'] : array();
-
-							$attr['id'] = 'fw-backend-options-group-' . $id;
-
-							if ( ! isset( $attr['class'] ) ) {
-								$attr['class'] = 'fw-backend-options-group';
-							} else {
-								$attr['class'] = 'fw-backend-options-group ' . $attr['class'];
-							}
-						}
-
-						$html .= '<div ' . fw_attr_to_html( $attr ) . '>';
-						$html .= $this->render_options( $group['options'], $values, $options_data );
-						$html .= '</div>';
-					}
-					unset($group);
+			switch ( $collected_type['group'] ) {
+				case 'container':
+					$html .= $this->container_type($collected_type['type'])->render(
+						$collected_type_options,
+						$values,
+						$options_data
+					);
 					break;
 				case 'option':
 					foreach ( $collected_type_options as $id => &$_option ) {
-						$data = $options_data;
+						$data = $options_data; // do not change directly to not affect next loops
 
 						$data['value'] = isset( $values[ $id ] ) ? $values[ $id ] : null;
 
@@ -1373,13 +1331,16 @@ final class _FW_Component_Backend {
 					unset($_option);
 					break;
 				default:
-					$html .= '<p><em>' . __( 'Unknown collected type', 'fw' ) . ': ' . $collected_type . '</em></p>';
+					$html .= '<p><em>' . __( 'Unknown collected group', 'fw' ) . ': ' . $collected_type['group'] . '</em></p>';
 			}
 
 			unset( $collected_type, $collected_type_options );
 
 			if ( $option ) {
-				$collected_type         = $option['type'];
+				$collected_type = array(
+					'group' => $option['group'],
+					'type'  => $option['option']['type'],
+				);
 				$collected_type_options = array(
 					$option['id'] => &$option['option']
 				);
@@ -1624,7 +1585,7 @@ final class _FW_Component_Backend {
 	 * @internal
 	 */
 	public function _register_option_type( FW_Access_Key $access_key, $option_type_class ) {
-		if ( $access_key->get_key() !== 'register_option_type' ) {
+		if ( $access_key->get_key() !== 'fw_option_type' ) {
 			trigger_error( 'Call denied', E_USER_ERROR );
 		}
 
@@ -1638,7 +1599,7 @@ final class _FW_Component_Backend {
 	 * @internal
 	 */
 	public function _register_container_type( FW_Access_Key $access_key, $container_type_class ) {
-		if ( $access_key->get_key() !== 'register_container_type' ) {
+		if ( $access_key->get_key() !== 'fw_container_type' ) {
 			trigger_error( 'Call denied', E_USER_ERROR );
 		}
 
@@ -1697,7 +1658,7 @@ final class _FW_Component_Backend {
 	 *
 	 * @return FW_Container_Type|FW_Container_Type_Undefined
 	 */
-	private function container_type( $container_type ) {
+	public function container_type( $container_type ) {
 		if ( is_array( $this->container_types_pending_registration ) ) {
 			// This method is called first time
 

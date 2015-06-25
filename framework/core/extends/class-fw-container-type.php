@@ -98,8 +98,8 @@ abstract class FW_Container_Type
 	{
 		$data = array_merge(
 			array(
-				'id_prefix'   => self::get_default_id_prefix(),   // attribute id prefix
-				'name_prefix' => self::get_default_name_prefix(), // attribute name prefix
+				'id_prefix'   => FW_Option_Type::get_default_id_prefix(),   // attribute id prefix
+				'name_prefix' => FW_Option_Type::get_default_name_prefix(), // attribute name prefix
 			),
 			$data
 		);
@@ -206,7 +206,7 @@ abstract class FW_Container_Type
 		static $registration_access_key = null;
 
 		if ($registration_access_key === null) {
-			$registration_access_key = new FW_Access_Key('register_container_type');
+			$registration_access_key = new FW_Access_Key('fw_container_type');
 		}
 
 		fw()->backend->_register_container_type($registration_access_key, $container_type_class);

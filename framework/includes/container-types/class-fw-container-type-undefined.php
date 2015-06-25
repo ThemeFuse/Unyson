@@ -19,15 +19,7 @@ class FW_Container_Type_Undefined extends FW_Container_Type {
 	 * {@inheritdoc}
 	 */
 	protected function _render($containers, $values, $data) {
-		$html = '<fieldset><legend>/* Undefined Container Type */</legend>';
-
-		foreach ($containers as $id => $option) {
-			$html .= fw()->backend->render_options($option['options'], $values, $data);
-		}
-
-		$html .= '</fieldset>';
-
-		return $html;
+		return '<p>/* Undefined Container Type */</p>';
 	}
 
 	/**

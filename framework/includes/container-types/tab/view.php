@@ -8,17 +8,17 @@
 <div class="fw-options-tabs-wrapper">
 	<div class="fw-options-tabs-list">
 		<ul>
-		<?php foreach ($tabs as $tab_id => &$tab): ?>
-			<li><a href="#fw-options-tab-<?php echo esc_attr($tab_id) ?>" class="nav-tab fw-wp-link" ><?php echo htmlspecialchars($tab['title'], ENT_COMPAT, 'UTF-8') ?></a></li>
-		<?php endforeach; unset($tab); ?>
+			<?php foreach ($tabs as $tab_id => &$tab): ?>
+				<li><a href="#fw-options-tab-<?php echo esc_attr($tab_id) ?>" class="nav-tab fw-wp-link" ><?php echo htmlspecialchars($tab['title'], ENT_COMPAT, 'UTF-8') ?></a></li>
+			<?php endforeach; unset($tab); ?>
 		</ul>
 		<div class="fw-clear"></div>
 	</div>
 	<div class="fw-options-tabs-contents metabox-holder">
 		<div class="fw-inner">
-		<?php
-		foreach ($tabs as $tab_id => &$tab):
-			// prepare attributes
+			<?php
+			foreach ($tabs as $tab_id => &$tab):
+				// prepare attributes
 			{
 				$attr = isset($tab['attr']) ? $tab['attr'] : array();
 
@@ -30,11 +30,11 @@
 					$attr['class'] = 'fw-options-tab '. $attr['class'];
 				}
 			}
-		?><div <?php echo fw_attr_to_html($attr) ?>><?php echo fw()->backend->render_options($tab['options'], $values, $options_data) ?></div><?php
-		unset($tabs[$tab_id]); // free memory after printed and not needed anymore
-		endforeach;
-		unset($tab);
-		?>
+				?><div <?php echo fw_attr_to_html($attr) ?>><?php echo fw()->backend->render_options($tab['options'], $values, $options_data) ?></div><?php
+				unset($tabs[$tab_id]); // free memory after printed and not needed anymore
+			endforeach;
+			unset($tab);
+			?>
 		</div>
 	</div>
 	<div class="fw-clear"></div>
