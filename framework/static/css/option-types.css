@@ -96,34 +96,40 @@ textarea.fw-option-type-textarea {
 
 /* modal fixes */
 
-.fw-options-modal .media-frame input[type=email],
-.fw-options-modal .media-frame input[type=number],
-.fw-options-modal .media-frame input[type=password],
-.fw-options-modal .media-frame input[type=search],
-.fw-options-modal .media-frame input[type=text],
-.fw-options-modal .media-frame input[type=url],
-.fw-options-modal .media-frame select,
-.fw-options-modal .media-frame textarea {
+.fw-modal .media-frame input[type=email],
+.fw-modal .media-frame input[type=number],
+.fw-modal .media-frame input[type=password],
+.fw-modal .media-frame input[type=search],
+.fw-modal .media-frame input[type=text],
+.fw-modal .media-frame input[type=url],
+.fw-modal .media-frame select,
+.fw-modal .media-frame textarea {
 	font-size: 14px;
 }
 
-.fw-options-modal .media-frame select {
+.fw-modal .media-frame select {
 	line-height: 28px;
 	height: 28px;
 	padding: 2px;
 	margin: 1px;
 }
 
-.fw-options-modal .media-frame select[multiple] {
+.fw-modal .media-frame select[multiple] {
 	height: auto;
 }
 
-.fw-options-modal .media-frame input,
-.fw-options-modal .media-frame textarea {
+.fw-modal .media-frame input,
+.fw-modal .media-frame textarea {
 	padding: 3px 5px;
+}
+
+.fw-modal .media-frame input {
 	line-height: 15px;
 }
 
+.fw-modal .media-frame textarea.code {
+	line-height: 1.4;
+}
 
 @media (max-width: 782px) {
 	.fw-option-type-checkboxes label,

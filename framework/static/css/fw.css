@@ -2946,13 +2946,13 @@ body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 /* end: modal */
 
 
-/* OptionsModal */
+/* Modal */
 
 /* sizes */
 
-.fw-options-modal.fw-options-modal-small > .media-modal,
-.fw-options-modal.fw-options-modal-medium > .media-modal,
-.fw-options-modal.fw-options-modal-large > .media-modal {
+.fw-modal.fw-modal-small > .media-modal,
+.fw-modal.fw-modal-medium > .media-modal,
+.fw-modal.fw-modal-large > .media-modal {
 	margin: auto;
 
 	-webkit-box-sizing: border-box;
@@ -2961,17 +2961,17 @@ body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 	width: 100%;
 }
 
-.fw-options-modal.fw-options-modal-small > .media-modal {
+.fw-modal.fw-modal-small > .media-modal {
 	max-width: 750px;
 	max-height: 500px;
 }
 
-.fw-options-modal.fw-options-modal-medium > .media-modal {
+.fw-modal.fw-modal-medium > .media-modal {
 	max-width: 840px;
 	max-height: 660px;
 }
 
-.fw-options-modal.fw-options-modal-large > .media-modal {
+.fw-modal.fw-modal-large > .media-modal {
 	max-width: 1200px;
 	max-height: 800px;
 }
@@ -2980,23 +2980,23 @@ body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 
 /* tabs fixes */
 
-.fw-options-modal .fw-options-tabs-first-level > .fw-options-tabs-list {
+.fw-modal .fw-options-tabs-first-level > .fw-options-tabs-list {
 	padding-top: 20px;
 }
 
-.fw-options-modal .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab {
+.fw-modal .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab {
 	background-color: #f1f1f1;
 }
 
-.fw-options-modal .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab:hover {
+.fw-modal .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab:hover {
 	background-color: #f8f8f8;
 }
 
-.fw-options-modal .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+.fw-modal .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 	position: relative;
 }
 
-.fw-options-modal .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab:after {
+.fw-modal .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab:after {
 	position: absolute;
 	left: 0;
 	bottom: -1px;
@@ -3012,12 +3012,12 @@ body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 
 /* Hide last border */
 
-.fw-options-modal .media-frame-content > form {
+.fw-modal .media-frame-content > form {
 	position: relative;
 }
 
-.fw-options-modal .media-frame-content > form > .fw-backend-options-last-border-hider,
-.fw-options-modal .media-frame-content > form .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-backend-options-last-border-hider {
+.fw-modal .media-frame-content > form > .fw-backend-options-last-border-hider,
+.fw-modal .media-frame-content > form .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-backend-options-last-border-hider {
 	position: absolute;
 	bottom: 0;
 	left: 0;
@@ -3025,26 +3025,26 @@ body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 	border-bottom: 1px solid #FFFFFF;
 	z-index: 1;
 }
-body.rtl .fw-options-modal .media-frame-content > form > .fw-backend-options-last-border-hider,
-body.rtl .fw-options-modal .media-frame-content > form .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-backend-options-last-border-hider {
+body.rtl .fw-modal .media-frame-content > form > .fw-backend-options-last-border-hider,
+body.rtl .fw-modal .media-frame-content > form .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-backend-options-last-border-hider {
 	left: auto;
 	right: 0;
 }
 
-.fw-options-modal .media-frame-content > form > .fw-backend-option:last-child {
+.fw-modal .media-frame-content > form > .fw-backend-option:last-child {
 	border-bottom: none;
 }
 
-.fw-options-modal .media-frame-content > form .fw-options-tabs-contents .fw-options-tabs-list {
+.fw-modal .media-frame-content > form .fw-options-tabs-contents .fw-options-tabs-list {
 	padding: 0 0 0 25px;
 }
-body.rtl .fw-options-modal .media-frame-content > form .fw-options-tabs-contents .fw-options-tabs-list {
+body.rtl .fw-modal .media-frame-content > form .fw-options-tabs-contents .fw-options-tabs-list {
 	padding: 0 25px 0 0;
 }
 
 /* end: Hide last border */
 
-/* end: OptionsModal */
+/* end: Modal */
 
 
 /* SoleModal */

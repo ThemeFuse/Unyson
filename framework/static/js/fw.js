@@ -561,101 +561,318 @@ fw.getQueryString = function(name) {
 };
 
 (function(){
-	var fwLoadingId = 'fw-options-modal',
-		/*
-		 * A stack-like structure to manage chains of modals
-		 * (modals that are opened one from another)
+	/**
+	 * A stack-like structure to manage chains of modals
+	 * (modals that are opened one from another)
+	 */
+	var modalsStack = {
+		_stack: [],
+		push: function(modal) {
+			this._stack.push(modal);
+		},
+		pop: function() {
+			return this._stack.pop();
+		},
+		peek: function() {
+			return this._stack[this._stack.length - 1];
+		},
+		getSize: function() {
+			return this._stack.length;
+		}
+	};
+
+	/**
+	 * Generic modal
+	 *
+	 * Usage:
+	 * var modal = new fw.Modal();
+	 *
+	 * modal.on('open|close', function(){});
+	 */
+	fw.Modal = Backbone.Model.extend({
+		ContentView: Backbone.View.extend({
+			tagName: 'form',
+			attributes: {
+				'onsubmit': 'return false;'
+			},
+			onSubmit: function(e) {
+				e.preventDefault();
+
+				this.model.trigger('submit', {
+					$form: this.$el
+				});
+			},
+			render: function() {
+				this.$el.html(
+					this.model.get('html')
+				);
+
+				fwEvents.trigger('fw:options:init', {$elements: this.$el});
+
+				this.trigger('render');
+
+				this.afterHtmlReplaceFixes();
+			},
+			initialize: function() {
+				this.listenTo(this.model, 'change:html', this.render);
+			},
+			/**
+			 * Call this after html replace
+			 * this.$el.html('...');
+			 * this.afterHtmlReplaceFixes();
+			 */
+			afterHtmlReplaceFixes: function() {
+				/* options fixes */
+				{
+					// hide last border
+					this.$el.prepend('<div class="fw-backend-options-last-border-hider"></div>');
+
+					// hide last border from tabs
+					this.$el.find('.fw-options-tabs-contents > .fw-inner > .fw-options-tab')
+						.append('<div class="fw-backend-options-last-border-hider"></div>');
+				}
+
+				this.$el.append('<input type="submit" class="fw-hidden hidden-submit" />');
+			}
+		}),
+		defaults: {
+			/* Modal title */
+			title: 'Edit Options',
+			/**
+			 * Content html
+			 * @private
+			 */
+			html: '',
+			size: 'small' // small, medium, large
+		},
+		/**
+		 * Create and init this.frame
 		 */
-		modalsStack = {
-			_stack: [],
-			push: function(modal) {
-				this._stack.push(modal);
-			},
-			pop: function() {
-				return this._stack.pop();
-			},
-			peek: function() {
-				return this._stack[this._stack.length - 1];
-			},
-			getSize: function() {
-				return this._stack.length;
-			}
-		},
-		htmlCache = {};
+		initializeFrame: function() {
+			var modal = this;
 
-	var ContentView = Backbone.View.extend({
-		tagName: 'form',
-		events: {
-			'submit': 'onSubmit'
-		},
-		render: function() {
-			this.$el.html(
-				this.model.get('html')
-			);
-
-			fwEvents.trigger('fw:options:init', {$elements: this.$el});
-
-			/* options fixes */
-			{
-				// hide last border
-				this.$el.prepend('<div class="fw-backend-options-last-border-hider"></div>');
-
-				// hide last border from tabs
-				this.$el.find('.fw-options-tabs-contents > .fw-inner > .fw-options-tab')
-					.append('<div class="fw-backend-options-last-border-hider"></div>');
-			}
-
-			this.$el.append('<input type="submit" class="fw-hidden hidden-submit" />');
-		},
-		initialize: function() {
-			this.listenTo(this.model, 'change:html', this.render);
-		},
-		onSubmit: function(e) {
-			e.preventDefault();
-
-			fw.loading.show(fwLoadingId);
-
-			jQuery.ajax({
-				url: ajaxurl,
-				type: 'POST',
-				data: [
-					'action=fw_backend_options_get_values',
-					'options='+ encodeURIComponent(JSON.stringify(this.model.get('options'))),
-					'name_prefix=fw_edit_options_modal',
-					this.$el.serialize()
-				].join('&'),
-				dataType: 'json',
-				success: _.bind(function (response, status, xhr) {
-					fw.loading.hide(fwLoadingId);
-
-					if (!response.success) {
-						/**
-						 * do not replace html here
-						 * user completed the form with data and wants to submit data
-						 * do not delete all his work
-						 */
-						alert('Error: '+ response.data.message);
-						return;
-					}
-
-					this.model.set('values', response.data.values);
-
-					// simulate click on close button to fire animations
-					this.model.frame.modal.$el.find('.media-modal-close').trigger('click');
-				}, this),
-				error: function (xhr, status, error) {
-					fw.loading.hide(fwLoadingId);
-
-					/**
-					 * do not replace html here
-					 * user completed the form with data and wants to submit data
-					 * do not delete all his work
-					 */
-					alert(status +': '+ error.message);
+			var ControllerMainState = wp.media.controller.State.extend({
+				id: 'main',
+				defaults: {
+					content: 'main',
+					menu: 'default',
+					title: this.get('title')
+				},
+				initialize: function() {
+					this.listenTo(modal, 'change:title', function(){
+						this.set('title', modal.get('title'));
+					});
 				}
 			});
+
+			this.frame = new wp.media.view.MediaFrame({
+				state: 'main',
+				states: [ new ControllerMainState ]
+			});
+
+			var modal = this;
+
+			this.frame.once('ready', function(){
+				var $modalWrapper = modal.frame.modal.$el,
+					$modal        = $modalWrapper.find('.media-modal'),
+					$backdrop     = $modalWrapper.find('.media-modal-backdrop'),
+					size          = modal.get('size'),
+					stackSize     = modalsStack.getSize(),
+					$close        = $modalWrapper.find('.media-modal-close');
+
+				modal.frame.$el.addClass('hide-toolbar');
+
+				$modalWrapper.addClass('fw-modal');
+
+				if (_.indexOf(['large', 'medium', 'small'], size) !== -1) {
+					$modalWrapper.addClass('fw-modal-' + size);
+				} else {
+					$modalWrapper.addClass('fw-modal-' + modal.defaults.size);
+				}
+
+				if (stackSize) {
+					$modal.css({
+						border: (stackSize * 30) +'px solid transparent'
+					});
+				}
+
+				/**
+				 * Adjust the z-index for the new frame's backdrop and modal
+				 */
+				{
+					$backdrop.css('z-index',
+						/**
+						 * Use modal z-index because backdrop z-index in some cases can be too smaller
+						 * and when there are 2+ modals open, first modal will cover the second backdrop
+						 *
+						 * For e.g.
+						 *
+						 * - second modal | z-index: 560003
+						 * - second backdrop | z-index: 559902
+						 *
+						 * - first modal | z-index: 560002 (This will cover the above backdrop)
+						 * - first backdrop | z-index: 559901
+						 */
+						parseInt($modal.css('z-index'))
+						+ stackSize * 2 + 1
+					);
+					$modal.css('z-index',
+						parseInt($modal.css('z-index'))
+						+ stackSize * 2 + 2
+					);
+				}
+
+				/**
+				 * Show effect on close
+				 */
+				(function(){
+					var eventsNamespace = '.fwModalCloseEffect';
+					var closingTimeout  = 0;
+
+					var closeEffect = function(){
+						clearTimeout(closingTimeout);
+
+						// begin css animation
+						$modalWrapper.addClass('fw-modal-closing');
+
+						closingTimeout = setTimeout(
+							function(){
+								closingTimeout = 0;
+
+								// remove events that prevent original close
+								$close.off(eventsNamespace);
+								$backdrop.off(eventsNamespace);
+
+								// fire original close process after animation effect finished
+								$close.trigger('click');
+								$backdrop.trigger('click');
+
+								// remove animation class
+								$modalWrapper.removeClass('fw-modal-closing');
+
+								preventOriginalClose();
+							},
+							300 // css animation duration
+						);
+					};
+
+					function handleCloseClick(e) {
+						e.stopPropagation();
+						e.preventDefault();
+
+						if (closingTimeout) {
+							// do nothing if currently there is a closing delay/animation in progress
+							return;
+						}
+
+						closeEffect();
+					}
+
+					// add events that prevent original close
+					function preventOriginalClose() {
+						$close.on('click'+ eventsNamespace, handleCloseClick);
+						$backdrop.on('click'+ eventsNamespace, handleCloseClick);
+					}
+
+					preventOriginalClose();
+				})();
+			});
+
+			this.frame.on('open', function() {
+				var $modalWrapper = modal.frame.modal.$el;
+
+				$modalWrapper.addClass('fw-modal-open');
+
+				modalsStack.push($modalWrapper.find('.media-modal'));
+
+				// Resize .fw-options-tabs-contents to fit entire window
+				{
+					modal.on('change:html', modal.resizeTabsContent);
+
+					jQuery(window).on('resize.resizeTabsContent', function () {
+						modal.resizeTabsContent();
+					});
+				}
+			});
+
+			this.frame.on('close', function(){
+				// Stop tracking modal HTML and window size
+				{
+					modal.off('change:html', modal.resizeTabsContent);
+
+					jQuery(window).off('resize.resizeTabsContent');
+				}
+
+				/**
+				 * clear html
+				 * to prevent same ids in html when another modal with same options will be opened
+				 */
+				modal.set('html', '');
+
+				modal.frame.modal.$el.removeClass('fw-modal-open');
+
+				modalsStack.pop();
+			});
+
+			this.frame.on('content:create:main', function () {
+				modal.frame.content.set(
+					modal.content
+				);
+			});
+		},
+		/**
+		 * Create and init this.content
+		 */
+		initializeContent: function() {
+			this.content = new this.ContentView({
+				controller: this.frame,
+				model: this
+			});
+		},
+		initialize: function() {
+			this.initializeFrame();
+			this.initializeContent();
+		},
+		/**
+		 * @param {Object} options used for fw()->backend->render_options(json_decode(options, true))
+		 */
+		open: function() {
+			this.frame.open();
+
+			return this;
+		},
+		/**
+		 * Resize .fw-options-tabs-contents to fit entire window
+		 */
+		resizeTabsContent: function () {
+			var $content, $frame;
+
+			$content = this.frame.$el.find('.fw-options-tabs-first-level > .fw-options-tabs-contents');
+			if ($content.length == 0) {
+				return;
+			}
+
+			$frame = $content.closest('.media-frame-content');
+
+			// resize icon list to fit entire window
+			$content.css('overflow-y', 'auto').height(1000000);
+			$frame.scrollTop(1000000);
+
+			// -1 is necessary for Linux and Windows
+			// -2 is necessary for Mac OS
+			// I don't know where this numbers come from but without this adjustment
+			// vertical scroll bar appears.
+			$content.height($content.height() - $frame.scrollTop() /* - 2  */);
+
+			// This is another fix for vertical scroll bar issue
+			$frame.css('overflow-y', 'hidden');
 		}
 	});
+})();
+
+(function(){
+	var fwLoadingId = 'fw-options-modal',
+		htmlCache = {};
 
 	/**
 	 * Modal to edit backend options
@@ -689,240 +906,129 @@ fw.getQueryString = function(name) {
 	 *
 	 * modal.open();
 	 */
-	fw.OptionsModal = Backbone.Model.extend({
-		defaults: {
-			/** Will be transformed to array with json_decode($options, true) and sent to fw()->backend->render_options() */
-			options: [
-				{'demo-text': {
-					'type': 'text',
-					'label': 'Demo Text'
-				}},
-				{'demo-textarea': {
-					'type': 'textarea',
-					'label': 'Demo Textarea'
-				}}
-			],
-			/** Values of the options {'option-id': 'option value'} , also used in fw()->backend->render_options() */
-			values: {},
-			/* Modal title */
-			title: 'Edit Options',
-			/**
-			 * Content html
-			 * @private
-			 */
-			html: '',
-			size: 'small' // small, medium, large
-		},
-		/**
-		 * Properties created in .initialize():
-		 * - {Backbone.View} contentView
-		 * - {wp.media.view.MediaFrame} frame
-		 *
-		 * @private
-		 */
-		initialize: function() {
-			var modal = this;
+	fw.OptionsModal = fw.Modal.extend({
+		ContentView: fw.Modal.prototype.ContentView.extend({
+			events: {
+				'submit': 'onSubmit'
+			},
+			onSubmit: function(e) {
+				e.preventDefault();
 
-			// prepare this.frame
-			{
-				var ControllerMainState = wp.media.controller.State.extend({
-					id: 'main',
-					defaults: {
-						content: 'main',
-						menu: 'default',
-						title: this.get('title')
-					},
-					initialize: function() {
-						this.listenTo(modal, 'change:title', function(){
-							this.set('title', modal.get('title'));
-						});
-					}
-				});
+				fw.loading.show(fwLoadingId);
 
-				this.frame = new wp.media.view.MediaFrame({
-					state: 'main',
-					states: [ new ControllerMainState ]
-				});
+				jQuery.ajax({
+					url: ajaxurl,
+					type: 'POST',
+					data: [
+						'action=fw_backend_options_get_values',
+						'options='+ encodeURIComponent(JSON.stringify(this.model.get('options'))),
+						'name_prefix=fw_edit_options_modal',
+						this.$el.serialize()
+					].join('&'),
+					dataType: 'json',
+					success: _.bind(function (response, status, xhr) {
+						fw.loading.hide(fwLoadingId);
 
-				this.frame.once('ready', function(){
-					var $modalWrapper = modal.frame.modal.$el,
-						$modal        = $modalWrapper.find('.media-modal'),
-						$backdrop     = $modalWrapper.find('.media-modal-backdrop'),
-						size          = modal.get('size'),
-						stackSize     = modalsStack.getSize(),
-						$close        = $modalWrapper.find('.media-modal-close');
-
-					$modalWrapper.addClass('fw-modal fw-options-modal');
-
-					if (_.indexOf(['large', 'medium', 'small'], size) !== -1) {
-						$modalWrapper.addClass('fw-options-modal-' + size);
-					} else {
-						$modalWrapper.addClass('fw-options-modal-' + modal.defaults.size);
-					}
-
-					if (stackSize) {
-						$modal.css({
-							border: (stackSize * 30) +'px solid transparent'
-						});
-					}
-
-					/**
-					 * Adjust the z-index for the new frame's backdrop and modal
-					 */
-					{
-						$backdrop.css('z-index',
+						if (!response.success) {
 							/**
-							 * Use modal z-index because backdrop z-index in some cases can be too smaller
-							 * and when there are 2+ modals open, first modal will cover the second backdrop
-							 *
-							 * For e.g.
-							 *
-							 * - second modal | z-index: 560003
-							 * - second backdrop | z-index: 559902
-							 *
-							 * - first modal | z-index: 560002 (This will cover the above backdrop)
-							 * - first backdrop | z-index: 559901
+							 * do not replace html here
+							 * user completed the form with data and wants to submit data
+							 * do not delete all his work
 							 */
-							parseInt($modal.css('z-index'))
-							+ stackSize * 2 + 1
-						);
-						$modal.css('z-index',
-							parseInt($modal.css('z-index'))
-							+ stackSize * 2 + 2
-						);
-					}
-
-					// show effect on close
-					(function(){
-						var eventsNamespace = '.fwOptionsModalCloseEffect';
-						var closingTimeout  = 0;
-
-						var closeEffect = function(){
-							clearTimeout(closingTimeout);
-
-							// begin css animation
-							$modalWrapper.addClass('fw-modal-closing');
-
-							closingTimeout = setTimeout(function(){
-								closingTimeout = 0;
-
-								// remove events that prevent original close
-								$close.off(eventsNamespace);
-								$backdrop.off(eventsNamespace);
-
-								// fire original close process after animation effect finished
-								$close.trigger('click');
-								$backdrop.trigger('click');
-
-								// remove animation class
-								$modalWrapper.removeClass('fw-modal-closing');
-
-								preventOriginalClose();
-							},
-							300 // css animation duration
-							);
-						};
-
-						function handleCloseClick(e) {
-							e.stopPropagation();
-							e.preventDefault();
-
-							if (closingTimeout) {
-								// do nothing if currently there is a closing delay/animation in progress
-								return;
-							}
-
-							closeEffect();
+							alert('Error: '+ response.data.message);
+							return;
 						}
 
-						// add events that prevent original close
-						function preventOriginalClose() {
-							$close.on('click'+ eventsNamespace, handleCloseClick);
-							$backdrop.on('click'+ eventsNamespace, handleCloseClick);
-						}
+						this.model.set('values', response.data.values);
 
-						preventOriginalClose();
-					})();
-				});
+						// simulate click on close button to fire animations
+						this.model.frame.modal.$el.find('.media-modal-close').trigger('click');
+					}, this),
+					error: function (xhr, status, error) {
+						fw.loading.hide(fwLoadingId);
 
-				this.frame.on('open', function() {
-					var $modalWrapper = modal.frame.modal.$el;
-
-					$modalWrapper.addClass('fw-modal-open');
-
-					modalsStack.push($modalWrapper.find('.media-modal'));
-
-					// Resize .fw-options-tabs-contents to fit entire window
-					{
-						modal.on('change:html', modal.resizeTabsContent);
-
-						jQuery(window).on('resize.resizeTabsContent', function () { modal.resizeTabsContent(); });
+						/**
+						 * do not replace html here
+						 * user completed the form with data and wants to submit data
+						 * do not delete all his work
+						 */
+						alert(status +': '+ error.message);
 					}
-				});
-
-				this.frame.on('close', function(){
-					// Stop tracking modal HTML and window size
-					{
-						modal.off('change:html', modal.resizeTabsContent);
-
-						jQuery(window).off('resize.resizeTabsContent');
-					}
-
-					/**
-					 * clear html
-					 * to prevent same ids in html when another modal with same options will be opened
-					 */
-					modal.set('html', '');
-
-					modal.frame.modal.$el.removeClass('fw-modal-open');
-
-					modalsStack.pop();
-				});
-
-				this.contentView = new ContentView({
-					controller: this.frame,
-					model: this
-				});
-
-				this.frame.on('content:create:main', function () {
-					modal.frame.content.set(
-						modal.contentView
-					);
-
-					modal.frame.toolbar.set(
-						new wp.media.view.Toolbar({
-							controller: modal.frame,
-							items: [
-								{
-									style: 'primary',
-									text: _fw_localized.l10n.save,
-									priority: 40,
-									click: function () {
-										/**
-										 * Simulate form submit
-										 * Important: Empty input[required] must not start form submit
-										 *     and must show default browser warning popup "This field is required"
-										 */
-										modal.contentView.$el.find('input[type="submit"].hidden-submit').trigger('click');
-									}
-								}
-							]
-						})
-					);
 				});
 			}
+		}),
+		defaults: _.extend(
+			fw.Modal.prototype.defaults,
+			{
+				/**
+				 * Will be transformed to array with json_decode($options, true)
+				 * and sent to fw()->backend->render_options()
+				 */
+				options: [
+					{'demo-text': {
+						'type': 'text',
+						'label': 'Demo Text'
+					}},
+					{'demo-textarea': {
+						'type': 'textarea',
+						'label': 'Demo Textarea'
+					}}
+				],
+				/**
+				 * Values of the options {'option-id': 'option value'}
+				 * also used in fw()->backend->render_options()
+				 */
+				values: {}
+			}
+		),
+		initializeFrame: function() {
+			fw.Modal.prototype.initializeFrame.call(this);
+
+			var modal = this;
+
+			this.frame.once('ready', function() {
+				modal.frame.$el.removeClass('hide-toolbar');
+				modal.frame.modal.$el.addClass('fw-options-modal');
+			});
+
+			this.frame.on('content:create:main', function () {
+				modal.frame.toolbar.set(
+					new wp.media.view.Toolbar({
+						controller: modal.frame,
+						items: [
+							{
+								style: 'primary',
+								text: _fw_localized.l10n.save,
+								priority: 40,
+								click: function () {
+									/**
+									 * Simulate form submit
+									 * Important: Empty input[required] must not start form submit
+									 *     and must show default browser warning popup "This field is required"
+									 */
+									modal.content.$el.find('input[type="submit"].hidden-submit').trigger('click');
+								}
+							}
+						]
+					})
+				);
+			});
 		},
 		/**
 		 * @param {Object} options used for fw()->backend->render_options(json_decode(options, true))
 		 */
 		open: function() {
-			this.frame.open();
+			fw.Modal.prototype.open.call(this);
 
 			this.updateHtml();
+
+			return this;
 		},
 		getHtmlCacheId: function() {
 			return fw.md5(
-				JSON.stringify(this.get('options')) +'~'+ JSON.stringify(this.get('values'))
+				JSON.stringify(this.get('options')) +
+				'~' +
+				JSON.stringify(this.get('values'))
 			);
 		},
 		updateHtml: function() {
@@ -970,32 +1076,6 @@ fw.getQueryString = function(name) {
 					modal.set('html', status+ ': '+ error.message);
 				}
 			});
-		},
-		/**
-		 * Resize .fw-options-tabs-contents to fit entire window
-		 */
-		resizeTabsContent: function () {
-			var $content, $frame;
-
-			$content = this.frame.$el.find('.fw-options-tabs-first-level > .fw-options-tabs-contents');
-			if ($content.length == 0) {
-				return;
-			}
-
-			$frame = $content.closest('.media-frame-content');
-
-			// resize icon list to fit entire window
-			$content.css('overflow-y', 'auto').height(1000000);
-			$frame.scrollTop(1000000);
-
-			// -1 is necessary for Linux and Windows
-			// -2 is necessary for Mac OS
-			// I don't know where this numbers come from but without this adjustment
-			// vertical scroll bar appears.
-			$content.height($content.height() - $frame.scrollTop() /* - 2  */);
-
-			// This is another fix for vertical scroll bar issue
-			$frame.css('overflow-y', 'hidden');
 		}
 	});
 })();
