@@ -8,6 +8,7 @@ class FW_Container_Type_Popup extends FW_Container_Type {
 	protected function _get_defaults() {
 		return array(
 			'title' => __('More Options', 'fw'),
+			'modal-size' => 'small', // small, medium, large
 		);
 	}
 
@@ -27,10 +28,22 @@ class FW_Container_Type_Popup extends FW_Container_Type {
 	protected function _render($containers, $values, $data) {
 		$html = '';
 
+		$defaults = $this->get_defaults();
+
 		foreach ($containers as $id => &$option) {
-			$attr = $option['attr'];
-			$attr['data-modal-title'] = $option['title'];
-			$attr['style'] = 'padding:15px;';
+			{
+				$attr = $option['attr'];
+
+				$attr['data-modal-title'] = $option['title'];
+
+				if (in_array($option['modal-size'], array('small', 'medium', 'large'))) {
+					$attr['data-modal-size'] = $option['modal-size'];
+				} else {
+					$attr['data-modal-size'] = $defaults['modal-size'];
+				}
+
+				$attr['style'] = 'padding:15px;';
+			}
 
 			$html .=
 				'<div '. fw_attr_to_html($attr) .'>'

@@ -6,7 +6,8 @@ jQuery(function($){
 				var $option = data.$option,
 					$options = data.$options,
 					modal = optionsModals[id] = new fw.Modal({
-						title: $option.attr('data-modal-title')
+						title: $option.attr('data-modal-title'),
+						size: $option.attr('data-modal-size')
 					}),
 					onOpen = function(){
 						$options.detach();
