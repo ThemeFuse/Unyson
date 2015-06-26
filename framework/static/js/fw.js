@@ -590,6 +590,16 @@ fw.getQueryString = function(name) {
 	 * modal.on('open|close', function(){});
 	 */
 	fw.Modal = Backbone.Model.extend({
+		defaults: {
+			/* Modal title */
+			title: 'Edit Options',
+			/**
+			 * Content html
+			 * @private
+			 */
+			html: '',
+			size: 'small' // small, medium, large
+		},
 		ContentView: Backbone.View.extend({
 			tagName: 'form',
 			attributes: {
@@ -635,16 +645,6 @@ fw.getQueryString = function(name) {
 				this.$el.append('<input type="submit" class="fw-hidden hidden-submit" />');
 			}
 		}),
-		defaults: {
-			/* Modal title */
-			title: 'Edit Options',
-			/**
-			 * Content html
-			 * @private
-			 */
-			html: '',
-			size: 'small' // small, medium, large
-		},
 		/**
 		 * Create and init this.frame
 		 */
