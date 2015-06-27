@@ -634,6 +634,11 @@ function fw_extract_only_options(array $options, &$_recursion_options = array())
  * Collect correct options from the first level of the array and group them
  * @param array $collected Will be filled with found correct options
  * @param array $options
+ *
+ * @deprecated
+ * It is deprecated since 2.4 because container types were added and there can be any type of containers
+ * but this function is hardcoded only for tab,box,group.
+ * Use fw_collect_options()
  */
 function fw_collect_first_level_options(&$collected, &$options) {
 	if (empty($options)) {
