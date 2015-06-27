@@ -1374,8 +1374,21 @@ final class _FW_Component_Backend {
 			wp_enqueue_script( 'fw-backend-options' );
 		}
 
-		foreach ( fw_extract_only_options( $options ) as $option_id => $option ) {
-			fw()->backend->option_type( $option['type'] )->enqueue_static( $option_id, $option );
+		$collected = array();
+
+		fw_collect_options( $collected, $options, array(
+			'limit_option_types' => false,
+			'limit_container_types' => false,
+			'limit_level' => 0,
+			'info_wrapper' => true,
+		) );
+
+		foreach ( $collected as &$option ) {
+			if ($option['group'] === 'option') {
+				fw()->backend->option_type($option['option']['type'])->enqueue_static($option['id'], $option['option']);
+			} elseif ($option['group'] === 'container') {
+				fw()->backend->container_type($option['option']['type'])->enqueue_static($option['id'], $option['option']);
+			}
 		}
 	}
 
