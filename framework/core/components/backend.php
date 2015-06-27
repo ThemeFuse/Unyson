@@ -648,22 +648,22 @@ final class _FW_Component_Backend {
 
 		$collected = array();
 
-		fw_collect_first_level_options( $collected, $options );
+		fw_collect_options( $collected, $options, array(
+			'limit_option_types' => false,
+			'limit_container_types' => array(), // only simple options are allowed on taxonomy edit page
+			'limit_level' => 1,
+		) );
 
-		unset( $options );
-
-		if ( empty( $collected['options'] ) ) {
+		if ( empty( $collected ) ) {
 			return;
-		} // only simple options are allowed on taxonomy edit page
+		}
 
 		$values = fw_get_db_term_option( $term->term_id, $term->taxonomy );
 
 		// fixes word_press style: .form-field input { width: 95% }
 		echo '<style type="text/css">.fw-option-type-radio input, .fw-option-type-checkbox input { width: auto; }</style>';
 
-		echo $this->render_options( $collected['options'], $values, array(), 'taxonomy' );
-
-		unset( $options );
+		echo $this->render_options( $collected, $values, array(), 'taxonomy' );
 	}
 
 	public function _action_init() {
