@@ -1742,91 +1742,111 @@ final class _FW_Component_Backend {
 	 */
 	private function customizer_register_options($wp_customize, $options, $parent_data = array()) {
 		$collected = array();
-		fw_collect_first_level_options( $collected, $options );
 
-		if (empty($collected['all'])) {
+		fw_collect_options( $collected, $options, array(
+			'limit_option_types' => false,
+			'limit_container_types' => false,
+			'limit_level' => 1,
+			'info_wrapper' => true,
+		) );
+
+		if ( empty( $collected ) ) {
 			return;
 		}
 
-		foreach ($collected['all'] as &$opt) {
-			switch ($opt['type']) {
-				case 'tab':
-					$args = array(
-						'title' => $opt['option']['title'],
-						'description' => empty($opt['option']['desc']) ? '' : $opt['option']['desc'],
-					);
+		foreach ($collected as &$opt) {
+			switch ($opt['group']) {
+				case 'container':
+					// Check if has container options
+					{
+						$_collected = array();
 
-					if ($parent_data) {
-						trigger_error('Not supported panel parent, type: '. $parent_data['type'], E_USER_WARNING);
-						break;
+						fw_collect_options( $_collected, $opt['option']['options'], array(
+							'limit_option_types' => array(),
+							'limit_container_types' => false,
+							'limit_level' => 1,
+							'limit' => 1,
+							'info_wrapper' => false,
+						) );
+
+						$has_containers = !empty($_collected);
+
+						unset($_collected);
 					}
 
-					$wp_customize->add_panel(
-						$opt['id'],
-						$args
+					$children_data = array(
+						'group' => 'container',
+						'id' => $opt['id']
 					);
 
-					$this->customizer_register_options(
-						$wp_customize,
-						$opt['option']['options'],
-						array(
-							'type' => 'panel',
-							'id' => $opt['id']
-						)
-					);
-					break;
-				case 'box':
 					$args = array(
-						'title' => $opt['option']['title'],
+						'title' => empty($opt['option']['title'])
+							? fw_id_to_title($opt['id'])
+							: $opt['option']['title'],
+						'description' => empty($opt['option']['desc'])
+							? ''
+							: $opt['option']['desc'],
 					);
 
-					if ($parent_data) {
-						if ($parent_data['type'] === 'panel') {
-							$args['panel'] = $parent_data['id'];
-						} else {
-							trigger_error('Not supported section parent, type: '. $parent_data['type'], E_USER_WARNING);
+					if ($has_containers) {
+						if ($parent_data) {
+							trigger_error($opt['id'] .' panel can\'t have a parent ('. $parent_data['id'] .')', E_USER_WARNING);
 							break;
 						}
-					}
 
-					$wp_customize->add_section($opt['id'], $args);
+						$wp_customize->add_panel($opt['id'], $args);
+
+						$children_data['customizer_type'] = 'panel';
+					} else {
+						if ($parent_data) {
+							if ($parent_data['customizer_type'] === 'panel') {
+								$args['panel'] = $parent_data['id'];
+							} else {
+								trigger_error($opt['id'] .' section can have only panel parent ('. $parent_data['id'] .')', E_USER_WARNING);
+								break;
+							}
+						}
+
+						$wp_customize->add_section($opt['id'], $args);
+
+						$children_data['customizer_type'] = 'section';
+					}
 
 					$this->customizer_register_options(
 						$wp_customize,
 						$opt['option']['options'],
-						array(
-							'type' => 'section',
-							'id' => $opt['id']
-						)
+						$children_data
 					);
+
+					unset($children_data);
 					break;
 				case 'option':
 					$setting_id = FW_Option_Type::get_default_name_prefix() .'['. $opt['id'] .']';
 
 					{
 						$args = array(
-							'label'       => empty($opt['option']['label']) ? '' : $opt['option']['label'],
-							'description' => empty($opt['option']['desc']) ? '' : $opt['option']['desc'],
-							'settings'    => $setting_id,
-							'type'        => 'radio',
-							'choices'     => array(
-								'a' => 'Demo A',
-								'b' => 'Demo B',
-							),
+							'label' => empty($opt['option']['label'])
+								? fw_id_to_title($opt['id'])
+								: $opt['option']['label'],
+							'description' => empty($opt['option']['desc'])
+								? ''
+								: $opt['option']['desc'],
+							'settings' => $setting_id,
 						);
 
 						if ($parent_data) {
-							if ($parent_data['type'] === 'section') {
+							if ($parent_data['customizer_type'] === 'section') {
 								$args['section'] = $parent_data['id'];
 							} else {
-								trigger_error('Not supported control parent, type: '. $parent_data['type'], E_USER_WARNING);
+								trigger_error('Invalid control parent: '. $parent_data['customizer_type'], E_USER_WARNING);
 								break;
 							}
-						} else {
-							// the option is not placed in a section, create a section automatically
+						} else { // the option is not placed in a section, create a section automatically
 							$args['section'] = 'fw_option_auto_section_'. $opt['id'];
 							$wp_customize->add_section($args['section'], array(
-								'title' => empty($opt['option']['label']) ? fw_id_to_title($opt['id']) : $opt['option']['label'],
+								'title' => empty($opt['option']['label'])
+									? fw_id_to_title($opt['id'])
+									: $opt['option']['label'],
 							));
 						}
 					}
@@ -1859,7 +1879,7 @@ final class _FW_Component_Backend {
 					);
 					break;
 				default:
-					trigger_error('Not supported option in customizer, type: '. $opt['type'], E_USER_WARNING); // todo: uncomment
+					trigger_error('Unknown group: '. $opt['group'], E_USER_WARNING);
 			}
 		}
 	}
