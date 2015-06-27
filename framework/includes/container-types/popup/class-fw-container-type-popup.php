@@ -7,8 +7,8 @@ class FW_Container_Type_Popup extends FW_Container_Type {
 
 	protected function _get_defaults() {
 		return array(
-			'title' => __('More Options', 'fw'),
 			'modal-size' => 'small', // small, medium, large
+			'desc' => '',
 		);
 	}
 
@@ -16,13 +16,20 @@ class FW_Container_Type_Popup extends FW_Container_Type {
 		$uri = fw_get_framework_directory_uri('/includes/container-types/popup');
 
 		wp_enqueue_script(
-			'fw-container-type-popup',
+			'fw-container-type-'. $this->get_type(),
 			$uri .'/scripts.js',
 			array('jquery', 'fw-events', 'fw'),
 			fw()->manifest->get_version()
 		);
 
 		wp_enqueue_style('fw');
+
+		wp_enqueue_style(
+			'fw-container-type-'. $this->get_type(),
+			$uri .'/styles.css',
+			array(),
+			fw()->manifest->get_version()
+		);
 	}
 
 	protected function _render($containers, $values, $data) {
@@ -41,12 +48,11 @@ class FW_Container_Type_Popup extends FW_Container_Type {
 				} else {
 					$attr['data-modal-size'] = $defaults['modal-size'];
 				}
-
-				$attr['style'] = 'padding:15px;';
 			}
 
 			$html .=
 				'<div '. fw_attr_to_html($attr) .'>'
+				. '<p class="popup-button-wrapper">'
 				. fw_html_tag(
 					'button',
 					array(
@@ -55,6 +61,8 @@ class FW_Container_Type_Popup extends FW_Container_Type {
 					),
 					$option['title']
 				)
+				. '</p>'
+				. (empty($option['desc']) ? '' : ('<div class="popup-desc">'. $option['desc'] .'</div>'))
 				. '<div class="popup-options fw-hidden">'
 				. fw()->backend->render_options($option['options'], $values, $data)
 				. '</div>'

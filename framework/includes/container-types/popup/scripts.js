@@ -34,7 +34,7 @@ jQuery(function($){
 	fwEvents.on('fw:options:init', function(data){
 		data.$elements.find(optionTypeClass +':not(.initialized)').each(function(){
 			var $option = $(this),
-				$button = $option.find('> .popup-button'),
+				$button = $option.find('> .popup-button-wrapper > .popup-button'),
 				$options = $option.find('> .popup-options');
 
 			$button.on('click', function(){
