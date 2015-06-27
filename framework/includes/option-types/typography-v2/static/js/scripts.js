@@ -95,7 +95,7 @@
 							// Allow: Ctrl+A
 						(e.keyCode == 65 && e.ctrlKey === true) ||
 							//Allow -
-						(e.keyCode == 109 ) ||
+						(e.keyCode == 109 ) || (e.keyCode == 189 ) ||
 							// Allow: Ctrl+C
 						(e.keyCode == 67 && e.ctrlKey === true) ||
 							// Allow: Ctrl+X
