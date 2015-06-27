@@ -587,41 +587,53 @@ final class _FW_Component_Backend {
 
 		$collected = array();
 
-		fw_collect_first_level_options( $collected, $options );
+		fw_collect_options( $collected, $options, array(
+			'limit_option_types' => false,
+			'limit_container_types' => false,
+			'limit_level' => 1,
+			'info_wrapper' => true,
+		) );
 
-		unset( $options ); // free memory
-
-		if ( empty( $collected['boxes'] ) ) {
-			return; // only boxes are allowed on edit post page
+		if (empty($collected)) {
+			return;
 		}
-
-		$boxes =& $collected['boxes'];
-
-		unset( $collected ); // free memory
 
 		$values = fw_get_db_post_option( $post->ID );
 
-		foreach ( $boxes as $id => &$box ) {
-			if (empty($box['options'])) {
-				continue;
+		foreach ( $collected as &$option ) {
+			if (
+				$option['group'] === 'container'
+				&&
+				$option['option']['type'] === 'box'
+			) { // this is a box, add it as a metabox
+				$context  = isset( $option['option']['context'] )
+					? $option['option']['context']
+					: 'normal';
+				$priority = isset( $option['option']['priority'] )
+					? $option['option']['priority']
+					: 'default';
+
+				add_meta_box(
+					'fw-options-box-' . $option['id'],
+					empty( $option['option']['title'] ) ? ' ' : $option['option']['title'],
+					$this->print_meta_box_content_callback,
+					$post_type,
+					$context,
+					$priority,
+					$this->render_options( $option['option']['options'], $values )
+				);
+			} else { // this is not a box, wrap it in auto-generated box
+				add_meta_box(
+					'fw-options-box:auto-generated:'. time() .':'. fw_unique_increment(),
+					' ',
+					$this->print_meta_box_content_callback,
+					$post_type,
+					'normal',
+					'default',
+					$this->render_options( array($option['id'] => $option['option']), $values )
+				);
 			}
-
-			$context  = isset( $box['context'] ) ? $box['context'] : 'normal';
-			$priority = isset( $box['priority'] ) ? $box['priority'] : 'default';
-
-			add_meta_box(
-				'fw-options-box-' . $id,
-				empty( $box['title'] ) ? ' ' : $box['title'],
-				$this->print_meta_box_content_callback,
-				$post_type,
-				$context,
-				$priority,
-				$this->render_options( $box['options'], $values )
-			);
-
-			unset( $box[ $id ] ); // free memory
 		}
-		unset($box);
 	}
 
 	/**
