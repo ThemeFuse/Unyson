@@ -52,8 +52,9 @@ abstract class FW_Container_Type
 	 * @return array
 	 *
 	 * array(
-	 *     'title' => 'Container default title', // optional, some containers may not have a title
+	 *     'type' => '...',
 	 *     ...
+	 *     'options' => array(...),
 	 * )
 	 * @internal
 	 */
@@ -90,11 +91,12 @@ abstract class FW_Container_Type
 	/**
 	 * Fixes and prepare defaults
 	 *
+	 * @param string $id
 	 * @param array  $option
 	 * @param array  $data
 	 * @return array
 	 */
-	private function prepare(&$option, &$data)
+	private function prepare($id, &$option, &$data)
 	{
 		$data = array_merge(
 			array(
@@ -114,6 +116,10 @@ abstract class FW_Container_Type
 
 		if (!isset($option['attr'])) {
 			$option['attr'] = array();
+		}
+
+		if (!isset($option['title'])) {
+			$option['title'] = fw_id_to_title($id);
 		}
 
 		$option['attr']['class'] = 'fw-container fw-container-type-'. $option['type'] .(
@@ -145,7 +151,7 @@ abstract class FW_Container_Type
 				continue;
 			}
 
-			$this->prepare($option, $data);
+			$this->prepare($id, $option, $data);
 
 			$this->enqueue_static($id, $option, $data);
 
@@ -172,7 +178,7 @@ abstract class FW_Container_Type
 			return false;
 		}
 
-		$this->prepare($option, $data);
+		$this->prepare($id, $option, $data);
 
 		$call_next_time = $this->_enqueue_static($id, $option, $values, $data);
 
@@ -184,10 +190,10 @@ abstract class FW_Container_Type
 	/**
 	 * Default option array
 	 *
-	 * This makes possible an option array to have required only one parameter: array('type' => '...')
-	 * Other parameters are merged with array returned from this method
-	 *
 	 * @return array
+	 *         'type'  => '...'
+	 *         'title' => '...'
+	 *         'attr'  => array(...)
 	 */
 	final public function get_defaults()
 	{
