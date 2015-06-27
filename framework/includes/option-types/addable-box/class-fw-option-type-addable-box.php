@@ -91,12 +91,14 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 			}
 		}
 
-		// Use only groups and options
 		{
-			$collected = array();
-			fw_collect_first_level_options($collected, $option['box-options']);
-			$box_options =& $collected['groups_and_options'];
-			unset($collected);
+			$box_options = array();
+
+			fw_collect_options( $box_options, $options, array(
+				'limit_option_types' => false,
+				'limit_container_types' => array('group'), // Use only groups and options
+				'limit_level' => 1,
+			) );
 		}
 
 		$option['attr']['data-for-js'] = json_encode(array(
