@@ -587,47 +587,16 @@ function fw_include_file_isolated($file_path, $once = false) {
 }
 
 /**
- * Extract only input options from array with: tabs, boxes, options
+ * Extract only input options (without containers)
  * @param array $options
- * @param array $_recursion_options Do not use this parameter
  * @return array {option_id => option}
  */
-function fw_extract_only_options(array $options, &$_recursion_options = array()) {
-	static $recursion = null;
+function fw_extract_only_options(array $options) {
+	$collected = array();
 
-	if ($recursion === null) {
-		$recursion = array(
-			'level'  => 0,
-			'result' => array(),
-		);
+	fw_collect_options($collected, $options);
 
-		$_recursion_options =& $options;
-	}
-
-	foreach ($_recursion_options as $id => &$option) {
-		if (isset($option['options'])) {
-			// this is container with options
-			$recursion['level']++;
-			fw_extract_only_options(array(), $option['options']);
-			$recursion['level']--;
-		} elseif (isset($option['type']) && is_string($option['type'])) {
-			$recursion['result'][$id] =& $option;
-		} elseif (is_int($id) && is_array($option)) {
-			// this is array with options
-			$recursion['level']++;
-			fw_extract_only_options(array(), $option);
-			$recursion['level']--;
-		}
-	}
-	unset($option);
-
-	if ($recursion['level'] == 0) {
-		$result =& $recursion['result'];
-
-		$recursion = null;
-
-		return $result;
-	}
+	return $collected;
 }
 
 /**
