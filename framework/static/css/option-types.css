@@ -123,10 +123,6 @@ textarea.fw-option-type-textarea {
 	padding: 3px 5px;
 }
 
-.fw-modal .media-frame input {
-	line-height: 15px;
-}
-
 .fw-modal .media-frame textarea.code {
 	line-height: 1.4;
 }
