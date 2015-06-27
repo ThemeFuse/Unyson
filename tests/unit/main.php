@@ -161,6 +161,30 @@ class Tests_Unyson_Main extends WP_UnitTestCase {
 			$result = array();
 
 			fw_collect_options($result, $options, array(
+				'limit' => 1,
+			));
+
+			$this->assertEquals(1, count($result));
+
+			unset($result);
+		}
+
+		{
+			$result = array();
+
+			fw_collect_options($result, $options, array(
+				'limit' => 3,
+			));
+
+			$this->assertEquals(3, count($result));
+
+			unset($result);
+		}
+
+		{
+			$result = array();
+
+			fw_collect_options($result, $options, array(
 				'limit_option_types' => array('text', 'textarea'),
 			));
 

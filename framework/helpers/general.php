@@ -767,6 +767,10 @@ function fw_collect_options(&$result, &$options, $settings = array(), $_recursio
 		 * @type false|array('container-type', ...) Empty array will skip all types
 		 */
 		'limit_container_types' => array(),
+		/**
+		 * @type int Limit the number of options that will be collected
+		 */
+		'limit' => 0,
 	);
 
 	static $access_key = null;
@@ -814,6 +818,14 @@ function fw_collect_options(&$result, &$options, $settings = array(), $_recursio
 					!in_array($option['type'], $settings['limit_container_types'])
 				) {
 					break;
+				}
+
+				if (
+					$settings['limit']
+					&&
+					count($result) >= $settings['limit']
+				) {
+					return;
 				}
 
 				if ($settings['info_wrapper']) {
@@ -877,6 +889,14 @@ function fw_collect_options(&$result, &$options, $settings = array(), $_recursio
 				!in_array($option['type'], $settings['limit_option_types'])
 			) {
 				continue;
+			}
+
+			if (
+				$settings['limit']
+				&&
+				count($result) >= $settings['limit']
+			) {
+				return;
 			}
 
 			if ($settings['info_wrapper']) {
