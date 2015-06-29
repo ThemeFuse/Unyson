@@ -170,7 +170,7 @@ unset($data);
 		?>
 	</div>
 
-	<?php if ($something_displayed): ?>
+	<?php if ($something_displayed && apply_filters('fw_extensions_page_show_other_extensions', true)): ?>
 		<!-- show/hide not compatible extensions -->
 		<p class="fw-text-center toggle-not-compat-ext-btn-wrapper"><?php
 			echo fw_html_tag(
