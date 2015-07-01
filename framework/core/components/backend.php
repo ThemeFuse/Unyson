@@ -544,7 +544,7 @@ final class _FW_Component_Backend {
 				array(
 					fw_html_tag('a', array(
 						'target' => '_blank',
-						'href'   => 'https://wordpress.org/support/view/plugin-reviews/unyson?filter=5',
+						'href'   => 'https://wordpress.org/support/view/plugin-reviews/unyson?filter=5#postform',
 					), __('leave a review', 'fw')),
 					fw_html_tag('a', array(
 						'target' => '_blank',
