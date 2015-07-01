@@ -176,6 +176,7 @@ final class _FW_Component_Backend {
 
 	private function add_filters() {
 		if ( is_admin() ) {
+			add_filter('admin_footer_text', array($this, '_filter_admin_footer_text'), 11);
 			add_filter('update_footer', array($this, '_filter_footer_version'), 11);
 		}
 	}
@@ -518,19 +519,70 @@ final class _FW_Component_Backend {
 		add_action( 'admin_menu', array( $this, '_action_admin_change_theme_settings_order' ), 9999 );
 	}
 
+	public function _filter_admin_footer_text( $html ) {
+		if (
+			(
+				current_user_can( 'update_themes' )
+				||
+				current_user_can( 'update_plugins' )
+			)
+			&&
+			fw_current_screen_match(array(
+				'only' => array(
+					array('parent_base' => fw()->extensions->manager->get_page_slug()) // Unyson Extensions page
+				)
+			))
+		) {
+			return ( empty( $html ) ? '' : $html . '<br/>' )
+			. '<em>'
+			. str_replace(
+				array(
+					'{wp_review_link}',
+					'{facebook_share_link}',
+					'{twitter_share_link}',
+				),
+				array(
+					fw_html_tag('a', array(
+						'target' => '_blank',
+						'href'   => 'https://wordpress.org/support/view/plugin-reviews/unyson?filter=5',
+					), __('leave a review', 'fw')),
+					fw_html_tag('a', array(
+						'target' => '_blank',
+						'href'   => 'https://www.facebook.com/sharer/sharer.php?'. http_build_query(array(
+							'u' => 'http://unyson.io',
+						)),
+						'onclick' => 'return !window.open(this.href, \'Facebook\', \'width=640,height=300\')',
+					), __('Facebook', 'fw')),
+					fw_html_tag('a', array(
+						'target' => '_blank',
+						'href'   => 'https://twitter.com/home?'. http_build_query(array(
+							'status' => __('Unyson WordPress Framework is the fastest and easiest way to develop a premium theme. I highly recommend it', 'fw')
+								.' http://unyson.io/ #unysonwp',
+						)),
+						'onclick' => 'return !window.open(this.href, \'Twitter\', \'width=640,height=430\')',
+					), __('Twitter', 'fw')),
+				),
+				__('If you like Unyson, {wp_review_link}, share on {facebook_share_link} or {twitter_share_link}.', 'fw')
+			)
+			. '</em>';
+		} else {
+			return $html;
+		}
+	}
+
 	/**
 	 * Print framework version in the admin footer
 	 *
-	 * @param string $value
+	 * @param string $html
 	 *
 	 * @return string
 	 * @internal
 	 */
-	public function _filter_footer_version( $value ) {
+	public function _filter_footer_version( $html ) {
 		if ( current_user_can( 'update_themes' ) || current_user_can( 'update_plugins' ) ) {
-			return ( empty( $value ) ? '' : $value . ' | ' ) . fw()->manifest->get_name() . ' ' . fw()->manifest->get_version();
+			return ( empty( $html ) ? '' : $html . ' | ' ) . fw()->manifest->get_name() . ' ' . fw()->manifest->get_version();
 		} else {
-			return $value;
+			return $html;
 		}
 	}
 
