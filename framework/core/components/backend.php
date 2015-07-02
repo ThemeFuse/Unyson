@@ -390,54 +390,51 @@ final class _FW_Component_Backend {
 			);
 		}
 
-		{
-			wp_register_style(
-				'fw-font-awesome',
-				fw_get_framework_directory_uri( '/static/libs/font-awesome/css/font-awesome.min.css' ),
-				array(),
-				fw()->manifest->get_version()
-			);
-		}
+		wp_register_style(
+			'fw-font-awesome',
+			fw_get_framework_directory_uri( '/static/libs/font-awesome/css/font-awesome.min.css' ),
+			array(),
+			fw()->manifest->get_version()
+		);
 
-		{
-			wp_register_script(
-				'backbone-relational',
-				fw_get_framework_directory_uri( '/static/libs/backbone-relational/backbone-relational.js' ),
-				array( 'backbone' ),
-				fw()->manifest->get_version(),
-				true
-			);
-		}
+		wp_register_script(
+			'backbone-relational',
+			fw_get_framework_directory_uri( '/static/libs/backbone-relational/backbone-relational.js' ),
+			array( 'backbone' ),
+			fw()->manifest->get_version(),
+			true
+		);
 
-		{
-			wp_register_script(
-				'fw-uri',
-				fw_get_framework_directory_uri( '/static/libs/uri/URI.js' ),
-				array(),
-				fw()->manifest->get_version(),
-				true
-			);
-		}
+		wp_register_script(
+			'fw-uri',
+			fw_get_framework_directory_uri( '/static/libs/uri/URI.js' ),
+			array(),
+			fw()->manifest->get_version(),
+			true
+		);
 
-		{
-			wp_register_script(
-				'fw-moment',
-				fw_get_framework_directory_uri( '/static/libs/moment/moment.min.js' ),
-				array(),
-				fw()->manifest->get_version(),
-				true
-			);
-		}
+		wp_register_script(
+			'fw-moment',
+			fw_get_framework_directory_uri( '/static/libs/moment/moment.min.js' ),
+			array(),
+			fw()->manifest->get_version(),
+			true
+		);
 
-		{
-			wp_register_script(
-				'fw-form-helpers',
-				fw_get_framework_directory_uri( '/static/js/fw-form-helpers.js' ),
-				array( 'jquery' ),
-				fw()->manifest->get_version(),
-				true
-			);
-		}
+		wp_register_script(
+			'fw-form-helpers',
+			fw_get_framework_directory_uri( '/static/js/fw-form-helpers.js' ),
+			array( 'jquery' ),
+			fw()->manifest->get_version(),
+			true
+		);
+
+		wp_register_style(
+			'fw-unycon',
+			fw_get_framework_directory_uri( '/static/libs/unycon/styles.css' ),
+			array(),
+			fw()->manifest->get_version()
+		);
 
 		$this->static_registered = true;
 	}
