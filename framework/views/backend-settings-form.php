@@ -9,30 +9,41 @@
  */
 ?>
 
-<script type="text/javascript">
-	(function($){
-		var fwLoadingId = 'fw-theme-settings';
+<?php
+if (!function_exists('_action_fw_theme_settings_footer_scripts')):
 
-		{
-			fw.loading.show(fwLoadingId);
+function _action_fw_theme_settings_footer_scripts() {
+	?>
+	<script type="text/javascript">
+		(function ($) {
+			var fwLoadingId = 'fw-theme-settings';
 
-			fwEvents.one('fw:options:init', function(data){
-				fw.loading.hide(fwLoadingId);
-			});
-		}
+			{
+				fw.loading.show(fwLoadingId);
 
-		$(function($){
-			$(document.body).on({
-				'fw:settings-form:before-html-reset': function(){
-					fw.loading.show(fwLoadingId);
-				},
-				'fw:settings-form:reset': function(){
+				fwEvents.one('fw:options:init', function (data) {
 					fw.loading.hide(fwLoadingId);
-				}
+				});
+			}
+
+			$(function ($) {
+				$(document.body).on({
+					'fw:settings-form:before-html-reset': function () {
+						fw.loading.show(fwLoadingId);
+					},
+					'fw:settings-form:reset': function () {
+						fw.loading.hide(fwLoadingId);
+					}
+				});
 			});
-		});
-	})(jQuery);
-</script>
+		})(jQuery);
+	</script>
+<?php
+}
+add_action('admin_print_footer_scripts', '_action_fw_theme_settings_footer_scripts', 20);
+
+endif;
+?>
 
 <?php if ($side_tabs): ?>
 	<div class="fw-settings-form-header fw-row">
