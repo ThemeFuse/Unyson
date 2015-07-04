@@ -52,7 +52,7 @@ You can help us improve the documentation by contributing to this [Github reposi
 
 ## Copyright and license
 
-Code and documentation copyright 2014 ThemeFuse LTD. Code released under [the GPL license](https://github.com/ThemeFuse/Unyson/blob/master/LICENSE). Docs released under [Creative Commons](https://github.com/ThemeFuse/Unyson-Documentation/blob/master/LICENSE).
+Code and documentation copyright 2014 ThemeFuse LTD. Code released under [the GPL license](https://github.com/ThemeFuse/Unyson/blob/master/framework/LICENSE). Docs released under [Creative Commons](https://github.com/ThemeFuse/Unyson-Documentation/blob/master/LICENSE).
 
 ## Contributing
 
