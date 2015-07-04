@@ -431,7 +431,7 @@ final class _FW_Component_Backend {
 
 		wp_register_style(
 			'fw-unycon',
-			fw_get_framework_directory_uri( '/static/libs/unycon/styles.css' ),
+			fw_get_framework_directory_uri( '/static/libs/unycon/unycon.css' ),
 			array(),
 			fw()->manifest->get_version()
 		);
