@@ -112,9 +112,6 @@ jQuery(document).ready(function ($) {
 		isBusy: false,
 		template: function(template, vars) {
 			try {
-				/**
-				 * may throw error in in template is used an option id added after some items was already saved
-				 */
 				return _.template(
 					$.trim(template),
 					vars,
