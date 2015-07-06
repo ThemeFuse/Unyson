@@ -1,9 +1,11 @@
-jQuery(document).ready(function($){
-	$(document.body).click(function (e) {
-		if (!$(e.target).is('.fw-option-type-color-picker, .iris-picker, .iris-picker-inner, .iris-palette')) {
-			$('.fw-option-type-color-picker.initialized').iris('hide');
-		}
-	});
+/*global jQuery */
+(function($){
+	$(document).ready(function(){
+		$(document.body).click(function (e) {
+			if (!$(e.target).is('.fw-option-type-color-picker, .iris-picker, .iris-picker-inner, .iris-palette')) {
+				$('.fw-option-type-color-picker.initialized').iris('hide');
+			}
+		});
 
 	/**
 	 * Return true if color is dark
@@ -78,13 +80,22 @@ jQuery(document).ready(function($){
 			$input.addClass('initialized');
 		});
 
-		jQuery('.fw-inner').on('click', '.fw-option-type-color-picker', function () {
-			$('.fw-option-type-color-picker.initialized').iris('hide');
+			$('.fw-inner').on('click', '.fw-option-type-color-picker', function () {
+				var $this = $(this);
+				$('.fw-option-type-color-picker.initialized').iris('hide');
 
-			$(this).iris('show');
+				$this.iris('show');
 
-			return false;
+				var widthParent = $this.closest('.fw-backend-option').outerWidth(),
+					widthPiker = $this.next('.iris-picker').outerWidth(),
+					offsetPiker = ($this.next('.iris-picker').offset().left - $this.closest('.fw-backend-option').offset().left) + widthPiker;
+
+				if (offsetPiker > widthParent) {
+					$this.next('.iris-picker').css('right', '0');
+				}
+				return false;
+			});
+
 		});
-
 	});
-});
+})(jQuery);
