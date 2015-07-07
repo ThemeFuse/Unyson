@@ -477,7 +477,7 @@ final class _FW_Component_Backend {
 
 		/**
 		 * Use this action if you what to add the settings page in a custom place in menu
-		 * Usage example http://pastebin.com/0KQXLPZj
+		 * Usage example http://pastebin.com/gvAjGRm1
 		 */
 		do_action( 'fw_backend_add_custom_settings_menu', $data );
 
