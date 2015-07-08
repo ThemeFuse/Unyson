@@ -1047,13 +1047,25 @@ function fw_current_url() {
 			$url .= $_SERVER['SERVER_NAME'];
 		}
 
-		if ($_SERVER['SERVER_PORT'] != '80') {
+		if (!in_array(intval($_SERVER['SERVER_PORT']), array(80, 443))) {
 			$url .= ':'. $_SERVER['SERVER_PORT'];
 		}
 
 		$url .= $_SERVER['REQUEST_URI'];
 
-		$url = set_url_scheme($url);
+		$url = set_url_scheme($url); // https fix
+
+		if ( is_multisite() ) {
+			if ( defined( 'SUBDOMAIN_INSTALL' ) && SUBDOMAIN_INSTALL ) {
+				$site_url = parse_url($url);
+
+				if ( isset($site_url['query']) ) {
+					$url = home_url($site_url['path'] . '?' . $site_url['query']);
+				} else {
+					$url = home_url($site_url['path']);
+				}
+			}
+		}
 	}
 
 	return $url;
