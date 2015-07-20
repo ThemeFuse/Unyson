@@ -94,7 +94,7 @@ class FW_Option_Type_Slider extends FW_Option_Type {
 		if (is_null($input_value)) {
 			return $option['value'];
 		} else {
-			return intval($input_value);
+			return floatval($input_value);
 		}
 	}
 
