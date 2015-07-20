@@ -84,7 +84,7 @@ Yes; Unyson will work with any theme.
 
 = 2.4.0 =
 * Created "Container Types" and container type `popup` [#615](https://github.com/ThemeFuse/Unyson/issues/615)
-* Created the `fw_collect_options()` function
+* Created the `fw_collect_options()` function [#740](https://github.com/ThemeFuse/Unyson/issues/740)
 * Added Unycon font icon. Demo `http://{your-host}/wp-content/plugins/unyson/framework/static/libs/unycon/demo/`
 * Minor fixes
 
