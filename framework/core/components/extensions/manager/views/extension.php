@@ -60,7 +60,7 @@ if (!$installed_data && !$is_compatible) {
 					<img height="128" src="<?php echo esc_attr($thumbnail) ?>" class="fw-extensions-list-item-thumbnail" alt="Thumbnail"/>
 				</div>
 				<div class="fw-extension-list-item-table-cell cell-2">
-					<h3 class="fw-extensions-list-item-title"><?php
+					<h3 class="fw-extensions-list-item-title"<?php if ($is_active): ?> title="v<?php echo esc_attr(fw()->extensions->get($name)->manifest->get_version()) ?>"<?php endif; ?>><?php
 						if ($is_active && ($extension_link = fw()->extensions->get($name)->_get_link())) {
 							echo fw_html_tag('a', array('href' => $extension_link), $title);
 						} else {
