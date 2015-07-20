@@ -914,7 +914,9 @@ fw.getQueryString = function(name) {
 			onSubmit: function(e) {
 				e.preventDefault();
 
-				fw.loading.show(fwLoadingId);
+				var loadingId = fwLoadingId +':submit';
+
+				fw.loading.show(loadingId);
 
 				jQuery.ajax({
 					url: ajaxurl,
@@ -927,7 +929,7 @@ fw.getQueryString = function(name) {
 					].join('&'),
 					dataType: 'json',
 					success: _.bind(function (response, status, xhr) {
-						fw.loading.hide(fwLoadingId);
+						fw.loading.hide(loadingId);
 
 						if (!response.success) {
 							/**
@@ -945,7 +947,55 @@ fw.getQueryString = function(name) {
 						this.model.frame.modal.$el.find('.media-modal-close').trigger('click');
 					}, this),
 					error: function (xhr, status, error) {
-						fw.loading.hide(fwLoadingId);
+						fw.loading.hide(loadingId);
+
+						/**
+						 * do not replace html here
+						 * user completed the form with data and wants to submit data
+						 * do not delete all his work
+						 */
+						alert(status +': '+ error.message);
+					}
+				});
+			},
+			resetValues: function() {
+				var loadingId = fwLoadingId +':reset';
+
+				fw.loading.show(loadingId);
+
+				jQuery.ajax({
+					url: ajaxurl,
+					type: 'POST',
+					data: [
+						'action=fw_backend_options_get_values',
+						'options='+ encodeURIComponent(JSON.stringify(this.model.get('options'))),
+						'name_prefix=fw_edit_options_modal'
+					].join('&'),
+					dataType: 'json',
+					success: _.bind(function (response, status, xhr) {
+						fw.loading.hide(loadingId);
+
+						if (!response.success) {
+							/**
+							 * do not replace html here
+							 * user completed the form with data and wants to submit data
+							 * do not delete all his work
+							 */
+							alert('Error: '+ response.data.message);
+							return;
+						}
+
+						this.model.set('values', response.data.values);
+
+						// make sure on the above open, the html 'change' will be fired
+						this.model.set('html', '', {
+							silent: true // right now we don't need modal reRender, only when the open above
+						});
+
+						this.model.open();
+					}, this),
+					error: function (xhr, status, error) {
+						fw.loading.hide(loadingId);
 
 						/**
 						 * do not replace html here
@@ -984,12 +1034,12 @@ fw.getQueryString = function(name) {
 		initializeFrame: function() {
 			fw.Modal.prototype.initializeFrame.call(this);
 
-			var modal = this;
+			this.frame.once('ready', _.bind(function() {
+				this.frame.$el.removeClass('hide-toolbar');
+				this.frame.modal.$el.addClass('fw-options-modal');
+			}, this));
 
-			this.frame.once('ready', function() {
-				modal.frame.$el.removeClass('hide-toolbar');
-				modal.frame.modal.$el.addClass('fw-options-modal');
-			});
+			var modal = this;
 
 			this.frame.on('content:create:main', function () {
 				modal.frame.toolbar.set(
@@ -1007,6 +1057,14 @@ fw.getQueryString = function(name) {
 									 *     and must show default browser warning popup "This field is required"
 									 */
 									modal.content.$el.find('input[type="submit"].hidden-submit').trigger('click');
+								}
+							},
+							{
+								style: '',
+								text: _fw_localized.l10n.reset,
+								priority: -1,
+								click: function () {
+									modal.content.resetValues();
 								}
 							}
 						]
