@@ -67,7 +67,6 @@ class FW_Option_Type_Range_Slider extends FW_Option_Type {
 			$this->default_properties( $option['properties'] )
 		);
 
-		fw_print($data['value']);
 		return fw_render_view( fw_get_framework_directory( '/includes/option-types/' . $this->get_type() . '/view.php' ),
 			array(
 				'id'     => $id,
