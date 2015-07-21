@@ -1,5 +1,10 @@
 #!/bin/bash
 # Run the tests on your local machine
+#
+# Usage:
+# 1. Create a new database with the same name as the DB_NAME variable below
+# 2. Make sure that the user from the variable below DB_USER has access to that database
+# 3. Execute in console this script $ ./run.bash
 
 # requirements: subversion, phpunit
 command -v svn >/dev/null 2>&1 || { echo >&2 "subversion is not installed. Aborting."; exit 1; }
