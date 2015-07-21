@@ -94,7 +94,7 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 		{
 			$box_options = array();
 
-			fw_collect_options( $box_options, $options, array(
+			fw_collect_options( $box_options, $option['box-options'], array(
 				'limit_option_types' => false,
 				'limit_container_types' => array('group'), // Use only groups and options
 				'limit_level' => 1,
