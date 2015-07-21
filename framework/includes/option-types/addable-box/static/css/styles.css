@@ -5,6 +5,14 @@
 .fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox > h3.hndle {
 	cursor: move !important; /* to rewrite .fw-postbox h3.hndle */
 	word-break: break-all; /* if box text is too long, do not move controls outside box */
+	position: relative;
+}
+
+.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox > h3.hndle > span {
+	overflow: hidden;
+	white-space: nowrap;
+	max-width: 100%;
+	display: block;
 }
 
 #wpbody-content .fw-option-type-addable-box .metabox-holder {
@@ -24,20 +32,31 @@
 	vertical-align: middle;
 }
 
+.fw-option-type-addable-box .fw-backend-option-design-customizer {
+	padding: 15px;
+}
+
 
 /* Controls */
 
+
 .fw-option-type-addable-box > .fw-option-boxes > .fw-option-box h3.hndle .fw-html-after-title {
-	float: right;
-	position: relative; /* fix .handlediv::before padding that goes on top of the content from .fw-html-after-title */
-	padding-right: 3px;
+	position: absolute;
+	top: 0;
+	right: 27px;
+	display: block;
+	height: 100%;
+	background-color: #FFF;
+	box-sizing: border-box;
+	padding: 0 3px;
+	padding-top: inherit;
 }
 
-.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box h3.hndle .fw-option-box-controls .fw-option-box-control {
+.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box h3.hndle .fw-html-after-title .fw-option-box-controls .fw-option-box-control {
 	text-decoration: none;
 }
 
-.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box h3.hndle .fw-option-box-controls .fw-option-box-control-wrapper {
+.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box h3.hndle .fw-html-after-title .fw-option-box-controls .fw-option-box-control-wrapper {
 	color: #cccccc;
 }
 

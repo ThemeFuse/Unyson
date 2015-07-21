@@ -22,7 +22,7 @@ class _FW_Customizer_Setting_Option extends WP_Customize_Setting {
 
 		foreach ($value as $var) {
 			fw_aks(
-				fw_html_attr_name_to_array_multi_key($var['name']),
+				fw_html_attr_name_to_array_multi_key($var['name'], true),
 				$var['value'],
 				$POST
 			);

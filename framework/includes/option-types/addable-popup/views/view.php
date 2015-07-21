@@ -21,7 +21,7 @@ $increment_placeholder = '###-addable-popup-increment-'. fw_rand_md5() .'-###';
 		<div class="item default">
 			<div class="input-wrapper">
 				<?php echo fw()->backend->option_type('hidden')->render('', array('value' => '[]'), array(
-					'id_prefix' => $data['id_prefix'] . $id . '-' . $increment_placeholder . '-',
+					'id_prefix' => $data['id_prefix'] . $id . '-' . $increment_placeholder,
 					'name_prefix' => $data['name_prefix'] . '[' . $id . ']',
 				));?>
 			</div>

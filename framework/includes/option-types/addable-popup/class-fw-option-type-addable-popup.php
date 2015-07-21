@@ -110,7 +110,7 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 
 		$values = array_map('json_decode', $input_value, array_fill(0, count($input_value), true));
 
-		if($option['limit']){
+		if ($option['limit']) {
 			$values= array_slice($values, 0 , $option['limit']);
 		}
 

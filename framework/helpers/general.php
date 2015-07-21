@@ -919,11 +919,27 @@ function fw_get_options_values_from_input(array $options, $input_array = null) {
 }
 
 /**
- * 'abc[def][xyz]'   -> 'abc/def/xyz'
- * 'abc[def][xyz][]' -> 'abc/def/xyz'
+ * @param $attr_name
+ * @param bool $set_mode
+ * @return mixed
  */
-function fw_html_attr_name_to_array_multi_key($attr_name) {
-	$attr_name = str_replace('[]', '',  $attr_name);
+function fw_html_attr_name_to_array_multi_key($attr_name, $set_mode = false) {
+	if ($set_mode) {
+		/**
+		 * The key will be used to set value in array
+		 * 'hello[world][]' -> 'hello/world/'
+		 * $array['hello']['world'][] = $value;
+		 */
+		$attr_name = str_replace('[]', '/', $attr_name);
+	} else {
+		/**
+		 * The key will be used to get value from array
+		 * 'hello[world][]' -> 'hello/world'
+		 * $value = $array['hello']['world'];
+		 */
+		$attr_name = str_replace('[]', '', $attr_name);
+	}
+
 	$attr_name = str_replace('][', '/', $attr_name);
 	$attr_name = str_replace('[',  '/', $attr_name);
 	$attr_name = str_replace(']',  '',  $attr_name);

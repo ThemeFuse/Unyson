@@ -838,6 +838,10 @@ body.rtl .fw-backend-option-design-default > .fw-backend-option-desc > .fw-inner
 }
 
 
+.fw-backend-option-design-customizer {
+	padding: 5px 0 10px;
+}
+
 .fw-backend-option-design-customizer > .fw-backend-option-desc {
 	padding-bottom: 6px;
 }
