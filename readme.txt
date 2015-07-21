@@ -84,6 +84,7 @@ Yes; Unyson will work with any theme.
 
 = 2.4.1 =
 * Fixed [#742](https://github.com/ThemeFuse/Unyson/issues/742), [#731](https://github.com/ThemeFuse/Unyson/issues/731), [#728](https://github.com/ThemeFuse/Unyson/issues/728), [#726](https://github.com/ThemeFuse/Unyson/issues/726), [Shortcodes#29](https://github.com/ThemeFuse/Unyson-Shortcodes-Extension/issues/29)
+* Fixed: `addable-popup` option type wasn't saved in Customizer
 
 = 2.4.0 =
 * Created "Container Types" and container type `popup` [#615](https://github.com/ThemeFuse/Unyson/issues/615)
