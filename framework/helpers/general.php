@@ -789,7 +789,12 @@ function fw_collect_options(&$result, &$options, $settings = array(), $_recursio
 				if (
 					is_array($settings['limit_container_types'])
 					&&
-					!in_array($option['type'], $settings['limit_container_types'])
+					(
+						// Customizer options can contain options with not existing or empty $option['type']
+						empty($option['type'])
+						||
+						!in_array($option['type'], $settings['limit_container_types'])
+					)
 				) {
 					break;
 				}

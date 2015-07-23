@@ -1795,9 +1795,22 @@ final class _FW_Component_Backend {
 	 */
 	public function _action_enqueue_customizer_static()
 	{
-		fw()->backend->enqueue_options_static(
-			fw()->theme->get_customizer_options()
-		);
+		{
+			$options_for_enqueue = array();
+			$customizer_options = fw()->theme->get_customizer_options();
+
+			/**
+			 * In customizer options is allowed to have container with unspecified (or not existing) 'type'
+			 * fw()->backend->enqueue_options_static() tries to enqueue both options and container static
+			 * not existing container types will throw notices.
+			 * To prevent that, extract and send it only options (without containers)
+			 */
+			fw_collect_options($options_for_enqueue, $customizer_options);
+
+			fw()->backend->enqueue_options_static($options_for_enqueue);
+
+			unset($options_for_enqueue, $customizer_options);
+		}
 
 		wp_enqueue_script(
 			'fw-backend-customizer',
