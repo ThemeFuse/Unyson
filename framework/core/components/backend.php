@@ -555,7 +555,7 @@ final class _FW_Component_Backend {
 						'target' => '_blank',
 						'href'   => 'https://twitter.com/home?'. http_build_query(array(
 							'status' => __('Unyson WordPress Framework is the fastest and easiest way to develop a premium theme. I highly recommend it', 'fw')
-								.' http://unyson.io/ #unysonwp',
+								.' http://unyson.io/ #UnysonWP',
 						)),
 						'onclick' => 'return !window.open(this.href, \'Twitter\', \'width=640,height=430\')',
 					), __('Twitter', 'fw')),
