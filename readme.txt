@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.2
-Stable tag: 2.4.2
+Stable tag: 2.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -81,6 +81,9 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.4.3 =
+* [An attempt](https://github.com/ThemeFuse/Unyson/commit/9985875d56520caae4ce72c7111aea1e326777a5) to fix [#263](https://github.com/ThemeFuse/Unyson/issues/263)
 
 = 2.4.2 =
 * Allow containers without the `type` parameter in [Customizer options](http://manual.unyson.io/en/latest/options/introduction.html#customizer)
