@@ -149,5 +149,19 @@ if (defined('FW')) {
 			return dirname( __FILE__ ) . '/tmp';
 		}
 		add_filter( 'fw_tmp_dir', '_filter_fw_tmp_dir' );
+
+		/** @internal */
+		function _filter_fw_disable_auto_update ( $update, $item ) {
+			if ('unyson' === strtolower($item->slug)) {
+				/**
+				 * Prevent Unyson auto-update
+				 * An attempt to fix https://github.com/ThemeFuse/Unyson/issues/263
+				 */
+				return false;
+			} else {
+				return $update;
+			}
+		}
+		add_filter( 'auto_update_plugin', '_filter_fw_disable_auto_update', 10, 2 );
 	}
 }
