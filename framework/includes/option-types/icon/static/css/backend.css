@@ -74,3 +74,32 @@ body.rtl .fw-option-type-icon .option-type-icon-list i {
 .fw-option-type-icon .option-type-icon-list::-webkit-scrollbar-thumb:window-inactive {
 	background: rgba(92,92,92,0.4);
 }
+
+
+/* Search */
+.fw-option.fw-option-type-icon .fw-icon-search-holder{
+	display:inline-block;
+	clear:both;
+	position:relative;
+	padding:0 50px 0 0;
+	margin:10px 0 0 0;
+}
+.fw-option.fw-option-type-icon input.fw-icon-search[type="text"]{
+	display:inline-block;
+	margin-right:30px;
+}
+.fw-option.fw-option-type-icon .fw-current-icon{
+	display:inline-block;
+	position:absolute;
+	top:0px;
+	right:0;
+	border:1px solid #ddd;
+    float: none;
+    border: 1px solid #e1e1e1;
+    margin:0;
+    padding: 5px 0;
+    background-color: #ffffff;
+    text-align: center;
+    width:30px;
+    font-size:16px;
+}

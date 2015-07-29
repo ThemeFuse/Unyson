@@ -43,6 +43,10 @@ ksort($groups);
 					}
 				?>
 			</select>
+			<div class="fw-icon-search-holder">
+				<input type="text" class="fw-icon-search" placeholder="icon search">
+				<div class="fw-current-icon"><i class="fw-show-current"></i></div>
+			</div>
 		</div>
 		<?php endif; ?>
 
