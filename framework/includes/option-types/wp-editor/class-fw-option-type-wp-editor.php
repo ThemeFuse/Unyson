@@ -51,7 +51,15 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			 * Set the editor size: small - small box, large - full size
 			 * string
 			 */
-			'size'          => 'small' // small, large
+			'size'          => 'small', // small, large
+			/**
+			 * Set editor type : 'tinymce' or 'html'
+			 */
+			'editor_type' => wp_default_editor(),
+			/**
+			 * Set the editor height, must be int
+			 */
+			'editor_height' => 400
 		);
 	}
 
@@ -184,18 +192,22 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			'data-tmce-teeny'    => json_encode( $this->get_teeny_preset( $option ) ),
 			'data-tmce-extended' => json_encode( $this->get_extended_preset( $option ) ),
 			'data-width-type'    => $option['size'],
+			'data-editor-type' =>$option['editor_type']
 		) );
 
 		echo '<div ' . fw_attr_to_html( $wrapper_attr ) . '>';
 
 		$option['editor_css'] .= '<style>#wp-link-wrap{z-index: 160105} #wp-link-backdrop{z-index: 160100} .mce-container.mce-panel.mce-floatpanel.mce-menu, .mce-container.mce-panel.mce-floatpanel.mce-popover, .mce-container.mce-panel.mce-floatpanel.mce-window {z-index: 160105 !important;}</style>';
 
-		wp_editor( $value, $textarea_id, array(
+		$settings = array(
 			'teeny'         => $option['teeny'],
 			'media_buttons' => $option['media_buttons'],
 			'tinymce'       => $option['tinymce'],
-			'editor_css'    => $option['editor_css']
-		) );
+			'editor_css'    => $option['editor_css'],
+			'editor_height' => (int) $option['editor_height']
+		);
+
+		wp_editor( $value, $textarea_id, $settings );
 
 		echo '</div>';
 	}
