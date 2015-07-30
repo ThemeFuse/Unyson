@@ -42,11 +42,10 @@
 
 	var reachTexEditorReinit = function($textarea){
 		var parent = $textarea.parents('.wp-editor-wrap:eq(0)'),
-			$activeEditorBtn = parent.hasClass('tmce-active') ? parent.find('.switch-tmce') : parent.find('.switch-html'),
+			$activeEditorBtn =$textarea.parents('.fw-option-type-wp-editor').data('editor-type') === 'tinymce'  ? parent.find('.switch-tmce') : parent.find('.switch-html'),
 			$btnTabs = parent.find('.wp-switch-editor').removeAttr("onclick"),
 			id = $textarea.attr('id'),
 			settings = {id: id , buttons: 'strong,em,link,block,del,ins,img,ul,ol,li,code,more,close'};
-
 
 		var tmceCustomSettings = $textarea.parents('.fw-option-type-wp-editor').data('tinymce'),
 			tmce_teeny = $textarea.parents('.fw-option-type-wp-editor').data('tmce-teeny'),
