@@ -958,7 +958,7 @@ fw.getQueryString = function(name) {
 					}
 				});
 			},
-			resetValues: function() {
+			resetForm: function() {
 				var loadingId = fwLoadingId +':reset';
 
 				fw.loading.show(loadingId);
@@ -985,14 +985,12 @@ fw.getQueryString = function(name) {
 							return;
 						}
 
-						this.model.set('values', response.data.values);
-
 						// make sure on the above open, the html 'change' will be fired
 						this.model.set('html', '', {
 							silent: true // right now we don't need modal reRender, only when the open above
 						});
 
-						this.model.open();
+						this.model.open(response.data.values);
 					}, this),
 					error: function (xhr, status, error) {
 						fw.loading.hide(loadingId);
@@ -1064,7 +1062,7 @@ fw.getQueryString = function(name) {
 								text: _fw_localized.l10n.reset,
 								priority: -1,
 								click: function () {
-									modal.content.resetValues();
+									modal.content.resetForm();
 								}
 							}
 						]
@@ -1073,24 +1071,24 @@ fw.getQueryString = function(name) {
 			});
 		},
 		/**
-		 * @param {Object} options used for fw()->backend->render_options(json_decode(options, true))
+		 * @param {Object} values Offer custom values for display. The user can reject them by closing the modal
 		 */
-		open: function() {
+		open: function(values) {
 			fw.Modal.prototype.open.call(this);
 
-			this.updateHtml();
+			this.updateHtml(values);
 
 			return this;
 		},
-		getHtmlCacheId: function() {
+		getHtmlCacheId: function(values) {
 			return fw.md5(
 				JSON.stringify(this.get('options')) +
 				'~' +
-				JSON.stringify(this.get('values'))
+				JSON.stringify(typeof values == 'undefined' ? this.get('values') : values)
 			);
 		},
-		updateHtml: function() {
-			var cacheId = this.getHtmlCacheId();
+		updateHtml: function(values) {
+			var cacheId = this.getHtmlCacheId(values);
 
 			if (typeof htmlCache[cacheId] != 'undefined') {
 				this.set('html', htmlCache[cacheId]);
@@ -1109,7 +1107,7 @@ fw.getQueryString = function(name) {
 				data: {
 					action: 'fw_backend_options_render',
 					options: JSON.stringify(this.get('options')),
-					values: this.get('values'),
+					values: typeof values == 'undefined' ? this.get('values') : values,
 					data: {
 						name_prefix: 'fw_edit_options_modal',
 						id_prefix: 'fw-edit-options-modal-'
