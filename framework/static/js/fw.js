@@ -985,9 +985,9 @@ fw.getQueryString = function(name) {
 							return;
 						}
 
-						// make sure on the above open, the html 'change' will be fired
+						// make sure on the below open, the html 'change' will be fired
 						this.model.set('html', '', {
-							silent: true // right now we don't need modal reRender, only when the open above
+							silent: true // right now we don't need modal reRender, only when the open below
 						});
 
 						this.model.open(response.data.values);
