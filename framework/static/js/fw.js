@@ -1071,7 +1071,7 @@ fw.getQueryString = function(name) {
 			});
 		},
 		/**
-		 * @param {Object} values Offer custom values for display. The user can reject them by closing the modal
+		 * @param {Object} [values] Offer custom values for display. The user can reject them by closing the modal
 		 */
 		open: function(values) {
 			fw.Modal.prototype.open.call(this);
