@@ -220,6 +220,8 @@ function fw_print($value) {
 			margin: 10px 30px;
 			padding: 1px;
 			border-radius: 5px;
+			position: relative;
+			z-index: 11110;
 		}
 		div.fw_print_r_group div.fw_print_r {
 			margin: 9px;
