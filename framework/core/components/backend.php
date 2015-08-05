@@ -169,7 +169,6 @@ final class _FW_Component_Backend {
 		add_action('save_post', array($this, '_action_save_post'), 7, 3);
 		add_action('wp_restore_post_revision', array($this, '_action_restore_post_revision'), 10, 2);
 		add_action('_wp_put_post_revision', array($this, '_action__wp_put_post_revision'));
-		add_action('wp_creating_autosave', array($this, '_action_trigger_wp_create_autosave'));
 
 		add_action('customize_register', array($this, '_action_customize_register'), 7);
 	}
@@ -764,6 +763,7 @@ final class _FW_Component_Backend {
 	}
 
 	/**
+	 * Save meta from $_POST to fw options (post meta)
 	 * @param int $post_id
 	 * @param WP_Post $post
 	 * @param bool $update
@@ -815,78 +815,57 @@ final class _FW_Component_Backend {
 			 * Use the 'fw_post_options_update' action
 			 */
 			do_action( 'fw_save_post_options', $post_id, $post, $old_values );
+		} elseif ($original_post_id = wp_is_post_autosave( $post_id )) {
+			do {
+				$parent = get_post($post->post_parent);
+
+				if ( ! $parent instanceof WP_Post ) {
+					break;
+				}
+
+				if (
+					isset($_POST['post_ID'])
+					&&
+					intval($_POST['post_ID']) === intval($parent->ID)
+				) {} else {
+					break;
+				}
+
+				if (empty($_POST[ FW_Option_Type::get_default_name_prefix() ])) {
+					// this happens on Quick Edit
+					break;
+				}
+
+				$current_values = fw_get_options_values_from_input(
+					fw()->theme->get_post_options($parent->post_type)
+				);
+
+				fw_set_db_post_option(
+					$post->ID,
+					null,
+					array_diff_key( // remove handled values
+						$current_values,
+						$this->process_options_handlers(
+							fw()->theme->get_post_options($parent->post_type),
+							$current_values
+						)
+					)
+				);
+			} while(false);
 		} elseif ($original_post_id = wp_is_post_revision( $post_id )) {
 			/**
 			 * Do nothing, the
 			 * - '_wp_put_post_revision'
 			 * - 'wp_restore_post_revision'
-			 * - 'wp_creating_autosave'
 			 * actions will handle this
 			 */
-		} elseif ($original_post_id = wp_is_post_autosave( $post_id )) {
-			// fixme: I don't know how to test this. The execution never entered here
-			FW_Flash_Messages::add(fw_rand_md5(), 'Unhandled auto-save');
-		} else {
+		}  else {
 			/**
 			 * This happens on:
 			 * - post add (auto-draft): do nothing
 			 * - revision restore: do nothing, that is handled by the 'wp_restore_post_revision' action
 			 */
 		}
-	}
-
-	/**
-	 * @param array $autosave
-	 *
-	 * @internal
-	 **/
-	public function _action_trigger_wp_create_autosave( $autosave ) {
-		add_action( 'save_post', array( $this, '_action_update_autosave_options' ), 10, 2 );
-	}
-
-	/**
-	 * Happens on post Preview
-	 *
-	 * @param int $post_id
-	 * @param WP_Post $post
-	 *
-	 * @internal
-	 **/
-	public function _action_update_autosave_options( $post_id, $post ) {
-		remove_action( 'save_post', array( $this, '_action_update_autosave_options' ) );
-
-		remove_action( 'save_post', array( $this, '_action_save_post' ), 7 );
-
-		do {
-			$parent = get_post($post->post_parent);
-
-			if ( ! $parent instanceof WP_Post ) {
-				break;
-			}
-
-			if (empty($_POST[ FW_Option_Type::get_default_name_prefix() ])) {
-				// this happens on Quick Edit
-				break;
-			}
-
-			$current_values = fw_get_options_values_from_input(
-				fw()->theme->get_post_options($parent->post_type)
-			);
-
-			fw_set_db_post_option(
-				$post->ID,
-				null,
-				array_diff_key( // remove handled values
-					$current_values,
-					$this->process_options_handlers(
-						fw()->theme->get_post_options($parent->post_type),
-						$current_values
-					)
-				)
-			);
-		} while(false);
-
-		add_action( 'save_post', array( $this, '_action_save_post' ), 7, 3 );
 	}
 
 	/**
