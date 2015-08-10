@@ -1007,7 +1007,8 @@ class FW_Option_Type_Unique extends FW_Option_Type
 	protected function _get_defaults()
 	{
 		return array(
-			'value' => ''
+			'value' => '',
+			'length' => 0, // Limit id length
 		);
 	}
 
@@ -1022,6 +1023,21 @@ class FW_Option_Type_Unique extends FW_Option_Type
 
 	protected function _init() {
 		add_action('save_post', array($this, '_action_reset_post_ids'), 8);
+	}
+
+	/**
+	 * @param null|int $length_limit
+	 * @return string
+	 */
+	protected function generate_id($length_limit = null)
+	{
+		$id = fw_rand_md5();
+
+		if ($length_limit) {
+			$id = substr($id, 0, (int)$length_limit);
+		}
+
+		return $id;
 	}
 
 	/**
@@ -1049,13 +1065,13 @@ class FW_Option_Type_Unique extends FW_Option_Type
 
 	protected function _get_value_from_input($option, $input_value) {
 		if (is_null($input_value)) {
-			$id = empty($option['value']) ? fw_rand_md5() : $option['value'];
+			$id = empty($option['value']) ? $this->generate_id($option['length']) : $option['value'];
 		} else {
 			$id = $input_value;
 		}
 
 		if (empty($id) || !is_string($id)) {
-			$id = fw_rand_md5();
+			$id = $this->generate_id($option['length']);
 		}
 
 		/**
@@ -1075,7 +1091,7 @@ class FW_Option_Type_Unique extends FW_Option_Type
 			}
 
 			while (isset(self::$ids[$post_id][$id])) {
-				$id = fw_rand_md5();
+				$id = $this->generate_id($option['length']);
 			}
 
 			self::$ids[$post_id][$id] = true;
