@@ -27,7 +27,7 @@ function _fw_update_debug_log($message) {
 
 	$message = '['. date('Y-m-d H:i:s') .'] '. $message;
 
-	$wp_filesystem->put_contents($file_fs_path, $current_log ."\n". $message);
+	$wp_filesystem->put_contents($file_fs_path, $current_log . $message ."\n");
 }
 
 add_action('fw_plugin_pre_update', '_action_fw_update_debug_before_update', 7);
