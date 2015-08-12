@@ -102,32 +102,6 @@ if (defined('FW')) {
 		add_action( 'delete_blog', '_action_fw_delete_blog', 10, 2 );
 
 		/** @internal */
-		function _filter_fw_check_if_plugin_pre_update( $result, $data ) {
-			if ( isset( $data['plugin'] ) && $data['plugin'] === plugin_basename( __FILE__ ) ) {
-				/**
-				 * Before plugin update
-				 */
-				do_action( 'fw_plugin_pre_update' );
-			}
-
-			return $result;
-		}
-		add_filter( 'upgrader_pre_install', '_filter_fw_check_if_plugin_pre_update', 10, 2 );
-
-		/** @internal */
-		function _filter_fw_check_if_plugin_post_update( $result, $data ) {
-			if ( isset( $data['plugin'] ) && $data['plugin'] === plugin_basename( __FILE__ ) ) {
-				/**
-				 * After plugin update
-				 */
-				do_action( 'fw_plugin_post_update' );
-			}
-
-			return $result;
-		}
-		add_filter( 'upgrader_post_install', '_filter_fw_check_if_plugin_post_update', 10, 2 );
-
-		/** @internal */
 		function _filter_fw_plugin_action_list( $actions ) {
 			return apply_filters( 'fw_plugin_action_list', $actions );
 		}
@@ -151,20 +125,106 @@ if (defined('FW')) {
 		add_filter( 'fw_tmp_dir', '_filter_fw_tmp_dir' );
 
 		/** @internal */
-		function _filter_fw_disable_auto_update ( $update, $item ) {
-			if ('unyson' === strtolower($item->slug)) {
-				/**
-				 * Prevent Unyson auto update
-				 * An attempt to fix https://github.com/ThemeFuse/Unyson/issues/263
-				 */
-				do_action('fw_plugin_auto_update_stop');
-				return false;
-			} else {
-				return $update;
+		final class _FW_Update_Hooks {
+			public static function _init() {
+				add_filter( 'upgrader_pre_install',  array(__CLASS__, '_filter_fw_check_if_plugin_pre_update'),  9999, 2 );
+				add_filter( 'upgrader_post_install', array(__CLASS__, '_filter_fw_check_if_plugin_post_update'), 9999, 2 );
+				add_action( 'automatic_updates_complete', array(__CLASS__, '_action_fw_automatic_updates_complete') );
+				add_filter( 'auto_update_plugin', array(__CLASS__, '_filter_fw_disable_auto_update'), 10, 2 );
+			}
+
+			public static function _filter_fw_check_if_plugin_pre_update( $result, $data ) {
+				if (
+					!is_wp_error($result)
+					&&
+					isset( $data['plugin'] )
+					&&
+					plugin_basename( __FILE__ ) === $data['plugin']
+				) {
+					/**
+					 * Before plugin update
+					 * The plugin was already download and extracted to a temp directory
+					 * and it's right before being replaced with the new downloaded version
+					 */
+					do_action( 'fw_plugin_pre_update' ); self::_fw_update_debug_log('fw_plugin_pre_update');
+				}
+
+				return $result;
+			}
+
+			public static function _filter_fw_check_if_plugin_post_update( $result, $data ) {
+				if (
+					!is_wp_error($result)
+					&&
+					isset( $data['plugin'] )
+					&&
+					plugin_basename( __FILE__ ) === $data['plugin']
+				) {
+					/**
+					 * After plugin successfully updated
+					 */
+					do_action( 'fw_plugin_post_update' ); self::_fw_update_debug_log('fw_plugin_post_update');
+				}
+
+				return $result;
+			}
+
+			public static function _action_fw_automatic_updates_complete($results) {
+				if (!isset($results['plugin'])) {
+					return;
+				}
+
+				foreach ($results['plugin'] as $plugin) {
+					if ('unyson' === strtolower($plugin->item->slug)) {
+						do_action( 'fw_automatic_update_complete', $plugin->result ); self::_fw_update_debug_log('fw_automatic_update_complete '. ($plugin->result ? 'OK' : 'NOT OK'));
+						break;
+					}
+				}
+			}
+
+			public static function _filter_fw_disable_auto_update ( $update, $item ) {
+				if ('unyson' === strtolower($item->slug)) {
+					/**
+					 * Prevent Unyson auto update
+					 * An attempt to fix https://github.com/ThemeFuse/Unyson/issues/263
+					 */
+					do_action('fw_plugin_auto_update_stop'); self::_fw_update_debug_log('fw_plugin_auto_update_stop');
+					return false;
+				} else {
+					return $update;
+				}
+			}
+
+			/**
+			 * Log debug information in ABSPATH/fw-update.log
+			 * @param string $message
+			 * @return bool|void
+			 */
+			private static function _fw_update_debug_log($message) {
+				/** @var WP_Filesystem_Base $wp_filesystem */
+				global $wp_filesystem;
+
+				if (!$wp_filesystem) {
+					return;
+				}
+
+				$file_fs_path = fw_fix_path($wp_filesystem->abspath()) .'/fw-update.log';
+
+				if ($wp_filesystem->exists($file_fs_path)) {
+					$current_log = $wp_filesystem->get_contents($file_fs_path);
+
+					if ($current_log === false) {
+						return false;
+					}
+				} else {
+					$current_log = '';
+				}
+
+				$message = '['. date('Y-m-d H:i:s') .'] '. $message;
+
+				$wp_filesystem->put_contents($file_fs_path, $current_log . $message ."\n");
 			}
 		}
-		add_filter( 'auto_update_plugin', '_filter_fw_disable_auto_update', 10, 2 );
-
-		require_once dirname(__FILE__) .'/update-debug.php';
+		_FW_Update_Hooks::_init();
 	}
 }
