@@ -84,7 +84,7 @@ Yes; Unyson will work with any theme.
 
 = 2.4.5 =
 * Fixed [#768](https://github.com/ThemeFuse/Unyson/issues/768)
-* Create `ABSPATH .'/fw-update.log'` on plugin update [68bf6ab](https://github.com/ThemeFuse/Unyson/commit/68bf6ab67ffa50f3957aac1983e7d9e5a1c3041d) to help solve [#263](https://github.com/ThemeFuse/Unyson/issues/263)
+* Create `ABSPATH .'/fw-update.log'` on plugin update to help solve [#263](https://github.com/ThemeFuse/Unyson/issues/263)
 
 = 2.4.4 =
 * Fixed [#757](https://github.com/ThemeFuse/Unyson/issues/757), [#752](https://github.com/ThemeFuse/Unyson/issues/752#issuecomment-124839194)
