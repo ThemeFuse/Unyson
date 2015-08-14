@@ -130,7 +130,11 @@ if (defined('FW')) {
 				add_filter( 'upgrader_pre_install',  array(__CLASS__, '_filter_fw_check_if_plugin_pre_update'),  9999, 2 );
 				add_filter( 'upgrader_post_install', array(__CLASS__, '_filter_fw_check_if_plugin_post_update'), 9999, 2 );
 				add_action( 'automatic_updates_complete', array(__CLASS__, '_action_fw_automatic_updates_complete') );
-				add_filter( 'auto_update_plugin', array(__CLASS__, '_filter_fw_disable_auto_update'), 10, 2 );
+
+				add_filter( 'auto_update_plugin', array(__CLASS__, '_filter_fw_disable_auto_update'), 9999, 2 );
+
+				add_action( 'admin_notices', array(__CLASS__, '_action_admin_notices') );
+				add_action( 'network_admin_notices', array(__CLASS__, '_action_admin_notices') );
 			}
 
 			public static function _filter_fw_check_if_plugin_pre_update( $result, $data ) {
@@ -175,7 +179,7 @@ if (defined('FW')) {
 				}
 
 				foreach ($results['plugin'] as $plugin) {
-					if ('unyson' === strtolower($plugin->item->slug)) {
+					if (plugin_basename( __FILE__ ) === strtolower($plugin->item->plugin)) {
 						do_action( 'fw_automatic_update_complete', $plugin->result ); self::_fw_update_debug_log('fw_automatic_update_complete '. ($plugin->result ? 'OK' : 'NOT OK'));
 						break;
 					}
@@ -183,7 +187,7 @@ if (defined('FW')) {
 			}
 
 			public static function _filter_fw_disable_auto_update ( $update, $item ) {
-				if ('unyson' === strtolower($item->slug)) {
+				if (plugin_basename( __FILE__ ) === strtolower($item->plugin)) {
 					/**
 					 * Prevent Unyson auto update
 					 * An attempt to fix https://github.com/ThemeFuse/Unyson/issues/263
@@ -192,6 +196,31 @@ if (defined('FW')) {
 					return false;
 				} else {
 					return $update;
+				}
+			}
+
+			public static function _action_admin_notices() {
+				$slug = basename(dirname( __FILE__ ));
+
+				if (apply_filters('auto_update_plugin', false, (object)array(
+					'id' => '9999999',
+					'slug' => $slug,
+					'plugin' => plugin_basename( __FILE__ ),
+					'new_version' => '2.9999.9999',
+					'url' => 'https://wordpress.org/plugins/'. $slug .'/',
+					'package' => 'https://downloads.wordpress.org/plugin/'. $slug .'.2.9999.9999.zip'
+				))) {
+					$replacements = array(
+						'{auto_updates}' => '<a href="https://codex.wordpress.org/Configuring_Automatic_Background_Updates" target="_blank">'. __('Automatic Background Updates', 'fw') .'</a>',
+						'{ext_auto_uninstall_link}' => '<a href="https://github.com/ThemeFuse/Unyson/issues/263" target="_blank">'. __('extension may be deleted', 'fw') .'</a>',
+						'{unyson_link}' => '<a href="https://wordpress.org/plugins/unyson/" target="_blank">'. __('Unyson plugin', 'fw') .'</a>',
+					);
+
+					echo '<div class="error"><p>' . str_replace(
+							array_keys($replacements),
+							array_values($replacements),
+							__('{auto_updates} are enabled for {unyson_link}. Please disable them, otherwise {ext_auto_uninstall_link}.', 'fw')
+						) . '</p></div>';
 				}
 			}
 
