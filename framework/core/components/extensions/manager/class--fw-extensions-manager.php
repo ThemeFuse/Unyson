@@ -27,14 +27,14 @@ final class _FW_Extensions_Manager
 
 	public function __construct()
 	{
-		if (!is_admin()) {
-			return;
-		}
-
 		// In any case/permission, make sure to not miss the plugin update actions to prevent extensions delete
 		{
 			add_action('fw_plugin_pre_update', array($this, '_action_plugin_pre_update'));
 			add_action('fw_plugin_post_update', array($this, '_action_plugin_post_update'));
+		}
+
+		if (!is_admin()) {
+			return;
 		}
 
 		if (!$this->can_activate() && !$this->can_install()) {
