@@ -83,7 +83,7 @@ Yes; Unyson will work with any theme.
 == Changelog ==
 
 = 2.4.6 =
-* Make sure automatic updates are disabled for Unyson plugin [4ada657](https://github.com/ThemeFuse/Unyson/commit/4ada6571c2c0dba220d4bb65dd70327614e6d3f8)
+* Fixed: Extensions uninstalled after auto-update [#263](https://github.com/ThemeFuse/Unyson/issues/263)
 
 = 2.4.5 =
 * Fixed [#768](https://github.com/ThemeFuse/Unyson/issues/768)
