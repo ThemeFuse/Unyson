@@ -14,30 +14,6 @@ jQuery(function($){
 		isBusy: false,
 		eventNamespace: '.fw-extension',
 		$wrapper: $('.wrap'),
-		/**
-		 * @param {string} html 'x<tag...>y</tag>z'
-		 * @param {string} tag
-		 * @returns {string} 'y'
-		 */
-		extractFirstTagContents: function(html, tag) {
-			// 'x<tag...>y' -> 'y'
-			$.each(['<'+ tag, '>'], function(i, x){
-				html = html.split(x);
-				html.shift();
-				html = html.join(x);
-			});
-
-			// 'x</tag>y' -> 'x'
-			{
-				var tagEnd = '</'+ tag +'>';
-
-				html = html.split(tagEnd);
-				html.pop();
-				html = html.join(tagEnd);
-			}
-
-			return html;
-		},
 		listenSubmit: function() {
 			this.$wrapper.on('submit'+ this.eventNamespace, 'form.fw-extension-ajax-form', this.onSubmit);
 		},
@@ -56,12 +32,6 @@ jQuery(function($){
 
 			var confirmMessage = $form.attr('data-confirm-message');
 
-			if (confirmMessage) {
-				if (!confirm(confirmMessage)) {
-					return;
-				}
-			}
-
 			inst.isBusy = true;
 			inst.loading($form, true);
 
@@ -74,42 +44,37 @@ jQuery(function($){
 				dataType: 'json'
 			}).done(function(data){
 				if (data.success) {
-					inst.isBusy = true;
-					inst.loading($form, true);
+					if (confirmMessage) {
+						if (!confirm(confirmMessage)) {
+							inst.isBusy = false;
+							inst.loading($form, false);
+						}
+					}
 
 					$.ajax({
-						url: $form.attr('action') +'&is-ajax-submit',
+						url: ajaxurl,
 						type: 'POST',
-						data: $form.serialize(),
-						dataType: 'html'
-					}).done(function(html){
-						html = inst.extractFirstTagContents(html, 'body');
-						html = '<div>'+ html +'</div>';
-
-						var $content = $(html).find('#wpcontent .wrap').last();
-						var success = $content.find('[success]').length != 0;
-
-						if (success) {
+						data: {
+							action: 'fw_extensions_'+ $form.attr('data-extension-action'),
+							extension: $form.attr('data-extension-name')
+						},
+						dataType: 'json'
+					}).done(function(r) {
+						if (r.success) {
 							window.location.reload();
 						} else {
-							if (true) {
-								var $lastMessage = $content.find('> p').last();
+							var error = r.data ? r.data.pop().message : 'Error';
 
-								if ($lastMessage.find('a').length) {
-									// this is not message, these are link printed by WP_Upgrader_Skin::after()
-									$lastMessage = $lastMessage.prev();
-								}
-
-								alert($lastMessage.text());
-
-								window.location.reload();
-							} else {
-								inst.stopListeningSubmit();
-								$form.submit();
-							}
+							fw.soleModal.show(
+								'fw-extension-install-error',
+								'<p class="fw-text-danger">'+ error +'</p>'
+							);
 						}
 					}).fail(function(jqXHR, textStatus, errorThrown){
-						console.log(textStatus);
+						fw.soleModal.show(
+							'fw-extension-install-error',
+							'<p class="fw-text-danger">Error: '+ textStatus +'</p>'
+						);
 						inst.isBusy = false;
 						inst.loading($form, false);
 					});
@@ -118,9 +83,8 @@ jQuery(function($){
 					$form.submit();
 				}
 			}).fail(function(jqXHR, textStatus, errorThrown){
-				console.log(textStatus);
-				inst.isBusy = false;
-				inst.loading($form, false);
+				inst.stopListeningSubmit();
+				$form.submit();
 			});
 		},
 		loading: function($form, show) {

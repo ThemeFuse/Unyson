@@ -123,7 +123,10 @@ if (!$installed_data && !$is_compatible) {
 							<form action="<?php echo esc_attr($link) ?>&sub-page=delete&extension=<?php echo esc_attr($name) ?>"
 							      method="post"
 							      class="fw-extension-ajax-form"
-							      data-confirm-message="<?php esc_attr_e('Are you sure you want to remove this extension?', 'fw') ?>">
+							      data-confirm-message="<?php esc_attr_e('Are you sure you want to remove this extension?', 'fw') ?>"
+							      data-extension-name="<?php echo esc_attr($name) ?>"
+							      data-extension-action="uninstall"
+								>
 								<?php wp_nonce_field($nonces['delete']['action'], $nonces['delete']['name']); ?>
 								<p>
 									<a href="#" onclick="jQuery(this).closest('form').submit(); return false;" data-remove-extension="<?php echo esc_attr($name) ?>" ><?php _e('Remove', 'fw'); ?></a>
@@ -132,7 +135,12 @@ if (!$installed_data && !$is_compatible) {
 							<?php endif; ?>
 						</div>
 					<?php elseif ($can_install && $available_data): ?>
-						<form action="<?php echo esc_attr($link) ?>&sub-page=install&extension=<?php echo esc_attr($name) ?>" method="post" class="fw-extension-ajax-form">
+						<form action="<?php echo esc_attr($link) ?>&sub-page=install&extension=<?php echo esc_attr($name) ?>"
+						      method="post"
+						      class="fw-extension-ajax-form"
+						      data-extension-name="<?php echo esc_attr($name) ?>"
+						      data-extension-action="install"
+							>
 							<?php wp_nonce_field($nonces['install']['action'], $nonces['install']['name']); ?>
 							<input type="submit" class="button" value="<?php esc_attr_e('Download', 'fw') ?>">
 						</form>

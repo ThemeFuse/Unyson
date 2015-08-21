@@ -53,6 +53,8 @@ final class _FW_Extensions_Manager
 
 			if ($this->can_install()) {
 				add_action('wp_ajax_fw_extensions_check_direct_fs_access', array($this, '_action_ajax_check_direct_fs_access'));
+				add_action('wp_ajax_fw_extensions_install', array($this, '_action_ajax_install'));
+				add_action('wp_ajax_fw_extensions_uninstall', array($this, '_action_ajax_uninstall'));
 			}
 		}
 
@@ -210,6 +212,64 @@ final class _FW_Extensions_Manager
 			wp_send_json_success();
 		} else {
 			wp_send_json_error();
+		}
+	}
+
+	/**
+	 * @internal
+	 */
+	public function _action_ajax_install()
+	{
+		if (!$this->can_install()) {
+			// if can't install, no need to know if has access or not
+			wp_send_json_error();
+		}
+
+		if (!FW_WP_Filesystem::has_direct_access(fw_get_framework_directory('/extensions'))) {
+			wp_send_json_error();
+		}
+
+		$extension = (string)FW_Request::POST('extension');
+
+		$install_result = $this->install_extensions(array(
+			$extension => array()
+		), array(
+			'cancel_on_error' => true
+		));
+
+		if ($install_result === true) {
+			wp_send_json_success();
+		} else {
+			wp_send_json_error($install_result);
+		}
+	}
+
+	/**
+	 * @internal
+	 */
+	public function _action_ajax_uninstall()
+	{
+		if (!$this->can_install()) {
+			// if can't install, no need to know if has access or not
+			wp_send_json_error();
+		}
+
+		if (!FW_WP_Filesystem::has_direct_access(fw_get_framework_directory('/extensions'))) {
+			wp_send_json_error();
+		}
+
+		$extension = (string)FW_Request::POST('extension');
+
+		$install_result = $this->uninstall_extensions(array(
+			$extension => array()
+		), array(
+			'cancel_on_error' => true
+		));
+
+		if ($install_result === true) {
+			wp_send_json_success();
+		} else {
+			wp_send_json_error($install_result);
 		}
 	}
 
