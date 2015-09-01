@@ -765,6 +765,7 @@ final class _FW_Extensions_Manager
 	private function display_list_page()
 	{
 		{
+
 			wp_enqueue_style(
 				'fw-extensions-page',
 				$this->get_uri('/static/extensions-page.css'),
@@ -781,6 +782,12 @@ final class _FW_Extensions_Manager
 			wp_localize_script('fw-extensions-page', '_fw_extensions_script_data', array(
 				'link' => $this->get_link(),
 			));
+
+			/**
+			 * this is needed for fw.soleModal design
+			 * it is displayed when extension ajax install returns an error
+			 */
+			wp_enqueue_media();
 		}
 
 		/** Prepare extensions list for view */

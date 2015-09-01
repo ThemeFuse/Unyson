@@ -1511,7 +1511,7 @@ fw.soleModal = (function(){
 				'<div class="fw-modal fw-sole-modal" style="display:none;">'+
 				'    <div class="media-modal wp-core-ui" style="width: 350px; height: 200px;">'+
 				'        <div class="media-modal-content" style="min-height: 200px;">' +
-				'            <a class="media-modal-close" href="#" onclick="return false;"><span class="media-modal-icon"></span></a>'+
+				'            <button type="button" class="button-link media-modal-close"><span class="media-modal-icon"></span></button>'+
 				'            <table width="100%" height="100%"><tbody><tr>'+
 				'                <td valign="middle" class="fw-sole-modal-content fw-text-center"><!-- modal content --></td>'+
 				'            </tr><tbody></table>'+
