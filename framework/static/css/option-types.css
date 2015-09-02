@@ -118,7 +118,7 @@ textarea.fw-option-type-textarea {
 	height: auto;
 }
 
-.fw-modal .media-frame input,
+.fw-modal .media-frame input[type=text],
 .fw-modal .media-frame textarea {
 	padding: 3px 5px;
 }
