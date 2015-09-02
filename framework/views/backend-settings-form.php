@@ -43,6 +43,11 @@ function _action_fw_theme_settings_footer_scripts() {
 add_action('admin_print_footer_scripts', '_action_fw_theme_settings_footer_scripts', 20);
 
 endif;
+
+$texts = apply_filters('fw_settings_form_texts', array(
+	'save_button' => __('Save Changes', 'fw'),
+	'reset_button' => __('Reset Options', 'fw'),
+));
 ?>
 
 <?php if ($side_tabs): ?>
@@ -69,7 +74,7 @@ endif;
 				echo fw_html_tag('input', array(
 					'type' => 'submit',
 					'name' => '_fw_reset_options',
-					'value' => __('Reset Options', 'fw'),
+					'value' => $texts['reset_button'],
 					'class' => 'button-secondary button-large submit-button-reset',
 				))
 				?>
@@ -78,7 +83,7 @@ endif;
 				echo fw_html_tag('input', array(
 					'type' => 'submit',
 					'name' => '_fw_save_options',
-					'value' => __('Save Changes', 'fw'),
+					'value' => $texts['save_button'],
 					'class' => 'button-primary button-large submit-button-save',
 				))
 				?>
@@ -102,14 +107,14 @@ endif;
 	echo fw_html_tag('input', array(
 		'type' => 'submit',
 		'name' => '_fw_save_options',
-		'value' => __('Save Changes', 'fw'),
+		'value' => $texts['save_button'],
 		'class' => 'button-primary button-large',
 	));
 	echo ($side_tabs ? '' : ' &nbsp;&nbsp; ');
 	echo fw_html_tag('input', array(
 		'type' => 'submit',
 		'name' => '_fw_reset_options',
-		'value' => __('Reset Options', 'fw'),
+		'value' => $texts['reset_button'],
 		'class' => 'button-secondary button-large',
 	));
 ?>
