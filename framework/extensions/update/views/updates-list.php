@@ -96,7 +96,7 @@
 			</div>
 			<?php if ($one_update_mode): ?>
 			<div class="fw-ext-update-extensions-form-simple">
-				<p><?php _e('New extensions updates available.', 'fw'); ?></p>
+				<p style="color:#d54e21;"><?php _e('New extensions updates available.', 'fw'); ?></p>
 				<p><input class="button" type="submit" value="<?php echo esc_attr(__('Update Extensions', 'fw')) ?>" name="update"></p>
 				<script type="text/javascript">
 					jQuery(function($){
