@@ -393,6 +393,8 @@ class FW_Option_Type_Checkbox extends FW_Option_Type {
 		if (
 			defined('DOING_AJAX') && DOING_AJAX
 			&&
+			is_string($data['value'])
+			&&
 			in_array($data['value'], array('false', 'true'))
 		) {
 			/**
@@ -413,14 +415,15 @@ class FW_Option_Type_Checkbox extends FW_Option_Type {
 
 		unset( $option['attr']['value'] );
 
-		return '<input type="checkbox" name="' . esc_attr( $option['attr']['name'] ) . '" value="" checked="checked" style="display: none">' .
-		       '<!-- used for "' . esc_attr( $id ) . '" to be present in _POST -->' .
-		       '' .
-		       '<label for="' . esc_attr( $option['attr']['id'] ) . '">' .
-		       '<input ' . fw_attr_to_html( $option['attr'] ) . ' type="checkbox" value="true" ' .
-		       ( $option['value'] ? 'checked="checked" ' : '' ) .
-		       '> ' . htmlspecialchars( $option['text'], ENT_COMPAT, 'UTF-8' ) .
-		       '</label>';
+		return ''.
+			'<input type="checkbox" name="' . esc_attr( $option['attr']['name'] ) . '" value="" checked="checked" style="display: none">' .
+			'<!-- used for "' . esc_attr( $id ) . '" to be present in _POST -->' .
+			'' .
+			'<label for="' . esc_attr( $option['attr']['id'] ) . '">' .
+				'<input ' . fw_attr_to_html( $option['attr'] ) . ' type="checkbox" value="true" ' .
+					( $option['value'] ? 'checked="checked" ' : '' ) .
+				'> ' . htmlspecialchars( $option['text'], ENT_COMPAT, 'UTF-8' ) .
+			'</label>';
 	}
 
 	/**

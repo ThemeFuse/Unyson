@@ -77,6 +77,8 @@ class FW_Option_Type_Switch extends FW_Option_Type
 		if (
 			defined('DOING_AJAX') && DOING_AJAX
 			&&
+			is_string($data['value'])
+			&&
 			in_array($data['value'], array('false', 'true'))
 			&&
 			// do not transform if there is an exact match with a choice
