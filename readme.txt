@@ -85,7 +85,7 @@ Yes; Unyson will work with any theme.
 = 2.4.7 =
 * FontAwesome 4.4.0
 * Improved extension ajax install/uninstall [#809](https://github.com/ThemeFuse/Unyson/issues/809)
-* Fixed [#829](https://github.com/ThemeFuse/Unyson/issues/829), [#820](https://github.com/ThemeFuse/Unyson/issues/820)
+* Fixed [#829](https://github.com/ThemeFuse/Unyson/issues/829), [#820](https://github.com/ThemeFuse/Unyson/issues/820), [Shortcodes#31](https://github.com/ThemeFuse/Unyson-Shortcodes-Extension/issues/31)
 
 = 2.4.6 =
 * Fixed: Extensions uninstalled after auto-update [#263](https://github.com/ThemeFuse/Unyson/issues/263)
