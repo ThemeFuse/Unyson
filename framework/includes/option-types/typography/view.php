@@ -33,14 +33,14 @@
 	<div class="fw-option-typography-option fw-option-typography-option-size fw-border-box-sizing fw-col-sm-2" style="display: <?php echo (!isset($option['components']['size']) || $option['components']['size'] != false) ? 'block' : 'none' ?>;">
 		<select data-type="size" name="<?php echo esc_attr($option['attr']['name']) ?>[size]" class="fw-option-typography-option-size-input">
 		<?php for ($i = 9; $i <= 70; $i++): ?>
-			<option value="<?php echo $i ?>" <?php echo $data['value']['size'] === $i ? ' selected="selected" ' : ''; ?>><?php echo $i ?>px</option>
+			<option value="<?php echo esc_attr($i) ?>" <?php echo $data['value']['size'] === $i ? ' selected="selected" ' : ''; ?>><?php echo $i ?>px</option>
 		<?php endfor; ?>
 		</select>
 	</div>
 
 	<div class="fw-option-typography-option fw-option-typography-option-family fw-border-box-sizing fw-col-sm-5"
 	     style="display: <?php echo ( ! isset( $option['components']['family'] ) || $option['components']['family'] != false ) ? 'block' : 'none'; ?>;">
-		<select data-type="family" data-value="<?php echo $data['value']['family']; ?>"
+		<select data-type="family" data-value="<?php echo esc_attr($data['value']['family']); ?>"
 		        name="<?php echo esc_attr( $option['attr']['name'] ) ?>[family]"
 		        class="fw-option-typography-option-family-input"></select>
 	</div>

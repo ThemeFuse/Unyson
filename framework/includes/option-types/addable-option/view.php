@@ -22,7 +22,7 @@ if ($option['sortable']) {
 	<?php foreach($data['value'] as $option_value): ?>
 		<tr class="fw-option-type-addable-option-option">
 			<td class="td-move">
-				<img src="<?php echo $move_img_src ?>" width="7" />
+				<img src="<?php echo esc_attr($move_img_src); ?>" width="7" />
 			</td>
 			<td class="td-option fw-force-xs">
 			<?php

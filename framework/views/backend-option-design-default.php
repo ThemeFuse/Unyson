@@ -102,7 +102,7 @@
 	<?php if ($option['label'] !== false): ?>
 		<div class="<?php echo esc_attr($classes['label']) ?>">
 			<div class="fw-inner">
-				<label for="<?php echo $data['id_prefix'] . esc_attr($id) ?>"><?php echo fw_htmlspecialchars($option['label']) ?></label>
+				<label for="<?php echo esc_attr($data['id_prefix']) . esc_attr($id) ?>"><?php echo fw_htmlspecialchars($option['label']) ?></label>
 				<?php if ($help): ?><div class="fw-option-help fw-option-help-in-label fw-visible-xs-block <?php echo esc_attr($help['class']) ?>" title="<?php echo esc_attr($help['html']) ?>"></div><?php endif; ?>
 				<div class="fw-clear"></div>
 			</div>

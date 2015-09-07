@@ -22,8 +22,8 @@
 				$attachment_filename    = basename(get_attached_file($id, true));
 				$attachment_url         = wp_get_attachment_url($id);
 				?>
-				<div class="thumb" data-attid="<?php echo $id; ?>" data-origsrc="<?php echo $attachment_url; ?>">
-					<img src="<?php echo $attachment_thumb_url; ?>" alt="<?php echo $attachment_filename; ?>"/>
+				<div class="thumb" data-attid="<?php echo esc_attr($id); ?>" data-origsrc="<?php echo esc_attr($attachment_url); ?>">
+					<img src="<?php echo esc_attr($attachment_thumb_url); ?>" alt="<?php echo esc_attr($attachment_filename); ?>"/>
 					<a href="#" class="dashicons fw-x clear-uploads-thumb"></a>
 				</div>
 			<?php endforeach; ?>

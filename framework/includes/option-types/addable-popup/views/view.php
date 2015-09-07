@@ -25,7 +25,7 @@ $increment_placeholder = '###-addable-popup-increment-'. fw_rand_md5() .'-###';
 					'name_prefix' => $data['name_prefix'] . '[' . $id . ']',
 				));?>
 			</div>
-			<img src="<?php echo $sortable_image; ?>" class="sort-item"/>
+			<img src="<?php echo esc_attr($sortable_image); ?>" class="sort-item"/>
 
 			<div class="content"></div>
 			<a href="#" class="dashicons fw-x delete-item"></a>
@@ -38,7 +38,7 @@ $increment_placeholder = '###-addable-popup-increment-'. fw_rand_md5() .'-###';
 						'name_prefix' => $data['name_prefix'] . '[' . $id . ']',
 					));?>
 				</div>
-				<img src="<?php echo $sortable_image; ?>" class="sort-item"/>
+				<img src="<?php echo esc_attr($sortable_image); ?>" class="sort-item"/>
 
 				<div class="content"><!-- will be populated from js --></div>
 				<a href="#" class="dashicons fw-x delete-item"></a>

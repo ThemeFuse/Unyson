@@ -31,7 +31,7 @@ $components = (isset($option['components']) && is_array($option['components'])) 
 <div <?php echo fw_attr_to_html( $wrapper_attr ) ?>>
 	<?php if ( $components['family'] ) : ?>
 		<div class="fw-option-typography-v2-option fw-option-typography-v2-option-family fw-border-box-sizing fw-col-sm-5">
-			<select data-type="family" data-value="<?php echo $data['value']['family']; ?>"
+			<select data-type="family" data-value="<?php echo esc_attr($data['value']['family']); ?>"
 			        name="<?php echo esc_attr( $option['attr']['name'] ) ?>[family]"
 			        class="fw-option-typography-v2-option-family-input">
 			</select>
@@ -123,7 +123,7 @@ $components = (isset($option['components']) && is_array($option['components'])) 
 		<div class="fw-option-typography-v2-option fw-option-typography-v2-option-size fw-border-box-sizing fw-col-sm-2">
 			<input data-type="size" name="<?php echo esc_attr( $option['attr']['name'] ) ?>[size]"
 			       class="fw-option-typography-v2-option-size-input" type="text"
-			       value="<?php echo $data['value']['size']; ?>">
+			       value="<?php echo esc_attr($data['value']['size']); ?>">
 
 			<div class="fw-inner"><?php _e( 'Size', 'fw' ); ?></div>
 		</div>
@@ -133,7 +133,7 @@ $components = (isset($option['components']) && is_array($option['components'])) 
 		<div
 			class="fw-option-typography-v2-option fw-option-typography-v2-option-line-height fw-border-box-sizing fw-col-sm-2">
 			<input data-type="line-height" name="<?php echo esc_attr( $option['attr']['name'] ) ?>[line-height]"
-			       value="<?php echo $data['value']['line-height']; ?>"
+			       value="<?php echo esc_attr($data['value']['line-height']); ?>"
 			       class="fw-option-typography-v2-option-line-height-input" type="text">
 
 			<div class="fw-inner"><?php _e( 'Line height', 'fw' ); ?></div>
@@ -144,7 +144,7 @@ $components = (isset($option['components']) && is_array($option['components'])) 
 		<div
 			class="fw-option-typography-v2-option fw-option-typography-v2-option-letter-spacing fw-border-box-sizing fw-col-sm-2">
 			<input data-type="letter-spacing" name="<?php echo esc_attr( $option['attr']['name'] ) ?>[letter-spacing]"
-			       value="<?php echo $data['value']['letter-spacing']; ?>"
+			       value="<?php echo esc_attr($data['value']['letter-spacing']); ?>"
 			       class="fw-option-typography-v2-option-letter-spacing-input" type="text">
 
 			<div class="fw-inner"><?php _e( 'Letter spacing', 'fw' ); ?></div>
