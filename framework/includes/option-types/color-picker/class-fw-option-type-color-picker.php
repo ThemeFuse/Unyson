@@ -42,6 +42,7 @@ class FW_Option_Type_Color_Picker extends FW_Option_Type
 		$option['attr']['size']   = '7';
 		$option['attr']['maxlength'] = '7';
 		$option['attr']['onclick'] = 'this.select()';
+		$option['attr']['data-default'] = $option['value'];
 
 		return '<input type="text" '. fw_attr_to_html($option['attr']) .'>';
 	}
