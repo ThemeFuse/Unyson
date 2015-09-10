@@ -1,6 +1,9 @@
 jQuery(document).ready(function($){
 	var helpers = {
+		optionClass: 'fw-option-type-color-picker',
+		eventNamespace: '.fwOptionTypeColorPicker',
 		colorRegex: /^#[a-f0-9]{3}([a-f0-9]{3})?$/,
+		localized: window._fw_option_type_color_picker_localized,
 		/**
 		 * Return true if color is dark
 		 * @param {string} color Accept only correct color format, e.g. #123456
@@ -41,7 +44,7 @@ jQuery(document).ready(function($){
 	};
 
 	fwEvents.on('fw:options:init', function (data) {
-		data.$elements.find('input.fw-option-type-color-picker:not(.initialized)').each(function(){
+		data.$elements.find('input.'+ helpers.optionClass +':not(.initialized)').each(function(){
 			var $input = $(this),
 				changeTimeoutId = 0;
 
@@ -74,6 +77,10 @@ jQuery(document).ready(function($){
 					palettes: true
 				});
 
+				var $picker = helpers.getInstance($input).picker;
+
+				$picker.addClass(helpers.optionClass +'-iris');
+
 				{
 					var color = $input.val();
 
@@ -88,14 +95,14 @@ jQuery(document).ready(function($){
 				{
 					$input.parent().attr('id', 'fw-color-picker-r-'+ (++helpers.increment));
 
-					var originalShowCallback = helpers.getInstance($input).picker.show;
+					var originalShowCallback = helpers.getInstance($input).show;
 
-					helpers.getInstance($input).picker.show = function () {
+					helpers.getInstance($input).show = function () {
 						$(document.body)
-							.off('click.fwHideCurrentColorPicker')
-							.on('click.fwHideCurrentColorPicker', function(e){
+							.off('click'+ helpers.eventNamespace)
+							.on('click'+ helpers.eventNamespace, function(e){
 								if (!$(e.target).closest('#'+ $input.parent().attr('id')).length) {
-									$(document.body).off('click.fwHideCurrentColorPicker');
+									$(document.body).off('click'+ helpers.eventNamespace);
 									$input.iris('hide');
 								}
 							});
@@ -109,7 +116,7 @@ jQuery(document).ready(function($){
 				 * Show it manually
 				 */
 				$input.on('focus', function(){
-					if (!helpers.getInstance($input).picker.is(':visible')) {
+					if (!$picker.is(':visible')) {
 						$input.iris('show');
 					}
 				});
@@ -121,6 +128,38 @@ jQuery(document).ready(function($){
 					 */
 					helpers.updatePreview($input, $input.val());
 				});
+
+				var $firstPalette = $picker.find('.iris-palette-container > .iris-palette:first-child');
+
+				/**
+				 * Fix style
+				 */
+				$firstPalette.css('margin-left', '');
+
+				{
+					var defaultValue = $input.attr('data-default');
+
+					if (defaultValue && helpers.isColorValid(defaultValue)) {
+						$picker.find('> .iris-picker-inner').append(
+							'<div class="' + helpers.optionClass + '-reset-default fw-pull-left">' +
+								'<span>' + helpers.localized.l10n.reset_to_default + '</span>' +
+								'<a class="iris-palette" style="'
+									+ 'background-color:'+ defaultValue +';'
+									+ 'height:' + $firstPalette.css('height') + ';'
+									+ 'width:' + $firstPalette.css('width') + ';'
+								+'"></a>' +
+							'</div>'
+						);
+
+						$picker.on('click', '.' + helpers.optionClass + '-reset-default .iris-palette', function () {
+							$input.iris('color', $(this).css('background-color'));
+						});
+
+						$picker.addClass(helpers.optionClass + '-with-reset-default');
+
+						$picker.css('height', parseFloat($picker.css('height')) + 17);
+					}
+				}
 
 				$input.iris('show');
 			});
