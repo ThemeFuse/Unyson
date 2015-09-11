@@ -414,7 +414,26 @@
 	 */
 	function fw_get_db_customizer_option( $option_id = null, $default_value = null ) {
 		// note: this contains only changed controls/options
-		$all_db_values = get_theme_mod(FW_Option_Type::get_default_name_prefix(), array());
+		$all_db_values = get_theme_mod(FW_Option_Type::get_default_name_prefix(), null);
+
+		if (
+			!is_null($default_value)
+			&&
+			(
+				is_null($all_db_values)
+				||
+				is_null(fw_akg($option_id, $all_db_values))
+			)
+		) {
+			/**
+			 * Default value was provided in case db value is empty.
+			 *
+			 * Do not extract default values from options files (below)
+			 * maybe this function was called from options files and it will cause infinite loop,
+			 * that's why the developer provided a default value to prevent that.
+			 */
+			return $default_value;
+		}
 
 		// extract options default values
 		{
