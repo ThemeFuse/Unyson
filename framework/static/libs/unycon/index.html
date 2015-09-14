@@ -11,6 +11,11 @@
         body {
             padding-top: 50px;
         }
+        @media (max-width: 767px) {
+            body {
+                padding-top: 75px;
+            }
+        }
         .icon {
             width: 200px;
             height: 100px;
@@ -24,16 +29,16 @@
 
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
-        <div class="navbar-header">
+        <div class="navbar-header hidden-xs">
             <span class="navbar-brand">Unycon</span>
         </div>
-        <div class="collapse navbar-collapse">
+        <div>
             <form class="navbar-form navbar-left" role="search" onsubmit="return false;">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Search" maxlength="16" size="17" id="search-icon" />
                 </div>
             </form>
-            <div class="navbar-right">
+            <div class="navbar-right hidden-xs">
                 <span class="navbar-brand">v2.0.0</span>
             </div>
         </div>
