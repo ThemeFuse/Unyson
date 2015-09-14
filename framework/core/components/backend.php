@@ -1103,12 +1103,6 @@ final class _FW_Component_Backend {
 			}
 		}
 
-		/**
-		 * Fix booleans
-		 *
-		 * In POST, booleans are transformed to strings: 'true' and 'false'
-		 * Transform them back to booleans
-		 */
 		{
 			foreach ( fw_extract_only_options( $options ) as $option_id => $option ) {
 				if ( ! isset( $values[ $option_id ] ) ) {
@@ -1116,21 +1110,55 @@ final class _FW_Component_Backend {
 				}
 
 				/**
-				 * We detect if option is using booleans by sending it a boolean input value
-				 * If it returns a boolean, then it works with booleans
+				 * Fix booleans
+				 *
+				 * In POST, booleans are transformed to strings: 'true' and 'false'
+				 * Transform them back to booleans
 				 */
-				if ( ! is_bool(
-					fw()->backend->option_type( $option['type'] )->get_value_from_input( $option, true )
-				) ) {
-					continue;
-				}
+				do {
+					/**
+					 * Detect if option is using booleans by sending it a boolean input value
+					 * If it returns a boolean, then it works with booleans
+					 */
+					if ( ! is_bool(
+						fw()->backend->option_type( $option['type'] )->get_value_from_input( $option, true )
+					) ) {
+						break;
+					}
 
-				if ( is_bool( $values[ $option_id ] ) ) {
-					// value is already boolean, does not need to fix
-					continue;
-				}
+					if ( is_bool( $values[ $option_id ] ) ) {
+						// value is already boolean, does not need to fix
+						break;
+					}
 
-				$values[ $option_id ] = ( $values[ $option_id ] === 'true' );
+					$values[ $option_id ] = ( $values[ $option_id ] === 'true' );
+
+					continue 2;
+				} while(false);
+
+				/**
+				 * Fix integers
+				 *
+				 * In POST, integers are transformed to strings: '0', '1', '2', ...
+				 * Transform them back to integers
+				 */
+				do {
+					if (!is_numeric($values[ $option_id ])) {
+						// do nothing if value is not a number
+						break;
+					}
+
+					/**
+					 * Detect if option is using integer value by checking $option['value']
+					 */
+					if ( isset($option['value']) && !is_int($option['value']) ) {
+						continue;
+					}
+
+					$values[ $option_id ] = (int)$values[ $option_id ];
+
+					continue 2;
+				} while(false);
 			}
 		}
 
