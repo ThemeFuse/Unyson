@@ -452,6 +452,10 @@
 			}
 		}
 
+		if (is_null($all_db_values)) {
+			$all_db_values = array();
+		}
+
 		if (is_null($option_id)) {
 			return array_merge(
 				$all_default_values,
