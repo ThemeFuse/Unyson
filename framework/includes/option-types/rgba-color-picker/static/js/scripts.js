@@ -1,180 +1,264 @@
-/* globals jQuery */
-(function ($) {
-	$(document.body).click(function (e) {
-		if (!$(e.target).is('.fw-option-type-rgba-color-picker, .iris-picker, .iris-picker-inner, .iris-palette, .fw-alpha-container')) {
-			$('.fw-option-type-rgba-color-picker.initialized').iris('hide');
-		}
-	});
-
-	Color.prototype.toString = function (remove_alpha) {
-		if (remove_alpha == 'no-alpha') {
-			return this.toCSS('rgba', '1').replace(/\s+/g, '');
-		}
-		if (this._alpha < 1) {
-			return this.toCSS('rgba', this._alpha).replace(/\s+/g, '');
-		}
-		var hex = parseInt(this._color, 10).toString(16);
-		if (this.error) return '';
-		if (hex.length < 6) {
-			for (var i = 6 - hex.length - 1; i >= 0; i--) {
-				hex = '0' + hex;
+jQuery(function($){
+	/**
+	 * fixme: maybe make these simple functions and do not clog Color.prototype
+	 */
+	{
+		Color.prototype.toString = function (remove_alpha) {
+			if (remove_alpha == 'no-alpha') {
+				return this.toCSS('rgba', '1').replace(/\s+/g, '');
 			}
-		}
-		return '#' + hex;
-	};
-
-	Color.prototype.toHex = function () {
-		var hex = parseInt(this._color, 10).toString(16);
-		if (this.error) return '';
-		if (hex.length < 6) {
-			for (var i = 6 - hex.length - 1; i >= 0; i--) {
-				hex = '0' + hex;
+			if (this._alpha < 1) {
+				return this.toCSS('rgba', this._alpha).replace(/\s+/g, '');
 			}
-		}
-		return '#' + hex;
-	};
-
-	function activateIris(input) {
-
-		var $input = input;
-
-		$input.iris({
-			palettes: true,
-			defaultColor: false,
-			change: function (event, ui) {
-				var $transparency = $input.next('.iris-picker').find('.transparency');
-				$transparency.css('backgroundColor', ui.color.toString('no-alpha'));
-
-				$alpha_slider.slider("option", "value", ui.color._alpha * 100);
-
-				$input.css('background-color', ui.color.toCSS());
-				$input.css('color', ($alpha_slider.slider("value") > 40) ? ui.color.getMaxContrastColor().toCSS() : '#000000');
-
-				$input.trigger('fw:rgba:color:picker:changed', {
-					$element: $input,
-					iris: $input.data('a8cIris'),
-					alphaSlider: $alpha_slider.data('uiSlider')
-				});
-				$input.trigger('change');
+			var hex = parseInt(this._color, 10).toString(16);
+			if (this.error) return '';
+			if (hex.length < 6) {
+				for (var i = 6 - hex.length - 1; i >= 0; i--) {
+					hex = '0' + hex;
+				}
 			}
-		});
+			return '#' + hex;
+		};
 
-		$input.on('change keyup blur', function () {
-
-			//              * iris::change is not triggered when the input is empty or color is wrong
-			if (Color($input.val()).error) {
-				$input.css('background-color', '');
-				$input.css('color', '');
+		Color.prototype.toHex = function () {
+			var hex = parseInt(this._color, 10).toString(16);
+			if (this.error) return '';
+			if (hex.length < 6) {
+				for (var i = 6 - hex.length - 1; i >= 0; i--) {
+					hex = '0' + hex;
+				}
 			}
-		});
-
-		if (!$input.hasClass('initialized')) {
-
-			$('<div class="fw-alpha-container"><div class="slider-alpha"></div><div class="transparency"></div></div>').appendTo($input.next('.iris-picker'));
-
-		}
-
-		var $alpha_slider = $input.next('.iris-picker:first').find('.slider-alpha');
-
-		$alpha_slider.slider({
-			value: Color($input.val())._alpha * 100,
-			range: "max",
-			step: 1,
-			min: 0,
-			max: 100,
-			slide: function (event, ui) {
-				$(this).find('.ui-slider-handle').text(ui.value);
-
-				var color = $input.iris('color', true);
-				var cssColor = (ui.value < 100) ? color.toCSS('rgba', ui.value / 100) : color.toHex();
-
-				$input.css('background-color', cssColor).val(cssColor);
-				$input.css('color', (ui.value > 40) ? color.getMaxContrastColor().toCSS() : '#000000');
-
-				var new_alpha_val = parseFloat(ui.value),
-					iris = $input.data('a8cIris');
-				iris._color._alpha = new_alpha_val / 100.0;
-			},
-			create: function (event, ui) {
-				var v = $(this).slider('value');
-				$(this).find('.ui-slider-handle').text(v);
-				var $transparency = $input.next('.iris-picker:first').find('.transparency');
-				$transparency.css('backgroundColor', Color($input.val()).toCSS('rgb', 1));
-			},
-			change: function (event, ui) {
-				$(this).find('.ui-slider-handle').text(ui.value);
-
-				var color = $input.iris('color', true);
-				var cssColor = (ui.value < 100) ? color.toCSS('rgba', ui.value / 100) : color.toHex();
-
-				$input.css('background-color', cssColor).val(cssColor);
-				$input.css('color', (ui.value > 40) ? color.getMaxContrastColor().toCSS() : '#000000');
-
-				var new_alpha_val = parseFloat(ui.value),
-					iris = $input.data('a8cIris');
-				iris._color._alpha = new_alpha_val / 100.0;
-
-				$input.trigger('fw:rgba:color:picker:changed', {
-					$element: $input,
-					iris: $input.data('a8cIris'),
-					alphaSlider: $alpha_slider.data('uiSlider')
-				});
-				$input.trigger('change');
-			}
-		});
-
-		$input.iris('show');
-
-		if (!Color($input.val()).error) {
-			$input.iris('color', $input.val());
-		}
-
-		$input.addClass('initialized');
-
+			return '#' + hex;
+		};
 	}
 
-	fwEvents.on('fw:options:init', function (data) {
+	var helpers = {
+		optionClass: 'fw-option-type-rgba-color-picker',
+		eventNamespace: '.fwOptionTypeRgbaColorPicker',
+		hexColorRegex: /^#[a-f0-9]{3}([a-f0-9]{3})?$/,
+		localized: window._fw_option_type_rgba_color_picker_localized,
+		increment: 0,
+		isColorDark: function(rgbaColor) {
+			var r, g, b, o = 1;
 
-		data.$elements.find('input.fw-option-type-rgba-color-picker').each(function () {
+			if (this.hexColorRegex.test(rgbaColor)) {
+				var color = rgbaColor.substring(1); // remove #
 
-			var $this = $(this);
+				r = parseInt(color.substr(0,2),16);
+				g = parseInt(color.substr(2,2),16);
+				b = parseInt(color.substr(4,2),16);
+			} else {
+				var rgba = rgbaColor
+						.replace(/^(rgb|rgba)\(/, '')
+						.replace(/\)$/, '')
+						.replace(/\s/g, '')
+						.split(',');
 
-			if ($this.val() != '') {
-				$this.css('background-color', $(this).val());
-				$this.contrastColor();
+				r = rgba[0];
+				g = rgba[1];
+				b = rgba[2];
+				o = rgba[3];
 			}
 
-		});
+			var yiq = ((r*299)+(g*587)+(b*114))/1000;
 
-		$('.fw-inner').on('click', '.fw-option-type-rgba-color-picker', function () {
+			return yiq < 128 && o > 0.4;
+		},
+		isColorValid: function(rgbaColor) {
+			return !Color(rgbaColor).error;
+		},
+		getInstance: function ($iris) {
+			return $iris.data('a8cIris');
+		},
+		updatePreview: function ($input, color) {
+			if (this.isColorValid(color)) {
+				$input.css({
+					'background-color': color,
+					'color': this.isColorDark(color) ? '#FFFFFF' : '#000000'
+				});
+			} else {
+				$input.css({
+					'background-color': '',
+					'color': ''
+				});
+			}
+		}
+	};
 
-			activateIris($(this));
+	fwEvents.on('fw:options:init', function (data) {
+		data.$elements.find('input.'+ helpers.optionClass +':not(.initialized)').each(function () {
+			var $input = $(this),
+				changeTimeoutId = 0;
 
-			return false;
+			/**
+			 * Improvement: Initialized picker only on first focus
+			 * Do not initialize all pickers on the page, for performance reasons, maybe none of them will be opened
+			 */
+			$input.one('focus', function(){
+				$input.iris({
+					palettes: true,
+					defaultColor: false,
+					change: function (event, ui) {
+						var $transparency = $input.next('.iris-picker').find('.transparency');
+						$transparency.css('backgroundColor', ui.color.toString('no-alpha'));
+
+						$alphaSlider.slider("option", "value", ui.color._alpha * 100);
+
+						clearTimeout(changeTimeoutId);
+						changeTimeoutId = setTimeout(function(){
+							$input.trigger('fw:option-type:rgba-color-picker:change', {
+								$element: $input,
+								iris: $input.data('a8cIris'),
+								alphaSlider: $alphaSlider.data('uiSlider')
+							});
+							$input.trigger('change');
+						}, 12);
+					}
+				});
+
+				var $picker = helpers.getInstance($input).picker;
+
+				$picker.addClass(helpers.optionClass +'-iris');
+
+				/**
+				 * Hide if clicked outside option
+				 */
+				{
+					$input.parent().attr('id', 'fw-rgba-color-picker-r-'+ (++helpers.increment));
+
+					var originalShowCallback = helpers.getInstance($input).show;
+
+					helpers.getInstance($input).show = function () {
+						$(document.body)
+							.off('click'+ helpers.eventNamespace)
+							.on('click'+ helpers.eventNamespace, function(e){
+								if (!$(e.target).closest('#'+ $input.parent().attr('id')).length) {
+									$(document.body).off('click'+ helpers.eventNamespace);
+									$input.iris('hide');
+								}
+							});
+
+						originalShowCallback.apply(this);
+					};
+				}
+
+				/**
+				 * After the second hide the picker is not showing on the next focus (I don't know why)
+				 * Show it manually
+				 */
+				$input.on('focus', function(){
+					if (!$picker.is(':visible')) {
+						$input.iris('show');
+					}
+				});
+
+				$input.on('change keyup blur', function () {
+					// iris::change is not triggered when the input is empty or color is wrong
+					helpers.updatePreview($input, $input.val());
+				});
+
+				$(''
+					+ '<div class="fw-alpha-container">' 
+					+ /**/'<div class="slider-alpha"></div>'
+					+ /**/'<div class="transparency"></div>'
+					+ '</div>'
+				).appendTo($input.next('.iris-picker'));
+
+				var $alphaSlider = $input.next('.iris-picker:first').find('.slider-alpha');
+
+				$alphaSlider.slider({
+					value: Color($input.val())._alpha * 100,
+					range: "max",
+					step: 1,
+					min: 0,
+					max: 100,
+					slide: function (event, ui) {
+						$(this).find('.ui-slider-handle').text(ui.value);
+
+						var color = $input.iris('color', true),
+							cssColor = (
+								(ui.value < 100) ? color.toCSS('rgba', ui.value / 100) : color.toHex()
+							).replace(/\s/g, '');
+
+						$input.val(cssColor);
+						$input.data('a8cIris')._color._alpha = parseFloat(ui.value) / 100.0;
+
+						clearTimeout(changeTimeoutId);
+						changeTimeoutId = setTimeout(function(){
+							$input.trigger('fw:option-type:rgba-color-picker:change', {
+								$element: $input,
+								iris: $input.data('a8cIris'),
+								alphaSlider: $alphaSlider.data('uiSlider')
+							});
+							$input.trigger('change');
+						}, 12);
+					},
+					create: function (event, ui) {
+						var v = $(this).slider('value'),
+							$transparency = $input.next('.iris-picker:first').find('.transparency');
+
+						$(this).find('.ui-slider-handle').text(v);
+
+						$transparency.css('backgroundColor', Color($input.val()).toCSS('rgb', 1));
+					},
+					change: function (event, ui) {
+						$(this).find('.ui-slider-handle').text(ui.value);
+
+						var color = $input.iris('color', true),
+							cssColor = (
+								(ui.value < 100) ? color.toCSS('rgba', ui.value / 100) : color.toHex()
+							).replace(/\s/g, '');
+
+						$input.val(cssColor);
+						$input.data('a8cIris')._color._alpha = parseFloat(ui.value) / 100.0;
+
+						clearTimeout(changeTimeoutId);
+						changeTimeoutId = setTimeout(function(){
+							$input.trigger('fw:option-type:rgba-color-picker:change', {
+								$element: $input,
+								iris: $input.data('a8cIris'),
+								alphaSlider: $alphaSlider.data('uiSlider')
+							});
+							$input.trigger('change');
+						}, 12);
+					}
+				});
+
+				var $firstPalette = $picker.find('.iris-palette-container > .iris-palette:first-child');
+
+
+				{
+					var defaultValue = $input.attr('data-default');
+
+					if (defaultValue && helpers.isColorValid(defaultValue)) {
+						$picker.find('> .iris-picker-inner').append(''
+							+ '<div class="' + helpers.optionClass + '-reset-default fw-pull-left">'
+							+ /**/'<span>' + helpers.localized.l10n.reset_to_default + '</span>'
+							+ /**/'<a class="iris-palette" style="'
+							+ /**//**/'background-color:'+ defaultValue +';'
+							+ /**//**/'height:' + $firstPalette.css('height') + ';'
+							+ /**//**/'width:' + $firstPalette.css('width') + ';'
+							+ /**//**/'"></a>'
+							+ '</div>'
+						);
+
+						$picker.on('click', '.' + helpers.optionClass + '-reset-default .iris-palette', function () {
+							$input.iris('color', $(this).css('background-color'));
+						});
+
+						$picker.addClass(helpers.optionClass + '-with-reset-default');
+
+						$picker.css('height', parseFloat($picker.css('height')) + 17);
+					}
+				}
+
+				$input.iris('show');
+			});
+
+			helpers.updatePreview($input, $input.val());
+
+			$input.addClass('.initialized')
 		});
 	});
 
-})(jQuery);
-
-(function ($) {
-	$.fn.contrastColor = function () {
-		return this.each(function () {
-			var bg = $(this).css('background-color');
-			//use first opaque parent bg if element is transparent
-			if (bg == 'transparent' || bg == 'rgba(0, 0, 0, 0)') {
-				$(this).parents().each(function () {
-					bg = $(this).css('background-color');
-					if (bg != 'transparent' && bg != 'rgba(0, 0, 0, 0)') return false;
-				});
-				//exit if all parents are transparent
-				if (bg == 'transparent' || bg == 'rgba(0, 0, 0, 0)') return false;
-			}
-			//get r,g,b and decide
-			var rgb = bg.replace(/^(rgb|rgba)\(/, '').replace(/\)$/, '').replace(/\s/g, '').split(',');
-			var yiq = ((rgb[0] * 299) + (rgb[1] * 587) + (rgb[2] * 114)) / 1000;
-			if (yiq >= 150) $(this).css('color', '#000000');
-			else $(this).css('color', '#ffffff');
-		});
-	};
-
-})(jQuery);
+});

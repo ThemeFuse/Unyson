@@ -32,6 +32,16 @@ class FW_Option_Type_Rgba_Color_Picker extends FW_Option_Type {
 			fw()->manifest->get_version(),
 			true
 		);
+
+		wp_localize_script(
+			'fw-option-'. $this->get_type(),
+			'_fw_option_type_'. str_replace('-', '_', $this->get_type()) .'_localized',
+			array(
+				'l10n' => array(
+					'reset_to_default' => __('Reset to default', 'fw'),
+				),
+			)
+		);
 	}
 
 	public function get_type() {
@@ -43,6 +53,7 @@ class FW_Option_Type_Rgba_Color_Picker extends FW_Option_Type {
 	 */
 	protected function _render( $id, $option, $data ) {
 		$option['attr']['value'] = empty($data['value']) ? $option['value'] : $data['value'];
+		$option['attr']['data-default'] = $option['value'];
 
 		return '<input type="text" ' . fw_attr_to_html( $option['attr'] ) . '>';
 	}

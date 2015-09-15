@@ -16,10 +16,10 @@ jQuery(document).ready(function($){
 
 			/** @link http://24ways.org/2010/calculating-color-contrast/ */
 			{
-				var r = parseInt(color.substr(0,2),16);
-				var g = parseInt(color.substr(2,2),16);
-				var b = parseInt(color.substr(4,2),16);
-				var yiq = ((r*299)+(g*587)+(b*114))/1000;
+				var r = parseInt(color.substr(0,2),16),
+					g = parseInt(color.substr(2,2),16),
+					b = parseInt(color.substr(4,2),16),
+					yiq = ((r*299)+(g*587)+(b*114))/1000;
 			}
 
 			return yiq < 128;
@@ -31,7 +31,7 @@ jQuery(document).ready(function($){
 			if (this.isColorValid(color)) {
 				$input.css({
 					'background-color': color,
-					'color': helpers.isColorDark(color) ? '#FFFFFF' : '#000000'
+					'color': this.isColorDark(color) ? '#FFFFFF' : '#000000'
 				});
 			} else {
 				$input.css({
@@ -58,19 +58,16 @@ jQuery(document).ready(function($){
 					defaultColor: false,
 					clear: function(){},
 					change: function(event, ui){
-						helpers.updatePreview($input, ui.color.toString());
-
-						$input.trigger('fw:color:picker:changed', {
-							$element: $input,
-							event   : event,
-							ui      : ui
-						});
-
 						/**
 						 * If we trigger the 'change' right here, that will block the picker (I don't know why)
 						 */
 						clearTimeout(changeTimeoutId);
 						changeTimeoutId = setTimeout(function(){
+							$input.trigger('fw:color:picker:changed', { // should be 'fw:option-type:color-picker:change'
+								$element: $input,
+								event   : event,
+								ui      : ui
+							});
 							$input.trigger('change');
 						}, 12);
 					},
@@ -140,15 +137,15 @@ jQuery(document).ready(function($){
 					var defaultValue = $input.attr('data-default');
 
 					if (defaultValue && helpers.isColorValid(defaultValue)) {
-						$picker.find('> .iris-picker-inner').append(
-							'<div class="' + helpers.optionClass + '-reset-default fw-pull-left">' +
-								'<span>' + helpers.localized.l10n.reset_to_default + '</span>' +
-								'<a class="iris-palette" style="'
-									+ 'background-color:'+ defaultValue +';'
-									+ 'height:' + $firstPalette.css('height') + ';'
-									+ 'width:' + $firstPalette.css('width') + ';'
-								+'"></a>' +
-							'</div>'
+						$picker.find('> .iris-picker-inner').append(''
+							+ '<div class="' + helpers.optionClass + '-reset-default fw-pull-left">'
+							+ /**/'<span>' + helpers.localized.l10n.reset_to_default + '</span>'
+							+ /**/'<a class="iris-palette" style="'
+							+ /**//**/'background-color:'+ defaultValue +';'
+							+ /**//**/'height:' + $firstPalette.css('height') + ';'
+							+ /**//**/'width:' + $firstPalette.css('width') + ';'
+							+ /**//**/'"></a>'
+							+ '</div>'
 						);
 
 						$picker.on('click', '.' + helpers.optionClass + '-reset-default .iris-palette', function () {

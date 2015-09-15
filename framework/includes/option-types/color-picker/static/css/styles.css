@@ -14,13 +14,14 @@ input.fw-option-type-color-picker.iris-error {
 	color: #000;
 }
 
-.fw-option-type-color-picker-iris.iris-border {
-	z-index: 999;
-	position: absolute;
-}
-
 .fw-option-type-color-picker-with-reset-default > .iris-palette-container {
 	bottom: 27px !important;
+}
+
+.fw-option-type-color-picker-iris,
+.fw-option-type-color-picker-iris.iris-picker {
+	z-index: 999;
+	position: absolute;
 }
 
 .fw-option-type-color-picker-iris .fw-option-type-color-picker-reset-default {
