@@ -12,7 +12,12 @@ var fwForm = {
 	initAjaxSubmit: function(opts) {
 		var opts = jQuery.extend({
 			selector: 'form[data-fw-form-id]',
-			ajaxUrl: (typeof ajaxurl == 'undefined') ? '/wp-admin/admin-ajax.php' : ajaxurl,
+			ajaxUrl: (typeof ajaxurl != 'undefined')
+				? ajaxurl
+				: ((typeof fwAjaxUrl != 'undefined')
+					? fwAjaxUrl // wp_localize_script('fw-form-helpers', 'fwAjaxUrl', admin_url( 'admin-ajax.php', 'relative' ));
+					: '/wp-admin/admin-ajax.php'
+				),
 			loading: function (elements, show) {
 				elements.$form.css('position', 'relative');
 				elements.$form.find('> .fw-form-loading').remove();
