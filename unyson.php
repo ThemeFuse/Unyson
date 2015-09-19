@@ -57,7 +57,7 @@ if (defined('FW')) {
 			}
 
 			// add special option (is used in another action)
-			update_option('_fw_plugin_activated', true);
+			update_option('_fw_plugin_activated', true, false);
 		}
 		register_activation_hook( __FILE__, '_action_fw_plugin_activate' );
 

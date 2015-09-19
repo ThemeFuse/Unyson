@@ -62,7 +62,7 @@ class FW_WP_Option
 		if ($specific_multi_key === null) {
 			/** Replace entire option */
 
-			update_option($option_name, $set_value);
+			update_option($option_name, $set_value, false);
 
 			FW_Cache::del($cache_key);
 		} else {
@@ -78,7 +78,7 @@ class FW_WP_Option
 
 			FW_Cache::set($cache_key, $values);
 
-			update_option($option_name, $values['original']);
+			update_option($option_name, $values['original'], false);
 		}
 	}
 }

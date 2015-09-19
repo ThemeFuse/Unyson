@@ -1041,7 +1041,7 @@ function fw_get_google_fonts_v2() {
 			update_option( 'fw_google_fonts', array(
 				'last_update' => time(),
 				'fonts'       => $body
-			) );
+			), false );
 
 			return $body;
 		} else {

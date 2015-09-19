@@ -2011,7 +2011,7 @@ final class _FW_Extensions_Manager
 			 */
 			$db_wp_option_value['deactivated'] = array_diff_key($db_wp_option_value['deactivated'], $db_wp_option_value['activated']);
 
-			update_option($db_wp_option_name, $db_wp_option_value);
+			update_option($db_wp_option_name, $db_wp_option_value, false);
 		}
 
 		do_action('fw_extensions_before_activation', $extensions_for_activation);
@@ -2249,7 +2249,7 @@ final class _FW_Extensions_Manager
 			 */
 			$db_wp_option_value['activated'] = array_diff_key($db_wp_option_value['activated'], $db_wp_option_value['deactivated']);
 
-			update_option($db_wp_option_name, $db_wp_option_value);
+			update_option($db_wp_option_name, $db_wp_option_value, false);
 		}
 
 		do_action('fw_extensions_before_deactivation', $extensions_for_deactivation);
