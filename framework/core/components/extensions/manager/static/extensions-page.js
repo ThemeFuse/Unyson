@@ -1,9 +1,5 @@
 jQuery(function ($) {
 	fw.qtip( $('.fw-extensions-list .fw-extensions-list-item .fw-extension-tip') );
-
-	setTimeout(function(){
-		$('#fw-extensions-list-wrapper').fadeTo('fast', 1);
-	}, 300);
 });
 
 /**

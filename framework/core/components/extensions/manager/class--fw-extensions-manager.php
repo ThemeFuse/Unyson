@@ -47,7 +47,7 @@ final class _FW_Extensions_Manager
 			add_action('admin_menu', array($this, '_action_admin_menu'));
 			add_action('network_admin_menu', array($this, '_action_admin_menu'));
 			add_action('admin_footer', array($this, '_action_admin_footer'));
-			add_action('admin_enqueue_scripts', array($this, '_action_enqueue_menu_icon_style'));
+			add_action('admin_enqueue_scripts', array($this, '_action_enqueue_scripts'));
 			add_action('fw_after_plugin_activate', array($this, '_action_after_plugin_activate'), 100);
 			add_action('after_switch_theme', array($this, '_action_theme_switch'));
 
@@ -613,13 +613,7 @@ final class _FW_Extensions_Manager
 
 			if (is_wp_error($collected)) {
 				if (defined('WP_DEBUG') && WP_DEBUG) {
-					if (
-						fw_current_screen_match(array(
-							'only' => array(
-								array('parent_base' => $this->get_page_slug())
-							)
-						))
-					) {
+					if ($this->is_extensions_page()) {
 						// display this warning only on Unyson extensions page
 						FW_Flash_Messages::add('fw_ext_auto_activate_hidden_standalone',
 							sprintf(__('Cannot activate hidden standalone extension %s', 'fw'),
@@ -764,31 +758,7 @@ final class _FW_Extensions_Manager
 
 	private function display_list_page()
 	{
-		{
-
-			wp_enqueue_style(
-				'fw-extensions-page',
-				$this->get_uri('/static/extensions-page.css'),
-				array('fw'),
-				fw()->manifest->get_version()
-			);
-			wp_enqueue_script(
-				'fw-extensions-page',
-				$this->get_uri('/static/extensions-page.js'),
-				array('fw'),
-				fw()->manifest->get_version(),
-				true
-			);
-			wp_localize_script('fw-extensions-page', '_fw_extensions_script_data', array(
-				'link' => $this->get_link(),
-			));
-
-			/**
-			 * this is needed for fw.soleModal design
-			 * it is displayed when extension ajax install returns an error
-			 */
-			wp_enqueue_media();
-		}
+		// note: static is enqueued in 'admin_enqueue_scripts' action
 
 		/** Prepare extensions list for view */
 		{
@@ -847,7 +817,7 @@ final class _FW_Extensions_Manager
 
 		echo '<h2>'. sprintf(__('%s Extensions', 'fw'), fw()->manifest->get_name()) .'</h2><br/>';
 
-		echo '<div id="fw-extensions-list-wrapper" style="opacity:0;">';
+		echo '<div id="fw-extensions-list-wrapper">';
 
 		fw_render_view(dirname(__FILE__) .'/views/extensions-page.php', array(
 			'lists' => &$lists,
@@ -1691,6 +1661,8 @@ final class _FW_Extensions_Manager
 
 	private function display_extension_page()
 	{
+		// note: static is enqueued in 'admin_enqueue_scripts' action
+
 		$extension_name = trim(FW_Request::GET('extension', ''));
 
 		$installed_extensions = $this->get_installed_extensions();
@@ -1717,22 +1689,6 @@ final class _FW_Extensions_Manager
 				$this->js_redirect();
 				return;
 			}
-		}
-
-		{
-			wp_enqueue_style(
-				'fw-extension-page',
-				$this->get_uri('/static/extension-page.css'),
-				array('fw'),
-				fw()->manifest->get_version()
-			);
-			wp_enqueue_script(
-				'fw-extension-page',
-				$this->get_uri('/static/extension-page.js'),
-				array('fw'),
-				fw()->manifest->get_version(),
-				true
-			);
 		}
 
 		{
@@ -1763,7 +1719,7 @@ final class _FW_Extensions_Manager
 
 		unset($installed_extensions);
 
-		echo '<div id="fw-extension-tab-content" style="opacity: 0;">';
+		echo '<div id="fw-extension-tab-content">';
 		{
 			$method_data = array();
 
@@ -2907,10 +2863,44 @@ final class _FW_Extensions_Manager
 		return fw_id_to_title($extension_name);
 	}
 
+	public function is_extensions_page()
+	{
+		$current_screen = get_current_screen();
+
+		if (empty($current_screen)) {
+			return false;
+		}
+
+		return (
+			property_exists($current_screen, 'base') && strpos($current_screen->base, $this->get_page_slug()) !== false
+			&&
+			property_exists($current_screen, 'id') && strpos($current_screen->id, $this->get_page_slug()) !== false
+			&&
+		    !isset($_GET['sub-page'])
+		);
+	}
+
+	public function is_extension_page()
+	{
+		$current_screen = get_current_screen();
+
+		if (empty($current_screen)) {
+			return false;
+		}
+
+		return (
+			property_exists($current_screen, 'base') && strpos($current_screen->base, $this->get_page_slug()) !== false
+			&&
+			property_exists($current_screen, 'id') && strpos($current_screen->id, $this->get_page_slug()) !== false
+			&&
+			isset($_GET['sub-page']) && $_GET['sub-page'] === 'extension'
+		);
+	}
+
 	/**
 	 * @internal
 	 */
-	public function _action_enqueue_menu_icon_style()
+	public function _action_enqueue_scripts()
 	{
 		wp_enqueue_style(
 			'fw-extensions-menu-icon',
@@ -2918,6 +2908,65 @@ final class _FW_Extensions_Manager
 			array(),
 			fw()->manifest->get_version()
 		);
+
+		/**
+		 * Enqueue only on Extensions List page
+		 */
+		if ($this->is_extensions_page()) {
+			wp_enqueue_style(
+				'fw-extensions-page',
+				$this->get_uri('/static/extensions-page.css'),
+				array('fw'),
+				fw()->manifest->get_version()
+			);
+			wp_enqueue_script(
+				'fw-extensions-page',
+				$this->get_uri('/static/extensions-page.js'),
+				array('fw'),
+				fw()->manifest->get_version(),
+				true
+			);
+			wp_localize_script('fw-extensions-page', '_fw_extensions_script_data', array(
+				'link' => $this->get_link(),
+			));
+
+			/**
+			 * this is needed for fw.soleModal design
+			 * it is displayed when extension ajax install returns an error
+			 */
+			wp_enqueue_media();
+		}
+
+		if ($this->is_extension_page()) {
+			wp_enqueue_style(
+				'fw-extension-page',
+				$this->get_uri('/static/extension-page.css'),
+				array('fw'),
+				fw()->manifest->get_version()
+			);
+			wp_enqueue_script(
+				'fw-extension-page',
+				$this->get_uri('/static/extension-page.js'),
+				array('fw'),
+				fw()->manifest->get_version(),
+				true
+			);
+
+			/**
+			 * Enqueue extension settings options static
+			 */
+			if (
+				isset($_GET['extension'])
+				&&
+				is_string($extension_name = $_GET['extension'])
+				&&
+				fw()->extensions->get($extension_name)
+				&&
+				($extension_settings_options = fw()->extensions->get($extension_name)->get_settings_options())
+			) {
+				fw()->backend->enqueue_options_static($extension_settings_options);
+			}
+		}
 	}
 
 	private function activate_theme_extensions()
