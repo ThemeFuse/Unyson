@@ -59,10 +59,11 @@ final class _FW_Component_Theme
 
 	/**
 	 * Return array with options from specified name/path
-	 * @param string $name
+	 * @param string $name '{theme}/framework-customizations/theme/options/{$name}.php'
+	 * @param array $variables These will be available in options file (like variables for view)
 	 * @return array
 	 */
-	public function get_options($name)
+	public function get_options($name, array $variables = array())
 	{
 		$path = $this->locate_path('/options/'. $name .'.php');
 
@@ -70,7 +71,7 @@ final class _FW_Component_Theme
 			return array();
 		}
 
-		$variables = fw_get_variables_from_file($path, array('options' => array()));
+		$variables = fw_get_variables_from_file($path, array('options' => array()), $variables);
 
 		return $variables['options'];
 	}

@@ -536,14 +536,11 @@ function fw_locate_theme_path($rel_path) {
  */
 function fw_render_view($file_path, $view_variables = array(), $return = true) {
 	extract($view_variables, EXTR_REFS);
-
 	unset($view_variables);
 
 	if ($return) {
 		ob_start();
-
 		require $file_path;
-
 		return ob_get_clean();
 	} else {
 		require $file_path;
@@ -554,19 +551,23 @@ function fw_render_view($file_path, $view_variables = array(), $return = true) {
  * Safe load variables from an file
  * Use this function to not include files directly and to not give access to current context variables (like $this)
  * @param string $file_path
- * @param array $_variables array('variable_name' => 'default_value')
+ * @param array $_extract_variables Extract these from file array('variable_name' => 'default_value')
+ * @param array $_set_variables Set these to be available in file (like variables in view)
  * @return array
  */
-function fw_get_variables_from_file($file_path, array $_variables) {
+function fw_get_variables_from_file($file_path, array $_extract_variables, array $_set_variables = array()) {
+	extract($_set_variables, EXTR_REFS);
+	unset($_set_variables);
+
 	require $file_path;
 
-	foreach ($_variables as $variable_name => $default_value) {
+	foreach ($_extract_variables as $variable_name => $default_value) {
 		if (isset($$variable_name)) {
-			$_variables[$variable_name] = $$variable_name;
+			$_extract_variables[$variable_name] = $$variable_name;
 		}
 	}
 
-	return $_variables;
+	return $_extract_variables;
 }
 
 /**
