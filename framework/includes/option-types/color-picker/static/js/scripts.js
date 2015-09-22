@@ -158,8 +158,10 @@ jQuery(document).ready(function($){
 						$picker
 							.on(
 								'click',
-								'.' + helpers.optionClass + '-reset-default .iris-palette',
-								function(){ $input.iris('color', $(this).css('background-color')); }
+								'.' + helpers.optionClass + '-reset-default',
+								function(){
+									$input.iris('color', $(this).find('.iris-palette').css('background-color'));
+								}
 							)
 							.addClass(helpers.optionClass + '-with-reset-default')
 							.css('height', parseFloat($picker.css('height')) + 17);

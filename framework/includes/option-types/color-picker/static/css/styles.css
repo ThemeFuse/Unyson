@@ -26,7 +26,8 @@ input.fw-option-type-color-picker.iris-error {
 
 .fw-option-type-color-picker-iris .fw-option-type-color-picker-reset-default {
 	width: 139px;
-	padding-top: 2px;
+	margin-top: 2px;
+	cursor: pointer;
 }
 
 .fw-option-type-color-picker-iris .fw-option-type-color-picker-reset-default .iris-palette {
