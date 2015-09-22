@@ -133,30 +133,40 @@ jQuery(document).ready(function($){
 				 */
 				$firstPalette.css('margin-left', '');
 
-				{
-					var defaultValue = $input.attr('data-default');
-
-					if (defaultValue && helpers.isColorValid(defaultValue)) {
+				/**
+				 * "Reset" color button
+				 */
+				$.each([{
+					color: $input.attr('data-default'),
+					text: helpers.localized.l10n.reset_to_default
+				},{
+					color: $input.val(),
+					text: helpers.localized.l10n.reset_to_initial
+				}], function(i, data){
+					if (data.color && helpers.isColorValid(data.color)) {
 						$picker.find('> .iris-picker-inner').append(''
 							+ '<div class="' + helpers.optionClass + '-reset-default fw-pull-left">'
-							+ /**/'<span>' + helpers.localized.l10n.reset_to_default + '</span>'
+							+ /**/'<span>' + data.text + '</span>'
 							+ /**/'<a class="iris-palette" style="'
-							+ /**//**/'background-color:'+ defaultValue +';'
+							+ /**//**/'background-color:'+ data.color +';'
 							+ /**//**/'height:' + $firstPalette.css('height') + ';'
 							+ /**//**/'width:' + $firstPalette.css('width') + ';'
 							+ /**//**/'"></a>'
 							+ '</div>'
 						);
 
-						$picker.on('click', '.' + helpers.optionClass + '-reset-default .iris-palette', function () {
-							$input.iris('color', $(this).css('background-color'));
-						});
+						$picker
+							.on(
+								'click',
+								'.' + helpers.optionClass + '-reset-default .iris-palette',
+								function(){ $input.iris('color', $(this).css('background-color')); }
+							)
+							.addClass(helpers.optionClass + '-with-reset-default')
+							.css('height', parseFloat($picker.css('height')) + 17);
 
-						$picker.addClass(helpers.optionClass + '-with-reset-default');
-
-						$picker.css('height', parseFloat($picker.css('height')) + 17);
+						return false;
 					}
-				}
+				});
 
 				$input.iris('show');
 			});

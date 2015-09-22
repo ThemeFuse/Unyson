@@ -37,6 +37,7 @@ class FW_Option_Type_Color_Picker extends FW_Option_Type
 			array(
 				'l10n' => array(
 					'reset_to_default' => __('Reset to default', 'fw'),
+					'reset_to_initial' => __('Reset to initial', 'fw'),
 				),
 			)
 		);
