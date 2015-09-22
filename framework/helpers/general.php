@@ -1469,3 +1469,42 @@ function fw_get_image_sizes( $size = '' ) {
 
 	return $sizes;
 }
+
+/**
+ * @param string $icon A string that is meant to be an icon (an image, a font icon class, or something else)
+ * @param array Additional attributes
+ * @return string
+ */
+function fw_string_to_icon_html($icon, array $attributes = array()) {
+	if (preg_match('/\.(png|jpg|jpeg|gif|svg|webp)$/', $icon)) {
+		// http://.../image.png
+		$tag = 'img';
+		$attr = array(
+			'src' => $icon,
+			'alt' => 'icon',
+		);
+	} elseif (preg_match('/^[a-zA-Z0-9\-_ ]+$/', $icon)) {
+		// 'font-icon font-icon-class'
+		$tag = 'span';
+		$attr = array(
+			'class' => trim($icon),
+		);
+	} else {
+		// can't detect. maybe it's raw html '<span ...'
+		return $icon;
+	}
+
+	foreach ($attributes as $attr_name => $attr_val) {
+		if (isset($attr[$attr_name])) {
+			if ($attr_name === 'class') {
+				$attr[$attr_name] .= ' '. $attr_val;
+			} else {
+				// ignore. do not overwrite already set attributes
+			}
+		} else {
+			$attr[$attr_name] = (string)$attr_val;
+		}
+	}
+
+	return fw_html_tag($tag, $attr);
+}

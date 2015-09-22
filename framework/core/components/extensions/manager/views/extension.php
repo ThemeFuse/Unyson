@@ -57,7 +57,9 @@ if (!$installed_data && !$is_compatible) {
 		<div class="fw-extension-list-item-table">
 			<div class="fw-extension-list-item-table-row">
 				<div class="fw-extension-list-item-table-cell cell-1">
-					<img height="128" src="<?php echo esc_attr($thumbnail) ?>" class="fw-extensions-list-item-thumbnail" alt="Thumbnail"/>
+					<div class="fw-extensions-list-item-thumbnail-wrapper">
+						<?php echo fw_string_to_icon_html($thumbnail, array('class' => 'fw-extensions-list-item-thumbnail')); ?>
+					</div>
 				</div>
 				<div class="fw-extension-list-item-table-cell cell-2">
 					<h3 class="fw-extensions-list-item-title"<?php if ($is_active): ?> title="v<?php echo esc_attr(fw()->extensions->get($name)->manifest->get_version()) ?>"<?php endif; ?>><?php

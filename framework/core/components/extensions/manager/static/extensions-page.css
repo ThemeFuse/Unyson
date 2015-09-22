@@ -37,8 +37,29 @@
 	margin-bottom: 0;
 }
 
-.fw-extensions-list .fw-extensions-list-item img.fw-extensions-list-item-thumbnail {
+.fw-extensions-list .fw-extensions-list-item .fw-extensions-list-item-thumbnail-wrapper {
+	height: 128px;
+	min-width: 128px;
+	text-align: center;
+	background: url('img/thumbnail-bg.jpg');
+	background-size: 128px;
+}
+
+.fw-extensions-list .fw-extensions-list-item .fw-extensions-list-item-thumbnail-wrapper img.fw-extensions-list-item-thumbnail {
 	display: block;
+	height: 100%;
+}
+
+.fw-extensions-list .fw-extensions-list-item .fw-extensions-list-item-thumbnail-wrapper span.fw-extensions-list-item-thumbnail {
+	display: inline;
+	vertical-align: middle;
+	color: #fff;
+	line-height: 128px;
+	font-size: 42px;
+}
+
+.fw-extensions-list .fw-extensions-list-item .fw-extensions-list-item-thumbnail-wrapper span.fw-extensions-list-item-thumbnail.dashicons {
+	font-size: 48px;
 }
 
 .fw-extensions-list .fw-extensions-list-item .fw-extensions-list-item-title {

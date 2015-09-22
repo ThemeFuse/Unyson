@@ -2916,7 +2916,10 @@ final class _FW_Extensions_Manager
 			wp_enqueue_style(
 				'fw-extensions-page',
 				$this->get_uri('/static/extensions-page.css'),
-				array('fw'),
+				array(
+					'fw',
+					'fw-unycon', 'fw-font-awesome', // in case some extension has font-icon thumbnail
+				),
 				fw()->manifest->get_version()
 			);
 			wp_enqueue_script(
