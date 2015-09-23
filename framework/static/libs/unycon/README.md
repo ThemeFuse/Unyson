@@ -72,13 +72,13 @@ Open `demo.html` and run the below steps in browser console.
 3. Load groups
 
     ```javascript
-    unycon.groups = {...}; // copy from index.html
+    unycon.groups = {...}; // copy from index.html source code
     ```
 
 4. Load icons
 
     ```javascript
-    unycon.icons = {...}; // copy from index.html
+    unycon.icons = {...}; // copy from index.html source code
     ```
 
 5. Show checkboxes
