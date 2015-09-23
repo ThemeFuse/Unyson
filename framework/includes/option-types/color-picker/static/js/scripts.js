@@ -164,6 +164,9 @@ jQuery(document).ready(function($){
 									$input.iris('color', $(this).find('.iris-palette').css('background-color'));
 								}
 							)
+							.on('remove', function(){
+								$(document.body).off(eventNamespace);
+							})
 							.addClass(helpers.optionClass + '-with-reset-default')
 							.css('height', parseFloat($picker.css('height')) + 17);
 
