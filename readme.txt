@@ -83,11 +83,19 @@ Yes; Unyson will work with any theme.
 == Changelog ==
 
 = 2.4.8 =
-* Option type `color-picker` and `rgba-color-picker`: Added "Reset to default color" button [#831](https://github.com/ThemeFuse/Unyson/issues/831)
-* Fixed [#853](https://github.com/ThemeFuse/Unyson/issues/853)
+* Option type `color-picker` and `rgba-color-picker`: Added "Reset" button [#831](https://github.com/ThemeFuse/Unyson/issues/831)
+* Fixed [#853](https://github.com/ThemeFuse/Unyson/issues/853), [#856](https://github.com/ThemeFuse/Unyson/issues/856), [#794](https://github.com/ThemeFuse/Unyson/issues/794), [#865](https://github.com/ThemeFuse/Unyson/issues/865)
 * Unycon v2: Removed strange (not useful) icons
 
     Demo and search `http://{your-site.com}/wp-content/plugins/unyson/framework/static/libs/unycon/`
+
+* For extension developers: Now you can set font icon as [thumbnail](http://manual.unyson.io/en/latest/manifest/extension.html)
+
+    ```
+    $manifest['thumbnail'] = 'fa fa-btc'; // or 'dashicons' or 'unycon'
+    ```
+
+* Extensions list: Changed extension buttons *(Install, Activate, Deactive, Remove)* position to make more space for description
 
 = 2.4.7 =
 * FontAwesome 4.4.0
