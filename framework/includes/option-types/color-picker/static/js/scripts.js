@@ -46,7 +46,8 @@ jQuery(document).ready(function($){
 	fwEvents.on('fw:options:init', function (data) {
 		data.$elements.find('input.'+ helpers.optionClass +':not(.initialized)').each(function(){
 			var $input = $(this),
-				changeTimeoutId = 0;
+				changeTimeoutId = 0,
+				eventNamespace = helpers.eventNamespace +'_'+ (++helpers.increment);
 
 			/**
 			 * Improvement: Initialized picker only on first focus
@@ -96,10 +97,10 @@ jQuery(document).ready(function($){
 
 					helpers.getInstance($input).show = function () {
 						$(document.body)
-							.off('click'+ helpers.eventNamespace)
-							.on('click'+ helpers.eventNamespace, function(e){
+							.off('click'+ eventNamespace)
+							.on('click'+ eventNamespace, function(e){
 								if (!$(e.target).closest('#'+ $input.parent().attr('id')).length) {
-									$(document.body).off('click'+ helpers.eventNamespace);
+									$(document.body).off('click'+ eventNamespace);
 									$input.iris('hide');
 								}
 							});
