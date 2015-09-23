@@ -1026,6 +1026,7 @@ class FW_Option_Type_Unique extends FW_Option_Type
 
 	protected function _init() {
 		add_action('save_post', array($this, '_action_reset_post_ids'), 8);
+		add_filter('fw:option-type:addable-popup:value-from-input', array($this, '_filter_addable_popup_value_from_input'), 10, 2);
 	}
 
 	/**
@@ -1101,6 +1102,18 @@ class FW_Option_Type_Unique extends FW_Option_Type
 		}
 
 		return $id;
+	}
+
+	/**
+	 * Make sure there are no duplicate ids
+	 *
+	 * @param array $value
+	 * @param array $option
+	 *
+	 * @return array
+	 */
+	public function _filter_addable_popup_value_from_input($value, $option) {
+		return $value;
 	}
 }
 FW_Option_Type::register('FW_Option_Type_Unique');
