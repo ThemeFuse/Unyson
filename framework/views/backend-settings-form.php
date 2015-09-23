@@ -71,6 +71,20 @@ $texts = apply_filters('fw_settings_form_texts', array(
 		<div class="fw-col-xs-12 fw-col-sm-6">
 			<div class="form-header-buttons">
 				<?php
+				/**
+				 * Make sure firs submit button is Save button
+				 * because the first button is "clicked" when you press enter in some input
+				 * and the form is submitted.
+				 * So to prevent form Reset on input Enter, make Save button first in html
+				 */
+
+				echo fw_html_tag('input', array(
+					'type' => 'submit',
+					'name' => '_fw_save_options',
+					'class' => 'fw-hidden',
+				));
+				?>
+				<?php
 				echo fw_html_tag('input', array(
 					'type' => 'submit',
 					'name' => '_fw_reset_options',
