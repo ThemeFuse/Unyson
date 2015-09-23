@@ -39,7 +39,7 @@
 
 .fw-extensions-list .fw-extensions-list-item .fw-extensions-list-item-thumbnail-wrapper {
 	height: 128px;
-	min-width: 128px;
+	width: 128px;
 	text-align: center;
 	background: url('img/thumbnail-bg.jpg');
 	background-size: 128px;

@@ -1476,7 +1476,11 @@ function fw_get_image_sizes( $size = '' ) {
  * @return string
  */
 function fw_string_to_icon_html($icon, array $attributes = array()) {
-	if (preg_match('/\.(png|jpg|jpeg|gif|svg|webp)$/', $icon)) {
+	if (
+		preg_match('/\.(png|jpg|jpeg|gif|svg|webp)$/', $icon)
+		||
+		preg_match('/^data:image\//', $icon)
+	) {
 		// http://.../image.png
 		$tag = 'img';
 		$attr = array(
