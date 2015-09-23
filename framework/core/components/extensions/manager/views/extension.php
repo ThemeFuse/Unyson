@@ -110,7 +110,10 @@ if (!$installed_data && !$is_compatible) {
 						</form>
 					<?php elseif ($installed_data): ?>
 						<div class="fw-text-center">
-							<form action="<?php echo esc_attr($link) ?>&sub-page=activate&extension=<?php echo esc_attr($name) ?>" method="post">
+							<form action="<?php echo esc_attr($link) ?>&sub-page=activate&extension=<?php echo esc_attr($name) ?>"
+							      method="post"
+							      class="extension-activate-form"
+								>
 								<?php wp_nonce_field($nonces['activate']['action'], $nonces['activate']['name']); ?>
 								<input class="button" type="submit" value="<?php esc_attr_e('Activate', 'fw'); ?>"/>
 							</form>
@@ -124,15 +127,18 @@ if (!$installed_data && !$is_compatible) {
 							?>
 							<form action="<?php echo esc_attr($link) ?>&sub-page=delete&extension=<?php echo esc_attr($name) ?>"
 							      method="post"
-							      class="fw-extension-ajax-form"
+							      class="fw-extension-ajax-form extension-delete-form"
 							      data-confirm-message="<?php esc_attr_e('Are you sure you want to remove this extension?', 'fw') ?>"
 							      data-extension-name="<?php echo esc_attr($name) ?>"
 							      data-extension-action="uninstall"
 								>
 								<?php wp_nonce_field($nonces['delete']['action'], $nonces['delete']['name']); ?>
-								<p>
-									<a href="#" onclick="jQuery(this).closest('form').submit(); return false;" data-remove-extension="<?php echo esc_attr($name) ?>" ><?php _e('Remove', 'fw'); ?></a>
-								</p>
+								<p class="fw-visible-xs-block"></p>
+								<a href="#"
+								   onclick="jQuery(this).closest('form').submit(); return false;"
+								   data-remove-extension="<?php echo esc_attr($name) ?>"
+								   title="<?php echo esc_attr_e('Remove', 'fw'); ?>"
+									><span class="btn-text fw-visible-xs-inline"><?php _e('Remove', 'fw'); ?></span><span class="btn-icon unycon unycon-trash fw-hidden-xs"></span></a>
 							</form>
 							<?php endif; ?>
 						</div>
