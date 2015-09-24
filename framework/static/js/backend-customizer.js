@@ -24,6 +24,7 @@ jQuery(function($){
 			pendingChanges = {};
 		},
 		randomIdIncrement = 0,
+		localized = _fw_backend_customizer_localized,
 		init = function(){
 			if (initialized) {
 				return;
@@ -67,7 +68,7 @@ jQuery(function($){
 						 * to prevent block/glitch in the middle of the animation when the iframe will reload.
 						 * Bigger than 300, which most of the css animations are.
 						 */
-						333
+						localized.change_timeout
 					);
 				}
 			);

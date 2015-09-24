@@ -1826,6 +1826,13 @@ final class _FW_Component_Backend {
 			fw()->manifest->get_version(),
 			true
 		);
+		wp_localize_script(
+			'fw-backend-customizer',
+			'_fw_backend_customizer_localized',
+			array(
+				'change_timeout' => apply_filters('fw_customizer_option_change_timeout', 333),
+			)
+		);
 
 		do_action('fw_admin_enqueue_scripts:customizer');
 	}
