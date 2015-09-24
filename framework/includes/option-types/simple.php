@@ -1113,6 +1113,32 @@ class FW_Option_Type_Unique extends FW_Option_Type
 	 * @return array
 	 */
 	public function _filter_addable_popup_value_from_input($value, $option) {
+		/**
+		 * Extract only options type 'unique'
+		 */
+		{
+			$update_options = array();
+
+			fw_collect_options($update_options, $option['popup-options'], array(
+				'limit_option_types' => array($this->get_type())
+			));
+
+			if (empty($update_options)) {
+				return $value;
+			}
+		}
+
+		foreach ($value as &$row) {
+			foreach ($update_options as $opt_id => $opt) {
+				if (isset($row[$opt_id])) { // should not happen, but just in case, prevent notice
+					$row[$opt_id] = fw()->backend->option_type($opt['type'])->get_value_from_input(
+						array_merge($opt, array('value' => $row[$opt_id])),
+						null
+					);
+				}
+			}
+		}
+
 		return $value;
 	}
 }
