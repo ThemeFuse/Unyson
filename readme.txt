@@ -84,7 +84,7 @@ Yes; Unyson will work with any theme.
 
 = 2.4.8 =
 * Option type `color-picker` and `rgba-color-picker`: Added "Reset" button [#831](https://github.com/ThemeFuse/Unyson/issues/831)
-* Fixed [#853](https://github.com/ThemeFuse/Unyson/issues/853), [#856](https://github.com/ThemeFuse/Unyson/issues/856), [#794](https://github.com/ThemeFuse/Unyson/issues/794), [#865](https://github.com/ThemeFuse/Unyson/issues/865), [#873](https://github.com/ThemeFuse/Unyson/issues/873)
+* Fixed [#853](https://github.com/ThemeFuse/Unyson/issues/853), [#856](https://github.com/ThemeFuse/Unyson/issues/856), [#794](https://github.com/ThemeFuse/Unyson/issues/794), [#865](https://github.com/ThemeFuse/Unyson/issues/865), [#873](https://github.com/ThemeFuse/Unyson/issues/873), [#876](https://github.com/ThemeFuse/Unyson/issues/876)
 * Unycon v2: Removed strange (not useful) icons
 
     Demo and search `http://{your-site.com}/wp-content/plugins/unyson/framework/static/libs/unycon/`
