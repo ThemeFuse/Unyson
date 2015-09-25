@@ -66,6 +66,18 @@
 		),
 	);
 
+
+	/** Additional classes for container and label */
+	
+	if (isset($option['container-class'])) {
+		$classes['option'][] = $option['container-class'];
+	} 
+		
+	if (isset($option['label-class'])) {
+		$classes['label'][] = $option['label-class'];
+	}
+	
+	
 	/** Additional classes for option div */
 	{
 		if ($help) {
