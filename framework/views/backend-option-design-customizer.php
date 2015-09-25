@@ -77,6 +77,13 @@
 		$classes['label'][] = $option['label-class'];
 	}
 	
+	/** Add label icon */
+	if (isset($option['label-icon'])) {
+		$label_icon = '<i class="'.fw_htmlspecialchars($option['label-icon']).'"></i> &nbsp;';
+	}else{
+		$label_icon ='';
+	}
+	
 	
 	/** Additional classes for option div */
 	{
@@ -114,7 +121,7 @@
 	<?php if ($option['label'] !== false): ?>
 		<div class="<?php echo esc_attr($classes['label']) ?>">
 			<div class="fw-inner">
-				<label for="<?php echo esc_attr($data['id_prefix']) . esc_attr($id) ?>"><span class="customize-control-title"><?php echo fw_htmlspecialchars($option['label']) ?></span></label>
+				<label for="<?php echo esc_attr($data['id_prefix']) . esc_attr($id) ?>"><span class="customize-control-title"><?php echo $label_icon.fw_htmlspecialchars($option['label']) ?></span></label>
 				<?php if ($help): ?><div class="fw-option-help fw-option-help-in-label <?php echo esc_attr($help['class']) ?>" title="<?php echo esc_attr($help['html']) ?>"></div><?php endif; ?>
 				<div class="fw-clear"></div>
 			</div>
