@@ -81,7 +81,9 @@ abstract class FW_Container_Type
 			trigger_error( 'Method call not allowed', E_USER_ERROR );
 		}
 
-		add_action('admin_enqueue_scripts', array(__CLASS__, '_action_enqueue_too_early_static'), 11);
+		add_action('admin_enqueue_scripts', array(__CLASS__, '_action_enqueue_too_early_static'),
+			11 // https://github.com/ThemeFuse/Unyson/blob/6adaf5dcf55baac3f88e98aaf45f2def7b56781d/framework/core/components/backend.php#L170-L174
+		);
 	}
 
 	final public static function _action_enqueue_too_early_static() {
