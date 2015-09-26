@@ -157,7 +157,22 @@ final class _FW_Component_Backend {
 			add_action('admin_menu', array($this, '_action_admin_menu'));
 			add_action('add_meta_boxes', array($this, '_action_create_post_meta_boxes'), 10, 2);
 			add_action('init', array($this, '_action_init'), 20);
-			add_action('admin_enqueue_scripts', array($this, '_action_admin_enqueue_scripts'), 8);
+			add_action('admin_enqueue_scripts', array($this, '_action_admin_register_scripts'),
+				/**
+				 * Usually when someone register/enqueue a script/style to be used in other places
+				 * in 'admin_enqueue_scripts' actions with default (not set) priority 10, they use priority 9.
+				 * Use here priority 8, in case those scripts/styles used in actions with priority 9
+				 * are using scripts/styles registered here
+				 */
+				8
+			);
+			add_action('admin_enqueue_scripts', array($this, '_action_admin_enqueue_scripts'),
+				/**
+				 * In case some custom defined option types are using script/styles registered
+				 * in actions with default priority 10 (make sure the enqueue is executed after register)
+				 */
+				11
+			);
 
 			// render and submit options from javascript
 			{
@@ -1008,6 +1023,10 @@ final class _FW_Component_Backend {
 		do_action( 'fw_save_term_options', $term_id, $taxonomy, $old_values );
 	}
 
+	public function _action_admin_register_scripts() {
+		$this->register_static();
+	}
+
 	public function _action_admin_enqueue_scripts() {
 		global $current_screen, $plugin_page, $post;
 
@@ -1055,8 +1074,6 @@ final class _FW_Component_Backend {
 				do_action( 'fw_admin_enqueue_scripts:term', $current_screen->taxonomy );
 			}
 		}
-
-		$this->register_static();
 	}
 
 	/**

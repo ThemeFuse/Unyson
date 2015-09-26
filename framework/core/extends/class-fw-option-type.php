@@ -69,6 +69,38 @@ abstract class FW_Option_Type
 	private $static_enqueued = false;
 
 	/**
+	 * If options enqueue is called before the `admin_enqueue_scripts` action, that is wrong,
+	 * we must not execute wp_enqueue_...() before that action, because it is not recommended to do that
+	 * also some styles/scripts can have in dependencies some styles/script that are not yet registered
+	 * so they will not be enqueued
+	 *
+	 * @var array
+	 */
+	private static $too_early_enqueue = array();
+
+	final public static function _init_static($access_key) {
+		if ( $access_key->get_key() !== 'fw_backend' ) {
+			trigger_error( 'Method call not allowed', E_USER_ERROR );
+		}
+
+		add_action('admin_enqueue_scripts', array(__CLASS__, '_action_enqueue_too_early_static'), 11);
+	}
+
+	final public static function _action_enqueue_too_early_static() {
+		if (empty(self::$too_early_enqueue)) {
+			return;
+		}
+
+		$options = self::$too_early_enqueue;
+
+		self::$too_early_enqueue = array();
+
+		foreach ($options as $id => $opt) {
+			fw()->backend->option_type($opt['type'])->enqueue_static($id, $opt['option'], $opt['data']);
+		}
+	}
+
+	/**
 	 * Used as prefix for attribute id="{prefix}{option-id}"
 	 * @return string
 	 */
@@ -192,6 +224,15 @@ abstract class FW_Option_Type
 	 */
 	final public function enqueue_static($id = '', $option = array(), $data = array())
 	{
+		if (!doing_action('admin_enqueue_scripts') && !did_action('admin_enqueue_scripts')) {
+			self::$too_early_enqueue[$id] = array(
+				'option' => $option,
+				'data' => $data,
+			);
+			// fixme: maybe add warning?
+			return;
+		}
+
 		{
 			static $option_types_static_enqueued = false;
 
