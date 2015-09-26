@@ -76,7 +76,7 @@ abstract class FW_Container_Type
 	 */
 	private static $too_early_enqueue = array();
 
-	final public static function _init_static($access_key) {
+	final public static function _static_init($access_key) {
 		if ( $access_key->get_key() !== 'fw_backend' ) {
 			trigger_error( 'Method call not allowed', E_USER_ERROR );
 		}
@@ -96,7 +96,7 @@ abstract class FW_Container_Type
 		self::$too_early_enqueue = array();
 
 		foreach ($options as $id => $opt) {
-			fw()->backend->container_type($opt['type'])->enqueue_static($id, $opt['option'], $opt['values'], $opt['data']);
+			fw()->backend->container_type($opt['option']['type'])->enqueue_static($id, $opt['option'], $opt['values'], $opt['data']);
 		}
 	}
 

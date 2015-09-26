@@ -136,6 +136,9 @@ final class _FW_Component_Backend {
 
 		$this->add_actions();
 		$this->add_filters();
+
+		FW_Option_Type::_static_init($this->get_access_key());
+		FW_Container_Type::_static_init($this->get_access_key());
 	}
 
 	/**
