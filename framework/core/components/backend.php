@@ -136,9 +136,6 @@ final class _FW_Component_Backend {
 
 		$this->add_actions();
 		$this->add_filters();
-
-		FW_Option_Type::_static_init($this->get_access_key());
-		FW_Container_Type::_static_init($this->get_access_key());
 	}
 
 	/**
@@ -271,6 +268,19 @@ final class _FW_Component_Backend {
 	}
 
 	private function register_static() {
+		if (
+			!doing_action('admin_enqueue_scripts')
+			&&
+			!did_action('admin_enqueue_scripts')
+		) {
+			/**
+			 * Do not wp_enqueue/register_...() because at this point not all handles has been registered
+			 * and maybe they are used in dependencies in handles that are going to be enqueued.
+			 * So as a result some handles will not be equeued because of not registered dependecies.
+			 */
+			return;
+		}
+
 		if ( $this->static_registered ) {
 			return;
 		}
@@ -1344,7 +1354,17 @@ final class _FW_Component_Backend {
 			$design = $this->default_render_design;
 		}
 
-		{
+		if (
+			!doing_action('admin_enqueue_scripts')
+			&&
+			!did_action('admin_enqueue_scripts')
+		) {
+			/**
+			 * Do not wp_enqueue/register_...() because at this point not all handles has been registered
+			 * and maybe they are used in dependencies in handles that are going to be enqueued.
+			 * So as a result some handles will not be equeued because of not registered dependecies.
+			 */
+		} else {
 			/**
 			 * register scripts and styles
 			 * in case if this method is called before enqueue_scripts action
@@ -1450,7 +1470,18 @@ final class _FW_Component_Backend {
 	 * @param array $options
 	 */
 	public function enqueue_options_static( $options ) {
-		{
+		if (
+			!doing_action('admin_enqueue_scripts')
+			&&
+			!did_action('admin_enqueue_scripts')
+		) {
+			/**
+			 * Do not wp_enqueue/register_...() because at this point not all handles has been registered
+			 * and maybe they are used in dependencies in handles that are going to be enqueued.
+			 * So as a result some handles will not be equeued because of not registered dependecies.
+			 */
+			return;
+		} else {
 			/**
 			 * register scripts and styles
 			 * in case if this method is called before enqueue_scripts action
@@ -1496,12 +1527,20 @@ final class _FW_Component_Backend {
 			$design = $this->default_render_design;
 		}
 
-		/**
-		 * register scripts and styles
-		 * in case if this method is called before enqueue_scripts action
-		 * and option types has some of these in their dependencies
-		 */
-		$this->register_static();
+		if (
+			!doing_action('admin_enqueue_scripts')
+			&&
+			!did_action('admin_enqueue_scripts')
+		) {
+			/**
+			 * Do not wp_enqueue/register_...() because at this point not all handles has been registered
+			 * and maybe they are used in dependencies in handles that are going to be enqueued.
+			 * So as a result some handles will not be equeued because of not registered dependecies.
+			 */
+		} else {
+			$this->register_static();
+		}
+
 
 		if ( ! in_array( $design, $this->available_render_designs ) ) {
 			trigger_error( 'Invalid render design specified: ' . $design, E_USER_WARNING );
