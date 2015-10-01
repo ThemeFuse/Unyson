@@ -70,8 +70,10 @@ input.fw-option-type-rgba-color-picker.iris-error {
 	cursor: pointer;
 }
 
-.fw-option-type-rgba-color-picker-iris .fw-option-type-rgba-color-picker-reset-default .iris-palette {
-	float: right;
+.fw-option-type-rgba-color-picker-iris .fw-option-type-rgba-color-picker-reset-default span {
+	line-height: 16px;
+	padding-left: 2px;
+	float: left;
 }
 
 

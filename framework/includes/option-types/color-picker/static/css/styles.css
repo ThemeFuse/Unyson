@@ -30,8 +30,10 @@ input.fw-option-type-color-picker.iris-error {
 	cursor: pointer;
 }
 
-.fw-option-type-color-picker-iris .fw-option-type-color-picker-reset-default .iris-palette {
-	float: right;
+.fw-option-type-color-picker-iris .fw-option-type-color-picker-reset-default span {
+	line-height: 16px;
+	padding-left: 2px;
+	float: left;
 }
 
 

@@ -240,12 +240,12 @@ jQuery(function($){
 					if (data.color && helpers.isColorValid(data.color)) {
 						$picker.find('> .iris-picker-inner').append(''
 							+ '<div class="' + helpers.optionClass + '-reset-default fw-pull-left">'
-							+ /**/'<span>' + data.text + '</span>'
 							+ /**/'<a class="iris-palette" style="'
 							+ /**//**/'background-color:'+ data.color +';'
 							+ /**//**/'height:' + $firstPalette.css('height') + ';'
 							+ /**//**/'width:' + $firstPalette.css('width') + ';'
 							+ /**//**/'"></a>'
+							+ /**/'<span>' + data.text + '</span>'
 							+ '</div>'
 						);
 
