@@ -192,6 +192,19 @@ abstract class FW_Option_Type
 	 */
 	final public function enqueue_static($id = '', $option = array(), $data = array())
 	{
+		if (
+			!doing_action('admin_enqueue_scripts')
+			&&
+			!did_action('admin_enqueue_scripts')
+		) {
+			/**
+			 * Do not wp_enqueue/register_...() because at this point not all handles has been registered
+			 * and maybe they are used in dependencies in handles that are going to be enqueued.
+			 * So as a result some handles will not be equeued because of not registered dependecies.
+			 */
+			return;
+		}
+
 		{
 			static $option_types_static_enqueued = false;
 
