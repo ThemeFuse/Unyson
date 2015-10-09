@@ -102,9 +102,9 @@
 							$.trim(data.template),
 							values,
 							{
-								evaluate: /\{\{(.+?)\}\}/g,
-								interpolate: /\{\{=(.+?)\}\}/g,
-								escape: /\{\{-(.+?)\}\}/g
+								evaluate: /\{\{([\s\S]+?)\}\}/g,
+								interpolate: /\{\{=([\s\S]+?)\}\}/g,
+								escape: /\{\{-([\s\S]+?)\}\}/g
 							}
 						);
 					} catch (e) {
