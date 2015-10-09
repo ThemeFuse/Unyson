@@ -394,3 +394,5 @@ jQuery(function($){
 	});
 </script>
 <?php endif; ?>
+
+<?php do_action('fw_settings_form_footer'); ?>

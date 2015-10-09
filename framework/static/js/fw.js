@@ -828,6 +828,11 @@ fw.getQueryString = function(name) {
 				controller: this.frame,
 				model: this
 			});
+
+			/**
+			 * This allows to access from DOM the modal instance
+			 */
+			jQuery.data(this.content.el, 'modal', this);
 		},
 		initialize: function() {
 			this.initializeFrame();
