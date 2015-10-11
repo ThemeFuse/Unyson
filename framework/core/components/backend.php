@@ -481,7 +481,7 @@ final class _FW_Component_Backend {
 			return;
 		}
 
-		if ( ! fw()->theme->get_settings_options() ) {
+		if ( ! fw()->theme->locate_path('/options/settings.php') ) {
 			return;
 		}
 
