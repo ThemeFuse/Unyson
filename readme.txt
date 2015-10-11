@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.3
-Stable tag: 2.4.8
+Stable tag: 2.4.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -81,6 +81,10 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.4.9 =
+* Fixed [#889](https://github.com/ThemeFuse/Unyson/issues/889) Some scripts/styles were enqueued too early
+* Minor fixes and improvements ([diff](https://github.com/ThemeFuse/Unyson/compare/v2.4.8...v2.4.9))
 
 = 2.4.8 =
 * Option type `color-picker` and `rgba-color-picker`: Added "Reset" button [#831](https://github.com/ThemeFuse/Unyson/issues/831)
