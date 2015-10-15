@@ -98,6 +98,8 @@
 						/**
 						 * may throw error in in template is used an option id added after some items was already saved
 						 */
+						values._context = $clonedItem.find('.content');
+
 						template = _.template(
 							$.trim(data.template),
 							values,
