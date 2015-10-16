@@ -106,7 +106,7 @@ class FW_Form {
 			}
 
 			if ( ! isset( $data['attr']['action'] ) ) {
-				$data['attr']['action'] = '';
+				$data['attr']['action'] = fw_current_url();
 			}
 
 			$this->attr = $data['attr'];
