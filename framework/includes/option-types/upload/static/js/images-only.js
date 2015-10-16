@@ -23,7 +23,14 @@
 				frame = wp.media({
 					library: {
 						type: 'image'
-					}
+					},
+					states: new wp.media.controller.Library({
+                        library:   wp.media.query( { type: 'image' } ),
+                        multiple:  false,
+                        title:     'Select Image',
+                        filterable: 'uploaded',
+                        priority:  20
+                    })
 				});
 
 				frame.on('ready', function() {

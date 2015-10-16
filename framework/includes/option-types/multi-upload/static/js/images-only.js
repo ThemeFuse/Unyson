@@ -31,7 +31,14 @@
 					library: {
 						type: 'image'
 					},
-					multiple: true
+					multiple: true,
+					states: new wp.media.controller.Library({
+                        library:   wp.media.query( { type: 'image' } ),
+                        multiple:  true,
+                        title:     'Select Images',
+                        filterable: 'uploaded',
+                        priority:  20
+                    })
 				});
 
 				frame.on('ready', function() {
