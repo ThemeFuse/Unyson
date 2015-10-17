@@ -272,7 +272,7 @@ jQuery(function($){
 
 			helpers.updatePreview($input, $input.val());
 
-			$input.addClass('.initialized')
+			$input.addClass('initialized');
 		});
 	});
 
