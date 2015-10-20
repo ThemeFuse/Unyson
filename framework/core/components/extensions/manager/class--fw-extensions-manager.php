@@ -2421,6 +2421,14 @@ final class _FW_Extensions_Manager
 										$source_data['user_repo'], $response_code
 									)
 								);
+							} elseif (is_wp_error($response)) {
+								return new WP_Error(
+									$wp_error_id,
+									sprintf(
+										__( 'Failed to access Github repository "%s" releases. (%s)', 'fw' ),
+										$source_data['user_repo'], $response->get_error_message()
+									)
+								);
 							} else {
 								return new WP_Error(
 									$wp_error_id,
