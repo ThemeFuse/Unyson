@@ -191,7 +191,13 @@ final class _FW_Component_Theme
 	 */
 	public function _action_fw_extensions_init()
 	{
-		if (is_admin() && !fw()->theme->manifest->check_requirements()) {
+		if (
+			is_admin()
+			&&
+			!fw()->theme->manifest->check_requirements()
+			&&
+		    current_user_can('manage_options')
+		) {
 			FW_Flash_Messages::add(
 				'fw_theme_requirements',
 				__('Theme requirements not met:', 'fw') .' '. fw()->theme->manifest->get_not_met_requirement_text(),
