@@ -1512,3 +1512,33 @@ function fw_string_to_icon_html($icon, array $attributes = array()) {
 
 	return fw_html_tag($tag, $attr);
 }
+
+/**
+ * @return string|null
+ * @since 2.4.10
+ */
+function fw_get_json_last_error_message() {
+	switch (json_last_error()) {
+		case JSON_ERROR_NONE:
+			return null; // __('No errors', 'fw');
+			break;
+		case JSON_ERROR_DEPTH:
+			return __('Maximum stack depth exceeded', 'fw');
+			break;
+		case JSON_ERROR_STATE_MISMATCH:
+			return __('Underflow or the modes mismatch', 'fw');
+			break;
+		case JSON_ERROR_CTRL_CHAR:
+			return __('Unexpected control character found', 'fw');
+			break;
+		case JSON_ERROR_SYNTAX:
+			return __('Syntax error, malformed JSON', 'fw');
+			break;
+		case JSON_ERROR_UTF8:
+			return __('Malformed UTF-8 characters, possibly incorrectly encoded', 'fw');
+			break;
+		default:
+			return __('Unknown error', 'fw');
+			break;
+	}
+}
