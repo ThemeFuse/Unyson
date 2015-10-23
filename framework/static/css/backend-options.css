@@ -2,6 +2,7 @@
 Included on pages where backend options are rendered
 */
 
+
 /* General */
 
 .postbox-with-fw-options > .inside,
@@ -521,14 +522,22 @@ form.fw-settings-form.fw-backend-side-tabs {
 /* form header */
 
 .fw-backend-side-tabs .fw-settings-form-header {
-	background: #0074a2;
 	margin-top: 20px;
-
 	opacity: 0;
-
 	transition: opacity ease 0.3s;
 	-webkit-transition: opacity ease 0.3s;
 }
+
+/* make it match with admin color themes */
+.admin-color-fresh .fw-backend-side-tabs .fw-settings-form-header { background-color: #32373c }
+.admin-color-light .fw-backend-side-tabs .fw-settings-form-header { background-color: #777 }
+.admin-color-light .fw-backend-side-tabs .fw-options-tabs-first-level { background: #ddd }
+.admin-color-blue .fw-backend-side-tabs .fw-settings-form-header { background-color: #4796b3 }
+.admin-color-coffee .fw-backend-side-tabs .fw-settings-form-header { background-color: #46403c }
+.admin-color-ectoplasm .fw-backend-side-tabs .fw-settings-form-header { background-color: #413256 }
+.admin-color-midnight .fw-backend-side-tabs .fw-settings-form-header { background-color: #26292c }
+.admin-color-ocean .fw-backend-side-tabs .fw-settings-form-header { background-color: #627c83 }
+.admin-color-sunrise .fw-backend-side-tabs .fw-settings-form-header { background-color: #be3631 }
 
 .fw-backend-side-tabs .fw-settings-form-header.initialized {
 	opacity: 1;
@@ -588,7 +597,8 @@ form.fw-settings-form.fw-backend-side-tabs {
 .fw-backend-side-tabs .fw-settings-form-header .form-header-buttons .submit-button-separator {
 	margin: 0 12px;
 	color: #358eb6;
-	border: 1px solid #358eb6;
+	border-color: rgb(255,255,255);
+	border-color: rgba(255,255,255,0.5);
 	border-width: 0 1px;
 	display: inline-block;
 	height: 14px;
@@ -613,7 +623,7 @@ form.fw-settings-form.fw-backend-side-tabs {
 	height: 26px;
 	line-height: 24px;
 	background: #fff;
-	border-color: #0073aa;
+	border-color: transparent;
 	color: #0074a2;
 	-webkit-border-radius: 2px;
 	border-radius: 2px;
