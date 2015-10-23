@@ -613,6 +613,7 @@ form.fw-settings-form.fw-backend-side-tabs {
 	height: 26px;
 	line-height: 24px;
 	background: #fff;
+	border-color: #0073aa;
 	color: #0074a2;
 	-webkit-border-radius: 2px;
 	border-radius: 2px;
