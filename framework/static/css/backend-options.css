@@ -522,6 +522,7 @@ form.fw-settings-form.fw-backend-side-tabs {
 /* form header */
 
 .fw-backend-side-tabs .fw-settings-form-header {
+	background-color: #0074a2;
 	margin-top: 20px;
 	opacity: 0;
 	transition: opacity ease 0.3s;
@@ -529,15 +530,14 @@ form.fw-settings-form.fw-backend-side-tabs {
 }
 
 /* make it match with admin color themes */
-.admin-color-fresh .fw-backend-side-tabs .fw-settings-form-header { background-color: #32373c }
-.admin-color-light .fw-backend-side-tabs .fw-settings-form-header { background-color: #777 }
-.admin-color-light .fw-backend-side-tabs .fw-options-tabs-first-level { background: #ddd }
-.admin-color-blue .fw-backend-side-tabs .fw-settings-form-header { background-color: #4796b3 }
-.admin-color-coffee .fw-backend-side-tabs .fw-settings-form-header { background-color: #46403c }
-.admin-color-ectoplasm .fw-backend-side-tabs .fw-settings-form-header { background-color: #413256 }
-.admin-color-midnight .fw-backend-side-tabs .fw-settings-form-header { background-color: #26292c }
-.admin-color-ocean .fw-backend-side-tabs .fw-settings-form-header { background-color: #627c83 }
-.admin-color-sunrise .fw-backend-side-tabs .fw-settings-form-header { background-color: #be3631 }
+body.admin-color-light .fw-backend-side-tabs .fw-settings-form-header { background-color: #777 }
+body.admin-color-light .fw-backend-side-tabs .fw-options-tabs-first-level { background: #ddd }
+body.admin-color-blue .fw-backend-side-tabs .fw-settings-form-header { background-color: #4796b3 }
+body.admin-color-coffee .fw-backend-side-tabs .fw-settings-form-header { background-color: #46403c }
+body.admin-color-ectoplasm .fw-backend-side-tabs .fw-settings-form-header { background-color: #413256 }
+body.admin-color-midnight .fw-backend-side-tabs .fw-settings-form-header { background-color: #26292c }
+body.admin-color-ocean .fw-backend-side-tabs .fw-settings-form-header { background-color: #627c83 }
+body.admin-color-sunrise .fw-backend-side-tabs .fw-settings-form-header { background-color: #be3631 }
 
 .fw-backend-side-tabs .fw-settings-form-header.initialized {
 	opacity: 1;
