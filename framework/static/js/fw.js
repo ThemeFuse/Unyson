@@ -844,11 +844,13 @@ fw.getQueryString = function(name) {
 			this.initializeFrame();
 			this.initializeContent();
 		},
-		/**
-		 * @param {Object} options used for fw()->backend->render_options(json_decode(options, true))
-		 */
 		open: function() {
 			this.frame.open();
+
+			return this;
+		},
+		close: function() {
+			this.frame.$el.closest('.media-modal').find('.media-modal-close:first').trigger('click');
 
 			return this;
 		},
