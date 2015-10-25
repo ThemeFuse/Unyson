@@ -119,6 +119,7 @@ textarea.fw-option-type-textarea {
 }
 
 .fw-modal .media-frame input[type=text],
+.fw-modal .media-frame input[type=password],
 .fw-modal .media-frame textarea {
 	padding: 3px 5px;
 }

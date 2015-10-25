@@ -587,7 +587,7 @@ fw.getQueryString = function(name) {
 	 * Usage:
 	 * var modal = new fw.Modal();
 	 *
-	 * modal.on('open|close', function(){});
+	 * modal.on('open|closing|close', function(){});
 	 */
 	fw.Modal = Backbone.Model.extend({
 		defaults: {
@@ -766,6 +766,8 @@ fw.getQueryString = function(name) {
 						}
 
 						closeEffect();
+
+						modal.trigger('closing');
 					}
 
 					// add events that prevent original close
@@ -793,6 +795,8 @@ fw.getQueryString = function(name) {
 						modal.resizeTabsContent();
 					});
 				}
+
+				modal.trigger('open');
 			});
 
 			this.frame.on('close', function(){
@@ -812,6 +816,8 @@ fw.getQueryString = function(name) {
 				modal.frame.modal.$el.removeClass('fw-modal-open');
 
 				modalsStack.pop();
+
+				modal.trigger('close');
 			});
 
 			this.frame.on('content:create:main', function () {
