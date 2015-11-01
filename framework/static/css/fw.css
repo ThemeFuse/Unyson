@@ -3055,7 +3055,7 @@ body.rtl .fw-modal .media-frame-content > form .fw-options-tabs-contents .fw-opt
 }
 
 .fw-sole-modal > .media-modal-backdrop {
-	z-index: 100000;
+	z-index: 499999;
 	background-color: transparent;
 }
 
