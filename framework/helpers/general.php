@@ -1542,3 +1542,48 @@ function fw_get_json_last_error_message() {
 			break;
 	}
 }
+
+/**
+ * Return mime_types by file extension ex : input : array( 'png', 'jpg', 'jpeg' ) => output : array( 'image/jpeg' ).
+ *
+ * @param array $type
+ *
+ * @return array
+ */
+function fw_get_mime_type_by_ext( $type = array() ) {
+	$result = array();
+
+	foreach ( wp_get_mime_types() as $key => $mime_type ) {
+		$types = explode( '|', $key );
+		foreach ( $type as $item ) {
+			if ( in_array( $item, $types ) && ! in_array( $mime_type, $result ) ) {
+				$result[] = $mime_type;
+			}
+		}
+	}
+
+	return $result;
+}
+
+/**
+ * Return types from file extensions ex : input array( 'png', 'jpg', 'zip' ) => output : array( 'image', 'archive' ).
+ *
+ * @see wp_ext2type() function.
+ *
+ * @param array $ext_array
+ *
+ * @return array
+ */
+function fw_multi_ext2type( $ext_array = array() ) {
+
+	$type_collector = array();
+
+	foreach ( $ext_array as $ext ) {
+		$type = wp_ext2type( $ext );
+		if ( ! in_array( $type, $type_collector ) ) {
+			$type_collector[] = $type;
+		}
+	}
+
+	return $type_collector;
+}

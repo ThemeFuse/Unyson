@@ -1,6 +1,6 @@
-(function($, _, fwe) {
+(function ($, _, fwe) {
 
-	var init = function() {
+	var init = function () {
 		var $this = $(this),
 			elements = {
 				$container: $this,
@@ -14,9 +14,9 @@
 					notEmpty: $this.find('.thumb-template-not-empty').attr('data-template')
 				}
 			},
-			collectThumbsIds = function() {
+			collectThumbsIds = function () {
 				var ids = [];
-				elements.$thumbsContainer.find('.thumb').each(function() {
+				elements.$thumbsContainer.find('.thumb').each(function () {
 					ids.push($(this).data('attid'));
 				});
 				return ids;
@@ -25,84 +25,106 @@
 				buttonAdd: elements.$container.attr('data-l10n-button-add'),
 				buttonEdit: elements.$container.attr('data-l10n-button-edit')
 			},
-			frame,
-			createFrame = function() {
-				frame = wp.media({
-					library: {
-						type: 'image'
-					},
-					multiple: true
-				});
+			frame;
 
-				frame.on('ready', function() {
-					frame.modal.$el.addClass('fw-option-type-multi-upload');
-				});
+		var haveFilesDetails = elements.$container.attr('data-files-details') !== undefined;
 
-				// opens the modal with the correct attachments already selected
-				frame.on('open', function() {
-					var selection = frame.state().get('selection'),
-						ids = elements.$input.val(),
-						parsedIds,
-						attachment;
+		if (haveFilesDetails) {
+			var parsedFilesDetails = JSON.parse(elements.$container.attr('data-files-details'));
+		}
+		var createFrame = function () {
+			frame = wp.media({
+				library: {
+					type: haveFilesDetails ? parsedFilesDetails.mime_types : 'image'
+				},
+				multiple: true
+			});
 
-					frame.reset();
-					try {
-						parsedIds = JSON.parse(ids);
-						$.each(parsedIds, function(index, id) {
-							attachment = wp.media.attachment(id);
-							if (attachment.id) {
-								selection.add(attachment);
-							}
-						});
-					} catch(e) {
+			if (haveFilesDetails) {
+				frame.on('content:render', function () {
+					var $view = this.first().frame.views.get('.media-frame-uploader')[0];
 
-					}
-				});
-
-				frame.on('select', function() {
-					var attachments = frame.state().get('selection'),
-						ids = [],
-						compiledTemplates = [];
-
-					attachments.each(function(attachment) {
-						var src;
-						if (attachment.get('sizes')) {
-							src = attachment.get('sizes').thumbnail
-									? attachment.get('sizes').thumbnail.url
-									: attachment.get('sizes').full.url;
-						} else {
-							src = attachment.get('url');
+					$view.options.uploader.plupload = {
+						filters: {
+							mime_types: [
+								{
+									title: 'Images',
+									extensions: parsedFilesDetails.ext_files.join(',')
+								}
+							]
 						}
-
-						ids.push(attachment.id);
-						compiledTemplates.push(_.template(
-							templates.thumb.notEmpty,
-							{
-								src: src,
-								alt: attachment.get('filename'),
-								id: attachment.id,
-								originalSrc: attachment.get('url')
-							},
-							{variable: 'data'}
-						));
-					});
-
-					elements.$input.val(JSON.stringify(ids));
-					elements.$uploadButton.text(l10n.buttonEdit);
-					elements.$thumbsContainer.html(compiledTemplates.join(''));
-					elements.$container.removeClass('empty');
-
-					fwe.trigger('fw:option-type:multi-upload:change', {
-						$element: elements.$container,
-						attachments: attachments
-					});
-					elements.$container.trigger('fw:option-type:multi-upload:change', {
-						attachments: attachments
-					});
+					};
 				});
-			};
+			}
+			frame.on('ready', function () {
+				frame.modal.$el.addClass('fw-option-type-multi-upload');
+			});
 
-		elements.$uploadButton.on('click', function(e) {
+			// opens the modal with the correct attachments already selected
+			frame.on('open', function () {
+				var selection = frame.state().get('selection'),
+					ids = elements.$input.val(),
+					parsedIds,
+					attachment;
+
+				frame.reset();
+				try {
+					parsedIds = JSON.parse(ids);
+					$.each(parsedIds, function (index, id) {
+						attachment = wp.media.attachment(id);
+						if (attachment.id) {
+							selection.add(attachment);
+						}
+					});
+				} catch (e) {
+
+				}
+			});
+
+			frame.on('select', function () {
+				var attachments = frame.state().get('selection'),
+					ids = [],
+					compiledTemplates = [];
+
+				attachments.each(function (attachment) {
+					var src;
+					if (attachment.get('sizes')) {
+						src = attachment.get('sizes').thumbnail
+							? attachment.get('sizes').thumbnail.url
+							: attachment.get('sizes').full.url;
+					} else {
+						src = attachment.get('url');
+					}
+
+					ids.push(attachment.id);
+					compiledTemplates.push(_.template(
+						templates.thumb.notEmpty,
+						{
+							src: src,
+							alt: attachment.get('filename'),
+							id: attachment.id,
+							originalSrc: attachment.get('url')
+						},
+						{variable: 'data'}
+					));
+				});
+
+				elements.$input.val(JSON.stringify(ids));
+				elements.$uploadButton.text(l10n.buttonEdit);
+				elements.$thumbsContainer.html(compiledTemplates.join(''));
+				elements.$container.removeClass('empty');
+
+				fwe.trigger('fw:option-type:multi-upload:change', {
+					$element: elements.$container,
+					attachments: attachments
+				});
+				elements.$container.trigger('fw:option-type:multi-upload:change', {
+					attachments: attachments
+				});
+			});
+		};
+
+		elements.$uploadButton.on('click', function (e) {
 			e.preventDefault();
 
 			if (!frame) {
@@ -111,11 +133,11 @@
 			frame.open();
 		});
 
-		elements.$container.on('click', '.no-image-img, .thumb img', function() {
+		elements.$container.on('click', '.no-image-img, .thumb img', function () {
 			elements.$uploadButton.trigger('click');
 		});
 
-		elements.$thumbsContainer.on('click', '.clear-uploads-thumb', function(e) {
+		elements.$thumbsContainer.on('click', '.clear-uploads-thumb', function (e) {
 			var ids;
 
 			$(this).closest('.thumb').remove();
@@ -139,14 +161,14 @@
 
 		elements.$thumbsContainer.sortable({
 			cancel: '.no-image',
-			update: function() {
+			update: function () {
 				var ids = collectThumbsIds();
 				elements.$input.val(JSON.stringify(ids));
 			}
 		});
 	};
 
-	fwe.on('fw:options:init', function(data) {
+	fwe.on('fw:options:init', function (data) {
 		data.$elements
 			.find('.fw-option-type-multi-upload.images-only:not(.fw-option-initialized)').each(init)
 			.addClass('fw-option-initialized');

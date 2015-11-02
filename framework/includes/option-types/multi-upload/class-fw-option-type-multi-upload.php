@@ -112,6 +112,21 @@ class FW_Option_Type_Multi_Upload extends FW_Option_Type
 
 		$l10n = $option['texts'];
 
+		if ( ! empty( $option['files_ext'] ) ) {
+			$ext_files  = is_array( $option['files_ext'] ) ? $option['files_ext'] : explode( ',', $option['file_ext'] );
+			$ext_files  = array_unique( $ext_files );
+			$mime_types = fw_get_mime_type_by_ext( $ext_files );
+			$collector  = array(
+				'ext_files'  => $ext_files,
+				'mime_types' => $mime_types
+			);
+
+			$wrapper_attr['data-files-details'] = json_encode( $collector );
+
+			$check_file_types      = fw_multi_ext2type( $ext_files );
+			$option['images_only'] = ( ! empty( $check_file_types ) && count( $check_file_types ) === 1 && $check_file_types[0] === 'image' );
+		}
+
 		if ($option['images_only']) {
 			return $this->render_images_only($input_attr, $wrapper_attr, $l10n);
 		} else {
