@@ -1502,6 +1502,7 @@ fw.soleModal = (function(){
 				width: 350
 				height: 200
 				hidePrevious: false // just replace the modal content or hide the previous modal and open it again with new content
+				updatePrevious: false // if current open modal has the same id as modal requested to show, update it without reopening
 				afterOpen: function(){}
 				afterClose: function(){}
 			}
@@ -1595,6 +1596,22 @@ fw.soleModal = (function(){
 				return false;
 			}
 		},
+		setSize: function(width, height) {
+			var $size = this.$modal.find('> .media-modal');
+
+			if (
+				$size.height() != height
+				||
+				$size.width() != width
+			) {
+				$size.animate({
+					'height': height +'px',
+					'width': width +'px'
+				}, this.animationTime);
+			}
+
+			$size = undefined;
+		},
 		/**
 		 * Show modal
 		 * Call without arguments to display next from queue
@@ -1616,6 +1633,7 @@ fw.soleModal = (function(){
 						width: 350,
 						height: 200,
 						hidePrevious: false,
+						updatePrevious: false,
 						afterOpen: function(){},
 						afterClose: function(){}
 					}, opts || {});
@@ -1637,7 +1655,21 @@ fw.soleModal = (function(){
 			}
 
 			if (this.current) {
-				return false;
+				if (
+					this.queue.length
+					&&
+					this.queue[0].id === this.current.id
+					&&
+					this.queue[0].updatePrevious
+				) {
+					this.current = this.queue.shift();
+
+					this.setContent(this.current.html);
+
+					return true;
+				} else {
+					return false;
+				}
 			}
 
 			this.currentMethod = '';
@@ -1660,23 +1692,7 @@ fw.soleModal = (function(){
 
 			this.$modal.css('display', '');
 
-			// set size
-			{
-				var $size = this.$modal.find('> .media-modal');
-
-				if (
-					$size.height() != this.current.height
-					||
-					$size.width() != this.current.width
-				) {
-					$size.animate({
-						'height': this.current.height +'px',
-						'width': this.current.width +'px'
-					}, this.animationTime);
-				}
-
-				$size = undefined;
-			}
+			this.setSize(this.current.width, this.current.height);
 
 			this.currentMethodTimeoutId = setTimeout(_.bind(function() {
 				this.current.afterOpen();
@@ -1695,6 +1711,8 @@ fw.soleModal = (function(){
 					}, this), this.current.autoHide);
 				}
 			}, this), this.animationTime * 2);
+
+			return true;
 		},
 		/**
 		 * @param {String} [id]
