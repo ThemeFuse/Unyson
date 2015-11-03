@@ -37,6 +37,12 @@
 				frame.on('content:render', function () {
 					var $view = this.first().frame.views.get('.media-frame-uploader')[0];
 
+					if(parsedFilesDetails.extra_mime_types.length > 0  && _.isArray(parsedFilesDetails.extra_mime_types)){
+						_.each(parsedFilesDetails.extra_mime_types, function(mime_type){
+							mOxie.Mime.addMimeType(mime_type);
+						});
+					}
+
 					$view.options.uploader.plupload = {
 						filters: {
 							mime_types: [

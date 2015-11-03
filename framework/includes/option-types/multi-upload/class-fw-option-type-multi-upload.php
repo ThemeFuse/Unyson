@@ -15,12 +15,13 @@ class FW_Option_Type_Multi_Upload extends FW_Option_Type
 	/**
 	 * @internal
 	 */
-	protected function _get_defaults()
-	{
+	protected function _get_defaults() {
 		return array(
-			'images_only' => true,
-			'texts'       => array(),
-			'value'       => array(),
+			'images_only'      => true,
+			'texts'            => array(),
+			'value'            => array(),
+			'files_ext'        => array(),
+			'extra_mime_types' => array()
 		);
 	}
 
@@ -113,12 +114,13 @@ class FW_Option_Type_Multi_Upload extends FW_Option_Type
 		$l10n = $option['texts'];
 
 		if ( ! empty( $option['files_ext'] ) ) {
-			$ext_files  = is_array( $option['files_ext'] ) ? $option['files_ext'] : explode( ',', $option['file_ext'] );
+			$ext_files  = is_array( $option['files_ext'] ) ? $option['files_ext'] : explode( ',', $option['files_ext'] );
 			$ext_files  = array_unique( $ext_files );
 			$mime_types = fw_get_mime_type_by_ext( $ext_files );
 			$collector  = array(
 				'ext_files'  => $ext_files,
-				'mime_types' => $mime_types
+				'mime_types' => $mime_types,
+				'extra_mime_types' => $option['extra_mime_types']
 			);
 
 			$wrapper_attr['data-files-details'] = json_encode( $collector );
