@@ -1502,7 +1502,7 @@ fw.soleModal = (function(){
 				width: 350
 				height: 200
 				hidePrevious: false // just replace the modal content or hide the previous modal and open it again with new content
-				updateCurrent: false // if current open modal has the same id as modal requested to show, update it without reopening
+				updateIfCurrent: false // if current open modal has the same id as modal requested to show, update it without reopening
 				afterOpen: function(){}
 				afterClose: function(){}
 			}
@@ -1633,7 +1633,7 @@ fw.soleModal = (function(){
 						width: 350,
 						height: 200,
 						hidePrevious: false,
-						updateCurrent: false,
+						updateIfCurrent: false,
 						afterOpen: function(){},
 						afterClose: function(){}
 					}, opts || {});
@@ -1660,7 +1660,7 @@ fw.soleModal = (function(){
 					&&
 					this.queue[0].id === this.current.id
 					&&
-					this.queue[0].updateCurrent
+					this.queue[0].updateIfCurrent
 				) {
 					this.current = this.queue.shift();
 
