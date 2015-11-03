@@ -3186,16 +3186,3 @@ body.rtl .fw-modal .media-frame-content > form .fw-options-tabs-contents .fw-opt
 }
 
 /* end: fw.loading */
-
-
-/* wp rtl */
-
-body.rtl .dashicons-arrow-left-alt2:before {
-	content: '\f345';
-}
-
-body.rtl .dashicons-arrow-right-alt2:before {
-	content: '\f341';
-}
-
-/* end: wp rtl */
