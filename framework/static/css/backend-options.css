@@ -257,6 +257,10 @@ form.fw-settings-form.fw-backend-side-tabs {
 	border-bottom: none;
 }
 
+body.rtl .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list {
+	float: right;
+}
+
 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents {
 	margin-left: 198px !important;
 	background: #fff;
@@ -275,6 +279,24 @@ form.fw-settings-form.fw-backend-side-tabs {
 	margin-right: 0;
 	border: 1px solid #d3d3d3;
 	border-width: 0 0 1px;
+}
+
+body.rtl .fw-backend-side-tabs .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
+	padding: 0;
+}
+
+body.rtl .fw-backend-side-tabs .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li:first-child a.nav-tab {
+	margin: 0;
+}
+
+body.rtl .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+	border-left: 1px solid #e5e5e5;
+	border-right: none;
+}
+
+body.rtl .fw-backend-side-tabs .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+	float: none;
+	margin-left: 0;
 }
 
 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab {
@@ -318,6 +340,11 @@ form.fw-settings-form.fw-backend-side-tabs {
 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab:hover {
 	background: #bdbdbd;
 	color: #fff;
+}
+
+body.rtl .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents {
+	margin-left: 0 !important;
+	margin-right: 198px !important;
 }
 
 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
@@ -479,6 +506,10 @@ form.fw-settings-form.fw-backend-side-tabs {
 		margin-left: 0 !important;
 	}
 
+	body.rtl .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents {
+		margin-right: 0 !important;
+	}
+
 	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner {
 		padding-bottom: 0;
 	}
@@ -515,6 +546,12 @@ form.fw-settings-form.fw-backend-side-tabs {
 
 	.fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > .handlediv:before {
 		top: 2px;
+	}
+}
+
+@media (max-width: 782px){
+	body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+		float: none;
 	}
 }
 
@@ -584,6 +621,10 @@ body.admin-color-sunrise .fw-backend-side-tabs .fw-settings-form-header { backgr
 	text-align: right;
 }
 
+body.rtl .fw-backend-side-tabs .fw-settings-form-header .form-header-buttons {
+	text-align: left;
+}
+
 .fw-backend-side-tabs .fw-settings-form-header .form-header-buttons input {
 	-webkit-box-shadow: none;
 	box-shadow: none;
@@ -638,7 +679,8 @@ body.admin-color-sunrise .fw-backend-side-tabs .fw-settings-form-header { backgr
 		text-align: center;
 	}
 
-	.fw-backend-side-tabs .fw-settings-form-header .form-header-buttons {
+	.fw-backend-side-tabs .fw-settings-form-header .form-header-buttons,
+	body.rtl .fw-backend-side-tabs .fw-settings-form-header .form-header-buttons {
 		text-align: inherit;
 	}
 
@@ -676,6 +718,12 @@ body.admin-color-sunrise .fw-backend-side-tabs .fw-settings-form-header { backgr
 	border-radius: 2px;
 }
 
+body.rtl .fw-backend-side-tabs .form-footer-buttons input[type="submit"] {
+	float: right;
+	margin-left: 0;
+	margin-right: 26px;
+}
+
 .fw-backend-side-tabs .form-footer-buttons input[type="submit"].button-primary {
 	margin-left: 26px;
 }
@@ -684,9 +732,18 @@ body.admin-color-sunrise .fw-backend-side-tabs .fw-settings-form-header { backgr
 	margin-left: 13px;
 }
 
+
+body.rtl .fw-backend-side-tabs .fw-options-tabs-wrapper + .form-footer-buttons {
+	margin: -71px 198px 0 0;
+}
+
 @media (max-width: 782px) {
 	.fw-backend-side-tabs .fw-options-tabs-wrapper + .form-footer-buttons {
 		margin: -1px 0 0; /* hide last option border */
+	}
+
+	body.rtl .fw-backend-side-tabs .fw-options-tabs-wrapper + .form-footer-buttons {
+		margin: -1px 0 0;
 	}
 }
 

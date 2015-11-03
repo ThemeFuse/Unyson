@@ -13,8 +13,17 @@
 	margin-left: 10px;
 }
 
+body.rtl .fw-option-type-radio-text .predefined .fw-option-type-radio div {
+	margin-right: 10px;
+	margin-left: 0;
+}
+
 .fw-option-type-radio-text .predefined .fw-option-type-radio div:first-child {
 	margin-left: inherit;
+}
+
+body.rtl .fw-option-type-radio-text .predefined .fw-option-type-radio div:first-child {
+	margin-right: inherit;
 }
 
 .fw-option-type-radio-text .custom input.fw-option-type-text{
@@ -30,3 +39,5 @@
 .fw-backend-option-input-type-radio-text .fw-option-help-in-input {
 	top: 4px !important;
 }
+
+
