@@ -37,6 +37,10 @@ class FW_Option_Type_Datetime_Picker extends FW_Option_Type {
 	protected function _render( $id, $option, $data ) {
 		$wrapper_attr = $option['attr'];
 
+		$defaults                  = $this->_get_defaults();
+		$default_datetime_picker   = $defaults['datetime-picker'];
+		$option['datetime-picker'] = array_merge( $default_datetime_picker, $option['datetime-picker'] );
+
 		$moment_format = $option['datetime-picker']['moment-format'];
 
 		$wrapper_attr['data-min-date'] = fw_akg('datetime-picker/minDate', $option, false );
