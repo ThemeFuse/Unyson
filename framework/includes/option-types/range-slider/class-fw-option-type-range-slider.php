@@ -17,14 +17,14 @@ class FW_Option_Type_Range_Slider extends FW_Option_Type {
 			wp_enqueue_style(
 				'fw-option-' . $this->get_type() . 'ion-range-slider',
 				fw_get_framework_directory_uri( '/includes/option-types/' . $this->get_type() . '/static/libs/ion-range-slider/ion.rangeSlider.css' ),
-				'2.0.3'
+				fw()->manifest->get_version()
 			);
 
 			wp_enqueue_script(
 				'fw-option-' . $this->get_type() . 'ion-range-slider',
 				fw_get_framework_directory_uri( '/includes/option-types/' . $this->get_type() . '/static/libs/ion-range-slider/ion.rangeSlider.min.js' ),
 				array( 'jquery', 'fw-moment' ),
-				'2.0.3'
+				fw()->manifest->get_version()
 			);
 		}
 
