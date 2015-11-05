@@ -593,6 +593,7 @@ fw.getQueryString = function(name) {
 		defaults: {
 			/* Modal title */
 			title: 'Edit Options',
+			headerElements: '',
 			/**
 			 * Content html
 			 * @private
@@ -656,11 +657,28 @@ fw.getQueryString = function(name) {
 				defaults: {
 					content: 'main',
 					menu: 'default',
-					title: this.get('title')
+					title: this.get('title'),
+					headerElements: this.get('headerElements')
 				},
 				initialize: function() {
 					this.listenTo(modal, 'change:title', function(){
 						this.set('title', modal.get('title'));
+					});
+				},
+				activate: function () {
+					this.listenTo(this.frame, 'title:create:default', function () {
+						this.frame.title.mode(this.id);
+					});
+
+					this.listenTo(this.frame, 'title:create:' + this.id, function (title) {
+						title.view = new wp.media.View({
+							controller: this,
+							tagName: 'h1'
+						});
+					});
+
+					this.listenTo(this.frame, 'title:render:' + this.id, function (view) {
+						view.$el.html(this.get('title') + this.get('headerElements') || '');
 					});
 				}
 			});
