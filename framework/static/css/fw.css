@@ -2886,6 +2886,14 @@ body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 	transition: opacity .3s ease-in-out;
 }
 
+.fw-modal.fw-modal-backdrop-light > .media-modal-backdrop {
+	background-color: #fff;
+}
+
+.fw-modal.fw-modal-backdrop-dark > .media-modal-backdrop {
+	background-color: #000;
+}
+
 .fw-modal.fw-modal-open > .media-modal-backdrop {
 	opacity: .7; /* must be the same as in .media-modal-backdrop {} wp style */
 

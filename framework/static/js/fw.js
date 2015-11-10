@@ -1521,6 +1521,7 @@ fw.soleModal = (function(){
 				height: 200
 				hidePrevious: false // just replace the modal content or hide the previous modal and open it again with new content
 				updateIfCurrent: false // if current open modal has the same id as modal requested to show, update it without reopening
+				backdrop: null // true - light, false - dark
 				afterOpen: function(){}
 				afterClose: function(){}
 			}
@@ -1652,6 +1653,7 @@ fw.soleModal = (function(){
 						height: 200,
 						hidePrevious: false,
 						updateIfCurrent: false,
+						backdrop: null,
 						afterOpen: function(){},
 						afterClose: function(){}
 					}, opts || {});
@@ -1704,6 +1706,14 @@ fw.soleModal = (function(){
 			this.setContent(this.current.html);
 
 			this.$getCloseButton().css('display', this.current.showCloseButton ? '' : 'none');
+
+			{
+				this.$modal.removeClass('fw-modal-backdrop-light fw-modal-backdrop-dark');
+
+				if (this.current.backdrop !== null) {
+					this.$modal.addClass('fw-modal-backdrop-'+ (this.current.backdrop ? 'light' : 'dark'));
+				}
+			}
 
 			this.$modal.removeClass('fw-modal-closing');
 			this.$modal.addClass('fw-modal-open');
