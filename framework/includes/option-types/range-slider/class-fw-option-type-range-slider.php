@@ -81,6 +81,7 @@ class FW_Option_Type_Range_Slider extends FW_Option_Type {
 			'min'  => 0,
 			'max'  => 100,
 			'step' => 1,
+			'grid_snap' => true,
 		), $properties );
 	}
 

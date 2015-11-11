@@ -26,6 +26,7 @@ require $dir . '/datetime-picker/class-fw-option-type-datetime-picker.php';
 require $dir . '/radio-text/class-fw-option-type-radio-text.php';
 require $dir . '/popup/class-fw-option-type-popup.php';
 require $dir . '/slider/class-fw-option-type-slider.php';
+require $dir . '/slider/class-fw-option-type-short-slider.php';
 require $dir . '/range-slider/class-fw-option-type-range-slider.php';
 require $dir . '/rgba-color-picker/class-fw-option-type-rgba-color-picker.php';
 require $dir . '/typography-v2/class-fw-option-type-typography-v2.php';

@@ -9,41 +9,50 @@
 class FW_Option_Type_Slider extends FW_Option_Type {
 
 	/**
+	 * This class is extended by 'short-slider' option type
+	 * but the type here should be this
+	 * @return string
+	 */
+	private function _get_type() {
+		return 'slider';
+	}
+
+	/**
 	 * @internal
 	 * {@inheritdoc}
 	 */
 	protected function _enqueue_static( $id, $option, $data ) {
 		{
 			wp_enqueue_style(
-				'fw-option-' . $this->get_type() . 'ion-range-slider',
-				fw_get_framework_directory_uri( '/includes/option-types/' . $this->get_type() . '/static/libs/ion-range-slider/ion.rangeSlider.css' ),
+				'fw-option-' . $this->_get_type() . 'ion-range-slider',
+				fw_get_framework_directory_uri( '/includes/option-types/' . $this->_get_type() . '/static/libs/ion-range-slider/ion.rangeSlider.css' ),
 				fw()->manifest->get_version()
 			);
 
 			wp_enqueue_script(
-				'fw-option-' . $this->get_type() . 'ion-range-slider',
-				fw_get_framework_directory_uri( '/includes/option-types/' . $this->get_type() . '/static/libs/ion-range-slider/ion.rangeSlider.min.js' ),
+				'fw-option-' . $this->_get_type() . 'ion-range-slider',
+				fw_get_framework_directory_uri( '/includes/option-types/' . $this->_get_type() . '/static/libs/ion-range-slider/ion.rangeSlider.min.js' ),
 				array( 'jquery', 'fw-moment' ),
 				fw()->manifest->get_version()
 			);
 		}
 
 		wp_enqueue_style(
-			'fw-option-' . $this->get_type(),
-			fw_get_framework_directory_uri( '/includes/option-types/' . $this->get_type() . '/static/css/styles.css' ),
+			'fw-option-' . $this->_get_type(),
+			fw_get_framework_directory_uri( '/includes/option-types/' . $this->_get_type() . '/static/css/styles.css' ),
 			fw()->manifest->get_version()
 		);
 
 		wp_enqueue_script(
-			'fw-option-' . $this->get_type(),
-			fw_get_framework_directory_uri( '/includes/option-types/' . $this->get_type() . '/static/js/scripts.js' ),
-			array( 'jquery',  'fw-events', 'underscore', 'fw-option-' . $this->get_type() . 'ion-range-slider' ),
+			'fw-option-' . $this->_get_type(),
+			fw_get_framework_directory_uri( '/includes/option-types/' . $this->_get_type() . '/static/js/scripts.js' ),
+			array( 'jquery',  'fw-events', 'underscore', 'fw-option-' . $this->_get_type() . 'ion-range-slider' ),
 			fw()->manifest->get_version()
 		);
 	}
 
 	public function get_type() {
-		return 'slider';
+		return $this->_get_type();
 	}
 
 	/**
@@ -61,7 +70,7 @@ class FW_Option_Type_Slider extends FW_Option_Type {
 			$this->default_properties($option['properties'])
 		);
 
-		return fw_render_view( fw_get_framework_directory( '/includes/option-types/' . $this->get_type() . '/view.php' ), array(
+		return fw_render_view( fw_get_framework_directory( '/includes/option-types/' . $this->_get_type() . '/view.php' ), array(
 			'id'     => $id,
 			'option' => $option,
 			'data'   => $data,
@@ -74,6 +83,7 @@ class FW_Option_Type_Slider extends FW_Option_Type {
 			'min' => 0,
 			'max' => 100,
 			'step' => 1,
+			'grid_snap' => true,
 		), $properties);
 	}
 

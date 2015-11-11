@@ -1,3 +1,7 @@
+.fw-option-type-slider.short-slider {
+	max-width: 280px;
+}
+
 .fw-option-type-slider .irs {
 	height: 30px;
 }
