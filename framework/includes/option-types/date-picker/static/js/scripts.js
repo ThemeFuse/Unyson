@@ -36,13 +36,16 @@ function fw_option_type_date_picker_initialize(object) {
 
 jQuery(document).ready(function ($) {
 	fwEvents.on('fw:options:init', function (data) {
-		var obj = data.$elements.find('.fw-option-type-date-picker');
+		var obj = data.$elements.find('.fw-option-type-date-picker:not(.initialized)');
 
-		if (!obj.length)
+		if (!obj.length) {
 			return;
+		}
 
 		for (var i = 0; i < obj.length; i++) {
 			fw_option_type_date_picker_initialize(jQuery(obj[i]));
 		}
+
+		obj.addClass('initialized');
 	});
 });
