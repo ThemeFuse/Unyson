@@ -162,6 +162,18 @@ $extensions = array(
 			),
 		),
 	),
+	'backups' => array(
+		'display'     => true,
+		'parent'      => null,
+		'name'        => __( 'Backup & Demo Content', 'fw' ),
+		'description' => __( 'This extension lets you create an automated backup schedule, import demo content or even create a demo content archive for migration purposes.', 'fw' ),
+		'thumbnail'   => $thumbnails_uri . '/backups.jpg',
+		'download'    => array(
+			'github' => array(
+				'user_repo' => $github_account . '/Unyson-Backups-Extension',
+			),
+		),
+	),
 	'events' => array(
 		'display'     => true,
 		'parent'      => null,
