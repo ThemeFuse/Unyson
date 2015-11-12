@@ -192,6 +192,29 @@ final class _FW_Extensions_Manager
 				'extensions' => array()
 			) );
 
+			{
+				$installed_extensions = $this->get_installed_extensions();
+				$supported_extensions = fw()->theme->manifest->get('supported_extensions', array());
+
+				if (isset($installed_extensions['backup'])) {
+					// make sure only Backup or Backups can be installed
+					unset($vars['extensions']['backups']);
+				}
+
+				foreach (
+					array('backup', 'styling', 'translation', 'learning')
+					as $obsolete_extension
+				) {
+					if (
+						!isset($supported_extensions[$obsolete_extension])
+						&&
+						!isset($installed_extensions[$obsolete_extension])
+					) {
+						unset($vars['extensions'][$obsolete_extension]);
+					}
+				}
+			}
+
 			FW_Cache::set($cache_key, $vars['extensions']);
 
 			return $vars['extensions'];
