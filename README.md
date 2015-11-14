@@ -72,7 +72,7 @@ If you have a bug report or feature request related to a specific extension, fol
 * [Sidebars](https://github.com/ThemeFuse/Unyson-Sidebars-Extension)
 * [Sliders](https://github.com/ThemeFuse/Unyson-Sliders-Extension)
 * [Portfolio](https://github.com/ThemeFuse/Unyson-Portfolio-Extension)
-* [Backups](https://github.com/ThemeFuse/Unyson-Backups-Extension)
+* [Backup & Demo Content](https://github.com/ThemeFuse/Unyson-Backups-Extension)
 * [SEO](https://github.com/ThemeFuse/Unyson-SEO-Extension)
 * [Forms](https://github.com/ThemeFuse/Unyson-Forms-Extension)
 * [Feedback](https://github.com/ThemeFuse/Unyson-Feedback-Extension)
