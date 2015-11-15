@@ -107,7 +107,7 @@ final class _FW_Extensions_Manager
 
 			if (is_multisite() && !is_network_admin()) {
 				// only network admin can change files that affects the entire network
-				$can_install = false;
+				$can_install = current_user_can_for_blog(get_current_blog_id(), 'install_plugins');
 			}
 
 			if ($can_install) {
