@@ -103,16 +103,18 @@ final class _FW_Extensions_Manager
 		static $can_install = null;
 
 		if ($can_install === null) {
-			$can_install = current_user_can('install_plugins');
+			$capability = 'install_plugins';
 
-			if (is_multisite() && !is_network_admin()) {
+			if (is_multisite()) {
 				// only network admin can change files that affects the entire network
-				$can_install = current_user_can_for_blog(get_current_blog_id(), 'install_plugins');
+				$can_install = current_user_can_for_blog(get_current_blog_id(), $capability);
+			} else {
+				$can_install = current_user_can($capability);
 			}
 
 			if ($can_install) {
 				// also you can use this method to get the capability
-				$can_install = 'install_plugins';
+				$can_install = $capability;
 			}
 		}
 
