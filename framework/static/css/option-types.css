@@ -93,8 +93,8 @@ textarea.fw-option-type-textarea {
 }
 
 /* RTL Radio and Checkboxes inline */
-.fw-option-type-checkboxes.fw-option-type-checkboxes-inline > div:not(:last-child),
-.fw-option-type-radio.fw-option-type-radio-inline > div:not(:last-child) {
+body.rtl .fw-option-type-checkboxes.fw-option-type-checkboxes-inline > div:not(:last-child),
+body.rtl .fw-option-type-radio.fw-option-type-radio-inline > div:not(:last-child) {
 	float: right;
 	margin: 0 0 0 10px;
 }
