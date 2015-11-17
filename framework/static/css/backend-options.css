@@ -636,14 +636,14 @@ body.rtl .fw-backend-side-tabs .fw-settings-form-header .form-header-buttons {
 }
 
 .fw-backend-side-tabs .fw-settings-form-header .form-header-buttons .submit-button-separator {
+	display: inline-block;
+	vertical-align: middle;
 	margin: 0 12px;
 	color: #358eb6;
-	border-color: rgb(255,255,255);
-	border-color: rgba(255,255,255,0.5);
-	border-width: 0 1px;
-	display: inline-block;
+	background-color: rgb(255,255,255);
+	background-color: rgba(255,255,255,0.5);
 	height: 14px;
-	vertical-align: middle;
+	width: 1px;
 }
 
 .fw-backend-side-tabs .fw-settings-form-header .form-header-buttons .submit-button-reset {
