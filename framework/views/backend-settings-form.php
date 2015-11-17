@@ -85,21 +85,23 @@ $texts = apply_filters('fw_settings_form_texts', array(
 				));
 				?>
 				<?php
-				echo fw_html_tag('input', array(
-					'type' => 'submit',
-					'name' => '_fw_reset_options',
-					'value' => $texts['reset_button'],
-					'class' => 'button-secondary button-large submit-button-reset',
-				))
-				?>
-				<i class="submit-button-separator"></i>
-				<?php
-				echo fw_html_tag('input', array(
-					'type' => 'submit',
-					'name' => '_fw_save_options',
-					'value' => $texts['save_button'],
-					'class' => 'button-primary button-large submit-button-save',
-				))
+				echo implode(
+					'<i class="submit-button-separator"></i>',
+					apply_filters('fw_settings_form_header_buttons', array(
+						fw_html_tag('input', array(
+							'type' => 'submit',
+							'name' => '_fw_reset_options',
+							'value' => $texts['reset_button'],
+							'class' => 'button-secondary button-large submit-button-reset',
+						)),
+						fw_html_tag('input', array(
+							'type' => 'submit',
+							'name' => '_fw_save_options',
+							'value' => $texts['save_button'],
+							'class' => 'button-primary button-large submit-button-save',
+						))
+					))
+				);
 				?>
 			</div>
 		</div>
@@ -117,21 +119,23 @@ $texts = apply_filters('fw_settings_form_texts', array(
 
 <div class="form-footer-buttons">
 <!-- This div is required to follow after options in order to have special styles in case options will contain tabs (css adjacent selector + ) -->
-<?php
-	echo fw_html_tag('input', array(
-		'type' => 'submit',
-		'name' => '_fw_save_options',
-		'value' => $texts['save_button'],
-		'class' => 'button-primary button-large',
-	));
-	echo ($side_tabs ? '' : ' &nbsp;&nbsp; ');
-	echo fw_html_tag('input', array(
-		'type' => 'submit',
-		'name' => '_fw_reset_options',
-		'value' => $texts['reset_button'],
-		'class' => 'button-secondary button-large',
-	));
-?>
+<?php echo implode(
+	$side_tabs ? ' ' : ' &nbsp;&nbsp; ',
+	apply_filters('fw_settings_form_footer_buttons', array(
+		fw_html_tag('input', array(
+			'type' => 'submit',
+			'name' => '_fw_save_options',
+			'value' => $texts['save_button'],
+			'class' => 'button-primary button-large',
+		)),
+		fw_html_tag('input', array(
+			'type' => 'submit',
+			'name' => '_fw_reset_options',
+			'value' => $texts['reset_button'],
+			'class' => 'button-secondary button-large',
+		))
+	))
+); ?>
 </div>
 
 <!-- focus tab -->
@@ -244,8 +248,7 @@ jQuery(function($){
 							'<img src="'+ fw.img.loadingSpinner +'" style="vertical-align: bottom;" /> '+
 							title +
 						'</h2>'+
-						'<p class="fw-text-muted"><em>'+ description +'</em></p>'+
-						loadingExtraMessage,
+						'<p class="fw-text-muted"><em>'+ description +'</em></p>'+ loadingExtraMessage,
 						{
 							autoHide: 60000,
 							allowClose: false
