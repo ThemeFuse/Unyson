@@ -207,13 +207,16 @@ jQuery(function($){
 
 <?php if ($ajax_submit): ?>
 <!-- ajax submit -->
+<div id="fw-settings-form-ajax-save-extra-message"
+     data-html="<?php echo fw_htmlspecialchars(apply_filters('fw_settings_form_ajax_save_loading_extra_message', '')) ?>"></div>
 <script type="text/javascript">
 	jQuery(function ($) {
 		function isReset($submitButton) {
 			return $submitButton.length && $submitButton.attr('name') == '<?php echo esc_js($reset_input_name) ?>';
 		}
 
-		var formSelector = 'form[data-fw-form-id="fw_settings"]';
+		var formSelector = 'form[data-fw-form-id="fw_settings"]',
+			loadingExtraMessage = $('#fw-settings-form-ajax-save-extra-message').attr('data-html');
 
 		fwForm.initAjaxSubmit({
 			selector: formSelector,
@@ -232,7 +235,7 @@ jQuery(function($){
 						description =
 							'<?php echo esc_js(__('We are currently saving your settings.', 'fw')) ?>'+
 							'<br/>'+
-							'<?php echo esc_js(__('This may take a few moments.', 'fw')) ?>';
+							'<?php echo esc_js(__('This may take a few moments.', 'fw')); ?>';
 					}
 
 					fw.soleModal.show(
@@ -241,7 +244,8 @@ jQuery(function($){
 							'<img src="'+ fw.img.loadingSpinner +'" style="vertical-align: bottom;" /> '+
 							title +
 						'</h2>'+
-						'<p class="fw-text-muted"><em>'+ description +'</em></p>',
+						'<p class="fw-text-muted"><em>'+ description +'</em></p>'+
+						loadingExtraMessage,
 						{
 							autoHide: 60000,
 							allowClose: false
@@ -254,8 +258,12 @@ jQuery(function($){
 			onErrors: function() {
 				fw.soleModal.hide('fw-options-ajax-save-loading');
 			},
-			onAjaxError: function() {
+			onAjaxError: function(elements, data) {
 				fw.soleModal.hide('fw-options-ajax-save-loading');
+				fw.soleModal.show(
+					'fw-options-ajax-save-error',
+					'<p class="fw-text-danger">'+ String(data.errorThrown) +'</p>'
+				);
 			},
 			onSuccess: function(elements, ajaxData) {
 				/**
