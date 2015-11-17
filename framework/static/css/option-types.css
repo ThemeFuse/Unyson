@@ -79,7 +79,7 @@ textarea.fw-option-type-textarea {
 	width: 100px !important;
 }
 
-/* Radio amd Checkboxes inline */
+/* Radio and Checkboxes inline */
 
 .fw-option-type-checkboxes.fw-option-type-checkboxes-inline > div,
 .fw-option-type-radio.fw-option-type-radio-inline > div {
@@ -90,6 +90,13 @@ textarea.fw-option-type-textarea {
 .fw-option-type-checkboxes.fw-option-type-checkboxes-inline > div:last-child,
 .fw-option-type-radio.fw-option-type-radio-inline > div:last-child {
 	margin-right: 0;
+}
+
+/* RTL Radio and Checkboxes inline */
+body.rtl .fw-option-type-checkboxes.fw-option-type-checkboxes-inline > div:not(:last-child),
+body.rtl .fw-option-type-radio.fw-option-type-radio-inline > div:not(:last-child) {
+	float: right;
+	margin: 0 0 0 10px;
 }
 
 /* end: Radio amd Checkboxes inline */
