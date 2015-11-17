@@ -83,7 +83,17 @@ Yes; Unyson will work with any theme.
 == Changelog ==
 
 = 2.4.10 =
-...
+* New extension: [Backup & Demo Content](http://manual.unyson.io/en/latest/extension/backups/#content) *(Note: It will not be visible in extensions list if old Backup extension is set as supported in [theme manifest](http://manual.unyson.io/en/latest/manifest/theme.html#content))*
+* Soft removed 3 extensions: Styling, Translation, Learning [#874](https://github.com/ThemeFuse/Unyson/issues/874)
+* Added option type `short-slider` (same as `slider`, but it's smaller)
+* Fixed html validation error. Added current url in `FW_Form` `<form action="...">`
+* Option type `upload`: Added `files_ext` and `extra_mime_types` parameters ([docs](http://manual.unyson.io/en/latest/options/built-in-option-types.html#upload))
+* `fw.Modal`: added `headerElements` attribute to set html elements in modal header
+* `fw.soleModal`: added `backdrop: null|bool` parameter to set backdrop transparent, white or dark
+* Added classes: `FW_Type` and `FW_Type_Register` *(used in the new Backup extension)*
+* Fixed [#993](https://github.com/ThemeFuse/Unyson/issues/993)
+* RTL fixes
+* Other minor fixes ([the diff](https://github.com/ThemeFuse/Unyson/compare/v2.4.9...v2.4.10))
 
 = 2.4.9 =
 * Fixed [#889](https://github.com/ThemeFuse/Unyson/issues/889) Some scripts/styles were enqueued too early
