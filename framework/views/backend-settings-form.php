@@ -262,10 +262,18 @@ jQuery(function($){
 				fw.soleModal.hide('fw-options-ajax-save-loading');
 			},
 			onAjaxError: function(elements, data) {
+				{
+					var message = String(data.errorThrown);
+
+					if (data.jqXHR.responseText && data.jqXHR.responseText.indexOf('Fatal error') > -1) {
+						message = $(data.jqXHR.responseText).text().split(' in ').shift();
+					}
+				}
+
 				fw.soleModal.hide('fw-options-ajax-save-loading');
 				fw.soleModal.show(
 					'fw-options-ajax-save-error',
-					'<p class="fw-text-danger">'+ String(data.errorThrown) +'</p>'
+					'<p class="fw-text-danger">'+ message +'</p>'
 				);
 			},
 			onSuccess: function(elements, ajaxData) {
