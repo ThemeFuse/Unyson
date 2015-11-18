@@ -23,7 +23,7 @@
 				}
 			};
 
-		nodes.$itemsWrapper.on('click', '.item', function (e) {
+		nodes.$itemsWrapper.on('click', '.item > .button', function (e) {
 			e.preventDefault();
 
 			var values = {};
