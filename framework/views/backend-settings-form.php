@@ -245,7 +245,7 @@ jQuery(function($){
 					fw.soleModal.show(
 						'fw-options-ajax-save-loading',
 						'<h2 class="fw-text-muted">'+
-							'<img src="'+ fw.img.loadingSpinner +'" style="vertical-align: bottom;" /> '+
+							'<img src="'+ fw.img.loadingSpinner +'" style="vertical-align: middle;" /> '+
 							title +
 						'</h2>'+
 						'<p class="fw-text-muted"><em>'+ description +'</em></p>'+ loadingExtraMessage,

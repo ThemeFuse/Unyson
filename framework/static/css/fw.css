@@ -3077,6 +3077,10 @@ body.rtl .fw-modal .media-frame-content > form .fw-options-tabs-contents .fw-opt
 	line-height: initial;
 }
 
+.fw-sole-modal .fw-sole-modal-content h2:first-child {
+	margin-top: 0;
+}
+
 .fw-sole-modal .fw-sole-modal-content p {
 	font-size: 13px;
 	line-height: 19px;
