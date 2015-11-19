@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.3
-Stable tag: 2.4.10
+Stable tag: 2.4.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -81,6 +81,9 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.4.11 =
+* Fixed a bug in `popup` option-type: Options were not saved
 
 = 2.4.10 =
 * New extension: [Backup & Demo Content](http://manual.unyson.io/en/latest/extension/backups/#content) *(Note: It will not be visible in extensions list if old Backup extension is set as supported in [theme manifest](http://manual.unyson.io/en/latest/manifest/theme.html#content))*
