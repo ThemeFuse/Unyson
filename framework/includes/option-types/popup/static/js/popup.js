@@ -1,6 +1,5 @@
 (function ($, _, fwEvents, window) {
-
-	popup = function () {
+	var popup = function () {
 		var $this = $(this),
 			$defaultItem = $this.find('.item.default'),
 			nodes = {
@@ -26,8 +25,9 @@
 		nodes.$itemsWrapper.on('click', '.item > .button', function (e) {
 			e.preventDefault();
 
-			var values = {};
-			var $input = $(this).find('input');
+			var values = {},
+				$item = $(this).closest('.item'),
+				$input = $item.find('input');
 
 			if ($input.length && $input.val().length ) {
 				values = JSON.parse($input.val());
@@ -35,13 +35,12 @@
 
 			utils.modal.set('edit', true);
 			utils.modal.set('values', values, {silent: true});
-			utils.modal.set('itemRef', $(this));
+			utils.modal.set('itemRef', $item);
 			utils.modal.open();
 		});
 
 		utils.modal.on('change:values', function (modal, values) {
 			utils.editItem(utils.modal.get('itemRef'), values);
-
 
 			fwEvents.trigger('fw:option-type:popup:change', {
 				element: $this,
@@ -55,5 +54,4 @@
 			.find('.fw-option-type-popup:not(.fw-option-initialized)').each(popup)
 			.addClass('fw-option-initialized');
 	});
-
 })(jQuery, _, fwEvents, window);
