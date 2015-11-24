@@ -1,6 +1,8 @@
 jQuery(function($){
 	var initialized = false,
 		changeTimeoutId = 0,
+		randomIdIncrement = 0,
+		localized = _fw_backend_customizer_localized,
 		/**
 		 * @type {Object} {'#options_wrapper_id':'~'}
 		 */
@@ -11,8 +13,11 @@ jQuery(function($){
 		processPendingChanges = function(){
 			$.each(pendingChanges, function(optionsWrapperId){
 				var $optionsWrapper = $('#'+ optionsWrapperId),
-					$input = $optionsWrapper.closest('.fw-backend-customizer-option').find('> input.fw-backend-customizer-option-input'),
-					newValue = JSON.stringify($optionsWrapper.find(':input').serializeArray());
+					$input = $optionsWrapper.closest('.fw-backend-customizer-option')
+						.find('> input.fw-backend-customizer-option-input'),
+					newValue = JSON.stringify(fixSerializedValues(
+						$optionsWrapper.find(':input').serializeArray()
+					));
 
 				if ($input.val() === newValue) {
 					return;
@@ -23,8 +28,36 @@ jQuery(function($){
 
 			pendingChanges = {};
 		},
-		randomIdIncrement = 0,
-		localized = _fw_backend_customizer_localized,
+		fixSerializedValues = function(values) {
+			var inputNameToIndex = {},
+				fixedValues = [];
+
+			/**
+			 * Traverse reversed array to leave only the last values.
+			 * This is how _POST works, if you have
+			 * fw_options[option_name][x]: 3
+			 * fw_options[option_name][x]: 7
+			 * the last one "wins" and the value of $_POST['fw_options']['option_name']['x'] will be 7
+			 */
+			for (var i = values.length - 1; i >= 0; i--) {
+				if (values[i].name.slice(-2) === '[]') {
+					// this will be sent in _POST as array
+				} else {
+					if (typeof inputNameToIndex[values[i].name] === 'undefined') {
+						inputNameToIndex[values[i].name] = i;
+					} else {
+						continue; // skip if already added (the last overwrites others)
+					}
+				}
+
+				fixedValues.push(values[i]);
+			}
+
+			/**
+			 * The array was traversed in revers order, now restore the initial order
+			 */
+			return fixedValues.reverse();
+		},
 		init = function(){
 			if (initialized) {
 				return;
@@ -35,9 +68,9 @@ jQuery(function($){
 			 */
 			$('#customize-theme-controls .fw-backend-customizer-option').each(function(){
 				$(this).find('> input.fw-backend-customizer-option-input').val(
-					JSON.stringify(
+					JSON.stringify(fixSerializedValues(
 						$(this).find('> .fw-backend-customizer-option-inner :input').serializeArray()
-					)
+					))
 				);
 			});
 
