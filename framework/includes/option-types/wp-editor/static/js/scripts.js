@@ -62,6 +62,12 @@
 		}
 
 		/**
+		 * set the right wp-editor-id.
+		 */
+		$btnTabs.each(function(){
+			$(this).attr('data-wp-editor-id', id);
+		});
+		/**
 		 * add autoupdate textarea value to tinyMCE settings
 		 */
 		initTinyMCESettings.setup = function(ed) {
@@ -73,13 +79,11 @@
 		/**
 		 * add \ remove editors by change tabs
 		 */
-		$btnTabs.bind('click', function()
-		{
+		$btnTabs.bind('click', function() {
 			var button = $(this);
 			var value = '';
 
-			if(button.is('.switch-tmce'))
-			{
+			if (button.is('.switch-tmce')) {
 
 				//add <p> html tags
 				//fixme: window.switchEditors.switchto 
@@ -88,17 +92,21 @@
 					$textarea.val(value);
 				}
 
-
 				initTinyMCESettings.selector = '#' + id;
-				tinymce.init(initTinyMCESettings);
-				parent.removeClass('html-active').addClass('tmce-active');
+				initTinyMCESettings.onpageload = false;
+
+
 				if (QTags != undefined) {
 					QTags._buttonsInit();
 				}
 
-			}
-			else
-			{
+				window.tinyMCEPreInit.mceInit[id] = tinymce.extend({}, initTinyMCESettings, tinyMCEPreInit.mceInit[id]);
+				if (tinymce.get(id) === null) {
+					tinymce.init(window.tinyMCEPreInit.mceInit[id]);
+				}
+
+				parent.removeClass('html-active').addClass('tmce-active');
+			} else {
 				parent.removeClass('tmce-active').addClass('html-active');
 
 				//Get content before removing the Visual editor, because it removes multiple new lines
