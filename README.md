@@ -8,7 +8,7 @@ To get started, check out the [Scratch Theme](https://github.com/ThemeFuse/Scrat
 
 If you are not a developer, please use the [Unyson plugin page](https://wordpress.org/plugins/unyson/) on WordPress.org.
 
-[![Build Status](https://travis-ci.org/ThemeFuse/Unyson.svg?branch=master)](https://travis-ci.org/ThemeFuse/Unyson)
+[![Build Status](https://travis-ci.org/ThemeFuse/Unyson.svg?branch=master)](https://travis-ci.org/ThemeFuse/Unyson) [![Stories in Ready](https://badge.waffle.io/ThemeFuse/Unyson.svg?label=ready&title=Ready)](http://waffle.io/ThemeFuse/Unyson)
 
 ## Table of contents
 
@@ -87,3 +87,4 @@ If you have a bug report or feature request related to a specific extension, fol
 * [Blog Posts](https://github.com/ThemeFuse/Unyson-Blog-Extension)
 * [Learning](https://github.com/ThemeFuse/Unyson-Learning-Extension)
 * [Translation](https://github.com/ThemeFuse/Unyson-Translation-Extension)
+
