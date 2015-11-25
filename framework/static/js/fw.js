@@ -587,7 +587,7 @@ fw.getQueryString = function(name) {
 	 * Usage:
 	 * var modal = new fw.Modal();
 	 *
-	 * modal.on('open|closing|close', function(){});
+	 * modal.on('open|render|closing|close', function(){});
 	 */
 	fw.Modal = Backbone.Model.extend({
 		defaults: {
@@ -614,15 +614,15 @@ fw.getQueryString = function(name) {
 				});
 			},
 			render: function() {
-				this.$el.html(
-					this.model.get('html')
-				);
+				this.$el.html(this.model.get('html'));
 
-				fwEvents.trigger('fw:options:init', {$elements: this.$el});
+				if (this.model.get('html').length) {
+					fwEvents.trigger('fw:options:init', {$elements: this.$el});
 
-				this.trigger('render');
+					this.model.trigger('render');
 
-				this.afterHtmlReplaceFixes();
+					this.afterHtmlReplaceFixes();
+				}
 			},
 			initialize: function() {
 				this.listenTo(this.model, 'change:html', this.render);
