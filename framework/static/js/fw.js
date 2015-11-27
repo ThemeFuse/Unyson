@@ -1663,6 +1663,7 @@ fw.soleModal = (function(){
 						hidePrevious: false,
 						updateIfCurrent: false,
 						backdrop: null,
+						customClass: null,
 						afterOpen: function(){},
 						afterClose: function(){}
 					}, opts || {});
@@ -1726,6 +1727,10 @@ fw.soleModal = (function(){
 
 			this.$modal.removeClass('fw-modal-closing');
 			this.$modal.addClass('fw-modal-open');
+
+			if (this.current.customClass !== null) {
+				this.$modal.addClass(this.current.customClass);
+			}
 
 			this.$modal.css('display', '');
 
