@@ -649,8 +649,8 @@ fw.getQueryString = function(name) {
 		/**
 		 * Create and init this.frame
 		 */
-		initializeFrame: function(options) {
-			options = options || {};
+		initializeFrame: function(settings) {
+			settings = settings || {};
 
 			var modal = this;
 
@@ -860,8 +860,8 @@ fw.getQueryString = function(name) {
 			 */
 			jQuery.data(this.content.el, 'modal', this);
 		},
-		initialize: function(attributes, options) {
-			this.initializeFrame(options);
+		initialize: function(attributes, settings) {
+			this.initializeFrame(settings);
 			this.initializeContent();
 		},
 		open: function() {
@@ -1062,10 +1062,10 @@ fw.getQueryString = function(name) {
 				values: {}
 			}
 		),
-		initializeFrame: function(options) {
-			fw.Modal.prototype.initializeFrame.call(this, options);
+		initializeFrame: function(settings) {
+			fw.Modal.prototype.initializeFrame.call(this, settings);
 
-			options = options || {};
+			settings = settings || {};
 
 			var modal = this,
 				buttons = [
@@ -1092,8 +1092,8 @@ fw.getQueryString = function(name) {
 					}
 				];
 
-			if (options.buttons) {
-				buttons = buttons.concat(options.buttons);
+			if (settings.buttons) {
+				buttons = buttons.concat(settings.buttons);
 			}
 
 			this.frame.on('content:create:main', function () {
