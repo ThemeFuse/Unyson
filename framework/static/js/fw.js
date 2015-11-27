@@ -649,7 +649,9 @@ fw.getQueryString = function(name) {
 		/**
 		 * Create and init this.frame
 		 */
-		initializeFrame: function() {
+		initializeFrame: function(options) {
+			options = options || {};
+
 			var modal = this;
 
 			var ControllerMainState = wp.media.controller.State.extend({
@@ -858,8 +860,8 @@ fw.getQueryString = function(name) {
 			 */
 			jQuery.data(this.content.el, 'modal', this);
 		},
-		initialize: function() {
-			this.initializeFrame();
+		initialize: function(attributes, options) {
+			this.initializeFrame(options);
 			this.initializeContent();
 		},
 		open: function() {
@@ -1060,46 +1062,53 @@ fw.getQueryString = function(name) {
 				values: {}
 			}
 		),
-		initializeFrame: function() {
-			fw.Modal.prototype.initializeFrame.call(this);
+		initializeFrame: function(options) {
+			fw.Modal.prototype.initializeFrame.call(this, options);
 
-			this.frame.once('ready', _.bind(function() {
-				this.frame.$el.removeClass('hide-toolbar');
-				this.frame.modal.$el.addClass('fw-options-modal');
-			}, this));
+			options = options || {};
 
-			var modal = this;
+			var modal = this,
+				buttons = [
+					{
+						style: 'primary',
+						text: _fw_localized.l10n.save,
+						priority: 40,
+						click: function () {
+							/**
+							 * Simulate form submit
+							 * Important: Empty input[required] must not start form submit
+							 *     and must show default browser warning popup "This field is required"
+							 */
+							modal.content.$el.find('input[type="submit"].hidden-submit').trigger('click');
+						}
+					},
+					{
+						style: '',
+						text: _fw_localized.l10n.reset,
+						priority: -1,
+						click: function () {
+							modal.content.resetForm();
+						}
+					}
+				];
+
+			if (options.buttons) {
+				buttons = buttons.concat(options.buttons);
+			}
 
 			this.frame.on('content:create:main', function () {
 				modal.frame.toolbar.set(
 					new wp.media.view.Toolbar({
 						controller: modal.frame,
-						items: [
-							{
-								style: 'primary',
-								text: _fw_localized.l10n.save,
-								priority: 40,
-								click: function () {
-									/**
-									 * Simulate form submit
-									 * Important: Empty input[required] must not start form submit
-									 *     and must show default browser warning popup "This field is required"
-									 */
-									modal.content.$el.find('input[type="submit"].hidden-submit').trigger('click');
-								}
-							},
-							{
-								style: '',
-								text: _fw_localized.l10n.reset,
-								priority: -1,
-								click: function () {
-									modal.content.resetForm();
-								}
-							}
-						]
+						items: buttons
 					})
 				);
 			});
+
+			this.frame.once('ready', _.bind(function() {
+				this.frame.$el.removeClass('hide-toolbar');
+				this.frame.modal.$el.addClass('fw-options-modal');
+			}, this));
 		},
 		/**
 		 * @param {Object} [values] Offer custom values for display. The user can reject them by closing the modal
