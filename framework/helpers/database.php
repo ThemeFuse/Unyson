@@ -498,3 +498,49 @@
 		);
 	}
 }
+
+{
+	function fw_db_option_storage_load($id, array $option, $value = null) {
+		if (empty($option['fw-storage'])) {
+			return $value;
+		}
+
+		$storage = is_array($option['fw-storage']) ? $option['fw-storage'] : array(
+			'type' => $option['fw-storage'],
+		);
+
+		//
+	}
+
+	/**
+	 * @param null|string $type
+	 * @return FW_Option_Storage_Type|FW_Option_Storage_Type[]|null
+	 */
+	function fw_db_option_storage_type($type = null) {
+		static $types = null;
+
+		if (is_null($types)) {
+			if (!class_exists('FW_Option_Storage_Type')) {
+				require_once fw_get_framework_directory('/includes/optoin-storage/class-fw-option-storage-type');
+			}
+			if (!class_exists('_FW_Option_Storage_Type_Register')) {
+				require_once fw_get_framework_directory('/includes/optoin-storage/class--fw-option-storage-type-register');
+			}
+
+			$access_key = new FW_Access_Key('fw:option-storage-register');
+			$register = new _FW_Option_Storage_Type_Register($access_key->get_key());
+
+			do_action('fw:option-storage-types:register', $register);
+
+			$types = $register->_get_types($access_key);
+		}
+
+		if (empty($type)) {
+			return $types;
+		} elseif (isset($types[$type])) {
+			return $types[$type];
+		} else {
+			return null;
+		}
+	}
+}
