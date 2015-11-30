@@ -500,16 +500,62 @@
 }
 
 {
-	function fw_db_option_storage_load($id, array $option, $value = null) {
-		if (empty($option['fw-storage'])) {
-			return $value;
+	function fw_db_option_storage_save($id, array $option, $value = null) {
+		{
+			if (empty($option['fw-storage'])) {
+				return $value;
+			}
+
+			$storage = is_array($option['fw-storage']) ? $option['fw-storage'] : array(
+				'type' => $option['fw-storage'],
+			);
+
+			if (empty($storage['type'])) {
+				return $value;
+			}
+
+			$storage_type = fw_db_option_storage_type($storage['type']);
+
+			if (empty($storage_type)) {
+				trigger_error('Invalid option storage type: ', $storage['type'], E_USER_WARNING);
+				return $value;
+			}
+
+			/** @var FW_Option_Storage_Type $storage_type */
 		}
 
-		$storage = is_array($option['fw-storage']) ? $option['fw-storage'] : array(
-			'type' => $option['fw-storage'],
-		);
+		$option['fw-storage'] = $storage;
 
-		//
+		return $storage_type->save($id, $option, $value);
+	}
+
+	function fw_db_option_storage_load($id, array $option, $value = null) {
+		{
+			if (empty($option['fw-storage'])) {
+				return $value;
+			}
+
+			$storage = is_array($option['fw-storage']) ? $option['fw-storage'] : array(
+				'type' => $option['fw-storage'],
+			);
+
+			if (empty($storage['type'])) {
+				return $value;
+			}
+
+			$storage_type = fw_db_option_storage_type($storage['type']);
+
+			if (empty($storage_type)) {
+				trigger_error('Invalid option storage type: ', $storage['type'], E_USER_WARNING);
+				return $value;
+			}
+
+			/** @var FW_Option_Storage_Type $storage_type */
+		}
+
+		$option['fw-storage'] = $storage;
+
+		return $storage_type->load($id, $option, $value);
 	}
 
 	/**
