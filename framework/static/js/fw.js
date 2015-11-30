@@ -290,6 +290,10 @@ fw.md5 = (function(){
 				return false;
 			}
 
+			if (this.current && this.current.customClass !== null) {
+				this.$modal.removeClass(this.current.customClass);
+			}
+
 			this.current = this.queue.shift();
 
 			if (!this.current) {
@@ -390,6 +394,10 @@ fw.md5 = (function(){
 					this.current.state = 'closed';
 
 					this.$getEl().hide().removeClass('opening open closing').addClass('closed');
+
+					if (this.current.customClass !== null) {
+						this.$modal.removeClass(this.current.customClass);
+					}
 
 					this.current = null;
 
@@ -1663,6 +1671,7 @@ fw.soleModal = (function(){
 						hidePrevious: false,
 						updateIfCurrent: false,
 						backdrop: null,
+						customClass: null,
 						afterOpen: function(){},
 						afterClose: function(){}
 					}, opts || {});
@@ -1691,7 +1700,15 @@ fw.soleModal = (function(){
 					&&
 					this.queue[0].updateIfCurrent
 				) {
+					if (this.current.customClass !== null) {
+						this.$modal.removeClass(this.current.customClass);
+					}
+
 					this.current = this.queue.shift();
+
+					if (this.current.customClass !== null) {
+						this.$modal.addClass(this.current.customClass);
+					}
 
 					this.setContent(this.current.html);
 
@@ -1701,8 +1718,11 @@ fw.soleModal = (function(){
 				}
 			}
 
-			this.currentMethod = '';
+			if (this.current && this.current.customClass !== null) {
+				this.$modal.removeClass(this.current.customClass);
+			}
 
+			this.currentMethod = '';
 			this.current = this.queue.shift();
 
 			if (!this.current) {
@@ -1726,6 +1746,10 @@ fw.soleModal = (function(){
 
 			this.$modal.removeClass('fw-modal-closing');
 			this.$modal.addClass('fw-modal-open');
+
+			if (this.current.customClass !== null) {
+				this.$modal.addClass(this.current.customClass);
+			}
 
 			this.$modal.css('display', '');
 
@@ -1793,6 +1817,10 @@ fw.soleModal = (function(){
 				this.$getContent().fadeOut('fast', _.bind(function(){
 					this.current.afterClose();
 
+					if (this.current.customClass !== null) {
+						this.$modal.removeClass(this.current.customClass);
+					}
+
 					this.currentMethod = '';
 					this.current = null;
 					this.show();
@@ -1813,6 +1841,10 @@ fw.soleModal = (function(){
 
 				this.$modal.removeClass('fw-modal-open');
 				this.$modal.removeClass('fw-modal-closing');
+
+				if (this.current.customClass !== null) {
+					this.$modal.removeClass(this.current.customClass);
+				}
 
 				this.setContent('');
 
