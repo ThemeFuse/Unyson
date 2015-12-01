@@ -134,7 +134,7 @@ class FW_Option_Type_Icon extends FW_Option_Type
 			$sets = apply_filters('fw_option_type_icon_sets', $this->get_default_sets());
 
 			// do not allow overwrite default sets
-			$sets = array_merge($sets, $this->get_default_sets());
+			$sets = array_merge_recursive($sets, $this->get_default_sets());
 
 			FW_Cache::set($cache_key, $sets);
 
