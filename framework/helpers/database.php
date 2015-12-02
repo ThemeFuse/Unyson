@@ -98,18 +98,74 @@
 			 * 1. https://github.com/WordPress/WordPress/blob/2096b451c704715db3c4faf699a1184260deade9/wp-includes/query.php#L3573-L3583
 			 * 2. https://github.com/WordPress/WordPress/blob/4a31dd6fe8b774d56f901a29e72dcf9523e9ce85/wp-includes/revision.php#L485-L528
 			 */
-			if (is_preview()) {
-				$preview = wp_get_post_autosave($post->ID);
-
-				if ( is_object($preview) ) {
-					$post_id = $preview->ID;
-				}
+			if (
+				is_preview()
+				&&
+			    is_object($preview = wp_get_post_autosave($post->ID))
+			) {
+				$post_id = $preview->ID;
 			}
 		}
 
-		$option_id = 'fw_options' . ( $option_id !== null ? '/' . $option_id : '' );
+		$options = fw_extract_only_options( // todo: cache this (by post type)
+			fw()->theme->get_post_options(get_post_type($post_id))
+		);
 
-		return FW_WP_Meta::get( 'post', $post_id, $option_id, $default_value, $get_original_value );
+		if ($option_id) {
+			$option_id = explode('/', $option_id); // 'option_id/sub/keys'
+			$_option_id = array_shift($option_id); // 'option_id'
+			$sub_keys  = implode('/', $option_id); // 'sub/keys'
+			$option_id = $_option_id;
+			unset($_option_id);
+
+			$value = FW_WP_Meta::get(
+				'post',
+				$post_id,
+				'fw_options/' . $option_id,
+				null,
+				$get_original_value
+			);
+
+			if (isset($options[$option_id])) {
+				$value = fw_db_option_storage_load(
+					$option_id,
+					$options[$option_id],
+					$value,
+					array( 'post_id' => $post_id, )
+				);
+			}
+
+			if ($sub_keys) {
+				return fw_akg($sub_keys, $value, $default_value);
+			} else {
+				return is_null($value) ? $default_value : $value;
+			}
+		} else {
+			$value = FW_WP_Meta::get(
+				'post',
+				$post_id,
+				'fw_options',
+				null,
+				$get_original_value
+			);
+
+			if (is_array($value)) {
+				foreach ($value as $_option_id => $_option_value) {
+					if (isset($options[$_option_id])) {
+						$value[$_option_id] = fw_db_option_storage_load(
+							$_option_id,
+							$options[$_option_id],
+							$_option_value,
+							array( 'post_id' => $post_id, )
+						);
+					}
+				}
+
+				return $value;
+			} else {
+				return $default_value;
+			}
+		}
 	}
 
 	/**
@@ -133,15 +189,64 @@
 			}
 		}
 
-		$old_value = fw_get_db_post_option($post_id, $option_id);
+		$options = fw_extract_only_options( // todo: cache this (by post type)
+			fw()->theme->get_post_options(get_post_type($post_id))
+		);
 
-		$sub_keys = explode('/', $option_id);
-		$base_key = array_shift($sub_keys);
+		$sub_keys = null;
 
-		$option_id = 'fw_options' . ( $option_id !== null ? '/' . $option_id : '' );
+		if ($option_id) {
+			$option_id = explode('/', $option_id); // 'option_id/sub/keys'
+			$_option_id = array_shift($option_id); // 'option_id'
+			$sub_keys  = implode('/', $option_id); // 'sub/keys'
+			$option_id = $_option_id;
+			unset($_option_id);
 
-		FW_WP_Meta::set( 'post', $post_id, $option_id, $value );
+			$old_value = fw_get_db_post_option($post_id, $option_id);
 
+			if ($sub_keys) { // update sub_key in old_value and use the entire value
+				$new_value = $old_value;
+				fw_aks($sub_keys, $value, $new_value);
+				$value = $new_value;
+				unset($new_value);
+
+				$old_value = fw_akg($sub_keys, $old_value);
+			}
+
+			if (isset($options[$option_id])) {
+				$value = fw_db_option_storage_save(
+					$option_id,
+					$options[$option_id],
+					$value,
+					array( 'post_id' => $post_id, )
+				);
+			}
+
+			FW_WP_Meta::set( 'post', $post_id, 'fw_options/'. $option_id, $value );
+		} else {
+			$old_value = fw_get_db_post_option($post_id);
+
+			if (!is_array($value)) {
+				$value = array();
+			}
+
+			foreach ($value as $_option_id => $_option_value) {
+				if (isset($options[$_option_id])) {
+					$value[$_option_id] = fw_db_option_storage_save(
+						$_option_id,
+						$options[$_option_id],
+						$_option_value,
+						array( 'post_id' => $post_id, )
+					);
+				}
+			}
+
+			FW_WP_Meta::set( 'post', $post_id, 'fw_options', $value );
+		}
+
+		/**
+		 * @deprecated
+		 */
 		fw()->backend->_sync_post_separate_meta($post_id);
 
 		/**
@@ -158,7 +263,7 @@
 			 * if $option_id is 'hello/world/7'
 			 * this will be 'hello'
 			 */
-			$base_key,
+			$option_id,
 			/**
 			 * The remaining sub-keys
 			 *
@@ -170,7 +275,7 @@
 			 * if $option_id is 'hello'
 			 * $option_id_keys will be array()
 			 */
-			$sub_keys,
+			explode('/', $sub_keys),
 			/**
 			 * Old post option(s) value
 			 * @since 2.3.3
@@ -500,7 +605,17 @@
 }
 
 {
-	function fw_db_option_storage_save($id, array $option, $value = null) {
+	/**
+	 * @param string $id
+	 * @param array $option
+	 * @param mixed $value
+	 * @param array $params
+	 *
+	 * @return mixed
+	 *
+	 * @since 2.5.0
+	 */
+	function fw_db_option_storage_save($id, array $option, $value, array $params = array()) {
 		if (
 			!empty($option['fw-storage'])
 			&&
@@ -520,10 +635,20 @@
 
 		/** @var FW_Option_Storage_Type $storage_type */
 
-		return $storage_type->save($id, $option, $value);
+		return $storage_type->save($id, $option, $value, $params);
 	}
 
-	function fw_db_option_storage_load($id, array $option, $value = null) {
+	/**
+	 * @param string $id
+	 * @param array $option
+	 * @param mixed $value
+	 * @param array $params
+	 *
+	 * @return mixed
+	 *
+	 * @since 2.5.0
+	 */
+	function fw_db_option_storage_load($id, array $option, $value, array $params = array()) {
 		if (
 			!empty($option['fw-storage'])
 			&&
@@ -543,18 +668,19 @@
 
 		/** @var FW_Option_Storage_Type $storage_type */
 
-		return $storage_type->load($id, $option, $value);
+		return $storage_type->load($id, $option, $value, $params);
 	}
 
 	/**
 	 * @param null|string $type
 	 * @return FW_Option_Storage_Type|FW_Option_Storage_Type[]|null
+	 * @since 2.5.0
 	 */
 	function fw_db_option_storage_type($type = null) {
 		static $types = null;
 
 		if (is_null($types)) {
-			$dir = fw_get_framework_directory('/includes/optoin-storage');
+			$dir = fw_get_framework_directory('/includes/option-storage');
 
 			if (!class_exists('FW_Option_Storage_Type')) {
 				require_once $dir .'/class-fw-option-storage-type.php';
