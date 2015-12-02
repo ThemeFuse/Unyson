@@ -19,9 +19,7 @@ class FW_Option_Storage_Type_Post_Meta extends FW_Option_Storage_Type {
 
 		update_post_meta($post_id, $meta_id, $value);
 
-		return array(
-			'fw-storage:'. $this->get_type() => $meta_id
-		);
+		return fw()->backend->option_type($option['type'])->get_value_from_input(array('type' => $option['type']), null);
 	}
 
 	/**

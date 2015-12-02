@@ -10,6 +10,18 @@ abstract class FW_Option_Storage_Type extends FW_Type {
 	 * @param array $params
 	 *
 	 * @return mixed
+	 *
+	 *  - if the save is fail
+	 *
+	 *    <?php
+	 *    return $value;
+	 *
+	 *  - if the save is success, return a valid default/empty value from that option type,
+	 *    so if the separately saved value is lost, will be used empty but valid $value
+	 *    and there will be no notices/errors in scripts that are using it and expects a specific structure/format
+	 *
+	 *    <?php
+	 *    return return fw()->backend->option_type($option['type'])->get_value_from_input(array('type' => $option['type']), null);
 	 */
 	abstract protected function _save($id, array $option, $value, array $params);
 
@@ -79,9 +91,6 @@ abstract class FW_Option_Storage_Type extends FW_Type {
 		} else {
 			return $value;
 		}
-
-		// fixme: if post meta is deleted, will be returned an invalid value
-		// maybe run through get_value_from_input() $option['value'] ?
 
 		return $this->_load($id, $option, $value, $params);
 	}
