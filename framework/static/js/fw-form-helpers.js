@@ -39,8 +39,15 @@ var fwForm = {
 				} else {
 					// Frontend
 					jQuery.each(data.errors, function (inputName, message) {
+						message = '<p class="form-error" style="color: #9b2922;">{message}</p>'
+							.replace('{message}', message);
+
 						var $input = elements.$form.find('[name="' + inputName + '"]').last();
-						message = '<p class="form-error" style="color: #9b2922;">{message}</p>'.replace('{message}', message);
+
+						if (!$input.length) {
+							// maybe input name has array format, try to find by prefix: name[
+							$input = elements.$form.find('[name^="'+ inputName +'["]').last();
+						}
 
 						if ($input.length) {
 							// error message under input
