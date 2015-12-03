@@ -395,7 +395,7 @@ fw.md5 = (function(){
 
 					this.$getEl().hide().removeClass('opening open closing').addClass('closed');
 
-					if (this.current.customClass !== null) {
+					if (this.$modal && this.current.customClass !== null) {
 						this.$modal.removeClass(this.current.customClass);
 					}
 
@@ -1700,13 +1700,13 @@ fw.soleModal = (function(){
 					&&
 					this.queue[0].updateIfCurrent
 				) {
-					if (this.current.customClass !== null) {
+					if (this.$modal && this.current.customClass !== null) {
 						this.$modal.removeClass(this.current.customClass);
 					}
 
 					this.current = this.queue.shift();
 
-					if (this.current.customClass !== null) {
+					if (this.$modal && this.current.customClass !== null) {
 						this.$modal.addClass(this.current.customClass);
 					}
 
@@ -1718,7 +1718,7 @@ fw.soleModal = (function(){
 				}
 			}
 
-			if (this.current && this.current.customClass !== null) {
+			if (this.current && this.$modal && this.current.customClass !== null) {
 				this.$modal.removeClass(this.current.customClass);
 			}
 
@@ -1747,7 +1747,7 @@ fw.soleModal = (function(){
 			this.$modal.removeClass('fw-modal-closing');
 			this.$modal.addClass('fw-modal-open');
 
-			if (this.current.customClass !== null) {
+			if (this.$modal && this.current.customClass !== null) {
 				this.$modal.addClass(this.current.customClass);
 			}
 
@@ -1817,7 +1817,7 @@ fw.soleModal = (function(){
 				this.$getContent().fadeOut('fast', _.bind(function(){
 					this.current.afterClose();
 
-					if (this.current.customClass !== null) {
+					if (this.$modal && this.current.customClass !== null) {
 						this.$modal.removeClass(this.current.customClass);
 					}
 
@@ -1842,7 +1842,7 @@ fw.soleModal = (function(){
 				this.$modal.removeClass('fw-modal-open');
 				this.$modal.removeClass('fw-modal-closing');
 
-				if (this.current.customClass !== null) {
+				if (this.$modal && this.current.customClass !== null) {
 					this.$modal.removeClass(this.current.customClass);
 				}
 
