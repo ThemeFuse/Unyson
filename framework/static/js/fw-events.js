@@ -42,6 +42,14 @@ var fwEvents = new (function(){
 	}
 
 	/**
+	 * Make log helper public
+	 *
+	 * @param {String} [message]
+	 * @param {Object} [data]
+	 */
+	this.log = log;
+
+	/**
 	 * Enable/Disable Debug
 	 * @param {Boolean} enabled
 	 */
