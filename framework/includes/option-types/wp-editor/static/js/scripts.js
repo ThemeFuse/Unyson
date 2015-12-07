@@ -118,12 +118,13 @@
 			}
 		});
 
-		$activeEditorBtn.trigger('click');
 		/**
 		 * adding Qtags buttons panel
 		 */
 		quicktags(settings);
 		QTags._buttonsInit();
+
+		$activeEditorBtn.trigger('click');
 	};
 
 	fwe.on('fw:options:init', function(data) {
