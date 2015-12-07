@@ -164,7 +164,7 @@
 					$option_id,
 					$options[$option_id],
 					$value,
-					array( 'post_id' => $post_id, )
+					array( 'post-id' => $post_id, )
 				);
 			}
 
@@ -178,26 +178,24 @@
 				'post',
 				$post_id,
 				'fw_options',
-				null,
+				$default_value,
 				$get_original_value
 			);
 
-			if (is_array($value)) {
-				foreach ($value as $_option_id => $_option_value) {
-					if (isset($options[$_option_id])) {
-						$value[$_option_id] = fw_db_option_storage_load(
-							$_option_id,
-							$options[$_option_id],
-							$_option_value,
-							array( 'post_id' => $post_id, )
-						);
-					}
-				}
-
-				return $value;
-			} else {
-				return $default_value;
+			if (!is_array($value)) {
+				$value = array();
 			}
+
+			foreach ($options as $_option_id => $_option) {
+				$value[$_option_id] = fw_db_option_storage_load(
+					$_option_id,
+					$_option,
+					isset($value[$_option_id]) ? $value[$_option_id] : null,
+					array( 'post-id' => $post_id, )
+				);
+			}
+
+			return $value;
 		}
 	}
 
@@ -251,7 +249,7 @@
 					$option_id,
 					$options[$option_id],
 					$value,
-					array( 'post_id' => $post_id, )
+					array( 'post-id' => $post_id, )
 				);
 			}
 
@@ -269,7 +267,7 @@
 						$_option_id,
 						$options[$_option_id],
 						$_option_value,
-						array( 'post_id' => $post_id, )
+						array( 'post-id' => $post_id, )
 					);
 				}
 			}
@@ -728,6 +726,9 @@
 			{
 				require_once $dir .'/type/class-fw-option-storage-type-post-meta.php';
 				$register->register(new FW_Option_Storage_Type_Post_Meta());
+
+				require_once $dir .'/type/class-fw-option-storage-type-wp-option.php';
+				$register->register(new FW_Option_Storage_Type_WP_Option());
 			}
 
 			do_action('fw:option-storage-types:register', $register);

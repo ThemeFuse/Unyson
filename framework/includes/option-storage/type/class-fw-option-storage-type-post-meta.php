@@ -1,5 +1,11 @@
 <?php if (!defined('FW')) die('Forbidden');
 
+/**
+ * array(
+ *  'post-id' => 3 // optional // hardcoded post id
+ *  'prefix' => 'hello' // optional // post meta name = 'fw:opt:{prefix:}option_id'
+ * )
+ */
 class FW_Option_Storage_Type_Post_Meta extends FW_Option_Storage_Type {
 	public function get_type() {
 		return 'post-meta';
@@ -46,10 +52,10 @@ class FW_Option_Storage_Type_Post_Meta extends FW_Option_Storage_Type {
 	private function get_post_id($option, $params) {
 		$post_id = null;
 
-		if (!empty($option['fw-storage']['post_id'])) {
-			$post_id = $option['fw-storage']['post_id'];
-		} elseif (!empty($params['post_id'])) {
-			$post_id = $params['post_id'];
+		if (!empty($option['fw-storage']['post-id'])) {
+			$post_id = $option['fw-storage']['post-id'];
+		} elseif (!empty($params['post-id'])) {
+			$post_id = $params['post-id'];
 		}
 
 		$post_id = intval($post_id);
@@ -63,7 +69,7 @@ class FW_Option_Storage_Type_Post_Meta extends FW_Option_Storage_Type {
 
 	private function get_meta_id($id, $option, $params) {
 		return 'fw:opt:'. (
-			empty($option['fw-storage']['meta_prefix']) ? '' : $option['fw-storage']['meta_prefix'] .':'
+			empty($option['fw-storage']['prefix']) ? '' : $option['fw-storage']['prefix'] .':'
 		) . $id;
 	}
 }
