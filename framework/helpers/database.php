@@ -116,9 +116,13 @@
 		 * but the Slider extension does that and maybe other extensions,
 		 * so the solution is to check if it is recursion, to not load the options array (disable the storage feature)
 		 */
-		static $recursion = false;
+		static $recursion = array();
 
-		if ($recursion) {
+		if (!isset($recursion[$post_type])) {
+			$recursion[$post_type] = false;
+		}
+
+		if ($recursion[$post_type]) {
 			/**
 			 * Allow known post types that sure don't have options with 'fw-storage' parameter
 			 */
@@ -131,13 +135,13 @@
 
 			$options = array();
 		} else {
-			$recursion = true;
+			$recursion[$post_type] = true;
 
 			$options = fw_extract_only_options( // todo: cache this (by post type)
 				fw()->theme->get_post_options( $post_type )
 			);
 
-			$recursion = false;
+			$recursion[$post_type] = false;
 		}
 
 		if ($option_id) {
