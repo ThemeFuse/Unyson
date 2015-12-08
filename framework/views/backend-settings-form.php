@@ -396,7 +396,7 @@ jQuery(function($){
 <!-- end: ajax submit -->
 <?php endif; ?>
 
-<?php if ($side_tabs): ?>
+<?php if ($side_tabs && apply_filters('fw:settings-form:side-tabs:open-all-boxes', true)): ?>
 <!-- open all postboxes -->
 <script type="text/javascript">
 	jQuery(function ($) {
