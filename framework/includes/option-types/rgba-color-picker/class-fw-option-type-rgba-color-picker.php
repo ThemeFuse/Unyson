@@ -56,6 +56,13 @@ class FW_Option_Type_Rgba_Color_Picker extends FW_Option_Type {
 		$option['attr']['value'] = empty($data['value']) ? $option['value'] : $data['value'];
 		$option['attr']['data-default'] = $option['value'];
 
+		$palettes = (bool) $option['palettes'];
+		if ( ! empty( $option['palettes'] ) && is_array( $option['palettes'] ) ) {
+			$palettes = $option['palettes'];
+		}
+
+		$option['attr']['data-palettes'] = json_encode( $palettes );
+
 		return '<input type="text" ' . fw_attr_to_html( $option['attr'] ) . '>';
 	}
 
@@ -82,7 +89,8 @@ class FW_Option_Type_Rgba_Color_Picker extends FW_Option_Type {
 	 */
 	protected function _get_defaults() {
 		return array(
-			'value' => ''
+			'value' => '',
+			'palettes'=> true
 		);
 	}
 }
