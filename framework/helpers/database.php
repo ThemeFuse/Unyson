@@ -160,7 +160,7 @@
 			);
 
 			if (isset($options[$option_id])) {
-				$value = fw_db_option_storage_load(
+				$value = fw()->backend->option_type($options[$option_id]['type'])->storage_load(
 					$option_id,
 					$options[$option_id],
 					$value,
@@ -187,7 +187,7 @@
 			}
 
 			foreach ($options as $_option_id => $_option) {
-				$value[$_option_id] = fw_db_option_storage_load(
+				$value[$_option_id] = fw()->backend->option_type($_option['type'])->storage_load(
 					$_option_id,
 					$_option,
 					isset($value[$_option_id]) ? $value[$_option_id] : null,
@@ -245,7 +245,7 @@
 			}
 
 			if (isset($options[$option_id])) {
-				$value = fw_db_option_storage_save(
+				$value = fw()->backend->option_type($options[$option_id]['type'])->storage_save(
 					$option_id,
 					$options[$option_id],
 					$value,
@@ -263,7 +263,7 @@
 
 			foreach ($value as $_option_id => $_option_value) {
 				if (isset($options[$_option_id])) {
-					$value[$_option_id] = fw_db_option_storage_save(
+					$value[$_option_id] = fw()->backend->option_type($options[$_option_id]['type'])->storage_save(
 						$_option_id,
 						$options[$_option_id],
 						$_option_value,

@@ -314,4 +314,42 @@ abstract class FW_Option_Type
 
 		fw()->backend->_register_option_type($registration_access_key, $option_type_class);
 	}
+
+	/**
+	 * If the option is composed of more options (added by user) which values are stored in database
+	 * the option must call fw_db_option_storage_load() for each sub-option
+	 * because some of them may have configured the save to be done in separate place (post meta, wp option, etc.)
+	 * @param string $id
+	 * @param array $option
+	 * @param mixed $value
+	 * @param array $params
+	 * @return mixed
+	 * @since 2.5.0
+	 */
+	final public function storage_load($id, array $option, $value, array $params = array()) {
+		return $this->_storage_load($id, $option, $value, $params);
+	}
+
+	protected function _storage_load($id, array $option, $value, array $params) {
+		return fw_db_option_storage_load($id, $option, $value, $params);
+	}
+
+	/**
+	 * If the option is composed of more options (added by user) which values are stored in database
+	 * the option must call fw_db_option_storage_save() for each sub-option
+	 * because some of them may have configured the save to be done in separate place (post meta, wp option, etc.)
+	 * @param string $id
+	 * @param array $option
+	 * @param mixed $value
+	 * @param array $params
+	 * @return mixed
+	 * @since 2.5.0
+	 */
+	final public function storage_save($id, array $option, $value, array $params = array()) {
+		return $this->_storage_save($id, $option, $value, $params);
+	}
+
+	protected function _storage_save($id, array $option, $value, array $params) {
+		return fw_db_option_storage_save($id, $option, $value, $params);
+	}
 }
