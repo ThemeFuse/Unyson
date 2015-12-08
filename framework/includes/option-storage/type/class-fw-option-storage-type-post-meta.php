@@ -3,7 +3,7 @@
 /**
  * array(
  *  'post-id' => 3 // optional // hardcoded post id
- *  'prefix' => 'hello' // optional // post meta name = 'fw:opt:{prefix:}option_id'
+ *  'post-meta' => 'hello_world' // optional (default: 'fw:opt:{option_id}')
  * )
  */
 class FW_Option_Storage_Type_Post_Meta extends FW_Option_Storage_Type {
@@ -16,16 +16,16 @@ class FW_Option_Storage_Type_Post_Meta extends FW_Option_Storage_Type {
 	 */
 	protected function _save( $id, array $option, $value, array $params ) {
 		if ($post_id = $this->get_post_id($option, $params)) {
-			// ok
+			$meta_id = $this->get_meta_id($id, $option, $params);
+
+			update_post_meta($post_id, $meta_id, $value);
+
+			return fw()->backend->option_type($option['type'])->get_value_from_input(
+				array('type' => $option['type']), null
+			);
 		} else {
 			return $value;
 		}
-
-		$meta_id = $this->get_meta_id($id, $option, $params);
-
-		update_post_meta($post_id, $meta_id, $value);
-
-		return fw()->backend->option_type($option['type'])->get_value_from_input(array('type' => $option['type']), null);
 	}
 
 	/**
@@ -33,19 +33,17 @@ class FW_Option_Storage_Type_Post_Meta extends FW_Option_Storage_Type {
 	 */
 	protected function _load( $id, array $option, $value, array $params ) {
 		if ($post_id = $this->get_post_id($option, $params)) {
-			// ok
+			$meta_id = $this->get_meta_id($id, $option, $params);
+
+			$meta_value = get_post_meta($post_id, $meta_id, true);
+
+			if ($meta_value === '' && is_array($value)) {
+				return $value;
+			} else {
+				return $meta_value;
+			}
 		} else {
 			return $value;
-		}
-
-		$meta_id = $this->get_meta_id($id, $option, $params);
-
-		$meta_value = get_post_meta($post_id, $meta_id, true);
-
-		if ($meta_value === '' && is_array($value)) {
-			return $value;
-		} else {
-			return $meta_value;
 		}
 	}
 
@@ -68,8 +66,8 @@ class FW_Option_Storage_Type_Post_Meta extends FW_Option_Storage_Type {
 	}
 
 	private function get_meta_id($id, $option, $params) {
-		return 'fw:opt:'. (
-			empty($option['fw-storage']['prefix']) ? '' : $option['fw-storage']['prefix'] .':'
-		) . $id;
+		return empty($option['fw-storage']['post-meta'])
+			? 'fw:opt:'. $id
+			: $option['fw-storage']['post-meta'];
 	}
 }
