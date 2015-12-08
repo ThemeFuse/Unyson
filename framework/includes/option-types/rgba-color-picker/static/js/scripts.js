@@ -97,7 +97,7 @@ jQuery(function($){
 			 */
 			$input.one('focus', function(){
 				$input.iris({
-					palettes: true,
+					palettes: JSON.parse($input.attr('data-palettes')),
 					defaultColor: false,
 					change: function (event, ui) {
 						var $transparency = $input.next('.iris-picker').find('.transparency');

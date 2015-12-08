@@ -72,7 +72,7 @@ jQuery(document).ready(function($){
 							$input.trigger('change');
 						}, 12);
 					},
-					palettes: true
+					palettes: JSON.parse($input.attr('data-palettes'))
 				});
 
 				var $picker = helpers.getInstance($input).picker;
