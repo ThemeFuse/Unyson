@@ -327,9 +327,23 @@ abstract class FW_Option_Type
 	 * @since 2.5.0
 	 */
 	final public function storage_load($id, array $option, $value, array $params = array()) {
-		return $this->_storage_load($id, $option, $value, $params);
+		if ($this->get_type() === $option['type']) {
+			return $this->_storage_load($id, $option, $value, $params);
+		} else {
+			return $value;
+		}
 	}
 
+	/**
+	 * @see storage_load
+	 * @param string $id
+	 * @param array $option
+	 * @param mixed $value
+	 * @param array $params
+	 * @return mixed
+	 * @since 2.5.0
+	 * @internal
+	 */
 	protected function _storage_load($id, array $option, $value, array $params) {
 		return fw_db_option_storage_load($id, $option, $value, $params);
 	}
@@ -346,9 +360,23 @@ abstract class FW_Option_Type
 	 * @since 2.5.0
 	 */
 	final public function storage_save($id, array $option, $value, array $params = array()) {
-		return $this->_storage_save($id, $option, $value, $params);
+		if ($this->get_type() === $option['type']) {
+			return $this->_storage_save($id, $option, $value, $params);
+		} else {
+			return $value;
+		}
 	}
 
+	/**
+	 * @see storage_save
+	 * @param string $id
+	 * @param array $option
+	 * @param mixed $value
+	 * @param array $params
+	 * @return mixed
+	 * @since 2.5.0
+	 * @internal
+	 */
 	protected function _storage_save($id, array $option, $value, array $params) {
 		return fw_db_option_storage_save($id, $option, $value, $params);
 	}
