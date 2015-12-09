@@ -124,6 +124,11 @@ class FW_Option_Type_Popup extends FW_Option_Type {
 			}
 
 			$values = fw_get_options_values_from_input($popup_options, array());
+		} else if (is_array( $input_value )) {
+			/**
+			 * Don't decode if we have already an array
+			 */
+			$values = $input_value;
 		} else {
 			$values = json_decode( $input_value, true );
 		}
