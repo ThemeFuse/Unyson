@@ -37,14 +37,14 @@ jQuery(document).ready(function($){
 		 */
 		function addPostboxToggles($boxes) {
 			/** Remove events added by /wp-admin/js/postbox.js */
-			$boxes.find('h3, .handlediv').off('click.postboxes');
+			$boxes.find('h2, h3, .handlediv').off('click.postboxes');
 
 			var eventNamespace = '.fw-backend-postboxes';
 
 			// make postboxes to close/open on click
 			$boxes
 				.off('click'+ eventNamespace) // remove already attached, just to be sure, prevent multiple execution
-				.on('click'+ eventNamespace, '> h3.hndle, > .handlediv', function(e){
+				.on('click'+ eventNamespace, '> .hndle, > .handlediv', function(e){
 					var $box = $(this).closest('.fw-postbox');
 
 					$box.toggleClass('closed');
@@ -58,7 +58,7 @@ jQuery(document).ready(function($){
 
 		/** Remove box header if title is empty */
 		function hideBoxEmptyTitles($boxes) {
-			$boxes.find('> h3.hndle > span').each(function(){
+			$boxes.find('> .hndle > span').each(function(){
 				var $this = $(this);
 
 				if (!$.trim($this.html()).length) {
@@ -136,7 +136,7 @@ jQuery(document).ready(function($){
 				 * If not prevented, boxes within options can be dragged out of parent box to first level boxes
 				 */
 				.off('mousedown'+ eventNamespace) // remove already attached (happens when this script is executed multiple times on the same elements)
-				.on('mousedown'+ eventNamespace, '.fw-postbox > h3.hndle, .fw-postbox > .handlediv', function(e){
+				.on('mousedown'+ eventNamespace, '.fw-postbox > .hndle, .fw-postbox > .handlediv', function(e){
 					e.stopPropagation();
 				});
 		}

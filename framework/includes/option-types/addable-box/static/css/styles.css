@@ -2,13 +2,13 @@
 	min-width: 100%;
 }
 
-.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox > h3.hndle {
+.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox > .hndle {
 	cursor: move !important; /* to rewrite .fw-postbox h3.hndle */
 	word-break: break-all; /* if box text is too long, do not move controls outside box */
 	position: relative;
 }
 
-.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox > h3.hndle > span {
+.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox > .hndle > span {
 	overflow: hidden;
 	white-space: nowrap;
 	max-width: 100%;
@@ -24,11 +24,11 @@
 	margin-bottom: 20px;
 }
 
-.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox > h3.hndle span:after {
+.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox > .hndle span:after {
 	content: '\00a0'; /* &nbsp; - when title is empty, box has too small (broken) height */
 }
 
-.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox > h3.hndle img {
+.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox > .hndle img {
 	vertical-align: middle;
 }
 
@@ -40,7 +40,7 @@
 /* Controls */
 
 
-.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box h3.hndle .fw-html-after-title {
+.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box .hndle .fw-html-after-title {
 	position: absolute;
 	top: 0;
 	right: 27px;
@@ -52,11 +52,11 @@
 	padding-top: inherit;
 }
 
-.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box h3.hndle .fw-html-after-title .fw-option-box-controls .fw-option-box-control {
+.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box .hndle .fw-html-after-title .fw-option-box-controls .fw-option-box-control {
 	text-decoration: none;
 }
 
-.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box h3.hndle .fw-html-after-title .fw-option-box-controls .fw-option-box-control-wrapper {
+.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box .hndle .fw-html-after-title .fw-option-box-controls .fw-option-box-control-wrapper {
 	color: #cccccc;
 }
 
