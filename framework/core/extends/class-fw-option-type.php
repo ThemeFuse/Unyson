@@ -128,13 +128,16 @@ abstract class FW_Option_Type
 			$data
 		);
 
-		$option = array_merge(
-			$this->get_defaults(),
-			$option,
-			array(
-				'type' => $this->get_type()
-			)
-		);
+		$defaults = $this->get_defaults();
+		$merge_attr = !empty($option['attr']) && !empty($defaults['attr']);
+
+		$option = array_merge($defaults, $option, array(
+			'type' => $this->get_type()
+		));
+
+		if ($merge_attr) {
+			$option['attr'] = array_merge($defaults['attr'], $option['attr']);
+		}
 
 		if (!isset($data['value'])) {
 			// if no input value, use default
