@@ -20,10 +20,14 @@ class FW_Option_Type_Datetime_Picker extends FW_Option_Type {
 	 */
 	protected function _get_defaults() {
 		return array(
+			'attr' => array(
+				'readonly' => 'readonly'
+			),
 			'value'  => '',
 			'datetime-picker' => array(
 				'format'        => 'Y/m/d H:i',
 				'extra-formats' => array(),
+				// it is used in event option type.
 				'moment-format' => 'YYYY/MM/DD HH:mm',
 				'maxDate'       => false,
 				'minDate'       => false,
