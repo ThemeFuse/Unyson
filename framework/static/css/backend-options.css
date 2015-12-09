@@ -86,14 +86,7 @@ body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
 	color: #000;
 	border-bottom: 1px solid #ccc;
 	margin-top: 0;
-	margin-bottom: -1px; /* @since WP 4.4 */
-}
-
-body.branch-4-0 .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab,
-body.branch-4-1 .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab,
-body.branch-4-2 .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab,
-body.branch-4-3 .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab {
-	margin-bottom: 0;
+	margin-bottom: -1px;
 }
 
 .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab:hover {
