@@ -3,7 +3,7 @@ Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.3
-Stable tag: 2.4.11
+Stable tag: 2.4.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -81,6 +81,17 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.4.12 =
+* WordPress 4.4 fixes
+* Fixed
+  [#1039](https://github.com/ThemeFuse/Unyson/issues/1039),
+  [#1044](https://github.com/ThemeFuse/Unyson/issues/1044),
+  [#1055](https://github.com/ThemeFuse/Unyson/pull/1055),
+  [#1072](https://github.com/ThemeFuse/Unyson/issues/1072),
+  [#1049](https://github.com/ThemeFuse/Unyson/issues/1049),
+  [#1086](https://github.com/ThemeFuse/Unyson/issues/1086),
+  [PageBuilder#40](https://github.com/ThemeFuse/Unyson-PageBuilder-Extension/issues/40#issuecomment-160135453)
 
 = 2.4.11 =
 * Fixed a bug in `popup` option-type: Options were not saved
