@@ -294,6 +294,10 @@ fw.md5 = (function(){
 				this.$modal.removeClass(this.current.customClass);
 			}
 
+			if (this.$modal && ! this.current.wrapWithTable) {
+				this.wrapWithTable(this.$modal);
+			}
+
 			this.current = this.queue.shift();
 
 			if (!this.current) {
@@ -397,6 +401,10 @@ fw.md5 = (function(){
 
 					if (this.$modal && this.current.customClass !== null) {
 						this.$modal.removeClass(this.current.customClass);
+					}
+
+					if (this.$modal && ! this.current.wrapWithTable) {
+						this.wrapWithTable(this.$modal);
 					}
 
 					this.current = null;
@@ -1597,6 +1605,39 @@ fw.soleModal = (function(){
 		$getContent: function() {
 			return this.$modal.find('.fw-sole-modal-content:first');
 		},
+		wrapWithTable: function ($modal) {
+			var temporaryContent = $modal.find('.fw-sole-modal-content').html();
+
+			$modal.find('.fw-sole-modal-content').remove();
+
+			var htmlTemplate =
+				'<tbody>' +
+					'<tr>' +
+						'<td valign="middle" class="fw-sole-modal-content fw-text-center">' +
+							temporaryContent +
+						'</td>' +
+					'</tr>' +
+				'</tbody>';
+
+			var $table = jQuery('<table>', {
+				html: htmlTemplate
+			}).attr({width: '100%', height: '100%'});
+
+			$modal.find('.media-modal-content').append($table);
+		},
+		unwrapWithTable: function ($modal) {
+			var temporaryContent = $modal.find('.fw-sole-modal-content').html();
+
+			$modal.find('.fw-sole-modal-content')
+				.closest('table')
+				.remove();
+
+			$modal.find('.media-modal-content')
+				.append(jQuery('<div>', {
+					class: 'fw-sole-modal-content',
+					html: temporaryContent
+				}));
+		},
 		setContent: function(html) {
 			this.lazyInit();
 
@@ -1670,6 +1711,7 @@ fw.soleModal = (function(){
 						height: 200,
 						hidePrevious: false,
 						updateIfCurrent: false,
+						wrapWithTable: true,
 						backdrop: null,
 						customClass: null,
 						afterOpen: function(){},
@@ -1704,6 +1746,10 @@ fw.soleModal = (function(){
 						this.$modal.removeClass(this.current.customClass);
 					}
 
+					if (this.$modal && ! this.current.wrapWithTable) {
+						this.wrapWithTable(this.$modal);
+					}
+
 					this.current = this.queue.shift();
 
 					if (this.$modal && this.current.customClass !== null) {
@@ -1711,6 +1757,10 @@ fw.soleModal = (function(){
 					}
 
 					this.setContent(this.current.html);
+
+					if (this.$modal && ! this.current.wrapWithTable) {
+						this.unwrapWithTable(this.$modal);
+					}
 
 					return true;
 				} else {
@@ -1720,6 +1770,10 @@ fw.soleModal = (function(){
 
 			if (this.current && this.$modal && this.current.customClass !== null) {
 				this.$modal.removeClass(this.current.customClass);
+			}
+
+			if (this.current && this.$modal && ! this.current.wrapWithTable) {
+				this.unwrapWithTable(this.$modal);
 			}
 
 			this.currentMethod = '';
@@ -1749,6 +1803,10 @@ fw.soleModal = (function(){
 
 			if (this.$modal && this.current.customClass !== null) {
 				this.$modal.addClass(this.current.customClass);
+			}
+
+			if (this.$modal && ! this.current.wrapWithTable) {
+				this.unwrapWithTable(this.$modal);
 			}
 
 			this.$modal.css('display', '');
@@ -1821,6 +1879,10 @@ fw.soleModal = (function(){
 						this.$modal.removeClass(this.current.customClass);
 					}
 
+					if (this.$modal && ! this.current.wrapWithTable) {
+						this.wrapWithTable(this.$modal);
+					}
+
 					this.currentMethod = '';
 					this.current = null;
 					this.show();
@@ -1844,6 +1906,10 @@ fw.soleModal = (function(){
 
 				if (this.$modal && this.current.customClass !== null) {
 					this.$modal.removeClass(this.current.customClass);
+				}
+
+				if (this.$modal && ! this.current.wrapWithTable) {
+					this.wrapWithTable(this.$modal);
 				}
 
 				this.setContent('');
