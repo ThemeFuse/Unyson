@@ -1669,7 +1669,7 @@ final class _FW_Component_Backend {
 
 					/**
 					 * used <small> not <span> because there is a lot of css and js
-					 * that thinks inside <h3 class="hndle"> there is only one <span>
+					 * that thinks inside <h2 class="hndle"> there is only one <span>
 					 * so do not brake their logic
 					 */
 					'<small class="fw-html-before-title">' . $placeholders['html_before_title'] . '</small>' .
