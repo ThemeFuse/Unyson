@@ -18,15 +18,16 @@ A simple and easy way to build a powerful website.
 **Features include:**
 
 * **Drag & Drop Page Builder.** Create countless pages using the content and media shortcodes.
-* **Sidebars.** This module will let your users customize WordPress pages with dynamic sidebars.
-* **Backup.** Your users will be able to create backups directly from the WordPress admin.
 * **Sliders.** To make you life even easier we have already built in 3 of them that support images and videos.
-* **SEO.** SEO settings at finger tips without installing further plugins.
-* **Breadcrumbs.** A pretty small module that will really come in handy when you’ll want to navigate your website faster.
-* **Events.** It's pretty simple to use and it has Calendar and Map shortcodes.  
+* **Mega Menu.** User-friendly drop down menu that will let you easily create highly customized menu configurations.
+* **Sidebars.** This module will let your users customize WordPress pages with dynamic sidebars.
 * **Portfolio.** Portfolio has some pretty neat filtering animations.
+* **Breadcrumbs.** A pretty small module that will really come in handy when you’ll want to navigate your website faster.
+* **Forms** Use the drag & drop form builder to create any contact form you'll ever want or need.
+* **SEO.** SEO settings at finger tips without installing further plugins.
 * **Feedback.** We've added a way for users to submit reviews and ratings for events, projects, etc.
-* **Learning.** Create courses, lessons and quizzes for your online training site.
+* **Events.** It's pretty simple to use and it has Calendar and Map shortcodes.
+* **Backup & Demo Content.** Create an automated backup schedule, import demo content or even create a demo content archive for migration purposes.
 
 To get started, check out the [Scratch Theme](https://github.com/ThemeFuse/Scratch-Theme).
 
