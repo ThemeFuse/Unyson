@@ -3188,7 +3188,7 @@ final class _FW_Extensions_Manager
 			&&
 			$this->can_install()
 			&&
-			($not_installed_supported_extensions = $this->get_supported_extensions_for_install())
+			$this->get_supported_extensions_for_install()
 		) {
 			echo '<div class="'. (fw_ext('page-builder') ? 'update-nag' : 'error') .'"> <p>';
 			echo fw_html_tag('a', array(
