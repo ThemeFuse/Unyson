@@ -147,6 +147,7 @@ if (defined('FW')) {
 					 */
 					do_action( 'fw_plugin_pre_update' );
 				}
+
 				return $result;
 			}
 
@@ -163,6 +164,7 @@ if (defined('FW')) {
 					 */
 					do_action( 'fw_plugin_post_update' );
 				}
+
 				return $result;
 			}
 
@@ -170,6 +172,7 @@ if (defined('FW')) {
 				if (!isset($results['plugin'])) {
 					return;
 				}
+
 				foreach ($results['plugin'] as $plugin) {
 					if (plugin_basename( __FILE__ ) === strtolower($plugin->item->plugin)) {
 						do_action( 'fw_automatic_update_complete', $plugin->result );
