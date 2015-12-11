@@ -50,6 +50,7 @@ final class _FW_Extensions_Manager
 			add_action('admin_enqueue_scripts', array($this, '_action_enqueue_scripts'));
 			add_action('fw_after_plugin_activate', array($this, '_action_after_plugin_activate'), 100);
 			add_action('after_switch_theme', array($this, '_action_theme_switch'));
+			add_action('admin_notices', array($this, '_action_admin_notices'));
 
 			if ($this->can_install()) {
 				add_action('wp_ajax_fw_extensions_check_direct_fs_access', array($this, '_action_ajax_check_direct_fs_access'));
@@ -3173,5 +3174,27 @@ final class _FW_Extensions_Manager
 		}
 
 		return $extensions;
+	}
+
+	public function _action_admin_notices() {
+		/**
+		 * In v2.4.12 was done a terrible mistake https://github.com/ThemeFuse/Unyson-Extensions-Approval/issues/160
+		 * Show a warning with link to install theme supported extensions
+		 */
+		if (
+			!isset($_GET['supported']) // already on 'Install Supported Extensions' page
+			&&
+			fw()->manifest->get_version() === '2.4.13'
+			&&
+			$this->can_install()
+			&&
+			($not_installed_supported_extensions = $this->get_supported_extensions_for_install())
+		) {
+			echo '<div class="'. (fw_ext('page-builder') ? 'update-nag' : 'error') .'"> <p>';
+			echo fw_html_tag('a', array(
+				'href' => $this->get_link() .'&sub-page=install&supported',
+			), __('Install theme compatible extensions', 'fw'));
+			echo '</p></div>';
+		}
 	}
 }
