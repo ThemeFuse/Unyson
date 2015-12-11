@@ -88,6 +88,12 @@ Yes; Unyson will work with any theme.
 
     We are very sorry
 
+    To install all extensions compatible with your theme, open the following link:
+
+    ```
+    {site.domain}/wp-admin/admin.php?page=fw-extensions&sub-page=install&supported
+    ```
+
 * Fixed [#1089](https://github.com/ThemeFuse/Unyson/issues/1089), [#1077](https://github.com/ThemeFuse/Unyson/pull/1077#issuecomment-163324948)
 
 = 2.4.12 =
