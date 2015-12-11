@@ -47,20 +47,25 @@ class FW_Option_Type_Icon extends FW_Option_Type
 
 			unset($sets);
 
-			/**
-			 * user hash as array key instead of src, because src can be a very long data-url string
-			 */
-			$style_hash = md5($set['font-style-src']);
+			$font_style_sources = (array) $set['font-style-src'];
 
-			if (!isset($this->enqueued_font_styles[ $style_hash ])) {
-				wp_enqueue_style(
-					"fw-option-type-{$this->get_type()}-font-{$option['set']}",
-					$set['font-style-src'],
-					array(),
-					fw()->manifest->get_version()
-				);
+			foreach($font_style_sources as $key => $style_source) {
 
-				$this->enqueued_font_styles[ $style_hash ] = true;
+				/**
+				 * user hash as array key instead of src, because src can be a very long data-url string
+				 */
+				$style_hash = md5($style_source);
+
+				if (!isset($this->enqueued_font_styles[ $style_hash ])) {
+					wp_enqueue_style(
+						"fw-option-type-{$this->get_type()}-font-{$option['set']}-{$style_hash}",
+						$style_source,
+						array(),
+						fw()->manifest->get_version()
+					);
+
+					$this->enqueued_font_styles[ $style_hash ] = true;
+				}
 			}
 		}
 
