@@ -123,5 +123,61 @@ if (defined('FW')) {
 			return dirname( __FILE__ ) . '/tmp';
 		}
 		add_filter( 'fw_tmp_dir', '_filter_fw_tmp_dir' );
+
+		/** @internal */
+		final class _FW_Update_Hooks {
+			public static function _init() {
+				add_filter( 'upgrader_pre_install',  array(__CLASS__, '_filter_fw_check_if_plugin_pre_update'),  9999, 2 );
+				add_filter( 'upgrader_post_install', array(__CLASS__, '_filter_fw_check_if_plugin_post_update'), 9999, 2 );
+				add_action( 'automatic_updates_complete', array(__CLASS__, '_action_fw_automatic_updates_complete') );
+			}
+
+			public static function _filter_fw_check_if_plugin_pre_update( $result, $data ) {
+				if (
+					!is_wp_error($result)
+					&&
+					isset( $data['plugin'] )
+					&&
+					plugin_basename( __FILE__ ) === $data['plugin']
+				) {
+					/**
+					 * Before plugin update
+					 * The plugin was already download and extracted to a temp directory
+					 * and it's right before being replaced with the new downloaded version
+					 */
+					do_action( 'fw_plugin_pre_update' );
+				}
+				return $result;
+			}
+
+			public static function _filter_fw_check_if_plugin_post_update( $result, $data ) {
+				if (
+					!is_wp_error($result)
+					&&
+					isset( $data['plugin'] )
+					&&
+					plugin_basename( __FILE__ ) === $data['plugin']
+				) {
+					/**
+					 * After plugin successfully updated
+					 */
+					do_action( 'fw_plugin_post_update' );
+				}
+				return $result;
+			}
+
+			public static function _action_fw_automatic_updates_complete($results) {
+				if (!isset($results['plugin'])) {
+					return;
+				}
+				foreach ($results['plugin'] as $plugin) {
+					if (plugin_basename( __FILE__ ) === strtolower($plugin->item->plugin)) {
+						do_action( 'fw_automatic_update_complete', $plugin->result );
+						break;
+					}
+				}
+			}
+		}
+		_FW_Update_Hooks::_init();
 	}
 }
