@@ -1,15 +1,12 @@
 jQuery(document).ready(function ($) {
-	var optionTypeClass = 'fw-option-type-switch';
-	var customEventPrefix = 'fw:option-type:switch:';
+	var optionTypeClass = 'fw-option-type-switch',
+		customEventPrefix = 'fw:option-type:switch:';
 
 	fwEvents.on('fw:options:init', function (data) {
-		var $elements = data.$elements.find('.'+ optionTypeClass +':not(.fw-option-initialized)');
-
-		$elements.find('input[type="checkbox"]')
+		data.$elements.find('.'+ optionTypeClass +':not(.fw-option-initialized)').find('input[type="checkbox"]')
 			.on('change', function(){
-				var $this = $(this);
-
-				var value;
+				var $this = $(this),
+					value;
 
 				if ($this.prop('checked')) {
 					value = $this.attr('data-switch-right-bool-value');
@@ -20,8 +17,11 @@ jQuery(document).ready(function ($) {
 						value = $this.attr('data-switch-right-value')
 					}
 
-					// prevent hidden value sent in POST
-					$this.prev('input[type="hidden"]').removeAttr('name');
+					$this
+						// prevent hidden value sent in POST
+						.prev('input[type="hidden"]').removeAttr('name')
+						// set choice hidden json value
+						.prev('input[type="hidden"]').val($this.attr('data-switch-right-value-json'));
 				} else {
 					value = $this.attr('data-switch-left-bool-value');
 
@@ -31,16 +31,18 @@ jQuery(document).ready(function ($) {
 						value = $this.attr('data-switch-left-value');
 					}
 
-					// make hidden value sent in POST
-					$this.prev('input[type="hidden"]').attr('name', $this.attr('name'));
+					$this
+						// make hidden value sent in POST
+						.prev('input[type="hidden"].js-post-key').attr('name', $this.attr('name'))
+						// set choice hidden json value
+						.prev('input[type="hidden"]').val($this.attr('data-switch-left-value-json'));;
 				}
 
 				$this.closest('.'+ optionTypeClass).trigger(customEventPrefix +'change', {
 					value: value
 				});
 			})
-			.adaptiveSwitch();
-
-		$elements.addClass('fw-option-initialized');
+			.adaptiveSwitch()
+			.addClass('fw-option-initialized');
 	});
 });

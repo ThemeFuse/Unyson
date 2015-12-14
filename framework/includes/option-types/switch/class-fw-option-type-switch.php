@@ -64,6 +64,8 @@ class FW_Option_Type_Switch extends FW_Option_Type
 			);
 
 			foreach (array('left', 'right') as $value_type) {
+				$input_attr['data-switch-'. $value_type .'-value-json'] = json_encode($option[$value_type .'-choice']['value']);
+
 				if (is_bool($option[$value_type .'-choice']['value'])) {
 					$input_attr['data-switch-'. $value_type .'-bool-value'] = $option[$value_type. '-choice']['value']
 						? 'true'
@@ -149,11 +151,24 @@ class FW_Option_Type_Switch extends FW_Option_Type
 
 		return '<div '. fw_attr_to_html($option['attr']) .'>'.
 			/**
+			 * Store right/left choice value in this input
+			 * It is useful in customizer when you want to create real-time preview
+			 */
+			fw_html_tag('input', array(
+				'type' => 'hidden',
+				'name' => $input_attr['name'] .'[json]',
+				'value' => $input_attr['data-switch-'. (empty($input_attr['checked']) ? 'left' : 'right') .'-value-json'],
+				'class' => 'js-choice-value-json',
+			)) .
+			/**
 			 * On submit, a value must be present in the POST for _get_value_from_input() to work properly
 			 * If no value is present, then the default $option['value'] will be used
 			 */
-			'<input type="hidden" value="" '. (empty($input_attr['checked']) ? 'name="'. esc_attr($input_attr['name']) .'"' : '') .' />'.
-
+			fw_html_tag('input', array_merge(array(
+				'type' => 'hidden',
+				'value' => '',
+				'class' => 'js-post-key',
+			), empty($input_attr['checked']) ? array('name' => $input_attr['name']) : array())) .
 			'<input type="checkbox" '. fw_attr_to_html($input_attr) .' />'.
 		'</div>';
 	}
