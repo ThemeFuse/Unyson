@@ -277,7 +277,7 @@ abstract class FW_Option_Type
 
 		$option['type'] = $this->get_type();
 
-		if (!isset($option['value'])) {
+		if (!array_key_exists('value', $option)) {
 			FW_Flash_Messages::add(
 				'fw-option-type-no-default-value',
 				sprintf(__('Option type %s has no default value', 'fw'), $this->get_type()),

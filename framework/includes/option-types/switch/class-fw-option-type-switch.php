@@ -55,6 +55,10 @@ class FW_Option_Type_Switch extends FW_Option_Type
 	 */
 	protected function _render($id, $option, $data)
 	{
+		if (is_null($data['value'])) {
+			$data['value'] = $this->get_value_from_input($option, null);
+		}
+
 		{
 			$input_attr = array(
 				'name' => $option['attr']['name'],
@@ -98,7 +102,11 @@ class FW_Option_Type_Switch extends FW_Option_Type
 	protected function _get_value_from_input($option, $input_value)
 	{
 		if (is_null($input_value)) {
-			return $option['value'];
+			if (in_array($option['value'], array($option['left-choice']['value'], $option['right-choice']['value']), true)) {
+				return $option['value'];
+			} else {
+				return $option['left-choice']['value'];
+			}
 		} else {
 			$input_value = json_decode($input_value);
 
@@ -124,7 +132,7 @@ class FW_Option_Type_Switch extends FW_Option_Type
 	protected function _get_defaults()
 	{
 		return array(
-			'value' => false,
+			'value' => null,
 			'left-choice' => array(
 				'value' => false,
 				'label' => __('No', 'fw'),
