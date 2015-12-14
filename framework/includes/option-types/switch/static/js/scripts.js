@@ -3,43 +3,30 @@ jQuery(document).ready(function ($) {
 		customEventPrefix = 'fw:option-type:switch:';
 
 	fwEvents.on('fw:options:init', function (data) {
-		data.$elements.find('.'+ optionTypeClass +':not(.fw-option-initialized)').find('input[type="checkbox"]')
+		data.$elements.find('.'+ optionTypeClass +':not(.fw-option-initialized)')
+			.find('input[type="checkbox"]')
 			.on('change', function(){
 				var $this = $(this),
-					value;
+					checked = $this.prop('checked'),
+					value = $this.attr('data-switch-'+ (checked ? 'right' : 'left') +'-value-json');
 
-				if ($this.prop('checked')) {
-					value = $this.attr('data-switch-right-bool-value');
+				$this.val(value);
 
-					if (value) {
-						value = value == 'true';
-					} else {
-						value = $this.attr('data-switch-right-value')
-					}
-
-					$this
-						// prevent hidden value sent in POST
-						.prev('input[type="hidden"]').removeAttr('name')
-						// set choice hidden json value
-						.prev('input[type="hidden"]').val($this.attr('data-switch-right-value-json'));
+				if (checked) {
+					$this.prev('input[type="hidden"]').remove();
 				} else {
-					value = $this.attr('data-switch-left-bool-value');
-
-					if (value) {
-						value = value == 'true';
-					} else {
-						value = $this.attr('data-switch-left-value');
-					}
-
-					$this
-						// make hidden value sent in POST
-						.prev('input[type="hidden"].js-post-key').attr('name', $this.attr('name'))
-						// set choice hidden json value
-						.prev('input[type="hidden"]').val($this.attr('data-switch-left-value-json'));;
+					/**
+					 * When checkbox is not checked, it is not sent in POST so create a hidden input for that
+					 */
+					$('<input>').attr({
+						'type': 'hidden',
+						'name': $this.attr('name'),
+						'value': value
+					}).insertBefore($this);
 				}
 
 				$this.closest('.'+ optionTypeClass).trigger(customEventPrefix +'change', {
-					value: value
+					value: JSON.parse(value)
 				});
 			})
 			.adaptiveSwitch()

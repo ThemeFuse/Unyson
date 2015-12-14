@@ -65,82 +65,14 @@ class FW_Option_Type_Switch extends FW_Option_Type
 
 			foreach (array('left', 'right') as $value_type) {
 				$input_attr['data-switch-'. $value_type .'-value-json'] = json_encode($option[$value_type .'-choice']['value']);
-
-				if (is_bool($option[$value_type .'-choice']['value'])) {
-					$input_attr['data-switch-'. $value_type .'-bool-value'] = $option[$value_type. '-choice']['value']
-						? 'true'
-						: 'false';
-				} else {
-					$input_attr['data-switch-'. $value_type .'-value'] = $option[$value_type .'-choice']['value'];
-				}
 			}
 		}
 
-		if (
-			defined('DOING_AJAX') && DOING_AJAX
-			&&
-			is_string($data['value'])
-			&&
-			in_array($data['value'], array('false', 'true'))
-			&&
-			// do not transform if there is an exact match with a choice
-			(
-				$option['left-choice']['value'] !== $data['value']
-				&&
-				$option['right-choice']['value'] !== $data['value']
-			)
-		) {
-			/**
-			 * This happens on fw.OptionsModal open/render
-			 * When the switch is used by other option types
-			 * then this script http://bit.ly/1QshDoS can't fix nested values
-			 *
-			 * Check if values is 'true' or 'false' and one of the choices values is a boolean that matches it
-			 * then transform/fix it to boolean
-			 */
-			if (
-				$data['value'] === 'true'
-				&&
-				(
-					(
-						is_bool($option['right-choice']['value'])
-						&&
-						$option['right-choice']['value'] === true
-					)
-					||
-					(
-						is_bool($option['left-choice']['value'])
-						&&
-						$option['left-choice']['value'] === true
-					)
-				)
-			) {
-				$data['value'] = true;
-			} elseif (
-				$data['value'] === 'false'
-				&&
-				(
-					(
-						is_bool($option['right-choice']['value'])
-						&&
-						$option['right-choice']['value'] === false
-					)
-					||
-					(
-						is_bool($option['left-choice']['value'])
-						&&
-						$option['left-choice']['value'] === false
-					)
-				)
-			) {
-				$data['value'] = false;
-			}
+		if ($checked = ($data['value'] === $option['right-choice']['value'])) {
+			$input_attr['checked'] = 'checked'; // right choice means checked
 		}
 
-		if ($data['value'] === $option['right-choice']['value']) {
-			// right choice means checked
-			$input_attr['checked'] = 'checked';
-		}
+		$input_attr['value'] = json_encode($option[ ($checked ? 'right' : 'left') .'-choice' ]['value']);
 
 		unset(
 			$option['attr']['name'],
@@ -150,25 +82,12 @@ class FW_Option_Type_Switch extends FW_Option_Type
 		);
 
 		return '<div '. fw_attr_to_html($option['attr']) .'>'.
-			/**
-			 * Store right/left choice value in this input
-			 * It is useful in customizer when you want to create real-time preview
-			 */
-			fw_html_tag('input', array(
+			'<!-- note: value is json encoded, if want to use it in js, do: var val = JSON.parse($input.val()); -->'.
+			($checked ? '' : fw_html_tag('input', array(
 				'type' => 'hidden',
-				'name' => $input_attr['name'] .'[json]',
-				'value' => $input_attr['data-switch-'. (empty($input_attr['checked']) ? 'left' : 'right') .'-value-json'],
-				'class' => 'js-choice-value-json',
-			)) .
-			/**
-			 * On submit, a value must be present in the POST for _get_value_from_input() to work properly
-			 * If no value is present, then the default $option['value'] will be used
-			 */
-			fw_html_tag('input', array_merge(array(
-				'type' => 'hidden',
-				'value' => '',
-				'class' => 'js-post-key',
-			), empty($input_attr['checked']) ? array('name' => $input_attr['name']) : array())) .
+				'name' => $input_attr['name'],
+				'value' => $input_attr['data-switch-left-value-json'],
+			))).
 			'<input type="checkbox" '. fw_attr_to_html($input_attr) .' />'.
 		'</div>';
 	}
@@ -181,12 +100,12 @@ class FW_Option_Type_Switch extends FW_Option_Type
 		if (is_null($input_value)) {
 			return $option['value'];
 		} else {
-			if ($input_value) {
-				// checked
-				return $option['right-choice']['value'];
+			$input_value = json_decode($input_value);
+
+			if (in_array($input_value, array($option['left-choice']['value'], $option['right-choice']['value']), true)) {
+				return $input_value;
 			} else {
-				// unchecked
-				return $option['left-choice']['value'];
+				return $option['value'];
 			}
 		}
 	}
