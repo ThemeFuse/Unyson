@@ -226,7 +226,18 @@ if (is_admin()) {
 	 * @internal
 	 */
 	function _action_fw_flash_message_frontend_prepare() {
-		if (!session_id()) {
+		if (
+			/**
+			 * In ajax it's not possible to call flash message after headers were sent,
+			 * so there will be no "headers already sent" warning.
+			 * Also in the Backups extension, are made many internal ajax request,
+			 * each creating a new independent request that don't remember/use session cookie from previous request,
+			 * thus on server side are created many (not used) new sessions.
+			 */
+			!(defined('DOING_AJAX') && DOING_AJAX)
+			&&
+			!session_id()
+		) {
 			session_start();
 		}
 	}
