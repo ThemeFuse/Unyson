@@ -83,6 +83,27 @@ Yes; Unyson will work with any theme.
 
 == Changelog ==
 
+= 2.4.14 =
+* Customizer options: Added `wp-customizer-args` parameter. [#1097](https://github.com/ThemeFuse/Unyson/issues/1097), [#1082](https://github.com/ThemeFuse/Unyson/issues/1082)
+
+    ```
+    $options = array(
+        'b' => array(
+            'wp-customizer-args' => array( // <---
+                'priority' => 10,
+                'active_callback' => 'is_front_page',
+            ),
+            'type' => 'box',
+            'options' => array(
+                'o' => array('type' => 'text')
+            )
+        )
+    );
+    ```
+
+* Option type `switch`: Changed html input value structure. [#1083](https://github.com/ThemeFuse/Unyson/issues/1083)
+* Improved the `FW_WP_Filesystem` helper. [#1127](https://github.com/ThemeFuse/Unyson/issues/1127)
+
 = 2.4.13 =
 * **IMPORTANT!!!** Updating from v2.4.12 to any newer version will uninstall all extensions [#1105](https://github.com/ThemeFuse/Unyson/issues/1105#issuecomment-163966468)
 
