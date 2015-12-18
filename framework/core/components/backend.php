@@ -937,6 +937,7 @@ final class _FW_Component_Backend {
 	 * @param int $post_id
 	 *
 	 * @return bool
+	 * @deprecated since 2.5.0
 	 */
 	public function _sync_post_separate_meta( $post_id ) {
 		$post_type = get_post_type( $post_id );
