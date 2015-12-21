@@ -1718,7 +1718,7 @@ fw.soleModal = (function(){
 						customClass: null,
 						afterOpen: function(){},
 						afterOpenStart: function(){},
-						afterClose: function(){}
+						afterClose: function(){},
 						afterCloseStart: function(){}
 					}, opts || {});
 
