@@ -108,7 +108,16 @@ class FW_Option_Type_Switch extends FW_Option_Type
 				return $option['left-choice']['value'];
 			}
 		} else {
-			$input_value = json_decode($input_value);
+			$tmp_json = json_decode($input_value);
+
+			/*
+			 * Check if parsing is successfuly.
+			 * If it's not - leave $input_value as it is.
+			 */
+			if (json_last_error() === JSON_ERROR_NONE) {
+				$input_value = $tmp_json;
+			}
+	
 
 			if (in_array($input_value, array($option['left-choice']['value'], $option['right-choice']['value']), true)) {
 				return $input_value;
