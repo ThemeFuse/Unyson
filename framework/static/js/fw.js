@@ -1547,7 +1547,9 @@ fw.soleModal = (function(){
 				hidePrevious: false // just replace the modal content or hide the previous modal and open it again with new content
 				updateIfCurrent: false // if current open modal has the same id as modal requested to show, update it without reopening
 				backdrop: null // true - light, false - dark
+				afterOpenStart: function(){} // before open animation starts
 				afterOpen: function(){}
+				afterCloseStart: function(){} // before close animation starts
 				afterClose: function(){}
 			}
 			*/
@@ -1715,7 +1717,9 @@ fw.soleModal = (function(){
 						backdrop: null,
 						customClass: null,
 						afterOpen: function(){},
+						afterOpenStart: function(){},
 						afterClose: function(){}
+						afterCloseStart: function(){}
 					}, opts || {});
 
 					// hide close button if close is not allowed
@@ -1813,6 +1817,7 @@ fw.soleModal = (function(){
 
 			this.setSize(this.current.width, this.current.height);
 
+			this.current.afterOpenStart();
 			this.currentMethodTimeoutId = setTimeout(_.bind(function() {
 				this.current.afterOpen();
 
@@ -1872,6 +1877,7 @@ fw.soleModal = (function(){
 
 			if (this.queue.length && !this.queue[0].hidePrevious) {
 				// replace content
+				this.current.afterCloseStart();
 				this.$getContent().fadeOut('fast', _.bind(function(){
 					this.current.afterClose();
 
@@ -1894,6 +1900,7 @@ fw.soleModal = (function(){
 
 			this.$modal.addClass('fw-modal-closing');
 
+			this.current.afterCloseStart();
 			this.currentMethodTimeoutId = setTimeout(_.bind(function(){
 				this.current.afterClose();
 
