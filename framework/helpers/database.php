@@ -419,11 +419,7 @@
 		if (
 			!is_null($default_value)
 			&&
-			(
-				is_null($all_db_values)
-				||
-				is_null(fw_akg($option_id, $all_db_values))
-			)
+			is_null($option_id ? fw_akg($option_id, $all_db_values) : $all_db_values)
 		) {
 			/**
 			 * Default value was provided in case db value is empty.
