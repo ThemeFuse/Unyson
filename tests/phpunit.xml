@@ -1,0 +1,30 @@
+<phpunit
+	backupGlobals="false"
+	backupStaticAttributes="false"
+	bootstrap="bootstrap.php"
+	colors="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+	processIsolation="false"
+	stopOnError="false"
+	stopOnFailure="false"
+	stopOnIncomplete="false"
+	stopOnSkipped="false"
+	syntaxCheck="false"
+	verbose="true"
+>
+	<testsuites>
+		<testsuite>
+			<directory prefix="test-" suffix=".php">./</directory>
+		</testsuite>
+	</testsuites>
+
+	<filter>
+		<whitelist>
+			<directory>./inc</directory>
+			<directory>./frontend</directory>
+			<directory>./admin</directory>
+		</whitelist>
+	</filter>
+</phpunit>
