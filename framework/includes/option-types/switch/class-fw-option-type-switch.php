@@ -55,6 +55,10 @@ class FW_Option_Type_Switch extends FW_Option_Type
 	 */
 	protected function _render($id, $option, $data)
 	{
+		if (is_null($data['value'])) {
+			$data['value'] = $this->get_value_from_input($option, null);
+		}
+
 		{
 			$input_attr = array(
 				'name' => $option['attr']['name'],
@@ -64,81 +68,15 @@ class FW_Option_Type_Switch extends FW_Option_Type
 			);
 
 			foreach (array('left', 'right') as $value_type) {
-				if (is_bool($option[$value_type .'-choice']['value'])) {
-					$input_attr['data-switch-'. $value_type .'-bool-value'] = $option[$value_type. '-choice']['value']
-						? 'true'
-						: 'false';
-				} else {
-					$input_attr['data-switch-'. $value_type .'-value'] = $option[$value_type .'-choice']['value'];
-				}
+				$input_attr['data-switch-'. $value_type .'-value-json'] = json_encode($option[$value_type .'-choice']['value']);
 			}
 		}
 
-		if (
-			defined('DOING_AJAX') && DOING_AJAX
-			&&
-			is_string($data['value'])
-			&&
-			in_array($data['value'], array('false', 'true'))
-			&&
-			// do not transform if there is an exact match with a choice
-			(
-				$option['left-choice']['value'] !== $data['value']
-				&&
-				$option['right-choice']['value'] !== $data['value']
-			)
-		) {
-			/**
-			 * This happens on fw.OptionsModal open/render
-			 * When the switch is used by other option types
-			 * then this script http://bit.ly/1QshDoS can't fix nested values
-			 *
-			 * Check if values is 'true' or 'false' and one of the choices values is a boolean that matches it
-			 * then transform/fix it to boolean
-			 */
-			if (
-				$data['value'] === 'true'
-				&&
-				(
-					(
-						is_bool($option['right-choice']['value'])
-						&&
-						$option['right-choice']['value'] === true
-					)
-					||
-					(
-						is_bool($option['left-choice']['value'])
-						&&
-						$option['left-choice']['value'] === true
-					)
-				)
-			) {
-				$data['value'] = true;
-			} elseif (
-				$data['value'] === 'false'
-				&&
-				(
-					(
-						is_bool($option['right-choice']['value'])
-						&&
-						$option['right-choice']['value'] === false
-					)
-					||
-					(
-						is_bool($option['left-choice']['value'])
-						&&
-						$option['left-choice']['value'] === false
-					)
-				)
-			) {
-				$data['value'] = false;
-			}
+		if ($checked = ($data['value'] === $option['right-choice']['value'])) {
+			$input_attr['checked'] = 'checked'; // right choice means checked
 		}
 
-		if ($data['value'] === $option['right-choice']['value']) {
-			// right choice means checked
-			$input_attr['checked'] = 'checked';
-		}
+		$input_attr['value'] = json_encode($option[ ($checked ? 'right' : 'left') .'-choice' ]['value']);
 
 		unset(
 			$option['attr']['name'],
@@ -148,12 +86,12 @@ class FW_Option_Type_Switch extends FW_Option_Type
 		);
 
 		return '<div '. fw_attr_to_html($option['attr']) .'>'.
-			/**
-			 * On submit, a value must be present in the POST for _get_value_from_input() to work properly
-			 * If no value is present, then the default $option['value'] will be used
-			 */
-			'<input type="hidden" value="" '. (empty($input_attr['checked']) ? 'name="'. esc_attr($input_attr['name']) .'"' : '') .' />'.
-
+			'<!-- note: value is json encoded, if want to use it in js, do: var val = JSON.parse($input.val()); -->'.
+			($checked ? '' : fw_html_tag('input', array(
+				'type' => 'hidden',
+				'name' => $input_attr['name'],
+				'value' => $input_attr['data-switch-left-value-json'],
+			))).
 			'<input type="checkbox" '. fw_attr_to_html($input_attr) .' />'.
 		'</div>';
 	}
@@ -164,14 +102,27 @@ class FW_Option_Type_Switch extends FW_Option_Type
 	protected function _get_value_from_input($option, $input_value)
 	{
 		if (is_null($input_value)) {
-			return $option['value'];
-		} else {
-			if ($input_value) {
-				// checked
-				return $option['right-choice']['value'];
+			if (in_array($option['value'], array($option['left-choice']['value'], $option['right-choice']['value']), true)) {
+				return $option['value'];
 			} else {
-				// unchecked
 				return $option['left-choice']['value'];
+			}
+		} else {
+			$tmp_json = json_decode($input_value);
+
+			/*
+			 * Check if parsing is successfuly.
+			 * If it's not - leave $input_value as it is.
+			 */
+			if (json_last_error() === JSON_ERROR_NONE) {
+				$input_value = $tmp_json;
+			}
+	
+
+			if (in_array($input_value, array($option['left-choice']['value'], $option['right-choice']['value']), true)) {
+				return $input_value;
+			} else {
+				return $option['value'];
 			}
 		}
 	}
@@ -190,7 +141,7 @@ class FW_Option_Type_Switch extends FW_Option_Type
 	protected function _get_defaults()
 	{
 		return array(
-			'value' => false,
+			'value' => null,
 			'left-choice' => array(
 				'value' => false,
 				'label' => __('No', 'fw'),

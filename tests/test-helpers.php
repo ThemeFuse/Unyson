@@ -1,6 +1,6 @@
 <?php
 
-class Tests_Unyson_Main extends WP_UnitTestCase {
+class Tests_Unyson_Main extends WP_Unyson_UnitTestCase {
 
 	/**
 	 * Activate the plugin, mock all the things

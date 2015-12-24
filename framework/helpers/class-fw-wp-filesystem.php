@@ -18,49 +18,53 @@ class FW_WP_Filesystem
 		global $wp_filesystem;
 
 		if ($wp_filesystem) {
-			// already initialized (has access)
-			return true;
+			if (
+				is_object($wp_filesystem)
+				&&
+				!(is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code())
+			) {
+				return true; // already initialized
+			}
 		}
 
-		if (empty($url)) {
+		if ( empty( $url ) ) {
 			$url = fw_current_url();
 		}
 
-		if (get_filesystem_method() === 'direct') {
+		if ( get_filesystem_method() === 'direct' ) {
 			// in case if direct access is available
 
 			/* you can safely run request_filesystem_credentials() without any issues and don't need to worry about passing in a URL */
-			$creds = request_filesystem_credentials(site_url() . '/wp-admin/', '', false, false, null);
+			$creds = request_filesystem_credentials( site_url() . '/wp-admin/', '', false, false, null );
 
 			/* initialize the API */
-			if ( ! WP_Filesystem($creds) ) {
+			if ( ! WP_Filesystem( $creds ) ) {
 				/* any problems and we exit */
-				trigger_error(__('Cannot connect to Filesystem directly', 'fw'), E_USER_WARNING);
+				trigger_error( __( 'Cannot connect to Filesystem directly', 'fw' ), E_USER_WARNING );
+
 				return false;
 			}
 		} else {
-			$creds = request_filesystem_credentials($url, '', false, $context, $extra_fields);
+			$creds = request_filesystem_credentials( $url, '', false, $context, $extra_fields );
 
-			if (!$creds) {
+			if ( ! $creds ) {
 				// the form was printed to the user
 				return null;
 			}
 
 			/* initialize the API */
-			if ( ! WP_Filesystem($creds) ) {
+			if ( ! WP_Filesystem( $creds ) ) {
 				/* any problems and we exit */
-				request_filesystem_credentials($url, '', true, $context, $extra_fields); // the third parameter is true to show error to the user
+				request_filesystem_credentials( $url, '', true, $context, $extra_fields ); // the third parameter is true to show error to the user
 				return false;
 			}
 		}
 
-		global $wp_filesystem;
-
-		if ( ! is_object($wp_filesystem) ) {
-			return false;
-		}
-
-		if ( is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code() ) {
+		if (
+			! is_object($wp_filesystem)
+			||
+			(is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code())
+		) {
 			return false;
 		}
 
@@ -91,6 +95,8 @@ class FW_WP_Filesystem
 
 		if (!$wp_filesystem) {
 			trigger_error('Filesystem is not available', E_USER_ERROR);
+		} elseif (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code()) {
+			trigger_error('Filesystem: '. $wp_filesystem->errors->get_error_message(), E_USER_ERROR);
 		}
 
 		try {
@@ -132,6 +138,8 @@ class FW_WP_Filesystem
 
 		if (!$wp_filesystem) {
 			trigger_error('Filesystem is not available', E_USER_ERROR);
+		} elseif (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code()) {
+			trigger_error('Filesystem: '. $wp_filesystem->errors->get_error_message(), E_USER_ERROR);
 		}
 
 		$real_path = fw_fix_path($real_path);
@@ -167,6 +175,8 @@ class FW_WP_Filesystem
 
 		if (!$wp_filesystem) {
 			trigger_error('Filesystem is not available', E_USER_ERROR);
+		} elseif (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code()) {
+			trigger_error('Filesystem: '. $wp_filesystem->errors->get_error_message(), E_USER_ERROR);
 		}
 
 		$wp_filesystem_path = fw_fix_path($wp_filesystem_path);
@@ -202,7 +212,11 @@ class FW_WP_Filesystem
 		global $wp_filesystem;
 
 		if ($wp_filesystem) {
-			return $wp_filesystem->method === 'direct';
+			if (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code()) {
+				return false;
+			} else {
+				return $wp_filesystem->method === 'direct';
+			}
 		}
 
 		if (get_filesystem_method(array(), $context) === 'direct') {
@@ -231,6 +245,8 @@ class FW_WP_Filesystem
 
 		if (!$wp_filesystem) {
 			trigger_error('Filesystem is not available', E_USER_ERROR);
+		} elseif (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code()) {
+			trigger_error('Filesystem: '. $wp_filesystem->errors->get_error_message(), E_USER_ERROR);
 		}
 
 		$wp_filesystem_dir_path = fw_fix_path($wp_filesystem_dir_path);

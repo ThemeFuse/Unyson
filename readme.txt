@@ -2,8 +2,8 @@
 Contributors: unyson, themefusecom
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
-Tested up to: 4.3
-Stable tag: 2.4.11
+Tested up to: 4.4
+Stable tag: 2.4.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,15 +18,16 @@ A simple and easy way to build a powerful website.
 **Features include:**
 
 * **Drag & Drop Page Builder.** Create countless pages using the content and media shortcodes.
-* **Sidebars.** This module will let your users customize WordPress pages with dynamic sidebars.
-* **Backup.** Your users will be able to create backups directly from the WordPress admin.
 * **Sliders.** To make you life even easier we have already built in 3 of them that support images and videos.
-* **SEO.** SEO settings at finger tips without installing further plugins.
-* **Breadcrumbs.** A pretty small module that will really come in handy when you’ll want to navigate your website faster.
-* **Events.** It's pretty simple to use and it has Calendar and Map shortcodes.  
+* **Mega Menu.** User-friendly drop down menu that will let you easily create highly customized menu configurations.
+* **Sidebars.** This module will let your users customize WordPress pages with dynamic sidebars.
 * **Portfolio.** Portfolio has some pretty neat filtering animations.
+* **Breadcrumbs.** A pretty small module that will really come in handy when you’ll want to navigate your website faster.
+* **Forms** Use the drag & drop form builder to create any contact form you'll ever want or need.
+* **SEO.** SEO settings at finger tips without installing further plugins.
 * **Feedback.** We've added a way for users to submit reviews and ratings for events, projects, etc.
-* **Learning.** Create courses, lessons and quizzes for your online training site.
+* **Events.** It's pretty simple to use and it has Calendar and Map shortcodes.
+* **Backup & Demo Content.** Create an automated backup schedule, import demo content or even create a demo content archive for migration purposes.
 
 To get started, check out the [Scratch Theme](https://github.com/ThemeFuse/Scratch-Theme).
 
@@ -81,6 +82,49 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.4.14 =
+* Customizer options: Added `wp-customizer-args` parameter. [#1097](https://github.com/ThemeFuse/Unyson/issues/1097), [#1082](https://github.com/ThemeFuse/Unyson/issues/1082)
+
+        $options = array(
+            'b' => array(
+                'wp-customizer-args' => array( // <---
+                    'priority' => 10,
+                    'active_callback' => 'is_front_page',
+                ),
+                'type' => 'box',
+                'options' => array(
+                    'o' => array('type' => 'text')
+                )
+            )
+        );
+
+* Option type `switch`: Changed html input value structure. [#1083](https://github.com/ThemeFuse/Unyson/issues/1083)
+* Improved the `FW_WP_Filesystem` helper. [#1127](https://github.com/ThemeFuse/Unyson/issues/1127)
+
+= 2.4.13 =
+* **IMPORTANT!!!** Updating from v2.4.12 to any newer version will uninstall all extensions [#1105](https://github.com/ThemeFuse/Unyson/issues/1105#issuecomment-163966468)
+
+    We are very sorry
+
+    To install all extensions compatible with your theme, open the following link:
+
+    ```
+    {site.domain}/wp-admin/admin.php?page=fw-extensions&sub-page=install&supported
+    ```
+
+* Fixed [#1089](https://github.com/ThemeFuse/Unyson/issues/1089), [#1077](https://github.com/ThemeFuse/Unyson/pull/1077#issuecomment-163324948)
+
+= 2.4.12 =
+* WordPress 4.4 fixes
+* Fixed
+  [#1039](https://github.com/ThemeFuse/Unyson/issues/1039),
+  [#1044](https://github.com/ThemeFuse/Unyson/issues/1044),
+  [#1055](https://github.com/ThemeFuse/Unyson/pull/1055),
+  [#1072](https://github.com/ThemeFuse/Unyson/issues/1072),
+  [#1049](https://github.com/ThemeFuse/Unyson/issues/1049),
+  [#1086](https://github.com/ThemeFuse/Unyson/issues/1086),
+  [PageBuilder#40](https://github.com/ThemeFuse/Unyson-PageBuilder-Extension/issues/40#issuecomment-160135453)
 
 = 2.4.11 =
 * Fixed a bug in `popup` option-type: Options were not saved

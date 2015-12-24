@@ -15,7 +15,7 @@ jQuery(document).ready(function ($) {
 			data.$options   = $box.find('.fw-option-box-options:first');
 
 			data.$box       = $box.find('.fw-postbox:first');
-			data.$title     = data.$box.find('> h3.hndle:first');
+			data.$title     = data.$box.find('> .hndle:first');
 			data.$titleText = data.$title.find('> span:first');
 
 			return data;
@@ -163,7 +163,7 @@ jQuery(document).ready(function ($) {
 
 				$box.removeClass(titleUpdater.pendingClass);
 
-				$box.find('> h3.hndle span:not([class])').first().html(
+				$box.find('> .hndle span:not([class])').first().html(
 					this.template(data.template, JSON.parse(values))
 				);
 
@@ -196,7 +196,7 @@ jQuery(document).ready(function ($) {
 					template = '[Ajax Error] '+ response.data.message
 				}
 
-				$box.find('> h3.hndle span:not([class])').first().html(template);
+				$box.find('> .hndle span:not([class])').first().html(template);
 
 				delete data;
 
@@ -205,7 +205,7 @@ jQuery(document).ready(function ($) {
 				this.isBusy = false;
 				$box.removeClass(titleUpdater.pendingClass);
 
-				$box.find('> h3.hndle span:not([class])').first().text('[Server Error] '+ status +': '+ error.message);
+				$box.find('> .hndle span:not([class])').first().text('[Server Error] '+ status +': '+ error.message);
 
 				delete data;
 
@@ -268,7 +268,7 @@ jQuery(document).ready(function ($) {
 			$(this).addClass(titleUpdater.pendingClass);
 
 			/*
-			$(this).find('> h3.hndle span:not([class])').first().html(
+			$(this).find('> .hndle span:not([class])').first().html(
 				$('<img>').attr('src', fw.img.loadingSpinner)
 			);
 			*/

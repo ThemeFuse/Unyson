@@ -1670,7 +1670,7 @@ final class _FW_Component_Backend {
 
 					/**
 					 * used <small> not <span> because there is a lot of css and js
-					 * that thinks inside <h3 class="hndle"> there is only one <span>
+					 * that thinks inside <h2 class="hndle"> there is only one <span>
 					 * so do not brake their logic
 					 */
 					'<small class="fw-html-before-title">' . $placeholders['html_before_title'] . '</small>' .
@@ -1950,6 +1950,10 @@ final class _FW_Component_Backend {
 							: $opt['option']['desc'],
 					);
 
+					if (isset($opt['option']['wp-customizer-args']) && is_array($opt['option']['wp-customizer-args'])) {
+						$args = array_merge($opt['option']['wp-customizer-args'], $args);
+					}
+
 					if ($has_containers) {
 						if ($parent_data) {
 							trigger_error($opt['id'] .' panel can\'t have a parent ('. $parent_data['id'] .')', E_USER_WARNING);
@@ -1995,6 +1999,10 @@ final class _FW_Component_Backend {
 								: $opt['option']['desc'],
 							'settings' => $setting_id,
 						);
+
+						if (isset($opt['option']['wp-customizer-args']) && is_array($opt['option']['wp-customizer-args'])) {
+							$args = array_merge($opt['option']['wp-customizer-args'], $args);
+						}
 
 						if ($parent_data) {
 							if ($parent_data['customizer_type'] === 'section') {

@@ -39,9 +39,7 @@
 					elements.$pickerGroup.find(':checkbox').on('change', function() {
 						var $this = $(this),
 							checked = $(this).is(':checked'),
-							value = checked
-									? $this.attr('data-switch-right-value')
-									: $this.attr('data-switch-left-value');
+							value = JSON.parse($this.attr('data-switch-'+ (checked ? 'right' : 'left') +'-value-json'));
 
 						chooseGroup(value);
 					}).trigger('change');

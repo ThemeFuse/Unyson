@@ -128,13 +128,16 @@ abstract class FW_Option_Type
 			$data
 		);
 
-		$option = array_merge(
-			$this->get_defaults(),
-			$option,
-			array(
-				'type' => $this->get_type()
-			)
-		);
+		$defaults = $this->get_defaults();
+		$merge_attr = !empty($option['attr']) && !empty($defaults['attr']);
+
+		$option = array_merge($defaults, $option, array(
+			'type' => $this->get_type()
+		));
+
+		if ($merge_attr) {
+			$option['attr'] = array_merge($defaults['attr'], $option['attr']);
+		}
 
 		if (!isset($data['value'])) {
 			// if no input value, use default
@@ -274,7 +277,7 @@ abstract class FW_Option_Type
 
 		$option['type'] = $this->get_type();
 
-		if (!isset($option['value'])) {
+		if (!array_key_exists('value', $option)) {
 			FW_Flash_Messages::add(
 				'fw-option-type-no-default-value',
 				sprintf(__('Option type %s has no default value', 'fw'), $this->get_type()),

@@ -50,6 +50,7 @@ final class _FW_Extensions_Manager
 			add_action('admin_enqueue_scripts', array($this, '_action_enqueue_scripts'));
 			add_action('fw_after_plugin_activate', array($this, '_action_after_plugin_activate'), 100);
 			add_action('after_switch_theme', array($this, '_action_theme_switch'));
+			add_action('admin_notices', array($this, '_action_admin_notices'));
 
 			if ($this->can_install()) {
 				add_action('wp_ajax_fw_extensions_check_direct_fs_access', array($this, '_action_ajax_check_direct_fs_access'));
@@ -330,7 +331,7 @@ final class _FW_Extensions_Manager
 		/** @var WP_Filesystem_Base $wp_filesystem */
 		global $wp_filesystem;
 
-		if (!$wp_filesystem) {
+		if (!$wp_filesystem || (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code())) {
 			return;
 		}
 
@@ -379,7 +380,7 @@ final class _FW_Extensions_Manager
 		/** @var WP_Filesystem_Base $wp_filesystem */
 		global $wp_filesystem;
 
-		if ( ! $wp_filesystem ) {
+		if ( !$wp_filesystem || (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code()) ) {
 			return;
 		}
 
@@ -1046,7 +1047,7 @@ final class _FW_Extensions_Manager
 
 		global $wp_filesystem;
 
-		if (!$wp_filesystem) {
+		if (!$wp_filesystem || (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code())) {
 			return new WP_Error(
 				'fs_not_initialized',
 				__('WP Filesystem is not initialized', 'fw')
@@ -1520,7 +1521,7 @@ final class _FW_Extensions_Manager
 		/** @var WP_Filesystem_Base $wp_filesystem */
 		global $wp_filesystem;
 
-		if (!$wp_filesystem) {
+		if (!$wp_filesystem || (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code())) {
 			return new WP_Error(
 				'fs_not_initialized',
 				__('WP Filesystem is not initialized', 'fw')
@@ -3173,5 +3174,28 @@ final class _FW_Extensions_Manager
 		}
 
 		return $extensions;
+	}
+
+	public function _action_admin_notices() {
+		/**
+		 * In v2.4.12 was done a terrible mistake https://github.com/ThemeFuse/Unyson-Extensions-Approval/issues/160
+		 * Show a warning with link to install theme supported extensions
+		 */
+		if (
+			!isset($_GET['supported']) // already on 'Install Supported Extensions' page
+			&&
+			$this->can_install()
+			&&
+			(($installed_extensions = $this->get_installed_extensions()) || true)
+			&&
+			!isset($installed_extensions['page-builder'])
+			&&
+			$this->get_supported_extensions_for_install()
+		) {
+			echo '<div class="error"> <p>'
+			, fw_html_tag('a', array('href' => $this->get_link() .'&sub-page=install&supported'),
+				__('Install theme compatible extensions', 'fw'))
+			, '</p></div>';
+		}
 	}
 }

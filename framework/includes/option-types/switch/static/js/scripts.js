@@ -1,46 +1,35 @@
 jQuery(document).ready(function ($) {
-	var optionTypeClass = 'fw-option-type-switch';
-	var customEventPrefix = 'fw:option-type:switch:';
+	var optionTypeClass = 'fw-option-type-switch',
+		customEventPrefix = 'fw:option-type:switch:';
 
 	fwEvents.on('fw:options:init', function (data) {
-		var $elements = data.$elements.find('.'+ optionTypeClass +':not(.fw-option-initialized)');
-
-		$elements.find('input[type="checkbox"]')
+		data.$elements.find('.'+ optionTypeClass +':not(.fw-option-initialized)')
+			.find('input[type="checkbox"]')
 			.on('change', function(){
-				var $this = $(this);
+				var $this = $(this),
+					checked = $this.prop('checked'),
+					value = $this.attr('data-switch-'+ (checked ? 'right' : 'left') +'-value-json');
 
-				var value;
+				$this.val(value);
 
-				if ($this.prop('checked')) {
-					value = $this.attr('data-switch-right-bool-value');
-
-					if (value) {
-						value = value == 'true';
-					} else {
-						value = $this.attr('data-switch-right-value')
-					}
-
-					// prevent hidden value sent in POST
-					$this.prev('input[type="hidden"]').removeAttr('name');
+				if (checked) {
+					$this.prev('input[type="hidden"]').remove();
 				} else {
-					value = $this.attr('data-switch-left-bool-value');
-
-					if (value) {
-						value = value == 'true';
-					} else {
-						value = $this.attr('data-switch-left-value');
-					}
-
-					// make hidden value sent in POST
-					$this.prev('input[type="hidden"]').attr('name', $this.attr('name'));
+					/**
+					 * When checkbox is not checked, it is not sent in POST so create a hidden input for that
+					 */
+					$('<input>').attr({
+						'type': 'hidden',
+						'name': $this.attr('name'),
+						'value': value
+					}).insertBefore($this);
 				}
 
 				$this.closest('.'+ optionTypeClass).trigger(customEventPrefix +'change', {
-					value: value
+					value: JSON.parse(value)
 				});
 			})
-			.adaptiveSwitch();
-
-		$elements.addClass('fw-option-initialized');
+			.adaptiveSwitch()
+			.addClass('fw-option-initialized');
 	});
 });

@@ -294,6 +294,10 @@ fw.md5 = (function(){
 				this.$modal.removeClass(this.current.customClass);
 			}
 
+			if (this.$modal && ! this.current.wrapWithTable) {
+				this.wrapWithTable(this.$modal);
+			}
+
 			this.current = this.queue.shift();
 
 			if (!this.current) {
@@ -397,6 +401,10 @@ fw.md5 = (function(){
 
 					if (this.$modal && this.current.customClass !== null) {
 						this.$modal.removeClass(this.current.customClass);
+					}
+
+					if (this.$modal && ! this.current.wrapWithTable) {
+						this.wrapWithTable(this.$modal);
 					}
 
 					this.current = null;
@@ -1539,7 +1547,9 @@ fw.soleModal = (function(){
 				hidePrevious: false // just replace the modal content or hide the previous modal and open it again with new content
 				updateIfCurrent: false // if current open modal has the same id as modal requested to show, update it without reopening
 				backdrop: null // true - light, false - dark
+				afterOpenStart: function(){} // before open animation starts
 				afterOpen: function(){}
+				afterCloseStart: function(){} // before close animation starts
 				afterClose: function(){}
 			}
 			*/
@@ -1596,6 +1606,39 @@ fw.soleModal = (function(){
 		},
 		$getContent: function() {
 			return this.$modal.find('.fw-sole-modal-content:first');
+		},
+		wrapWithTable: function ($modal) {
+			var temporaryContent = $modal.find('.fw-sole-modal-content').html();
+
+			$modal.find('.fw-sole-modal-content').remove();
+
+			var htmlTemplate =
+				'<tbody>' +
+					'<tr>' +
+						'<td valign="middle" class="fw-sole-modal-content fw-text-center">' +
+							temporaryContent +
+						'</td>' +
+					'</tr>' +
+				'</tbody>';
+
+			var $table = jQuery('<table>', {
+				html: htmlTemplate
+			}).attr({width: '100%', height: '100%'});
+
+			$modal.find('.media-modal-content').append($table);
+		},
+		unwrapWithTable: function ($modal) {
+			var temporaryContent = $modal.find('.fw-sole-modal-content').html();
+
+			$modal.find('.fw-sole-modal-content')
+				.closest('table')
+				.remove();
+
+			$modal.find('.media-modal-content')
+				.append(jQuery('<div>', {
+					class: 'fw-sole-modal-content',
+					html: temporaryContent
+				}));
 		},
 		setContent: function(html) {
 			this.lazyInit();
@@ -1670,10 +1713,13 @@ fw.soleModal = (function(){
 						height: 200,
 						hidePrevious: false,
 						updateIfCurrent: false,
+						wrapWithTable: true,
 						backdrop: null,
 						customClass: null,
 						afterOpen: function(){},
-						afterClose: function(){}
+						afterOpenStart: function(){},
+						afterClose: function(){},
+						afterCloseStart: function(){}
 					}, opts || {});
 
 					// hide close button if close is not allowed
@@ -1704,6 +1750,10 @@ fw.soleModal = (function(){
 						this.$modal.removeClass(this.current.customClass);
 					}
 
+					if (this.$modal && ! this.current.wrapWithTable) {
+						this.wrapWithTable(this.$modal);
+					}
+
 					this.current = this.queue.shift();
 
 					if (this.$modal && this.current.customClass !== null) {
@@ -1711,6 +1761,10 @@ fw.soleModal = (function(){
 					}
 
 					this.setContent(this.current.html);
+
+					if (this.$modal && ! this.current.wrapWithTable) {
+						this.unwrapWithTable(this.$modal);
+					}
 
 					return true;
 				} else {
@@ -1720,6 +1774,10 @@ fw.soleModal = (function(){
 
 			if (this.current && this.$modal && this.current.customClass !== null) {
 				this.$modal.removeClass(this.current.customClass);
+			}
+
+			if (this.current && this.$modal && ! this.current.wrapWithTable) {
+				this.unwrapWithTable(this.$modal);
 			}
 
 			this.currentMethod = '';
@@ -1751,10 +1809,15 @@ fw.soleModal = (function(){
 				this.$modal.addClass(this.current.customClass);
 			}
 
+			if (this.$modal && ! this.current.wrapWithTable) {
+				this.unwrapWithTable(this.$modal);
+			}
+
 			this.$modal.css('display', '');
 
 			this.setSize(this.current.width, this.current.height);
 
+			this.current.afterOpenStart();
 			this.currentMethodTimeoutId = setTimeout(_.bind(function() {
 				this.current.afterOpen();
 
@@ -1814,11 +1877,16 @@ fw.soleModal = (function(){
 
 			if (this.queue.length && !this.queue[0].hidePrevious) {
 				// replace content
+				this.current.afterCloseStart();
 				this.$getContent().fadeOut('fast', _.bind(function(){
 					this.current.afterClose();
 
 					if (this.$modal && this.current.customClass !== null) {
 						this.$modal.removeClass(this.current.customClass);
+					}
+
+					if (this.$modal && ! this.current.wrapWithTable) {
+						this.wrapWithTable(this.$modal);
 					}
 
 					this.currentMethod = '';
@@ -1832,6 +1900,7 @@ fw.soleModal = (function(){
 
 			this.$modal.addClass('fw-modal-closing');
 
+			this.current.afterCloseStart();
 			this.currentMethodTimeoutId = setTimeout(_.bind(function(){
 				this.current.afterClose();
 
@@ -1844,6 +1913,10 @@ fw.soleModal = (function(){
 
 				if (this.$modal && this.current.customClass !== null) {
 					this.$modal.removeClass(this.current.customClass);
+				}
+
+				if (this.$modal && ! this.current.wrapWithTable) {
+					this.wrapWithTable(this.$modal);
 				}
 
 				this.setContent('');
