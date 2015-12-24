@@ -403,6 +403,31 @@ abstract class FW_Extension
 		fw_set_db_extension_data( $this->get_name(), $multi_key, $value );
 	}
 
+	/**
+	 * Get extension's data from user meta
+	 *
+	 * @param int $user_id
+	 * @param string|null $keys
+	 *
+	 * @return mixed|null
+	 */
+	final public function get_user_data( $user_id, $keys = null ) {
+		return fw_get_db_extension_user_data($user_id, $this->get_name(), $keys);
+	}
+
+	/**
+	 * et some extension's data in user meta
+	 *
+	 * @param int $user_id
+	 * @param mixed $value
+	 * @param string|null $keys
+	 *
+	 * @return bool|int
+	 */
+	final public function set_user_data( $user_id, $value, $keys = null ) {
+		return fw_set_db_extension_user_data($user_id, $this->get_name(), $value, $keys);
+	}
+
 	final public function get_post_options($post_type)
 	{
 		return $this->get_options('posts/'. $post_type);

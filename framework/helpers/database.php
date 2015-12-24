@@ -359,43 +359,51 @@
 	 *
 	 * @param int $user_id
 	 * @param string $extension_name
+	 * @param string $keys
 	 *
 	 * If the extension doesn't exist or is disabled, or meta key doesn't exist, returns null,
 	 * else returns the meta key value
 	 *
 	 * @return mixed|null
 	 */
-	function fw_get_db_extension_user_data( $user_id, $extension_name ) {
+	function fw_get_db_extension_user_data( $user_id, $extension_name, $keys = null ) {
 		if ( ! fw()->extensions->get( $extension_name ) ) {
 			trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
 
 			return null;
 		}
 		$data = get_user_meta( $user_id, 'fw_data', true );
-		if ( isset( $data[ $extension_name ] ) ) {
-			return $data[ $extension_name ];
+
+		if ( is_null( $keys ) ) {
+			return fw_akg( $extension_name, $data );
 		}
 
-		return null;
+		return fw_akg( $extension_name . '/' . $keys, $data );
 	}
 
 	/**
 	 * @param int $user_id
 	 * @param string $extension_name
 	 * @param mixed $value
+	 * @param string $keys
 	 *
 	 * In case the extension doesn't exist or is disabled, or the value is equal to previous, returns false
 	 *
 	 * @return bool|int
 	 */
-	function fw_set_db_extension_user_data( $user_id, $extension_name, $value ) {
+	function fw_set_db_extension_user_data( $user_id, $extension_name, $value, $keys = null ) {
 		if ( ! fw()->extensions->get( $extension_name ) ) {
 			trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
 
 			return false;
 		}
 		$data                    = get_user_meta( $user_id, 'fw_data', true );
-		$data[ $extension_name ] = $value;
+
+		if ( $keys == null ) {
+			fw_aks( $extension_name, $value, $data );
+		} else {
+			fw_aks( $extension_name . '/' . $keys, $value, $data );
+		}
 
 		return fw_update_user_meta( $user_id, 'fw_data', $data );
 	}
