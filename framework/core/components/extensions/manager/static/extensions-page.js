@@ -69,7 +69,7 @@ jQuery(function($){
 					}).fail(function(jqXHR, textStatus, errorThrown){
 						fw.soleModal.show(
 							'fw-extension-install-error',
-							'<p class="fw-text-danger">Error: '+ textStatus +'</p>'
+							'<p class="fw-text-danger">'+ String(errorThrown) +'</p>'
 						);
 						inst.isBusy = false;
 						inst.loading($form, false);
