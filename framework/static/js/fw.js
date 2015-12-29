@@ -1163,7 +1163,7 @@ fw.getQueryString = function(name) {
 				data: {
 					action: 'fw_backend_options_render',
 					options: JSON.stringify(this.get('options')),
-					values: typeof values == 'undefined' ? this.get('values') : values,
+					values: JSON.stringify(typeof values == 'undefined' ? this.get('values') : values),
 					data: {
 						name_prefix: 'fw_edit_options_modal',
 						id_prefix: 'fw-edit-options-modal-'
