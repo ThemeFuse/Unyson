@@ -1,5 +1,5 @@
 === Unyson ===
-Contributors: unyson, themefusecom
+Contributors: unyson
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.4
@@ -11,7 +11,7 @@ A simple and easy way to build a powerful website.
 
 == Description ==
 
-[Unyson](http://unyson.themefuse.com/) - A free drag & drop framework that comes with a bunch of built in extensions that will help you develop premium themes fast & easy.
+[Unyson](http://unyson.io/) - A free drag & drop framework that comes with a bunch of built in extensions that will help you develop premium themes fast & easy.
 
 [vimeo https://vimeo.com/113008662]
 
