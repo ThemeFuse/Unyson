@@ -69,7 +69,7 @@ jQuery(document).ready(function($){
 	}
 
 	/** Init tabs */
-	fwEvents.on('fw:options:init', function (data) {
+	(function(){
 		var htmlAttrName = 'data-fw-tab-html',
 			initTab = function($tab) {
 				var html;
@@ -81,25 +81,27 @@ jQuery(document).ready(function($){
 				}
 			};
 
-		data.$elements.find('.fw-options-tabs-wrapper:not(.initialized)')
-			.tabs({
-				create: function(event, ui) {
-					initTab(ui.panel);
-				},
-				activate: function(event, ui) {
-					initTab(ui.newPanel);
-				}
-			})
-			.each(function(){
-				var $this = $(this);
+		fwEvents.on('fw:options:init', function (data) {
+			data.$elements.find('.fw-options-tabs-wrapper:not(.initialized)')
+				.tabs({
+					create: function(event, ui) {
+						initTab(ui.panel);
+					},
+					activate: function(event, ui) {
+						initTab(ui.newPanel);
+					}
+				})
+				.each(function(){
+					var $this = $(this);
 
-				if (!$this.parent().closest('.fw-options-tabs-wrapper').length) {
-					// add special class to first level tabs
-					$this.addClass('fw-options-tabs-first-level');
-				}
-			})
-			.addClass('initialized');
-	});
+					if (!$this.parent().closest('.fw-options-tabs-wrapper').length) {
+						// add special class to first level tabs
+						$this.addClass('fw-options-tabs-first-level');
+					}
+				})
+				.addClass('initialized');
+		});
+	})();
 
 	/** Init boxes */
 	fwEvents.on('fw:options:init', function (data) {
