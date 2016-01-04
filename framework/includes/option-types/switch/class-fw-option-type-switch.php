@@ -110,11 +110,11 @@ class FW_Option_Type_Switch extends FW_Option_Type
 		} else {
 			$tmp_json = json_decode($input_value);
 
-			/*
-			 * Check if parsing is successfuly.
+			/**
+			 * Check if parsing is successful.
 			 * If it's not - leave $input_value as it is.
 			 */
-			if (function_exists('json_last_error') && json_last_error() === JSON_ERROR_NONE) {
+			if (!is_null($tmp_json)) {
 				$input_value = $tmp_json;
 			}
 	
