@@ -1518,7 +1518,7 @@ function fw_string_to_icon_html($icon, array $attributes = array()) {
  * @since 2.4.10
  */
 function fw_get_json_last_error_message() {
-	switch (json_last_error()) {
+	switch (function_exists('json_last_error') ? json_last_error() : -1) {
 		case JSON_ERROR_NONE:
 			return null; // __('No errors', 'fw');
 			break;
