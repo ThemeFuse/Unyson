@@ -19,18 +19,20 @@
 			<?php
 			foreach ($tabs as $tab_id => &$tab):
 				// prepare attributes
-			{
-				$attr = isset($tab['attr']) ? $tab['attr'] : array();
+				{
+					$attr = isset($tab['attr']) ? $tab['attr'] : array();
 
-				$attr['id'] = 'fw-options-tab-'. esc_attr($tab_id);
+					$attr['id'] = 'fw-options-tab-'. esc_attr($tab_id);
 
-				if (!isset($attr['class'])) {
-					$attr['class'] = 'fw-options-tab';
-				} else {
-					$attr['class'] = 'fw-options-tab '. $attr['class'];
+					if (!isset($attr['class'])) {
+						$attr['class'] = 'fw-options-tab';
+					} else {
+						$attr['class'] = 'fw-options-tab '. $attr['class'];
+					}
+
+					$attr['data-fw-tab-html'] = fw()->backend->render_options($tab['options'], $values, $options_data);
 				}
-			}
-				?><div <?php echo fw_attr_to_html($attr) ?>><?php echo fw()->backend->render_options($tab['options'], $values, $options_data) ?></div><?php
+				?><div <?php echo fw_attr_to_html($attr) ?>></div><?php
 				unset($tabs[$tab_id]); // free memory after printed and not needed anymore
 			endforeach;
 			unset($tab);

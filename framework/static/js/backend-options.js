@@ -70,22 +70,38 @@ jQuery(document).ready(function($){
 
 	/** Init tabs */
 	fwEvents.on('fw:options:init', function (data) {
-		var $elements = data.$elements.find('.fw-options-tabs-wrapper:not(.initialized)');
+		var htmlAttrName = 'data-fw-tab-html';
 
-		if ($elements.length) {
-			$elements.tabs();
+		data.$elements.find('.fw-options-tabs-wrapper:not(.initialized)')
+			.tabs({
+				create: function(event, ui) {
+					var $tab = ui.panel, html;
 
-			$elements.each(function(){
+					if (html = $tab.attr(htmlAttrName)) {
+						fwEvents.trigger('fw:options:init', {
+							$elements: $tab.removeAttr(htmlAttrName).html(html)
+						});
+					}
+				},
+				activate: function(event, ui) {
+					var $tab = ui.newPanel, html;
+
+					if (html = $tab.attr(htmlAttrName)) {
+						fwEvents.trigger('fw:options:init', {
+							$elements: $tab.removeAttr(htmlAttrName).html(html)
+						});
+					}
+				}
+			})
+			.each(function(){
 				var $this = $(this);
 
 				if (!$this.parent().closest('.fw-options-tabs-wrapper').length) {
 					// add special class to first level tabs
 					$this.addClass('fw-options-tabs-first-level');
 				}
-			});
-
-			$elements.addClass('initialized');
-		}
+			})
+			.addClass('initialized');
 	});
 
 	/** Init boxes */

@@ -1286,7 +1286,6 @@ final class _FW_Component_Backend {
 		fw_render_view( fw_get_framework_directory( '/views/backend-settings-form.php' ), array(
 			'options'              => $options,
 			'values'               => $values,
-			'focus_tab_input_name' => '_focus_tab',
 			'reset_input_name'     => '_fw_reset_options',
 			'ajax_submit'          => $ajax_submit,
 			'side_tabs'            => $side_tabs,
@@ -1327,17 +1326,6 @@ final class _FW_Component_Backend {
 		}
 
 		$redirect_url = fw_current_url();
-
-		{
-			$focus_tab_input_name = '_focus_tab';
-			$focus_tab_id         = trim( FW_Request::POST( $focus_tab_input_name ) );
-
-			if ( ! empty( $focus_tab_id ) ) {
-				$redirect_url = add_query_arg( $focus_tab_input_name, $focus_tab_id,
-					remove_query_arg( $focus_tab_input_name, $redirect_url )
-				);
-			}
-		}
 
 		$data['redirect'] = $redirect_url;
 
