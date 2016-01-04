@@ -25,7 +25,10 @@
 		var dynamicId = $textarea.attr('id');
 		if (dynamicId === "textarea_dynamic_id") {
 
-			window.tinyMCE.execCommand("mceRemoveEditor", false, dynamicId);
+			if(window.tinyMCE !== undefined){
+				window.tinyMCE.execCommand("mceRemoveEditor", false, dynamicId);
+			}
+
 			$('#qt_' + dynamicId + '_toolbar').remove();
 
 			var id = 'wp-editor-textarea-' + fw.randomMD5();

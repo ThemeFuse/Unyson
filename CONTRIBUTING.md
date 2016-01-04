@@ -22,4 +22,4 @@ At this point you're waiting on us to merge your pull request. We'll review all 
 
 * [General GitHub documentation](http://help.github.com/)
 * [GitHub pull request documentation](http://help.github.com/send-pull-requests/)
-* [Unyson Docs](http://unyson-docs.themefuse.com/)
+* [Unyson Docs](http://manual.unyson.io/)

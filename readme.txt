@@ -1,9 +1,9 @@
 === Unyson ===
-Contributors: unyson, themefusecom
+Contributors: unyson
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.4
-Stable tag: 2.4.14
+Stable tag: 2.4.15
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -11,7 +11,7 @@ A simple and easy way to build a powerful website.
 
 == Description ==
 
-[Unyson](http://unyson.themefuse.com/) - A free drag & drop framework that comes with a bunch of built in extensions that will help you develop premium themes fast & easy.
+[Unyson](http://unyson.io/) - A free drag & drop framework that comes with a bunch of built in extensions that will help you develop premium themes fast & easy.
 
 [vimeo https://vimeo.com/113008662]
 
@@ -82,6 +82,9 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.4.15 =
+* Fixed [#1164](https://github.com/ThemeFuse/Unyson/issues/1164), [#1080](https://github.com/ThemeFuse/Unyson/issues/1080), [#1006](https://github.com/ThemeFuse/Unyson/issues/1006), [#1139](https://github.com/ThemeFuse/Unyson/pull/1139), [#1152](https://github.com/ThemeFuse/Unyson/pull/1152), [#1157](https://github.com/ThemeFuse/Unyson/pull/1157)
 
 = 2.4.14 =
 * Customizer options: Added `wp-customizer-args` parameter. [#1097](https://github.com/ThemeFuse/Unyson/issues/1097), [#1082](https://github.com/ThemeFuse/Unyson/issues/1082)

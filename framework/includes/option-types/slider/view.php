@@ -1,5 +1,5 @@
-<?php if (!defined('FW')) {
-	die('Forbidden');
+<?php if ( ! defined( 'FW' ) ) {
+	die( 'Forbidden' );
 }
 /**
  * @var  string $id
@@ -12,8 +12,8 @@
 	$wrapper_attr = $option['attr'];
 
 	unset(
-	$wrapper_attr['value'],
-	$wrapper_attr['name']
+		$wrapper_attr['value'],
+		$wrapper_attr['name']
 	);
 }
 
@@ -23,7 +23,6 @@
 }
 
 ?>
-<div <?php echo fw_attr_to_html($wrapper_attr); ?>>
-	<div class="fw-irs-range-slider"></div>
-	<input class="fw-irs-range-slider-hidden-input" type="hidden" <?php echo fw_attr_to_html($input_attr); ?>/>
+<div <?php echo fw_attr_to_html( $wrapper_attr ); ?>>
+	<input class="fw-irs-range-slider" type="text" <?php echo fw_attr_to_html( $input_attr ); ?>/>
 </div>

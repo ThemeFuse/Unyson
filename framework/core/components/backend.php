@@ -1120,6 +1120,10 @@ final class _FW_Component_Backend {
 		{
 			if ( isset( $_POST['values'] ) ) {
 				$values = FW_Request::POST( 'values' );
+
+				if (is_string($values)) {
+					$values = json_decode($values, true);
+				}
 			} else {
 				$values = array();
 			}

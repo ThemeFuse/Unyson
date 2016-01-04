@@ -1,4 +1,4 @@
-# Unyson Framework [ ![Download](https://static.md/c1cea378c63f839fbede18687134423f.jpeg) ](https://github.com/ThemeFuse/Unyson/releases/latest)
+# [Unyson](https://wordpress.org/plugins/unyson/) Framework [ ![Download](https://static.md/c1cea378c63f839fbede18687134423f.jpeg) ](https://github.com/ThemeFuse/Unyson/releases/latest)
 
 [Unyson](http://unyson.io/) is a framework for [WordPress](http://wordpress.org/) that facilitates the development of a theme.
 

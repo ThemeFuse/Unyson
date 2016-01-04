@@ -91,6 +91,22 @@ class FW_Option_Type_Radio_Text extends FW_Option_Type
 
 		$option['choices'][ $this->custom_choice_key ] = '';
 
+
+		/*
+		 * Sometimes $input_value comes as a string because when you serialize
+		 * the form with js, it gives you the value as a string
+		 * and we need to treat this case accordingly.
+		 */
+		if (is_string($input_value)) {
+			$tmp_array = array(
+				'predefined' => $input_value,
+				'custom' => $input_value
+			);
+
+			$input_value = $tmp_array;
+		}
+
+
 		$selected = fw()->backend->option_type( 'radio' )->get_value_from_input( array(
 				'value' => $option['value'],
 				'choices' => $option['choices']

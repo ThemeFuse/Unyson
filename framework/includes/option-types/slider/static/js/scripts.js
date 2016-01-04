@@ -1,15 +1,5 @@
 (function ($, fwEvents) {
 	var defaults = {
-		onChange: function (data) {
-			var from = (data.from_value) ? data.from_value : data.from;
-			data.input.next('.fw-irs-range-slider-hidden-input').val(from);
-			data.input.closest('.fw-option-type-slider').find('span span.irs-slider.single').html(from);
-		},
-		onStart: function (data) {
-			var from = (data.from_value) ? data.from_value : data.from;
-			data.input.closest('.fw-option-type-slider').find('span span.irs-slider.single').html(from);
-			data.input.closest('.fw-option-type-slider').find('.irs-bar-edge').remove();
-		},
 		grid: true
 	};
 
