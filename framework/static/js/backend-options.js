@@ -5,6 +5,7 @@
 var fwBackendOptions = {
 	/**
 	 * Open a tab or sub-tab
+	 * @deprecated Tabs are lazy loaded https://github.com/ThemeFuse/Unyson/issues/1174
 	 */
 	openTab: function(tabId) {
 		if (!tabId) {
