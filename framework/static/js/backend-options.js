@@ -99,7 +99,28 @@ jQuery(document).ready(function($){
 						$this.addClass('fw-options-tabs-first-level');
 					}
 				})
-				.addClass('initialized');
+				.addClass('initialized')
+				.closest('form')
+				.off('submit.fw-tabs')
+				.on('submit.fw-tabs', function(){
+					// All options needs to be present in html to be sent in POST on submit
+					{
+						var $tabs,
+							selector = '.fw-options-tab['+ htmlAttrName +']',
+							fwLoadingId = 'fw-tabs-render';
+
+						fw.loading.show(fwLoadingId);
+
+						// initialized tabs can contain tabs, so init recursive until nothing is found
+						while ( ($tabs = $(this).find(selector)).length ) {
+							$tabs.each(function(){
+								initTab($(this));
+							});
+						}
+
+						fw.loading.hide(fwLoadingId);
+					}
+				});
 		});
 	})();
 
