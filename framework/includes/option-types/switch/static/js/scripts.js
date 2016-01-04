@@ -4,6 +4,7 @@ jQuery(document).ready(function ($) {
 
 	fwEvents.on('fw:options:init', function (data) {
 		data.$elements.find('.'+ optionTypeClass +':not(.fw-option-initialized)')
+			.addClass('fw-option-initialized')
 			.find('input[type="checkbox"]')
 			.on('change', function(){
 				var $this = $(this),
@@ -29,7 +30,6 @@ jQuery(document).ready(function ($) {
 					value: JSON.parse(value)
 				});
 			})
-			.adaptiveSwitch()
-			.addClass('fw-option-initialized');
+			.adaptiveSwitch();
 	});
 });
