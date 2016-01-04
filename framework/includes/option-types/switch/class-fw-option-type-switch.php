@@ -114,7 +114,7 @@ class FW_Option_Type_Switch extends FW_Option_Type
 			 * Check if parsing is successfuly.
 			 * If it's not - leave $input_value as it is.
 			 */
-			if (json_last_error() === JSON_ERROR_NONE) {
+			if (function_exists('json_last_error') && json_last_error() === JSON_ERROR_NONE) {
 				$input_value = $tmp_json;
 			}
 	
