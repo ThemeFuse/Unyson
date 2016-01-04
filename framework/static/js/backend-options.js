@@ -70,27 +70,24 @@ jQuery(document).ready(function($){
 
 	/** Init tabs */
 	fwEvents.on('fw:options:init', function (data) {
-		var htmlAttrName = 'data-fw-tab-html';
+		var htmlAttrName = 'data-fw-tab-html',
+			initTab = function($tab) {
+				var html;
+
+				if (html = $tab.attr(htmlAttrName)) {
+					fwEvents.trigger('fw:options:init', {
+						$elements: $tab.removeAttr(htmlAttrName).html(html)
+					});
+				}
+			};
 
 		data.$elements.find('.fw-options-tabs-wrapper:not(.initialized)')
 			.tabs({
 				create: function(event, ui) {
-					var $tab = ui.panel, html;
-
-					if (html = $tab.attr(htmlAttrName)) {
-						fwEvents.trigger('fw:options:init', {
-							$elements: $tab.removeAttr(htmlAttrName).html(html)
-						});
-					}
+					initTab(ui.panel);
 				},
 				activate: function(event, ui) {
-					var $tab = ui.newPanel, html;
-
-					if (html = $tab.attr(htmlAttrName)) {
-						fwEvents.trigger('fw:options:init', {
-							$elements: $tab.removeAttr(htmlAttrName).html(html)
-						});
-					}
+					initTab(ui.newPanel);
 				}
 			})
 			.each(function(){
