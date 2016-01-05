@@ -153,11 +153,14 @@ final class _FW_Component_Theme
 		try {
 			$config = FW_Cache::get($cache_key);
 		} catch (FW_Cache_Not_Found_Exception $e) {
+			// default values
 			$config = array(
 				/** Toggle Theme Settings form ajax submit */
 				'settings_form_ajax_submit' => true,
 				/** Toggle Theme Settings side tabs */
 				'settings_form_side_tabs' => false,
+				/** Toggle Tabs rendered all at once, or initialized only on open/display */
+				'lazy_tabs' => true,
 			);
 
 			if (file_exists(fw_get_template_customizations_directory('/theme/config.php'))) {

@@ -4,6 +4,8 @@
  * @var array $values
  * @var array $options_data
  */
+
+$lazy_tabs = fw()->theme->get_config('lazy_tabs');
 ?>
 <div class="fw-options-tabs-wrapper">
 	<div class="fw-options-tabs-list">
@@ -30,9 +32,15 @@
 						$attr['class'] = 'fw-options-tab '. $attr['class'];
 					}
 
-					$attr['data-fw-tab-html'] = fw()->backend->render_options($tab['options'], $values, $options_data);
+					if ($lazy_tabs) {
+						$attr['data-fw-tab-html'] = fw()->backend->render_options(
+							$tab['options'], $values, $options_data
+						);
+					}
 				}
-				?><div <?php echo fw_attr_to_html($attr) ?>></div><?php
+				?><div <?php echo fw_attr_to_html($attr) ?>><?php
+					echo $lazy_tabs ? '' : fw()->backend->render_options($tab['options'], $values, $options_data);
+				?></div><?php
 				unset($tabs[$tab_id]); // free memory after printed and not needed anymore
 			endforeach;
 			unset($tab);

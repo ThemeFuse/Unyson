@@ -375,6 +375,10 @@ final class _FW_Component_Backend {
 				fw()->manifest->get_version(),
 				true
 			);
+
+			wp_localize_script( 'fw', '_fw_backend_options_localized', array(
+				'lazy_tabs' => fw()->theme->get_config('lazy_tabs')
+			) );
 		}
 
 		{

@@ -4,29 +4,14 @@
 
 var fwBackendOptions = {
 	/**
-	 * Open a tab or sub-tab
 	 * @deprecated Tabs are lazy loaded https://github.com/ThemeFuse/Unyson/issues/1174
 	 */
-	openTab: function(tabId) {
-		if (!tabId) {
-			return;
-		}
-
-		var $tabLink = jQuery(".fw-options-tabs-wrapper > .fw-options-tabs-list > ul > li > a[href=\'#"+ tabId +"\']");
-
-		while ($tabLink.length) {
-			$tabLink.trigger("click");
-			$tabLink = $tabLink
-				.closest(".fw-options-tabs-wrapper").parent().closest(".fw-options-tabs-wrapper")
-				.find("> .fw-options-tabs-list > ul > li > a[href=\'#"+ $tabLink.closest(".fw-options-tab").attr("id") +"\']");
-		}
-
-		// click again on focus tab to update the input value
-		jQuery(".fw-options-tabs-wrapper > .fw-options-tabs-list > ul > li > a[href=\'#"+ tabId +"\']").trigger("click");;
-	}
+	openTab: function(tabId) { console.warn('deprecated'); }
 };
 
 jQuery(document).ready(function($){
+	var localized = _fw_backend_options_localized;
+
 	/**
 	 * Functions
 	 */
@@ -83,16 +68,45 @@ jQuery(document).ready(function($){
 			};
 
 		fwEvents.on('fw:options:init', function (data) {
-			data.$elements.find('.fw-options-tabs-wrapper:not(.initialized)')
-				.tabs({
-					create: function(event, ui) {
-						initTab(ui.panel);
-					},
-					activate: function(event, ui) {
-						initTab(ui.newPanel);
-					}
-				})
-				.each(function(){
+			var $tabs = data.$elements.find('.fw-options-tabs-wrapper:not(.initialized)');
+
+			if (localized.lazy_tabs) {
+				$tabs
+					.tabs({
+						create: function (event, ui) {
+							initTab(ui.panel);
+						},
+						activate: function (event, ui) {
+							initTab(ui.newPanel);
+						}
+					})
+					.closest('form')
+					.off('submit.fw-tabs')
+					.on('submit.fw-tabs', function () {
+						// All options needs to be present in html to be sent in POST on submit
+						{
+							var $tabs,
+								selector = '.fw-options-tab[' + htmlAttrName + ']',
+								fwLoadingId = 'fw-tabs-render';
+
+							fw.loading.show(fwLoadingId);
+
+							// initialized tabs can contain tabs, so init recursive until nothing is found
+							while (($tabs = $(this).find(selector)).length) {
+								$tabs.each(function () {
+									initTab($(this));
+								});
+							}
+
+							fw.loading.hide(fwLoadingId);
+						}
+					});
+			} else {
+				$tabs.tabs();
+			}
+
+			$tabs
+				.each(function () {
 					var $this = $(this);
 
 					if (!$this.parent().closest('.fw-options-tabs-wrapper').length) {
@@ -100,28 +114,7 @@ jQuery(document).ready(function($){
 						$this.addClass('fw-options-tabs-first-level');
 					}
 				})
-				.addClass('initialized')
-				.closest('form')
-				.off('submit.fw-tabs')
-				.on('submit.fw-tabs', function(){
-					// All options needs to be present in html to be sent in POST on submit
-					{
-						var $tabs,
-							selector = '.fw-options-tab['+ htmlAttrName +']',
-							fwLoadingId = 'fw-tabs-render';
-
-						fw.loading.show(fwLoadingId);
-
-						// initialized tabs can contain tabs, so init recursive until nothing is found
-						while ( ($tabs = $(this).find(selector)).length ) {
-							$tabs.each(function(){
-								initTab($(this));
-							});
-						}
-
-						fw.loading.hide(fwLoadingId);
-					}
-				});
+				.addClass('initialized');
 		});
 	})();
 
