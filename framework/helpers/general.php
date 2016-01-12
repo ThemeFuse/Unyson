@@ -1143,8 +1143,7 @@ function fw_current_user_can($capabilities, $default_value = null)
  * @param int $seconds
  * @return string
  */
-function fw_human_time($seconds)
-{
+function fw_human_time($seconds)  {
 	static $translations = null;
 	if ($translations === null) {
 		$translations = array(
@@ -1188,6 +1187,39 @@ function fw_human_time($seconds)
 		$number_of_units = floor($seconds / $unit);
 
 		return $number_of_units .' '. $translations[ $translation_key . ($number_of_units != 1 ? 's' : '') ];
+	}
+}
+
+/**
+ * Convert bytes to human readable format
+ *
+ * @param integer $bytes Size in bytes to convert
+ * @param integer $precision
+ * @return string
+ * @since 2.4.17
+ */
+function fw_human_bytes($bytes, $precision = 2) {
+	$kilobyte = 1024;
+	$megabyte = $kilobyte * 1024;
+	$gigabyte = $megabyte * 1024;
+	$terabyte = $gigabyte * 1024;
+
+	if (($bytes >= 0) && ($bytes < $kilobyte)) {
+		return $bytes . ' B';
+
+	} elseif (($bytes >= $kilobyte) && ($bytes < $megabyte)) {
+		return round($bytes / $kilobyte, $precision) . ' KB';
+
+	} elseif (($bytes >= $megabyte) && ($bytes < $gigabyte)) {
+		return round($bytes / $megabyte, $precision) . ' MB';
+
+	} elseif (($bytes >= $gigabyte) && ($bytes < $terabyte)) {
+		return round($bytes / $gigabyte, $precision) . ' GB';
+
+	} elseif ($bytes >= $terabyte) {
+		return round($bytes / $terabyte, $precision) . ' TB';
+	} else {
+		return $bytes . ' B';
 	}
 }
 
