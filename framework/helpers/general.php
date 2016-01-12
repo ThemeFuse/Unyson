@@ -1297,7 +1297,7 @@ function fw_oembed_get($url, $args = array()) {
 
 	if (!empty($args['width']) and !empty($args['height']) and class_exists('DOMDocument') and !empty($html)) {
 		$dom_element = new DOMDocument();
-		$dom_element->loadHTML($html);
+		@$dom_element->loadHTML($html);
 		$obj = $dom_element->getElementsByTagName('iframe')->item(0);
 		$obj->setAttribute('width', $args['width']);
 		$obj->setAttribute('height', $args['height']);
