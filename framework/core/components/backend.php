@@ -1011,7 +1011,7 @@ final class _FW_Component_Backend {
 		}
 
 		foreach ( $separate_meta_options as $meta_key => $option_value ) {
-			update_post_meta( $post_id, $meta_key, $option_value );
+			fw_update_post_meta($post_id, $meta_key, $option_value );
 		}
 
 		return true;
