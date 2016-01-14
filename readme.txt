@@ -3,7 +3,7 @@ Contributors: unyson
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.4
-Stable tag: 2.4.16
+Stable tag: 2.4.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,6 +82,11 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.4.17 =
+* Fixed [#1197](https://github.com/ThemeFuse/Unyson/issues/1197)
+* Added `'oembed'` option type ([docs](http://manual.unyson.io/en/latest/options/built-in-option-types.html#oembed))
+* fixed: `fw_get_db_customizer_option()` infinite recursion when called with default value inside `customizer.php`
 
 = 2.4.16 =
 * Fixed [#1178](https://github.com/ThemeFuse/Unyson/issues/1178), [#1179](https://github.com/ThemeFuse/Unyson/issues/1179), [#1169](https://github.com/ThemeFuse/Unyson/issues/1169), [#1085](https://github.com/ThemeFuse/Unyson/issues/1085)
