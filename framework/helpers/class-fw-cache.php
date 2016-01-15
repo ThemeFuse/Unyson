@@ -22,12 +22,11 @@
  */
 class FW_Cache
 {
-	protected static $cache = array();
-
 	/**
-	 * @var bool
+	 * The actual cache
+	 * @var array
 	 */
-	protected static $is_enabled;
+	protected static $cache = array();
 
 	/**
 	 * If the PHP will have less that this memory, the cache will try to delete parts from its array to free memory
@@ -41,7 +40,32 @@ class FW_Cache
 	 */
 	protected static $memory_limit = null;
 
+	/**
+	 * A special value that is used to detect if value was found in cache
+	 * We can't use null|false because these can be values set by user and we can't treat them as not existing values
+	 */
 	protected static $not_found_value;
+
+	/**
+	 * The amount of times the data was already stored in the cache.
+	 * @var int
+	 * @since 2.4.17
+	 */
+	protected static $hits = 0;
+
+	/**
+	 * Amount of times the cache did not have the value in cache.
+	 * @var int
+	 * @since 2.4.17
+	 */
+	protected static $misses = 0;
+
+	/**
+	 * Amount of times the cache free was called.
+	 * @var int
+	 * @since 2.4.17
+	 */
+	protected static $freed = 0;
 
 	protected static function get_memory_limit()
 	{
@@ -74,16 +98,86 @@ class FW_Cache
 	 */
 	public static function _init()
 	{
-		self::$is_enabled = function_exists('register_tick_function');
 		self::$not_found_value = new FW_Cache_Not_Found_Exception();
+
+		/**
+		 * Listen often triggered hooks to clear the memory
+		 * instead of tick function https://github.com/ThemeFuse/Unyson/issues/1197
+		 * @since 2.4.17
+		 */
+		foreach (array(
+			'query' => true,
+			'plugins_loaded' => true,
+			'wp_get_object_terms' => true,
+			'created_term' => true,
+			'wp_upgrade' => true,
+			'added_option' => true,
+			'updated_option' => true,
+			'deleted_option' => true,
+			'wp_after_admin_bar_render' => true,
+			'http_response' => true,
+			'oembed_result' => true,
+			'customize_post_value_set' => true,
+			'customize_save_after' => true,
+			'customize_render_panel' => true,
+			'customize_render_control' => true,
+			'customize_render_section' => true,
+			'role_has_cap' => true,
+			'user_has_cap' => true,
+			'theme_page_templates' => true,
+			'pre_get_users' => true,
+			'request' => true,
+			'send_headers' => true,
+			'updated_usermeta' => true,
+			'added_usermeta' => true,
+			'image_memory_limit' => true,
+			'upload_dir' => true,
+			'wp_head' => true,
+			'wp_footer' => true,
+			'wp' => true,
+			'wp_init' => true,
+			'fw_init' => true,
+			'init' => true,
+			'updated_postmeta' => true,
+			'deleted_postmeta' => true,
+			'setted_transient' => true,
+			'registered_post_type' => true,
+			'wp_count_posts' => true,
+			'wp_count_attachments' => true,
+			'after_delete_post' => true,
+			'post_updated' => true,
+			'wp_insert_post' => true,
+			'deleted_post' => true,
+			'clean_post_cache' => true,
+			'wp_restore_post_revision' => true,
+			'wp_delete_post_revision' => true,
+			'get_term' => true,
+			'edited_term_taxonomies' => true,
+			'deleted_term_taxonomy' => true,
+			'edited_terms' => true,
+			'created_term' => true,
+			'clean_term_cache' => true,
+			'edited_term_taxonomy' => true,
+			'switch_theme' => true,
+			'wp_get_update_data' => true,
+			'clean_user_cache' => true,
+			'process_text_diff_html' => true,
+		) as $hook => $tmp) {
+			add_filter($hook, array(__CLASS__, 'free_memory'), 9999);
+		}
 	}
 
+	/**
+	 * This method does nothing @since 2.4.17
+	 * but we can't delete it because it's public and maybe somebody is calling it
+	 * @return bool
+	 */
 	public static function is_enabled()
 	{
-		return self::$is_enabled;
+		return true;
 	}
 
-	public static function free_memory()
+	public static function free_memory($dummy = null)
 	{
 		while (self::memory_exceeded() && !empty(self::$cache)) {
 			reset(self::$cache);
@@ -92,6 +186,13 @@ class FW_Cache
 
 			unset(self::$cache[$key]);
 		}
+
+		++self::$freed;
+
+		/**
+		 * This method is used add_filter() so to not break anything return filter value
+		 */
+		return $dummy;
 	}
 
 	/**
@@ -101,7 +202,7 @@ class FW_Cache
 	 */
 	public static function set($keys, $value, $keys_delimiter = '/')
 	{
-		if (!self::$is_enabled) {
+		if (!self::is_enabled()) {
 			return;
 		}
 
@@ -149,10 +250,14 @@ class FW_Cache
 		self::free_memory();
 
 		if ($value === self::$not_found_value) {
-			throw new FW_Cache_Not_Found_Exception();
-		}
+			++self::$misses;
 
-		return $value;
+			throw new FW_Cache_Not_Found_Exception();
+		} else {
+			++self::$hits;
+
+			return $value;
+		}
 	}
 
 	/**
@@ -162,15 +267,29 @@ class FW_Cache
 	{
 		self::$cache = array();
 	}
+
+	/**
+	 * Debug information
+	 * <?php add_action('admin_footer', function(){ FW_Cache::stats(); });
+	 * @since 2.4.17
+	 */
+	public static function stats() {
+		echo '<div style="z-index: 10000; position: relative; background: #fff; padding: 15px;">';
+		echo '<p>';
+		echo '<strong>Cache Hits:</strong> '. self::$hits .'<br />';
+		echo '<strong>Cache Misses:</strong> '. self::$misses .'<br />';
+		echo '<strong>Cache Freed:</strong> '. self::$freed .'<br />';
+		echo '<strong>PHP Memory Peak Usage:</strong> '. fw_human_bytes(memory_get_peak_usage(false)) .'<br />';
+		echo '</p>';
+		echo '<ul>';
+		foreach (self::$cache as $group => $cache) {
+			echo "<li><strong>Group:</strong> $group - ( " . number_format( strlen( serialize( $cache ) ) / KB_IN_BYTES, 2 ) . 'k )</li>';
+		}
+		echo '</ul>';
+		echo '</div>';
+	}
 }
 
 class FW_Cache_Not_Found_Exception extends Exception {}
 
 FW_Cache::_init();
-
-// auto free_memory() every X ticks
-if (FW_Cache::is_enabled()) {
-	declare(ticks=3000);
-
-	register_tick_function(array('FW_Cache', 'free_memory'));
-}

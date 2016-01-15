@@ -4,4 +4,4 @@ $manifest = array();
 
 $manifest['name'] = __('Unyson', 'fw');
 
-$manifest['version'] = '2.4.16';
+$manifest['version'] = '2.4.17';

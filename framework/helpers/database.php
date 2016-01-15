@@ -558,12 +558,12 @@
 	 */
 	function fw_get_db_customizer_option( $option_id = null, $default_value = null ) {
 		// note: this contains only changed controls/options
-		$all_db_values = get_theme_mod(FW_Option_Type::get_default_name_prefix(), null);
+		$db_values = get_theme_mod(FW_Option_Type::get_default_name_prefix(), null);
 
 		if (
 			!is_null($default_value)
 			&&
-			is_null($option_id ? fw_akg($option_id, $all_db_values) : $all_db_values)
+			is_null($option_id ? fw_akg($option_id, $db_values) : $db_values)
 		) {
 			/**
 			 * Default value was provided in case db value is empty.
@@ -575,46 +575,44 @@
 			return $default_value;
 		}
 
-		// extract options default values
-		{
-			$cache_key = 'fw_default_options_values/customizer';
+		if (is_null($db_values)) {
+			$db_values = array();
+		}
 
-			try {
-				$all_default_values = FW_Cache::get( $cache_key );
-			} catch ( FW_Cache_Not_Found_Exception $e ) {
-				// extract the default values from options array
-				$all_default_values = fw_get_options_values_from_input(
-					fw()->theme->get_customizer_options(),
-					array()
-				);
+		if (
+			is_null($option_id)
+			||
+			(
+				($base_key = explode('/', $option_id)) // note: option_id can be a multi-key 'a/b/c'
+				&&
+				($base_key = array_shift($base_key))
+				&&
+				!array_key_exists($base_key, $db_values)
+			)
+		) {
+			// extract options default values
+			{
+				$cache_key = 'fw_default_options_values/customizer';
 
-				FW_Cache::set( $cache_key, $all_default_values );
+				try {
+					$default_values = FW_Cache::get( $cache_key );
+				} catch ( FW_Cache_Not_Found_Exception $e ) {
+					// extract the default values from options array
+					$default_values = fw_get_options_values_from_input(
+						fw()->theme->get_customizer_options(),
+						array()
+					);
+
+					FW_Cache::set( $cache_key, $default_values );
+				}
 			}
+
+			$db_values = array_merge($default_values, $db_values);
 		}
 
-		if (is_null($all_db_values)) {
-			$all_db_values = array();
-		}
-
-		if (is_null($option_id)) {
-			return array_merge(
-				$all_default_values,
-				$all_db_values
-			);
-		} else {
-			$base_key = explode('/', $option_id); // note: option_id can be a multi-key 'a/b/c'
-			$base_key = array_shift($base_key);
-
-			$all_db_values = array_key_exists($base_key, $all_db_values)
-				? $all_db_values
-				: $all_default_values;
-
-			return fw_akg(
-				$option_id,
-				$all_db_values,
-				$default_value
-			);
-		}
+		return is_null($option_id)
+			? $db_values
+			: fw_akg($option_id, $db_values, $default_value);
 	}
 
 	/**

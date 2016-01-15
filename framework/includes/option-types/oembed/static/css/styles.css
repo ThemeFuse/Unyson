@@ -1,0 +1,19 @@
+.fw-oembed-preview img,
+.fw-oembed-preview iframe,
+.fw-oembed-preview embed
+{
+	max-width: 100%;
+	vertical-align: middle;
+}
+
+.fw-oembed-preview a {
+	display: inline-block;
+}
+
+.fw-oembed-preview img {
+	display: block;
+	height: auto;
+}
+.fw-oembed-preview {
+	padding-top: 7px;
+}
