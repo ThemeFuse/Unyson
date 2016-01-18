@@ -748,20 +748,43 @@
 	}
 }
 
-function fw_db_update_big_data($table_name, array $cols, $where) {
+function fw_db_update_big_data($table, array $cols, $where) {
 	/** @var WPDB $wpdb */
 	global $wpdb;
 
 	/**
-	 * Initially extract from all columns a minimum length (this will include int, varchar and other short types)
-	 * then do second loop and extract as much as possible from each column (this will include long text types)
-	 */
-	$initial_length = 256;
-
-	/**
 	 * Total length of all columns allowed per one update
 	 */
-	$max_length = 950000;
+	$max_length = 900000;
+
+	/**
+	 * Sort columns by length
+	 */
+	{
+		$cols_total_length = 0;
+		$cols_lengths = array();
+
+		foreach (array_keys($cols) as $col_name) {
+			$col_length = mb_strlen( $cols[ $col_name ] );
+			$cols_lengths[ $col_length ] = $col_name;
+			$cols_total_length += $col_length;
+		}
+
+		if ($cols_total_length <= $max_length) {
+			/**
+			 * Length limit not reached, do regular update
+			 */
+			//return $wpdb->update($table, $cols, $where); // fixme
+		}
+
+		ksort($cols_lengths, SORT_NUMERIC);
+
+		foreach ($cols_lengths as $col_name) {
+			$col_val = $cols[$col_name];
+			unset($cols[$col_name]);
+			$cols[$col_name] = $col_val;
+		}
+	}
 
 	$first_extract = true;
 	$first_update = true;
@@ -769,38 +792,43 @@ function fw_db_update_big_data($table_name, array $cols, $where) {
 	while ($cols) {
 		$row = array();
 		$available_length = $max_length;
-		$column_names = array_keys($cols);
+		$length_per_column = abs($available_length / count($cols));
+		$length_per_column_extra = 0; // not used length, available for the next columns
+		$col_names = array_keys($cols);
 
-		while ($column_name = array_shift($column_names)) {
-			$row[ $column_name ] = mb_substr( $cols[ $column_name ], 0, $first_extract ? $initial_length : $available_length );
-			$cols[ $column_name ] = mb_substr( $cols[ $column_name ], $column_length = mb_strlen($row[ $column_name ]) );
+		while ($col_name = array_shift($col_names)) {
+			$row[ $col_name ] = mb_substr( $cols[ $col_name ], 0, $length_per_column + $length_per_column_extra );
+			$column_length = mb_strlen($row[ $col_name ]);
+			$cols[ $col_name ] = mb_substr( $cols[ $col_name ], $column_length );
 
 			/**
 			 * If the string was cut between a slashed character, for e.g. 'hi\"' was cut 'hi\'
 			 * Append next characters until the slashing is closed
 			 */
-			if (($last_char = mb_substr($row[ $column_name ], -1)) === '\\') {
+			if (($last_char = mb_substr($row[ $col_name ], -1)) === '\\') {
 				$slashes_length = 0;
 
-				while ( $last_char === '\\' && ($last_char = mb_substr( $cols[ $column_name ], $slashes_length, 1 )) ) {
-					$row[ $column_name ] .= $last_char;
+				while ( $last_char === '\\' && ($last_char = mb_substr( $cols[ $col_name ], $slashes_length, 1 )) ) {
+					$row[ $col_name ] .= $last_char;
 					++$slashes_length;
 				}
 
 				if ($slashes_length) {
 					$column_length += $slashes_length;
-					$cols[ $column_name ] = mb_substr( $cols[ $column_name ], $slashes_length );
+					$cols[ $col_name ] = mb_substr( $cols[ $col_name ], $slashes_length );
 				}
 			}
 
-			if (empty($cols[ $column_name ])) {
-				unset($cols[ $column_name ]);
+			$length_per_column_extra += $length_per_column + $length_per_column_extra - $column_length;
+
+			if (empty($cols[ $col_name ])) {
+				unset($cols[ $col_name ]);
 			}
 
 			if (($available_length = $available_length - $column_length) < 1) {
 				if ($first_extract) { // should not happen, anyway check just in case
 					return new WP_Error(
-						'initial_update_failed', 'Initial update failed (table name: '. $table_name .')'
+						'initial_update_failed', 'Initial update failed (table name: '. $table .')'
 					);
 				} else {
 					break;
@@ -812,25 +840,25 @@ function fw_db_update_big_data($table_name, array $cols, $where) {
 
 		if ($first_update) {
 			$sql = array();
-			foreach ( array_keys( $row ) as $column_name ) {
-				$sql[] = '`' . esc_sql( $column_name ) . '` = ' . $wpdb->prepare( '%s', $row[ $column_name ] );
+			foreach ( array_keys( $row ) as $col_name ) {
+				$sql[] = '`' . esc_sql( $col_name ) . '` = ' . $wpdb->prepare( '%s', $row[ $col_name ] );
 			}
 			$sql = implode( ', ', $sql );
 		} else {
 			$sql = array();
-			foreach ( array_keys( $row ) as $column_name ) {
-				$sql[] = '`' . esc_sql( $column_name ) . '` = CONCAT( `' . esc_sql( $column_name ) . '`'
-				         . ' , ' . $wpdb->prepare( '%s', $row[ $column_name ] ) . ')';
+			foreach ( array_keys( $row ) as $col_name ) {
+				$sql[] = '`' . esc_sql( $col_name ) . '` = CONCAT( `' . esc_sql( $col_name ) . '`'
+				         . ' , ' . $wpdb->prepare( '%s', $row[ $col_name ] ) . ')';
 			}
 			$sql = implode( ', ', $sql );
 		}
 
-		$sql = implode( " \n", array( "UPDATE {$table_name} SET", $sql, 'WHERE ' . $where ) );
+		$sql = implode( " \n", array( "UPDATE {$table} SET", $sql, 'WHERE ' . $where ) );
 
 		fw_print($sql);
 		if ( false && false === $wpdb->query($sql) ) {
 			return new WP_Error(
-				'update_failed', 'Update failed (table name: '. $table_name .')'
+				'update_failed', 'Update failed (table name: '. $table .')'
 			);
 		}
 
