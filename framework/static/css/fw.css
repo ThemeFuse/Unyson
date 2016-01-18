@@ -2923,6 +2923,10 @@ body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 	transition-duration: .6s;
 }
 
+.fw-modal.fw-modal-open > .media-modal > .media-modal-close:focus {
+	outline: 0;
+}
+
 /* end: open animation */
 
 /* close animation */
