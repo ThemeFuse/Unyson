@@ -747,3 +747,97 @@
 		}
 	}
 }
+
+function fw_db_update_big_data($table_name, array $cols, $where) {
+	/** @var WPDB $wpdb */
+	global $wpdb;
+
+	/**
+	 * Initially extract from all columns a minimum length (this will include int, varchar and other short types)
+	 * then do second loop and extract as much as possible from each column (this will include long text types)
+	 */
+	$initial_length = 256;
+
+	/**
+	 * Total length of all columns allowed per one update
+	 */
+	$max_length = 950000;
+
+	$first_extract = true;
+	$first_update = true;
+
+	while ($cols) {
+		$row = array();
+		$available_length = $max_length;
+		$column_names = array_keys($cols);
+
+		while ($column_name = array_shift($column_names)) {
+			$row[ $column_name ] = mb_substr( $cols[ $column_name ], 0, $first_extract ? $initial_length : $available_length );
+			$cols[ $column_name ] = mb_substr( $cols[ $column_name ], $column_length = mb_strlen($row[ $column_name ]) );
+
+			/**
+			 * If the string was cut between a slashed character, for e.g. 'hi\"' was cut 'hi\'
+			 * Append next characters until the slashing is closed
+			 */
+			if (($last_char = mb_substr($row[ $column_name ], -1)) === '\\') {
+				$slashes_length = 0;
+
+				while ( $last_char === '\\' && ($last_char = mb_substr( $cols[ $column_name ], $slashes_length, 1 )) ) {
+					$row[ $column_name ] .= $last_char;
+					++$slashes_length;
+				}
+
+				if ($slashes_length) {
+					$column_length += $slashes_length;
+					$cols[ $column_name ] = mb_substr( $cols[ $column_name ], $slashes_length );
+				}
+			}
+
+			if (empty($cols[ $column_name ])) {
+				unset($cols[ $column_name ]);
+			}
+
+			if (($available_length = $available_length - $column_length) < 1) {
+				if ($first_extract) { // should not happen, anyway check just in case
+					return new WP_Error(
+						'initial_update_failed', 'Initial update failed (table name: '. $table_name .')'
+					);
+				} else {
+					break;
+				}
+			}
+		}
+
+		$first_extract = false;
+
+		if ($first_update) {
+			$sql = array();
+			foreach ( array_keys( $row ) as $column_name ) {
+				$sql[] = '`' . esc_sql( $column_name ) . '` = ' . $wpdb->prepare( '%s', $row[ $column_name ] );
+			}
+			$sql = implode( ', ', $sql );
+		} else {
+			$sql = array();
+			foreach ( array_keys( $row ) as $column_name ) {
+				$sql[] = '`' . esc_sql( $column_name ) . '` = CONCAT( `' . esc_sql( $column_name ) . '`'
+				         . ' , ' . $wpdb->prepare( '%s', $row[ $column_name ] ) . ')';
+			}
+			$sql = implode( ', ', $sql );
+		}
+
+		$sql = implode( " \n", array( "UPDATE {$table_name} SET", $sql, 'WHERE ' . $where ) );
+
+		fw_print($sql);
+		if ( false && false === $wpdb->query($sql) ) {
+			return new WP_Error(
+				'update_failed', 'Update failed (table name: '. $table_name .')'
+			);
+		}
+
+		unset($sql);
+
+		$first_update = false;
+	}
+
+	return true;
+}
