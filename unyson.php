@@ -184,11 +184,3 @@ if (defined('FW')) {
 		_FW_Update_Hooks::_init();
 	}
 }
-
-add_action('fw_init', function(){
-	fw_db_update_big_data('test', array(
-		'a' => 'Hello World',
-		'b' => '10',
-		'c' => 'Lorem ipsum \dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. \Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-	), 'ID = 1');
-});

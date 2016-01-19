@@ -774,7 +774,7 @@ function fw_db_update_big_data($table, array $cols, $where) {
 			/**
 			 * Length limit not reached, do regular update
 			 */
-			//return $wpdb->update($table, $cols, $where); // fixme
+			return $wpdb->update($table, $cols, $where);
 		}
 
 		ksort($cols_lengths, SORT_NUMERIC);
@@ -825,7 +825,7 @@ function fw_db_update_big_data($table, array $cols, $where) {
 				unset($cols[ $col_name ]);
 			}
 
-			if (($available_length = $available_length - $column_length) < 1) {
+			if (($available_length = $available_length - $column_length) < 1 && !empty($col_names)) {
 				if ($first_extract) { // should not happen, anyway check just in case
 					return new WP_Error(
 						'initial_update_failed', 'Initial update failed (table name: '. $table .')'
@@ -855,8 +855,7 @@ function fw_db_update_big_data($table, array $cols, $where) {
 
 		$sql = implode( " \n", array( "UPDATE {$table} SET", $sql, 'WHERE ' . $where ) );
 
-		fw_print($sql);
-		if ( false && false === $wpdb->query($sql) ) {
+		if ( false === $wpdb->query($sql) ) {
 			return new WP_Error(
 				'update_failed', 'Update failed (table name: '. $table .')'
 			);
