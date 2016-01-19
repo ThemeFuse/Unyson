@@ -748,7 +748,23 @@
 	}
 }
 
-function fw_db_update_big_data($table, array $cols, $where) {
+/**
+ * "UPDATE ... SET foo = 'very very big string' WHERE ..."
+ * will throw mysql errors (mysql gone away or packet limit reached)
+ *
+ * This function does:
+ * "UPDATE ... SET foo = 'very' WHERE ..."
+ * "UPDATE ... SET foo = CONCAT(foo, ' very') WHERE ..."
+ * "UPDATE ... SET foo = CONCAT(foo, ' big') WHERE ..."
+ * "UPDATE ... SET foo = CONCAT(foo, ' string') WHERE ..."
+ *
+ * @param string $table
+ * @param array $cols {'col_name' => 'value'}
+ * @param array $where {'col_name' => 'value'}
+ *
+ * @return bool|WP_Error
+ */
+function fw_db_update_big_data($table, array $cols, array $where) {
 	/** @var WPDB $wpdb */
 	global $wpdb;
 
@@ -784,6 +800,16 @@ function fw_db_update_big_data($table, array $cols, $where) {
 			unset($cols[$col_name]);
 			$cols[$col_name] = $col_val;
 		}
+	}
+
+	// fixme: use $wpdb->process_fields(), but it's protected ...
+	{
+		foreach ( array_keys($where) as $field ) {
+			$where[] = "`$field` = " . $wpdb->prepare('%s', $where[$field]);
+			unset($where[$field]);
+		}
+
+		$where = implode(' AND ', $where);
 	}
 
 	$first_extract = true;
