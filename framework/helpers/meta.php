@@ -221,18 +221,19 @@ function fw_update_metadata( $meta_type, $object_id, $meta_key, $meta_value, $pr
 	 */
 	do_action( "update_{$meta_type}_meta", $meta_id, $object_id, $meta_key, $_meta_value );
 
-	if ( 'post' == $meta_type ) /**
-	 * Fires immediately before updating a post's metadata.
-	 *
-	 * @param int $meta_id ID of metadata entry to update.
-	 * @param int $object_id Object ID.
-	 * @param string $meta_key Meta key.
-	 * @param mixed $meta_value Meta value.
-	 */ {
+	if ( 'post' == $meta_type ) {
+		/**
+		 * Fires immediately before updating a post's metadata.
+		 *
+		 * @param int $meta_id ID of metadata entry to update.
+		 * @param int $object_id Object ID.
+		 * @param string $meta_key Meta key.
+		 * @param mixed $meta_value Meta value.
+		 */
 		do_action( 'update_postmeta', $meta_id, $object_id, $meta_key, $meta_value );
 	}
 
-	$result = $wpdb->update( $table, $data, $where );
+	$result = fw_db_update_big_data( $table, $data, $where );
 	if ( ! $result ) {
 		return false;
 	}

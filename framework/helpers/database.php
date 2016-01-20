@@ -749,12 +749,11 @@
 }
 
 /**
- * "UPDATE ... SET foo = 'very very big string' WHERE ..."
+ * "UPDATE ... SET foo = 'very big string' WHERE ..."
  * will throw mysql errors (mysql gone away or packet limit reached)
  *
  * This function does:
  * "UPDATE ... SET foo = 'very' WHERE ..."
- * "UPDATE ... SET foo = CONCAT(foo, ' very') WHERE ..."
  * "UPDATE ... SET foo = CONCAT(foo, ' big') WHERE ..."
  * "UPDATE ... SET foo = CONCAT(foo, ' string') WHERE ..."
  *
@@ -762,11 +761,20 @@
  * @param array $cols {'col_name' => 'value'}
  * @param array $where {'col_name' => 'value'}
  *
- * @return bool|WP_Error
+ * @return bool
  */
 function fw_db_update_big_data($table, array $cols, array $where) {
 	/** @var WPDB $wpdb */
 	global $wpdb;
+
+	/**
+	 * This feature is disabled by default because it's slower than a regular one query update.
+	 * If your theme has a lot of shortcode options, the post content is almost always big
+	 * and you get mysql errors on post save, then enable this feature.
+	 */
+	if (!appy_filters('fw_db_big_data_update_enable', false)) {
+		return $wpdb->update($table, $cols, $where);
+	}
 
 	/**
 	 * Total length of all columns allowed per one update
@@ -853,9 +861,8 @@ function fw_db_update_big_data($table, array $cols, array $where) {
 
 			if (($available_length = $available_length - $column_length) < 1 && !empty($col_names)) {
 				if ($first_extract) { // should not happen, anyway check just in case
-					return new WP_Error(
-						'initial_update_failed', 'Initial update failed (table name: '. $table .')'
-					);
+					//trigger_error('Initial update failed (table name: '. $table .')', E_USER_WARNING);
+					return false;
 				} else {
 					break;
 				}
@@ -882,9 +889,8 @@ function fw_db_update_big_data($table, array $cols, array $where) {
 		$sql = implode( " \n", array( "UPDATE {$table} SET", $sql, 'WHERE ' . $where ) );
 
 		if ( false === $wpdb->query($sql) ) {
-			return new WP_Error(
-				'update_failed', 'Update failed (table name: '. $table .')'
-			);
+			//trigger_error('Update failed (table name: '. $table .')', E_USER_WARNING);
+			return false;
 		}
 
 		unset($sql);
