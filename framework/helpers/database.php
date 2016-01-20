@@ -772,7 +772,7 @@ function fw_db_update_big_data($table, array $cols, array $where) {
 	 * If your theme has a lot of shortcode options, the post content is almost always big
 	 * and you get mysql errors on post save, then enable this feature.
 	 */
-	if (!appy_filters('fw_db_big_data_update_enable', false)) {
+	if (!apply_filters('fw_db_big_data_update_enable', false)) {
 		return $wpdb->update($table, $cols, $where);
 	}
 
