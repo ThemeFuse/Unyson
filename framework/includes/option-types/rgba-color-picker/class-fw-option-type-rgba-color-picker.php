@@ -89,7 +89,7 @@ class FW_Option_Type_Rgba_Color_Picker extends FW_Option_Type {
 	 */
 	protected function _get_defaults() {
 		return array(
-			'value' => '',
+			'value' => '#000000',
 			'palettes'=> true
 		);
 	}
