@@ -176,13 +176,14 @@ jQuery(function($){
 					slide: function (event, ui) {
 						$(this).find('.ui-slider-handle').text(ui.value);
 
+						$input.data('a8cIris')._color._alpha = parseFloat(ui.value) / 100.0;
+
 						var color = $input.iris('color', true),
 							cssColor = (
 								(ui.value < 100) ? color.toCSS('rgba', ui.value / 100) : color.toHex()
 							).replace(/\s/g, '');
 
 						$input.val(cssColor);
-						$input.data('a8cIris')._color._alpha = parseFloat(ui.value) / 100.0;
 
 						clearTimeout(changeTimeoutId);
 						changeTimeoutId = setTimeout(function(){
@@ -205,13 +206,14 @@ jQuery(function($){
 					change: function (event, ui) {
 						$(this).find('.ui-slider-handle').text(ui.value);
 
+						$input.data('a8cIris')._color._alpha = parseFloat(ui.value) / 100.0;
+
 						var color = $input.iris('color', true),
 							cssColor = (
 								(ui.value < 100) ? color.toCSS('rgba', ui.value / 100) : color.toHex()
 							).replace(/\s/g, '');
 
 						$input.val(cssColor);
-						$input.data('a8cIris')._color._alpha = parseFloat(ui.value) / 100.0;
 
 						clearTimeout(changeTimeoutId);
 						changeTimeoutId = setTimeout(function(){
