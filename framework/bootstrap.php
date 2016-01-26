@@ -14,7 +14,9 @@ if (defined('FW')) {
 	add_action('after_setup_theme', '_action_init_framework');
 
 	function _action_init_framework() {
-		remove_action('after_setup_theme', '_action_init_framework');
+		if (did_action('fw_init')) {
+			return;
+		}
 
 		$fw_dir = dirname(__FILE__);
 
