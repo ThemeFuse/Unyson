@@ -18,7 +18,14 @@
 					size : data.size
 				}),
 				editItem: function (item, values) {
-					item.find('input').val( JSON.stringify( values ) );
+					var $input = item.find('input'),
+						val = $input.val();
+
+					$input.val( values = JSON.stringify( values ) );
+
+					if (val != values) {
+						$this.trigger('fw:option-type:popup:change');
+					}
 				}
 			};
 
@@ -39,13 +46,21 @@
 			utils.modal.open();
 		});
 
-		utils.modal.on('change:values', function (modal, values) {
-			utils.editItem(utils.modal.get('itemRef'), values);
+		utils.modal.on({
+			'change:values': function (modal, values) {
+				utils.editItem(utils.modal.get('itemRef'), values);
 
-			fwEvents.trigger('fw:option-type:popup:change', {
-				element: $this,
-				values: values
-			});
+				fwEvents.trigger('fw:option-type:popup:change', {
+					element: $this,
+					values: values
+				});
+			},
+			'open': function () {
+				$this.trigger('fw:option-type:popup:open');
+			},
+			'close': function () {
+				$this.trigger('fw:option-type:popup:close');
+			}
 		});
 	};
 
