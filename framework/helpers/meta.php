@@ -95,9 +95,18 @@ function fw_add_metadata( $meta_type, $object_id, $meta_key, $meta_value, $uniqu
 	$result = $wpdb->insert( $table, array(
 		$column      => $object_id,
 		'meta_key'   => $meta_key,
-		'meta_value' => $meta_value
+		'meta_value' => '', // updated below (this can contain a lot of data and throw MySql Gone Away error)
 	) );
+	if ( ! $result ) {
+		return false;
+	}
 
+	$result = fw_db_update_big_data( $table, array(
+		'meta_value' => $meta_value
+	), array(
+		$column      => $object_id,
+		'meta_key'   => $meta_key,
+	) );
 	if ( ! $result ) {
 		return false;
 	}
