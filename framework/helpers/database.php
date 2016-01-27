@@ -887,8 +887,11 @@ function fw_db_update_big_data($table, array $cols, array $where) {
 		}
 
 		$sql = implode( " \n", array( "UPDATE {$table} SET", $sql, 'WHERE ' . $where ) );
+		$result = $wpdb->query($sql);
 
-		if ( false === $wpdb->query($sql) ) {
+		//fw_print($result, $sql); // debug
+
+		if ( false === $result ) {
 			//trigger_error('Update failed (table name: '. $table .')', E_USER_WARNING);
 			return false;
 		}
