@@ -107,7 +107,11 @@
 			}
 		}
 
-		$post_type = get_post_type( $post_id );
+		$post_type = get_post_type(
+			($post_revision_id = wp_is_post_revision($post_id))
+				? $post_revision_id
+				: $post_id
+		);
 
 		/**
 		 * Before fw_db_option_storage_load() feature
@@ -221,7 +225,13 @@
 		}
 
 		$options = fw_extract_only_options( // todo: cache this (by post type)
-			fw()->theme->get_post_options(get_post_type($post_id))
+			fw()->theme->get_post_options(
+				get_post_type(
+					($post_revision_id = wp_is_post_revision($post_id))
+						? $post_revision_id
+						: $post_id
+				)
+			)
 		);
 
 		$sub_keys = null;
@@ -826,6 +836,7 @@ function fw_db_update_big_data($table, array $cols, array $where) {
 	while ($cols) {
 		$row = array();
 		$available_length = $max_length;
+		// fixme: mysql CONCAT() has a limit, maybe find what exactly is that limit and use it for $length_per_column?
 		$length_per_column = abs($available_length / count($cols));
 		$length_per_column_extra = 0; // not used length, available for the next columns
 		$col_names = array_keys($cols);
