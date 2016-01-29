@@ -98,19 +98,13 @@
 			 * 1. https://github.com/WordPress/WordPress/blob/2096b451c704715db3c4faf699a1184260deade9/wp-includes/query.php#L3573-L3583
 			 * 2. https://github.com/WordPress/WordPress/blob/4a31dd6fe8b774d56f901a29e72dcf9523e9ce85/wp-includes/revision.php#L485-L528
 			 */
-			if (
-				is_preview()
-				&&
-			    is_object($preview = wp_get_post_autosave($post->ID))
-			) {
+			if ( is_preview() && is_object($preview = wp_get_post_autosave($post->ID)) ) {
 				$post_id = $preview->ID;
 			}
 		}
 
 		$post_type = get_post_type(
-			($post_revision_id = wp_is_post_revision($post_id))
-				? $post_revision_id
-				: $post_id
+			($post_revision_id = wp_is_post_revision($post_id)) ? $post_revision_id : $post_id
 		);
 
 		/**
@@ -227,9 +221,7 @@
 		$options = fw_extract_only_options( // todo: cache this (by post type)
 			fw()->theme->get_post_options(
 				get_post_type(
-					($post_revision_id = wp_is_post_revision($post_id))
-						? $post_revision_id
-						: $post_id
+					($post_revision_id = wp_is_post_revision($post_id)) ? $post_revision_id : $post_id
 				)
 			)
 		);
