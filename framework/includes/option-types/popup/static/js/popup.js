@@ -60,6 +60,9 @@
 			},
 			'close': function () {
 				$this.trigger('fw:option-type:popup:close');
+			},
+			'render': function () {
+				$this.trigger('fw:option-type:popup:render');
 			}
 		});
 	};
