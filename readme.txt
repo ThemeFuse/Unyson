@@ -29,8 +29,6 @@ A simple and easy way to build a powerful website.
 * **Events.** It's pretty simple to use and it has Calendar and Map shortcodes.
 * **Backup & Demo Content.** Create an automated backup schedule, import demo content or even create a demo content archive for migration purposes.
 
-To get started, check out the [Scratch Theme](https://github.com/ThemeFuse/Scratch-Theme).
-
 **Get involved**
 
 Developers can contribute to the source code on the [Unyson GitHub Repository](https://github.com/ThemeFuse/Unyson/blob/master/CONTRIBUTING.md).
