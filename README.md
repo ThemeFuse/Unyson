@@ -4,8 +4,6 @@
 
 This framework was created from the ground up by the team behind [ThemeFuse](http://themefuse.com/) from the desire to empower developers to build outstanding WordPress themes fast and easy.
 
-To get started, check out the [Scratch Theme](https://github.com/ThemeFuse/Scratch-Theme).
-
 If you are not a developer, please use the [Unyson plugin page](https://wordpress.org/plugins/unyson/) on WordPress.org.
 
 [![Build Status](https://travis-ci.org/ThemeFuse/Unyson.svg?branch=master)](https://travis-ci.org/ThemeFuse/Unyson) [![Stories in Ready](https://badge.waffle.io/ThemeFuse/Unyson.svg?label=ready&title=Ready)](http://waffle.io/ThemeFuse/Unyson)
