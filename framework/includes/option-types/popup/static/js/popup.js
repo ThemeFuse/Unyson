@@ -25,6 +25,7 @@
 
 					if (val != values) {
 						$this.trigger('fw:option-type:popup:change');
+						$input.trigger('change');
 					}
 				}
 			};
