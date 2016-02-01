@@ -498,20 +498,33 @@ class FW_Option_Type_Checkboxes extends FW_Option_Type {
 		$html .= '<input type="checkbox" name="' . esc_attr( $option['attr']['name'] ) . '[]" value="" checked="checked" style="display: none">' .
 		         '<!-- used for "' . esc_attr( $id ) . '" to be present in _POST -->';
 
-		foreach ( $option['choices'] as $value => $text ) {
-			$choice_id = $option['attr']['id'] . '-' . $value;
+		foreach ( $option['choices'] as $value => $choice ) {
+			if (is_string($choice)) {
+				$choice = array(
+					'text' => $choice,
+					'attr' => array(),
+				);
+			}
+
+			$choice['attr'] = array_merge(
+				isset($choice['attr']) ? $choice['attr'] : array(),
+				array(
+					'type' => 'checkbox',
+					'name' => $option['attr']['name'] . '[' . $value . ']',
+					'value' => 'true',
+					'id' => $option['attr']['id'] . '-' . $value,
+				),
+				isset( $option['value'][ $value ] ) && $option['value'][ $value ]
+					? array('checked' => 'checked') : array()
+			);
 
 			$html .=
-			'<div>' .
-				'<label for="' . esc_attr( $choice_id ) . '">' .
-					'<input type="checkbox" ' .
-						'name="' . esc_attr( $option['attr']['name'] ) . '[' . esc_attr( $value ) . ']" ' .
-						'value="true" ' .
-						'id="' . esc_attr( $choice_id ) . '" ' .
-						( isset( $option['value'][ $value ] ) && $option['value'][ $value ] ? 'checked="checked" ' : '' ) .
-						'> ' . htmlspecialchars( $text, ENT_COMPAT, 'UTF-8' ) .
-				'</label>' .
-			'</div>';
+				'<div>' .
+					'<label for="' . esc_attr( $choice['attr']['id'] ) . '">' .
+						'<input  ' . fw_attr_to_html($choice['attr']) . '>' .
+						' ' . htmlspecialchars( $choice['text'], ENT_COMPAT, 'UTF-8' ) .
+					'</label>' .
+				'</div>';
 		}
 
 		$html .= '</div>';
@@ -614,18 +627,30 @@ class FW_Option_Type_Radio extends FW_Option_Type {
 
 		$html = '<div ' . fw_attr_to_html( $div_attr ) . '>';
 
-		foreach ( $option['choices'] as $value => $text ) {
-			$choice_id = $option['attr']['id'] . '-' . $value;
+		foreach ( $option['choices'] as $value => $choice ) {
+			if (is_string($choice)) {
+				$choice = array(
+					'text' => $choice,
+					'attr' => array(),
+				);
+			}
+
+			$choice['attr'] = array_merge(
+				isset($choice['attr']) ? $choice['attr'] : array(),
+				array(
+					'type' => 'radio',
+					'name' => $option['attr']['name'],
+					'value' => $value,
+					'id' => $option['attr']['id'] . '-' . $value,
+				),
+				$option['value'] == $value ? array('checked' => 'checked') : array()
+			);
 
 			$html .=
 			'<div>' .
-				'<label for="' . esc_attr( $choice_id ) . '">' .
-					'<input type="radio" ' .
-						'name="' . esc_attr( $option['attr']['name'] ) . '" ' .
-						'value="' . esc_attr( $value ) . '" ' .
-						'id="' . esc_attr( $choice_id ) . '" ' .
-						( $option['value'] == $value ? 'checked="checked" ' : '' ) .
-						'> ' . htmlspecialchars( $text, ENT_COMPAT, 'UTF-8' ) .
+				'<label for="' . esc_attr( $choice['attr']['id'] ) . '">' .
+					'<input  ' . fw_attr_to_html($choice['attr']) . '>' .
+					' ' . htmlspecialchars( $choice['text'], ENT_COMPAT, 'UTF-8' ) .
 				'</label>' .
 			'</div>';
 		}
