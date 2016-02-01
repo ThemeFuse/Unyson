@@ -1194,7 +1194,7 @@ final class _FW_Component_Backend {
 						continue;
 					}
 
-					$values[ $option_id ] = (int)$values[ $option_id ];
+					$values[ $option_id ] = (float) $values[ $option_id ];
 
 					continue 2;
 				} while(false);
