@@ -2,7 +2,6 @@
 /**
  * @var array $options
  * @var array $values
- * @var string $focus_tab_input_name
  * @var string $reset_input_name
  * @var bool $ajax_submit
  * @var bool $side_tabs
@@ -137,35 +136,6 @@ $texts = apply_filters('fw_settings_form_texts', array(
 	))
 ); ?>
 </div>
-
-<!-- focus tab -->
-<?php
-$focus_tab_id = trim( FW_Request::POST($focus_tab_input_name, FW_Request::GET($focus_tab_input_name, '')) );
-echo fw_html_tag('input', array(
-	'type'  => 'hidden',
-	'name'  => $focus_tab_input_name,
-	'value' => $focus_tab_id,
-));
-?>
-<script type="text/javascript">
-jQuery(function($){
-	fwEvents.one("fw:options:init", function(){
-		var $form = $('form[data-fw-form-id="fw_settings"]:first');
-
-		$form.on("click", ".fw-options-tabs-wrapper > .fw-options-tabs-list > ul > li > a", function(){
-			$form.find("input[name='<?php echo esc_js($focus_tab_input_name); ?>']").val(
-				$(this).attr("href").replace(/^#/, "") // tab id
-			);
-		});
-
-		/* "wait" after tabs initialized */
-		setTimeout(function(){
-			fwBackendOptions.openTab($.trim("<?php echo esc_js($focus_tab_id) ?>"));
-		}, 200);
-	});
-});
-</script>
-<!-- end: focus tab -->
 
 <!-- reset warning -->
 <script type="text/javascript">
@@ -340,7 +310,6 @@ jQuery(function($){
 							elements.$form.trigger('fw:settings-form:before-html-reset');
 
 							setTimeout(function() {
-								var focusTabId = elements.$form.find("input[name='<?php echo esc_js($focus_tab_input_name); ?>']").val();
 								var scrollTop = jQuery(window).scrollTop();
 
 								// replace form html
@@ -358,8 +327,6 @@ jQuery(function($){
 								}
 
 								fwEvents.trigger('fw:options:init', {$elements: elements.$form});
-
-								fwBackendOptions.openTab(focusTabId);
 
 								jQuery(window).scrollTop(scrollTop);
 

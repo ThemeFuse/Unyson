@@ -95,9 +95,8 @@ function fw_add_metadata( $meta_type, $object_id, $meta_key, $meta_value, $uniqu
 	$result = $wpdb->insert( $table, array(
 		$column      => $object_id,
 		'meta_key'   => $meta_key,
-		'meta_value' => $meta_value
+		'meta_value' => $meta_value,
 	) );
-
 	if ( ! $result ) {
 		return false;
 	}
@@ -221,14 +220,15 @@ function fw_update_metadata( $meta_type, $object_id, $meta_key, $meta_value, $pr
 	 */
 	do_action( "update_{$meta_type}_meta", $meta_id, $object_id, $meta_key, $_meta_value );
 
-	if ( 'post' == $meta_type ) /**
-	 * Fires immediately before updating a post's metadata.
-	 *
-	 * @param int $meta_id ID of metadata entry to update.
-	 * @param int $object_id Object ID.
-	 * @param string $meta_key Meta key.
-	 * @param mixed $meta_value Meta value.
-	 */ {
+	if ( 'post' == $meta_type ) {
+		/**
+		 * Fires immediately before updating a post's metadata.
+		 *
+		 * @param int $meta_id ID of metadata entry to update.
+		 * @param int $object_id Object ID.
+		 * @param string $meta_key Meta key.
+		 * @param mixed $meta_value Meta value.
+		 */
 		do_action( 'update_postmeta', $meta_id, $object_id, $meta_key, $meta_value );
 	}
 
@@ -484,10 +484,10 @@ function fw_delete_user_meta( $user_id, $meta_key, $meta_value = '' ) {
  * @return int|bool Meta ID on success, false on failure.
  */
 function fw_add_post_meta( $post_id, $meta_key, $meta_value, $unique = false ) {
-	// Make sure meta is added to the post, not a revision.
-	if ( $the_post = wp_is_post_revision( $post_id ) ) {
+	// Make sure meta is added to the post, not a revision. // fixme: why this is needed?
+	/*if ( $the_post = wp_is_post_revision( $post_id ) ) {
 		$post_id = $the_post;
-	}
+	}*/
 
 	return fw_add_metadata( 'post', $post_id, $meta_key, $meta_value, $unique );
 }
@@ -510,10 +510,10 @@ function fw_add_post_meta( $post_id, $meta_key, $meta_value, $unique = false ) {
  *                  false on failure.
  */
 function fw_update_post_meta( $post_id, $meta_key, $meta_value, $prev_value = '' ) {
-	// Make sure meta is added to the post, not a revision.
-	if ( $the_post = wp_is_post_revision( $post_id ) ) {
+	// Make sure meta is added to the post, not a revision. fixme: why this is needed?
+	/*if ( $the_post = wp_is_post_revision( $post_id ) ) {
 		$post_id = $the_post;
-	}
+	}*/
 
 	return fw_update_metadata( 'post', $post_id, $meta_key, $meta_value, $prev_value );
 }
@@ -533,10 +533,10 @@ function fw_update_post_meta( $post_id, $meta_key, $meta_value, $prev_value = ''
  * @return bool True on success, false on failure.
  */
 function fw_delete_post_meta( $post_id, $meta_key, $meta_value = '' ) {
-	// Make sure meta is added to the post, not a revision.
-	if ( $the_post = wp_is_post_revision( $post_id ) ) {
+	// Make sure meta is added to the post, not a revision. // fixme: why this is needed?
+	/*if ( $the_post = wp_is_post_revision( $post_id ) ) {
 		$post_id = $the_post;
-	}
+	}*/
 
 	return delete_metadata( 'post', $post_id, $meta_key, $meta_value );
 }

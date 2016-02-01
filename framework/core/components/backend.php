@@ -375,6 +375,10 @@ final class _FW_Component_Backend {
 				fw()->manifest->get_version(),
 				true
 			);
+
+			wp_localize_script( 'fw', '_fw_backend_options_localized', array(
+				'lazy_tabs' => fw()->theme->get_config('lazy_tabs')
+			) );
 		}
 
 		{
@@ -937,6 +941,7 @@ final class _FW_Component_Backend {
 	 * @param int $post_id
 	 *
 	 * @return bool
+	 * @deprecated since 2.5.0
 	 */
 	public function _sync_post_separate_meta( $post_id ) {
 		$post_type = get_post_type( $post_id );
@@ -1006,7 +1011,7 @@ final class _FW_Component_Backend {
 		}
 
 		foreach ( $separate_meta_options as $meta_key => $option_value ) {
-			update_post_meta( $post_id, $meta_key, $option_value );
+			fw_update_post_meta($post_id, $meta_key, $option_value );
 		}
 
 		return true;
@@ -1285,7 +1290,6 @@ final class _FW_Component_Backend {
 		fw_render_view( fw_get_framework_directory( '/views/backend-settings-form.php' ), array(
 			'options'              => $options,
 			'values'               => $values,
-			'focus_tab_input_name' => '_focus_tab',
 			'reset_input_name'     => '_fw_reset_options',
 			'ajax_submit'          => $ajax_submit,
 			'side_tabs'            => $side_tabs,
@@ -1326,17 +1330,6 @@ final class _FW_Component_Backend {
 		}
 
 		$redirect_url = fw_current_url();
-
-		{
-			$focus_tab_input_name = '_focus_tab';
-			$focus_tab_id         = trim( FW_Request::POST( $focus_tab_input_name ) );
-
-			if ( ! empty( $focus_tab_id ) ) {
-				$redirect_url = add_query_arg( $focus_tab_input_name, $focus_tab_id,
-					remove_query_arg( $focus_tab_input_name, $redirect_url )
-				);
-			}
-		}
 
 		$data['redirect'] = $redirect_url;
 

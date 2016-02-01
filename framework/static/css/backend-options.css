@@ -730,6 +730,12 @@ body.rtl .fw-backend-side-tabs .fw-settings-form-header .form-header-buttons {
 	min-height: 70px;
 	border-top: 1px solid #e5e5e5;
 	background: #f7f7f7;
+
+	-webkit-animation: fwFadeIn 3s ease-in;
+	-moz-animation: fwFadeIn 3s ease-in;
+	-ms-animation: fwFadeIn 3s ease-in;
+	-o-animation: fwFadeIn 3s ease-in;
+	animation: fwFadeIn 3s ease-in;
 }
 
 .fw-backend-side-tabs .fw-options-tabs-wrapper + .form-footer-buttons {
