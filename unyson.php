@@ -109,9 +109,11 @@ if (defined('FW')) {
 
 		/** @internal */
 		function _action_fw_textdomain() {
-			load_plugin_textdomain( 'fw', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+			load_plugin_textdomain( 'fw', false, plugin_basename( dirname( __FILE__ ) ) . '/framework/languages' );
 		}
 		add_action( 'plugins_loaded', '_action_fw_textdomain' );
+
+		add_action('admin_footer', function(){ fw_print(get_locale()); });
 
 		/** @internal */
 		function _filter_fw_tmp_dir( $dir ) {
