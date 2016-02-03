@@ -113,8 +113,6 @@ if (defined('FW')) {
 		}
 		add_action( 'plugins_loaded', '_action_fw_textdomain' );
 
-		add_action('admin_footer', function(){ fw_print(get_locale()); });
-
 		/** @internal */
 		function _filter_fw_tmp_dir( $dir ) {
 			/**
