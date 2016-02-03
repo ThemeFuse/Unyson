@@ -65,56 +65,54 @@ jQuery(document).ready(function($){
 						$elements: $tab.removeAttr(htmlAttrName).html(html)
 					});
 				}
+			},
+			initAllTabs = function ($el) {
+				var selector = '.fw-options-tab[' + htmlAttrName + ']', $tabs;
+
+				// initialized tabs can contain tabs, so init recursive until nothing is found
+				while (($tabs = $el.find(selector)).length) {
+					$tabs.each(function () { initTab($(this)); });
+				}
 			};
+
+		fwEvents.on('fw:options:init:tabs', function (data) {
+			initAllTabs(data.$elements);
+		});
 
 		fwEvents.on('fw:options:init', function (data) {
 			var $tabs = data.$elements.find('.fw-options-tabs-wrapper:not(.initialized)');
 
 			if (localized.lazy_tabs) {
+				$tabs.tabs({
+					create: function (event, ui) {
+						initTab(ui.panel);
+					},
+					activate: function (event, ui) {
+						initTab(ui.newPanel);
+					}
+				});
+
 				$tabs
-					.tabs({
-						create: function (event, ui) {
-							initTab(ui.panel);
-						},
-						activate: function (event, ui) {
-							initTab(ui.newPanel);
-						}
-					})
 					.closest('form')
 					.off('submit.fw-tabs')
 					.on('submit.fw-tabs', function () {
 						// All options needs to be present in html to be sent in POST on submit
-						{
-							var $tabs,
-								selector = '.fw-options-tab[' + htmlAttrName + ']',
-								fwLoadingId = 'fw-tabs-render';
-
-							fw.loading.show(fwLoadingId);
-
-							// initialized tabs can contain tabs, so init recursive until nothing is found
-							while (($tabs = $(this).find(selector)).length) {
-								$tabs.each(function () {
-									initTab($(this));
-								});
-							}
-
-							fw.loading.hide(fwLoadingId);
-						}
+						initAllTabs($(this));
 					});
 			} else {
 				$tabs.tabs();
 			}
 
-			$tabs
-				.each(function () {
-					var $this = $(this);
+			$tabs.each(function () {
+				var $this = $(this);
 
-					if (!$this.parent().closest('.fw-options-tabs-wrapper').length) {
-						// add special class to first level tabs
-						$this.addClass('fw-options-tabs-first-level');
-					}
-				})
-				.addClass('initialized');
+				if (!$this.parent().closest('.fw-options-tabs-wrapper').length) {
+					// add special class to first level tabs
+					$this.addClass('fw-options-tabs-first-level');
+				}
+			});
+
+			$tabs.addClass('initialized');
 		});
 	})();
 
