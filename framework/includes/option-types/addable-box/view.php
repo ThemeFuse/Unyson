@@ -25,8 +25,14 @@ unset($attr['value']);
 if ($option['sortable']) {
 	$attr['class'] .= ' is-sortable';
 }
+
+$attr['class'] .= ' width-type-'. $option['width'];
+
+if (!empty($data['value'])) {
+	$attr['class'] .= ' has-boxes';
+}
 ?>
-<div <?php echo fw_attr_to_html($attr) ?>>
+<div <?php echo fw_attr_to_html($attr); ?>>
 	<?php $i = 0; ?>
 	<div class="fw-option-boxes metabox-holder">
 		<?php foreach ($data['value'] as $value_index => &$values): ?>

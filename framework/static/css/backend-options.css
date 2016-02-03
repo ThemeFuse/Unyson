@@ -840,12 +840,12 @@ form#post .fw-options-tabs-wrapper > .fw-options-tabs-contents .fw-backend-postb
 /* begin copy from: .js .meta-box-sortables .postbox .handlediv */
 
 .fw-postbox .handlediv:before {
-	right: 12px;
+	top: 0;
+	right: 0;
+	padding: 8px 9px 8px 7px;
 	font: 400 20px/1 dashicons;
 	speak: none;
 	display: inline-block;
-	padding: 8px 10px;
-	top: 0;
 	position: relative;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;

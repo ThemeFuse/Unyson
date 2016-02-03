@@ -77,6 +77,7 @@ jQuery(document).ready(function ($) {
 							$control.closest('.fw-option-box').remove();
 
 							methods.checkLimit($option);
+							methods.updateHasBoxesClass($option);
 							break;
 						default:
 							// custom control. trigger event for others to handle this
@@ -101,6 +102,12 @@ jQuery(document).ready(function ($) {
 			} else {
 				$button.removeClass('fw-hidden');
 			}
+		},
+		updateHasBoxesClass: function($option) {
+			$option[
+				$option.find('> .fw-option-boxes > .fw-option-box:first').length
+				? 'addClass' : 'removeClass'
+			]('has-boxes');
 		}
 	};
 
@@ -258,6 +265,7 @@ jQuery(document).ready(function ($) {
 			$option.trigger(methods.makeEventName('box:init'), {box: box});
 
 			methods.checkLimit($option);
+			methods.updateHasBoxesClass($option);
 		});
 
 		// close postboxes and attach event listener

@@ -191,7 +191,21 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 			 * to not confuse the user that if changing the order will affect something.
 			 */
 			'sortable' => true,
+			/**
+			 * Width type. Supported types:
+			 * - fixed
+			 * - full
+			 */
+			'width' => 'fixed',
 		);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function _get_backend_width_type()
+	{
+		return 'auto';
 	}
 }
 FW_Option_Type::register('FW_Option_Type_Addable_Box');

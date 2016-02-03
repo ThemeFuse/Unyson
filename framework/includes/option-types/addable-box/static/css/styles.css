@@ -1,3 +1,15 @@
+.fw-option-type-addable-box {
+	max-width: 100%;
+}
+
+.fw-option-type-addable-box.has-boxes.width-type-full {
+	width: 9999px;
+}
+
+.fw-option-type-addable-box.has-boxes.width-type-fixed {
+	width: 428px; /* same as .fw-backend-option-fixed-width */
+}
+
 .fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox {
 	min-width: 100%;
 }
