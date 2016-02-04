@@ -157,7 +157,7 @@ body.rtl .fw-option-type-typography .fw-option-typography-option-family .selecti
 	width: 125px;
 	float: right;
 	border: none;
-	background: transparent url(../images/google-fonts.png);
+	background: transparent url(../images/google-fonts.png) no-repeat;
 }
 
 .fw-option-type-typography .selectize-dropdown .selectize-dropdown-content div.option span {

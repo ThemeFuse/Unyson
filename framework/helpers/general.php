@@ -1010,9 +1010,21 @@ function fw_get_google_fonts() {
 	try {
 		return FW_Cache::get($cache_key);
 	} catch (FW_Cache_Not_Found_Exception $e) {
-		$fonts = apply_filters('fw_google_fonts',
-			include(dirname(__FILE__) .'/fw-google-fonts.json.php')
-		);
+		$g_fonts = json_decode(fw_get_google_fonts_v2(), true);
+		$old_fonts = include(dirname(__FILE__) .'/fw-google-fonts.json.php');
+		$fonts = array();
+
+		foreach ( $g_fonts['items'] as $font ) {
+			$fonts[ $font['family'] ] = array(
+				'family' => $font['family'],
+				'variants' => $font['variants'],
+				'position' => isset($old_fonts[$font['family']])
+					? $old_fonts[$font['family']]['position']
+					: 99999
+			);
+		}
+
+		$fonts = apply_filters('fw_google_fonts', $fonts);
 
 		FW_Cache::set($cache_key, $fonts);
 
@@ -1048,7 +1060,7 @@ function fw_get_google_fonts_v2() {
 			return $body;
 		} else {
 			if ( empty( $saved_data['fonts'] ) ) {
-				$saved_data['fonts'] = json_encode( array() );
+				$saved_data['fonts'] = json_encode( array( 'items' => array() ) );
 			}
 
 			update_option( 'fw_google_fonts', array(
