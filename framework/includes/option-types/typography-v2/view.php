@@ -6,7 +6,6 @@
  * @var  string $id
  * @var  array $option
  * @var  array $data
- * @var  array $fonts
  * @var array $defaults
  */
 
@@ -90,7 +89,7 @@ $components = (isset($option['components']) && is_array($option['components'])) 
 			<select data-type="subset" name="<?php echo esc_attr( $option['attr']['name'] ) ?>[subset]"
 			        class="fw-option-typography-v2-option-subset">
 				<?php if ( $google_font ) {
-					foreach ( $google_font->subsets as $subset ) { ?>
+					foreach ( $google_font['subsets'] as $subset ) { ?>
 						<option value="<?php echo esc_attr( $subset ) ?>"
 						        <?php if ($data['value']['subset'] === $subset): ?>selected="selected"<?php endif; ?>><?php echo fw_htmlspecialchars( $subset ); ?></option>
 					<?php }
@@ -107,7 +106,7 @@ $components = (isset($option['components']) && is_array($option['components'])) 
 			<select data-type="variation" name="<?php echo esc_attr( $option['attr']['name'] ) ?>[variation]"
 			        class="fw-option-typography-v2-option-variation">
 				<?php if ( $google_font ) {
-					foreach ( $google_font->variants as $variant ) { ?>
+					foreach ( $google_font['variants'] as $variant ) { ?>
 						<option value="<?php echo esc_attr( $variant ) ?>"
 						        <?php if ($data['value']['variation'] == $variant): ?>selected="selected"<?php endif; ?>><?php echo fw_htmlspecialchars( $variant ); ?></option>
 					<?php }

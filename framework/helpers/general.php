@@ -1021,15 +1021,16 @@ function fw_get_google_fonts() {
 }
 
 /**
- * @return Array with Google fonts
+ * @return string JSON encoded array with Google fonts
  */
 function fw_get_google_fonts_v2() {
 	$saved_data = get_option( 'fw_google_fonts', false );
+	$ttl = 7 * DAY_IN_SECONDS;
 
 	if (
 		false === $saved_data
 		||
-		( time() - $saved_data['last_update'] > ( time() - 7 * DAY_IN_SECONDS ) )
+		( $saved_data['last_update'] + $ttl < time() )
 	) {
 		$response = wp_remote_get( apply_filters( 'fw_googleapis_webfonts_url', 'http://google-webfonts-cache.unyson.io/v1/webfonts' ) );
 		$body     = wp_remote_retrieve_body( $response );
@@ -1046,10 +1047,14 @@ function fw_get_google_fonts_v2() {
 
 			return $body;
 		} else {
-			return ( ! empty( $saved_data['fonts'] ) )
-				? $saved_data['fonts']
-				: json_encode( array( 'items' => array() )
-			);
+			if ( empty( $saved_data['fonts'] ) ) {
+				$saved_data['fonts'] = json_encode( array() );
+			}
+
+			update_option( 'fw_google_fonts', array(
+				'last_update' => time() - $ttl + MINUTE_IN_SECONDS,
+				'fonts'       => $saved_data['fonts']
+			), false );
 		}
 	}
 
