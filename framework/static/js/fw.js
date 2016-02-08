@@ -963,20 +963,16 @@ fw.getQueryString = function(name) {
 			onSubmit: function(e) {
 				e.preventDefault();
 
-				/**
-				 * Lazy Tabs are also listening the 'submit' event
-				 * but their script is executed later but we need their event to be executed first,
-				 * so process our event on timeout.
-				 */
-				{
-					this._submitTimeout ? clearTimeout(this._submitTimeout) : 0;
-					this._submitTimeout = setTimeout(_.bind(this.processSubmit, this), 0);
-				}
-			},
-			processSubmit: function() {
 				var loadingId = fwLoadingId +':submit';
 
 				fw.loading.show(loadingId);
+
+				/**
+				 * Init all Lazy Tabs to render all form inputs.
+				 * Lazy Tabs script is listening the form 'submit' event
+				 * but it's executed after this event.
+				 */
+				fwEvents.trigger('fw:options:init:tabs', {$elements: this.$el});
 
 				jQuery.ajax({
 					url: ajaxurl,
