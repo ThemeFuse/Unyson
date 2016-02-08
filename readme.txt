@@ -82,7 +82,19 @@ Yes; Unyson will work with any theme.
 == Changelog ==
 
 = 2.5.0 =
-...
+* Added the possibility to save options in separate database location [#838](https://github.com/ThemeFuse/Unyson/issues/838)
+
+	Will be used in next release of the PageBuilder extension, the builder value will be moved to a separate post meta.
+
+* Lazy Tabs: Render only the visible tabs [#1174](https://github.com/ThemeFuse/Unyson/issues/1174)
+
+	This feature can be disabled by adding in `{theme}/framework-customizations/theme/config.php`:
+
+		$cfg['lazy_tabs'] = false;
+
+* Added the [`.pot` file](https://github.com/ThemeFuse/Unyson/tree/master/framework/languages) [#1256](https://github.com/ThemeFuse/Unyson/issues/1256)
+
+* Fixed [#1072](https://github.com/ThemeFuse/Unyson/issues/1072), [#1052](https://github.com/ThemeFuse/Unyson/issues/1052), [#1235](https://github.com/ThemeFuse/Unyson/issues/1235), [#1236](https://github.com/ThemeFuse/Unyson/issues/1236), [#1251](https://github.com/ThemeFuse/Unyson/issues/1251), [#1246](https://github.com/ThemeFuse/Unyson/issues/1246), [#1242](https://github.com/ThemeFuse/Unyson/issues/1242), [#941](https://github.com/ThemeFuse/Unyson/issues/941), [#1250](https://github.com/ThemeFuse/Unyson/issues/1250), [#1243](https://github.com/ThemeFuse/Unyson/issues/1243), [#1261](https://github.com/ThemeFuse/Unyson/issues/1261)
 
 = 2.4.17 =
 * Fixed [#1197](https://github.com/ThemeFuse/Unyson/issues/1197)
