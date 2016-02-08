@@ -308,8 +308,3 @@ Yes; Unyson will work with any theme.
 * Added the possibility to use custom `framework-customizations` directory name [#276](https://github.com/ThemeFuse/Unyson/issues/276)
 * Minor fixes
 
-
-== Upgrade Notice ==
-
-= 2.0.0 =
-* 2.0 is a major update. Unyson Framework as a plugin is working in a different way than build in theme version.
