@@ -865,7 +865,7 @@ body.rtl .fw-postbox .handlediv:before {
 }
 
 .fw-postbox .toggle-indicator {
-	display: none;
+	display: none; /* fixes https://github.com/ThemeFuse/Unyson/issues/1261 */
 }
 
 /* end copy from: .js .meta-box-sortables .postbox .handlediv */
