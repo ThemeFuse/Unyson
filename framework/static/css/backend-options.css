@@ -864,6 +864,10 @@ body.rtl .fw-postbox .handlediv:before {
 	content: '\f140';
 }
 
+.fw-postbox .toggle-indicator {
+	display: none;
+}
+
 /* end copy from: .js .meta-box-sortables .postbox .handlediv */
 
 /* end: Boxes */
