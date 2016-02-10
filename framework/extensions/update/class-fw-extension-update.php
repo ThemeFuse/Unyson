@@ -284,7 +284,7 @@ class FW_Extension_Update extends FW_Extension
 		/** @var WP_Filesystem_Base $wp_filesystem */
 		global $wp_filesystem;
 
-		if (!$wp_filesystem) {
+		if (!$wp_filesystem || (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code())) {
 			return;
 		}
 
