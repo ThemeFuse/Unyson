@@ -2394,6 +2394,8 @@ final class _FW_Extensions_Manager
 			}
 		}
 
+		$theme_ext_requirements = fw()->theme->manifest->get('requirements/extensions');
+
 		foreach ($data['download'] as $source => $source_data) {
 			switch ($source) {
 				case 'github':
@@ -2420,9 +2422,19 @@ final class _FW_Extensions_Manager
 					} else {
 						$http = new WP_Http();
 
+						if (
+							isset($theme_ext_requirements[$extension_name])
+							&&
+							isset($theme_ext_requirements[$extension_name]['max_version'])
+						) {
+							$tag = 'tags/v'. $theme_ext_requirements[$extension_name]['max_version'];
+						} else {
+							$tag = 'latest';
+						}
+
 						$response = $http->get(
 							apply_filters('fw_github_api_url', 'https://api.github.com')
-							. '/repos/'. $source_data['user_repo'] .'/releases/latest'
+							. '/repos/'. $source_data['user_repo'] .'/releases/'. $tag
 						);
 
 						unset($http);
