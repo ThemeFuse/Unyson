@@ -141,8 +141,8 @@ class FW_Extension_Update extends FW_Extension
 	private function get_extensions_with_updates($force_check = false)
 	{
 		$updates = array();
-
 		$services = $this->get_children();
+		$theme_ext_requirements = fw()->theme->manifest->get('requirements/extensions');
 
 		foreach (fw()->extensions->get_all() as $ext_name => $extension) {
 			/** @var FW_Extension $extension */
@@ -170,6 +170,16 @@ class FW_Extension_Update extends FW_Extension
 				if (!version_compare($fixed_latest_version, $extension->manifest->get_version(), '>')) {
 					// we already have latest version
 					continue;
+				}
+
+				if (
+					isset($theme_ext_requirements[$ext_name])
+					&&
+					isset($theme_ext_requirements[$ext_name]['max_version'])
+					&&
+					version_compare($fixed_latest_version, $theme_ext_requirements[$ext_name]['max_version'], '>')
+				) {
+					continue; // do not allow update if it exceeds max_version
 				}
 
 				$updates[$ext_name] = array(
