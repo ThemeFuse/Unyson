@@ -68,6 +68,7 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 	private function transform_options($options)
 	{
 		$new_options = array();
+
 		foreach ($options as $id => $option) {
 			if (is_int($id)) {
 				/**
@@ -83,6 +84,7 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 				$new_options[] = array($id => $option);
 			}
 		}
+
 		return $new_options;
 	}
 
@@ -105,24 +107,23 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 	 */
 	protected function _get_value_from_input($option, $input_value)
 	{
-		if (is_array($input_value)) {
-			$option['limit'] = intval($option['limit']);
+		if (is_null($input_value)) {
+			$values = $option['value'];
+		} elseif (is_array($input_value)) {
+			$values = array_map( 'json_decode', $input_value, array_fill( 0, count($input_value), true ) );
 
-			$values = array_map('json_decode', $input_value, array_fill(0, count($input_value), true));
-
-			if ($option['limit']) {
-				$values= array_slice($values, 0 , $option['limit']);
+			if ( $option['limit'] = intval( $option['limit'] ) ) {
+				$values = array_slice( $values, 0, $option['limit'] );
 			}
 		} else {
-			$values = $option['value'];
+			$values = array();
 		}
 
 		/**
-		 * For e.g. option type 'unique' needs to execute _get_value_from_input() for each option to prevent duplicate values
+		 * For e.g. option type 'unique' needs to execute _get_value_from_input() for each option
+		 * to prevent duplicate values
 		 */
-		$values = apply_filters('fw:option-type:addable-popup:value-from-input', $values, $option);
-
-		return $values;
+		return apply_filters('fw:option-type:addable-popup:value-from-input', $values, $option);
 	}
 
 	/**
