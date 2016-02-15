@@ -1,5 +1,9 @@
 <?php
 
+if (!function_exists('fw_fix_path')) {
+	_action_init_framework();
+}
+
 class Test_Option_Type extends FW_Option_Type {
 	public function get_type() {
 		return 'test-option-type';
@@ -27,10 +31,6 @@ class Test_Option_Type extends FW_Option_Type {
 class TestsUnysonOptionTypes extends WP_Unyson_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
-
-		if (!function_exists('fw_fix_path')) {
-			_action_init_framework();
-		}
 	}
 
 	public function test_fw_option_type_is_arround() {
