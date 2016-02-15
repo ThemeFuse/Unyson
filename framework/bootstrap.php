@@ -18,6 +18,8 @@ if (defined('FW')) {
 			return;
 		}
 
+		do_action('fw_before_init');
+
 		$fw_dir = dirname(__FILE__);
 
 		include $fw_dir .'/bootstrap-helpers.php';
