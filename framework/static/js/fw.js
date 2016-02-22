@@ -963,7 +963,8 @@ fw.getQueryString = function(name) {
 			onSubmit: function(e) {
 				e.preventDefault();
 
-				var loadingId = fwLoadingId +':submit';
+				var loadingId = fwLoadingId +':submit',
+					view = this;
 
 				fw.loading.show(loadingId);
 
@@ -972,19 +973,10 @@ fw.getQueryString = function(name) {
 				 * Lazy Tabs script is listening the form 'submit' event
 				 * but it's executed after this event.
 				 */
-				fwEvents.trigger('fw:options:init:tabs', {$elements: this.$el});
+				fwEvents.trigger('fw:options:init:tabs', {$elements: view.$el});
 
-				jQuery.ajax({
-					url: ajaxurl,
-					type: 'POST',
-					data: [
-						'action=fw_backend_options_get_values',
-						'options='+ encodeURIComponent(JSON.stringify(this.model.get('options'))),
-						'name_prefix=fw_edit_options_modal',
-						this.$el.serialize()
-					].join('&'),
-					dataType: 'json',
-					success: _.bind(function (response, status, xhr) {
+				view.model.getValuesFromServer(view.$el.serialize())
+					.done(function (response, status, xhr) {
 						fw.loading.hide(loadingId);
 
 						if (!response.success) {
@@ -997,12 +989,12 @@ fw.getQueryString = function(name) {
 							return;
 						}
 
-						this.model.set('values', response.data.values);
+						view.model.set('values', response.data.values);
 
 						// simulate click on close button to fire animations
-						this.model.frame.modal.$el.find('.media-modal-close').trigger('click');
-					}, this),
-					error: function (xhr, status, error) {
+						view.model.frame.modal.$el.find('.media-modal-close').trigger('click');
+					})
+					.fail(function (xhr, status, error) {
 						fw.loading.hide(loadingId);
 
 						/**
@@ -1011,8 +1003,7 @@ fw.getQueryString = function(name) {
 						 * do not delete all his work
 						 */
 						alert(status +': '+ error.message);
-					}
-				});
+					});
 			},
 			resetForm: function() {
 				var loadingId = fwLoadingId +':reset';
@@ -1143,6 +1134,43 @@ fw.getQueryString = function(name) {
 
 			return this;
 		},
+
+		/**
+		 * @param {String} [actualValues] A string containing correctly serialized
+		 *                                data that will be sent to the server.
+		 *                                Ex.: "parameter1=val1&par2=value"
+		 *
+		 * @returns {Promise} jQuery promise you can use in order to get your values
+		 *
+		 *
+		 * modal.getValuesFromServer()
+		 *     .done(function (response, status, xhr) {
+		 *         console.log(response.data.values); // your values ready to be used
+		 *     })
+		 *     .fail(function (xhr, status, error) {
+		 *         // handle errors
+		 *         console.error(status + ': ' + error);
+		 *     });
+		 */
+		getValuesFromServer: function (actualValues) {
+			var dataToSend = [
+				'action=fw_backend_options_get_values',
+				'options='+ encodeURIComponent(JSON.stringify(this.get('options'))),
+				'name_prefix=fw_edit_options_modal'
+			];
+
+			if (actualValues) {
+				dataToSend.push(actualValues);
+			}
+
+			return jQuery.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: dataToSend.join('&'),
+				dataType: 'json'
+			});
+		},
+
 		getHtmlCacheId: function(values) {
 			return fw.md5(
 				JSON.stringify(this.get('options')) +
