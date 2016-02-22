@@ -86,9 +86,9 @@
 					filename = attachment.get('filename');
 					compiled = _.template(
 						templates.thumb.notEmpty,
-						{src: url, alt: filename},
+						undefined,
 						{variable: 'data'}
-					);
+					)({src: url, alt: filename});
 
 					elements.$uploadButton.text(l10n.buttonEdit);
 					elements.$thumb

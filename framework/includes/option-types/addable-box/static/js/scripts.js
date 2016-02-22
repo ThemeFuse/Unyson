@@ -121,13 +121,13 @@ jQuery(document).ready(function ($) {
 			try {
 				return _.template(
 					$.trim(template),
-					vars,
+					undefined,
 					{
 						evaluate: /\{\{([\s\S]+?)\}\}/g,
 						interpolate: /\{\{=([\s\S]+?)\}\}/g,
 						escape: /\{\{-([\s\S]+?)\}\}/g
 					}
-				);
+				)(vars);
 			} catch (e) {
 				return '[Template Error] '+ e.message;
 			}

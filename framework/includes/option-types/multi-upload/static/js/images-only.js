@@ -105,14 +105,14 @@
 					ids.push(attachment.id);
 					compiledTemplates.push(_.template(
 						templates.thumb.notEmpty,
-						{
-							src: src,
-							alt: attachment.get('filename'),
-							id: attachment.id,
-							originalSrc: attachment.get('url')
-						},
+						undefined,
 						{variable: 'data'}
-					));
+					)({
+						src: src,
+						alt: attachment.get('filename'),
+						id: attachment.id,
+						originalSrc: attachment.get('url')
+					}));
 				});
 
 				elements.$input.val(JSON.stringify(ids));

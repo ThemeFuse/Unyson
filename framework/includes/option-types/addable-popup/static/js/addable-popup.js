@@ -102,13 +102,13 @@
 
 						template = _.template(
 							$.trim(data.template),
-							values,
+							undefined,
 							{
 								evaluate: /\{\{([\s\S]+?)\}\}/g,
 								interpolate: /\{\{=([\s\S]+?)\}\}/g,
 								escape: /\{\{-([\s\S]+?)\}\}/g
 							}
-						);
+						)(values);
 					} catch (e) {
 						template = '[Template Error] '+ e.message;
 					}
