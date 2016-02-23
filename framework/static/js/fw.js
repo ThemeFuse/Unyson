@@ -920,14 +920,14 @@ fw.getQueryString = function(name) {
 })();
 
 /**
- * @param {String} [actualValues] A string containing correctly serialized
- *                                data that will be sent to the server.
- *                                Ex.: "parameter1=val1&par2=value"
+ * @param {String} [data] An object with two keys:
+ *                        options: Your array with option types
+ *                        data: a string that will contain correctly serialized data
+ *                              Ex.: "parameter1=val1&par2=value"
  *
  * @returns {Promise} jQuery promise you can use in order to get your values
  *
- *
- * modal.getValuesFromServer()
+ * modal.getValuesFromServer({options: your_options})
  *     .done(function (response, status, xhr) {
  *         console.log(response.data.values); // your values ready to be used
  *     })
