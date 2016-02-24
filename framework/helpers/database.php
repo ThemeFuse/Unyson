@@ -80,7 +80,14 @@
 	 *
 	 * @return mixed|null
 	 */
-	function fw_get_db_post_option( $post_id = null, $option_id = null, $default_value = null, $get_original_value = null ) {
+	function fw_get_db_post_option(
+		$post_id = null,
+		$option_id = null,
+		$default_value = null,
+		$get_original_value = null
+	) {
+		$meta_key = 'fw_options';
+
 		if ( ! $post_id ) {
 			/** @var WP_Post $post */
 			global $post;
@@ -152,7 +159,7 @@
 			$value = FW_WP_Meta::get(
 				'post',
 				$post_id,
-				'fw_options/' . $option_id,
+				$meta_key .'/'. $option_id,
 				null,
 				$get_original_value
 			);
@@ -175,7 +182,7 @@
 			$value = FW_WP_Meta::get(
 				'post',
 				$post_id,
-				'fw_options',
+				$meta_key,
 				$default_value,
 				$get_original_value
 			);
@@ -205,6 +212,7 @@
 	 * @param $value
 	 */
 	function fw_set_db_post_option( $post_id = null, $option_id = null, $value ) {
+		$meta_key = 'fw_options';
 		$post_id = intval($post_id);
 
 		if ( ! $post_id ) {
@@ -255,7 +263,7 @@
 				);
 			}
 
-			FW_WP_Meta::set( 'post', $post_id, 'fw_options/'. $option_id, $value );
+			FW_WP_Meta::set( 'post', $post_id, $meta_key .'/'. $option_id, $value );
 		} else {
 			$old_value = fw_get_db_post_option($post_id);
 
@@ -274,7 +282,7 @@
 				}
 			}
 
-			FW_WP_Meta::set( 'post', $post_id, 'fw_options', $value );
+			FW_WP_Meta::set( 'post', $post_id, $meta_key, $value );
 		}
 
 		/**
