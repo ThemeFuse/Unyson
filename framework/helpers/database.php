@@ -14,43 +14,76 @@
 	 * @return mixed|null
 	 */
 	function fw_get_db_settings_option( $option_id = null, $default_value = null, $get_original_value = null ) {
-		$value = FW_WP_Option::get(
-			'fw_theme_settings_options:' . fw()->theme->manifest->get_id(),
-			$option_id, $default_value, $get_original_value
-		);
+		if (empty($option_id)) {
+			$sub_keys = null;
+		} else {
+			$option_id = explode('/', $option_id); // 'option_id/sub/keys'
+			$_option_id = array_shift($option_id); // 'option_id'
+			$sub_keys = empty($option_id) ? null : implode('/', $option_id); // 'sub/keys'
+			$option_id = $_option_id;
+			unset($_option_id);
+		}
 
-		if (
-			(!is_null($option_id) && is_null($value)) // a specific option_id was requested
-			||
-			(is_null($option_id) && empty($value)) // all options were requested but the db value is empty (this can happen after Reset)
-		) {
-			/**
-			 * Maybe the options was never saved or the given option id does not exist
-			 * Extract the default values from the options array and try to find there the option id
-			 */
+		try {
+			static $is_recursion = false;
 
-			$cache_key = 'fw_default_options_values/settings';
+			$options = FW_Cache::get( $cache_key = 'fw_only_options/settings' );
+		} catch ( FW_Cache_Not_Found_Exception $e ) {
+			if ($is_recursion) {
+				/**
+				 * This happens when this function is called inside options array file.
+				 */
+				$options = array();
+			} else {
+				$is_recursion = true;
 
-			try {
-				$all_options_values = FW_Cache::get( $cache_key );
-			} catch ( FW_Cache_Not_Found_Exception $e ) {
-				// extract the default values from options array
-				$all_options_values = fw_get_options_values_from_input(
-					fw()->theme->get_settings_options(),
-					array()
-				);
-
-				FW_Cache::set( $cache_key, $all_options_values );
+				$options = fw_extract_only_options(fw()->theme->get_settings_options());
 			}
 
-			if ( empty( $option_id ) ) {
-				// option id not specified, return all options values
-				return $all_options_values;
-			} else {
-				return fw_akg( $option_id, $all_options_values, $default_value );
+			FW_Cache::set($cache_key, $options);
+
+			$is_recursion = false;
+		}
+
+		try {
+			$values = FW_Cache::get( $cache_key = 'fw_settings_options/default_and_db_values' );
+		} catch ( FW_Cache_Not_Found_Exception $e ) {
+			FW_Cache::set(
+				$cache_key,
+				$values = array_merge(
+					fw_get_options_values_from_input($options, array()), // default values from options array
+					FW_WP_Option::get(
+						'fw_theme_settings_options:'. fw()->theme->manifest->get_id(), null, array(), $get_original_value
+					)
+				)
+			);
+		}
+
+		if (empty($option_id)) {
+			foreach ($options as $id => $option) {
+				$values[$id] = fw()->backend->option_type($options[$id]['type'])->storage_load(
+					$id, $options[$id], isset($values[$id]) ? $values[$id] : null, array()
+				);
 			}
 		} else {
-			return $value;
+			if (isset($options[$option_id])) {
+				$values[ $option_id ] = fw()->backend->option_type( $options[ $option_id ]['type'] )->storage_load(
+					$option_id,
+					$options[ $option_id ],
+					isset($values[ $option_id ]) ? $values[ $option_id ] : null,
+					array()
+				);
+			}
+		}
+
+		if (empty($option_id)) {
+			return (empty($values) && is_array($default_value)) ? $default_value : $values;
+		} else {
+			if (is_null($sub_keys)) {
+				return isset($values[$option_id]) ? $values[$option_id] : $default_value;
+			} else {
+				return fw_akg($sub_keys, $values[$option_id], $default_value);
+			}
 		}
 	}
 
@@ -61,6 +94,36 @@
 	 * @param mixed $value
 	 */
 	function fw_set_db_settings_option( $option_id = null, $value ) {
+		FW_Cache::del('fw_settings_options/default_and_db_values');
+
+		try {
+			$options = FW_Cache::get( $cache_key = 'fw_only_options/settings' );
+		} catch ( FW_Cache_Not_Found_Exception $e ) {
+			FW_Cache::set(
+				$cache_key,
+				$options = fw_extract_only_options(fw()->theme->get_settings_options())
+			);
+		}
+
+		if (empty($option_id)) {
+			foreach ($options as $id => $option) {
+				if (isset($value[$id])) {
+					$value[ $id ] = fw()->backend->option_type( $options[ $id ]['type'] )->storage_save(
+						$id, $options[ $id ], $value[$id], array()
+					);
+				}
+			}
+		} else {
+			if (isset($options[$option_id]) && isset($value[ $option_id ])) {
+				$value[ $option_id ] = fw()->backend->option_type( $options[ $option_id ]['type'] )->storage_save(
+					$option_id,
+					$options[ $option_id ],
+					$value[ $option_id ],
+					array()
+				);
+			}
+		}
+
 		FW_WP_Option::set(
 			'fw_theme_settings_options:' . fw()->theme->manifest->get_id(),
 			$option_id, $value
@@ -152,7 +215,7 @@
 		if ($option_id) {
 			$option_id = explode('/', $option_id); // 'option_id/sub/keys'
 			$_option_id = array_shift($option_id); // 'option_id'
-			$sub_keys  = implode('/', $option_id); // 'sub/keys'
+			$sub_keys = empty($option_id) ? null : implode('/', $option_id); // 'sub/keys'
 			$option_id = $_option_id;
 			unset($_option_id);
 
@@ -239,7 +302,7 @@
 		if ($option_id) {
 			$option_id = explode('/', $option_id); // 'option_id/sub/keys'
 			$_option_id = array_shift($option_id); // 'option_id'
-			$sub_keys  = implode('/', $option_id); // 'sub/keys'
+			$sub_keys = empty($option_id) ? null : implode('/', $option_id); // 'sub/keys'
 			$option_id = $_option_id;
 			unset($_option_id);
 
