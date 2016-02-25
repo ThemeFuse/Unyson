@@ -731,7 +731,7 @@ final class _FW_Component_Backend {
 
 		fw_collect_options( $collected, $options, array(
 			'limit_option_types' => false,
-			'limit_container_types' => array(), // only simple options are allowed on taxonomy edit page
+			'limit_container_types' => false,
 			'limit_level' => 1,
 		) );
 
@@ -1415,11 +1415,21 @@ final class _FW_Component_Backend {
 
 			switch ( $collected_type['group'] ) {
 				case 'container':
-					$html .= $this->container_type($collected_type['type'])->render(
-						$collected_type_options,
-						$values,
-						$options_data
-					);
+					if ($design === 'taxonomy') {
+						$html .= fw_render_view(
+							fw_get_framework_directory('/views/backend-container-design-'. $design .'.php'),
+							array(
+								'type' => $collected_type['type'],
+								'html' => $this->container_type($collected_type['type'])->render(
+									$collected_type_options, $values, $options_data
+								),
+							)
+						);
+					} else {
+						$html .= $this->container_type($collected_type['type'])->render(
+							$collected_type_options, $values, $options_data
+						);
+					}
 					break;
 				case 'option':
 					foreach ( $collected_type_options as $id => &$_option ) {

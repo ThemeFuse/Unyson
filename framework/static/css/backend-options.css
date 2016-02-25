@@ -1130,6 +1130,10 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 	padding: 9px 10px;
 }
 
+#edittag td.fw-backend-container-content {
+	padding-left: 0;
+}
+
 .fw-backend-option-design-taxonomy input[type=checkbox],
 .fw-backend-option-design-taxonomy input[type=radio] {
 	width: auto;
