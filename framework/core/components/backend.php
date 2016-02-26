@@ -1561,7 +1561,7 @@ final class _FW_Component_Backend {
 		}
 
 		$data = apply_filters(
-			'fw:backend:prepare_backend_json',
+			'fw:backend:option-render:data',
 			$data
 		);
 
