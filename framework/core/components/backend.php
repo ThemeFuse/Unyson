@@ -1560,6 +1560,11 @@ final class _FW_Component_Backend {
 			$data['value'] = $option['option_handler']->get_option_value($id, $option, $data);
 		}
 
+		$data = apply_filters(
+			'fw:backend:prepare_backend_json',
+			$data
+		);
+
 		return fw_render_view(fw_get_framework_directory('/views/backend-option-design-'. $design .'.php'), array(
 			'id'     => $id,
 			'option' => $option,
