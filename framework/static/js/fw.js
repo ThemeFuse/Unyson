@@ -615,6 +615,7 @@ fw.getQueryString = function(name) {
 			 * @private
 			 */
 			html: '',
+			modalCustomClass: '',
 			size: 'small' // small, medium, large
 		},
 		ContentView: Backbone.View.extend({
@@ -709,16 +710,21 @@ fw.getQueryString = function(name) {
 			var modal = this;
 
 			this.frame.once('ready', function(){
-				var $modalWrapper = modal.frame.modal.$el,
-					$modal        = $modalWrapper.find('.media-modal'),
-					$backdrop     = $modalWrapper.find('.media-modal-backdrop'),
-					size          = modal.get('size'),
-					stackSize     = modalsStack.getSize(),
-					$close        = $modalWrapper.find('.media-modal-close');
+				var $modalWrapper  = modal.frame.modal.$el,
+					$modal           = $modalWrapper.find('.media-modal'),
+					$backdrop        = $modalWrapper.find('.media-modal-backdrop'),
+					size             = modal.get('size'),
+					modalCustomClass = modal.get('modalCustomClass'),
+					stackSize        = modalsStack.getSize(),
+					$close           = $modalWrapper.find('.media-modal-close');
 
 				modal.frame.$el.addClass('hide-toolbar');
 
 				$modalWrapper.addClass('fw-modal');
+
+				if (modalCustomClass) {
+					$modalWrapper.addClass(modalCustomClass);
+				}
 
 				if (_.indexOf(['large', 'medium', 'small'], size) !== -1) {
 					$modalWrapper.addClass('fw-modal-' + size);
