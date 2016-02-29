@@ -52,7 +52,7 @@
 				$cache_key,
 				$values = array_merge(
 					fw_get_options_values_from_input($options, array()), // default values from options array
-					FW_WP_Option::get(
+					(array)FW_WP_Option::get(
 						'fw_theme_settings_options:'. fw()->theme->manifest->get_id(), null, array(), $get_original_value
 					)
 				)
