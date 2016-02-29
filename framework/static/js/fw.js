@@ -603,6 +603,12 @@ fw.getQueryString = function(name) {
 	 * Usage:
 	 * var modal = new fw.Modal();
 	 *
+	 * You can add a custom CSS class to your fw.Modal this way:
+	 *
+	 * var modal = new fw.Modal ({
+	 *   modalCustomClass: 'your-custom-css-class'
+	 * });
+	 *
 	 * modal.on('open|render|closing|close', function(){});
 	 */
 	fw.Modal = Backbone.Model.extend({
@@ -615,6 +621,7 @@ fw.getQueryString = function(name) {
 			 * @private
 			 */
 			html: '',
+			modalCustomClass: '',
 			size: 'small' // small, medium, large
 		},
 		ContentView: Backbone.View.extend({
@@ -710,16 +717,21 @@ fw.getQueryString = function(name) {
 			var modal = this;
 
 			this.frame.once('ready', function(){
-				var $modalWrapper = modal.frame.modal.$el,
-					$modal        = $modalWrapper.find('.media-modal'),
-					$backdrop     = $modalWrapper.find('.media-modal-backdrop'),
-					size          = modal.get('size'),
-					stackSize     = modalsStack.getSize(),
-					$close        = $modalWrapper.find('.media-modal-close');
+				var $modalWrapper  = modal.frame.modal.$el,
+					$modal           = $modalWrapper.find('.media-modal'),
+					$backdrop        = $modalWrapper.find('.media-modal-backdrop'),
+					size             = modal.get('size'),
+					modalCustomClass = modal.get('modalCustomClass'),
+					stackSize        = modalsStack.getSize(),
+					$close           = $modalWrapper.find('.media-modal-close');
 
 				modal.frame.$el.addClass('hide-toolbar');
 
 				$modalWrapper.addClass('fw-modal');
+
+				if (modalCustomClass) {
+					$modalWrapper.addClass(modalCustomClass);
+				}
 
 				if (_.indexOf(['large', 'medium', 'small'], size) !== -1) {
 					$modalWrapper.addClass('fw-modal-' + size);
@@ -986,7 +998,9 @@ fw.getValuesFromServer = function (data) {
 	 *  values: {
 	 *      'test1': 'Default1',
 	 *      'test2': 'Default2'
-	 *  }
+	 *  },
+	 *  modalCustomClass: 'some-custom-class' // if you want to add some css class
+	 *                                        // to your modal
 	 * });
 	 *
 	 * // listen for values change
