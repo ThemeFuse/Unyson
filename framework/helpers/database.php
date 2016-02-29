@@ -14,6 +14,8 @@
 	 * @return mixed|null
 	 */
 	function fw_get_db_settings_option( $option_id = null, $default_value = null, $get_original_value = null ) {
+		static $merge_values_with_defaults = false;
+
 		if (empty($option_id)) {
 			$sub_keys = null;
 		} else {
@@ -34,7 +36,7 @@
 				)
 			);
 
-			$update_values = true;
+			$merge_values_with_defaults = true;
 		}
 
 		/**
@@ -73,7 +75,8 @@
 		/**
 		 * Complete missing db values with default values from options array
 		 */
-		if (isset($update_values)) {
+		if ($merge_values_with_defaults) {
+			$merge_values_with_defaults = false;
 			FW_Cache::set(
 				'fw_settings_options/values',
 				$values = array_merge(fw_get_options_values_from_input($options, array()), $values)
