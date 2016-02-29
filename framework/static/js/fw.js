@@ -703,7 +703,8 @@ fw.getQueryString = function(name) {
 
 			this.frame = new wp.media.view.MediaFrame({
 				state: 'main',
-				states: [ new ControllerMainState ]
+				states: [ new ControllerMainState ],
+				uploader: false
 			});
 
 			var modal = this;
