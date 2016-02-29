@@ -25,37 +25,58 @@
 		}
 
 		try {
-			static $is_recursion = false;
+			$values = FW_Cache::get($cache_key = 'fw_settings_options/values');
+		} catch (FW_Cache_Not_Found_Exception $e) {
+			FW_Cache::set(
+				$cache_key,
+				$values = (array)FW_WP_Option::get(
+					'fw_theme_settings_options:'. fw()->theme->manifest->get_id(), null, array(), $get_original_value
+				)
+			);
 
-			$options = FW_Cache::get( $cache_key = 'fw_only_options/settings' );
-		} catch ( FW_Cache_Not_Found_Exception $e ) {
-			if ($is_recursion) {
-				/**
-				 * This happens when this function is called inside options array file.
-				 */
-				$options = array();
+			$update_values = true;
+		}
+
+		/**
+		 * If db value is not found and default value is provided
+		 * return default value before loading options file
+		 * to prevent infinite recursion in case if this function is called in options file
+		 */
+		if ( ! is_null($default_value) ) {
+			if ( empty( $option_id ) ) {
+				if ( empty( $values ) && is_array( $default_value ) ) {
+					return $default_value;
+				}
 			} else {
-				$is_recursion = true;
-
-				$options = fw_extract_only_options(fw()->theme->get_settings_options());
+				if ( is_null( $sub_keys ) ) {
+					if ( ! isset( $values[ $option_id ] ) ) {
+						return $default_value;
+					}
+				} else {
+					if ( is_null( fw_akg( $sub_keys, $values[ $option_id ] ) ) ) {
+						return $default_value;
+					}
+				}
 			}
-
-			FW_Cache::set($cache_key, $options);
-
-			$is_recursion = false;
 		}
 
 		try {
-			$values = FW_Cache::get( $cache_key = 'fw_settings_options/default_and_db_values' );
-		} catch ( FW_Cache_Not_Found_Exception $e ) {
+			$options = FW_Cache::get( $cache_key = 'fw_only_options/settings' );
+		} catch (FW_Cache_Not_Found_Exception $e) {
+			FW_Cache::set($cache_key, array()); // prevent infinite recursion
 			FW_Cache::set(
 				$cache_key,
-				$values = array_merge(
-					fw_get_options_values_from_input($options, array()), // default values from options array
-					(array)FW_WP_Option::get(
-						'fw_theme_settings_options:'. fw()->theme->manifest->get_id(), null, array(), $get_original_value
-					)
-				)
+				$options = fw_extract_only_options(fw()->theme->get_settings_options())
+			);
+		}
+
+		/**
+		 * Complete missing db values with default values from options array
+		 */
+		if (isset($update_values)) {
+			FW_Cache::set(
+				'fw_settings_options/values',
+				$values = array_merge(fw_get_options_values_from_input($options, array()), $values)
 			);
 		}
 
@@ -94,7 +115,7 @@
 	 * @param mixed $value
 	 */
 	function fw_set_db_settings_option( $option_id = null, $value ) {
-		FW_Cache::del('fw_settings_options/default_and_db_values');
+		FW_Cache::del('fw_settings_options/values');
 
 		try {
 			$options = FW_Cache::get( $cache_key = 'fw_only_options/settings' );
