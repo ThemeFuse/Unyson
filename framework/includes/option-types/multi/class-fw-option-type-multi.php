@@ -53,20 +53,19 @@ class FW_Option_Type_Multi extends FW_Option_Type
 	 */
 	protected function _get_value_from_input($option, $input_value)
 	{
-		if (
-			is_array($input_value) ||
-			empty($option['value'])
-		) {
+		if ( is_array($input_value) || empty($option['value']) ) {
 			$value = array();
-
-			foreach (fw_extract_only_options($option['inner-options']) as $inner_id => $inner_option) {
-				$value[$inner_id] = fw()->backend->option_type($inner_option['type'])->get_value_from_input(
-					$inner_option,
-					isset($input_value[$inner_id]) ? $input_value[$inner_id] : null
-				);
-			}
 		} else {
 			$value = $option['value'];
+		}
+
+		foreach (fw_extract_only_options($option['inner-options']) as $inner_id => $inner_option) {
+			$value[$inner_id] = fw()->backend->option_type($inner_option['type'])->get_value_from_input(
+				isset($value[$inner_id])
+					? array_merge($inner_option, array('value' => $value[$inner_id]))
+					: $inner_option,
+				isset($input_value[$inner_id]) ? $input_value[$inner_id] : null
+			);
 		}
 
 		return $value;
