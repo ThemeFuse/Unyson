@@ -603,6 +603,12 @@ fw.getQueryString = function(name) {
 	 * Usage:
 	 * var modal = new fw.Modal();
 	 *
+	 * You can add a custom CSS class to your fw.Modal this way:
+	 *
+	 * var modal = new fw.Modal ({
+	 *   modalCustomClass: 'your-custom-css-class'
+	 * });
+	 *
 	 * modal.on('open|render|closing|close', function(){});
 	 */
 	fw.Modal = Backbone.Model.extend({
@@ -991,7 +997,9 @@ fw.getValuesFromServer = function (data) {
 	 *  values: {
 	 *      'test1': 'Default1',
 	 *      'test2': 'Default2'
-	 *  }
+	 *  },
+	 *  modalCustomClass: 'some-custom-class' // if you want to add some css class
+	 *                                        // to your modal
 	 * });
 	 *
 	 * // listen for values change
