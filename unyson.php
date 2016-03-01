@@ -8,7 +8,7 @@
  * Author URI: http://themefuse.com
  * License: GPL2+
  * Text Domain: fw
- * Domain Path: /languages/
+ * Domain Path: /framework/languages
  */
 
 if (defined('FW')) {
@@ -111,7 +111,7 @@ if (defined('FW')) {
 		function _action_fw_textdomain() {
 			load_plugin_textdomain( 'fw', false, plugin_basename( dirname( __FILE__ ) ) . '/framework/languages' );
 		}
-		add_action( 'plugins_loaded', '_action_fw_textdomain' );
+		add_action( 'fw_before_init', '_action_fw_textdomain', 3 );
 
 		/** @internal */
 		function _filter_fw_tmp_dir( $dir ) {

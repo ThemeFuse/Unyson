@@ -71,7 +71,7 @@ if (!$installed_data && !$is_compatible) {
 					?></h3>
 
 					<?php if ($description): ?>
-						<p class="fw-extensions-list-item-desc"><?php echo $description; ?></p>
+						<p class="fw-extensions-list-item-desc"><?php echo esc_html($description); ?></p>
 					<?php endif; ?>
 
 					<?php
