@@ -331,14 +331,14 @@ abstract class FW_Option_Type
 	 */
 	final public function storage_load($id, array $option, $value, array $params = array()) {
 		if ($this->get_type() === $option['type']) {
-			return $this->_storage_load($id, $option, $value, $params);
+			return $this->_storage_load($id, array_merge($this->get_defaults(), $option), $value, $params);
 		} else {
 			return $value;
 		}
 	}
 
 	/**
-	 * @see storage_load
+	 * @see storage_load()
 	 * @param string $id
 	 * @param array $option
 	 * @param mixed $value
@@ -364,14 +364,14 @@ abstract class FW_Option_Type
 	 */
 	final public function storage_save($id, array $option, $value, array $params = array()) {
 		if ($this->get_type() === $option['type']) {
-			return $this->_storage_save($id, $option, $value, $params);
+			return $this->_storage_save($id, array_merge($this->get_defaults(), $option), $value, $params);
 		} else {
 			return $value;
 		}
 	}
 
 	/**
-	 * @see storage_save
+	 * @see storage_save()
 	 * @param string $id
 	 * @param array $option
 	 * @param mixed $value
