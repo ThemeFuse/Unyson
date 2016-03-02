@@ -330,8 +330,16 @@ abstract class FW_Option_Type
 	 * @since 2.5.0
 	 */
 	final public function storage_load($id, array $option, $value, array $params = array()) {
-		if ($this->get_type() === $option['type']) {
-			return $this->_storage_load($id, array_merge($this->get_defaults(), $option), $value, $params);
+		if (
+			$this->get_type() === $option['type']
+			&&
+			($option = array_merge($this->get_defaults(), $option))
+		) {
+			if (is_null($value)) {
+				$value = fw()->backend->option_type($option['type'])->get_value_from_input($option, $value);
+			}
+
+			return $this->_storage_load($id, $option, $value, $params);
 		} else {
 			return $value;
 		}
@@ -363,8 +371,12 @@ abstract class FW_Option_Type
 	 * @since 2.5.0
 	 */
 	final public function storage_save($id, array $option, $value, array $params = array()) {
-		if ($this->get_type() === $option['type']) {
-			return $this->_storage_save($id, array_merge($this->get_defaults(), $option), $value, $params);
+		if (
+			$this->get_type() === $option['type']
+			&&
+			($option = array_merge($this->get_defaults(), $option))
+		) {
+			return $this->_storage_save($id, $option, $value, $params);
 		} else {
 			return $value;
 		}
