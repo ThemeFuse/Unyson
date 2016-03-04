@@ -212,7 +212,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 			&&
 			true === $option['show_borders']
 		) {
-			$show_borders = 'fw-show-borders';
+			$show_borders = 'fw-show-borders fw-option-type-multi-show-borders';
 		}
 
 		$choices_groups = array();
