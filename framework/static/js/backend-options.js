@@ -63,6 +63,26 @@ jQuery(document).ready(function($){
 				if (html = $tab.attr(htmlAttrName)) {
 					fwEvents.trigger('fw:options:init', {
 						$elements: $tab.removeAttr(htmlAttrName).html(html),
+						/**
+						 * Sometimes we want to perform some action just when
+						 * lazy tabs are rendered. It's important in those cases
+						 * to distinguish regular fw:options:init events from
+						 * the ones that will render tabs. Passing by this little
+						 * detail may break some widgets because fw:options:init
+						 * event may be fired even when tabs are not yet rendered.
+						 *
+						 * That's how you can be sure that you'll run a piece
+						 * of code just when tabs will be arround 100%.
+						 *
+						 * fwEvents.on('fw:options:init', function (data) {
+						 *   if (! data.lazyTabsUpdated) {
+						 *     return;
+						 *   }
+						 *
+						 *   // Do your business
+						 * });
+						 *
+						 */
 						lazyTabsUpdated: true
 					});
 				}
