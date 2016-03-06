@@ -62,7 +62,8 @@ jQuery(document).ready(function($){
 
 				if (html = $tab.attr(htmlAttrName)) {
 					fwEvents.trigger('fw:options:init', {
-						$elements: $tab.removeAttr(htmlAttrName).html(html)
+						$elements: $tab.removeAttr(htmlAttrName).html(html),
+						lazyTabsUpdated: true
 					});
 				}
 			},
