@@ -4,7 +4,8 @@
 		var $this = $(this),
 			elements = {
 				$container: $this,
-				$input: $this.find('input[type="hidden"]'),
+				$input: $this.find('input[type="hidden"]:first'),
+				$urlInput: $this.find('input[type="hidden"].fw-option-type-upload-image-url'),
 				$uploadButton: $this.find('p a'),
 				$thumb: $this.find('.thumb')
 			},
@@ -97,6 +98,7 @@
 									'data-attid': attachment.id,
 									'data-origsrc': attachment.get('url')
 								});
+					elements.$urlInput.val(attachment.get('url'));
 					elements.$input.val(attachment.id).trigger('change');
 					elements.$container.removeClass('empty');
 

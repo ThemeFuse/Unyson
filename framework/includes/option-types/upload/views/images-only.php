@@ -33,4 +33,12 @@
 		'<img src="<%- data.src %>" alt="<%- data.alt %>"/>'.
 		'<a href="#" class="dashicons fw-x clear-uploads-thumb"></a>'
 	); ?>">
+
+	<!-- fixes https://github.com/ThemeFuse/Unyson/issues/1309 -->
+	<?php echo fw_html_tag('input', array(
+		'type' => 'hidden',
+		'name' => '_fake[url]',
+		'value' => intval($input_attr['value']) ? wp_get_attachment_url($input_attr['value']) : '',
+		'class' => 'fw-option-type-upload-image-url'
+	)); ?>
 </div>
