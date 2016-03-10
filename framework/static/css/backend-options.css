@@ -900,8 +900,7 @@ body.rtl .fw-postbox > .inside > .fw-backend-options-last-border-hider {
 }
 
 .fw-backend-option-design-default > .fw-backend-option-input > .fw-inner,
-.fw-backend-option-design-customizer > .fw-backend-option-input > .fw-inner,
-.fw-backend-option-design-taxonomy > td > .fw-backend-option-input > .fw-inner {
+.fw-backend-option-design-customizer > .fw-backend-option-input > .fw-inner {
 	position: relative;
 	max-width: 100%;
 
@@ -912,15 +911,13 @@ body.rtl .fw-postbox > .inside > .fw-backend-options-last-border-hider {
 
 .fw-backend-option-design-default > .fw-backend-option-input.width-type-fixed > .fw-inner,
 .fw-backend-option-design-customizer > .fw-backend-option-input.width-type-fixed > .fw-inner,
-.fw-backend-option-design-taxonomy > td > .fw-backend-option-input.width-type-fixed > .fw-inner,
 .fw-backend-option-fixed-width {
 	width: 100%;
 	max-width: 428px;
 }
 
 .fw-backend-option-design-default > .fw-backend-option-input.width-type-full > .fw-inner,
-.fw-backend-option-design-customizer > .fw-backend-option-input.width-type-full > .fw-inner,
-.fw-backend-option-design-taxonomy > td > .fw-backend-option-input.width-type-full > .fw-inner {
+.fw-backend-option-design-customizer > .fw-backend-option-input.width-type-full > .fw-inner {
 	width: 100%;
 }
 
@@ -1079,14 +1076,12 @@ body.rtl .fw-force-xs .fw-backend-option-design-default.with-help > .fw-backend-
 	color: #333333;
 }
 
-.fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner > .fw-option-help,
-.fw-backend-option-design-taxonomy.with-help > td > .fw-backend-option-input > .fw-inner > .fw-option-help {
+.fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner > .fw-option-help {
 	position: absolute;
 	top: 0;
 	right: 0px;
 }
-body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner > .fw-option-help,
-body.rtl .fw-backend-option-design-taxonomy.with-help > td > .fw-backend-option-input > .fw-inner > .fw-option-help {
+body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner > .fw-option-help {
 	right: auto;
 	left: 0;
 }
@@ -1099,22 +1094,18 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 }
 
 @media (min-width: 783px) {
-	.fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner,
-	.fw-backend-option-design-taxonomy.with-help > td > .fw-backend-option-input > .fw-inner {
+	.fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner {
 		padding-right: 26px;
 	}
-	body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner,
-	body.rtl .fw-backend-option-design-taxonomy.with-help > td > .fw-backend-option-input > .fw-inner {
+	body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner {
 		padding-right: 0;
 		padding-left: 26px;
 	}
 
-	.fw-force-xs .fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner,
-	.fw-force-xs .fw-backend-option-design-taxonomy.with-help > td > .fw-backend-option-input > .fw-inner {
+	.fw-force-xs .fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner {
 		padding-right: 0;
 	}
-	body.rtl .fw-force-xs .fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner,
-	body.rtl .fw-force-xs .fw-backend-option-design-taxonomy.with-help > td > .fw-backend-option-input > .fw-inner {
+	body.rtl .fw-force-xs .fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner {
 		padding-right: inherit;
 		padding-left: 0;
 	}
@@ -1125,35 +1116,58 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 
 /* Edit Term page */
 
-
-#edittag .form-table td {
-	padding: 9px 10px;
-}
-
 #edittag td.fw-backend-container-content {
 	padding-left: 0;
 }
 
-.fw-backend-option-design-taxonomy input[type=checkbox],
-.fw-backend-option-design-taxonomy input[type=radio] {
+
+#edittag > .fw-backend-option,
+#edittag > .fw-backend-options-group > .fw-backend-option,
+#edittag > .fw-backend-option-type-multi .fw-backend-option,
+#edittag > .fw-backend-option-type-multi-picker .fw-backend-option {
+	padding: 15px 0;
+	border-bottom-width: 0;
+}
+
+@media (min-width: 783px) {
+	#edittag > .fw-backend-option > .fw-backend-option-label,
+	#edittag > .fw-backend-options-group > .fw-backend-option > .fw-backend-option-label,
+	#edittag > .fw-backend-option-type-multi .fw-backend-option > .fw-backend-option-label,
+	#edittag > .fw-backend-option-type-multi-picker .fw-backend-option > .fw-backend-option-label {
+		width: 219px;
+	}
+
+	#edittag > .fw-backend-option > .fw-backend-option-input,
+	#edittag > .fw-backend-options-group > .fw-backend-option > .fw-backend-option-input,
+	#edittag > .fw-backend-option-type-multi .fw-backend-option > .fw-backend-option-input,
+	#edittag > .fw-backend-option-type-multi-picker .fw-backend-option > .fw-backend-option-input{
+		width: calc(100% - 219px);
+	}
+
+	#edittag > .fw-backend-option > .fw-backend-option-desc,
+	#edittag > .fw-backend-options-group > .fw-backend-option > .fw-backend-option-desc,
+	#edittag > .fw-backend-option-type-multi .fw-backend-option > .fw-backend-option-desc,
+	#edittag > .fw-backend-option-type-multi-picker .fw-backend-option > .fw-backend-option-desc {
+		margin-left: 219px;
+	}
+}
+
+#edittag .fw-backend-option input[type=checkbox],
+#edittag .fw-backend-option input[type=radio] {
 	width: auto;
 }
 
 @media (max-width: 782px) {
-	.fw-backend-option-design-taxonomy input[type=checkbox],
-	.fw-backend-option-design-taxonomy input[type=radio] {
+	#edittag .fw-backend-option input[type=checkbox],
+	#edittag .fw-backend-option input[type=radio] {
 		height: 25px;
 		width: 25px;
 	}
-
-	.fw-backend-option-design-taxonomy .fw-backend-option-label .fw-option-help {
-		display: inline-block !important;
-	}
 }
 
-.fw-backend-option-design-taxonomy .description,
-.fw-backend-option-design-taxonomy .fw-backend-option-desc {
-	font-size: 13px;
+#edittag .fw-backend-option .description,
+#edittag .fw-backend-option .fw-backend-option-desc .fw-inner {
+	font-size: 14px;
 }
 
 /* end: Edit Term page */

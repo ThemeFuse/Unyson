@@ -751,8 +751,10 @@ final class _FW_Component_Backend {
 		$current_edit_taxonomy = $this->get_current_edit_taxonomy();
 
 		if ( $current_edit_taxonomy['taxonomy'] ) {
-			add_action( $current_edit_taxonomy['taxonomy'] . '_edit_form_fields',
-				array( $this, '_action_create_taxonomy_options' ), 10 );
+			add_action(
+				$current_edit_taxonomy['taxonomy'] . '_edit_form',
+				array( $this, '_action_create_taxonomy_options' )
+			);
 		}
 
 		if ( ! empty( $_POST ) ) {
