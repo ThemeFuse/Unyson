@@ -2970,7 +2970,6 @@ body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	width: 100%;
 }
 
 .fw-modal.fw-modal-small > .media-modal {
@@ -2994,6 +2993,13 @@ body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 
 .fw-modal .fw-options-tabs-first-level > .fw-options-tabs-list {
 	padding-top: 20px;
+}
+
+.fw-modal .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
+	padding-left: 25px;
+}
+body.rtl .fw-modal .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
+	padding-right: 25px;
 }
 
 .fw-modal .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab {

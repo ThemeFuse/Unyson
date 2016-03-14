@@ -143,13 +143,6 @@ body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-
 	padding: 0 5px 0 0;
 }
 
-.fw-modal .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
-	padding-left: 25px;
-}
-body.rtl .fw-modal .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
-	padding-right: 25px;
-}
-
 .postbox .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
 	padding: 0 0 0 25px;
 }
