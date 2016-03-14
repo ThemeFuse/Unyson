@@ -464,12 +464,13 @@ abstract class FW_Extension
 	 * fw()->extensions->get('your-extension')->enqueue_all_css(false) // everywhere
 	 *
 	 * @param bool a flag that will indicate if you want to include css just on admin side
+	 * @param string limit to a specific extension. Useful when you use preprocessors
 	 * @return void
 	 *
 	 */
-	final public function enqueue_all_css($perform_admin_check = true)
+	final public function enqueue_all_css($perform_admin_check = true, $extension = 'css')
 	{
-		$this->enqueue_all_by_type('css', $perform_admin_check);
+		$this->enqueue_all_by_type('css', $perform_admin_check, $extension);
 	}
 
 	/**
@@ -481,15 +482,16 @@ abstract class FW_Extension
 	 *
 	 *
 	 * @param bool a flag that will indicate if you want to include js just on admin side
+	 * @param string limit to a specific extension. Useful when you use preprocessors
 	 * @return void
 	 *
 	 */
-	final public function enqueue_all_js($perform_admin_check = true)
+	final public function enqueue_all_js($perform_admin_check = true, $extension = 'js')
 	{
-		$this->enqueue_all_by_type('js', $perform_admin_check);
+		$this->enqueue_all_by_type('js', $perform_admin_check, $extension);
 	}
 
-	final private function enqueue_all_by_type($type, $perform_admin_check)
+	final private function enqueue_all_by_type($type, $perform_admin_check, $extension)
 	{
 		if ($perform_admin_check) {
 			if (! is_admin()) {
@@ -500,7 +502,6 @@ abstract class FW_Extension
 		$all_files = glob($this->get_path('/static/' . $type . '/*'));
 
 		foreach ($all_files as $file){
-			$extension = pathinfo($file, PATHINFO_EXTENSION);
 			$basename = basename($file, '.' . $extension);
 
 			if ($type == 'js') {
