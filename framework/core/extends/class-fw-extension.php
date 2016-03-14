@@ -457,6 +457,96 @@ abstract class FW_Extension
 	}
 
 	/**
+	 * Enque all css for one particular extension
+	 *
+	 * Usage:
+	 * fw()->extensions->get('your-extension')->enqueue_all_css() // on admin side
+	 * fw()->extensions->get('your-extension')->enqueue_all_css(false) // everywhere
+	 *
+	 * @param bool a flag that will indicate if you want to include css just on admin side
+	 * @return void
+	 *
+	 */
+	final public function enqueue_all_css($perform_admin_check = true)
+	{
+		$this->enqueue_all_by_type('css', $perform_admin_check);
+	}
+
+	/**
+	 * Enque all js for one particular extension
+	 *
+	 * Usage:
+	 * fw()->extensions->get('your-extension')->enqueue_all_js() // on admin side
+	 * fw()->extensions->get('your-extension')->enqueue_all_js(false) // everywhere
+	 *
+	 *
+	 * @param bool a flag that will indicate if you want to include js just on admin side
+	 * @return void
+	 *
+	 */
+	final public function enqueue_all_js($perform_admin_check = true)
+	{
+		$this->enqueue_all_by_type('js', $perform_admin_check);
+	}
+
+	final private function enqueue_all_by_type($type, $perform_admin_check)
+	{
+		if ($perform_admin_check) {
+			if (! is_admin()) {
+				return;
+			}
+		}
+
+		$all_files = glob($this->get_path('/static/' . $type . '/*'));
+
+		foreach ($all_files as $file){
+			$extension = pathinfo($file, PATHINFO_EXTENSION);
+			$basename = basename($file, '.' . $extension);
+
+			if ($type == 'js') {
+				$file_URI = $this->locate_js_URI($basename);
+			}
+
+			if ($type == 'css') {
+				$file_URI = $this->locate_css_URI($basename);
+			}
+
+			if ($file_URI) {
+				$handle = 'fw-extension-' . $this->get_name() . '-' . $type . '-' . $basename;
+
+				if ($type === 'js') {
+					wp_enqueue_script(
+						$handle,
+						$file_URI,
+						array(),
+						$this->manifest->get_version()
+					);
+				}
+
+				if ($type === 'css') {
+					wp_enqueue_style(
+						$handle,
+						$file_URI,
+						array(),
+						$this->manifest->get_version()
+					);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Shorthand for:
+	 * fw()->extensions->get('your-extension')->enqueue_all_js()
+	 * fw()->extensions->get('your-extension')->enqueue_all_css()
+	 */
+	final public function enqueue_all_static($perform_admin_check = true)
+	{
+		$this->enqueue_all_css($perform_admin_check);
+		$this->enqueue_all_js($perform_admin_check);
+	}
+
+	/**
 	 * @param string $name File name without extension, located in <extension>/views/$name.php
 	 * @return false|string
 	 */
