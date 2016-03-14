@@ -1217,6 +1217,16 @@ fw.getValuesFromServer = function (data) {
 			})
 		},
 
+		/**
+		 * @returns {Promise} jQuery promise
+		 *
+		 * Will work out just like getValuesFromServer() did, but it will
+		 * also include values that are currently in the form.
+		 */
+		getActualValues: function () {
+			return this.getValuesFromServer(this.content.$el.serialize());
+		},
+
 		getHtmlCacheId: function(values) {
 			return fw.md5(
 				JSON.stringify(this.get('options')) +
