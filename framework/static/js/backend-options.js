@@ -92,7 +92,7 @@ jQuery(document).ready(function($){
 
 				// initialized tabs can contain tabs, so init recursive until nothing is found
 				while (($tabs = $el.find(selector)).length) {
-					$tabs.each(function () { initTab($(this)); });
+					$tabs.each(function(){ initTab($(this)); });
 				}
 			};
 

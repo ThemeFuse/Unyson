@@ -167,16 +167,9 @@ function fw_rand_md5() {
 	return md5(time() .'-'. uniqid(rand(), true) .'-'. mt_rand(1, 1000));
 }
 
-/**
- * Return last + 1
- */
 function fw_unique_increment() {
-	static $i = null;
-
-	if ($i === null)
-		$i = mt_rand(0, 9370);
-
-	return $i++;
+	static $i = 0;
+	return ++$i;
 }
 
 /**
