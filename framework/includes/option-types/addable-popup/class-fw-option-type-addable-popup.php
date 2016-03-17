@@ -113,6 +113,11 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 			$values = array();
 
 			foreach ($input_value as $elem){
+				/**
+				 * Do JSON deconding only if $elem is not already parsed.
+				 * json_decode will throw an error when passing him anything
+				 * but a string.
+				 */
 				if (is_array($elem)) {
 					$values[] = $elem;
 				} else {
