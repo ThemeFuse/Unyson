@@ -2443,12 +2443,18 @@ final class _FW_Extensions_Manager
 
 						if ($response_code !== 200) {
 							if ($response_code === 403) {
-								$json_response = json_decode($response['body'], true);
-
-								if ($json_response) {
+								if ($json_response = json_decode($response['body'], true)) {
 									return new WP_Error(
 										$wp_error_id,
 										__('Github error:', 'fw') .' '. $json_response['message']
+									);
+								} else {
+									return new WP_Error(
+										$wp_error_id,
+										sprintf(
+											__( 'Failed to access Github repository "%s" releases. (Response code: %d)', 'fw' ),
+											$source_data['user_repo'], $response_code
+										)
 									);
 								}
 							} elseif ($response_code) {

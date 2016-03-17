@@ -570,6 +570,12 @@ final class _FW_Component_Extensions
 	{
 		self::$access_key = new FW_Access_Key('fw_extensions');
 
+		/**
+		 * Extensions are about to activate.
+		 * You can add subclasses to FW_Extension at this point.
+		 */
+		do_action('fw_extensions_before_init');
+
 		$this->load_all_extensions();
 		$this->add_actions();
 	}
