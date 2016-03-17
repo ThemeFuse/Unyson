@@ -110,7 +110,20 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 		if (is_null($input_value)) {
 			$values = $option['value'];
 		} elseif (is_array($input_value)) {
-			$values = array_map( 'json_decode', $input_value, array_fill( 0, count($input_value), true ) );
+			$values = array();
+
+			foreach ($input_value as $elem){
+				/**
+				 * Do JSON deconding only if $elem is not already parsed.
+				 * json_decode will throw an error when passing him anything
+				 * but a string.
+				 */
+				if (is_array($elem)) {
+					$values[] = $elem;
+				} else {
+					$values[] = json_decode($elem, true);
+				}
+			}
 
 			if ( $option['limit'] = intval( $option['limit'] ) ) {
 				$values = array_slice( $values, 0, $option['limit'] );
