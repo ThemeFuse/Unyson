@@ -110,13 +110,15 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 		if (is_null($input_value)) {
 			$values = $option['value'];
 		} elseif (is_array($input_value)) {
-			$values = array_map(function ($elem) {
-				if (is_array($elem)) {
-					return $elem;
-				}
+			$values = array();
 
-				return json_decode($elem, true);
-			}, $input_value);
+			foreach ($input_value as $elem){
+				if (is_array($elem)) {
+					$values[] = $elem;
+				} else {
+					$values[] = json_decode($elem, true);
+				}
+			}
 
 			if ( $option['limit'] = intval( $option['limit'] ) ) {
 				$values = array_slice( $values, 0, $option['limit'] );
