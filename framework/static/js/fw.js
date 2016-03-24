@@ -678,8 +678,8 @@ fw.getQueryString = function(name) {
 			var modal = this;
 
 			var ControllerMainState = wp.media.controller.State.extend({
-				id: 'main',
 				defaults: {
+					id: 'main',
 					content: 'main',
 					menu: 'default',
 					title: this.get('title'),
