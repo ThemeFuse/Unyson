@@ -49,6 +49,8 @@ class FW_Extension_Update extends FW_Extension
 		add_action('update-core-custom_'. 'fw-update-framework',  array($this, '_action_update_framework'));
 		add_action('update-core-custom_'. 'fw-update-theme',      array($this, '_action_update_theme'));
 		add_action('update-core-custom_'. 'fw-update-extensions', array($this, '_action_update_extensions'));
+
+		add_action('admin_notices', array($this, '_action_admin_notices'));
 	}
 
 	private function add_filters()
@@ -87,11 +89,11 @@ class FW_Extension_Update extends FW_Extension
 		$updates = $this->get_updates(!empty($_GET['force-check']));
 
 		if ($updates['framework'] && !is_wp_error($updates['framework'])) {
-			$data['counts']['total']++;
+			++$data['counts']['total'];
 		}
 
 		if ($updates['theme'] && !is_wp_error($updates['theme'])) {
-			$data['counts']['total']++;
+			++$data['counts']['total'];
 		}
 
 		if (!empty($updates['extensions'])) {
@@ -100,7 +102,7 @@ class FW_Extension_Update extends FW_Extension
 					continue;
 				}
 
-				$data['counts']['total'] ++;
+				++$data['counts']['total'];
 
 				if ($this->get_config('extensions_as_one_update')) {
 					// no matter how many extensions, display as one update
@@ -947,5 +949,34 @@ class FW_Extension_Update extends FW_Extension
 		$skin->footer();
 
 		require_once(ABSPATH . 'wp-admin/admin-footer.php');
+	}
+
+	public function _action_admin_notices() {
+		if (
+			get_current_screen()->parent_base === fw()->extensions->manager->get_page_slug()
+			&&
+			($updates = $this->get_updates())
+			&&
+		    !empty($updates['extensions'])
+		) { /* ok */ } else {
+			return;
+		}
+
+		foreach ($updates['extensions'] as $ext_name => $ext_update) {
+			if ( is_wp_error( $ext_update ) ) {
+				return;
+			}
+
+			break;
+		}
+
+		echo '<div class="notice notice-warning"><p>'
+			. sprintf(
+				esc_html__('New extensions updates available. %s', 'fw'),
+				fw_html_tag('a', array(
+					'href' => self_admin_url('update-core.php') .'#fw-ext-update-extensions',
+				), esc_html__('Go to Updates page', 'fw'))
+			)
+			. '</p></div>';
 	}
 }
