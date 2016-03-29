@@ -1133,6 +1133,8 @@ final class _FW_Component_Backend {
 			} else {
 				$values = array();
 			}
+
+			$values = self::_fix_POST_values(array_intersect_key($values, fw_extract_only_options($options)));
 		}
 
 		// data
@@ -1144,68 +1146,39 @@ final class _FW_Component_Backend {
 			}
 		}
 
-		{
-			foreach ( fw_extract_only_options( $options ) as $option_id => $option ) {
-				if ( ! isset( $values[ $option_id ] ) ) {
-					continue;
-				}
+		wp_send_json_success( array(
+			'html' => fw()->backend->render_options( $options, $values, $data )
+		) );
+	}
 
+	private static function _fix_POST_values(array $values) {
+		$fixed = array();
+
+		foreach ($values as $key => $value ) {
+			if ('true' === $value || 'false' === $value) {
 				/**
 				 * Fix booleans
 				 *
 				 * In POST, booleans are transformed to strings: 'true' and 'false'
 				 * Transform them back to booleans
 				 */
-				do {
-					/**
-					 * Detect if option is using booleans by sending it a boolean input value
-					 * If it returns a boolean, then it works with booleans
-					 */
-					if ( ! is_bool(
-						fw()->backend->option_type( $option['type'] )->get_value_from_input( $option, true )
-					) ) {
-						break;
-					}
-
-					if ( is_bool( $values[ $option_id ] ) ) {
-						// value is already boolean, does not need to fix
-						break;
-					}
-
-					$values[ $option_id ] = ( $values[ $option_id ] === 'true' );
-
-					continue 2;
-				} while(false);
-
+				$fixed[ $key ] = ( $value === 'true' );
+			} elseif (is_numeric($value)) {
 				/**
 				 * Fix integers
 				 *
 				 * In POST, integers are transformed to strings: '0', '1', '2', ...
 				 * Transform them back to integers
 				 */
-				do {
-					if (!is_numeric($values[ $option_id ])) {
-						// do nothing if value is not a number
-						break;
-					}
-
-					/**
-					 * Detect if option is using integer value by checking $option['value']
-					 */
-					if ( isset($option['value']) && !is_int($option['value']) ) {
-						continue;
-					}
-
-					$values[ $option_id ] = (float) $values[ $option_id ];
-
-					continue 2;
-				} while(false);
+				$fixed[ $key ] = (float) $value;
+			} elseif (is_array($value)) {
+				$fixed[ $key ] = self::_fix_POST_values($value);
+			} else {
+				$fixed[ $key ] = $value;
 			}
 		}
 
-		wp_send_json_success( array(
-			'html' => fw()->backend->render_options( $options, $values, $data )
-		) );
+		return $fixed;
 	}
 
 	/**
