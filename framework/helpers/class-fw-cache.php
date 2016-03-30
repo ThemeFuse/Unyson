@@ -36,11 +36,6 @@ class FW_Cache
 	protected static $min_free_memory = 10485760;
 
 	/**
-	 * Max allowed memory for PHP
-	 */
-	protected static $memory_limit = null;
-
-	/**
 	 * A special value that is used to detect if value was found in cache
 	 * We can't use null|false because these can be values set by user and we can't treat them as not existing values
 	 */
@@ -69,21 +64,14 @@ class FW_Cache
 
 	protected static function get_memory_limit()
 	{
-		if (self::$memory_limit === null) {
-			$memory_limit = ini_get('memory_limit');
+		$memory_limit = ini_get('memory_limit');
 
-			if (preg_match('/^(\d+)(.)$/', $memory_limit, $matches)) {
-				if ($matches[2] == 'M') {
-					$memory_limit = $matches[1] * 1024 * 1024; // nnn_m -> nnn MB
-				} else if ($matches[2] == 'K') {
-					$memory_limit = $matches[1] * 1024; // nnn_k -> nnn KB
-				}
-			}
-
-			self::$memory_limit = $memory_limit;
+		switch (substr($memory_limit, -1)) {
+			case 'M': return intval($memory_limit) * 1024 * 1024;
+			case 'K': return intval($memory_limit) * 1024;
+			case 'G': return intval($memory_limit) * 1024 * 1024 * 1024;
+			default:  return intval($memory_limit) * 1024 * 1024;
 		}
-
-		return self::$memory_limit;
 	}
 
 	protected static function memory_exceeded()
