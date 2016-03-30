@@ -972,7 +972,10 @@
 				collection = new this.collectionType( null, options );
 			}
 
-			collection.model = this.relatedModel;
+			// if is default model, use our custom (if is custom created by user, do not touch it)
+			if (collection.model === Backbone.Collection.prototype.model) {
+				collection.model = this.relatedModel;
+			}
 
 			if ( this.options.collectionKey ) {
 				var key = this.options.collectionKey === true ? this.options.reverseRelation.key : this.options.collectionKey;
