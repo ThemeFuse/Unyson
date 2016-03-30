@@ -1286,7 +1286,49 @@ final class _FW_Component_Backend {
 		$old_values = (array) fw_get_db_settings_option();
 
 		if ( ! empty( $_POST['_fw_reset_options'] ) ) { // The "Reset" button was pressed
-			fw_set_db_settings_option( null, array() );
+			/**
+			 * Apply filters in order to get keys for values that have to be
+			 * persisted even user will reset Theme Settings.
+			 *
+			 * You have to look closely at your fw_get_db_settings_option()
+			 * output in order to get a MultiKey path to section you'd like
+			 * to persist from reset to reset.
+			 *
+			 * More about MultiKeys:
+			 * http://manual.unyson.io/en/latest/helpers/php.html#multikey
+			 *
+			 * Usage:
+			 *
+			 * add_filter('fw_settings_prevent_reset', 'add_persisted_option');
+			 *
+			 * function add_persisted_option ($current_persisted_options) {
+			 *
+			 *   // be kind and don't remove other options that are
+			 *   // around already
+			 *   $current_persisted_options[] = 'my/multi/key';
+			 *
+			 *   return $current_persisted_options;
+			 * }
+			 */
+			$options_to_prevent = apply_filters(
+				'fw_settings_prevent_reset',
+				array()
+			);
+
+			$options_to_set = array();
+
+			foreach ($options_to_prevent as $god_option) {
+				$god_value = fw_akg(
+					$god_option,
+					$old_values
+				);
+
+				if ($god_value) {
+					fw_aks($god_option, $god_value, $options_to_set);
+				}
+			}
+
+			fw_set_db_settings_option( null, $options_to_set );
 
 			FW_Flash_Messages::add( $flash_id, __( 'The options were successfully reset', 'fw' ), 'success' );
 
