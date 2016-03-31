@@ -134,6 +134,8 @@ final class _FW_Component_Backend {
 			));
 		}
 
+		do_action('fw_option_types_before_init');
+
 		$this->add_actions();
 		$this->add_filters();
 	}
