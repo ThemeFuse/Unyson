@@ -134,6 +134,13 @@ final class _FW_Component_Backend {
 			));
 		}
 
+		/**
+		 * Option types are about to activate.
+		 * You can add subclasses to FW_Option_Type by hooking
+		 * up to this action.
+		 */
+		do_action('fw_option_types_before_init');
+
 		$this->add_actions();
 		$this->add_filters();
 	}
