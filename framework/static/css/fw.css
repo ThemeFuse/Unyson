@@ -3062,24 +3062,6 @@ body.rtl .fw-modal .media-frame-content > form .fw-options-tabs-contents .fw-opt
 
 /* end: Hide last border */
 
-/* Responsive fixes */
-
-@media (min-width: 1200px) { /* https://github.com/ThemeFuse/Unyson/issues/1353 */
-	.fw-modal .fw-backend-option > .fw-col-lg-2 {
-		width: 25%;
-	}
-
-	.fw-modal .fw-backend-option > .fw-col-lg-offset-2 {
-		margin-left: 25%;
-	}
-
-	.fw-modal .fw-backend-option > .fw-col-lg-10 {
-		width: 75%;
-	}
-}
-
-/* end: Responsive fixes */
-
 /* end: Modal */
 
 
