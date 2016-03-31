@@ -1301,36 +1301,22 @@ final class _FW_Component_Backend {
 			 *
 			 * Usage:
 			 *
-			 * add_filter('fw_settings_prevent_reset', 'add_persisted_option');
+			 * add_filter('fw_settings_form_reset:values', 'add_persisted_option');
 			 *
-			 * function add_persisted_option ($current_persisted_options) {
+			 * function add_persisted_option ($current_persisted, $old_values) {
 			 *
-			 *   // be kind and don't remove other options that are
-			 *   // around already
-			 *   $current_persisted_options[] = 'my/multi/key';
+			 *   $value_to_persist = fw_akg('my/multi/key', $old_values);
 			 *
-			 *   return $current_persisted_options;
+			 *   fw_aks('my/multi/key', $value_to_persist, $current_persisted);
+			 *
+			 *   return $current_persisted;
 			 * }
 			 */
-			$options_to_prevent = apply_filters(
-				'fw_settings_prevent_reset',
-				array()
+
+			fw_set_db_settings_option(
+				null,
+				apply_filters('fw_settings_form_reset:values', array(), $old_values)
 			);
-
-			$options_to_set = array();
-
-			foreach ($options_to_prevent as $god_option) {
-				$god_value = fw_akg(
-					$god_option,
-					$old_values
-				);
-
-				if ($god_value) {
-					fw_aks($god_option, $god_value, $options_to_set);
-				}
-			}
-
-			fw_set_db_settings_option( null, $options_to_set );
 
 			FW_Flash_Messages::add( $flash_id, __( 'The options were successfully reset', 'fw' ), 'success' );
 
