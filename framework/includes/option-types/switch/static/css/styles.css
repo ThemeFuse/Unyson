@@ -1,4 +1,5 @@
-.fw-option-type-switch .adaptive-switch {
+.fw-option-type-switch .adaptive-switch,
+.fw-option-type-switch .adaptive-switch label {
 	font-size: 11px;
 }
 
