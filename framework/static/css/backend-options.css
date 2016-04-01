@@ -1140,14 +1140,13 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 	#edittag > .fw-backend-option > .fw-backend-option-input,
 	#edittag > .fw-backend-options-group > .fw-backend-option > .fw-backend-option-input,
 	#edittag > .fw-backend-option-type-multi .fw-backend-option > .fw-backend-option-input,
-	#edittag > .fw-backend-option-type-multi-picker .fw-backend-option > .fw-backend-option-input{
+	#edittag > .fw-backend-option-type-multi-picker .fw-backend-option > .fw-backend-option-input {
 		width: calc(100% - 219px);
 	}
 
 	#edittag > .fw-backend-option > .fw-backend-option-desc,
 	#edittag > .fw-backend-options-group > .fw-backend-option > .fw-backend-option-desc,
-	#edittag > .fw-backend-option-type-multi .fw-backend-option > .fw-backend-option-desc,
-	#edittag > .fw-backend-option-type-multi-picker .fw-backend-option > .fw-backend-option-desc {
+	#edittag > .fw-backend-option-type-multi .fw-backend-option > .fw-backend-option-desc {
 		margin-left: 219px;
 	}
 }
