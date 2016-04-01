@@ -2,8 +2,8 @@
 Contributors: unyson
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
-Tested up to: 4.4
-Stable tag: 2.5.0
+Tested up to: 4.5
+Stable tag: 2.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,11 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.5.1 =
+* Fixed [#1062](https://github.com/ThemeFuse/Unyson/issues/1062), [#1278](https://github.com/ThemeFuse/Unyson/issues/1278), [#1292](https://github.com/ThemeFuse/Unyson/issues/1292), [#1293](https://github.com/ThemeFuse/Unyson/issues/1293), [#1310](https://github.com/ThemeFuse/Unyson/pull/1310), [#1295](https://github.com/ThemeFuse/Unyson/issues/1295), [#767](https://github.com/ThemeFuse/Unyson/issues/767), [#1322](https://github.com/ThemeFuse/Unyson/pull/1322), [#1323](https://github.com/ThemeFuse/Unyson/pull/1323), [#1321](https://github.com/ThemeFuse/Unyson/issues/1321), [#1054](https://github.com/ThemeFuse/Unyson/issues/1054), [#1309](https://github.com/ThemeFuse/Unyson/issues/1309), [#1347](https://github.com/ThemeFuse/Unyson/issues/1347), [#2777093](https://wordpress.org/support/topic/bootstrap-datepicker-not-translated-on-backend), [#1355](https://github.com/ThemeFuse/Unyson/issues/1355), [#1354](https://github.com/ThemeFuse/Unyson/issues/1354), [#1379](https://github.com/ThemeFuse/Unyson/issues/1379), [#1394](https://github.com/ThemeFuse/Unyson/issues/1394), [#1391](https://github.com/ThemeFuse/Unyson/issues/1391), [#1403](https://github.com/ThemeFuse/Unyson/pull/1403)
+* Fixes for [WP 4.5 BackboneJS & UnderscoreJS latest version](https://make.wordpress.org/core/2016/02/17/backbone-and-underscore-updated-to-latest-versions/)
+
 
 = 2.5.0 =
 * Added the possibility to save options in separate database location [#838](https://github.com/ThemeFuse/Unyson/issues/838)
