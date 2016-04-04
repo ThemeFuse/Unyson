@@ -85,7 +85,7 @@ jQuery(document).ready(function ($) {
 								methods.makeEventName('control:click'), {
 									controlId: controlId,
 									$control: $control,
-									box: methods.getBoxDataForEvent($control.closest('.box'))
+									box: methods.getBoxDataForEvent($control.closest('.fw-option-box'))
 								}
 							);
 					}
