@@ -1170,3 +1170,22 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 }
 
 /* end: Edit Term page */
+
+/* modal fix https://github.com/ThemeFuse/Unyson/issues/bvbbbbvbvvvggbgfvv1353bb */
+
+@media (min-width: 1200px) {
+	.media-frame-content .fw-backend-option > .fw-backend-option-label.fw-col-lg-2 {
+		width: 25%;
+	}
+
+	.media-frame-content .fw-backend-option > .fw-backend-option-input.fw-col-lg-10 {
+		width: 75%;
+	}
+
+	.media-frame-content .fw-backend-option > .fw-backend-option-desc.fw-col-lg-offset-2 {
+		margin-left: 25%;
+		width: 75%;
+	}
+}
+
+/* end: modal fix */
