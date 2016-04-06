@@ -747,6 +747,37 @@ final class _FW_Component_Backend {
 		echo $this->render_options( $collected, $values, array(), 'taxonomy' );
 	}
 
+	/**
+	 * @param string $taxonomy
+	 */
+	public function _action_create_add_taxonomy_options( $taxonomy ) {
+		$options = fw()->theme->get_taxonomy_options( $taxonomy );
+		if ( empty( $options ) ) {
+			return;
+		}
+
+		$collected = array();
+
+		fw_collect_options( $collected, $options, array(
+			'limit_option_types'    => false,
+			'limit_container_types' => array(), // only simple options are allowed on taxonomy edit page
+			'limit_level'           => 1,
+		) );
+
+		if ( empty( $collected ) ) {
+			return;
+		}
+		$values = array();
+		foreach ( $options as $option_id => $values ) {
+			$values[ $option_id ] = $values['value'];
+		}
+
+		// fixes word_press style: .form-field input { width: 95% }
+		echo '<style type="text/css">.fw-option-type-radio input, .fw-option-type-checkbox input { width: auto; }</style>';
+
+		echo $this->render_options( $collected, $values, array(), 'taxonomy' );
+	}
+
 	public function _action_init() {
 		$current_edit_taxonomy = $this->get_current_edit_taxonomy();
 
@@ -755,6 +786,12 @@ final class _FW_Component_Backend {
 				$current_edit_taxonomy['taxonomy'] . '_edit_form',
 				array( $this, '_action_create_taxonomy_options' )
 			);
+			add_action(
+				$current_edit_taxonomy['taxonomy'] . '_add_form_fields',
+				array( $this, '_action_create_add_taxonomy_options' ) );
+			add_action(
+				'create_' . $current_edit_taxonomy['taxonomy'],
+				array( $this, '_action_save_taxonomy_fields' ), 10 );
 		}
 
 		if ( ! empty( $_POST ) ) {
@@ -1017,6 +1054,19 @@ final class _FW_Component_Backend {
 		}
 
 		return true;
+	}
+	/**
+	 * @param int $term_id
+	 */
+	public function _action_save_taxonomy_fields( $term_id ) {
+		if ( ! isset( $_POST['action'] ) || ! isset( $_POST['taxonomy'] ) ) {
+			return; // this is not real term form submit, abort save
+		}
+		$taxonomy = $_POST['taxonomy'];
+		$custom   = $_POST['fw_options'];
+		foreach ( $custom as $id => $value ) {
+			fw_set_db_term_option( $term_id, $taxonomy, $id, $value );
+		}
 	}
 
 	public function _action_term_edit( $term_id, $tt_id, $taxonomy ) {
