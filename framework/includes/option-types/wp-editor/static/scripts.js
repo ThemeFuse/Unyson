@@ -32,9 +32,14 @@
 				return;
 			}
 
-			editor = tinymce.get(id);
-
-			editor.on('change', function(){ editor.save(); });
+			if (editor = tinymce.get(id)) {
+				editor.on('change', function () {
+					editor.save();
+				});
+			} else {
+				console.log('wp-editor init failed');
+				return;
+			}
 		}
 
 		/**

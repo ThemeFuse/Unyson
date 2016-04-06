@@ -3,6 +3,9 @@
 }
 
 class FW_Option_Type_Wp_Editor extends FW_Option_Type {
+	// prevent useless calls of wp_enqueue_*()
+	private static $enqueued = false;
+
 	public function get_type() {
 		return 'wp-editor';
 	}
@@ -52,25 +55,47 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	 * {@inheritdoc}
 	 */
 	protected function _enqueue_static( $id, $option, $data ) {
-		$uri = fw_get_framework_directory_uri( '/includes/option-types/' . $this->get_type() . '/static' );
+		if (!self::$enqueued) {
+			wp_enqueue_style(
+				/**
+				 * https://github.com/WordPress/WordPress/blob/4.4.2/wp-includes/script-loader.php#L731
+				 * without prefix it won't enqueue
+				 */
+				'fw-option-type-' . $this->get_type() .'-dashicons',
+				includes_url('css/dashicons.min.css'),
+				array(),
+				fw()->manifest->get_version()
+			);
+			wp_enqueue_style(
+				/**
+				 * https://github.com/WordPress/WordPress/blob/4.4.2/wp-includes/script-loader.php#L737
+				 * without prefix it won't enqueue
+				 */
+				'fw-option-type-' . $this->get_type() .'-editor-buttons',
+				includes_url('/css/editor.min.css'),
+				array('dashicons'),
+				fw()->manifest->get_version()
+			);
 
-		wp_enqueue_script( 'quicktags' );
-		wp_enqueue_style( 'buttons' );
+			$uri = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static');
 
-		wp_enqueue_script(
-			'fw-option-type-' . $this->get_type(),
-			$uri . '/scripts.js',
-			array( 'jquery', 'fw-events', 'editor', 'fw' ),
-			fw()->manifest->get_version(),
-			true
-		);
+			wp_enqueue_script(
+				'fw-option-type-' . $this->get_type(),
+				$uri . '/scripts.js',
+				array('jquery', 'fw-events', 'editor', 'fw'),
+				fw()->manifest->get_version(),
+				true
+			);
 
-		wp_enqueue_style(
-			'fw-option-type-' . $this->get_type(),
-			$uri . '/styles.css',
-			array(),
-			fw()->manifest->get_version()
-		);
+			wp_enqueue_style(
+				'fw-option-type-' . $this->get_type(),
+				$uri . '/styles.css',
+				array('dashicons', 'editor-buttons'),
+				fw()->manifest->get_version()
+			);
+
+			self::$enqueued = true;
+		}
 
 		/**
 		 * Make editor settings available in javascript tinyMCEPreInit.qtInit[ {$settings['id']} ]
