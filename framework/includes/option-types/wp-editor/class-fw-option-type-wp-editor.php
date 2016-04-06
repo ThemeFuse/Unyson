@@ -71,9 +71,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 
 		unset( $option['attr']['name'], $option['attr']['value'] );
 
-		echo fw_html_tag( 'div', array_merge( $option['attr'], array(
-			'style' => 'display:none;',
-		) ) );
+		echo '<div '. fw_attr_to_html($option['attr']) .' >';
 		wp_editor( $settings['value'], $settings['id'], $settings['settings'] );
 		echo '</div>';
 	}
@@ -103,15 +101,35 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			fw()->manifest->get_version()
 		);
 
-		ob_start();
-		$settings = $this->get_option_settings($id, $option, $data);
-		wp_editor( $settings['value'], $settings['id'], $settings['settings'] );
-		ob_end_clean();
+		/**
+		 * Make editor settings available in javascript tinyMCEPreInit.qtInit[ {$settings['id']} ]
+		 */
+		{
+			$settings = $this->get_option_settings($id, $option, $data);
+
+			ob_start();
+			wp_editor( $settings['value'], $settings['id'], $settings['settings'] );
+			ob_end_clean();
+		}
+
+		return true;
 	}
 
 	private function get_option_settings($id, $option, $data) {
+		{
+			$_option = $option;
+
+			ksort($_option); // keys must be in same order to obtain the same hash
+
+			unset($_option['attr'], $_option['value']);
+
+			$id = 'fw_wp_editor_'. md5( $id .'|'. json_encode($_option) );
+
+			unset($_option);
+		}
+
 		return array(
-			'id' => 'fw_wp_editor_'. md5( $id .'/**/'. json_encode($option) .'/**/'. json_encode($data) ),
+			'id' => $id,
 			'settings' => array(
 				'teeny'         => $option['teeny'],
 				'media_buttons' => $option['media_buttons'],
