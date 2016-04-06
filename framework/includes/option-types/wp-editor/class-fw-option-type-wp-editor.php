@@ -12,49 +12,14 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	 */
 	protected function _get_defaults() {
 		return array(
+			'value' => '',
+			'size' => 'small', // small, large
+			'editor_height' => 400,
+
 			/**
-			 * boolean | array
+			 * Also available
+			 * https://github.com/WordPress/WordPress/blob/4.4.2/wp-includes/class-wp-editor.php#L80-L94
 			 */
-			'tinymce'       => true,
-			/**
-			 * boolean
-			 */
-			'media_buttons' => true,
-			/**
-			 * boolean
-			 */
-			'teeny'         => false,
-			/**
-			 * boolean
-			 */
-			'wpautop'       => true,
-			/**
-			 * string
-			 * Additional CSS styling applied for both visual and HTML editors buttons, needs to include <style> tags, can use "scoped"
-			 */
-			'editor_css'    => '',
-			/**
-			 * boolean
-			 * if smth wrong try change true
-			 */
-			'reinit'        => false,
-			/**
-			 * string
-			 */
-			'value'         => '',
-			/**
-			 * Set the editor size: small - small box, large - full size
-			 * string
-			 */
-			'size'          => 'small', // small, large
-			/**
-			 * Set editor type : 'tinymce' or 'html'
-			 */
-			'editor_type' => wp_default_editor(),
-			/**
-			 * Set the editor height, must be int
-			 */
-			'editor_height' => 400
 		);
 	}
 
@@ -69,7 +34,11 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	protected function _render( $id, $option, $data ) {
 		$settings = $this->get_option_settings($id, $option, $data);
 
-		unset( $option['attr']['name'], $option['attr']['value'] );
+		{
+			unset( $option['attr']['name'], $option['attr']['value'] );
+
+			$option['attr']['data-size'] = $option['size'];
+		}
 
 		echo '<div '. fw_attr_to_html($option['attr']) .' >';
 
@@ -125,21 +94,49 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 
 			unset($_option['attr'], $_option['value']);
 
+			/**
+			 * This must be unique for option
+			 * it will be in editor html and in javascript tinyMCEPreInit.qtInit[ {$id} ]
+			 */
 			$id = 'fw_wp_editor_'. md5( $id .'|'. json_encode($_option) );
 
 			unset($_option);
 		}
 
+		{
+			$settings = array();
+
+			foreach ( // https://github.com/WordPress/WordPress/blob/4.4.2/wp-includes/class-wp-editor.php#L80-L94
+				array(
+					'wpautop',
+					'media_buttons',
+					'default_editor',
+					'drag_drop_upload',
+					'textarea_name',
+					'textarea_rows',
+					'tabindex',
+					'tabfocus_elements',
+					'editor_css',
+					'editor_class',
+					'teeny',
+					'dfw',
+					'_content_editor_dfw',
+					'tinymce',
+					'quicktags',
+				) as $key
+			) {
+				if (isset($option[$key])) {
+					$settings[$key] = $option[$key];
+				}
+			}
+
+			$settings['editor_height'] = (int) $option['editor_height'];
+			$settings['textarea_name'] = $option['attr']['name'];
+		}
+
 		return array(
 			'id' => $id,
-			'settings' => array(
-				'teeny'         => $option['teeny'],
-				'media_buttons' => $option['media_buttons'],
-				'tinymce'       => $option['tinymce'],
-				'editor_css'    => $option['editor_css'],
-				'editor_height' => (int) $option['editor_height'],
-				'textarea_name' => $option['attr']['name'],
-			),
+			'settings' => $settings,
 			// replace \u00a0 char to &nbsp;
 			'value' => str_replace( chr( 194 ) . chr( 160 ), '&nbsp;', (string) $data['value'] )
 		);

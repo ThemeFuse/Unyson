@@ -7,9 +7,11 @@
 			editor;
 
 		/**
-		 * width-type-fixed, width-type-auto, width-type-full
+		 * Set width
 		 */
-		$option.closest('.fw-backend-option-input-type-wp-editor').addClass('width-type-fixed');
+		$option.closest('.fw-backend-option-input-type-wp-editor').addClass(
+			'width-type-'+ ($option.attr('data-size') == 'large' ? 'full' : 'fixed')
+		);
 
 		/**
 		 * TinyMCE Editor
