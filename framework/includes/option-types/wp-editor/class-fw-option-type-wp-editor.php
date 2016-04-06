@@ -72,7 +72,9 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 		unset( $option['attr']['name'], $option['attr']['value'] );
 
 		echo '<div '. fw_attr_to_html($option['attr']) .' >';
+
 		wp_editor( $settings['value'], $settings['id'], $settings['settings'] );
+
 		echo '</div>';
 	}
 
@@ -135,7 +137,8 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 				'media_buttons' => $option['media_buttons'],
 				'tinymce'       => $option['tinymce'],
 				'editor_css'    => $option['editor_css'],
-				'editor_height' => (int) $option['editor_height']
+				'editor_height' => (int) $option['editor_height'],
+				'textarea_name' => $option['attr']['name'],
 			),
 			// replace \u00a0 char to &nbsp;
 			'value' => str_replace( chr( 194 ) . chr( 160 ), '&nbsp;', (string) $data['value'] )
