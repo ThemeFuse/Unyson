@@ -167,23 +167,10 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	 * @internal
 	 */
 	protected function _render( $id, $option, $data ) {
-		//replace \u00a0 char to &nbsp;
-		$value = str_replace( chr( 194 ) . chr( 160 ), '&nbsp;', (string) $data['value'] );
+		$settings = $this->get_option_settings($id, $option, $data);
 
 		$name = $option['attr']['name'];
 		unset( $option['attr']['name'], $option['attr']['value'] );
-
-		$textarea_id = 'textarea_';
-		if (
-			// check if id contains characters that can produce errors
-			preg_match( '/[^a-z0-9_\-]/i', $option['attr']['id'] )
-			||
-			$option['reinit']
-		) {
-			$textarea_id .= 'dynamic_id';
-		} else {
-			$textarea_id .= $option['attr']['id'];
-		}
 
 		$wrapper_attr = array_merge( $option['attr'], array(
 			'data-name'          => $name,
@@ -192,22 +179,12 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			'data-tmce-teeny'    => json_encode( $this->get_teeny_preset( $option ) ),
 			'data-tmce-extended' => json_encode( $this->get_extended_preset( $option ) ),
 			'data-width-type'    => $option['size'],
-			'data-editor-type' =>$option['editor_type']
+			'data-editor-type'   => $option['editor_type'],
 		) );
 
-		echo '<div ' . fw_attr_to_html( $wrapper_attr ) . '>';
+		echo '<div '. fw_attr_to_html( $wrapper_attr ) .'>';
 
-		$option['editor_css'] .= '<style>#wp-link-wrap{z-index: 160105} #wp-link-backdrop{z-index: 160100} .mce-container.mce-panel.mce-floatpanel.mce-menu, .mce-container.mce-panel.mce-floatpanel.mce-popover, .mce-container.mce-panel.mce-floatpanel.mce-window {z-index: 160105 !important;}</style>';
-
-		$settings = array(
-			'teeny'         => $option['teeny'],
-			'media_buttons' => $option['media_buttons'],
-			'tinymce'       => $option['tinymce'],
-			'editor_css'    => $option['editor_css'],
-			'editor_height' => (int) $option['editor_height']
-		);
-
-		wp_editor( $value, $textarea_id, $settings );
+		wp_editor( $settings['value'], $settings['id'], $settings['settings'] );
 
 		echo '</div>';
 	}
@@ -247,6 +224,26 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			$this->css_uri . '/styles.css',
 			array(),
 			fw()->manifest->get_version()
+		);
+
+		ob_start();
+		$settings = $this->get_option_settings($id, $option, $data);
+		wp_editor( $settings['value'], $settings['id'], $settings['settings'] );
+		ob_end_clean();
+	}
+
+	private function get_option_settings($id, $option, $data) {
+		return array(
+			'id' => 'fw_wp_editor_'. md5( json_encode($option) ),
+			'settings' => array(
+				'teeny'         => $option['teeny'],
+				'media_buttons' => $option['media_buttons'],
+				'tinymce'       => $option['tinymce'],
+				'editor_css'    => $option['editor_css'],
+				'editor_height' => (int) $option['editor_height']
+			),
+			// replace \u00a0 char to &nbsp;
+			'value' => str_replace( chr( 194 ) . chr( 160 ), '&nbsp;', (string) $data['value'] )
 		);
 	}
 
