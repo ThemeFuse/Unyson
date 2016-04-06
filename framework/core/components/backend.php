@@ -2031,14 +2031,22 @@ final class _FW_Component_Backend {
 						require_once fw_get_framework_directory('/includes/customizer/class--fw-customizer-control-option-wrapper.php');
 					}
 
+					$setting_args = array(
+						'default' => fw()->backend->option_type($opt['option']['type'])->get_value_from_input($opt['option'], null),
+						'fw_option' => $opt['option'],
+					);
+
+					$setting_type = $opt['option']['post_type'];
+
+					if(isset($setting_type)){
+						$setting_args['type'] = $setting_type;
+					}
+
 					$wp_customize->add_setting(
 						new _FW_Customizer_Setting_Option(
 							$wp_customize,
 							$setting_id,
-							array(
-								'default' => fw()->backend->option_type($opt['option']['type'])->get_value_from_input($opt['option'], null),
-								'fw_option' => $opt['option'],
-							)
+							$setting_args
 						)
 					);
 
