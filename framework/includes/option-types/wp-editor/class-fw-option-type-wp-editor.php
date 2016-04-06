@@ -56,26 +56,33 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	 */
 	protected function _enqueue_static( $id, $option, $data ) {
 		if (!self::$enqueued) {
-			wp_enqueue_style(
+			/**
+			 * The below styles usually are included directly in html when wp_editor() is called
+			 * but since we call it (below) wrapped in ob_start()...ob_end_clean() the html is not printed.
+			 * So included the styles manually.
+			 */
+			{
+				wp_enqueue_style(
 				/**
 				 * https://github.com/WordPress/WordPress/blob/4.4.2/wp-includes/script-loader.php#L731
 				 * without prefix it won't enqueue
 				 */
-				'fw-option-type-' . $this->get_type() .'-dashicons',
-				includes_url('css/dashicons.min.css'),
-				array(),
-				fw()->manifest->get_version()
-			);
-			wp_enqueue_style(
+					'fw-option-type-' . $this->get_type() .'-dashicons',
+					includes_url('css/dashicons.min.css'),
+					array(),
+					fw()->manifest->get_version()
+				);
+				wp_enqueue_style(
 				/**
 				 * https://github.com/WordPress/WordPress/blob/4.4.2/wp-includes/script-loader.php#L737
 				 * without prefix it won't enqueue
 				 */
-				'fw-option-type-' . $this->get_type() .'-editor-buttons',
-				includes_url('/css/editor.min.css'),
-				array('dashicons'),
-				fw()->manifest->get_version()
-			);
+					'fw-option-type-' . $this->get_type() .'-editor-buttons',
+					includes_url('/css/editor.min.css'),
+					array('dashicons'),
+					fw()->manifest->get_version()
+				);
+			}
 
 			$uri = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static');
 
