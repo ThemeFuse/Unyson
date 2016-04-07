@@ -2856,20 +2856,20 @@ a.fw-wp-link:hover {
 
 /* modal */
 
-body > div:not(.fw-modal) > .media-modal {
-	z-index: 161001;
+body > .fw-modal > .media-modal {
+	z-index: 100001;
 }
 
-body > div:not(.fw-modal) > .media-modal-backdrop {
-	z-index: 161000;
+body > .fw-modal > .media-modal-backdrop {
+	z-index: 100000; /* bigger than #wpadminbar */
 }
 
 body.wp-customizer > div:not(.fw-modal) > .media-modal {
-	z-index: 561001; /* bigger than .wp-customizer .media-modal */
+	z-index: 561001;
 }
 
 body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
-	z-index: 561000;
+	z-index: 561000; /* bigger than .wp-customizer .media-modal */
 }
 
 .fw-modal .media-modal-close:focus {

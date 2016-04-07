@@ -3,8 +3,7 @@
 	var init = function () {
 		var $option = $(this),
 			$textarea = $option.find('.wp-editor-area:first'),
-			id = $textarea.attr('id'),
-			editor;
+			id = $textarea.attr('id');
 
 		/**
 		 * Set width
@@ -25,39 +24,39 @@
 
 			tinymce.execCommand('mceRemoveEditor', false, id);
 
+			tinyMCEPreInit.mceInit[ id ].setup = function(ed) {
+				ed.once('init', function (e) {
+					var editor = e.target,
+						id = editor.id;
+
+					editor.on('change', function(){ editor.save(); });
+
+					/**
+					 * Quick Tags
+					 * http://stackoverflow.com/a/21519323/1794248
+					 */
+					{
+						$( '[id="wp-' + id + '-wrap"]' ).unbind( 'onmousedown' );
+						$( '[id="wp-' + id + '-wrap"]' ).bind( 'onmousedown', function(){
+							wpActiveEditor = id;
+						});
+
+						QTags( tinyMCEPreInit.qtInit[ id ] );
+						QTags._buttonsInit();
+
+						(function($wrap) {
+							$wrap.find('.switch-'+ ($wrap.hasClass('tmce-active') ? 'tmce' : 'html')).trigger('click');
+						})($textarea.closest('.wp-editor-wrap'));
+					}
+				});
+			};
+
 			try {
 				tinymce.init( tinyMCEPreInit.mceInit[ id ] );
 			} catch(e){
-				console.log('wp-editor init error', e);
+				console.error('wp-editor init error', id, e);
 				return;
 			}
-
-			if (editor = tinymce.get(id)) {
-				editor.on('change', function () {
-					editor.save();
-				});
-			} else {
-				console.log('wp-editor init failed');
-				return;
-			}
-		}
-
-		/**
-		 * Quick Tags
-		 * http://stackoverflow.com/a/21519323/1794248
-		 */
-		{
-			$( '[id="wp-' + id + '-wrap"]' ).unbind( 'onmousedown' );
-			$( '[id="wp-' + id + '-wrap"]' ).bind( 'onmousedown', function(){
-				wpActiveEditor = id;
-			});
-
-			QTags( tinyMCEPreInit.qtInit[ id ] );
-			QTags._buttonsInit();
-
-			$textarea.closest('.fw-option-type-wp-editor').data('editor-type') === 'tinymce'
-				? $textarea.closest('.wp-editor-wrap').find('.switch-tmce')
-				: $textarea.closest('.wp-editor-wrap').find('.switch-html');
 		}
 	};
 

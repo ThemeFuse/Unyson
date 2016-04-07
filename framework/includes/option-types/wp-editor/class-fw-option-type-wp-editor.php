@@ -63,20 +63,20 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			 */
 			{
 				wp_enqueue_style(
-				/**
-				 * https://github.com/WordPress/WordPress/blob/4.4.2/wp-includes/script-loader.php#L731
-				 * without prefix it won't enqueue
-				 */
+					/**
+					 * https://github.com/WordPress/WordPress/blob/4.4.2/wp-includes/script-loader.php#L731
+					 * without prefix it won't enqueue
+					 */
 					'fw-option-type-' . $this->get_type() .'-dashicons',
 					includes_url('css/dashicons.min.css'),
 					array(),
 					fw()->manifest->get_version()
 				);
 				wp_enqueue_style(
-				/**
-				 * https://github.com/WordPress/WordPress/blob/4.4.2/wp-includes/script-loader.php#L737
-				 * without prefix it won't enqueue
-				 */
+					/**
+					 * https://github.com/WordPress/WordPress/blob/4.4.2/wp-includes/script-loader.php#L737
+					 * without prefix it won't enqueue
+					 */
 					'fw-option-type-' . $this->get_type() .'-editor-buttons',
 					includes_url('/css/editor.min.css'),
 					array('dashicons'),
