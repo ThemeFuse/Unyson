@@ -1,28 +1,23 @@
-#
+# 
 # Translators:
-# Pablo Olave <pablo.olave.77@gmail.com>, 2016
+# Pablo <pablo.olave.77@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Unyson\n"
 "POT-Creation-Date: 2016-02-02 15:48+0300\n"
-"PO-Revision-Date: 2016-03-01 18:36+0300\n"
-"Last-Translator: \n"
-"Language-Team: Spanish (http://www.transifex.com/themefuse/unyson/language/"
-"es/)\n"
+"PO-Revision-Date: 2016-03-26 22:10+0000\n"
+"Last-Translator: Pablo <pablo.olave.77@gmail.com>\n"
+"Language-Team: Spanish (Spain) (http://www.transifex.com/themefuse/unyson/language/es_ES/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: es\n"
+"Language: es_ES\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-Basepath: .\n"
-"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
-"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
-"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
-"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
-"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
-"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
 "X-Poedit-SearchPath-0: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 
 #: ../framework/manifest.php:5
 msgid "Unyson"
@@ -202,12 +197,12 @@ msgstr "No se puede crear el directorio: "
 #: ../framework/extensions/update/class-fw-extension-update.php:381
 #, php-format
 msgid "Downloading the %s..."
-msgstr "Descargando %s..."
+msgstr "Descargando... %s"
 
 #: ../framework/extensions/update/class-fw-extension-update.php:386
 #, php-format
 msgid "Cannot download the %s."
-msgstr "No se puede descargar %s"
+msgstr "No se puede descargar archivo zip %s"
 
 #: ../framework/extensions/update/class-fw-extension-update.php:396
 #, php-format
@@ -338,9 +333,7 @@ msgstr "Github error: "
 #: ../framework/core/components/extensions/manager/class--fw-extensions-manager.php:2446
 #, php-format
 msgid "Failed to access Github repository \"%s\" releases. (Response code: %d)"
-msgstr ""
-"Ha fallado el acceso a publicaciones del repositorio Github \"%s\". (Código "
-"de respuesta: %d)"
+msgstr "Ha fallado el acceso a publicaciones del repositorio Github \"%s\". (Código de respuesta: %d)"
 
 #: ../framework/extensions/update/extensions/github-update/class-fw-extension-github-update.php:108
 #: ../framework/extensions/update/extensions/github-update/class-fw-extension-github-update.php:249
@@ -357,11 +350,9 @@ msgstr "No hay publicaciones encontradas en repositorio \"%s\"."
 #: ../framework/extensions/update/extensions/github-update/class-fw-extension-github-update.php:143
 #, php-format
 msgid ""
-"%s manifest has invalid \"github_update\" parameter. Please use \"user/repo"
-"\" format."
-msgstr ""
-"Manifiesto %s es un parámetro inválido para \"github_update\". Utilice el "
-"formato \"user/repo\""
+"%s manifest has invalid \"github_update\" parameter. Please use "
+"\"user/repo\" format."
+msgstr "Manifiesto %s es un parámetro inválido para \"github_update\". Utilice el formato \"user/repo\""
 
 #: ../framework/extensions/update/extensions/github-update/class-fw-extension-github-update.php:171
 #, php-format
@@ -455,7 +446,7 @@ msgstr "Usted tiene la versión %s instalada. Actualice %s"
 
 #: ../framework/extensions/update/includes/classes/class--fw-ext-update-extensions-list-table.php:126
 msgid "No Extensions for update."
-msgstr "No hay extensiones por actualizar."
+msgstr "Actualizar Extensiones"
 
 #: ../framework/extensions/portfolio/manifest.php:7
 #: ../framework/extensions/portfolio/class-fw-extension-portfolio.php:260
@@ -468,9 +459,7 @@ msgstr "Portafolios"
 msgid ""
 "This extension will add a fully fledged portfolio module that will let you "
 "display your projects using the built in portfolio pages."
-msgstr ""
-"Esta extensión añade un completo módulo de proyectos que le permitirá "
-"mostrar sus proyectos utilizando las páginas de portafolios predefinidas."
+msgstr "Esta extensión añade un completo módulo de proyectos que le permitirá mostrar sus proyectos utilizando las páginas de portafolios predefinidas."
 
 #: ../framework/extensions/portfolio/class-fw-extension-portfolio.php:115
 #: ../framework/extensions/portfolio/class-fw-extension-portfolio.php:232
@@ -684,7 +673,7 @@ msgstr "Imagen de portada del proyecto"
 
 #: ../framework/extensions/portfolio/class-fw-extension-portfolio.php:287
 msgid "Edit this item"
-msgstr "Editar este item"
+msgstr "Editar Item"
 
 #: ../framework/extensions/portfolio/class-fw-extension-portfolio.php:348
 #: ../framework/extensions/portfolio/class-fw-extension-portfolio.php:361
@@ -803,10 +792,7 @@ msgstr "SEO"
 msgid ""
 "This extension will enable you to have a fully optimized WordPress website "
 "by adding optimized meta titles, keywords and descriptions."
-msgstr ""
-"Esta extensión añade un completo módulo para optimizar su sitio web en "
-"Wordpress, añadiendo títulos (<title>,<meta>) optimizados, palabras claves y "
-"descripciones."
+msgstr "Esta extensión añade un completo módulo para optimizar su sitio web en Wordpress, añadiendo títulos (<title>,<meta>) optimizados, palabras claves y descripciones."
 
 #: ../framework/extensions/seo/extensions/seo-titles-metas/includes/fw-title-meta-options.php:22
 #: ../framework/extensions/seo/extensions/seo-titles-metas/includes/fw-title-meta-options.php:310
@@ -1128,9 +1114,7 @@ msgstr "Mailer"
 msgid ""
 "This extension will let you set some global email options and it is used by "
 "other extensions (like Forms) to send emails."
-msgstr ""
-"Esta extensión le permite establecer opciones globales para email y puede "
-"ser utilizada por otras extensiones (cómo Forms) para enviar emails."
+msgstr "Esta extensión le permite establecer opciones globales para email y puede ser utilizada por otras extensiones (cómo Forms) para enviar emails."
 
 #: ../framework/extensions/mailer/class-fw-extension-mailer.php:48
 msgid "Invalid send method"
@@ -1309,9 +1293,7 @@ msgstr "Aprendizaje"
 msgid ""
 "This extension adds a Learning module to your theme. Using this extension "
 "you can add courses, lessons and tests for your users to take."
-msgstr ""
-"Esta extensión añade un módulo de aprendizaje a su tema. utilizando esta "
-"extensión usted podrá agregar cursos, clases y exámenes para sus usuarios."
+msgstr "Esta extensión añade un módulo de aprendizaje a su tema. utilizando esta extensión usted podrá agregar cursos, clases y exámenes para sus usuarios."
 
 #: ../framework/extensions/learning/extensions/learning-quiz/class-fw-extension-learning-quiz.php:118
 #: ../framework/extensions/learning/extensions/learning-quiz/class-fw-extension-learning-quiz.php:145
@@ -1647,9 +1629,7 @@ msgstr "Analytics"
 msgid ""
 "Enables the possibility to add the Google Analytics tracking code that will "
 "let you get all the analytics about visitors, page views and more."
-msgstr ""
-"Añade la posibilidad de agregar el código de seguimiento de Google Analytics "
-"para obtener analítica de sus visitas, páginas vistas y más"
+msgstr "Añade la posibilidad de agregar el código de seguimiento de Google Analytics para obtener analítica de sus visitas, páginas vistas y más"
 
 #: ../framework/extensions/blog/class-fw-extension-blog.php:36
 #: ../framework/extensions/blog/class-fw-extension-blog.php:37
@@ -1737,10 +1717,7 @@ msgstr "Usted no tiene permisos para cambiar opciones de estilo"
 msgid ""
 "This extension lets you control the website visual style. Starting from "
 "predefined styles to changing specific fonts and colors across the website."
-msgstr ""
-"Esta extensión le permite mantener el control visual de su sitio web. "
-"Comenzando por estilos predefinidos hasta cambiar fuentes y colores a través "
-"del sitio web."
+msgstr "Esta extensión le permite mantener el control visual de su sitio web. Comenzando por estilos predefinidos hasta cambiar fuentes y colores a través del sitio web."
 
 #: ../framework/extensions/styling/extensions/switch-style-panel/manifest.php:7
 msgid "Switch Style Panel"
@@ -1750,9 +1727,7 @@ msgstr "Cambiar Panel de Estilos"
 msgid ""
 "Show on the front-end a panel that allows the user to make the switch "
 "between predefined styles."
-msgstr ""
-"Mostrar en el front-end un panel que permite al usuario realizar cambios "
-"entre estilos predefinidos."
+msgstr "Mostrar en el front-end un panel que permite al usuario realizar cambios entre estilos predefinidos."
 
 #: ../framework/extensions/styling/extensions/switch-style-panel/options/settings.php:9
 msgid "Frontend Style Switcher"
@@ -1828,10 +1803,7 @@ msgstr "Feedback"
 msgid ""
 "Adds the possibility to leave feedback (comments, reviews and rating) about "
 "your products, articles, etc. This replaces the default comments system."
-msgstr ""
-"Añade la posibilidad de dejar un feedback (comentarios, opiniones y "
-"valoraciones) acerca de sus productos, artículos, etc. Esta reemplaza el "
-"sistema de comentarios por defecto."
+msgstr "Añade la posibilidad de dejar un feedback (comentarios, opiniones y valoraciones) acerca de sus productos, artículos, etc. Esta reemplaza el sistema de comentarios por defecto."
 
 #: ../framework/extensions/feedback/extensions/feedback-stars/class-fw-extension-feedback-stars.php:84
 msgid "Rating:"
@@ -1860,8 +1832,7 @@ msgstr "Estrellas Feedback"
 
 #: ../framework/extensions/feedback/extensions/feedback-stars/manifest.php:8
 msgid "Allows visitors to appreciate a post using star rating"
-msgstr ""
-"Permite a sus visitantes valorar el post por medio de estrellas de valroación"
+msgstr "Permite a sus visitantes valorar el post por medio de estrellas de valroación"
 
 #: ../framework/extensions/feedback/extensions/feedback-stars/views/listing-review.php:22
 msgid "Pingback:"
@@ -1942,8 +1913,7 @@ msgstr "Comentarios cerrados."
 #: ../framework/extensions/shortcodes/extensions/page-builder/settings-options.php:18
 msgid ""
 "Select the posts you want the Page Builder extension to be activated for"
-msgstr ""
-"Seleccione las publicaciones en que quiera activar el Constructor de Página"
+msgstr "Seleccione las publicaciones en que quiera activar el Constructor de Página"
 
 #: ../framework/extensions/shortcodes/extensions/page-builder/manifest.php:7
 #: ../framework/core/components/extensions/manager/available-extensions.php:84
@@ -1954,18 +1924,13 @@ msgstr "Constructor de Página"
 msgid ""
 "Lets you easily build countless pages with the help of the drag and drop "
 "visual page builder that comes with a lot of already created shortcodes."
-msgstr ""
-"Permite construir de manera sencilla innumerables páginas con la ayuda del "
-"constructor visual \"arrastre y suelte\" que viene con un grupo de "
-"shortcodes listos para utilizar."
+msgstr "Permite construir de manera sencilla innumerables páginas con la ayuda del constructor visual \"arrastre y suelte\" que viene con un grupo de shortcodes listos para utilizar."
 
 #: ../framework/extensions/shortcodes/extensions/page-builder/includes/page-builder/class-fw-option-type-page-builder.php:51
 msgid ""
 "There must not be more than one page Editor integrated with the wp post "
 "editor per page"
-msgstr ""
-"No debe haber más de un editor de páginas integrado con el editor de "
-"publicación por página."
+msgstr "No debe haber más de un editor de páginas integrado con el editor de publicación por página."
 
 #: ../framework/extensions/shortcodes/extensions/page-builder/includes/page-builder/class-fw-option-type-page-builder.php:96
 msgid "Visual Page Builder"
@@ -1985,8 +1950,7 @@ msgstr "Elementos de Diseño"
 #: ../framework/extensions/shortcodes/extensions/page-builder/includes/page-builder/includes/item-types/simple/class-page-builder-simple-item.php:99
 #, php-format
 msgid "No Page Builder tab specified for shortcode: %s"
-msgstr ""
-"No hay pestaña especificada en el constructor de página para el shortcode: %s"
+msgstr "No hay pestaña especificada en el constructor de página para el shortcode: %s"
 
 #: ../framework/extensions/shortcodes/extensions/page-builder/includes/page-builder/includes/item-types/simple/class-page-builder-simple-item.php:111
 #: ../framework/extensions/shortcodes/shortcodes/column/includes/page-builder-column-item/class-page-builder-column-item.php:75
@@ -2066,8 +2030,7 @@ msgstr "Imagen"
 #: ../framework/extensions/shortcodes/shortcodes/media-image/options.php:9
 msgid ""
 "Either upload a new, or choose an existing image from your media library"
-msgstr ""
-"Ya sea subir una nueva o escoger una existente en su biblioteca multimedia"
+msgstr "Ya sea subir una nueva o escoger una existente en su biblioteca multimedia"
 
 #: ../framework/extensions/shortcodes/shortcodes/testimonials/options.php:30
 msgid "Name"
@@ -2142,8 +2105,7 @@ msgstr "Agregar una tabla"
 
 #: ../framework/extensions/shortcodes/shortcodes/table/includes/fw-option-type-table/class-fw-option-type-table.php:64
 msgid "table-builder option type must be inside the table shortcode"
-msgstr ""
-"la opción constructor de tablas debe estar dentro de un shortcode tabla"
+msgstr "la opción constructor de tablas debe estar dentro de un shortcode tabla"
 
 #: ../framework/extensions/shortcodes/shortcodes/table/includes/fw-option-type-table/class-fw-option-type-table.php:171
 msgid "Table Styling"
@@ -2288,8 +2250,7 @@ msgstr "Marcador (Placeholder) en mapa"
 #: ../framework/extensions/shortcodes/shortcodes/map/class-fw-shortcode-map.php:122
 #, php-format
 msgid "Unknown location provider \"%s\" specified for map shortcode"
-msgstr ""
-"Proveedor de ubicación desconocido \"%s\" especificado en shortcode mapa"
+msgstr "Proveedor de ubicación desconocido \"%s\" especificado en shortcode mapa"
 
 #: ../framework/extensions/shortcodes/shortcodes/map/config.php:8
 msgid "Map"
@@ -2349,8 +2310,7 @@ msgstr "Desactivar acercamiento al hacer scroll"
 
 #: ../framework/extensions/shortcodes/shortcodes/map/options.php:42
 msgid "Prevent the map from zooming when scrolling until clicking on the map"
-msgstr ""
-"Previene el acercamiento cuando hace scroll hasta que haga click en el mapa"
+msgstr "Previene el acercamiento cuando hace scroll hasta que haga click en el mapa"
 
 #: ../framework/extensions/shortcodes/shortcodes/column/includes/page-builder-column-item/class-page-builder-column-item.php:76
 #: ../framework/extensions/megamenu/includes/class-fw-ext-mega-menu-admin-walker.php:65
@@ -2476,7 +2436,7 @@ msgstr "Icono"
 
 #: ../framework/extensions/shortcodes/shortcodes/icon/config.php:7
 msgid "Add an Icon"
-msgstr "Agregar icono"
+msgstr "Agregar Icono"
 
 #: ../framework/extensions/shortcodes/shortcodes/icon/options.php:13
 msgid "Icon title"
@@ -2492,7 +2452,7 @@ msgstr "Agregar una caja con icono"
 
 #: ../framework/extensions/shortcodes/shortcodes/icon-box/options.php:8
 msgid "Box Style"
-msgstr "Estilo de caja"
+msgstr "Estilo de Caja"
 
 #: ../framework/extensions/shortcodes/shortcodes/icon-box/options.php:10
 msgid "Icon above title"
@@ -2504,7 +2464,7 @@ msgstr "Icono en línea con el título"
 
 #: ../framework/extensions/shortcodes/shortcodes/icon-box/options.php:16
 msgid "Choose an Icon"
-msgstr "Escoger un icono"
+msgstr "Escoger un Icono"
 
 #: ../framework/extensions/shortcodes/shortcodes/icon-box/options.php:20
 msgid "Title of the Box"
@@ -2629,8 +2589,7 @@ msgstr "Agregar Calendario"
 
 #: ../framework/extensions/shortcodes/shortcodes/calendar/options.php:14
 msgid "Select calendar population method (Ex: events, custom)"
-msgstr ""
-"Seleccione método de agrupación del calendario (Ej: eventos, personalizado)"
+msgstr "Seleccione método de agrupación del calendario (Ej: eventos, personalizado)"
 
 #: ../framework/extensions/shortcodes/shortcodes/calendar/options.php:23
 msgid "Calendar Type"
@@ -2747,11 +2706,8 @@ msgstr "Calendario: No se encuentra %s"
 
 #: ../framework/extensions/shortcodes/shortcodes/calendar/static.php:67
 #, php-format
-msgid ""
-"Calendar: Wrong date format %s. Should be either \"now\" or \"yyyy-mm-dd\""
-msgstr ""
-"Calendario: Formato de fecha incorrecto %s. Debe ser \"ahora\" o \"aaaa-mm-dd"
-"\""
+msgid "Calendar: Wrong date format %s. Should be either \"now\" or \"yyyy-mm-dd\""
+msgstr "Calendario: Formato de fecha incorrecto %s. Debe ser \"ahora\" o \"aaaa-mm-dd\""
 
 #: ../framework/extensions/shortcodes/shortcodes/calendar/static.php:69
 msgid "Calendar: Event URL is not set"
@@ -2760,19 +2716,15 @@ msgstr "Calendario: URL de evento no establecida"
 #: ../framework/extensions/shortcodes/shortcodes/calendar/static.php:70
 #, php-format
 msgid ""
-"Calendar: Wrong navigation direction %s. Can be only \"next\" or \"prev\" or "
-"\"today\""
-msgstr ""
-"Calendario: dirección de explroación incorrecta %s. Debe ser solo \"Siguiente"
-"\", \"Anterior\" u \"Hoy\""
+"Calendar: Wrong navigation direction %s. Can be only \"next\" or \"prev\" or"
+" \"today\""
+msgstr "Calendario: dirección de explroación incorrecta %s. Debe ser solo \"Siguiente\", \"Anterior\" u \"Hoy\""
 
 #: ../framework/extensions/shortcodes/shortcodes/calendar/static.php:72
 msgid ""
 "Calendar: Time split parameter should divide 60 without decimals. Something "
 "like 10, 15, 30"
-msgstr ""
-"Calendario: El parámetro de división debe dividir 60 sin decimales. Algo "
-"como 10, 15, 30"
+msgstr "Calendario: El parámetro de división debe dividir 60 sin decimales. Algo como 10, 15, 30"
 
 #: ../framework/extensions/shortcodes/shortcodes/calendar/static.php:74
 msgid "No events in this day."
@@ -2918,7 +2870,7 @@ msgstr "Sábado"
 
 #: ../framework/extensions/shortcodes/shortcodes/media-image/config.php:7
 msgid "Add an Image"
-msgstr "Agregar una imagen"
+msgstr "Agregar Imagen"
 
 #: ../framework/extensions/shortcodes/shortcodes/media-image/options.php:8
 msgid "Choose Image"
@@ -3069,8 +3021,7 @@ msgstr "Tipo de regla"
 
 #: ../framework/extensions/shortcodes/shortcodes/divider/options.php:14
 msgid "Here you can set the styling and size of the HR element"
-msgstr ""
-"Aquí usted puede establecer el estilo y alto de su elemento HR (separador)"
+msgstr "Aquí usted puede establecer el estilo y alto de su elemento HR (separador)"
 
 #: ../framework/extensions/shortcodes/shortcodes/divider/options.php:16
 msgid "Line"
@@ -3085,10 +3036,7 @@ msgid ""
 "How much whitespace do you need? Enter a pixel value. Positive value will "
 "increase the whitespace, negative value will reduce it. eg: '50', '-25', "
 "'200'"
-msgstr ""
-"Cuánto espacio necesita? ingrese un valor en pixeles. Valor positivo "
-"incrementa el espacio, valor negativo disminuye espacio. Ej: '50', '-25', "
-"'200'"
+msgstr "Cuánto espacio necesita? ingrese un valor en pixeles. Valor positivo incrementa el espacio, valor negativo disminuye espacio. Ej: '50', '-25', '200'"
 
 #: ../framework/extensions/shortcodes/shortcodes/section/config.php:6
 #: ../framework/extensions/shortcodes/shortcodes/section/includes/page-builder-section-item/class-page-builder-section-item.php:23
@@ -3146,8 +3094,7 @@ msgstr "Agregar/Editar Pestaña"
 #: ../framework/extensions/shortcodes/includes/class-fw-shortcode.php:194
 #, php-format
 msgid "No default view (views/view.php) found for shortcode: %s"
-msgstr ""
-"No hay vista por defecto encontrada (views/view.php) para el shortcode: %s"
+msgstr "No hay vista por defecto encontrada (views/view.php) para el shortcode: %s"
 
 #: ../framework/extensions/shortcodes/includes/class-fw-shortcodes-loader.php:203
 #, php-format
@@ -3157,8 +3104,7 @@ msgstr "Shortcode \"%s\" de %s ya ha se ha definido en %s"
 #: ../framework/extensions/shortcodes/includes/class-fw-shortcodes-loader.php:264
 #, php-format
 msgid "Class file found for shortcode %s but no class %s found"
-msgstr ""
-"Archivo Class encontrado para shortcode %s pero no se ha definido la class %s"
+msgstr "Archivo Class encontrado para shortcode %s pero no se ha definido la class %s"
 
 #: ../framework/extensions/shortcodes/includes/class-fw-shortcodes-loader.php:269
 #, php-format
@@ -3216,9 +3162,7 @@ msgstr "Social"
 msgid ""
 "Use this extension to configure all your social related APIs. Other "
 "extensions will use the Social extension to connect to your social accounts."
-msgstr ""
-"Utilice esta extensión para configurar sus APIs de redes sociales. Otras "
-"extensiones pueden ser utilizadas para conectar con sus cuentas sociales"
+msgstr "Utilice esta extensión para configurar sus APIs de redes sociales. Otras extensiones pueden ser utilizadas para conectar con sus cuentas sociales"
 
 #: ../framework/extensions/social/extensions/social-facebook/class-fw-extension-social-facebook.php:62
 #: ../framework/core/components/backend.php:584
@@ -3311,12 +3255,9 @@ msgstr "Formulario"
 #: ../framework/extensions/forms/manifest.php:7
 #: ../framework/core/components/extensions/manager/available-extensions.php:229
 msgid ""
-"This extension adds the possibility to create a contact form. Use the drag & "
-"drop form builder to create any contact form you'll ever want or need."
-msgstr ""
-"Esta extensión añade la posibilidad de crear un formulario de contacto. "
-"Utilice el constructor \"arrastrar y soltar\" para crear el formulario de "
-"contacto que quiera o necesite."
+"This extension adds the possibility to create a contact form. Use the drag &"
+" drop form builder to create any contact form you'll ever want or need."
+msgstr "Esta extensión añade la posibilidad de crear un formulario de contacto. Utilice el constructor \"arrastrar y soltar\" para crear el formulario de contacto que quiera o necesite."
 
 #: ../framework/extensions/forms/extensions/contact-forms/manifest.php:5
 msgid "Contact Forms"
@@ -3409,8 +3350,7 @@ msgstr "Email a"
 
 #: ../framework/extensions/forms/extensions/contact-forms/shortcodes/contact-form/options.php:95
 msgid "We recommend you to use an email that you verify often"
-msgstr ""
-"Recomendamos el uso de un correo electrónico que verifique frecuentemente"
+msgstr "Recomendamos el uso de un correo electrónico que verifique frecuentemente"
 
 #: ../framework/extensions/forms/extensions/contact-forms/shortcodes/contact-form/options.php:96
 msgid "The form will be sent to this email address."
@@ -3435,9 +3375,7 @@ msgstr "Tenga en cuenta que el tipo no se puede cambiar más adelante."
 #: ../framework/extensions/forms/views/backend/submit-box-add.php:11
 msgid ""
 "You will need to create a new form in order to have a different form type."
-msgstr ""
-"Usted tendrá que crear un nuevo formulario con el fin de tener un tipo "
-"diferente de formulario."
+msgstr "Usted tendrá que crear un nuevo formulario con el fin de tener un tipo diferente de formulario."
 
 #: ../framework/extensions/forms/views/backend/submit-box-add.php:20
 #: ../framework/extensions/forms/views/backend/submit-box-edit.php:16
@@ -3950,10 +3888,7 @@ msgstr "Texto para página de blog"
 msgid ""
 "The blog page anchor will have this text. In case homepage will be set as "
 "blog page, will be taken the homepage text"
-msgstr ""
-"La etiqueta de página de blog tendrá este texto. En caso de que la página de "
-"inicio esté configurada como página de blog (entradas), tomará el texto de "
-"página de inicio"
+msgstr "La etiqueta de página de blog tendrá este texto. En caso de que la página de inicio esté configurada como página de blog (entradas), tomará el texto de página de inicio"
 
 #: ../framework/extensions/breadcrumbs/settings-options.php:29
 msgid "Text for 404 Page"
@@ -3973,9 +3908,7 @@ msgstr "Migas de pan (Breadcrumbs)"
 msgid ""
 "Creates a simplified navigation menu for the pages that can be placed "
 "anywhere in the theme. This will make navigating the website much easier."
-msgstr ""
-"Crea un menu de navegación simplificado para páginas que puede ser ubicado "
-"en cualquier lugar de un tema. Esto conlleva a una navegación mas sencilla."
+msgstr "Crea un menu de navegación simplificado para páginas que puede ser ubicado en cualquier lugar de un tema. Esto conlleva a una navegación mas sencilla."
 
 #: ../framework/extensions/breadcrumbs/includes/class-breadcrumbs-builder.php:11
 msgid "404 Not found"
@@ -3988,7 +3921,7 @@ msgstr "Búsqueda para: "
 #: ../framework/extensions/breadcrumbs/includes/class-breadcrumbs-builder.php:248
 #: ../framework/includes/option-types/multi-select/class-fw-option-type-multi-select.php:472
 msgid "No title"
-msgstr "Sin título"
+msgstr "(sin título)"
 
 #: ../framework/extensions/events/class-fw-extension-events.php:89
 msgid "Create a event item"
@@ -4011,10 +3944,7 @@ msgstr "Evento Multi Intervalo"
 msgid ""
 "This extension adds a fully fledged Events module to your theme. It comes "
 "with built in pages that contain a calendar where events can be added."
-msgstr ""
-"Esta extensión añade un completo módulo para gestionar Eventos en su tema. "
-"Viene con páginas elaboradas que contienen calendario en donde cada evento "
-"es agregado."
+msgstr "Esta extensión añade un completo módulo para gestionar Eventos en su tema. Viene con páginas elaboradas que contienen calendario en donde cada evento es agregado."
 
 #: ../framework/extensions/events/extensions/events-tags/class-fw-extension-events-tags.php:81
 #: ../framework/extensions/events/extensions/events-tags/class-fw-extension-events-tags.php:189
@@ -4077,7 +4007,7 @@ msgstr "Su evento dura todo el día?"
 
 #: ../framework/extensions/events/includes/option-types/event/class-fw-option-type-event.php:67
 msgid "Start & End of Event"
-msgstr "Comienzo y Fin del Evento"
+msgstr "Comienzo y Fin de Evento"
 
 #: ../framework/extensions/events/includes/option-types/event/class-fw-option-type-event.php:68
 msgid "Set start and end events datetime"
@@ -4102,10 +4032,7 @@ msgid ""
 "Brings a new layer of customization freedom to your website by letting you "
 "add more than one sidebar to a page, or different sidebars on different "
 "pages."
-msgstr ""
-"Aporta una nueva capa de personalización libre para su sitio web permitiendo "
-"agregar mas de una barra lateral (Sidebar) a su página o diferentes barras "
-"laterales en diferentes páginas."
+msgstr "Aporta una nueva capa de personalización libre para su sitio web permitiendo agregar mas de una barra lateral (Sidebar) a su página o diferentes barras laterales en diferentes páginas."
 
 #: ../framework/extensions/sidebars/class-fw-extension-sidebars.php:131
 msgid "No matches found"
@@ -4158,9 +4085,7 @@ msgstr "Escriba aquí para buscar ..."
 
 #: ../framework/extensions/sidebars/views/backend-tab-specific.php:30
 msgid "Search for a specific page you want to set a sidebar for"
-msgstr ""
-"Búsqueda para una página específica para la cual quiere establecer una barra "
-"lateral"
+msgstr "Búsqueda para una página específica para la cual quiere establecer una barra lateral"
 
 #: ../framework/extensions/sidebars/views/backend-tab-grouped.php:6
 msgid "For group"
@@ -4168,9 +4093,7 @@ msgstr "Para un grupo"
 
 #: ../framework/extensions/sidebars/views/backend-tab-grouped.php:25
 msgid "Select group of pages you want to set a sidebar for."
-msgstr ""
-"Seleccione un grupo de páginas para las cuales quiere establecer su barra "
-"lateral."
+msgstr "Seleccione un grupo de páginas para las cuales quiere establecer su barra lateral."
 
 #: ../framework/extensions/sidebars/views/backend-sidebars-positions-mode-insert.php:18
 #: ../framework/extensions/sidebars/includes/option-type/sidebar-picker/view.php:60
@@ -4203,9 +4126,7 @@ msgstr "Gestionar Barras Laterales"
 msgid ""
 "Use this section to create and/or set different sidebar(s) for different "
 "page(s)"
-msgstr ""
-"Utilice esta sección para crear y/o establecer diferentes barras laterales "
-"para diferentes páginas"
+msgstr "Utilice esta sección para crear y/o establecer diferentes barras laterales para diferentes páginas"
 
 #: ../framework/extensions/sidebars/views/backend-main-view.php:24
 msgid "For Grouped Pages"
@@ -4230,17 +4151,15 @@ msgstr "Barra lateral dinámica no existe"
 
 #: ../framework/extensions/sidebars/includes/class-fw-extension-sidebars-backend.php:277
 msgid ""
-"The placeholder can't be deleted because it is used in one of sidebars below."
-msgstr ""
-"El marcador no puede ser eliminado porque es utilizado en una de las barras "
-"laterales de abajo."
+"The placeholder can't be deleted because it is used in one of sidebars "
+"below."
+msgstr "El marcador no puede ser eliminado porque es utilizado en una de las barras laterales de abajo."
 
 #: ../framework/extensions/sidebars/includes/class-fw-extension-sidebars-backend.php:280
 msgid ""
-"Please replace it first so that you will not have visual gaps in your layout."
-msgstr ""
-"Por favor primero reemplace y de este modo usted no tendrá deficiencias "
-"visuales en su diseño."
+"Please replace it first so that you will not have visual gaps in your "
+"layout."
+msgstr "Por favor primero reemplace y de este modo usted no tendrá deficiencias visuales en su diseño."
 
 #: ../framework/extensions/sidebars/includes/class-fw-extension-sidebars-backend.php:293
 msgid "Successfully removed"
@@ -4265,8 +4184,7 @@ msgstr "Error: Barras laterales no establecidas"
 
 #: ../framework/extensions/sidebars/includes/class-fw-extension-sidebars-backend.php:865
 msgid "Error: Position doesn't exists. Please check config file."
-msgstr ""
-"Error: Posición inexistente. Por favor revise el archivo de configuración."
+msgstr "Error: Posición inexistente. Por favor revise el archivo de configuración."
 
 #: ../framework/extensions/sidebars/includes/class-fw-extension-sidebars-config.php:55
 #: ../framework/extensions/sidebars/includes/class-fw-extension-sidebars-config.php:253
@@ -4334,10 +4252,7 @@ msgstr "Mega Menú"
 msgid ""
 "The Mega Menu extension adds a user-friendly drop down menu that will let "
 "you easily create highly customized menu configurations."
-msgstr ""
-"La extensión Mega Menú añade un menú desplegable fácil de utilizar que le "
-"permitirá crear de manera fácil configuraciones altamente personalizadas de "
-"menú."
+msgstr "La extensión Mega Menú añade un menú desplegable fácil de utilizar que le permitirá crear de manera fácil configuraciones altamente personalizadas de menú."
 
 #: ../framework/extensions/megamenu/class-fw-extension-megamenu.php:58
 msgid "Select Icon"
@@ -4409,9 +4324,7 @@ msgstr "Descripción (HTML)"
 msgid ""
 "The description will be displayed in the menu if the current theme supports "
 "it."
-msgstr ""
-"La descripción es mostrada en el menú si el actual tema tiene soporte para "
-"esta."
+msgstr "La descripción es mostrada en el menú si el actual tema tiene soporte para esta."
 
 #: ../framework/extensions/megamenu/includes/class-fw-ext-mega-menu-admin-walker.php:190
 msgid "Add Icon"
@@ -4488,13 +4401,7 @@ msgid ""
 "site at the URL `{url}` and it gets the error `{error}`. There may be a "
 "problem with the server configuration (eg local DNS problems, mod_security, "
 "etc) preventing connections from working properly."
-msgstr ""
-"Conexiones de bucle invertido HTTP no están activadas en este servidor. \n"
-"Si necesita ponerse en contacto con su proveedor de alojamiento web, dígales "
-"que cuando PHP intenta conectarse de nuevo al sitio en la URL `{url}` este "
-"obtiene el error `{error}`. Puede haber un problema con la configuración del "
-"servidor (Ej: problemas en DNS local, mod_security, etc) previniendo que las "
-"conecciones funcionen apropiadamente."
+msgstr "Conexiones de bucle invertido HTTP no están activadas en este servidor. \nSi necesita ponerse en contacto con su proveedor de alojamiento web, dígales que cuando PHP intenta conectarse de nuevo al sitio en la URL `{url}` este obtiene el error `{error}`. Puede haber un problema con la configuración del servidor (Ej: problemas en DNS local, mod_security, etc) previniendo que las conecciones funcionen apropiadamente."
 
 #: ../framework/extensions/backups/helpers.php:123
 #: ../framework/extensions/backups/helpers.php:145
@@ -4520,10 +4427,7 @@ msgstr "Respaldo & Contenido Demostrativo"
 msgid ""
 "This extension lets you create an automated backup schedule, import demo "
 "content or even create a demo content archive for migration purposes."
-msgstr ""
-"Esta extensión le permite crear respaldos programados automáticamente, "
-"importar contenido demostrativo o incluso crear un archivo de contenido "
-"demostrativo para propósitos de migración."
+msgstr "Esta extensión le permite crear respaldos programados automáticamente, importar contenido demostrativo o incluso crear un archivo de contenido demostrativo para propósitos de migración."
 
 #: ../framework/extensions/backups/extensions/backups-demo/class-fw-extension-backups-demo.php:97
 #: ../framework/extensions/backups/extensions/backups-demo/class-fw-extension-backups-demo.php:98
@@ -4582,10 +4486,7 @@ msgid ""
 "Warning! \n"
 "You are about to delete a backup, it will be lost forever. \n"
 "Are you sure?"
-msgstr ""
-"Advertencia!  \n"
-"Usted está eliminando un respaldo, este se perderá completamente. \n"
-"Está seguro (a)?"
+msgstr "Advertencia!  \nUsted está eliminando un respaldo, este se perderá completamente. \nEstá seguro (a)?"
 
 #: ../framework/extensions/backups/includes/module/schedule/settings-options.php:16
 msgid "Interval"
@@ -4598,9 +4499,7 @@ msgstr "Deshabilitado"
 
 #: ../framework/extensions/backups/includes/module/schedule/settings-options.php:25
 msgid "Select how often do you want to backup your website."
-msgstr ""
-"Seleccione la frecuencia con qué quiere hacer copias de seguridad de su "
-"sitio web."
+msgstr "Seleccione la frecuencia con qué quiere hacer copias de seguridad de su sitio web."
 
 #: ../framework/extensions/backups/includes/module/schedule/settings-options.php:32
 #: ../framework/extensions/backups/includes/module/schedule/settings-options.php:45
@@ -4865,9 +4764,7 @@ msgstr "Parámetros requeridos no encontrados"
 
 #: ../framework/extensions/backups/includes/module/tasks/type/class-fw-ext-backups-task-type-db-restore.php:232
 msgid "Cannot do full db restore because backup is missing some tables"
-msgstr ""
-"No es posible realizar la restauración total de base de datos porque al "
-"respaldo le faltan algunas tablas"
+msgstr "No es posible realizar la restauración total de base de datos porque al respaldo le faltan algunas tablas"
 
 #: ../framework/extensions/backups/includes/module/tasks/type/class-fw-ext-backups-task-type-db-restore.php:396
 #, php-format
@@ -5086,9 +4983,7 @@ msgstr "Convertir datos"
 msgid ""
 "Set to default language the posts, pages categories or tags that don't have "
 "a language set ?"
-msgstr ""
-"Establecer idioma predeterminado para publicaciones, páginas, categorías o "
-"etiquetas que no tengan idioma establecido?"
+msgstr "Establecer idioma predeterminado para publicaciones, páginas, categorías o etiquetas que no tengan idioma establecido?"
 
 #: ../framework/extensions/translation/manifest.php:7
 #: ../framework/extensions/translation/extensions/translate-posts/class-fw-extension-translate-posts.php:336
@@ -5100,11 +4995,9 @@ msgstr "Traducciones"
 #: ../framework/core/components/extensions/manager/available-extensions.php:265
 msgid ""
 "This extension lets you translate your website in any language or even add "
-"multiple languages for your users to change at their will from the front-end."
-msgstr ""
-"Esta extensión le permite traducir su sitio web a cualquier idioma o incluso "
-"añadir múltiples idiomas para que sus usuarios cambien a su elección desde "
-"el front-end."
+"multiple languages for your users to change at their will from the front-"
+"end."
+msgstr "Esta extensión le permite traducir su sitio web a cualquier idioma o incluso añadir múltiples idiomas para que sus usuarios cambien a su elección desde el front-end."
 
 #: ../framework/extensions/translation/extensions/translate-terms/class-fw-extension-translate-terms.php:114
 msgid "All Languages"
@@ -5157,7 +5050,7 @@ msgstr "Nuevo título"
 #: ../framework/extensions/translation/extensions/translate-widgets/includes/class-fw-widget-language-switcher.php:45
 #: ../framework/extensions/translation/extensions/translate-widgets/includes/class-fw-widget-calendar.php:49
 msgid "Title:"
-msgstr "Título: "
+msgstr "Título:"
 
 #: ../framework/extensions/translation/extensions/translate-widgets/includes/class-fw-widget-calendar.php:14
 msgid "A calendar of your site&#8217;s Posts."
@@ -5232,19 +5125,13 @@ msgid ""
 "This slider was created correctly, but the code implementation was delete "
 "from source code or blocked from filter.Delete this post or recovery slider "
 "implementation"
-msgstr ""
-"Este deslizador se ha creado correctamente, pero el código de implementación "
-"fue eliminado del código fuente o bloqueado desde el filtro. Elimine esta "
-"publicación o recupere la implementación del deslizador."
+msgstr "Este deslizador se ha creado correctamente, pero el código de implementación fue eliminado del código fuente o bloqueado desde el filtro. Elimine esta publicación o recupere la implementación del deslizador."
 
 #: ../framework/extensions/media/extensions/slider/class-fw-extension-slider.php:351
 msgid ""
 "This slider was created correctly, but the multimedia_types from config.php "
 "file was deleted, please set multimedia_types for this slider type."
-msgstr ""
-"Este deslizador se ha creado correctamente, pero los tipos_multimedia del "
-"archivo config.php fueron eliminados, por favor establezca tipos_multimedia "
-"(multimedia_types) para este tipo de deslizador."
+msgstr "Este deslizador se ha creado correctamente, pero los tipos_multimedia del archivo config.php fueron eliminados, por favor establezca tipos_multimedia (multimedia_types) para este tipo de deslizador."
 
 #: ../framework/extensions/media/extensions/slider/class-fw-extension-slider.php:361
 msgid "Slider Configuration"
@@ -5256,9 +5143,7 @@ msgstr "Título de deslizador"
 
 #: ../framework/extensions/media/extensions/slider/class-fw-extension-slider.php:377
 msgid "Choose a title for your slider only for internal use: Ex: \"Homepage\"."
-msgstr ""
-"Escoja un título para su deslizador solo para uso interno: Ej: \"Página de "
-"inicio\"."
+msgstr "Escoja un título para su deslizador solo para uso interno: Ej: \"Página de inicio\"."
 
 #: ../framework/extensions/media/extensions/slider/class-fw-extension-slider.php:433
 msgid "Slider Settings"
@@ -5268,9 +5153,7 @@ msgstr "Opciones del Deslizador"
 msgid ""
 "You don't have slider extensions, please create at least one extension for "
 "properly work"
-msgstr ""
-"Usted no tiene extensiones para deslizador, por favor cree al menos una "
-"extensión para su correcto funcionamiento."
+msgstr "Usted no tiene extensiones para deslizador, por favor cree al menos una extensión para su correcto funcionamiento."
 
 #: ../framework/extensions/media/extensions/slider/class-fw-extension-slider.php:474
 msgid "Choose the population method for your slider"
@@ -5327,10 +5210,7 @@ msgid ""
 "Adds the Sliders extension to your website. You'll be able to create "
 "different built in jQuery sliders for your homepage and all the other "
 "website pages."
-msgstr ""
-"Añade la extensión deslizadores (Sliders) a su sitio web. Usted podrá crear "
-"diferentes deslizadores jQuery integrados para su página de inicio y otras "
-"páginas del sitio web."
+msgstr "Añade la extensión deslizadores (Sliders) a su sitio web. Usted podrá crear diferentes deslizadores jQuery integrados para su página de inicio y otras páginas del sitio web."
 
 #: ../framework/extensions/media/extensions/slider/extensions/nivo-slider/manifest.php:5
 #: ../framework/extensions/media/extensions/slider/extensions/nivo-slider/manifest.php:6
@@ -5386,7 +5266,7 @@ msgstr "Escoja un subtítulo para su diapositiva."
 
 #: ../framework/extensions/media/extensions/slider/shortcodes/slider/config.php:9
 msgid "Add a Slider"
-msgstr "Agregar un Deslizador"
+msgstr "Añadir un slider"
 
 #: ../framework/extensions/media/extensions/slider/shortcodes/slider/options.php:9
 msgid "Select Slider"
@@ -5412,18 +5292,13 @@ msgstr "crear un nuevo deslizador"
 msgid ""
 "No Sliders created yet. Please go to the {br}Sliders page and "
 "{add_slider_link}."
-msgstr ""
-"No hay deslizadores creados aún. Por favor vaya a la {br} Página "
-"Deslizadores y {add_slider_link}."
+msgstr "No hay deslizadores creados aún. Por favor vaya a la {br} Página Deslizadores y {add_slider_link}."
 
 #: ../framework/extensions/media/extensions/slider/views/backend/submit-box-raw.php:5
 msgid ""
 "Note that the type and population can't be changed later. You'll need to "
 "create a new slider to have a different slider type or population method."
-msgstr ""
-"Note que el tipo y agrupación no podrá ser modificado después. Usted "
-"necesitará crear un nuevo deslizador para tener un tipo distinto de "
-"deslizador o método de agrupación."
+msgstr "Note que el tipo y agrupación no podrá ser modificado después. Usted necesitará crear un nuevo deslizador para tener un tipo distinto de deslizador o método de agrupación."
 
 #: ../framework/extensions/media/extensions/slider/views/backend/submit-box-raw.php:31
 #: ../framework/extensions/media/extensions/slider/views/backend/submit-box-edit.php:48
@@ -5456,9 +5331,7 @@ msgstr "Automáticamente, extrae imágenes desde categorías"
 #: ../framework/extensions/media/extensions/population-method/extensions/population-method-categories/class-fw-extension-population-method-categories.php:29
 #, php-format
 msgid "%s extension needs configured categories in post types"
-msgstr ""
-"extensión %s necesita ser categorías configuradas en tipos de entradas (post "
-"types)"
+msgstr "extensión %s necesita ser categorías configuradas en tipos de entradas (post types)"
 
 #: ../framework/extensions/media/extensions/population-method/extensions/population-method-categories/class-fw-extension-population-method-categories.php:34
 msgid "Categories Population Method"
@@ -5489,9 +5362,7 @@ msgstr "Automáticamente, extrae imágenes desde etiquetas"
 #: ../framework/extensions/media/extensions/population-method/extensions/population-method-tags/class-fw-extension-population-method-tags.php:29
 #, php-format
 msgid "%s extension needs configured tags in post types"
-msgstr ""
-"Extensión %s necesita ser etiquetas configuradas en tipos de entradas (post "
-"types)"
+msgstr "Extensión %s necesita ser etiquetas configuradas en tipos de entradas (post types)"
 
 #: ../framework/extensions/media/extensions/population-method/extensions/population-method-tags/class-fw-extension-population-method-tags.php:34
 msgid "Tags Population Method"
@@ -5518,9 +5389,7 @@ msgstr "Automáticamente, extrae imágenes desde entradas"
 #: ../framework/extensions/media/extensions/population-method/extensions/population-method-posts/class-fw-extension-population-method-posts.php:29
 #, php-format
 msgid "%s extension needs configured post categories in post types"
-msgstr ""
-"Extensión %s necesita ser entradas configuradas en tipos de entradas (post "
-"types)"
+msgstr "Extensión %s necesita ser entradas configuradas en tipos de entradas (post types)"
 
 #: ../framework/extensions/media/extensions/population-method/extensions/population-method-posts/class-fw-extension-population-method-posts.php:34
 msgid "Posts Population Method"
@@ -5575,7 +5444,7 @@ msgstr "Versión máxima requerida es "
 
 #: ../framework/core/class-fw-manifest.php:301
 msgid "and"
-msgstr "y "
+msgstr "y"
 
 #: ../framework/core/class-fw-manifest.php:308
 #, php-format
@@ -5637,17 +5506,13 @@ msgstr "dejar una opinión"
 msgid ""
 "Unyson WordPress Framework is the fastest and easiest way to develop a "
 "premium theme. I highly recommend it"
-msgstr ""
-"Framework Unyson Wordpress es el más rápido y fácil camino para desarrollar "
-"un tema premium. Recomiendo altamente éste"
+msgstr "Framework Unyson Wordpress es el más rápido y fácil camino para desarrollar un tema premium. Recomiendo altamente éste"
 
 #: ../framework/core/components/backend.php:594
 msgid ""
 "If you like Unyson, {wp_review_link}, share on {facebook_share_link} or "
 "{twitter_share_link}."
-msgstr ""
-"Si a usted le gusta Unyson, {wp_review_link}, comparta en "
-"{facebook_share_link} o {twitter_share_link}"
+msgstr "Si a usted le gusta Unyson, {wp_review_link}, comparta en {facebook_share_link} o {twitter_share_link}"
 
 #: ../framework/core/components/backend.php:1303
 msgid "You have no permissions to change settings options"
@@ -5687,8 +5552,7 @@ msgstr "No se cumplen los requisitos del Tema: "
 
 #: ../framework/core/components/extensions/manager/class--fw-extensions-manager.php:351
 msgid "Cannot remove the old extensions backup dir"
-msgstr ""
-"No es posible remover el directorio antiguo del respaldo de extensiones"
+msgstr "No es posible remover el directorio antiguo del respaldo de extensiones"
 
 #: ../framework/core/components/extensions/manager/class--fw-extensions-manager.php:357
 msgid "Cannot create the extensions backup dir"
@@ -5847,8 +5711,7 @@ msgstr "Usted no tiene permisos para desactivar extensiones"
 
 #: ../framework/core/components/extensions/manager/class--fw-extensions-manager.php:2297
 msgid "You are not allowed to save extensions settings."
-msgstr ""
-"Usted no tiene autorización para guardar configuraciones de extensiones."
+msgstr "Usted no tiene autorización para guardar configuraciones de extensiones."
 
 #: ../framework/core/components/extensions/manager/class--fw-extensions-manager.php:2304
 msgid "Invalid extension."
@@ -5890,8 +5753,7 @@ msgstr "Repositorio de extensión \"%s\" no tiene publicaciones \"%s\"."
 #: ../framework/core/components/extensions/manager/class--fw-extensions-manager.php:2510
 #, php-format
 msgid "Cannot download the \"%s\" extension zip. (Response code: %d)"
-msgstr ""
-"No es posible descargar zip de extensión \"%s\". (Código de respuesta: %d)"
+msgstr "No es posible descargar zip de extensión \"%s\". (Código de respuesta: %d)"
 
 #: ../framework/core/components/extensions/manager/class--fw-extensions-manager.php:2517
 #, php-format
@@ -5949,8 +5811,7 @@ msgstr "No es posible mover \"%s\" a \"%s\"."
 #: ../framework/core/components/extensions/manager/class--fw-extensions-manager.php:3150
 #, php-format
 msgid "Cannot activate the %s extension because it is not installed. %s"
-msgstr ""
-"No es posible activar la extensión %s porque esta no está instalada. %s"
+msgstr "No es posible activar la extensión %s porque esta no está instalada. %s"
 
 #: ../framework/core/components/extensions/manager/class--fw-extensions-manager.php:3107
 #: ../framework/core/components/extensions/manager/class--fw-extensions-manager.php:3154
@@ -5965,10 +5826,7 @@ msgstr "Instalar extensiones compatibles con el tema"
 msgid ""
 "Adds a sliders module to your website from where you'll be able to create "
 "different built in jQuery sliders for your homepage and rest of the pages."
-msgstr ""
-"Añade módulo deslizadores (Sliders) a su sitio web, donde usted podrá crear "
-"diferentes deslizadores jQuery integrados para su página de inicio y otras "
-"páginas del sitio web."
+msgstr "Añade módulo deslizadores (Sliders) a su sitio web, donde usted podrá crear diferentes deslizadores jQuery integrados para su página de inicio y otras páginas del sitio web."
 
 #: ../framework/core/components/extensions/manager/available-extensions.php:24
 msgid "Media"
@@ -5982,10 +5840,7 @@ msgstr "Método de agrupación"
 msgid ""
 "Let's you easily build countless pages with the help of the drag and drop "
 "visual page builder that comes with a lot of already created shortcodes."
-msgstr ""
-"Permite construir de manera sencilla innumerables páginas con la ayuda del "
-"constructor visual \"arrastre y suelte\" que viene con un grupo de "
-"shortcodes listos para utilizar."
+msgstr "Permite construir de manera sencilla innumerables páginas con la ayuda del constructor visual \"arrastre y suelte\" que viene con un grupo de shortcodes listos para utilizar."
 
 #: ../framework/core/components/extensions/manager/available-extensions.php:96
 msgid "Shortcodes"
@@ -5993,12 +5848,9 @@ msgstr "Shortcodes"
 
 #: ../framework/core/components/extensions/manager/available-extensions.php:157
 msgid ""
-"This extension lets you set up daily, weekly or monthly backup schedule. You "
-"can choose between a full backup or a data base only backup."
-msgstr ""
-"Esta extensión le permite establecer tareas de respaldo diario, semanal o "
-"mensual. Usted puede escoger entre un respaldo total o solo un respaldo de "
-"base de datos."
+"This extension lets you set up daily, weekly or monthly backup schedule. You"
+" can choose between a full backup or a data base only backup."
+msgstr "Esta extensión le permite establecer tareas de respaldo diario, semanal o mensual. Usted puede escoger entre un respaldo total o solo un respaldo de base de datos."
 
 #: ../framework/core/components/extensions/manager/views/extension.php:89
 #: ../framework/core/components/extensions/manager/views/extension-page-header.php:25
@@ -6165,10 +6017,7 @@ msgstr "por"
 msgid ""
 "Click OK to reset.\n"
 "All settings will be lost and replaced with default settings!"
-msgstr ""
-"Click OK para restablecer.\n"
-"Todas las configuraciones de perderán y reemplazadas a las configuraciones "
-"predeterminadas!"
+msgstr "Click OK para restablecer.\nTodas las configuraciones de perderán y reemplazadas a las configuraciones predeterminadas!"
 
 #: ../framework/views/backend-settings-form.php:202
 msgid "Resetting"
@@ -6361,8 +6210,7 @@ msgstr "a"
 #: ../framework/includes/option-types/multi-picker/class-fw-option-type-multi-picker.php:179
 #, php-format
 msgid "No 'picker' key set for multi-picker option: %s"
-msgstr ""
-"No establecida clave 'picker' (selector) para opción multi-selección: %s"
+msgstr "No establecida clave 'picker' (selector) para opción multi-selección: %s"
 
 #: ../framework/includes/option-types/background-image/view.php:37
 msgid "Predefined images"
