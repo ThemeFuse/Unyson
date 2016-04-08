@@ -760,22 +760,20 @@ final class _FW_Component_Backend {
 
 		fw_collect_options( $collected, $options, array(
 			'limit_option_types'    => false,
-			'limit_container_types' => array(), // only simple options are allowed on taxonomy edit page
+			'limit_container_types' => false,
 			'limit_level'           => 1,
 		) );
 
 		if ( empty( $collected ) ) {
 			return;
 		}
-		$values = array();
-		foreach ( $options as $option_id => $values ) {
-			$values[ $option_id ] = $values['value'];
-		}
 
 		// fixes word_press style: .form-field input { width: 95% }
 		echo '<style type="text/css">.fw-option-type-radio input, .fw-option-type-checkbox input { width: auto; }</style>';
 
-		echo $this->render_options( $collected, $values, array(), 'taxonomy' );
+		echo '<div class="fw-force-xs">';
+		echo $this->render_options( $collected, array(), array(), 'taxonomy' );
+		echo '</div>';
 	}
 
 	public function _action_init() {
@@ -788,15 +786,20 @@ final class _FW_Component_Backend {
 			);
 			add_action(
 				$current_edit_taxonomy['taxonomy'] . '_add_form_fields',
-				array( $this, '_action_create_add_taxonomy_options' ) );
-			add_action(
-				'create_' . $current_edit_taxonomy['taxonomy'],
-				array( $this, '_action_save_taxonomy_fields' ), 10 );
+				array( $this, '_action_create_add_taxonomy_options' )
+			);
 		}
 
 		if ( ! empty( $_POST ) ) {
 			// is form submit
 			add_action( 'edited_term', array( $this, '_action_term_edit' ), 10, 3 );
+
+			if ($current_edit_taxonomy['taxonomy']) {
+				add_action(
+					'create_' . $current_edit_taxonomy['taxonomy'],
+					array($this, '_action_save_taxonomy_fields')
+				);
+			}
 		}
 	}
 
@@ -1055,42 +1058,71 @@ final class _FW_Component_Backend {
 
 		return true;
 	}
+
 	/**
 	 * @param int $term_id
 	 */
 	public function _action_save_taxonomy_fields( $term_id ) {
-		if ( ! isset( $_POST['action'] ) || ! isset( $_POST['taxonomy'] ) ) {
-			return; // this is not real term form submit, abort save
+		if (
+			isset( $_POST['action'] )
+			&&
+			'add-tag' === $_POST['action']
+			&&
+			isset( $_POST['taxonomy'] )
+			&&
+			($taxonomy = get_taxonomy( $_POST['taxonomy'] ))
+			&&
+			current_user_can($taxonomy->cap->edit_terms)
+		) { /* ok */ } else { return; }
+
+		$options = fw()->theme->get_taxonomy_options( $taxonomy->name );
+		if ( empty( $options ) ) {
+			return;
 		}
-		$taxonomy = $_POST['taxonomy'];
-		$custom   = $_POST['fw_options'];
-		foreach ( $custom as $id => $value ) {
-			fw_set_db_term_option( $term_id, $taxonomy, $id, $value );
-		}
+
+		fw_set_db_term_option(
+			$term_id,
+			$taxonomy->name,
+			null,
+			fw_get_options_values_from_input($options)
+		);
+
+		do_action( 'fw_save_term_options', $term_id, $taxonomy->name, array() );
 	}
 
 	public function _action_term_edit( $term_id, $tt_id, $taxonomy ) {
-		if ( ! isset( $_POST['action'] ) || ! isset( $_POST['taxonomy'] ) ) {
-			return; // this is not real term form submit, abort save
-		}
+		if (
+			isset( $_POST['action'] )
+			&&
+			'editedtag' === $_POST['action']
+			&&
+			isset( $_POST['taxonomy'] )
+			&&
+			($taxonomy = get_taxonomy( $_POST['taxonomy'] ))
+			&&
+			current_user_can($taxonomy->cap->edit_terms)
+		) { /* ok */ } else { return; }
 
 		if (intval(FW_Request::POST('tag_ID')) != $term_id) {
 			// the $_POST values belongs to another term, do not save them into this one
 			return;
 		}
 
-		$old_values = (array) fw_get_db_term_option( $term_id, $taxonomy );
+		$options = fw()->theme->get_taxonomy_options( $taxonomy->name );
+		if ( empty( $options ) ) {
+			return;
+		}
+
+		$old_values = (array) fw_get_db_term_option( $term_id, $taxonomy->name );
 
 		fw_set_db_term_option(
 			$term_id,
-			$taxonomy,
+			$taxonomy->name,
 			null,
-			fw_get_options_values_from_input(
-				fw()->theme->get_taxonomy_options( $taxonomy )
-			)
+			fw_get_options_values_from_input($options)
 		);
 
-		do_action( 'fw_save_term_options', $term_id, $taxonomy, $old_values );
+		do_action( 'fw_save_term_options', $term_id, $taxonomy->name, $old_values );
 	}
 
 	public function _action_admin_register_scripts() {
@@ -1134,8 +1166,6 @@ final class _FW_Component_Backend {
 				'edit-tags' === $current_screen->base
 				&&
 				$current_screen->taxonomy
-				&&
-				! empty( $_GET['tag_ID'] )
 			) {
 				fw()->backend->enqueue_options_static(
 					fw()->theme->get_taxonomy_options( $current_screen->taxonomy )
