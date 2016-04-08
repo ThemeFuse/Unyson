@@ -37,45 +37,27 @@ class _FW_Customizer_Setting_Option extends WP_Customize_Setting {
 	}
 	
 	/**
-	 * Fetch the value of the setting.
+	 * Get the root value for a setting, especially for multidimensional ones.
 	 *
-	 * @since 3.4.0
+	 * @since 4.4.0
+	 * @access protected
 	 *
-	 * @return mixed The value.
+	 * @param mixed $default Value to return if root does not exist.
+	 * @return mixed
 	 */
-	public function value() {
-		// Get the callback that corresponds to the setting type.
-		switch( $this->type ) {
-			case 'theme_mod' :
-				$function = 'get_theme_mod';
-				break;
-			case 'option' :
-				$function = 'get_option';
-				break;
-			default :
-
-				/**
-				 * Filter a Customize setting value not handled as a theme_mod or option.
-				 *
-				 * The dynamic portion of the hook name, `$this->id_date['base']`, refers to
-				 * the base slug of the setting name.
-				 *
-				 * For settings handled as theme_mods or options, see those corresponding
-				 * functions for available hooks.
-				 *
-				 * @since 3.4.0
-				 *
-				 * @param mixed $default The setting default value. Default empty.
-				 */
-				return apply_filters( 'customize_value_' . $this->id_data[ 'base' ], $this );
+	protected function get_root_value( $default = null ) {
+		$id_base = $this->id_data['base'];
+		if ( 'option' === $this->type ) {
+			return get_option( $id_base, $default );
+		} else if ( 'theme_mod' ) {
+			return get_theme_mod( $id_base, $default );
+		} else {
+			/*
+			 * Any WP_Customize_Setting subclass implementing aggregate multidimensional
+			 * will need to override this method to obtain the data from the appropriate
+			 * location.
+			 */
+			return $this;
 		}
-
-		// Handle non-array value
-		if ( empty( $this->id_data[ 'keys' ] ) )
-			return $function( $this->id_data[ 'base' ], $this->default );
-
-		// Handle array-based value
-		$values = $function( $this->id_data[ 'base' ] );
-		return $this->multidimensional_get( $values, $this->id_data[ 'keys' ], $this->default );
 	}
 }
