@@ -146,7 +146,10 @@ var fwForm = {
 				isBusy = false;
 				opts.loading(elements, false);
 
+
 				if (r.success) {
+					fwEvents.trigger('fw:theme_settings:ajax_save');
+
 					opts.onSuccess(elements, r.data);
 				} else {
 					opts.onErrors(elements, r.data);
