@@ -2072,7 +2072,7 @@ final class _FW_Component_Backend {
 					$setting_id = FW_Option_Type::get_default_name_prefix() .'['. $opt['id'] .']';
 
 					{
-						$args = array(
+						$args_control = array(
 							'label' => empty($opt['option']['label'])
 								? fw_id_to_title($opt['id'])
 								: $opt['option']['label'],
@@ -2083,19 +2083,20 @@ final class _FW_Component_Backend {
 						);
 
 						if (isset($opt['option']['wp-customizer-args']) && is_array($opt['option']['wp-customizer-args'])) {
-							$args = array_merge($opt['option']['wp-customizer-args'], $args);
+							$args_control = array_merge($opt['option']['wp-customizer-args'], $args_control);
 						}
 
 						if ($parent_data) {
 							if ($parent_data['customizer_type'] === 'section') {
-								$args['section'] = $parent_data['id'];
+								$args_control['section'] = $parent_data['id'];
 							} else {
 								trigger_error('Invalid control parent: '. $parent_data['customizer_type'], E_USER_WARNING);
 								break;
 							}
 						} else { // the option is not placed in a section, create a section automatically
-							$args['section'] = 'fw_option_auto_section_'. $opt['id'];
-							$wp_customize->add_section($args['section'], array(
+							$args_control['section'] = 'fw_option_auto_section_'. $opt['id'];
+
+							$wp_customize->add_section($args_control['section'], array(
 								'title' => empty($opt['option']['label'])
 									? fw_id_to_title($opt['id'])
 									: $opt['option']['label'],
@@ -2111,22 +2112,33 @@ final class _FW_Component_Backend {
 						require_once fw_get_framework_directory('/includes/customizer/class--fw-customizer-control-option-wrapper.php');
 					}
 
-					$wp_customize->add_setting(
-						new _FW_Customizer_Setting_Option(
-							$wp_customize,
-							$setting_id,
-							array(
-								'default' => fw()->backend->option_type($opt['option']['type'])->get_value_from_input($opt['option'], null),
-								'fw_option' => $opt['option'],
-							)
-						)
-					);
+					{
+						$args_setting = array(
+							'default' => fw()->backend->option_type($opt['option']['type'])->get_value_from_input($opt['option'], null),
+							'fw_option' => $opt['option'],
+						);
 
+						if (isset($opt['option']['wp-customizer-setting-args']) && is_array($opt['option']['wp-customizer-setting-args'])) {
+							$args_setting = array_merge($opt['option']['wp-customizer-setting-args'], $args_control);
+						}
+
+						$wp_customize->add_setting(
+							new _FW_Customizer_Setting_Option(
+								$wp_customize,
+								$setting_id,
+								$args_setting
+							)
+						);
+
+						unset($args_setting);
+					}
+
+					// control must be registered after setting
 					$wp_customize->add_control(
 						new _FW_Customizer_Control_Option_Wrapper(
 							$wp_customize,
 							$opt['id'],
-							$args
+							$args_control
 						)
 					);
 					break;
