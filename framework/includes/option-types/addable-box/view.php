@@ -33,6 +33,11 @@ if (!empty($data['value'])) {
 }
 ?>
 <div <?php echo fw_attr_to_html($attr); ?>>
+	<!-- Fixes https://github.com/ThemeFuse/Unyson/issues/1278#issuecomment-208032542 -->
+	<?php echo fw()->backend->option_type('hidden')->render($id, array('value' => '~'), array(
+		'id_prefix' => $data['id_prefix'],
+		'name_prefix' => $data['name_prefix'],
+	)); ?>
 	<?php $i = 0; ?>
 	<div class="fw-option-boxes metabox-holder">
 		<?php foreach ($data['value'] as $value_index => &$values): ?>
