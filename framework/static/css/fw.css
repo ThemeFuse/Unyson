@@ -3067,37 +3067,37 @@ body.rtl .fw-modal .media-frame-content > form .fw-options-tabs-contents .fw-opt
 
 /* SoleModal */
 
-.fw-sole-modal > .media-modal {
+body > .fw-sole-modal > .media-modal {
 	z-index: 500000;
 	margin: auto;
 }
 
-.fw-sole-modal > .media-modal-backdrop {
+body > .fw-sole-modal > .media-modal-backdrop {
 	z-index: 499999;
 	background-color: transparent;
 }
 
-.fw-sole-modal > .media-modal > .media-modal-content {
+body > .fw-sole-modal > .media-modal > .media-modal-content {
 	-webkit-box-shadow: 0 1px 10px rgba(0,0,0,.25);
 	box-shadow: 0 0px 10px rgba(0,0,0,.25);
 }
 
-.fw-sole-modal .fw-sole-modal-content h2 {
+body > .fw-sole-modal .fw-sole-modal-content h2 {
 	font-size: 22px;
 	line-height: initial;
 }
 
-.fw-sole-modal .fw-sole-modal-content h2:first-child {
+body > .fw-sole-modal .fw-sole-modal-content h2:first-child {
 	margin-top: 0;
 }
 
-.fw-sole-modal .fw-sole-modal-content h2 img.wp-spinner {
+body > .fw-sole-modal .fw-sole-modal-content h2 img.wp-spinner {
 	vertical-align: baseline;
 	position: relative;
 	top: 2px;
 }
 
-.fw-sole-modal .fw-sole-modal-content p {
+body > .fw-sole-modal .fw-sole-modal-content p {
 	font-size: 13px;
 	line-height: 19px;
 }
