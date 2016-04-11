@@ -1235,51 +1235,11 @@ fw.getValuesFromServer = function (data) {
 			);
 		},
 		updateHtml: function(values) {
-			if ((function(options){
-					var optionTypesWithDefaultFwStorageParam = {'mailer':true};
+			var cacheId = this.getHtmlCacheId(values);
 
-					function containsFwStorageOption(opts){
-						if (
-							(typeof opts['fw-storage'] != 'undefined')
-							||
-							(
-								typeof opts['type'] != 'undefined'
-								&&
-								typeof optionTypesWithDefaultFwStorageParam[ opts['type'] ] != 'undefined'
-							)
-						) {
-							return true;
-						}
-
-						for (var key in opts) {
-							if (!opts.hasOwnProperty(key)) {
-								continue;
-							}
-
-							if (typeof opts[key] == 'object') {
-								if (containsFwStorageOption(opts[key])) {
-									return true;
-								}
-							}
-						}
-
-						return false;
-					}
-
-					return containsFwStorageOption(options);
-				})(this.get('options'))
-			) {
-				/**
-				 * Bypass html cache and load values from server
-				 * if there is at least one option that uses the `fw-storage` parameter
-				 */
-			} else {
-				var cacheId = this.getHtmlCacheId(values);
-
-				if (typeof htmlCache[cacheId] != 'undefined') {
-					this.set('html', htmlCache[cacheId]);
-					return;
-				}
+			if (typeof htmlCache[cacheId] != 'undefined') {
+				this.set('html', htmlCache[cacheId]);
+				return;
 			}
 
 			fw.loading.show(fwLoadingId);
