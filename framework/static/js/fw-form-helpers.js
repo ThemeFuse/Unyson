@@ -124,7 +124,17 @@ var fwForm = {
 			};
 
 			opts.hideErrors(elements);
-			opts.loading(elements, true);
+
+			/**
+			 * If you want to submit your ajaxified Theme Settings form without
+			 * any notification for the user add class fw-silent-submit to
+			 * the form element itself. This class will be removed
+			 * automatically after this particular submit, so that popup will
+			 * show when the user will press Submit button next time.
+			 */
+			opts.loading(elements, ! $form.hasClass('fw-silent-submit'));
+			$form.removeClass('fw-silent-submit');
+
 			isBusy = true;
 
 			jQuery.ajax({
