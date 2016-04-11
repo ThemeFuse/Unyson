@@ -1171,6 +1171,15 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 
 /* end: Edit Term page */
 
+/* Add Term page */
+
+#addtag .fw-backend-option {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+/* end: Add Term page */
+
 /* modal fix https://github.com/ThemeFuse/Unyson/issues/bvbbbbvbvvvggbgfvv1353bb */
 
 @media (min-width: 1200px) {
