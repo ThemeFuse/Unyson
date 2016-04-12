@@ -774,6 +774,14 @@ final class _FW_Component_Backend {
 		echo '<div class="fw-force-xs">';
 		echo $this->render_options( $collected, array(), array(), 'taxonomy' );
 		echo '</div>';
+
+		echo '<script type="text/javascript">'
+			.'jQuery(function($){'
+			.'    $("#submit").on("click", function(){'
+			.'        $("html, body").animate({ scrollTop: $("#col-left").offset().top });'
+			.'    });'
+			.'});'
+			.'</script>';
 	}
 
 	public function _action_init() {
