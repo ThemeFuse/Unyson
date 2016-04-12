@@ -71,7 +71,15 @@ class FW_Option_Type_Color_Picker extends FW_Option_Type
 	 */
 	protected function _get_value_from_input($option, $input_value)
 	{
-		if (!isset($input_value) || !preg_match('/^#[a-f0-9]{3}([a-f0-9]{3})?$/i', $input_value)) {
+		if (
+			is_null($input_value)
+			||
+			(
+				!is_null($input_value)
+				&&
+				!preg_match('/^#[a-f0-9]{3}([a-f0-9]{3})?$/i', $input_value)
+			)
+		) {
 			$input_value = $option['value'];
 		}
 
