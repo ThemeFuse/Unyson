@@ -295,5 +295,41 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 
 		return $value;
 	}
+
+	/**
+	 * {@inheritdoc}
+	 * fixes https://github.com/ThemeFuse/Unyson/issues/1440
+	 */
+	protected function _storage_load($id, array $option, $value, array $params) {
+		if (apply_filters('fw:option-type:multi-picker:fw-storage:process-inner-options', false)) {
+			foreach ($option['choices'] as $choice_id => $choice) {
+				foreach (fw_extract_only_options($choice) as $opt_id => $opt) {
+					$value[$choice_id][$opt_id] = fw()->backend->option_type($opt['type'])->storage_load(
+						$opt_id, $opt, $value[$choice_id][$opt_id], $params
+					);
+				}
+			}
+		}
+
+		return fw_db_option_storage_load($id, $option, $value, $params);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 * fixes https://github.com/ThemeFuse/Unyson/issues/1440
+	 */
+	protected function _storage_save($id, array $option, $value, array $params) {
+		if (apply_filters('fw:option-type:multi-picker:fw-storage:process-inner-options', false)) {
+			foreach ($option['choices'] as $choice_id => $choice) {
+				foreach (fw_extract_only_options($choice) as $opt_id => $opt) {
+					$value[$choice_id][$opt_id] = fw()->backend->option_type($opt['type'])->storage_save(
+						$opt_id, $opt, $value[$choice_id][$opt_id], $params
+					);
+				}
+			}
+		}
+
+		return fw_db_option_storage_save($id, $option, $value, $params);
+	}
 }
 FW_Option_Type::register('FW_Option_Type_Multi_Picker');
