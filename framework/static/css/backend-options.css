@@ -1178,6 +1178,11 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 	padding-right: 0;
 }
 
+#addtag .fw-postbox .fw-backend-option {
+	padding-left: 12px;
+	padding-right: 12px;
+}
+
 /* end: Add Term page */
 
 /* modal fix https://github.com/ThemeFuse/Unyson/issues/1353 */
