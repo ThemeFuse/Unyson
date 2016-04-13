@@ -1214,7 +1214,7 @@ fw.getValuesFromServer = function (data) {
 			return fw.getValuesFromServer({
 				options: this.get('options'),
 				actualValues: actualValues
-			})
+			});
 		},
 
 		/**
