@@ -2127,7 +2127,7 @@ final class _FW_Component_Backend {
 						);
 
 						if (isset($opt['option']['wp-customizer-setting-args']) && is_array($opt['option']['wp-customizer-setting-args'])) {
-							$args_setting = array_merge($opt['option']['wp-customizer-setting-args'], $args_control);
+							$args_setting = array_merge($opt['option']['wp-customizer-setting-args'], $args_setting);
 						}
 
 						$wp_customize->add_setting(
