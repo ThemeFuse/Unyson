@@ -1222,7 +1222,7 @@ final class _FW_Component_Backend {
 				$values = array();
 			}
 
-			$values = self::_fix_POST_values(array_intersect_key($values, fw_extract_only_options($options)));
+			$values = array_intersect_key($values, fw_extract_only_options($options));
 		}
 
 		// data
@@ -1237,36 +1237,6 @@ final class _FW_Component_Backend {
 		wp_send_json_success( array(
 			'html' => fw()->backend->render_options( $options, $values, $data )
 		) );
-	}
-
-	private static function _fix_POST_values(array $values) {
-		$fixed = array();
-
-		foreach ($values as $key => $value ) {
-			if ('true' === $value || 'false' === $value) {
-				/**
-				 * Fix booleans
-				 *
-				 * In POST, booleans are transformed to strings: 'true' and 'false'
-				 * Transform them back to booleans
-				 */
-				$fixed[ $key ] = ( $value === 'true' );
-			} elseif (is_numeric($value)) {
-				/**
-				 * Fix integers
-				 *
-				 * In POST, integers are transformed to strings: '0', '1', '2', ...
-				 * Transform them back to integers
-				 */
-				$fixed[ $key ] = (float) $value;
-			} elseif (is_array($value)) {
-				$fixed[ $key ] = self::_fix_POST_values($value);
-			} else {
-				$fixed[ $key ] = $value;
-			}
-		}
-
-		return $fixed;
 	}
 
 	/**
