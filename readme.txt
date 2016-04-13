@@ -3,7 +3,7 @@ Contributors: unyson
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.5
-Stable tag: 2.5.1
+Stable tag: 2.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,14 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.5.2 =
+* Fixed option-type `wp-editor` issues [#15](https://github.com/ThemeFuse/Unyson-Shortcodes-Extension/issues/15#issuecomment-207368593)
+* Taxonomy options now are displayed on Add Term page [#1427](https://github.com/ThemeFuse/Unyson/pull/1427)
+* Added the `wp-customizer-setting-args` parameter for customizer options [#1435](https://github.com/ThemeFuse/Unyson/issues/1435)
+* Added translations: [Nederlands](https://www.transifex.com/themefuse/dashboard/all_resources/nl_NL/?project=unyson), [Русский](https://www.transifex.com/themefuse/dashboard/all_resources/ru_RU/?project=unyson)
+* Updated [Español](https://www.transifex.com/themefuse/dashboard/all_resources/es_ES/?project=unyson) translations
+* Fixed [#1449](https://github.com/ThemeFuse/Unyson/issues/1449), [#1438](https://github.com/ThemeFuse/Unyson/issues/1438), [#1278](https://github.com/ThemeFuse/Unyson/issues/1278#issuecomment-208032542), [#1443](https://github.com/ThemeFuse/Unyson/issues/1443), [#1440](https://github.com/ThemeFuse/Unyson/issues/1440)
 
 = 2.5.1 =
 * Fixed [#1062](https://github.com/ThemeFuse/Unyson/issues/1062), [#1278](https://github.com/ThemeFuse/Unyson/issues/1278), [#1292](https://github.com/ThemeFuse/Unyson/issues/1292), [#1293](https://github.com/ThemeFuse/Unyson/issues/1293), [#1310](https://github.com/ThemeFuse/Unyson/pull/1310), [#1295](https://github.com/ThemeFuse/Unyson/issues/1295), [#767](https://github.com/ThemeFuse/Unyson/issues/767), [#1322](https://github.com/ThemeFuse/Unyson/pull/1322), [#1323](https://github.com/ThemeFuse/Unyson/pull/1323), [#1321](https://github.com/ThemeFuse/Unyson/issues/1321), [#1054](https://github.com/ThemeFuse/Unyson/issues/1054), [#1309](https://github.com/ThemeFuse/Unyson/issues/1309), [#1347](https://github.com/ThemeFuse/Unyson/issues/1347), [#2777093](https://wordpress.org/support/topic/bootstrap-datepicker-not-translated-on-backend), [#1355](https://github.com/ThemeFuse/Unyson/issues/1355), [#1354](https://github.com/ThemeFuse/Unyson/issues/1354), [#1379](https://github.com/ThemeFuse/Unyson/issues/1379), [#1394](https://github.com/ThemeFuse/Unyson/issues/1394), [#1391](https://github.com/ThemeFuse/Unyson/issues/1391), [#1403](https://github.com/ThemeFuse/Unyson/pull/1403)
