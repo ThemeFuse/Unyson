@@ -691,20 +691,11 @@ fw.getQueryString = function(name) {
 					});
 				},
 				activate: function () {
-					this.listenTo(this.frame, 'title:create:default', function () {
-						this.frame.title.mode(this.id);
-					});
-
-					this.listenTo(this.frame, 'title:create:' + this.id, function (title) {
-						title.view = new wp.media.View({
-							controller: this,
-							tagName: 'h1'
-						});
-					});
-
-					this.listenTo(this.frame, 'title:render:' + this.id, function (view) {
-						view.$el.html(this.get('title') + this.get('headerElements') || '');
-					});
+					this.frame.once('ready', _.bind(function(){
+						this.frame.views.get('.media-frame-title')[0].$el
+							.text(this.get('title'))
+							.append(this.get('headerElements') || '');
+					}, this));
 				}
 			});
 
@@ -717,7 +708,7 @@ fw.getQueryString = function(name) {
 			var modal = this;
 
 			this.frame.once('ready', function(){
-				var $modalWrapper  = modal.frame.modal.$el,
+				var $modalWrapper    = modal.frame.modal.$el,
 					$modal           = $modalWrapper.find('.media-modal'),
 					$backdrop        = $modalWrapper.find('.media-modal-backdrop'),
 					size             = modal.get('size'),
