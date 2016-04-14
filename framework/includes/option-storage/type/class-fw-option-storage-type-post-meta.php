@@ -4,6 +4,7 @@
  * array(
  *  'post-id' => 3 // optional // hardcoded post id
  *  'post-meta' => 'hello_world' // optional (default: 'fw:opt:{option_id}')
+ *  'key' => 'option_id/sub_key' // optional @since 2.5.3
  * )
  */
 class FW_Option_Storage_Type_Post_Meta extends FW_Option_Storage_Type {
@@ -18,7 +19,17 @@ class FW_Option_Storage_Type_Post_Meta extends FW_Option_Storage_Type {
 		if ($post_id = $this->get_post_id($option, $params)) {
 			$meta_id = $this->get_meta_id($id, $option, $params);
 
-			fw_update_post_meta($post_id, $meta_id, $value);
+			if (isset($option['fw-storage']['key'])) {
+				$meta_value = get_post_meta($post_id, $meta_id, true);
+
+				fw_aks($option['fw-storage']['key'], $value, $meta_value);
+
+				fw_update_post_meta($post_id, $meta_id, $meta_value);
+
+				unset($meta_value);
+			} else {
+				fw_update_post_meta($post_id, $meta_id, $value);
+			}
 
 			return fw()->backend->option_type($option['type'])->get_value_from_input(
 				array('type' => $option['type']), null
@@ -34,11 +45,14 @@ class FW_Option_Storage_Type_Post_Meta extends FW_Option_Storage_Type {
 	protected function _load( $id, array $option, $value, array $params ) {
 		if ($post_id = $this->get_post_id($option, $params)) {
 			$meta_id = $this->get_meta_id($id, $option, $params);
-
 			$meta_value = get_post_meta($post_id, $meta_id, true);
 
 			if ($meta_value === '' && is_array($value)) {
 				return $value;
+			}
+
+			if (isset($option['fw-storage']['key'])) {
+				return fw_akg($option['fw-storage']['key'], $meta_value, $value);
 			} else {
 				return $meta_value;
 			}

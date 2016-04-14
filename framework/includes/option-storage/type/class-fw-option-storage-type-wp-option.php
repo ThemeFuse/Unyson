@@ -2,8 +2,8 @@
 
 /**
  * array(
- *  'wp-option' => 'custom_wp_option_name',
- *  'key' => 'option_id/sub_key', // optional
+ *  'wp-option' => 'custom_wp_option_name'
+ *  'key' => 'option_id/sub_key' // optional @since 2.5.1
  * )
  */
 class FW_Option_Storage_Type_WP_Option extends FW_Option_Storage_Type {
