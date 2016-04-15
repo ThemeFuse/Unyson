@@ -1,7 +1,5 @@
 ### Update Icons
 
-todo: Get data from https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.5.0/src/icons.yml
-
 ```javascript
 // 1. Open http://fontawesome.io/icons/
 // 2. Run this script
