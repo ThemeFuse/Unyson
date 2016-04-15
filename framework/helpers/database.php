@@ -235,7 +235,7 @@
 
 			if (isset($options[$option_id])) {
 				try {
-					$value = FW_Cache::get( $cache_key = 'fw_post_options/values/'. $option_id );
+					$value = FW_Cache::get( $cache_key = 'fw_post_options/values/'. $post_id .'/'. $option_id );
 				} catch (FW_Cache_Not_Found_Exception $e) {
 					FW_Cache::set($cache_key, array()); // prevent recursion
 					FW_Cache::set(
@@ -270,7 +270,7 @@
 
 			foreach ($options as $_option_id => $_option) {
 				try {
-					$value = FW_Cache::get( $cache_key = 'fw_post_options/values/'. $_option_id );
+					$value = FW_Cache::get( $cache_key = 'fw_post_options/values/'. $post_id .'/'. $_option_id );
 				} catch (FW_Cache_Not_Found_Exception $e) {
 					FW_Cache::set($cache_key, array()); // prevent recursion
 					FW_Cache::set(
