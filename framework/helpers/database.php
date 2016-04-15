@@ -209,13 +209,26 @@
 				$cache_key = 'fw_post_options/only/'. $post_type
 			);
 		} catch (FW_Cache_Not_Found_Exception $e) {
-			FW_Cache::set($cache_key, array()); // prevent recursion
-			FW_Cache::set(
-				$cache_key,
-				$options = fw_extract_only_options(
-					fw()->theme->get_post_options( $post_type )
-				)
-			);
+			FW_Cache::set($cache_key, $options = array()); // prevent recursion
+
+			if (apply_filters('fw_get_db_post_option:fw-storage-enabled',
+				/**
+				 * Slider extension has too many fw_get_db_post_option()
+				 * inside post options altering filter and it creates recursive mess.
+				 * add_filter() was added in Slider extension
+				 * but this hardcode can be replaced with `true`
+				 * only after all users will install new version 1.1.15.
+				 */
+				$post_type !== 'fw-slider',
+				$post_type
+			)) {
+				FW_Cache::set(
+					$cache_key,
+					$options = fw_extract_only_options(
+						fw()->theme->get_post_options( $post_type )
+					)
+				);
+			}
 		}
 
 		if ($option_id) {
@@ -322,13 +335,26 @@
 				$cache_key = 'fw_post_options/only/'. $post_type
 			);
 		} catch (FW_Cache_Not_Found_Exception $e) {
-			FW_Cache::set($cache_key, array()); // prevent recursion
-			FW_Cache::set(
-				$cache_key,
-				$options = fw_extract_only_options(
-					fw()->theme->get_post_options($post_type)
-				)
-			);
+			FW_Cache::set($cache_key, $options = array()); // prevent recursion
+
+			if (apply_filters('fw_get_db_post_option:fw-storage-enabled',
+				/**
+				 * Slider extension has too many fw_get_db_post_option()
+				 * inside post options altering filter and it creates recursive mess.
+				 * add_filter() was added in Slider extension
+				 * but this hardcode can be replaced with `true`
+				 * only after all users will install new version 1.1.15.
+				 */
+				$post_type !== 'fw-slider',
+				$post_type
+			)) {
+				FW_Cache::set(
+					$cache_key,
+					$options = fw_extract_only_options(
+						fw()->theme->get_post_options( $post_type )
+					)
+				);
+			}
 		}
 
 		$sub_keys = null;
