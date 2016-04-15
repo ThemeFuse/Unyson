@@ -313,7 +313,7 @@
 			}
 		}
 
-		$post_type =get_post_type(
+		$post_type = get_post_type(
 			($post_revision_id = wp_is_post_revision($post_id)) ? $post_revision_id : $post_id
 		);
 
