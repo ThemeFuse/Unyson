@@ -201,39 +201,18 @@
 			($post_revision_id = wp_is_post_revision($post_id)) ? $post_revision_id : $post_id
 		);
 
-		/**
-		 * Before fw_db_option_storage_load() feature
-		 * there was possible to call fw_get_db_post_option() and it worked fine
-		 * but after v2.5.0 it's not possible anymore (it creates an infinite recursion)
-		 * but the Slider extension does that and maybe other extensions,
-		 * so the solution is to check if it is recursion, to not load the options array (disable the storage feature)
-		 */
-		static $recursion = array();
-
-		if (!isset($recursion[$post_type])) {
-			$recursion[$post_type] = false;
-		}
-
-		if ($recursion[$post_type]) {
-			/**
-			 * Allow known post types that sure don't have options with 'fw-storage' parameter
-			 */
-			if (!in_array($post_type, array('fw-slider'))) {
-				trigger_error(
-					'Infinite recursion detected in post type "'. $post_type .'" options caused by '. __FUNCTION__ .'()',
-					E_USER_WARNING
-				);
-			}
-
-			$options = array();
-		} else {
-			$recursion[$post_type] = true;
-
-			$options = fw_extract_only_options( // todo: cache this (by post type)
-				fw()->theme->get_post_options( $post_type )
+		try {
+			$options = FW_Cache::get(
+				$cache_key = 'fw_post_only_options/'. $post_type
 			);
-
-			$recursion[$post_type] = false;
+		} catch (FW_Cache_Not_Found_Exception $e) {
+			FW_Cache::set($cache_key, array()); // prevent recursion
+			FW_Cache::set(
+				$cache_key,
+				$options = fw_extract_only_options(
+					fw()->theme->get_post_options( $post_type )
+				)
+			);
 		}
 
 		if ($option_id) {

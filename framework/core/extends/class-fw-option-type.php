@@ -330,7 +330,7 @@ abstract class FW_Option_Type
 	 * @since 2.5.0
 	 */
 	final public function storage_load($id, array $option, $value, array $params = array()) {
-		if (
+		if ( // do not check !empty($option['fw-storage']) because this param can be set in option defaults
 			$this->get_type() === $option['type']
 			&&
 			($option = array_merge($this->get_defaults(), $option))
@@ -371,7 +371,7 @@ abstract class FW_Option_Type
 	 * @since 2.5.0
 	 */
 	final public function storage_save($id, array $option, $value, array $params = array()) {
-		if (
+		if ( // do not check !empty($option['fw-storage']) because this param can be set in option defaults
 			$this->get_type() === $option['type']
 			&&
 			($option = array_merge($this->get_defaults(), $option))
