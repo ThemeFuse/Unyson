@@ -351,7 +351,7 @@ final class _FW_Component_Backend {
 			wp_localize_script( 'fw', '_fw_localized', array(
 				'FW_URI'     => fw_get_framework_directory_uri(),
 				'SITE_URI'   => site_url(),
-				'LOADER_URI' => fw_get_loader_image(),
+				'LOADER_URI' => apply_filters( 'fw_loader_image', fw_get_framework_directory_uri() . '/static/img/logo.svg' )
 				'l10n'       => array(
 					'done'     => __( 'Done', 'fw' ),
 					'ah_sorry' => __( 'Ah, Sorry', 'fw' ),
