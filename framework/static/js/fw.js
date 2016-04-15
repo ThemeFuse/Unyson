@@ -17,12 +17,14 @@ fw.FW_URI = _fw_localized.FW_URI;
 
 fw.SITE_URI = _fw_localized.SITE_URI;
 
+fw.LOADER_URI = _fw_localized.LOADER_URI;
+
 /**
  * Useful images
  */
 fw.img = {
 	loadingSpinner: fw.SITE_URI +'/wp-admin/images/spinner.gif',
-	logoSvg: fw.FW_URI +'/static/img/logo.svg'
+	logoSvg: fw.LOADER_URI
 };
 
 /**
