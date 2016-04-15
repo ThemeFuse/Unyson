@@ -270,7 +270,7 @@
 
 			foreach ($options as $_option_id => $_option) {
 				try {
-					$value = FW_Cache::get( $cache_key = 'fw_post_options/values/'. $post_id .'/'. $_option_id );
+					$value[$_option_id] = FW_Cache::get( $cache_key = 'fw_post_options/values/'. $post_id .'/'. $_option_id );
 				} catch (FW_Cache_Not_Found_Exception $e) {
 					FW_Cache::set($cache_key, array()); // prevent recursion
 					FW_Cache::set(
