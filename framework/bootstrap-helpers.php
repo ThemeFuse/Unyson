@@ -127,4 +127,19 @@ function fw_get_framework_customizations_dir_rel_path($append = '') {
 
 		return $cache . $rel_path;
 	}
+
+	/**
+	 * URI of the loader image
+	 * @param string $rel_path
+	 * @return string
+	 */
+	function fw_get_loader_image($rel_path = '') {
+		static $cache = null;
+
+		if ($cache === null) {
+			$cache = apply_filters( 'fw_loader_image', fw_get_framework_directory_uri() . '/static/img/logo.svg' );
+		}
+
+		return $cache . $rel_path;
+	}
 }
