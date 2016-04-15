@@ -27,6 +27,9 @@
 		}
 
 		try {
+			/**
+			 * Cached because values are merged with extracted default values
+			 */
 			$values = FW_Cache::get($cache_key = 'fw_settings_options/values');
 		} catch (FW_Cache_Not_Found_Exception $e) {
 			FW_Cache::set(
@@ -65,7 +68,7 @@
 		try {
 			$options = FW_Cache::get( $cache_key = 'fw_only_options/settings' );
 		} catch (FW_Cache_Not_Found_Exception $e) {
-			FW_Cache::set($cache_key, array()); // prevent infinite recursion
+			FW_Cache::set($cache_key, array()); // prevent recursion
 			FW_Cache::set(
 				$cache_key,
 				$options = fw_extract_only_options(fw()->theme->get_settings_options())
@@ -203,7 +206,7 @@
 
 		try {
 			$options = FW_Cache::get(
-				$cache_key = 'fw_post_only_options/'. $post_type
+				$cache_key = 'fw_post_options/only/'. $post_type
 			);
 		} catch (FW_Cache_Not_Found_Exception $e) {
 			FW_Cache::set($cache_key, array()); // prevent recursion
@@ -231,12 +234,20 @@
 			);
 
 			if (isset($options[$option_id])) {
-				$value = fw()->backend->option_type($options[$option_id]['type'])->storage_load(
-					$option_id,
-					$options[$option_id],
-					$value,
-					array( 'post-id' => $post_id, )
-				);
+				try {
+					$value = FW_Cache::get( $cache_key = 'fw_post_options/values/'. $option_id );
+				} catch (FW_Cache_Not_Found_Exception $e) {
+					FW_Cache::set($cache_key, array()); // prevent recursion
+					FW_Cache::set(
+						$cache_key,
+						$value = fw()->backend->option_type($options[$option_id]['type'])->storage_load(
+							$option_id,
+							$options[$option_id],
+							$value,
+							array( 'post-id' => $post_id, )
+						)
+					);
+				}
 			}
 
 			if ($sub_keys) {
@@ -258,12 +269,20 @@
 			}
 
 			foreach ($options as $_option_id => $_option) {
-				$value[$_option_id] = fw()->backend->option_type($_option['type'])->storage_load(
-					$_option_id,
-					$_option,
-					isset($value[$_option_id]) ? $value[$_option_id] : null,
-					array( 'post-id' => $post_id, )
-				);
+				try {
+					$value = FW_Cache::get( $cache_key = 'fw_post_options/values/'. $_option_id );
+				} catch (FW_Cache_Not_Found_Exception $e) {
+					FW_Cache::set($cache_key, array()); // prevent recursion
+					FW_Cache::set(
+						$cache_key,
+						$value[$_option_id] = fw()->backend->option_type($_option['type'])->storage_load(
+							$_option_id,
+							$_option,
+							isset($value[$_option_id]) ? $value[$_option_id] : null,
+							array( 'post-id' => $post_id, )
+						)
+					);
+				}
 			}
 
 			return $value;
@@ -278,6 +297,8 @@
 	 * @param $value
 	 */
 	function fw_set_db_post_option( $post_id = null, $option_id = null, $value ) {
+		FW_Cache::del('fw_post_options/values');
+
 		$meta_key = 'fw_options';
 		$post_id = intval($post_id);
 
@@ -292,13 +313,23 @@
 			}
 		}
 
-		$options = fw_extract_only_options( // todo: cache this (by post type)
-			fw()->theme->get_post_options(
-				get_post_type(
-					($post_revision_id = wp_is_post_revision($post_id)) ? $post_revision_id : $post_id
-				)
-			)
+		$post_type =get_post_type(
+			($post_revision_id = wp_is_post_revision($post_id)) ? $post_revision_id : $post_id
 		);
+
+		try {
+			$options = FW_Cache::get(
+				$cache_key = 'fw_post_options/only/'. $post_type
+			);
+		} catch (FW_Cache_Not_Found_Exception $e) {
+			FW_Cache::set($cache_key, array()); // prevent recursion
+			FW_Cache::set(
+				$cache_key,
+				$options = fw_extract_only_options(
+					fw()->theme->get_post_options($post_type)
+				)
+			);
+		}
 
 		$sub_keys = null;
 
