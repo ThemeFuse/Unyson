@@ -6,6 +6,9 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	// prevent useless calls of wp_enqueue_*()
 	private static $enqueued = false;
 
+	// used in js and html
+	private static $wp_editor_id_prefix = 'fw_wp_editor_';
+
 	public function get_type() {
 		return 'wp-editor';
 	}
@@ -26,10 +29,20 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 		);
 	}
 
+	protected function _init() {
+		add_filter('tiny_mce_before_init', array(__CLASS__, '_filter_disable_default_init'), 10, 2);
+	}
+
 	/**
 	 * @internal
 	 */
-	protected function _init() {}
+	public static function _filter_disable_default_init($mceInit, $editor_id){
+		if (preg_match('/^'. preg_quote(self::$wp_editor_id_prefix, '/') .'/', $editor_id)) {
+			$mceInit['wp_skip_init'] = true;
+		}
+
+		return $mceInit;
+	}
 
 	/**
 	 * @internal
@@ -124,13 +137,17 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 
 			ksort($_option); // keys must be in same order to obtain the same hash
 
-			unset($_option['attr'], $_option['value']);
+			/**
+			 * The same option on enqueue and on modal ajax render can have different "fixed" values
+			 * Remove the values that happen to be different
+			 */
+			unset($_option['attr'], $_option['value'], $_option['label'], $_option['desc']);
 
 			/**
 			 * This must be unique for option
 			 * it will be in editor html and in javascript tinyMCEPreInit.qtInit[ {$id} ]
 			 */
-			$id = 'fw_wp_editor_'. md5( $id .'|'. json_encode($_option) );
+			$id = self::$wp_editor_id_prefix . md5( $id .'|'. json_encode($_option) );
 
 			unset($_option);
 		}
