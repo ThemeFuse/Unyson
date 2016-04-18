@@ -83,6 +83,8 @@ Yes; Unyson will work with any theme.
 
 = 2.5.3 =
 * Fixed option-type `wp-editor` issues: [#1472](https://github.com/ThemeFuse/Unyson/issues/1472), [#1475](https://github.com/ThemeFuse/Unyson/issues/1475), [#1478](https://github.com/ThemeFuse/Unyson/issues/1478)
+* Improvements in `fw_get_db_post_option()`
+* Updated FontAwesome to v4.6.1
 
 = 2.5.2 =
 * Fixed option-type `wp-editor` issues [#15](https://github.com/ThemeFuse/Unyson-Shortcodes-Extension/issues/15#issuecomment-207368593)
