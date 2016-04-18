@@ -26,6 +26,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			 * Also available
 			 * https://github.com/WordPress/WordPress/blob/4.4.2/wp-includes/class-wp-editor.php#L80-L94
 			 */
+			'wpautop' => true,
 		);
 	}
 
