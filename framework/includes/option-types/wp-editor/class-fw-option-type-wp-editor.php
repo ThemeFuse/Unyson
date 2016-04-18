@@ -184,7 +184,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 
 		$value = (string) $input_value;
 
-		if ( $option['wpautop'] === true ) {
+		if ( isset($option['wpautop']) && $option['wpautop'] === true ) {
 			$value = preg_replace( "/\n/i", '', wpautop( $value ) );
 		}
 
