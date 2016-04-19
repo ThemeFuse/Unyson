@@ -153,6 +153,15 @@ class FW_Cache
 		) as $hook => $tmp) {
 			add_filter($hook, array(__CLASS__, 'free_memory'), 9999);
 		}
+
+		/**
+		 * When WP global state is changed, better to flush the cache
+		 */
+		foreach (array(
+			'switch_blog' => true,
+		) as $hook => $tmp) {
+			add_filter($hook, array(__CLASS__, 'clear'), 1);
+		}
 	}
 
 	/**
@@ -165,6 +174,10 @@ class FW_Cache
 		return true;
 	}
 
+	/**
+	 * @param mixed $dummy
+	 * @return mixed
+	 */
 	public static function free_memory($dummy = null)
 	{
 		while (self::memory_exceeded() && !empty(self::$cache)) {
@@ -178,7 +191,7 @@ class FW_Cache
 		++self::$freed;
 
 		/**
-		 * This method is used add_filter() so to not break anything return filter value
+		 * This method is used in add_filter() so to not break anything return filter value
 		 */
 		return $dummy;
 	}
@@ -250,10 +263,17 @@ class FW_Cache
 
 	/**
 	 * Empty the cache
+	 * @param mixed $dummy
+	 * @return mixed
 	 */
-	public static function clear()
+	public static function clear($dummy = null)
 	{
 		self::$cache = array();
+
+		/**
+		 * This method is used in add_filter() so to not break anything return filter value
+		 */
+		return $dummy;
 	}
 
 	/**
