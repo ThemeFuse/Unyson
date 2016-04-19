@@ -96,6 +96,10 @@ jQuery(function($){
 			 * Do not initialize all pickers on the page, for performance reasons, maybe none of them will be opened
 			 */
 			$input.one('focus', function(){
+				if (!$.trim($input.val()).length) { // If the input value is empty, there a glitches with opacity slider
+					$input.val('rgba(0,0,0,0)');
+				}
+
 				$input.iris({
 					palettes: JSON.parse($input.attr('data-palettes')),
 					defaultColor: false,
