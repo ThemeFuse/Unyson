@@ -29,7 +29,7 @@ final class _FW_Component_Theme
 	 */
 	public function _init()
 	{
-		add_action('fw_extensions_init', array($this, '_action_fw_extensions_init'));
+		add_action('admin_notices', array($this, '_action_admin_notices'));
 	}
 
 	/**
@@ -192,20 +192,12 @@ final class _FW_Component_Theme
 	/**
 	 * @internal
 	 */
-	public function _action_fw_extensions_init()
+	public function _action_admin_notices()
 	{
-		if (
-			is_admin()
-			&&
-			!fw()->theme->manifest->check_requirements()
-			&&
-		    current_user_can('manage_options')
-		) {
-			FW_Flash_Messages::add(
-				'fw_theme_requirements',
-				__('Theme requirements not met:', 'fw') .' '. fw()->theme->manifest->get_not_met_requirement_text(),
-				'warning'
-			);
+		if ( is_admin() && !fw()->theme->manifest->check_requirements() && current_user_can('manage_options') ) {
+			echo '<div class="notice notice-warning"><p>';
+			echo __('Theme requirements not met:', 'fw') .' '. fw()->theme->manifest->get_not_met_requirement_text();
+			echo '</p></div>';
 		}
 	}
 }
