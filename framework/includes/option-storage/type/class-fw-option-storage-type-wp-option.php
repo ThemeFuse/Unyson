@@ -56,6 +56,14 @@ class FW_Option_Storage_Type_WP_Option extends FW_Option_Storage_Type {
 	private function get_wp_option($option, $params) {
 		$wp_option = null;
 
+		if (isset($params['post-id']) && wp_is_post_revision($params['post-id'])) {
+			/**
+			 * Post revision is updated after real post update and it contains old option value
+			 * thus overwriting the new option value
+			 */
+			return false;
+		}
+
 		if (!empty($option['fw-storage']['wp-option'])) {
 			$wp_option = $option['fw-storage']['wp-option'];
 		} elseif (!empty($params['wp-option'])) {
