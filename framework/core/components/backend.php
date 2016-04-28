@@ -1251,16 +1251,17 @@ final class _FW_Component_Backend {
 
 			do_action( 'fw_settings_form_reset', $old_values );
 		} else { // The "Save" button was pressed
+			$new_values = fw_get_options_values_from_input(
+				fw()->theme->get_settings_options()
+			);
 			fw_set_db_settings_option(
 				null,
-				fw_get_options_values_from_input(
-					fw()->theme->get_settings_options()
-				)
+				$new_values
 			);
 
 			FW_Flash_Messages::add( $flash_id, __( 'The options were successfully saved', 'fw' ), 'success' );
 
-			do_action( 'fw_settings_form_saved', $old_values );
+			do_action( 'fw_settings_form_saved', $old_values, $new_values );
 		}
 
 		$redirect_url = fw_current_url();
