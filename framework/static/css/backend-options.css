@@ -974,15 +974,15 @@ body.rtl .fw-backend-option-design-default > .fw-backend-option-desc > .fw-inner
 
 /* Options Groups */
 
-.fw-backend-options-group {
+.fw-backend-options-group:not(.show-borders) {
 	border-bottom: 1px solid #eeeeee;
 }
 
-.fw-backend-options-group > .fw-backend-option {
+.fw-backend-options-group:not(.show-borders) > .fw-backend-option {
 	border-bottom-width: 0;
 }
 
-.fw-backend-options-group > .fw-backend-option:not(:last-child) {
+.fw-backend-options-group:not(.show-borders) > .fw-backend-option:not(:last-child) {
 	padding-bottom: 0;
 }
 
