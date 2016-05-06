@@ -30,6 +30,16 @@ jQuery(document).ready(function ($) {
 					value: JSON.parse(value)
 				});
 			})
-			.adaptiveSwitch();
+			.on('change update:color', function(){
+				var $this = $(this),
+					isRight = $this.prop('checked'),
+					$option = $this.closest('.'+ optionTypeClass),
+					color = $option.attr('data-'+ (isRight ? 'right' : 'left') +'-color') || '';
+
+				$option.find('.switch-dot span').css('background-color', color);
+				$option.find('.switch-label-'+ (isRight ? 'right' : 'left')).css('color', color);
+			})
+			.adaptiveSwitch()
+			.trigger('update:color');
 	});
 });

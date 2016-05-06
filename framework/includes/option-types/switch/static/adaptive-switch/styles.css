@@ -150,6 +150,9 @@ input.adaptive-switch-input:checked:after {
 
 .adaptive-switch .switch-dot span {
 	background-color: #00709f;
+
+	-webkit-transition: background-color 0.2s linear;
+	transition: background-color 0.2s linear;
 }
 
 .adaptive-switch .switch-switcher label.switch-label {

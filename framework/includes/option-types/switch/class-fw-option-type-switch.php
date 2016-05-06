@@ -5,6 +5,8 @@
  */
 class FW_Option_Type_Switch extends FW_Option_Type
 {
+	private static $color_regex = '/^#?([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?$/';
+
 	public function get_type()
 	{
 		return 'switch';
@@ -70,20 +72,32 @@ class FW_Option_Type_Switch extends FW_Option_Type
 			foreach (array('left', 'right') as $value_type) {
 				$input_attr['data-switch-'. $value_type .'-value-json'] = json_encode($option[$value_type .'-choice']['value']);
 			}
+
+			if ($checked = ($data['value'] === $option['right-choice']['value'])) {
+				$input_attr['checked'] = 'checked'; // right choice means checked
+			}
+
+			$input_attr['value'] = json_encode($option[ ($checked ? 'right' : 'left') .'-choice' ]['value']);
 		}
 
-		if ($checked = ($data['value'] === $option['right-choice']['value'])) {
-			$input_attr['checked'] = 'checked'; // right choice means checked
+		{
+			unset(
+				$option['attr']['name'],
+				$option['attr']['value'],
+				$option['attr']['checked'],
+				$option['attr']['type']
+			);
+
+			foreach (array('left', 'right') as $value_type) {
+				if (
+					isset($option[$value_type .'-choice']['color'])
+					&&
+					preg_match(self::$color_regex, $option[$value_type .'-choice']['color'])
+				) {
+					$option['attr']['data-'. $value_type .'-color'] = $option[$value_type .'-choice']['color'];
+				}
+			}
 		}
-
-		$input_attr['value'] = json_encode($option[ ($checked ? 'right' : 'left') .'-choice' ]['value']);
-
-		unset(
-			$option['attr']['name'],
-			$option['attr']['value'],
-			$option['attr']['checked'],
-			$option['attr']['type']
-		);
 
 		return '<div '. fw_attr_to_html($option['attr']) .'>'.
 			'<!-- note: value is json encoded, if want to use it in js, do: var val = JSON.parse($input.val()); -->'.
@@ -117,7 +131,6 @@ class FW_Option_Type_Switch extends FW_Option_Type
 			if (!is_null($tmp_json)) {
 				$input_value = $tmp_json;
 			}
-	
 
 			if (in_array($input_value, array($option['left-choice']['value'], $option['right-choice']['value']), true)) {
 				return $input_value;
@@ -145,10 +158,12 @@ class FW_Option_Type_Switch extends FW_Option_Type
 			'left-choice' => array(
 				'value' => false,
 				'label' => __('No', 'fw'),
+				'color' => '', // #HEX
 			),
 			'right-choice' => array(
 				'value' => true,
 				'label' => __('Yes', 'fw'),
+				'color' => '', // #HEX
 			),
 		);
 	}
