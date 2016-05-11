@@ -48,7 +48,7 @@ class FW_WP_Meta {
 
 			fw_update_metadata( $meta_type, $object_id, $key, $set_value );
 
-			FW_Cache::del( $cache_key );
+			FW_Cache::del( self::$cache_key );
 
 		} else {
 			/** Change only specified key */

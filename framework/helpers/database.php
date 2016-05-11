@@ -408,6 +408,8 @@
 			FW_WP_Meta::set( 'post', $post_id, $meta_key, $value );
 		}
 
+		FW_Cache::del('fw_post_options/values'); // fixes https://github.com/ThemeFuse/Unyson/issues/1538
+
 		/**
 		 * @deprecated
 		 */
