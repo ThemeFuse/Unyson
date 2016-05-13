@@ -122,9 +122,9 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 		 * Make editor settings available in javascript tinyMCEPreInit.qtInit[ {$settings['id']} ]
 		 */
 		{
-			unset($option['teeny']); // I don't know why, but it breaks the default post wp editor
-			
 			$settings = $this->get_option_settings($id, $option, $data);
+
+			unset($settings['teeny']); // I don't know why, but it breaks the default post wp editor
 
 			ob_start();
 			wp_editor( $settings['value'], $settings['id'], $settings['settings'] );
