@@ -3,7 +3,7 @@ Contributors: unyson
 Tags: page builder, cms, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.0.0
 Tested up to: 4.5
-Stable tag: 2.5.3
+Stable tag: 2.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,9 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.5.4 =
+* Fixed [#1423](https://github.com/ThemeFuse/Unyson/issues/1423), [#1517](https://github.com/ThemeFuse/Unyson/issues/1517), [#1509](https://github.com/ThemeFuse/Unyson/issues/1509), [#1386](https://github.com/ThemeFuse/Unyson/issues/1386), [#1488](https://github.com/ThemeFuse/Unyson/issues/1488), [#837](https://github.com/ThemeFuse/Unyson/issues/837), [#1538](https://github.com/ThemeFuse/Unyson/issues/1538)
 
 = 2.5.3 =
 * Fixed option-type `wp-editor` issues: [#1472](https://github.com/ThemeFuse/Unyson/issues/1472), [#1475](https://github.com/ThemeFuse/Unyson/issues/1475), [#1478](https://github.com/ThemeFuse/Unyson/issues/1478)
