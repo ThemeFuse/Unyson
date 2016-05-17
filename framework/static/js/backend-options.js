@@ -33,7 +33,12 @@ jQuery(document).ready(function($){
 				.on('click'+ eventNamespace, '> .hndle, > .handlediv', function(e){
 					var $box = $(this).closest('.fw-postbox');
 
-					$box.toggleClass('closed');
+					if (!$box.siblings().length) {
+						// Do not close if only one box https://github.com/ThemeFuse/Unyson/issues/1094
+						$box.removeClass('closed');
+					} else {
+						$box.toggleClass('closed');
+					}
 
 					var isClosed = $box.hasClass('closed');
 
