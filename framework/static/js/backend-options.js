@@ -33,7 +33,7 @@ jQuery(document).ready(function($){
 				.on('click'+ eventNamespace, '> .hndle, > .handlediv', function(e){
 					var $box = $(this).closest('.fw-postbox');
 
-					if (!$box.siblings().length) {
+					if ($box.parent().is('.fw-backend-postboxes') && !$box.siblings().length) {
 						// Do not close if only one box https://github.com/ThemeFuse/Unyson/issues/1094
 						$box.removeClass('closed');
 					} else {
