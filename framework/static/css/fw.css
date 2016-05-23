@@ -2900,7 +2900,15 @@ body > .fw-modal > .media-modal-backdrop {
 	z-index: 100000; /* bigger than #wpadminbar */
 }
 
-body.wp-customizer > div:not(.fw-modal) > .media-modal {
+body.wp-customizer > div.fw-modal > .media-modal {
+	z-index: 500002;
+}
+
+body.wp-customizer > div.fw-modal > .media-modal-backdrop {
+	z-index: 500001; /* bigger than .wp-full-overlay */
+}
+
+body.wp-customizer > div:not(.fw-modal) > .media-modal { /* media upload modal */
 	z-index: 561001;
 }
 
