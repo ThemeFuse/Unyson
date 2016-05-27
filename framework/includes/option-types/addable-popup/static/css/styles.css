@@ -5,8 +5,9 @@
 	cursor: pointer;
 }
 
-.fw-option-type-addable-popup .item .content{
+.fw-option-type-addable-popup .item .content {
 	padding: 12px 30px;
+	word-wrap: break-word;
 }
 
 .fw-option-type-addable-popup .item:not(.default) + .item:not(.default){
