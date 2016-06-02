@@ -60,7 +60,7 @@
 				$this.trigger('fw:option-type:popup:open');
 
 				if (data['custom-events']['open']) {
-					fwEvents.trigger(data['custom-events']['open'], {
+					fwEvents.trigger('fw:option-type:popup:custom:' + data['custom-events']['open'], {
 						element: $this,
 						modal: utils.modal
 					});
@@ -70,7 +70,7 @@
 				$this.trigger('fw:option-type:popup:close');
 
 				if (data['custom-events']['close']) {
-					fwEvents.trigger(data['custom-events']['close'], {
+					fwEvents.trigger('fw:option-type:popup:custom:' + data['custom-events']['close'], {
 						element: $this,
 						modal: utils.modal
 					});
@@ -80,7 +80,7 @@
 				$this.trigger('fw:option-type:popup:render');
 
 				if (data['custom-events']['render']) {
-					fwEvents.trigger(data['custom-events']['render'], {
+					fwEvents.trigger('fw:option-type:popup:custom:' + data['custom-events']['render'], {
 						element: $this,
 						modal: utils.modal
 					});
