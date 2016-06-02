@@ -53,7 +53,8 @@ class FW_Option_Type_Popup extends FW_Option_Type {
 			'title'   => ( isset( $option['popup-title'] ) ) ? $option['popup-title'] : ( string ) $option['label'],
 			'options' => $this->transform_options( $option['popup-options'] ),
 			'button'  => $option['button'],
-			'size'    => $option['size']
+			'size'    => $option['size'],
+			'custom-events' => $option['custom-events']
 		) );
 
 		if ( ! empty( $data['value'] ) ) {
@@ -173,7 +174,13 @@ class FW_Option_Type_Popup extends FW_Option_Type {
 			/*
 			 * Array of default values for the popup options
 			 */
-			'value'         => array()
+			'value'         => array(),
+
+			'custom-events' => array(
+				'open' => false,
+				'close' => false,
+				'render' => false
+			)
 		);
 	}
 
