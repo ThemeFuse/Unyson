@@ -15,9 +15,9 @@ This framework was created from the ground up by the team behind [ThemeFuse](htt
 
 ## Installation
 
-1. [Download](https://github.com/ThemeFuse/Unyson/releases/latest) the latest stable release
-2. Extract the archive in the `/wp-content/plugins/unyson/` directory
-3. Open WordPress dashboard **Plugins menu** and **activate** the Unyson plugin
+1. Open the WordPress dashboard **Plugins > Add New** menu
+2. Type **Unyson** in the search field
+3. Press the **Install** button and **activate** the plugin
 4. Configure the plugin by going to the **Unyson menu**
 
 ## Bug reports
