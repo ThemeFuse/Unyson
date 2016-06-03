@@ -52,10 +52,10 @@ Code and documentation copyright 2014 ThemeFuse LTD. Code released under [the GP
 
 You can contribute with:
 
-* Source code, via Pull Requests. Please read our [contributor guidelines](https://github.com/ThemeFuse/Unyson/blob/master/CONTRIBUTING.md).
-* Translations, through [Transifex](https://www.transifex.com/projects/p/unyson/).
+* **Source code**, via Pull Requests. Please read our [contributor guidelines](https://github.com/ThemeFuse/Unyson/blob/master/CONTRIBUTING.md).
+* **Translations**, through [Transifex](https://www.transifex.com/projects/p/unyson/).
 
-If you have themes built with Unyson, test the compatibility with new extensions updates before they are going to be released on [Unyson Extensions Approval](https://github.com/ThemeFuse/Unyson-Extensions-Approval).
+If you have themes built with Unyson, **test the compatibility with new extensions updates** before they are going to be released on [Unyson Extensions Approval](https://github.com/ThemeFuse/Unyson-Extensions-Approval).
 
 ## Extensions
 
