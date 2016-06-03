@@ -4,10 +4,6 @@
 
 This framework was created from the ground up by the team behind [ThemeFuse](http://themefuse.com/) from the desire to empower developers to build outstanding WordPress themes fast and easy.
 
-If you are not a developer, please use the [Unyson plugin page](https://wordpress.org/plugins/unyson/) on WordPress.org.
-
-[![Build Status](https://travis-ci.org/ThemeFuse/Unyson.svg?branch=master)](https://travis-ci.org/ThemeFuse/Unyson) [![Stories in Ready](https://badge.waffle.io/ThemeFuse/Unyson.svg?label=ready&title=Ready)](http://waffle.io/ThemeFuse/Unyson)
-
 ## Table of contents
 
 * [Installation](#installation)
@@ -20,9 +16,9 @@ If you are not a developer, please use the [Unyson plugin page](https://wordpres
 ## Installation
 
 1. [Download](https://github.com/ThemeFuse/Unyson/releases/latest) the latest stable release
-2. Extract the archive to the `/wp-content/plugins/unyson/` directory
-3. Activate the Unyson plugin through the 'Plugins' menu in WordPress
-4. Configure the plugin by going to the Unyson menu that appears in your admin menu
+2. Extract the archive in the `/wp-content/plugins/unyson/` directory
+3. Open WordPress dashboard **Plugins menu** and **activate** the Unyson plugin
+4. Configure the plugin by going to the **Unyson menu**
 
 ## Bug reports
 
@@ -40,7 +36,7 @@ If your issue has already been reported, great! It will be reviewed in an upcomi
 #### Submitting a Bug Report
 
 You can report the issue via [Issues page](https://github.com/ThemeFuse/Unyson/issues).
-A good bug report includes full details to easily understand the issue you are having.
+A good bug report includes full details to easily understand the issue you are having and the exact steps to reproduce if it is a bug.
 
 ## Documentation
 
@@ -54,11 +50,12 @@ Code and documentation copyright 2014 ThemeFuse LTD. Code released under [the GP
 
 ## Contributing
 
-Developers can contribute to the source code. Please read our [contributor guidelines](https://github.com/ThemeFuse/Unyson/blob/master/CONTRIBUTING.md) for more information how you can do this.
+You can contribute with:
 
-Translators can contribute new languages to Unyson through [Transifex](https://www.transifex.com/projects/p/unyson/).
+* Source code, via Pull Requests. Please read our [contributor guidelines](https://github.com/ThemeFuse/Unyson/blob/master/CONTRIBUTING.md).
+* Translations, through [Transifex](https://www.transifex.com/projects/p/unyson/).
 
-Theme developers can test the compatibility of their themes with new extensions updates before they are going to be released on [Unyson Extensions Approval](https://github.com/ThemeFuse/Unyson-Extensions-Approval).
+If you have themes built with Unyson, test the compatibility with new extensions updates before they are going to be released on [Unyson Extensions Approval](https://github.com/ThemeFuse/Unyson-Extensions-Approval).
 
 ## Extensions
 
@@ -85,4 +82,7 @@ If you have a bug report or feature request related to a specific extension, fol
 * [Blog Posts](https://github.com/ThemeFuse/Unyson-Blog-Extension)
 * [Learning](https://github.com/ThemeFuse/Unyson-Learning-Extension)
 * [Translation](https://github.com/ThemeFuse/Unyson-Translation-Extension)
+
+
+[![Build Status](https://travis-ci.org/ThemeFuse/Unyson.svg?branch=master)](https://travis-ci.org/ThemeFuse/Unyson) [![Stories in Ready](https://badge.waffle.io/ThemeFuse/Unyson.svg?label=ready&title=Ready)](http://waffle.io/ThemeFuse/Unyson)
 
