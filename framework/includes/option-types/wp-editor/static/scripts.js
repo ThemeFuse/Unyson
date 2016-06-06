@@ -28,21 +28,12 @@
 				ed.once('init', function (e) {
 					var editor = e.target,
 						id = editor.id,
-						$wrap = $textarea.closest('.wp-editor-wrap');
+						$wrap = $textarea.closest('.wp-editor-wrap'),
+						visualMode = (typeof $option.attr('data-mode') != 'undefined')
+							? ($option.attr('data-mode') == 'tinymce')
+							: $wrap.hasClass('tmce-active');
 
 					editor.on('change', function(){ editor.save(); });
-
-					/**
-					 * Quick Tags
-					 * http://stackoverflow.com/a/21519323/1794248
-					 */
-					{
-						new QTags( tinyMCEPreInit.qtInit[ id ] );
-
-						QTags._buttonsInit();
-
-						$wrap.find('.switch-'+ ($wrap.hasClass('tmce-active') ? 'tmce' : 'html')).trigger('click');
-					}
 
 					/**
 					 * Fixes when wpautop is false
@@ -62,10 +53,31 @@
 								}
 							});
 					}
+
+					/**
+					 * Quick Tags
+					 * http://stackoverflow.com/a/21519323/1794248
+					 */
+					{
+						new QTags( tinyMCEPreInit.qtInit[ id ] );
+
+						QTags._buttonsInit();
+
+						if ($wrap.hasClass('html-active')) {
+							$wrap.find('.switch-html').trigger('click');
+						}
+
+						$wrap.find('.switch-'+ (visualMode ? 'tmce' : 'html')).trigger('click');
+
+
+						if (!editor.getParam('wpautop') && !visualMode) {
+							$textarea.val(wp.editor.removep(editor.getContent()));
+						}
+					}
 				});
 			};
 
-			if (!tinyMCEPreInit.mceInit[ id ].wpautop) { // todo: check if Visual mode
+			if (!tinyMCEPreInit.mceInit[ id ].wpautop) {
 				$textarea.val( wp.editor.autop($textarea.val()) );
 			}
 

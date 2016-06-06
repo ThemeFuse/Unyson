@@ -21,12 +21,13 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			'value' => '',
 			'size' => 'small', // small, large
 			'editor_height' => 400,
+			'wpautop' => true,
+			'editor_type' => false, // tinymce, html
 
 			/**
 			 * Also available
 			 * https://github.com/WordPress/WordPress/blob/4.4.2/wp-includes/class-wp-editor.php#L80-L94
 			 */
-			'wpautop' => true,
 		);
 	}
 
@@ -55,6 +56,8 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			unset( $option['attr']['name'], $option['attr']['value'] );
 
 			$option['attr']['data-size'] = $option['size'];
+			$option['attr']['data-mode'] = in_array($option['editor_type'], array('html', 'tinymce'))
+				? $option['editor_type'] : false;
 		}
 
 		echo '<div '. fw_attr_to_html($option['attr']) .' >';
