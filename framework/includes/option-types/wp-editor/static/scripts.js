@@ -27,7 +27,8 @@
 			tinyMCEPreInit.mceInit[ id ].setup = function(ed) {
 				ed.once('init', function (e) {
 					var editor = e.target,
-						id = editor.id;
+						id = editor.id,
+						$wrap = $textarea.closest('.wp-editor-wrap');
 
 					editor.on('change', function(){ editor.save(); });
 
@@ -36,20 +37,37 @@
 					 * http://stackoverflow.com/a/21519323/1794248
 					 */
 					{
-						$( '[id="wp-' + id + '-wrap"]' ).unbind( 'onmousedown' );
-						$( '[id="wp-' + id + '-wrap"]' ).bind( 'onmousedown', function(){
-							wpActiveEditor = id;
-						});
+						new QTags( tinyMCEPreInit.qtInit[ id ] );
 
-						QTags( tinyMCEPreInit.qtInit[ id ] );
 						QTags._buttonsInit();
 
-						(function($wrap) {
-							$wrap.find('.switch-'+ ($wrap.hasClass('tmce-active') ? 'tmce' : 'html')).trigger('click');
-						})($textarea.closest('.wp-editor-wrap'));
+						$wrap.find('.switch-'+ ($wrap.hasClass('tmce-active') ? 'tmce' : 'html')).trigger('click');
+					}
+
+					/**
+					 * Fixes when wpautop is false
+					 */
+					if (!editor.getParam('wpautop')) {
+						editor
+							.on('SaveContent', function(event){
+								// Remove <p> in Visual mode
+								if (event.content && $wrap.hasClass('tmce-active')) {
+									event.content = wp.editor.removep(event.content);
+								}
+							})
+							.on('BeforeSetContent', function(event){
+								// Prevent inline all content when switching from Text to Visual mode
+								if (event.content && !$wrap.hasClass('tmce-active')) {
+									event.content = wp.editor.autop(event.content);
+								}
+							});
 					}
 				});
 			};
+
+			if (!tinyMCEPreInit.mceInit[ id ].wpautop) { // todo: check if Visual mode
+				$textarea.val( wp.editor.autop($textarea.val()) );
+			}
 
 			try {
 				tinymce.init( tinyMCEPreInit.mceInit[ id ] );
