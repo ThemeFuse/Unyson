@@ -170,11 +170,14 @@ jQuery(document).ready(function ($) {
 
 				$box.removeClass(titleUpdater.pendingClass);
 
+				var jsonParsedValues = JSON.parse(values);
+
 				$box.find('> .hndle span:not([class])').first().html(
-					this.template(data.template, JSON.parse(values))
+					this.template(data.template, $.extend(jsonParsedValues, {_o: jsonParsedValues}))
 				);
 
 				delete data;
+				delete jsonParsedValues;
 				this.update();
 				return;
 			}
@@ -198,7 +201,7 @@ jQuery(document).ready(function ($) {
 				var template = '';
 
 				if (response.success) {
-					template = this.template(data.template, response.data.values);
+					template = this.template(data.template, $.extend(response.data.values, {_o: response.data.values}));
 				} else {
 					template = '[Ajax Error] '+ response.data.message
 				}
