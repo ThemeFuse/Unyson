@@ -44,6 +44,20 @@
 }
 
 {
+	try {
+		$responsive_classes = FW_Cache::get(
+			$cache_key = 'fw:backend-option-view:responsive-classes'
+		);
+	} catch (FW_Cache_Not_Found_Exception $e) {
+		FW_Cache::set(
+			$cache_key,
+			$responsive_classes = apply_filters('fw:backend-option-view:design-default:responsive-classes', array(
+				'label' => 'fw-col-xs-12 fw-col-sm-3 fw-col-lg-2',
+				'input' => 'fw-col-xs-12 fw-col-sm-9 fw-col-lg-10',
+			))
+		);
+	}
+
 	$classes = array(
 		'option' => array(
 			'fw-backend-option',
@@ -53,12 +67,12 @@
 		),
 		'label' => array(
 			'fw-backend-option-label',
-			'responsive' => 'fw-col-xs-12 fw-col-sm-3 fw-col-lg-2',
+			'responsive' => $responsive_classes['label'],
 		),
 		'input' => array(
 			'fw-backend-option-input',
 			'fw-backend-option-input-type-'. $option['type'],
-			'responsive' => 'fw-col-xs-12 fw-col-sm-9 fw-col-lg-10',
+			'responsive' => $responsive_classes['input'],
 		),
 		'desc' => array(
 			'fw-backend-option-desc',
