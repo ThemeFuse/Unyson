@@ -345,7 +345,7 @@ final class _FW_Component_Backend {
 				fw_get_framework_directory_uri( '/static/js/fw.js' ),
 				array( 'jquery', 'fw-events', 'backbone', 'qtip' ),
 				fw()->manifest->get_version(),
-				false
+				false // false fixes https://github.com/ThemeFuse/Unyson/issues/1625#issuecomment-224219454
 			);
 
 			wp_localize_script( 'fw', '_fw_localized', array(
