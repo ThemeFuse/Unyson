@@ -29,7 +29,7 @@ if (!function_exists('_fw_term_meta_setup_blog')):
 				meta_value longtext,
 				PRIMARY KEY	(meta_id),
 				KEY fw_term_id (fw_term_id),
-				KEY meta_key (meta_key)
+				KEY `meta_key` (`meta_key`(191))
 				) $charset_collate;"
 			);
 		}
