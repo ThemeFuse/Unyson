@@ -95,10 +95,6 @@ jQuery(document).ready(function($){
 			initAllTabs = function ($el) {
 				var selector = '.fw-options-tab[' + htmlAttrName + ']', $tabs;
 
-				if ($el.is(selector)) {
-					initTab($el);
-				}
-
 				// initialized tabs can contain tabs, so init recursive until nothing is found
 				while (($tabs = $el.find(selector)).length) {
 					$tabs.each(function(){ initTab($(this)); });
@@ -106,6 +102,11 @@ jQuery(document).ready(function($){
 			};
 
 		fwEvents.on('fw:options:init:tabs', function (data) {
+			// fixes https://github.com/ThemeFuse/Unyson/issues/1634
+			if (data.$elements.is('.fw-options-tab[' + htmlAttrName + ']')) {
+				initTab(data.$elements);
+			}
+
 			initAllTabs(data.$elements);
 		});
 
