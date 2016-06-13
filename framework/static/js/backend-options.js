@@ -95,9 +95,12 @@ jQuery(document).ready(function($){
 			initAllTabs = function ($el) {
 				var selector = '.fw-options-tab[' + htmlAttrName + ']', $tabs;
 
-				if ($el.is(selector)) {
-					initTab($el);
-				}
+				// fixes https://github.com/ThemeFuse/Unyson/issues/1634
+				$el.each(function(){
+					if ($(this).is(selector)) {
+						initTab($(this));
+					}
+				});
 
 				// initialized tabs can contain tabs, so init recursive until nothing is found
 				while (($tabs = $el.find(selector)).length) {
