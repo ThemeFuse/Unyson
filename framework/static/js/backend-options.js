@@ -95,6 +95,10 @@ jQuery(document).ready(function($){
 			initAllTabs = function ($el) {
 				var selector = '.fw-options-tab[' + htmlAttrName + ']', $tabs;
 
+				if ($el.is(selector)) {
+					initTab($el);
+				}
+
 				// initialized tabs can contain tabs, so init recursive until nothing is found
 				while (($tabs = $el.find(selector)).length) {
 					$tabs.each(function(){ initTab($(this)); });
