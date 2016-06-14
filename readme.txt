@@ -82,7 +82,7 @@ Yes; Unyson will work with any theme.
 == Changelog ==
 
 = 2.5.6 =
-* [Minor fixes](https://github.com/ThemeFuse/Unyson/compare/v2.5.5...v2.5.6)
+* [Minor fixes](https://github.com/ThemeFuse/Unyson/compare/v2.5.5...v2.5.6#files_bucket)
 
 = 2.5.5 =
 * Fixed [#1586](https://github.com/ThemeFuse/Unyson/issues/1586)
