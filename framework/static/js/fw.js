@@ -624,6 +624,7 @@ fw.getQueryString = function(name) {
 			 */
 			html: '',
 			modalCustomClass: '',
+			disableLazyTabs: false,
 			size: 'small' // small, medium, large
 		},
 		ContentView: Backbone.View.extend({
@@ -669,6 +670,16 @@ fw.getQueryString = function(name) {
 				}
 
 				this.$el.append('<input type="submit" class="fw-hidden hidden-submit" />');
+
+				/**
+				 * The user may want to completely disable lazy tabs for the
+				 * current modal. It is VERY convenient sometimes.
+				 */
+				if (this.modal.get('disableLazyTabs')) {
+					fwEvents.trigger('fw:options:init:tabs', {
+						$elements: this.model.frame.$el
+					});
+				}
 			}
 		}),
 		/**
