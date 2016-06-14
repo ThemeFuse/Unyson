@@ -675,7 +675,7 @@ fw.getQueryString = function(name) {
 				 * The user may want to completely disable lazy tabs for the
 				 * current modal. It is VERY convenient sometimes.
 				 */
-				if (this.modal.get('disableLazyTabs')) {
+				if (this.model.get('disableLazyTabs')) {
 					fwEvents.trigger('fw:options:init:tabs', {
 						$elements: this.model.frame.$el
 					});
