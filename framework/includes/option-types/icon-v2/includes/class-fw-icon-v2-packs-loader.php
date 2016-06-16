@@ -277,50 +277,72 @@ class FW_Icon_V2_Packs_Loader
 
 	public function get_default_icon_packs()
 	{
-		$base_path = fw_get_framework_directory('/includes/option-types/icon-v2/static/css/');
-		$base_uri  = fw_get_framework_directory_uri(
-			'/includes/option-types/icon-v2/static/css/'
-		);
-
 		return array(
 			'font-awesome' => array(
 				'name' => 'font-awesome',
 				'title' => 'Font Awesome',
 				'css_class_prefix' => 'fa',
-				'css_file' => $base_path . 'fa.css',
-				'css_file_uri' => $base_uri . 'fa.css'
+				'css_file' => fw_get_framework_directory(
+					'/static/libs/font-awesome/css/font-awesome.min.css'
+				),
+
+				'css_file_uri' => fw_get_framework_directory_uri(
+					'/static/libs/font-awesome/css/font-awesome.min.css'
+				),
 			),
 
 			'entypo' => array(
 				'name' => 'entypo',
 				'title' => 'Entypo',
 				'css_class_prefix' => 'entypo',
-				'css_file' => $base_path . 'entypo.css',
-				'css_file_uri' => $base_uri . 'entypo.css'
+				'css_file' => fw_get_framework_directory(
+					'/static/libs/entypo/css/entypo.css'
+				),
+
+				'css_file_uri' => fw_get_framework_directory_uri(
+					'/static/libs/entypo/css/entypo.css'
+				),
 			),
 
 			'linecons' => array(
 				'name' => 'linecons',
 				'title' => 'Linecons',
 				'css_class_prefix' => 'linecons',
-				'css_file' => $base_path . 'linecons.css',
-				'css_file_uri' => $base_uri . 'linecons.css'
+				'css_file' => fw_get_framework_directory(
+					'/static/libs/linecons/css/linecons.css'
+				),
+
+				'css_file_uri' => fw_get_framework_directory_uri(
+					'/static/libs/linecons/css/linecons.css'
+				),
 			),
 
 			'linearicons' => array(
 				'name' => 'linearicons',
 				'title' => 'Linearicons Free',
 				'css_class_prefix' => 'lnr',
-				'css_file' => $base_path . 'lnr.css',
-				'css_file_uri' => $base_uri . 'lnr.css',
+
+				'css_file' => fw_get_framework_directory(
+					'/static/libs/lnr/css/lnr.css'
+				),
+
+				'css_file_uri' => fw_get_framework_directory_uri(
+					'/static/libs/lnr/css/lnr.css'
+				),
 			),
 
 			'typicons' => array(
 				'name' => 'typicons',
 				'title' => 'Typicons',
 				'css_class_prefix' => 'typcn',
-				'css_file' => $base_path . 'typcn.css',
-				'css_file_uri' => $base_uri . 'typcn.css'
+
+				'css_file' => fw_get_framework_directory(
+					'/static/libs/typcn/css/typcn.css'
+				),
+
+				'css_file_uri' => fw_get_framework_directory_uri(
+					'/static/libs/typcn/css/typcn.css'
+				),
 			),
 
 			'unycon' => array(
