@@ -147,9 +147,9 @@ class FW_Option_Type_Upload extends FW_Option_Type
 	{
 		$l10n = array_merge(
 			array(
-				'button_add'    => __('Add Image', 'fw'), // TODO: add context ?
-				'button_edit'   => __('Edit', 'fw'), // TODO: add context ?
-				'modal_title'   => __('Select Images', 'fw'),
+				'button_add'    => __('Add Image', 'fw'),
+				'button_edit'   => __('Edit', 'fw'),
+				'modal_title'   => __('Select Image', 'fw'),
 			),
 			$l10n
 		);
