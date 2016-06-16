@@ -20,7 +20,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 		return array(
 			'value' => '',
 			'size' => 'small', // small, large
-			'editor_height' => 400,
+			'editor_height' => 300,
 			'wpautop' => true,
 			'editor_type' => false, // tinymce, html
 
