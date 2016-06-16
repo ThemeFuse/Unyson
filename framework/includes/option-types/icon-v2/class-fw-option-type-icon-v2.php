@@ -2,8 +2,8 @@
 
 if (! defined('FW')) { die('Forbidden'); }
 
-require_once __DIR__ . '/includes/class-fw-icon-v2-packs-loader.php';
-require_once __DIR__ . '/includes/class-fw-icon-v2-favorites.php';
+require_once dirname(__FILE__) . '/includes/class-fw-icon-v2-packs-loader.php';
+require_once dirname(__FILE__) . '/includes/class-fw-icon-v2-favorites.php';
 
 class FW_Option_Type_Icon_v2 extends FW_Option_Type
 {
