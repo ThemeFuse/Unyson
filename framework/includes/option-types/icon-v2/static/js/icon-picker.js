@@ -278,6 +278,7 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 	}
 
 	function renderIconsCollection (pack, icons, favorites) {
+
 		return '<ul class="fw-icon-v2-library-pack">' + _.map(
 			icons,
 			renderSingleIcon
@@ -414,7 +415,9 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 		var $favorites = modal.frame.$el.find('.fw-icon-v2-icon-favorites');
 
 		$favorites.html(
-			renderIconsCollection(null, currentFavorites, true)
+			_.isEmpty(currentFavorites)
+				?  fw_icon_v2_data.favorites_empty_label
+				: renderIconsCollection(null, currentFavorites, true)
 		);
 	}
 
