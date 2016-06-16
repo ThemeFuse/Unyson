@@ -182,26 +182,14 @@ class FW_Icon_V2_Packs_Loader
 
 	private function _load_icons_for_each_pack()
 	{
-		global $wp_filesystem;
-
-		if (empty($wp_filesystem)) {
-			require_once (ABSPATH . '/wp-admin/includes/file.php');
-			WP_Filesystem();
-		}
-
 		foreach ($this->icon_packs as $pack_name => $pack) {
 			$this->icon_packs[$pack_name]['icons'] = array();
-
 
 			if (! $pack['css_file']) { continue; }
 			if ( is_array($pack['icons']) ) { continue; }
 
-			if (! FW_WP_Filesystem::has_direct_access($pack['css_file'])) { continue; }
-
-			$css = $wp_filesystem->get_contents(
-				FW_WP_Filesystem::real_path_to_filesystem_path(
-					$pack['css_file']
-				)
+			$css = file_get_contents(
+				$pack['css_file']
 			);
 
 			$parser_matches = array();
