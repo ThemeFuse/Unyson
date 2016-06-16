@@ -282,7 +282,8 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 			return [
 				'<li data-fw-icon-v2="' + iconClass + '" class="' + liClass + '">',
 					'<i class="' + iconClass + '"></i>',
-					'<a><i></i></a>',
+					'<a title="Add to Favorites" class="fw-icon-v2-favorite"><i class="dashicons dashicons-star-filled"></i></a>',
+					'<a title="Remove from Favorites" class="fw-icon-v2-unfavorite"><i class="dashicons dashicons-no"></i></a>',
 				'</li>'
 			].join('');
 		}

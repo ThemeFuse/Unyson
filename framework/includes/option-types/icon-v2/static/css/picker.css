@@ -11,6 +11,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    background-size: contain;
+    box-sizing: border-box;
 }
 
 .fw-icon-v2-preview i {
@@ -32,6 +35,14 @@
 .fw-icon-v2-preview a:before {
     background-color: #fff;
     border-radius: 100%;
+}
+
+.fw-icon-v2-preview-small [data-icon-type="icon-font"] .fw-icon-v2-preview i,
+.fw-icon-v2-preview-medium [data-icon-type="icon-font"] .fw-icon-v2-preview i,
+.fw-icon-v2-preview-large [data-icon-type="icon-font"] .fw-icon-v2-preview i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /*** Small Preview ***/
@@ -66,9 +77,9 @@
 }
 
 .fw-icon-v2-preview-large .fw-icon-v2-preview i {
-    font-size: 50px;
-    width: 50px;
-    height: 50px;
+    font-size: 45px;
+    width: 45px;
+    height: 45px;
 }
 
 
@@ -216,23 +227,20 @@
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li a i {
-    font-family: dashicons;
-    font-style: normal;
     font-size: 12px;
-    vertical-align: top;
-    line-height: 1;
     width: 12px;
     height: 12px;
     color: #e0e0e0;
     transition: color 0.2s ease;
 }
 
-.fw-icon-v2-picker-modal .fw-option-html ul li a i:before {
-    content: "\f155";
+.fw-icon-v2-picker-modal .fw-icon-v2-unfavorite,
+.fw-icon-v2-picker-modal .fw-icon-v2-icon-favorites .fw-icon-v2-favorite {
+    display: none;
 }
 
-.fw-icon-v2-picker-modal .fw-option-html .fw-icon-v2-icon-favorites ul li a i:before {
-    content: "\f158";
+.fw-icon-v2-picker-modal .fw-icon-v2-icon-favorites .fw-icon-v2-unfavorite {
+    display: block;
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li a:hover i,
