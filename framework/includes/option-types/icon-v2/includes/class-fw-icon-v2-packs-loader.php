@@ -241,7 +241,10 @@ class FW_Icon_V2_Packs_Loader
 									$has_content_for_pseudo;
 
 				if ($selector_is_icon) {
-					$icon = explode(':', ltrim($selector, '.'))[0];
+					$icon = explode(':', ltrim($selector, '.'));
+
+					$icon = $icon[0];
+
 					$this->icon_packs[$pack_name]['icons'][] = $icon;
 				}
 			}
