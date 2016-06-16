@@ -282,7 +282,7 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 			return [
 				'<li data-fw-icon-v2="' + iconClass + '" class="' + liClass + '">',
 					'<i class="' + iconClass + '"></i>',
-					'<a><i class="dashicons dashicons-star-filled"></i></a>',
+					'<a><i></i></a>',
 				'</li>'
 			].join('');
 		}
