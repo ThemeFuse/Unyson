@@ -74,7 +74,7 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 				'search_label' => __('Search Icon', 'fw'),
 				'select_pack_label' => __('Select Pack', 'fw'),
 				'favorites_empty_label' => __(
-					'You have no favorite icons. To add icons here click on start button that\'s on each icon.',
+					'You have no favorite icons. To add icons here click on star button that\'s on each icon.',
 					'fw'
 				),
 				'icons' => $this->packs_loader->get_packs()
