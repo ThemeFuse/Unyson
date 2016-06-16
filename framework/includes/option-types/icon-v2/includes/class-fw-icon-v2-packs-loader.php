@@ -16,110 +16,101 @@ class FW_Icon_V2_Packs_Loader
 
 	public function __construct()
 	{
-		$cache_key = 'fw_option_type_icon_v2/packs';
+		/**
+		 * You are able to load more packs at this step.
+		 *
+		 * Default packs can't be changed.
+		 *
+		 * Example:
+		 *
+		 * add_filter(
+		 *   'fw:option-type:icon-v2:packs',
+		 *   '_add_more_packs'
+		 * );
+		 *
+		 * function _add_more_packs($default_packs) {
+		 *   return array(
+		 *     'new_pack_name' => array(
+		 *       'name' => 'new_pack_name', // note that it have to be the same as array key
+		 *       'title' => 'New Pack', // This one will be displayed inside picker
+		 *       'css_class_prefix' => 'new-pack-name', // the class that will be used in CSS
+		 *
+		 *       // Path to the CSS file that will define your classes
+		 *       // Please, note that you will be responsible for referencing
+		 *       // your icon fonts in a correct way from your @font-face rules.
+		 *       //
+		 *       // Both of them are required.
+		 *       //
+		 *       'css_file' => 'path_to_your_css_file',
+		 *       'css_file_uri' => 'network_accessible_path_to_your_css_file',
+		 *
+		 *       // By default, the option type will enqueue all CSS from all
+		 *       // packs. You can handle CSS by yourself by making this option falsy.
+		 *       //
+		 *       // Please note that you will have to enqueue your CSS
+		 *       // both on the admin and frontend side.
+		 *       'require_css_file' => false,
+		 *
+		 *       // Possible options:
+		 *       // - false (default) - I'll try to it describe below
+		 *       // - array - define list of icons by hand, that's the error prone one
+		 *       //
+		 *       // When you will set `icons` option as false for a specific pack,
+		 *       // the option type icon-v2 will try to do a guess by itself
+		 *       // about the icons you will want to be displayed inside the
+		 *       // picker. The mechanics are the following: Option type will
+		 *       // read all of CSS rules from the file in the `css_file` option.
+		 *       // It will use `css_class_prefix` in order to filter the rules
+		 *       // that will match actual icons. Your CSS should have this
+		 *       // form in order to be matched:
+		 *       //
+		 *       // .`css_class_prefix`-some-icon:before { // after also works fine
+		 *       //   content: '\266a';
+		 *       // }
+		 *       'icons' => array(
+		 *         'new-pack-name-search',
+		 *         'new-pack-name-arrow-right',
+		 *         'new-pack-name-arrow-left'
+		 *       ),
+		 *
+		 *       'apply_root_class' => true
+		 *
+		 *     );
+		 *   );
+		 * }
+		 */
+		$packs = apply_filters(
+			'fw:option_type:icon-v2:packs',
+			$this->get_default_icon_packs()
+		);
 
-		try {
-			$this->icon_packs = FW_Cache::get($cache_key);
-		} catch (FW_Cache_Not_Found_Exception $e) {
+		/**
+		 * Default packs should be kept as they are.
+		 *
+		 * We update them to match the last versions from their sources.
+		 */
+		$packs = array_merge(
+			$this->get_default_icon_packs(),
+			$packs
+		);
 
-			/**
-			 * You are able to load more packs at this step.
-			 *
-			 * Default packs can't be changed.
-			 *
-			 * Example:
-			 *
-			 * add_filter(
-			 *   'fw:option-type:icon-v2:packs',
-			 *   '_add_more_packs'
-			 * );
-			 *
-			 * function _add_more_packs($default_packs) {
-			 *   return array(
-			 *     'new_pack_name' => array(
-			 *       'name' => 'new_pack_name', // note that it have to be the same as array key
-			 *       'title' => 'New Pack', // This one will be displayed inside picker
-			 *       'css_class_prefix' => 'new-pack-name', // the class that will be used in CSS
-			 *
-			 *       // Path to the CSS file that will define your classes
-			 *       // Please, note that you will be responsible for referencing
-			 *       // your icon fonts in a correct way from your @font-face rules.
-			 *       //
-			 *       // Both of them are required.
-			 *       //
-			 *       'css_file' => 'path_to_your_css_file',
-			 *       'css_file_uri' => 'network_accessible_path_to_your_css_file',
-			 *
-			 *       // By default, the option type will enqueue all CSS from all
-			 *       // packs. You can handle CSS by yourself by making this option falsy.
-			 *       //
-			 *       // Please note that you will have to enqueue your CSS
-			 *       // both on the admin and frontend side.
-			 *       'require_css_file' => false,
-			 *
-			 *       // Possible options:
-			 *       // - false (default) - I'll try to it describe below
-			 *       // - array - define list of icons by hand, that's the error prone one
-			 *       //
-			 *       // When you will set `icons` option as false for a specific pack,
-			 *       // the option type icon-v2 will try to do a guess by itself
-			 *       // about the icons you will want to be displayed inside the
-			 *       // picker. The mechanics are the following: Option type will
-			 *       // read all of CSS rules from the file in the `css_file` option.
-			 *       // It will use `css_class_prefix` in order to filter the rules
-			 *       // that will match actual icons. Your CSS should have this
-			 *       // form in order to be matched:
-			 *       //
-			 *       // .`css_class_prefix`-some-icon:before { // after also works fine
-			 *       //   content: '\266a';
-			 *       // }
-			 *       'icons' => array(
-			 *         'new-pack-name-search',
-			 *         'new-pack-name-arrow-right',
-			 *         'new-pack-name-arrow-left'
-			 *       ),
-			 *
-			 *       'apply_root_class' => true
-			 *
-			 *     );
-			 *   );
-			 * }
-			 */
-			$packs = apply_filters(
-				'fw:option_type:icon-v2:packs',
-				$this->get_default_icon_packs()
+		foreach ($packs as $pack_name => $pack) {
+			$this->icon_packs[$pack_name] = array_merge(
+				array(
+					'title' => ucfirst($pack_name),
+					'css_class_prefix' => $pack_name,
+					'css_file' => false,
+					'css_file_uri' => false,
+					'require_css_file' => true,
+					'icons' => false,
+					'apply_root_class' => true
+				),
+
+				$pack
 			);
-
-			/**
-			 * Default packs should be kept as they are.
-			 *
-			 * We update them to match the last versions from their sources.
-			 */
-			$packs = array_merge(
-				$this->get_default_icon_packs(),
-				$packs
-			);
-
-			foreach ($packs as $pack_name => $pack) {
-				$this->icon_packs[$pack_name] = array_merge(
-					array(
-						'title' => ucfirst($pack_name),
-						'css_class_prefix' => $pack_name,
-						'css_file' => false,
-						'css_file_uri' => false,
-						'require_css_file' => true,
-						'icons' => false,
-						'apply_root_class' => true
-					),
-
-					$pack
-				);
-			}
-
-			FW_Cache::set($cache_key, $this->icon_packs);
-
-			return $packs;
 		}
+
+		return $packs;
 	}
 
 	public function enqueue_frontend_css()
