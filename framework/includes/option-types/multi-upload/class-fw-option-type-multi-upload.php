@@ -158,13 +158,15 @@ class FW_Option_Type_Multi_Upload extends FW_Option_Type
 		$l10n = array_merge(
 			array(
 				'button_add'    => __('Add Images', 'fw'), // TODO: add context ?
-				'button_edit'   => __('Edit', 'fw') // TODO: add context ?
+				'button_edit'   => __('Edit', 'fw'), // TODO: add context ?
+				'modal_title'   => __('Select Images', 'fw'),
 			),
 			$l10n
 		);
 		$wrapper_attr = array_merge($wrapper_attr, array(
 			'data-l10n-button-add'  => $l10n['button_add'],
 			'data-l10n-button-edit' => $l10n['button_edit'],
+			'data-l10n-modal-title' => $l10n['modal_title'],
 		));
 
 		$wrapper_attr['class'] .= ' images-only';

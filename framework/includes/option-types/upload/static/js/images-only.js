@@ -17,7 +17,8 @@
 			},
 			l10n = {
 				buttonAdd: elements.$container.attr('data-l10n-button-add'),
-				buttonEdit: elements.$container.attr('data-l10n-button-edit')
+				buttonEdit: elements.$container.attr('data-l10n-button-edit'),
+				modalTitle: elements.$container.attr('data-l10n-modal-title')
 			},
 			frame;
 
@@ -31,7 +32,14 @@
 				frame = wp.media({
 					library: {
 						type: haveFilesDetails ? parsedFilesDetails.mime_types : 'image'
-					}
+					},
+					states: new wp.media.controller.Library({
+                        library:   wp.media.query( { type: 'image' } ),
+                        multiple:  false,
+                        title:     l10n.modalTitle,
+                        filterable: 'uploaded',
+                        priority:  20
+                    })
 				});
 
 			if(haveFilesDetails) {
