@@ -7,7 +7,7 @@
  */
 
 function get_libs_dir() {
-	return __DIR__ . '/../framework/static/libs/';
+	return dirname(__FILE__) . '/../static/libs/';
 }
 
 $packs = array(
