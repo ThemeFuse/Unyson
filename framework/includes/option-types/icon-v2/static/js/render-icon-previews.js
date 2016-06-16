@@ -20,6 +20,7 @@
 
 	$(document).on('click', '.fw-icon-v2-remove-icon', removeIcon);
 	$(document).on('click', '.fw-icon-v2-trigger-modal', getNewIcon);
+	$(document).on('click', '.fw-icon-v2-preview', getNewIcon);
 
 	/**
 	 * For debugging purposes
@@ -31,16 +32,30 @@
 
 		var $root = $(this).closest($rootClass);
 
-		fwOptionTypeIconV2Picker.pick(getDataForRoot($root), function (data) {
-			setDataForRoot(
-				$root,
-				data
-			);
-		});
+		/**
+		 * fw.OptionsModal should execute it's change:values callbacks
+		 * only if the picker was changed. That's why we introduce unique-id
+		 * for each picker.
+		 */
+		if (! $root.data('unique-id')) {
+			$root.data('unique-id', fw.randomMD5());
+		}
+
+		fwOptionTypeIconV2Picker.pick(
+			getDataForRoot($root),
+			$root.data('unique-id'),
+			function (data) {
+				setDataForRoot(
+					$root,
+					data
+				);
+			}
+		);
 	}
 
 	function removeIcon (event) {
 		event.preventDefault();
+		event.stopPropagation();
 
 		var $root = $(this).closest($rootClass);
 

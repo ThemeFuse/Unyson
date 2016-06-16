@@ -1,7 +1,8 @@
 window.fwOptionTypeIconV2Picker = (function ($) {
 	var modal = null,
 		currentValues = null,
-		callback = null;
+		callback = null,
+		uniqueId = null;
 
 	var currentFavorites = [];
 	// $(window).on('resize', computeToolbarPosition);
@@ -19,9 +20,10 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 		pick: pick
 	};
 
-	function pick (values, fn) {
+	function pick (values, id, fn) {
 		currentValues = values;
 		callback = fn;
+		uniqueId = id;
 
 		createModal(values, fn);
 
@@ -116,6 +118,17 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 		});
 
 		modal.on('render', function () {
+			/**
+			 * Every icon picker change should trigger a new callback chain
+			 * execution.
+			 */
+			modal.set(
+				'values',
+				_.extend({}, modal.get('values'), {
+					current_picker: uniqueId
+				}),
+				{silent: true}
+			);
 
 			// select correct tab here, based on currentValues
 			// also render icon sets here, if needed
@@ -282,7 +295,8 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 			return [
 				'<li data-fw-icon-v2="' + iconClass + '" class="' + liClass + '">',
 					'<i class="' + iconClass + '"></i>',
-					'<a><i class="dashicons dashicons-star-filled"></i></a>',
+					'<a title="Add to Favorites" class="fw-icon-v2-favorite"><i class="dashicons dashicons-star-filled"></i></a>',
+					'<a title="Remove from Favorites" class="fw-icon-v2-unfavorite"><i class="dashicons dashicons-no"></i></a>',
 				'</li>'
 			].join('');
 		}
