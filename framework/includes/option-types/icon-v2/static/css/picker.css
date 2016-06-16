@@ -73,6 +73,28 @@
 
 
 /*** Icon Picker Modal *******************************************************/
+.fw-icon-v2-picker-modal .fw-options-tabs-contents {
+    overflow-y: hidden !important;
+}
+
+.fw-icon-v2-picker-modal .fw-backend-option-design-default:not(.fw-backend-option-type-upload) {
+    padding: 0;
+}
+
+.fw-icon-v2-picker-modal .fw-icon-v2-toolbar {
+    padding: 30px 27px 20px;
+}
+
+.fw-icon-v2-picker-modal .fw-icon-v2-library-packs-wrapper {
+    overflow-y: auto;
+    height: 500px;
+    padding: 0 27px;
+}
+
+.fw-icon-v2-picker-modal .fw-icon-v2-icon-favorites {
+    padding: 24px 27px;
+}
+
 .fw-icon-v2-picker-modal .media-frame-title {
   display: none;
 }
@@ -108,6 +130,10 @@
 .fw-icon-v2-picker-modal h2 {
     position: relative;
     text-align: center;
+}
+
+.fw-icon-v2-picker-modal h2:first-of-type {
+    margin-top: 0;
 }
 
 .fw-icon-v2-picker-modal h2 span {
@@ -148,29 +174,41 @@
     border: 3px solid transparent;
     border-radius: 4px;
     cursor: pointer;
-    transition: border-color 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li:hover {
-    border-color: #eee;
+    /*border-color: #eee;*/
+    box-shadow: 0 2px 16px 4px rgba(43, 43, 54, 0.1);
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li.selected {
     border-color: #64bd1f;
+    box-shadow: 0 2px 16px 4px rgba(43, 43, 54, 0.1);
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li > i {
     color: #666;
     font-size: 22px;
     text-align: center;
+    transition: color 0.2s ease;
 }
 
+.fw-icon-v2-picker-modal .fw-option-html ul li:hover > i,
+.fw-icon-v2-picker-modal .fw-option-html ul li.selected > i {
+    color: #64bd1f;
+}
+
+/*** Add to Favorites Button ***/
 .fw-icon-v2-picker-modal .fw-option-html ul li a {
     opacity: 0;
     position: absolute;
-    padding: 3px;
-    top: 0;
-    right: 0;
+    padding: 5px;
+    top: -2px;
+    right: -2px;
+    width: 12px;
+    height: 12px;
+    transition: all 0.2s ease;
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li:hover a {
@@ -178,10 +216,23 @@
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li a i {
+    font-family: dashicons;
+    font-style: normal;
     font-size: 12px;
+    vertical-align: top;
+    line-height: 1;
     width: 12px;
     height: 12px;
     color: #e0e0e0;
+    transition: color 0.2s ease;
+}
+
+.fw-icon-v2-picker-modal .fw-option-html ul li a i:before {
+    content: "\f155";
+}
+
+.fw-icon-v2-picker-modal .fw-option-html .fw-icon-v2-icon-favorites ul li a i:before {
+    content: "\f158";
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li a:hover i,
@@ -189,7 +240,6 @@
     color: #FFC93C;
 }
 
-
-
-
-
+.fw-icon-v2-picker-modal .fw-option-html .fw-icon-v2-icon-favorites ul li a:hover i {
+    color: red;
+}
