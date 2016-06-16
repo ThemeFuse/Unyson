@@ -1042,8 +1042,12 @@ fw.getValuesFromServer = function (data) {
 
 						view.model.set('values', response.data.values);
 
-						// simulate click on close button to fire animations
-						view.model.frame.modal.$el.find('.media-modal-close').trigger('click');
+						if (! view.model.frame.$el.hasClass('fw-options-modal-no-close')) {
+							// simulate click on close button to fire animations
+							view.model.frame.modal.$el.find('.media-modal-close').trigger('click');
+						}
+
+						view.model.frame.$el.removeClass('fw-options-modal-no-close');
 					})
 					.fail(function (xhr, status, error) {
 						fw.loading.hide(loadingId);
@@ -1124,7 +1128,7 @@ fw.getValuesFromServer = function (data) {
 				 * Values of the options {'option-id': 'option value'}
 				 * also used in fw()->backend->render_options()
 				 */
-				values: {}
+				values: {},
 			}
 		),
 		initializeFrame: function(settings) {
@@ -1138,14 +1142,7 @@ fw.getValuesFromServer = function (data) {
 						style: 'primary',
 						text: _fw_localized.l10n.save,
 						priority: 40,
-						click: function () {
-							/**
-							 * Simulate form submit
-							 * Important: Empty input[required] must not start form submit
-							 *     and must show default browser warning popup "This field is required"
-							 */
-							modal.content.$el.find('input[type="submit"].hidden-submit').trigger('click');
-						}
+						click: triggerSubmit
 					},
 					{
 						style: '',
@@ -1156,6 +1153,22 @@ fw.getValuesFromServer = function (data) {
 						}
 					}
 				];
+
+			/**
+			 * Sometimes we want an apply button in order to save changes
+			 * that will not trigger a modal close.
+			 */
+			if (settings.saveWithoutCloseButton) {
+				buttons = buttons.concat([{
+					style: '',
+					text: _fw_localized.l10n.apply,
+					priority: 45,
+					click: function () {
+						modal.frame.$el.addClass('fw-options-modal-no-close');
+						triggerSubmit();
+					}
+				}]);
+			}
 
 			if (settings.buttons) {
 				buttons = buttons.concat(settings.buttons);
@@ -1174,6 +1187,15 @@ fw.getValuesFromServer = function (data) {
 				this.frame.$el.removeClass('hide-toolbar');
 				this.frame.modal.$el.addClass('fw-options-modal');
 			}, this));
+
+			function triggerSubmit () {
+				/**
+				 * Simulate form submit
+				 * Important: Empty input[required] must not start form submit
+				 *     and must show default browser warning popup "This field is required"
+				 */
+				modal.content.$el.find('input[type="submit"].hidden-submit').trigger('click');
+			}
 		},
 		/**
 		 * @param {Object} [values] Offer custom values for display. The user can reject them by closing the modal
