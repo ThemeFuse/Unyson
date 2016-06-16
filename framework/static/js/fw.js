@@ -1128,7 +1128,7 @@ fw.getValuesFromServer = function (data) {
 				 * Values of the options {'option-id': 'option value'}
 				 * also used in fw()->backend->render_options()
 				 */
-				values: {},
+				values: {}
 			}
 		),
 		initializeFrame: function(settings) {
