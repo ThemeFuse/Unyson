@@ -11,6 +11,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    background-size: contain;
+    box-sizing: border-box;
 }
 
 .fw-icon-v2-preview i {
@@ -32,6 +35,14 @@
 .fw-icon-v2-preview a:before {
     background-color: #fff;
     border-radius: 100%;
+}
+
+.fw-icon-v2-preview-small [data-icon-type="icon-font"] .fw-icon-v2-preview i,
+.fw-icon-v2-preview-medium [data-icon-type="icon-font"] .fw-icon-v2-preview i,
+.fw-icon-v2-preview-large [data-icon-type="icon-font"] .fw-icon-v2-preview i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /*** Small Preview ***/
@@ -66,13 +77,35 @@
 }
 
 .fw-icon-v2-preview-large .fw-icon-v2-preview i {
-    font-size: 50px;
-    width: 50px;
-    height: 50px;
+    font-size: 45px;
+    width: 45px;
+    height: 45px;
 }
 
 
 /*** Icon Picker Modal *******************************************************/
+.fw-icon-v2-picker-modal .fw-options-tabs-contents {
+    overflow-y: hidden !important;
+}
+
+.fw-icon-v2-picker-modal .fw-backend-option-design-default:not(.fw-backend-option-type-upload) {
+    padding: 0;
+}
+
+.fw-icon-v2-picker-modal .fw-icon-v2-toolbar {
+    padding: 30px 27px 20px;
+}
+
+.fw-icon-v2-picker-modal .fw-icon-v2-library-packs-wrapper {
+    overflow-y: auto;
+    height: 500px;
+    padding: 0 27px;
+}
+
+.fw-icon-v2-picker-modal .fw-icon-v2-icon-favorites {
+    padding: 24px 27px;
+}
+
 .fw-icon-v2-picker-modal .media-frame-title {
   display: none;
 }
@@ -108,6 +141,10 @@
 .fw-icon-v2-picker-modal h2 {
     position: relative;
     text-align: center;
+}
+
+.fw-icon-v2-picker-modal h2:first-of-type {
+    margin-top: 0;
 }
 
 .fw-icon-v2-picker-modal h2 span {
@@ -148,29 +185,41 @@
     border: 3px solid transparent;
     border-radius: 4px;
     cursor: pointer;
-    transition: border-color 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li:hover {
-    border-color: #eee;
+    /*border-color: #eee;*/
+    box-shadow: 0 2px 16px 4px rgba(43, 43, 54, 0.1);
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li.selected {
     border-color: #64bd1f;
+    box-shadow: 0 2px 16px 4px rgba(43, 43, 54, 0.1);
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li > i {
     color: #666;
     font-size: 22px;
     text-align: center;
+    transition: color 0.2s ease;
 }
 
+.fw-icon-v2-picker-modal .fw-option-html ul li:hover > i,
+.fw-icon-v2-picker-modal .fw-option-html ul li.selected > i {
+    color: #64bd1f;
+}
+
+/*** Add to Favorites Button ***/
 .fw-icon-v2-picker-modal .fw-option-html ul li a {
     opacity: 0;
     position: absolute;
-    padding: 3px;
-    top: 0;
-    right: 0;
+    padding: 5px;
+    top: -2px;
+    right: -2px;
+    width: 12px;
+    height: 12px;
+    transition: all 0.2s ease;
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li:hover a {
@@ -182,6 +231,16 @@
     width: 12px;
     height: 12px;
     color: #e0e0e0;
+    transition: color 0.2s ease;
+}
+
+.fw-icon-v2-picker-modal .fw-icon-v2-unfavorite,
+.fw-icon-v2-picker-modal .fw-icon-v2-icon-favorites .fw-icon-v2-favorite {
+    display: none;
+}
+
+.fw-icon-v2-picker-modal .fw-icon-v2-icon-favorites .fw-icon-v2-unfavorite {
+    display: block;
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li a:hover i,
@@ -189,7 +248,6 @@
     color: #FFC93C;
 }
 
-
-
-
-
+.fw-icon-v2-picker-modal .fw-option-html .fw-icon-v2-icon-favorites ul li a:hover i {
+    color: red;
+}

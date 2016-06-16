@@ -20,6 +20,7 @@
 
 	$(document).on('click', '.fw-icon-v2-remove-icon', removeIcon);
 	$(document).on('click', '.fw-icon-v2-trigger-modal', getNewIcon);
+	$(document).on('click', '.fw-icon-v2-preview', getNewIcon);
 
 	/**
 	 * For debugging purposes
@@ -54,6 +55,7 @@
 
 	function removeIcon (event) {
 		event.preventDefault();
+		event.stopPropagation();
 
 		var $root = $(this).closest($rootClass);
 
