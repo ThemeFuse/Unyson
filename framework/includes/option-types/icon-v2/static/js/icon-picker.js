@@ -40,7 +40,7 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 				{
 					'icon-fonts': {
 						type: 'tab',
-						title: 'Icon Fonts',
+						title: fw_icon_v2_data.icon_fonts_label,
 						options: {
 							'icon-font': {
 								type: 'html-full',
@@ -57,7 +57,7 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 				{
 					'custom-upload': {
 						type: 'tab',
-						title: 'Custom Upload',
+						title: fw_icon_v2_data.custom_upload_label,
 						options: {
 							'custom-upload': {
 								type: 'upload'
@@ -69,7 +69,7 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 				{
 					'favorites': {
 						type: 'tab',
-						title: 'Favorites',
+						title: fw_icon_v2_data.favorites_label,
 						attr: {
 							class: '.fw-icon-v2-favorites'
 						},
@@ -88,7 +88,6 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 		modal.on('change:values', function(modal, values) {
 			// run callback here
 			// get values based on current tab
-			console.log(values);
 
 			var type = modal.frame.$el.find('.fw-options-tabs-wrapper')
 				.tabs('instance').active.index() === 1 ? 'custom-upload' : 'icon-font';
@@ -129,7 +128,6 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 			}
 
 			if (modal.frame.$el.find('.fw-icon-v2-icons-library ul').length === 0) {
-
 				renderIconsLibrary({
 					search: '',
 					packs: _.values(fw_icon_v2_data.icons)
@@ -203,10 +201,12 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 	}
 
 	function iconLibraryHTML () {
-		var searchInput = '<input type="text" placeholder="Search Icon" class="fw-option fw-option-type-text">';
+		var searchInput = '<input type="text" placeholder="' +
+            fw_icon_v2_data.search_label +
+            '" class="fw-option fw-option-type-text">';
 		var selectPack = [
             '<select class="fw-selectize">',
-				'<option value="">Select Pack</option>'
+				'<option value="">' + fw_icon_v2_data.select_pack_label + '</option>'
 		].concat(
 
 			_.map(
