@@ -219,7 +219,7 @@ window.fwOptionTypeIconV2Picker = (function ($) {
             '" class="fw-option fw-option-type-text">';
 		var selectPack = [
             '<select class="fw-selectize">',
-				'<option value="">' + fw_icon_v2_data.select_pack_label + '</option>'
+				'<option value="all">' + fw_icon_v2_data.all_packs_label + '</option>'
 		].concat(
 
 			_.map(
@@ -368,7 +368,7 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 			'.fw-icon-v2-icons-library .fw-icon-v2-toolbar select'
 		)[0].value;
 
-		if (packs.trim() === '') {
+		if (packs.trim() === '' || packs === 'all') {
 			packs = _.values(fw_icon_v2_data.icons);
 		} else {
 			packs = [ fw_icon_v2_data.icons[packs] ];
@@ -437,4 +437,3 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 	}
 
 })(jQuery);
-
