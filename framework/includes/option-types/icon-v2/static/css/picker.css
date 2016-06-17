@@ -84,8 +84,25 @@
 
 
 /*** Icon Picker Modal *******************************************************/
+.fw-icon-v2-picker-modal li:first-child .nav-tab {
+    background: #fff;
+}
+
+.fw-icon-v2-picker-modal li .nav-tab {
+    background: #f1f1f1;
+}
+
+.fw-icon-v2-picker-modal li.ui-tabs-active .nav-tab {
+    background: #fff !important;
+    background-color: #fff !important;
+}
+
 .fw-icon-v2-picker-modal .fw-options-tabs-contents {
     overflow-y: hidden !important;
+}
+
+.fw-icon-v2-picker-modal .fw-backend-option-design-default {
+    border: none;
 }
 
 .fw-icon-v2-picker-modal .fw-backend-option-design-default:not(.fw-backend-option-type-upload) {
@@ -98,7 +115,7 @@
 
 .fw-icon-v2-picker-modal .fw-icon-v2-library-packs-wrapper {
     overflow-y: auto;
-    height: 500px;
+    height: 460px;
     padding: 0 27px;
 }
 
@@ -133,7 +150,7 @@
 }
 
 .fw-icon-v2-picker-modal .fw-icon-v2-toolbar input,
-.fw-icon-v2-picker-modal .fw-icon-v2-toolbar .fw-selectize {
+.fw-icon-v2-picker-modal .fw-icon-v2-toolbar .selectize-control {
     width: 48% !important;
     float: left;
 }
