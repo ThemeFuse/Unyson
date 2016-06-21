@@ -101,8 +101,7 @@
 						center  : googleMapsPos,
 						zoom    : 15,
 						mapTypeControl: false,
-						streetViewControl: false,
-						mapMaker: true
+						streetViewControl: false
 					};
 
 					if (_.isEmpty(this.map.object.map)){
