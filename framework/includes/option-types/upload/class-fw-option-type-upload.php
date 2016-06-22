@@ -205,7 +205,11 @@ class FW_Option_Type_Upload extends FW_Option_Type
 		if (empty($input_value)) {
 			return $option['value'];
 		} else {
-			return $this->get_attachment_info($input_value);
+			if (is_array($input_value)) {
+				return $input_value;
+			} else {
+				return $this->get_attachment_info($input_value);
+			}
 		}
 	}
 
