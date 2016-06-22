@@ -381,4 +381,16 @@ $texts = apply_filters('fw_settings_form_texts', array(
 </script>
 <?php endif; ?>
 
+<?php if (!empty($_GET['_focus_tab'])): ?>
+<script type="text/javascript">
+	jQuery(function($){
+		fwEvents.one('fw:options:init', function(){
+			setTimeout(function(){
+				$('a[href="#<?php echo esc_js($_GET['_focus_tab']); ?>"]').trigger('click');
+			}, 90);
+		});
+	});
+</script>
+<?php endif; ?>
+
 <?php do_action('fw_settings_form_footer'); ?>
