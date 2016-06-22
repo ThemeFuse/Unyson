@@ -75,7 +75,12 @@ if ( ! class_exists( 'FW_Resize' ) ) {
 
 			{
 				if ( ! $width || ! $height ) {
-					$editor       = wp_get_image_editor( $file_path );
+					$editor = wp_get_image_editor( $file_path );
+
+					if (is_wp_error($editor)) {
+						return $editor;
+					}
+
 					$size         = $editor->get_size();
 					$orig_width   = $size['width'];
 					$orig_height  = $size['height'];
