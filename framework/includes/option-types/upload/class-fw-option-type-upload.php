@@ -205,6 +205,10 @@ class FW_Option_Type_Upload extends FW_Option_Type
 		if (empty($input_value)) {
 			return $option['value'];
 		} else {
+			// Sometimes we want to do direct 
+			// [fw_get_options_values_from_input](fw-get-options-values-from-input) 
+			// and we pass full attachment array in, with `attachment_id` and `url`. 
+			// It should accept and work correctly with this form of calling it.
 			if (is_array($input_value)) {
 				return $input_value;
 			} else {
