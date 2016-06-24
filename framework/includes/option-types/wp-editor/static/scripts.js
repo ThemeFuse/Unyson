@@ -3,7 +3,17 @@
 	var init = function () {
 		var $option = $(this),
 			$textarea = $option.find('.wp-editor-area:first'),
-			id = $textarea.attr('id');
+			id = $option.attr('data-fw-editor-id');
+
+		/**
+		 * Dynamically set tinyMCEPreInit.mceInit and tinyMCEPreInit.qtInit
+		 * based on the data-fw-mce-settings and data-fw-qt-settings
+		 */
+		var mceSettings = JSON.parse($option.attr('data-fw-mce-settings'));
+		var qtSettings = JSON.parse($option.attr('data-fw-qt-settings'));
+
+		tinyMCEPreInit.mceInit[ id ] = mceSettings;
+		tinyMCEPreInit.qtInit[ id ] = qtSettings;
 
 		/**
 		 * Set width
@@ -98,4 +108,30 @@
 	});
 
 })(jQuery, fwEvents);
+
+/**
+ * Find all wp-editor option types from container
+ * and give them new IDs (random MD5).
+ *
+ * Copy their preinit data from currentId.
+ *
+ * The main callback we have below will take care about populating
+ * tinyMCEPreInit.mceInit and tinyMCEPreInit.qtInit for them.
+ */
+function fwWpEditorRefreshIds(currentId, container) {
+	_.map(
+		jQuery(container).find('.fw-option-type-wp-editor').toArray(),
+		refreshEditor
+	);
+
+	function refreshEditor (editor) {
+		var html = jQuery(editor).clone().wrap('<p>').parent().html();
+		console.log(currentId);
+
+		var regexp = new RegExp(currentId, 'g');
+		html = html.replace(regexp, fw.randomMD5());
+
+		jQuery(editor).replaceWith(html);
+	}
+}
 
