@@ -3,7 +3,17 @@
 	var init = function () {
 		var $option = $(this),
 			$textarea = $option.find('.wp-editor-area:first'),
-			id = $textarea.attr('id');
+			id = $option.attr('data-fw-editor-id');
+
+		/**
+		 * Dynamically set tinyMCEPreInit.mceInit and tinyMCEPreInit.qtInit
+		 * based on the data-fw-mce-settings and data-fw-qt-settings
+		 */
+		var mceSettings = JSON.parse($option.attr('data-fw-mce-settings'));
+		var qtSettings = JSON.parse($option.attr('data-fw-qt-settings'));
+
+		tinyMCEPreInit.mceInit[ id ] = mceSettings;
+		tinyMCEPreInit.qtInit[ id ] = qtSettings;
 
 		/**
 		 * Set width
