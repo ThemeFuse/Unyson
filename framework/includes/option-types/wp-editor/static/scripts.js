@@ -109,3 +109,29 @@
 
 })(jQuery, fwEvents);
 
+/**
+ * Find all wp-editor option types from container
+ * and give them new IDs (random MD5).
+ *
+ * Copy their preinit data from currentId.
+ *
+ * The main callback we have below will take care about populating
+ * tinyMCEPreInit.mceInit and tinyMCEPreInit.qtInit for them.
+ */
+function fwWpEditorRefreshIds(currentId, container) {
+	_.map(
+		jQuery(container).find('.fw-option-type-wp-editor').toArray(),
+		refreshEditor
+	);
+
+	function refreshEditor (editor) {
+		var html = jQuery(editor).clone().wrap('<p>').parent().html();
+		console.log(currentId);
+
+		var regexp = new RegExp(currentId, 'g');
+		html = html.replace(regexp, fw.randomMD5());
+
+		jQuery(editor).replaceWith(html);
+	}
+}
+

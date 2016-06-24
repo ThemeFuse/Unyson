@@ -250,7 +250,21 @@ jQuery(document).ready(function ($) {
 				}, 300);
 			}
 
+
 			$boxes.append($newBox);
+
+			/**
+			 * Re-render wp-editor from newBox
+			 */
+			if ($option.find('.fw-option-box').length > 1) {
+				fwWpEditorRefreshIds(
+					$option.find(
+						'.fw-option-box:first textarea.wp-editor-area'
+					).attr('id'),
+
+					$newBox
+				);
+			}
 
 			methods.initControls($newBox);
 
