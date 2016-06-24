@@ -649,7 +649,30 @@ final class _FW_Component_Backend {
 			// this is needed for flash messages (admin notices) to be displayed properly
 			echo '<h2 class="fw-hidden"></h2>';
 		} else {
-			echo '<h2>' . __( 'Theme Settings', 'fw' ) . '</h2><br/>';
+			$title = __( 'Theme Settings', 'fw' );
+
+			// Extract page title from menu title
+			do {
+				global $menu, $submenu;
+
+				foreach ($menu as $_menu) {
+					if ($_menu[2] === $this->_get_settings_page_slug()) {
+						$title = $_menu[0];
+						break 2;
+					}
+				}
+
+				foreach ($submenu as $_menu) {
+					foreach ($_menu as $_submenu) {
+						if ($_submenu[2] === $this->_get_settings_page_slug()) {
+							$title = $_submenu[0];
+							break 3;
+						}
+					}
+				}
+			} while(false);
+
+			echo '<h2>' . esc_html($title) . '</h2><br/>';
 		}
 
 		$this->settings_form->render();
