@@ -210,6 +210,7 @@ class FW_WP_Editor_Manager {
 		);
 
 		$mce_settings['formats'] = json_decode($mce_settings['formats'], true);
+		$mce_settings['external_plugins'] = json_decode($mce_settings['external_plugins'], true);
 
 		$qt_settings = fw_akg(
 			$this->editor_id,
