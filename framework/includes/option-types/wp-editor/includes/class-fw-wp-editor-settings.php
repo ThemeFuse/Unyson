@@ -44,7 +44,7 @@ class FW_WP_Editor_Manager {
 		 * Using a hash of combination of $option and $id is not enough. It
 		 * usually repeats itself on the page pretty often.
 		 */
-		$this->editor_id = fw_rand_md5();
+		$this->editor_id = fw()->backend->option_type('wp-editor')->get_id_prefix() . fw_rand_md5();
 	}
 
 	public function get_html() {
