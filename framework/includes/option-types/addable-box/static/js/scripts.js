@@ -258,9 +258,9 @@ jQuery(document).ready(function ($) {
 			 */
 			if ($option.find('.fw-option-box').length > 1) {
 				fwWpEditorRefreshIds(
-					$option.find(
-						'.fw-option-box:first textarea.wp-editor-area'
-					).attr('id'),
+					jQuery(
+						$option.find('.default-box-template').attr('data-template')
+					).find('textarea').attr('id'),
 
 					$newBox
 				);
