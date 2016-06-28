@@ -1215,9 +1215,9 @@ class FW_Option_Type_GMap_Key extends FW_Option_Type_Text {
 	 */
 	protected function _storage_save( $id, array $option, $value, array $params ) {
 		if ( $value == self::$original_value ) {
-			return;
+			return $value;
 		}
-		parent::_storage_save( $id, $option, $value, $params );
+		return parent::_storage_save( $id, $option, $value, $params );
 	}
 }
 
