@@ -109,7 +109,7 @@ class FW_Option_Type_Map extends FW_Option_Type {
 	}
 
 	public static function api_key() {
-		return apply_filters( 'fw_option_map_gmap_api_key', 'AIzaSyBdZhjRWhxpheVoiPSks6wdVsR5SuYkbEo' );
+		return FW_Option_Type_GMap_Key::get_key();
 	}
 }
 
