@@ -126,7 +126,6 @@ function fwWpEditorRefreshIds(currentId, container) {
 
 	function refreshEditor (editor) {
 		var html = jQuery(editor).clone().wrap('<p>').parent().html();
-		console.log(currentId);
 
 		var regexp = new RegExp(currentId, 'g');
 		html = html.replace(regexp, fw.randomMD5());

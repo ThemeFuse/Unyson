@@ -8,9 +8,6 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	// prevent useless calls of wp_enqueue_*()
 	private static $enqueued = false;
 
-	// used in js and html
-	private static $wp_editor_id_prefix = 'fw_wp_editor_';
-
 	public function get_type() {
 		return 'wp-editor';
 	}
@@ -34,14 +31,19 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	}
 
 	protected function _init() {
-		add_filter('tiny_mce_before_init', array(__CLASS__, '_filter_disable_default_init'), 10, 2);
+		add_filter('tiny_mce_before_init', array($this, '_filter_disable_default_init'), 10, 2);
+	}
+
+	// used in js and html
+	public function get_id_prefix() {
+		return 'fw_wp_editor_';
 	}
 
 	/**
 	 * @internal
 	 */
-	public static function _filter_disable_default_init($mceInit, $editor_id){
-		if (preg_match('/^'. preg_quote(self::$wp_editor_id_prefix, '/') .'/', $editor_id)) {
+	public function _filter_disable_default_init($mceInit, $editor_id){
+		if (preg_match('/^'. preg_quote($this->get_id_prefix(), '/') .'/', $editor_id)) {
 			$mceInit['wp_skip_init'] = true;
 		}
 
@@ -109,6 +111,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			);
 
 			self::$enqueued = true;
+
 		}
 
 		return true;

@@ -31,9 +31,14 @@ class FW_Option_Type_Map extends FW_Option_Type {
 
 		wp_enqueue_script(
 			'google-maps-api-v3',
-			'https://maps.googleapis.com/maps/api/js?key=' . self::api_key() . '&v=3.23&libraries=places&language=' . $this->language,
+			'https://maps.googleapis.com/maps/api/js?'. http_build_query(array(
+				'v' => '3.23',
+				'libraries' => 'places',
+				'language' => $this->language,
+				'key' => self::api_key(),
+			)),
 			array(),
-			'3.15',
+			fw()->manifest->get_version(),
 			true
 		);
 		wp_enqueue_script(
@@ -104,7 +109,7 @@ class FW_Option_Type_Map extends FW_Option_Type {
 	}
 
 	public static function api_key() {
-		return apply_filters( 'fw_option_map_gmap_api_key', 'AIzaSyBdZhjRWhxpheVoiPSks6wdVsR5SuYkbEo' );
+		return FW_Option_Type_GMap_Key::get_key();
 	}
 }
 

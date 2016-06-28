@@ -1168,3 +1168,57 @@ class FW_Option_Type_Unique extends FW_Option_Type
 	}
 }
 FW_Option_Type::register('FW_Option_Type_Unique');
+
+class FW_Option_Type_GMap_Key extends FW_Option_Type_Text {
+
+	private static $original_value = null;
+
+	/**
+	 * Returns wp_options key where the key is stored
+	 *
+	 * @return string
+	 */
+	public static function get_key_option_id() {
+		return 'fw-option-types:gmap-key';
+	}
+
+	public static function get_key() {
+		return (string) get_option( self::get_key_option_id() );
+	}
+
+	public function _init() {
+		if ( is_null( self::$original_value ) ) {
+			self::$original_value = self::get_key();
+		}
+	}
+
+	public function get_type() {
+		return 'gmap-key';
+	}
+
+	/**
+	 * @internal
+	 */
+	protected function _get_defaults() {
+		return array(
+			'value'      => self::get_key(),
+			'fw-storage' => array(
+				'type'      => 'wp-option',
+				'wp-option' => self::get_key_option_id(),
+			),
+		);
+	}
+
+	/**
+	 * Restrict option save if the option value is same as the one in the database
+	 * @inheritdoc
+	 */
+	protected function _storage_save( $id, array $option, $value, array $params ) {
+		if ( $value == self::$original_value ) {
+			return;
+		}
+		parent::_storage_save( $id, $option, $value, $params );
+	}
+}
+
+FW_Option_Type::register( 'FW_Option_Type_GMap_Key' );
