@@ -6,15 +6,6 @@
  * Map
  */
 class FW_Option_Type_Map extends FW_Option_Type {
-	private $language = '';
-
-	/**
-	 * @internal
-	 */
-	public function _init() {
-		$this->language = substr( get_locale(), 0, 2 );
-	}
-
 	public function get_type() {
 		return 'map';
 	}
@@ -34,7 +25,7 @@ class FW_Option_Type_Map extends FW_Option_Type {
 			'https://maps.googleapis.com/maps/api/js?'. http_build_query(array(
 				'v' => '3.23',
 				'libraries' => 'places',
-				'language' => $this->language,
+				'language' => substr( get_locale(), 0, 2 ),
 				'key' => self::api_key(),
 			)),
 			array(),
