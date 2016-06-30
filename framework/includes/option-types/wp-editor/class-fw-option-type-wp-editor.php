@@ -22,12 +22,25 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			'editor_height' => 160,
 			'wpautop' => true,
 			'editor_type' => false, // tinymce, html
+			'shortcodes_list' => $this->get_default_shortcodes_list()
 
 			/**
 			 * Also available
 			 * https://github.com/WordPress/WordPress/blob/4.4.2/wp-includes/class-wp-editor.php#L80-L94
 			 */
 		);
+	}
+
+	protected function get_default_shortcodes_list() {
+		$editor_shortcodes = fw_ext('editor-shortcodes-v2');
+
+		if (! $editor_shortcodes) {
+			return array(
+					'button', 'map', 'icon', 'divider', 'notification'
+			);
+		}
+
+		return $editor_shortcodes->default_shortcodes_list();
 	}
 
 	protected function _init() {
@@ -88,7 +101,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 					 */
 					'fw-option-type-' . $this->get_type() .'-editor-buttons',
 					includes_url('/css/editor.min.css'),
-					array('dashicons'),
+					array('dashicons', 'fw-unycon'),
 					fw()->manifest->get_version()
 				);
 			}
