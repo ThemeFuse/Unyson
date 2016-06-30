@@ -120,6 +120,8 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			array('dashicons', 'editor-buttons'),
 			fw()->manifest->get_version()
 		);
+
+		do_action('fw:option_type:wp-editor:editor_shortcodes_scripts');
 	}
 
 	/**
