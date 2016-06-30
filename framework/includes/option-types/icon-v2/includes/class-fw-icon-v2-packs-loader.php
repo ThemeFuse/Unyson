@@ -329,7 +329,7 @@ class FW_Icon_V2_Packs_Loader
 
 			'unycon' => array(
 				'name' => 'unycon',
-				'title' => 'Unycons',
+				'title' => 'Unycon',
 				'css_class_prefix' => 'unycon',
 				'css_file' => fw_get_framework_directory( '/static/libs/unycon/unycon.css' ),
 				'css_file_uri' => fw_get_framework_directory_uri(

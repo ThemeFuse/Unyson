@@ -56,17 +56,6 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 					}
 				},
 
-				{
-					'custom-upload': {
-						type: 'tab',
-						title: fw_icon_v2_data.custom_upload_label,
-						options: {
-							'custom-upload': {
-								type: 'upload'
-							}
-						}
-					}
-				},
 
 				{
 					'favorites': {
@@ -80,6 +69,19 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 								type: 'html-full',
 								label: false,
 								html: '<div class="fw-icon-v2-icon-favorites"></div>'
+							}
+						}
+					}
+				},
+
+				{
+					'custom-upload': {
+						type: 'tab',
+						title: fw_icon_v2_data.custom_upload_label,
+						options: {
+							'custom-upload': {
+								label: 'Upload Icon',
+								type: 'upload'
 							}
 						}
 					}
@@ -297,7 +299,6 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 				'<li data-fw-icon-v2="' + iconClass + '" class="' + liClass + '">',
 					'<i class="' + iconClass + '"></i>',
 					'<a title="Add to Favorites" class="fw-icon-v2-favorite"><i class="dashicons dashicons-star-filled"></i></a>',
-					'<a title="Remove from Favorites" class="fw-icon-v2-unfavorite"><i class="dashicons dashicons-no"></i></a>',
 				'</li>'
 			].join('');
 		}
