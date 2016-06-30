@@ -121,7 +121,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			fw()->manifest->get_version()
 		);
 
-		do_action('fw:option_type:wp-editor:editor_shortcodes_scripts');
+		do_action('fw:option-type:wp-editor:enqueue-scripts');
 	}
 
 	/**
