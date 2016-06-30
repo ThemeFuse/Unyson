@@ -68,8 +68,8 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 			array(
 				'edit_icon_label' => __('Edit Icon', 'fw'),
 				'add_icon_label' => __('Add Icon', 'fw'),
-				'icon_fonts_label' => __('Icon Fonts', 'fw'),
-				'custom_upload_label' => __('Custom Upload', 'fw'),
+				'icon_fonts_label' => __('Icons', 'fw'),
+				'custom_upload_label' => __('Upload', 'fw'),
 				'favorites_label' => __('Favorites', 'fw'),
 				'search_label' => __('Search Icon', 'fw'),
 				'select_pack_label' => __('Select Pack', 'fw'),

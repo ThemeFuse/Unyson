@@ -110,17 +110,17 @@
 }
 
 .fw-icon-v2-picker-modal .fw-icon-v2-toolbar {
-    padding: 30px 27px 20px;
+    padding: 30px 40px 20px;
 }
 
 .fw-icon-v2-picker-modal .fw-icon-v2-library-packs-wrapper {
     overflow-y: auto;
     height: 460px;
-    padding: 0 27px;
+    padding: 0 20px;
 }
 
 .fw-icon-v2-picker-modal .fw-icon-v2-icon-favorites {
-    padding: 24px 27px;
+    padding: 24px 20px;
 }
 
 .fw-icon-v2-picker-modal .media-frame-title {
@@ -157,27 +157,46 @@
 
 .fw-icon-v2-picker-modal h2 {
     position: relative;
-    text-align: center;
+    text-align: left;
+    font-size: 13px;
+    color: #0085ba;
+    /*overflow: hidden;*/
 }
 
 .fw-icon-v2-picker-modal h2:first-of-type {
     margin-top: 0;
 }
 
+.fw-icon-v2-picker-modal h2:only-of-type {
+    display: none;
+}
+
 .fw-icon-v2-picker-modal h2 span {
     position: relative;
     padding: 0 10px;
     background-color: #fff;
+    z-index: 2;
+    left: 10px;
 }
 
 .fw-icon-v2-picker-modal h2:before {
     position: absolute;
-    left: 0;
+    left: 50px;
     top: 10px;
     content: '';
     width: 100%;
     height: 1px;
-    background-color: #ccc;
+    background-color: #d9edf5;
+}
+
+.fw-icon-v2-picker-modal h2:after {
+    position: absolute;
+    left: -50px;
+    top: 10px;
+    content: '';
+    width: 100%;
+    height: 1px;
+    background-color: #d9edf5;
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul {
@@ -191,8 +210,8 @@
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li {
-    width: 59.5px;
-    height: 59.5px;
+    width: 60.6px;
+    height: 60.6px;
     float: left;
     margin: 0;
     position: relative;
@@ -206,13 +225,31 @@
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li:hover {
-    /*border-color: #eee;*/
-    box-shadow: 0 2px 16px 4px rgba(43, 43, 54, 0.1);
+    border-color: #dedede;
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li.selected {
     border-color: #64bd1f;
-    box-shadow: 0 2px 16px 4px rgba(43, 43, 54, 0.1);
+}
+
+.fw-icon-v2-picker-modal .fw-option-html ul li:after {
+    content: "\f147";
+    font-family: dashicons;
+    background-color: #64bd1f;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    border-top-left-radius: 2px;
+    color: #fff;
+    line-height: normal;
+    font-size: 17px;
+    padding: 1px 0 0 1px;
+    opacity: 0;
+}
+
+.fw-icon-v2-picker-modal .fw-option-html ul li.selected:after {
+    opacity: 1;
+    transition: opacity 0.2s ease; 
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li > i {
@@ -222,25 +259,16 @@
     transition: color 0.2s ease;
 }
 
-.fw-icon-v2-picker-modal .fw-option-html ul li:hover > i,
-.fw-icon-v2-picker-modal .fw-option-html ul li.selected > i {
-    color: #64bd1f;
-}
-
-/*** Add to Favorites Button ***/
+/*** Favorited Icons ***/
 .fw-icon-v2-picker-modal .fw-option-html ul li a {
-    opacity: 0;
     position: absolute;
     padding: 5px;
     top: -2px;
-    right: -2px;
+    right: -3px;
     width: 12px;
     height: 12px;
+    cursor: pointer;
     transition: all 0.2s ease;
-}
-
-.fw-icon-v2-picker-modal .fw-option-html ul li:hover a {
-    opacity: 1;
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li a i {
@@ -248,21 +276,25 @@
     width: 12px;
     height: 12px;
     color: #e0e0e0;
-    transition: color 0.2s ease;
+    transition: all 0.2s ease;
 }
 
-.fw-icon-v2-picker-modal .fw-icon-v2-unfavorite,
-.fw-icon-v2-picker-modal .fw-icon-v2-icon-favorites .fw-icon-v2-favorite {
-    display: none;
+.fw-icon-v2-picker-modal .fw-option-html ul li:not(.fw-icon-v2-favorite) a {
+    opacity: 0;
 }
 
-.fw-icon-v2-picker-modal .fw-icon-v2-icon-favorites .fw-icon-v2-unfavorite {
-    display: block;
+.fw-icon-v2-picker-modal .fw-option-html ul li:hover a {
+    opacity: 1;
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li a:hover i,
 .fw-icon-v2-picker-modal .fw-option-html ul li.fw-icon-v2-favorite a i {
     color: #FFC93C;
+}
+
+
+.fw-icon-v2-picker-modal .fw-option-html .fw-icon-v2-icon-favorites ul li a {
+    opacity: 1;
 }
 
 .fw-icon-v2-picker-modal .fw-option-html .fw-icon-v2-icon-favorites ul li a:hover i {
@@ -281,3 +313,7 @@
     line-height: 18px !important;
     color: #FFC93C;
 }
+
+
+
+
