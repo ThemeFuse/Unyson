@@ -1169,6 +1169,10 @@ class FW_Option_Type_Unique extends FW_Option_Type
 }
 FW_Option_Type::register('FW_Option_Type_Unique');
 
+/**
+ * Input for Google Maps API Key which is stored in a wp_option
+ * @since 2.5.7
+ */
 class FW_Option_Type_GMap_Key extends FW_Option_Type_Text {
 
 	private static $original_value = null;
