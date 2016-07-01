@@ -325,6 +325,7 @@
 								fw_option_map_initialize($(this));
 							});
 						});
+						pendingInit = [];
 					}).fail(function(){
 						console.error('Failed to load Google Maps script');
 						pendingInit = [];
