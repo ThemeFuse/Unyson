@@ -314,6 +314,10 @@
 				} else {
 					pendingInit.push(obj);
 
+					/**
+					 * Lazy load script only on option init to prevent API request limit and error
+					 * Fixes https://github.com/ThemeFuse/Unyson/issues/1675
+					 */
 					$.ajax({
 						type: "GET",
 						url: localized.google_maps_js_uri,
