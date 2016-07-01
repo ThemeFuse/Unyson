@@ -21,23 +21,23 @@ class FW_Option_Type_Map extends FW_Option_Type {
 		);
 
 		wp_enqueue_script(
-			'google-maps-api-v3',
-			'https://maps.googleapis.com/maps/api/js?'. http_build_query(array(
-				'v' => '3.23',
-				'libraries' => 'places',
-				'language' => substr( get_locale(), 0, 2 ),
-				'key' => self::api_key(),
-			)),
-			array(),
-			fw()->manifest->get_version(),
-			true
-		);
-		wp_enqueue_script(
 			$this->get_type() . '-styles',
 			fw_get_framework_directory_uri( '/includes/option-types/' . $this->get_type() . '/static/js/scripts.js' ),
 			array( 'jquery', 'jquery-ui-widget', 'fw-events', 'underscore', 'jquery-ui-autocomplete' ),
 			'1.0',
 			true
+		);
+		wp_localize_script(
+			$this->get_type() . '-styles',
+			'_fw_option_type_map',
+			array(
+				'google_maps_js_uri' => 'https://maps.googleapis.com/maps/api/js?'. http_build_query(array(
+					'v' => '3.23',
+					'libraries' => 'places',
+					'language' => substr( get_locale(), 0, 2 ),
+					'key' => self::api_key(),
+				))
+			)
 		);
 	}
 

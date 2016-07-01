@@ -3,7 +3,7 @@
  */
 
 "use strict";
-(function($, _, fwe){
+(function($, _, fwe, localized){
 	jQuery( document ).ready( function( ) {
 		$.fn.pressEnter = function(fn) {
 			return this.each(function() {
@@ -298,17 +298,46 @@
 			}
 		}
 
+		var pendingInit = [];
 
 		fwe.on('fw:options:init', function (data) {
 
 			var obj = data.$elements.find('.fw-option-type-map:not(.initialized)');
 
-			obj.each(function(){
-				fw_option_map_initialize($(this));
-			});
+			if (!obj.length) {
+				return;
+			}
+
+			if (typeof google == 'undefined' || typeof google.maps == 'undefined') {
+				if (pendingInit.length) { // already in process of loading the script
+					pendingInit.push(obj);
+				} else {
+					pendingInit.push(obj);
+
+					$.ajax({
+						type: "GET",
+						url: localized.google_maps_js_uri,
+						dataType: "script",
+						cache: true
+					}).done(function(){
+						$.each(pendingInit, function(i, obj){
+							obj.each(function(){
+								fw_option_map_initialize($(this));
+							});
+						});
+					}).fail(function(){
+						console.error('Failed to load Google Maps script');
+						pendingInit = [];
+					});
+				}
+			} else {
+				obj.each(function(){
+					fw_option_map_initialize($(this));
+				});
+			}
 
 			obj.addClass('initialized');
 		});
 	});
 
-})(jQuery, _, fwEvents);
+})(jQuery, _, fwEvents, _fw_option_type_map);
