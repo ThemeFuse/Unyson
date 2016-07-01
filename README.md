@@ -84,5 +84,6 @@ If you have a bug report or feature request related to a specific extension, fol
 * [Translation](https://github.com/ThemeFuse/Unyson-Translation-Extension)
 
 
+[![PhpStorm IDE](https://rawgit.com/ThemeFuse/Unyson/master/.github/img/phpstorm.png)](https://www.jetbrains.com/phpstorm/)
 [![Build Status](https://travis-ci.org/ThemeFuse/Unyson.svg?branch=master)](https://travis-ci.org/ThemeFuse/Unyson) [![Stories in Ready](https://badge.waffle.io/ThemeFuse/Unyson.svg?label=ready&title=Ready)](http://waffle.io/ThemeFuse/Unyson)
 
