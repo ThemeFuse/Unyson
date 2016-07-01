@@ -21,14 +21,14 @@ class FW_Option_Type_Map extends FW_Option_Type {
 		);
 
 		wp_enqueue_script(
-			$this->get_type() . '-styles',
+			$this->get_type() . '-scripts',
 			fw_get_framework_directory_uri( '/includes/option-types/' . $this->get_type() . '/static/js/scripts.js' ),
 			array( 'jquery', 'jquery-ui-widget', 'fw-events', 'underscore', 'jquery-ui-autocomplete' ),
 			'1.0',
 			true
 		);
 		wp_localize_script(
-			$this->get_type() . '-styles',
+			$this->get_type() . '-scripts',
 			'_fw_option_type_map',
 			array(
 				'google_maps_js_uri' => 'https://maps.googleapis.com/maps/api/js?'. http_build_query(array(
