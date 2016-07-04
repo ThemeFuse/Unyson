@@ -16,6 +16,7 @@ fw_print($json);
 $wrapper_attr = array(
 	'class' => $option['attr']['class'] . ' fw-icon-v2-preview-' . $option['preview-size'],
 	'id'    => $option['attr']['id'],
+	'data-fw-modal-size' => $option['popup_size']
 );
 
 unset($option['attr']['class'], $option['attr']['id']);

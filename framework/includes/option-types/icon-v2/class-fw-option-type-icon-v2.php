@@ -171,7 +171,8 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 				// 'url' => false
 			),
 
-			'preview-size' => 'medium'
+			'preview-size' => 'medium',
+			'popup_size' => 'large'
 		);
 	}
 

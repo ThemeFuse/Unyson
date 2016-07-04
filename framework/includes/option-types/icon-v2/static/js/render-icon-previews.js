@@ -31,6 +31,7 @@
 		event.preventDefault();
 
 		var $root = $(this).closest($rootClass);
+		var modalSize = $root.attr('data-fw-modal-size');
 
 		/**
 		 * fw.OptionsModal should execute it's change:values callbacks
@@ -49,7 +50,8 @@
 					$root,
 					data
 				);
-			}
+			},
+			modalSize
 		);
 	}
 

@@ -20,24 +20,24 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 		pick: pick
 	};
 
-	function pick (values, id, fn) {
+	function pick (values, id, fn, modalSize) {
 		currentValues = values;
 		callback = fn;
 		uniqueId = id;
 
-		createModal(values, fn);
+		createModal(modalSize);
 
 		modal.open();
 	}
 
-	function createModal () {
+	function createModal (modalSize) {
 		if (modal) return;
 
 		modal = new fw.OptionsModal({
 			modalCustomClass: 'fw-icon-v2-picker-modal',
 			disableLazyTabs: true,
 			title: '',
-			size: 'medium',
+			size: modalSize,
 			options: [
 				{
 					'icon-fonts': {
@@ -55,7 +55,6 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 						}
 					}
 				},
-
 
 				{
 					'favorites': {
