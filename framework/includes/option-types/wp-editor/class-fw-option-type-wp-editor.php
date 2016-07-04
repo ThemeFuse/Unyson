@@ -19,6 +19,17 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			'editor_height' => 160,
 			'wpautop' => true,
 			'editor_type' => false, // tinymce, html
+
+			/**
+			 * By default, you don't have any shortcodes into the editor.
+			 *
+			 * You have two possible values:
+			 *   - false:   You will not have a shortcodes button at all
+			 *   - default: the default values you provide in wp-shortcodes
+			 *              extension filter will be used
+			 *
+			 *   - An array of shortcodes
+			 */
 			'shortcodes_list' => false // 'default', array('button', map')
 
 			/**
