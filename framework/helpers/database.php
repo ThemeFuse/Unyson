@@ -9,7 +9,7 @@
 	 *
 	 * @param string|null $option_id Specific option id (accepts multikey). null - all options
 	 * @param null|mixed $default_value If no option found in the database, this value will be returned
-	 * @param null|bool $get_original_value Original value is that with no translations and other changes
+	 * @param null|bool $get_original_value REMOVED https://github.com/ThemeFuse/Unyson/issues/1676
 	 *
 	 * @return mixed|null
 	 */
@@ -166,7 +166,7 @@
 	 * @param null|int $post_id
 	 * @param string|null $option_id Specific option id (accepts multikey). null - all options
 	 * @param null|mixed $default_value If no option found in the database, this value will be returned
-	 * @param null|bool $get_original_value Original value is that with no translations and other changes
+	 * @param null|bool $get_original_value REMOVED https://github.com/ThemeFuse/Unyson/issues/1676
 	 *
 	 * @return mixed|null
 	 */
@@ -460,7 +460,7 @@
 	 * @param string $taxonomy
 	 * @param string|null $option_id Specific option id (accepts multikey). null - all options
 	 * @param null|mixed $default_value If no option found in the database, this value will be returned
-	 * @param null|bool $get_original_value Original value is that with no translations and other changes
+	 * @param null|bool $get_original_value REMOVED https://github.com/ThemeFuse/Unyson/issues/1676
 	 *
 	 * @return mixed|null
 	 */
@@ -508,7 +508,7 @@
 	 * @param string $extension_name
 	 * @param string|null $multi_key The key of the data you want to get. null - all data
 	 * @param null|mixed $default_value If no option found in the database, this value will be returned
-	 * @param null|bool $get_original_value Original value is that with no translations and other changes
+	 * @param null|bool $get_original_value REMOVED https://github.com/ThemeFuse/Unyson/issues/1676
 	 *
 	 * @return mixed|null
 	 */
@@ -562,7 +562,7 @@
 	 * @param string $extension_name
 	 * @param string|null $option_id
 	 * @param null|mixed $default_value If no option found in the database, this value will be returned
-	 * @param null|bool $get_original_value Original value is that with no translations and other changes
+	 * @param null|bool $get_original_value REMOVED https://github.com/ThemeFuse/Unyson/issues/1676
 	 *
 	 * @return mixed|null
 	 */
@@ -687,7 +687,6 @@
 	 *
 	 * @param string|null $option_id Specific option id (accepts multikey). null - all options
 	 * @param null|mixed $default_value If no option found in the database, this value will be returned
-	 * // fixme: Maybe add this parameter? @ param null|bool $get_original_value Original value is that with no translations and other changes
 	 *
 	 * @return mixed|null
 	 */

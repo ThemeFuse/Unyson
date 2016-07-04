@@ -362,7 +362,7 @@ abstract class FW_Extension
 	 *
 	 * @param string|null $option_id
 	 * @param null|mixed $default_value If no option found in the database, this value will be returned
-	 * @param null|bool $get_original_value Original value is that with no translations and other changes
+	 * @param null|bool $get_original_value REMOVED https://github.com/ThemeFuse/Unyson/issues/1676
 	 *
 	 * @return mixed|null
 	 */
@@ -385,7 +385,7 @@ abstract class FW_Extension
 	 *
 	 * @param string|null $multi_key The key of the data you want to get. null - all data
 	 * @param null|mixed $default_value If no option found in the database, this value will be returned
-	 * @param null|bool $get_original_value Original value is that with no translations and other changes
+	 * @param null|bool $get_original_value REMOVED https://github.com/ThemeFuse/Unyson/issues/1676
 	 *
 	 * @return mixed|null
 	 */
