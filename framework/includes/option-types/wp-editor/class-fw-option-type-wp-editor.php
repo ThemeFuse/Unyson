@@ -19,7 +19,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			'editor_height' => 160,
 			'wpautop' => true,
 			'editor_type' => false, // tinymce, html
-			'shortcodes_list' => $this->get_default_shortcodes_list()
+			'shortcodes_list' => false // 'default', array('button', map')
 
 			/**
 			 * Also available
@@ -64,6 +64,10 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	 * @internal
 	 */
 	protected function _render( $id, $option, $data ) {
+		if ($option['shortcodes_list'] === 'default') {
+			$option['shortcodes_list'] = $this->get_default_shortcodes_list();
+		}
+
 		$editor_manager = new FW_WP_Editor_Manager($id, $option, $data);
 		echo $editor_manager->get_html();
 	}

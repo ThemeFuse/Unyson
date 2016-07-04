@@ -75,9 +75,13 @@ class FW_WP_Editor_Manager {
 			$option['attr']['data-fw-editor-id'] = $this->editor_id;
 			$option['attr']['data-fw-mce-settings'] = json_encode($preinit_data['mce_settings']);
 			$option['attr']['data-fw-qt-settings'] = json_encode($preinit_data['qt_settings']);
-			$option['attr']['data-fw-shortcodes-list'] = json_encode(
-				$option['shortcodes_list']
-			);
+
+
+			if ($option['shortcodes_list']) {
+				$option['attr']['data-fw-shortcodes-list'] = json_encode(
+					$option['shortcodes_list']
+				);
+			}
 
 			$option['attr']['data-size'] = $option['size'];
 			$option['attr']['data-mode'] = in_array($option['editor_type'], array('html', 'tinymce'))
