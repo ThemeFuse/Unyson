@@ -90,6 +90,21 @@ $extensions = array(
 			),
 		),
 	),
+	'wp-shortcodes' => array(
+		'display'     => true,
+		'parent'      => 'shortcodes',
+		'name'        => __( 'WordPress Shortcodes', 'fw' ),
+		'description' => __(
+			'Lets you insert Unyson shortcodes inside any wp-editor',
+			'fw'
+		),
+		'thumbnail'   => $thumbnails_uri . '/page-builder.jpg',
+		'download'    => array(
+			'github' => array(
+				'user_repo' => 'ThemeFuse/Unyson-WP-Shortcodes-Extension',
+			),
+		),
+	),
 	'shortcodes' => array(
 		'display'     => false,
 		'parent'      => null,

@@ -19,7 +19,18 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			'editor_height' => 160,
 			'wpautop' => true,
 			'editor_type' => false, // tinymce, html
-			'shortcodes_list' => $this->get_default_shortcodes_list()
+
+			/**
+			 * By default, you don't have any shortcodes into the editor.
+			 *
+			 * You have two possible values:
+			 *   - false:   You will not have a shortcodes button at all
+			 *   - true:    the default values you provide in wp-shortcodes
+			 *              extension filter will be used
+			 *
+			 *   - An array of shortcodes
+			 */
+			'shortcodes' => false // true, array('button', map')
 
 			/**
 			 * Also available
@@ -29,7 +40,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	}
 
 	protected function get_default_shortcodes_list() {
-		$editor_shortcodes = fw_ext('editor-shortcodes-v2');
+		$editor_shortcodes = fw_ext('wp-shortcodes');
 
 		if (! $editor_shortcodes) {
 			return array(
@@ -64,6 +75,10 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	 * @internal
 	 */
 	protected function _render( $id, $option, $data ) {
+		if ($option['shortcodes'] === true) {
+			$option['shortcodes'] = $this->get_default_shortcodes_list();
+		}
+
 		$editor_manager = new FW_WP_Editor_Manager($id, $option, $data);
 		echo $editor_manager->get_html();
 	}
