@@ -77,9 +77,9 @@ class FW_WP_Editor_Manager {
 			$option['attr']['data-fw-qt-settings'] = json_encode($preinit_data['qt_settings']);
 
 
-			if ($option['shortcodes_list']) {
+			if ($option['shortcodes']) {
 				$option['attr']['data-fw-shortcodes-list'] = json_encode(
-					$option['shortcodes_list']
+					$option['shortcodes']
 				);
 			}
 

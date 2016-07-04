@@ -30,7 +30,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			 *
 			 *   - An array of shortcodes
 			 */
-			'shortcodes_list' => false // 'default', array('button', map')
+			'shortcodes' => false // 'default', array('button', map')
 
 			/**
 			 * Also available
@@ -75,8 +75,8 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	 * @internal
 	 */
 	protected function _render( $id, $option, $data ) {
-		if ($option['shortcodes_list'] === 'default') {
-			$option['shortcodes_list'] = $this->get_default_shortcodes_list();
+		if ($option['shortcodes']) {
+			$option['shortcodes'] = $this->get_default_shortcodes_list();
 		}
 
 		$editor_manager = new FW_WP_Editor_Manager($id, $option, $data);
