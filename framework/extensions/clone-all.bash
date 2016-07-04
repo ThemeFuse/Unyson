@@ -26,7 +26,7 @@ forms:Unyson-Forms-Extension
 mailer:Unyson-Mailer-Extension
 social:Unyson-Social-Extension
 translation:Unyson-Translation-Extension
-shortcodes/extensions/wp-shortcodes:Creative-Themes/Unyson-WP-Shortcodes-Extension
+shortcodes/extensions/wp-shortcodes:Unyson-WP-Shortcodes-Extension
 '
 
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" # script dir

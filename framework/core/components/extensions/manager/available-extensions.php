@@ -101,7 +101,7 @@ $extensions = array(
 		'thumbnail'   => $thumbnails_uri . '/page-builder.jpg',
 		'download'    => array(
 			'github' => array(
-				'user_repo' => 'Creative-Themes/Unyson-WP-Shortcodes-Extension',
+				'user_repo' => 'ThemeFuse/Unyson-WP-Shortcodes-Extension',
 			),
 		),
 	),
