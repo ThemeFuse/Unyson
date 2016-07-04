@@ -200,24 +200,35 @@ class FW_WP_Editor_Manager {
 			array()
 		);
 
-		/**
-		 * https://github.com/WordPress/WordPress/blob/master/wp-includes/class-wp-editor.php#L522
-		 *
-		 * _WP_Editors outputs JavaScript notation object, we want a valid JSON.
-		 *
-		 * Replace this:
-		 * {a: 1}
-		 * to
-		 * {"a": 1}
-		 */
-		$mce_settings['formats'] = preg_replace(
-			"/(\w+)\:/",
-			'"$1":',
-			$mce_settings['formats']
-		);
+		if ( isset($mce_settings['formats']) ) {
+			/**
+			 * https://github.com/WordPress/WordPress/blob/master/wp-includes/class-wp-editor.php#L522
+			 *
+			 * _WP_Editors outputs JavaScript notation object, we want a valid JSON.
+			 *
+			 * Replace this:
+			 * {a: 1}
+			 * to
+			 * {"a": 1}
+			 */
+			$mce_settings['formats'] = preg_replace(
+				"/(\w+)\:/",
+				'"$1":',
+				$mce_settings['formats']
+			);
 
-		$mce_settings['formats'] = json_decode($mce_settings['formats'], true);
-		$mce_settings['external_plugins'] = json_decode($mce_settings['external_plugins'], true);
+			$mce_settings['formats'] = json_decode(
+				$mce_settings['formats'],
+				true
+			);
+		}
+
+		if ( isset($mce_settings['external_plugins']) ) {
+			$mce_settings['external_plugins'] = json_decode(
+				$mce_settings['external_plugins'],
+				true
+			);
+		}
 
 		$qt_settings = fw_akg(
 			$this->editor_id,
