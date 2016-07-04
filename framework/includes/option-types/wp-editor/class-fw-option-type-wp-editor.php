@@ -25,12 +25,12 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 			 *
 			 * You have two possible values:
 			 *   - false:   You will not have a shortcodes button at all
-			 *   - default: the default values you provide in wp-shortcodes
+			 *   - true:    the default values you provide in wp-shortcodes
 			 *              extension filter will be used
 			 *
 			 *   - An array of shortcodes
 			 */
-			'shortcodes' => false // 'default', array('button', map')
+			'shortcodes' => false // true, array('button', map')
 
 			/**
 			 * Also available
