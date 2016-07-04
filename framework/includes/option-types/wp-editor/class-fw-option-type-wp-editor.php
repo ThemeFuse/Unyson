@@ -75,7 +75,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	 * @internal
 	 */
 	protected function _render( $id, $option, $data ) {
-		if ($option['shortcodes']) {
+		if ($option['shortcodes'] === true) {
 			$option['shortcodes'] = $this->get_default_shortcodes_list();
 		}
 
