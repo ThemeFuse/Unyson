@@ -29,7 +29,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	}
 
 	protected function get_default_shortcodes_list() {
-		$editor_shortcodes = fw_ext('editor-shortcodes-v2');
+		$editor_shortcodes = fw_ext('wp-shortcodes');
 
 		if (! $editor_shortcodes) {
 			return array(

@@ -26,6 +26,7 @@ forms:Unyson-Forms-Extension
 mailer:Unyson-Mailer-Extension
 social:Unyson-Social-Extension
 translation:Unyson-Translation-Extension
+shortcodes/extensions/wp-shortcodes:Creative-Themes/Unyson-WP-Shortcodes-Extension
 '
 
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" # script dir
@@ -39,7 +40,12 @@ echo "$EXTENSIONS" | grep -v '^$' | while read line; do
     if [ -d "$DIR" ]; then
         echo "[Warning] $DIR already exists. Skipping."
     else
-        COMMAND="git clone git@github.com:${ACCOUNT}/${REP}.git $DIR"
+        if [[ $REP == *"/"* ]]
+        then
+            COMMAND="git clone git@github.com:${REP}.git $DIR"
+        else
+            COMMAND="git clone git@github.com:${ACCOUNT}/${REP}.git $DIR"
+        fi
         echo "$COMMAND"
         $COMMAND
     fi
