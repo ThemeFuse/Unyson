@@ -5,7 +5,7 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 		uniqueId = null;
 
 	var currentFavorites = [];
-	// $(window).on('resize', computeToolbarPosition);
+	$(window).on('resize', computeModalHeight);
 
 	$(document).on('click', '.fw-icon-v2-library-icon', markIconAsSelected);
 	$(document).on('click', '.fw-icon-v2-library-icon a', markIconAsFavorite);
@@ -146,6 +146,8 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 					search: '',
 					packs: _.values(fw_icon_v2_data.icons)
 				});
+
+				setTimeout(computeModalHeight, 100);
 			}
 
 			getLatestFavorites(refreshFavoritesClasses);
@@ -421,19 +423,16 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 		);
 	}
 
-	function computeToolbarPosition () {
-		var $toolbar = modal.frame.$el.find('.fw-icon-v2-toolbar').css({
-			position: 'fixed'
-		});
+	function computeModalHeight () {
+		var $icons = modal.frame.$el.find('.fw-icon-v2-library-packs-wrapper');
+		var toolbarHeight = modal.frame.$el.find('.fw-icon-v2-toolbar').height();
+		console.log('compute');
 
-		var top = modal.frame.$el.find('.fw-icon-v2-icons-library').offset().top;
-		var left = modal.frame.$el.offset().left;
-
-		$toolbar.css({
-			left: left,
-			right: left,
-			top: top - 24 // because of the padding
-		});
+		$icons.height(
+			modal.frame.$el.find(
+				'.fw-options-tabs-contents.metabox-holder'
+			).height() - toolbarHeight
+		);
 	}
 
 })(jQuery);
