@@ -37,7 +37,7 @@ abstract class FW_Option_Type
 	abstract protected function _render($id, $option, $data);
 
 	/**
-	 * Extract correct value for $option['value'] from input array
+	 * Extract correct value that will be stored in db or $option['value'] from raw form input value
 	 * If input value is empty, will be returned $option['value']
 	 * @param array $option Option array merged with _get_defaults()
 	 * @param array|string|null $input_value
