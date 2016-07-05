@@ -99,7 +99,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 							break;
 						default:
 							if ( ! is_string($picker_value = apply_filters(
-								'fw:option-type:multi-picker:string-value:'. $picker_type,
+								'fw:option-type:multi-picker:string-value:'. $picker_type, // @since 2.5.8
 								$picker_value
 							))) {
 								trigger_error(
