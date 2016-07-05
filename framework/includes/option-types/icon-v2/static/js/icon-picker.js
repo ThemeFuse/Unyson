@@ -93,7 +93,7 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 			// get values based on current tab
 
 			var type = modal.frame.$el.find('.fw-options-tabs-wrapper')
-				.tabs('instance').active.index() === 1 ? 'custom-upload' : 'icon-font';
+				.tabs('instance').active.index() === 2 ? 'custom-upload' : 'icon-font';
 
 			if (type == "icon-font") {
 				callback({
