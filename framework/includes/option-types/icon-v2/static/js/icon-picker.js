@@ -205,7 +205,7 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 			});
 
 			modal.frame.$el.find('.fw-options-tabs-wrapper').tabs({
-				active: currentValues.type == 'custom-upload' ? 1 : 0
+				active: currentValues.type == 'custom-upload' ? 2 : 0
 			});
 		});
 
@@ -424,6 +424,7 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 	}
 
 	function computeModalHeight () {
+		if (! modal) { return; }
 		var $icons = modal.frame.$el.find('.fw-icon-v2-library-packs-wrapper');
 		var toolbarHeight = modal.frame.$el.find('.fw-icon-v2-toolbar').height();
 
