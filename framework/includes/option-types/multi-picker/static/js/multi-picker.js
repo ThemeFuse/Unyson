@@ -61,6 +61,14 @@
 					elements.$pickerGroup.find('select').on('change', function() {
 						chooseGroup(this.value);
 					}).trigger('change');
+				},
+				'icon-v2': function () {
+					var iconV2Selector = '.fw-option-type-icon-v2 > input';
+
+					elements.$pickerGroup.find(iconV2Selector).on('change', function() {
+						var type = JSON.parse(this.value)['type'];
+						chooseGroup(type);
+					}).trigger('change');
 				}
 			};
 

@@ -85,6 +85,21 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 				$picker_key   = key($option['picker']);
 				$picker_type  = $option['picker'][$picker_key]['type'];
 				$picker       = $option['picker'][$picker_key];
+
+				/**
+				 * A complex option type should be aware of the fact that currently
+				 * it's value is extracted from multi picker.
+				 * Multi picker accepts only a string as an output. Complex option
+				 * types often do more than this.
+				 *
+				 * The option type should return the correct choice branch
+				 * that should be selected when this key is present.
+				 *
+				 * TODO: This really should be documented somewhere else than
+				 * this dark place.
+				 */
+				$picker['fw_multi_picker'] = true;
+
 				$picker_value = fw()->backend->option_type($picker_type)->get_value_from_input(
 					$picker,
 					isset($data['value'][$picker_key]) ? $data['value'][$picker_key] : null
@@ -153,10 +168,21 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 					}
 				}
 				$picker_choices = array_intersect_key($option['choices'], $collected_choices);
+
 				break;
 			case 'radio':
 			case 'image-picker':
 				$picker_choices = array_intersect_key($option['choices'], $picker['choices']);
+				break;
+			case 'icon-v2':
+				$picker_choices = array_intersect_key(
+					$option['choices'],
+					array(
+						'icon-font' => array(),
+						'custom-upload' => array()
+					)
+				);
+
 				break;
 			default:
 				$picker_choices = apply_filters(
