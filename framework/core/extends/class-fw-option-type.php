@@ -39,6 +39,7 @@ abstract class FW_Option_Type
 	/**
 	 * Extract correct value that will be stored in db or $option['value'] from raw form input value
 	 * If input value is empty, will be returned $option['value']
+	 * This method should be named get_db_value($form_input_value, $option)
 	 * @param array $option Option array merged with _get_defaults()
 	 * @param array|string|null $input_value
 	 * @return string|array|int|bool Correct value
@@ -244,8 +245,9 @@ abstract class FW_Option_Type
 	}
 
 	/**
-	 * Extract correct value for $option['value'] from input array
+	 * Extract correct value that will be stored in db or $option['value'] from raw form input value
 	 * If input value is empty, will be returned $option['value']
+	 * This method should be named get_db_value($form_input_value, $option)
 	 * @param  array $option
 	 * @param  mixed|null $input_value Option's value from $_POST or elsewhere. If is null, it means it does not exists
 	 * @return array|string
