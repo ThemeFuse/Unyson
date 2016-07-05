@@ -98,8 +98,9 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 							$picker_value = fw_akg('type', $picker_value, 'icon-font');
 							break;
 						default:
-							if ( ! is_string($picker_value = apply_filters('fw:option-type:multi-picker:string-value',
-								null, $picker_value
+							if ( ! is_string($picker_value = apply_filters(
+								'fw:option-type:multi-picker:string-value:'. $picker_type,
+								$picker_value
 							))) {
 								trigger_error(
 									'[multi-picker] Cannot detect string value for picker type '. $picker_type,
