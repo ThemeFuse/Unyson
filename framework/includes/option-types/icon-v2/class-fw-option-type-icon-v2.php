@@ -97,6 +97,20 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 
 	protected function _get_value_from_input($option, $input_value)
 	{
+		/**
+		 * Handle the case when it is used as a multi-picker picker.
+		 * Return the current type in this case. Whether icon-type or custom-upload.
+		 */
+		if (isset($option['fw_multi_picker'])) {
+			$source = $input_value;
+
+			if (is_null($input_value)) {
+				$source = $option['value'];
+			}
+
+			return fw_akg('type', $source, 'icon-font');
+		}
+
 		if (is_null( $input_value )) {
 			return $option['value'];
 		}
@@ -107,7 +121,15 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 
 	protected function _get_db_value_from_json($input_value)
 	{
-		$input = json_decode($input_value, true);
+		$input = $input_value;
+
+		/**
+		 * When icon-v2 is used as a multi-picker picker it, the value
+		 * comes straight as array, you should parse it.
+		 */
+		if (! is_array($input_value)) {
+			$input = json_decode($input_value, true);
+		}
 
 		$result = array();
 

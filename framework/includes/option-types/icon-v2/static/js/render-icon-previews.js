@@ -195,7 +195,7 @@
 					data
 				)
 			)
-		);
+		).trigger('change');
 
 		refreshSinglePreview($root);
 	}
