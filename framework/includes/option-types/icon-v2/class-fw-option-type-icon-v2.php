@@ -81,7 +81,7 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 				'icons' => $this->packs_loader->get_packs()
 			)
 		);
-	}/*}}}*/
+	}
 
 	protected function _render($id, $option, $data)
 	{
@@ -97,26 +97,11 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 
 	protected function _get_value_from_input($option, $input_value)
 	{
-		/**
-		 * Handle the case when it is used as a multi-picker picker.
-		 * Return the current type in this case. Whether icon-type or custom-upload.
-		 */
-		if (isset($option['fw_multi_picker'])) {
-			$source = $input_value;
-
-			if (is_null($input_value)) {
-				$source = $option['value'];
-			}
-
-			return fw_akg('type', $source, 'icon-font');
-		}
-
 		if (is_null( $input_value )) {
 			return $option['value'];
 		}
 
-		 $to_return = $this->_get_db_value_from_json($input_value);
-		return $to_return;
+		return $this->_get_db_value_from_json($input_value);
 	}
 
 	protected function _get_db_value_from_json($input_value)

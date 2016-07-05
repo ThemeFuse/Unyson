@@ -66,6 +66,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 	protected function _render($id, $option, $data)
 	{
 		$options_array = $this->prepare_option($id, $option);
+
 		unset($option['attr']['name'], $option['attr']['value']);
 
 		if ($option['show_borders']) {
@@ -86,37 +87,39 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 				$picker_type  = $option['picker'][$picker_key]['type'];
 				$picker       = $option['picker'][$picker_key];
 
-				/**
-				 * A complex option type should be aware of the fact that currently
-				 * it's value is extracted from multi picker.
-				 * Multi picker accepts only a string as an output. Complex option
-				 * types often do more than this.
-				 *
-				 * The option type should return the correct choice branch
-				 * that should be selected when this key is present.
-				 *
-				 * TODO: This really should be documented somewhere else than
-				 * this dark place.
-				 */
-				$picker['fw_multi_picker'] = true;
-
-				$picker_value = fw()->backend->option_type($picker_type)->get_value_from_input(
-					$picker,
-					isset($data['value'][$picker_key]) ? $data['value'][$picker_key] : null
-				);
+				if ( ! is_string($picker_value = fw()->backend->option_type($picker_type)->get_value_from_input(
+					$picker, isset($data['value'][$picker_key]) ? $data['value'][$picker_key] : null
+				))) {
+					/**
+					 * Extract the string value that is used as array key
+					 */
+					switch ($picker_type) {
+						case 'icon-v2':
+							$picker_value = fw_akg('type', $picker_value, 'icon-font');
+							break;
+						default:
+							if ( ! is_string($picker_value = apply_filters('fw:option-type:multi-picker:string-value',
+								null, $picker_value
+							))) {
+								trigger_error(
+									'[multi-picker] Cannot detect string value for picker type '. $picker_type,
+									E_USER_WARNING
+								);
+								$picker_value = '?';
+							}
+					}
+				}
 			}
 
 			$skip_first = true;
 			foreach ($options_array as $group_id => &$group) {
 				if ($skip_first) {
-					// first is picker
 					$skip_first = false;
-					continue;
+					continue; // first is picker
 				}
 
 				if ($group_id === $id .'-'. $picker_value) {
-					// skip selected choice options
-					continue;
+					continue; // skip selected choice options
 				}
 
 				$options_array[$group_id]['attr']['data-options-template'] = fw()->backend->render_options(
@@ -168,7 +171,6 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 					}
 				}
 				$picker_choices = array_intersect_key($option['choices'], $collected_choices);
-
 				break;
 			case 'radio':
 			case 'image-picker':
@@ -182,7 +184,6 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 						'custom-upload' => array()
 					)
 				);
-
 				break;
 			default:
 				$picker_choices = apply_filters(
@@ -209,9 +210,9 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 
 		{
 			reset($option['picker']);
-			$picker_key             = key($option['picker']);
-			$picker                 = $option['picker'][$picker_key];
-			$picker_type            = $picker['type'];
+			$picker_key  = key($option['picker']);
+			$picker      = $option['picker'][$picker_key];
+			$picker_type = $picker['type'];
 		}
 
 		$picker_choices = $this->get_picker_choices(
