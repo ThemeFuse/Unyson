@@ -205,7 +205,7 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 			});
 
 			modal.frame.$el.find('.fw-options-tabs-wrapper').tabs({
-				active: currentValues.type == 'custom-upload' ? 1 : 0
+				active: currentValues.type == 'custom-upload' ? 2 : 0
 			});
 		});
 
