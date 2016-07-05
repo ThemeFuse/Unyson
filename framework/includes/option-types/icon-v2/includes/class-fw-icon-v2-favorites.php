@@ -39,7 +39,7 @@ class FW_Icon_V2_Favorites_Manager
 	{
 		return FW_WP_Option::get(
 			$this->key,
-			'type',
+			null,
 			array()
 		);
 	}
@@ -48,7 +48,7 @@ class FW_Icon_V2_Favorites_Manager
 	{
 		FW_WP_Option::set(
 			$this->key,
-			'type',
+			null,
 			$favorites
 		);
 	}
