@@ -26,7 +26,7 @@ class FW_WP_Option
 		if (empty($specific_multi_key) && $specific_multi_key !== '0') {
 			return is_null($value) ? $default_value : $value;
 		} else {
-			return fw_akg($specific_multi_key, $values, $default_value);
+			return fw_akg($specific_multi_key, $value, $default_value);
 		}
 	}
 
