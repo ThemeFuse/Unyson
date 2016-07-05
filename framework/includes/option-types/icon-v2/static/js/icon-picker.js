@@ -424,6 +424,7 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 	}
 
 	function computeModalHeight () {
+		if (! modal) { return; }
 		var $icons = modal.frame.$el.find('.fw-icon-v2-library-packs-wrapper');
 		var toolbarHeight = modal.frame.$el.find('.fw-icon-v2-toolbar').height();
 
