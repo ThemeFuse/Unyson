@@ -650,8 +650,19 @@ fw.getQueryString = function(name) {
 					this.afterHtmlReplaceFixes();
 				}
 			},
+			renderSizeClass: function () {
+				var $modalWrapper = this.model.frame.modal.$el;
+				var allSizes = ['large', 'medium', 'small'];
+
+				$modalWrapper.removeClass(
+					_.map(allSizes, formSizeClass).join(' ')
+				).addClass(formSizeClass(this.model.get('size')));
+
+				function formSizeClass (size) { return 'fw-modal-' + size; }
+			},
 			initialize: function() {
 				this.listenTo(this.model, 'change:html', this.render);
+				this.listenTo(this.model, 'change:size', this.renderSizeClass);
 			},
 			/**
 			 * Call this after html replace
