@@ -90,7 +90,7 @@ $extensions = array(
 			),
 		),
 	),
-	'wp-shortcodes' => array(
+	/*'wp-shortcodes' => array(
 		'display'     => true,
 		'parent'      => 'shortcodes',
 		'name'        => __( 'WordPress Shortcodes', 'fw' ),
@@ -104,7 +104,7 @@ $extensions = array(
 				'user_repo' => 'ThemeFuse/Unyson-WP-Shortcodes-Extension',
 			),
 		),
-	),
+	),*/
 	'shortcodes' => array(
 		'display'     => false,
 		'parent'      => null,

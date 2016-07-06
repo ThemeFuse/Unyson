@@ -5,7 +5,7 @@ $dir = dirname(__FILE__);
 require $dir . '/simple.php';
 
 require $dir . '/icon/class-fw-option-type-icon.php';
-require $dir . '/icon-v2/class-fw-option-type-icon-v2.php';
+//require $dir . '/icon-v2/class-fw-option-type-icon-v2.php';
 require $dir . '/image-picker/class-fw-option-type-image-picker.php';
 require $dir . '/upload/class-fw-option-type-upload.php';
 require $dir . '/color-picker/class-fw-option-type-color-picker.php';
