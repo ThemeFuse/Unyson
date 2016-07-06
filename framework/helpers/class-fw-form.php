@@ -417,7 +417,7 @@ class FW_Form {
 
 		echo '<form '. fw_attr_to_html( $render_data['attr'] ) .' >';
 
-		do_action('fw_form_display:before');
+		do_action('fw_form_display:before', $this);
 
 		echo fw_html_tag('input', array(
 			'type'  => 'hidden',
@@ -459,7 +459,7 @@ class FW_Form {
 			));
 		}
 
-		do_action('fw_form_display:after');
+		do_action('fw_form_display:after', $this);
 
 		echo '</form>';
 	}
