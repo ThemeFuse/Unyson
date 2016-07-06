@@ -19,7 +19,6 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 	{
 		$this->packs_loader = new FW_Icon_V2_Packs_Loader();
 		$this->favorites = new FW_Icon_V2_Favorites_Manager();
-		$this->favorites->attach_ajax_actions();
 
 		add_action(
 			'wp_enqueue_scripts',
@@ -188,5 +187,8 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 		return 'full';
 	}
 }
+
+$favorites = new FW_Icon_V2_Favorites_Manager();
+$favorites->attach_ajax_actions();
 
 FW_Option_Type::register( 'FW_Option_Type_Icon_v2' );

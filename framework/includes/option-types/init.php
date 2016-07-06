@@ -5,7 +5,6 @@ $dir = dirname(__FILE__);
 require $dir . '/simple.php';
 
 require $dir . '/icon/class-fw-option-type-icon.php';
-require $dir . '/icon-v2/class-fw-option-type-icon-v2.php';
 require $dir . '/image-picker/class-fw-option-type-image-picker.php';
 require $dir . '/upload/class-fw-option-type-upload.php';
 require $dir . '/color-picker/class-fw-option-type-color-picker.php';
@@ -32,6 +31,11 @@ require $dir . '/range-slider/class-fw-option-type-range-slider.php';
 require $dir . '/rgba-color-picker/class-fw-option-type-rgba-color-picker.php';
 require $dir . '/typography-v2/class-fw-option-type-typography-v2.php';
 require $dir . '/oembed/class-fw-option-type-oembed.php';
+
 if (!class_exists('FW_Option_Type_Multi_Select')) {
   require $dir . '/multi-select/class-fw-option-type-multi-select.php';
+}
+
+if (!class_exists('FW_Option_Type_Icon_v2')) {
+  require_once $dir . '/icon-v2/class-fw-option-type-icon-v2.php';
 }
