@@ -31,7 +31,10 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 	}
 
 	function createModal (modalSize) {
-		if (modal) return;
+		if (modal) {
+			modal.set('size', modalSize);
+			return;
+		}
 
 		modal = new fw.OptionsModal({
 			modalCustomClass: 'fw-icon-v2-picker-modal',
