@@ -417,6 +417,8 @@ class FW_Form {
 
 		echo '<form '. fw_attr_to_html( $render_data['attr'] ) .' >';
 
+		do_action('fw_form_display:before');
+
 		echo fw_html_tag('input', array(
 			'type'  => 'hidden',
 			'name'  => self::$id_input_name,
@@ -456,6 +458,8 @@ class FW_Form {
 				'value' => $render_data['submit']['value']
 			));
 		}
+
+		do_action('fw_form_display:after');
 
 		echo '</form>';
 	}
