@@ -165,7 +165,7 @@
 
 		function hasIcon (data) {
 			if (data.type === 'icon-font') {
-				if (data['icon-class'].trim() !== '') {
+				if (data['icon-class'] && data['icon-class'].trim() !== '') {
 					return true;
 				}
 			}
