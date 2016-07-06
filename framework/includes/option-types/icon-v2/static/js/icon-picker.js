@@ -431,7 +431,7 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 		$icons.height(
 			modal.frame.$el.find(
 				'.fw-options-tabs-contents.metabox-holder'
-			).height() - toolbarHeight
+			).height() - toolbarHeight - 50
 		);
 	}
 

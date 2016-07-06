@@ -20,6 +20,11 @@
 	 */
 	if (is_admin()) {
 		require_once dirname(__FILE__) . '/option-types/multi-select/class-fw-option-type-multi-select.php';
+
+		if (!class_exists('FW_Option_Type_Icon_v2')) {
+			require_once dirname(__FILE__) .
+				'/option-types/icon-v2/class-fw-option-type-icon-v2.php';
+		}
 	}
 }
 
