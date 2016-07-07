@@ -225,9 +225,7 @@ class FW_WP_Editor_Manager {
 			if (
 				is_string($setting)
 				&&
-				! is_numeric($setting)
-				&&
-				($setting{0} === '[' || $setting{0} === '{')
+				in_array($setting{0}, array('[', '{'), true)
 				&&
 				! is_null($decoded = json_decode($setting))
 			) {
