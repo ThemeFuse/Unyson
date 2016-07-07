@@ -3,9 +3,13 @@
     align-items: center;
 }
 
+.fw-icon-v2-preview-wrapper.fw-has-icon .fw-icon-v2-preview {
+    background-image: url(../img/transparent_bg.png);
+    background-size: 10px;
+}
+
 .fw-icon-v2-preview {
-    background-color: #fafafa;
-    border: 1px dashed #b7b7b7;
+    background-image: url('../img/no-image.png');
     margin-right: 25px;
     position: relative;
     display: flex;
@@ -16,6 +20,10 @@
     box-sizing: border-box;
 }
 
+.fw-icon-v2-preview:hover {
+    opacity: 0.9;
+}
+
 .fw-icon-v2-preview i {
     color: #7a7a7a;
     background-repeat: no-repeat;
@@ -23,13 +31,21 @@
 
 .fw-icon-v2-preview a {
     position: absolute;
-    top: -10px;
-    right: -10px;
-    display: none;
+    opacity: 0;
+    width: 12px;
+    height: 12px;
+    top: -9px;
+    right: -6px;
+    font-size: 14px !important;
+    outline: none;
 }
 
-.fw-has-icon .fw-icon-v2-preview a {
-    display: block;
+.fw-icon-v2-preview-wrapper.fw-has-icon .fw-icon-v2-preview:hover {
+    opacity: 1;
+}
+
+.fw-icon-v2-preview-wrapper.fw-has-icon .fw-icon-v2-preview:hover a {
+    opacity: 1;
 }
 
 .fw-icon-v2-preview a:before {
@@ -37,9 +53,11 @@
     border-radius: 100%;
 }
 
-.fw-icon-v2-preview-small [data-icon-type="icon-font"] .fw-icon-v2-preview i,
-.fw-icon-v2-preview-medium [data-icon-type="icon-font"] .fw-icon-v2-preview i,
-.fw-icon-v2-preview-large [data-icon-type="icon-font"] .fw-icon-v2-preview i {
+.fw-icon-v2-preview-wrapper[data-icon-type="custom-upload"] .fw-icon-v2-preview i {
+    background-size: cover;
+}
+
+.fw-icon-v2-preview-wrapper[data-icon-type="icon-font"] .fw-icon-v2-preview i {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -53,9 +71,9 @@
 }
 
 .fw-icon-v2-preview-small .fw-icon-v2-preview i {
-    font-size: 15px;
-    width: 15px;
-    height: 15px;
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
 }
 
 /*** Medium Preview ***/
@@ -65,10 +83,9 @@
 }
 
 .fw-icon-v2-preview-medium .fw-icon-v2-preview i {
-    font-size: 30px;
-    width: 30px;
-    height: 30px;
-    background-size: cover;
+    font-size: 50px;
+    width: 50px;
+    height: 50px;
 }
 
 /*** Large Preview ***/
@@ -78,11 +95,23 @@
 }
 
 .fw-icon-v2-preview-large .fw-icon-v2-preview i {
-    font-size: 45px;
-    width: 45px;
-    height: 45px;
+    font-size: 65px;
+    width: 65px;
+    height: 65px;
 }
 
+/*** Sauron Preview :) ***/
+.fw-icon-v2-preview-sauron .fw-icon-v2-preview {
+    background-image: url('../img/sauron.png');
+    width: 70px;
+    height: 70px;
+}
+
+.fw-icon-v2-preview-sauron .fw-icon-v2-preview i {
+    font-size: 65px;
+    width: 65px;
+    height: 65px;
+}
 
 /*** Icon Picker Modal *******************************************************/
 .fw-icon-v2-picker-modal li:first-child .nav-tab {
@@ -116,7 +145,6 @@
 
 .fw-icon-v2-picker-modal .fw-icon-v2-library-packs-wrapper {
     overflow-y: auto;
-    height: 460px;
     padding: 0 20px;
 }
 
@@ -161,7 +189,6 @@
     text-align: left;
     font-size: 13px;
     color: #0085ba;
-    /*overflow: hidden;*/
 }
 
 .fw-icon-v2-picker-modal h2:first-of-type {
@@ -265,11 +292,16 @@
     position: absolute;
     padding: 5px;
     top: -2px;
-    right: -3px;
+    right: -2px;
     width: 12px;
     height: 12px;
     cursor: pointer;
+    opacity: 0;
     transition: all 0.2s ease;
+}
+
+.fw-icon-v2-picker-modal .fw-option-html ul li:hover a {
+    opacity: 1;
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li a i {
@@ -280,28 +312,14 @@
     transition: all 0.2s ease;
 }
 
-.fw-icon-v2-picker-modal .fw-option-html ul li:not(.fw-icon-v2-favorite) a {
-    opacity: 0;
-}
-
-.fw-icon-v2-picker-modal .fw-option-html ul li:hover a {
-    opacity: 1;
-}
-
 .fw-icon-v2-picker-modal .fw-option-html ul li a:hover i,
-.fw-icon-v2-picker-modal .fw-option-html ul li.fw-icon-v2-favorite a i {
-    color: #FFC93C;
+.fw-icon-v2-picker-modal .fw-option-html ul li.fw-icon-v2-favorite i,
+.fw-icon-v2-picker-modal .fw-option-html .fw-icon-v2-icon-favorites ul li i {
+    color: #FFB800;
+    transition: all 0.2s ease;
 }
 
-
-.fw-icon-v2-picker-modal .fw-option-html .fw-icon-v2-icon-favorites ul li a {
-    opacity: 1;
-}
-
-.fw-icon-v2-picker-modal .fw-option-html .fw-icon-v2-icon-favorites ul li a:hover i {
-    color: #FF4617;
-}
-
+/*** Icon Packs Divider ***/
 .fw-icon-v2-icon-favorites h4 {
     margin-top: 4px;
     margin-bottom: 15px;
@@ -309,12 +327,9 @@
     font-weight: 600;
 }
 
+/*** Favorited Icons Info **/
 .fw-icon-v2-info {
     font-size: 12px !important;
     line-height: 18px !important;
     color: #FFC93C;
 }
-
-
-
-
