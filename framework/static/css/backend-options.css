@@ -58,7 +58,7 @@ Included on pages where backend options are rendered
 
 .fw-options-tabs-wrapper > .fw-options-tabs-list {
 	border-bottom: 1px solid #CCC;
-	padding: 0 10px;
+	/*padding: 0 10px;*/
 }
 
 .fw-options-tabs-wrapper > .fw-options-tabs-list ul,
@@ -69,8 +69,8 @@ Included on pages where backend options are rendered
 
 .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
 	float: left;
-	margin-right: 6px;
 }
+
 body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
 	float: right;
 	margin-right: 0px;
@@ -95,7 +95,7 @@ body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
 }
 
 .postbox .fw-options-tabs-wrapper > .fw-options-tabs-list {
-	padding-top: 10px;
+	padding: 10px 10px 0 10px;
 }
 
 .postbox .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab {

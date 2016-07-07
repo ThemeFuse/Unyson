@@ -3036,7 +3036,7 @@ body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 /* tabs fixes */
 
 .fw-modal .fw-options-tabs-first-level > .fw-options-tabs-list {
-	padding-top: 20px;
+	padding: 20px 10px 0 10px;
 }
 
 .fw-modal .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
