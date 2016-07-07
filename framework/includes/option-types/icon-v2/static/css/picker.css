@@ -145,6 +145,7 @@
 
 .fw-icon-v2-picker-modal .fw-icon-v2-library-packs-wrapper {
     overflow-y: auto;
+    overflow-x: hidden; 
     padding: 0 20px;
 }
 
@@ -286,6 +287,20 @@
     text-align: center;
     transition: color 0.2s ease;
 }
+
+/*** Icon Grid Size, depending on modal size ***/
+/*** Small Modal ***/
+.fw-icon-v2-picker-modal.fw-modal-small .fw-option-html ul li {
+    width: 58.5px;
+    height: 58.5px;
+}
+
+/*** Large Modal ***/
+.fw-icon-v2-picker-modal.fw-modal-large .fw-option-html ul li {
+    width: 62.2px;
+    height: 62.2px;
+}
+
 
 /*** Favorited Icons ***/
 .fw-icon-v2-picker-modal .fw-option-html ul li a {
