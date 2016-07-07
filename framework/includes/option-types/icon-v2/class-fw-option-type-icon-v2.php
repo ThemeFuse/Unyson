@@ -65,7 +65,7 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 			'fw-option-type-'. $this->get_type() .'-backend-previews',
 			'fw_icon_v2_data',
 			array(
-				'edit_icon_label' => __('Edit Icon', 'fw'),
+				'edit_icon_label' => __('Change Icon', 'fw'),
 				'add_icon_label' => __('Add Icon', 'fw'),
 				'icon_fonts_label' => __('Icons', 'fw'),
 				'custom_upload_label' => __('Upload', 'fw'),
@@ -177,8 +177,8 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 				// 'url' => false
 			),
 
-			'preview-size' => 'medium',
-			'popup-size' => 'large'
+			'preview_size' => 'medium',
+			'popup_size' => 'large'
 		);
 	}
 
