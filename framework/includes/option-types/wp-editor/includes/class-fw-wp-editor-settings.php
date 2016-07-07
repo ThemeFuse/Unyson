@@ -223,6 +223,13 @@ class FW_WP_Editor_Manager {
 			);
 		}
 
+		if (isset($mce_settings['style_formats'])) {
+			$mce_settings['style_formats'] = json_decode(
+				$mce_settings['style_formats'],
+				true
+			);
+		}
+
 		if ( isset($mce_settings['external_plugins']) ) {
 			$mce_settings['external_plugins'] = json_decode(
 				$mce_settings['external_plugins'],
