@@ -20,13 +20,16 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 		$this->packs_loader = new FW_Icon_V2_Packs_Loader();
 		$this->favorites = new FW_Icon_V2_Favorites_Manager();
 
-		add_action(
-			'wp_enqueue_scripts',
-			array($this->packs_loader, 'enqueue_frontend_css' )
-		);
+		/**
+		 * CSS for each pack is not loaded by default in frontend.
+		 *
+		 * You should load it by yourself in your theme, like this:
+		 *
+		 * fw()->backend->option_type('icon-v2')->packs_loader->enqueue_frontend_css()
+		 */
 	}
 
-	protected function _enqueue_static($id, $option, $data)/*{{{*/
+	protected function _enqueue_static($id, $option, $data)
 	{
 		$this->packs_loader->enqueue_admin_css();
 
