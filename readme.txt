@@ -84,7 +84,8 @@ Yes; Unyson will work with any theme.
 == Changelog ==
 
 = 2.5.8 =
-* Fixed `wp-editor` bug [#1700](https://github.com/ThemeFuse/Unyson/issues/1700)
+* Fixed `wp-editor` bugs
+* Updated FontAwesome
 * Fixed [#1676](https://github.com/ThemeFuse/Unyson/issues/1676)
 
 = 2.5.7 =
