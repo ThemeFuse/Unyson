@@ -88,6 +88,11 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	 * {@inheritdoc}
 	 */
 	protected function _enqueue_static( $id, $option, $data ) {
+		if (! wp_script_is('editor')) {
+			ob_start();
+			wp_editor('', fw_rand_md5());
+			ob_end_clean();
+		}
 		/**
 		 * The below styles usually are included directly in html when wp_editor() is called
 		 * but since we call it (below) wrapped in ob_start()...ob_end_clean() the html is not printed.
