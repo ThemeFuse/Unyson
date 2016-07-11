@@ -185,6 +185,10 @@
     float: left;
 }
 
+.fw-icon-v2-picker-modal .fw-icon-v2-toolbar .selectize-control .selectize-input > input {
+    display: none !important;
+}
+
 .fw-icon-v2-picker-modal h2 {
     position: relative;
     text-align: left;
@@ -341,4 +345,20 @@
     font-size: 12px !important;
     line-height: 18px !important;
     color: #FFC93C;
+}
+
+/*** Style Input Placeholder ***/
+.fw-icon-v2-picker-modal .fw-icon-v2-toolbar > input::-webkit-input-placeholder {
+    font-style: normal;
+    color: #333333;
+}
+
+.fw-icon-v2-picker-modal .fw-icon-v2-toolbar > input::-moz-placeholder {
+    font-style: normal;
+    color: #333333;
+}
+
+.fw-icon-v2-picker-modal .fw-icon-v2-toolbar > input:-ms-input-placeholder {
+    font-style: normal;
+    color: #333333;
 }
