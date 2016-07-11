@@ -250,7 +250,6 @@
     border: 3px solid transparent;
     border-radius: 4px;
     cursor: pointer;
-    transition: all 0.2s ease;
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li:hover {
@@ -278,14 +277,12 @@
 
 .fw-icon-v2-picker-modal .fw-option-html ul li.selected:after {
     opacity: 1;
-    transition: opacity 0.2s ease; 
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li > i {
     color: #666;
     font-size: 22px;
     text-align: center;
-    transition: color 0.2s ease;
 }
 
 /*** Icon Grid Size, depending on modal size ***/
@@ -312,7 +309,6 @@
     height: 12px;
     cursor: pointer;
     opacity: 0;
-    transition: all 0.2s ease;
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li:hover a {
@@ -324,14 +320,12 @@
     width: 12px;
     height: 12px;
     color: #e0e0e0;
-    transition: all 0.2s ease;
 }
 
 .fw-icon-v2-picker-modal .fw-option-html ul li a:hover i,
 .fw-icon-v2-picker-modal .fw-option-html ul li.fw-icon-v2-favorite i,
 .fw-icon-v2-picker-modal .fw-option-html .fw-icon-v2-icon-favorites ul li i {
     color: #FFB800;
-    transition: all 0.2s ease;
 }
 
 /*** Icon Packs Divider ***/
