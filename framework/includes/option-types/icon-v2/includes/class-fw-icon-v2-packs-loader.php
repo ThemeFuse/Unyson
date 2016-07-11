@@ -24,7 +24,7 @@ class FW_Icon_V2_Packs_Loader
 		 * Example:
 		 *
 		 * add_filter(
-		 *   'fw:option-type:icon-v2:packs',
+		 *   'fw:option_type:icon-v2:packs',
 		 *   '_add_more_packs'
 		 * );
 		 *
