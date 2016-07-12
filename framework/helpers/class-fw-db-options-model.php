@@ -110,7 +110,7 @@ abstract class FW_Db_Options_Model {
 		} catch (FW_Cache_Not_Found_Exception $e) {
 			FW_Cache::set(
 				$cache_key_values,
-				is_array($values = $this->get_values($item_id)) ? $values : array()
+				$values = is_array($values = $this->get_values($item_id)) ? $values : array()
 			);
 
 			self::$merge_values_with_defaults[ $this->get_id() ] = true;
