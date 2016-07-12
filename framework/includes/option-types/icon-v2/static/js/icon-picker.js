@@ -382,7 +382,9 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 		renderIconsLibrary({
 			search: search,
 			packs: packs
-		})
+		});
+
+		refreshFavoritesClasses(currentFavorites);
 	}
 
 	function fuzzyConsecutive (query, search) {
