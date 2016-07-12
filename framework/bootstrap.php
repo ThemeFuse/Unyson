@@ -49,7 +49,7 @@ if (defined('FW')) {
 				'class-fw-session',
 				'class-fw-wp-option',
 				'class-fw-wp-meta',
-				'class-fw-db-option-model',
+				'class-fw-db-options-model',
 				'database',
 				'class-fw-flash-messages',
 				'class-fw-resize',

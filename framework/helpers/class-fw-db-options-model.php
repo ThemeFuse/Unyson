@@ -5,7 +5,7 @@
  * it will handle all clever logic with default values, multikeys and processing options fw-storage parameter
  * @since 2.5.9
  */
-abstract class FW_Db_Option_Model {
+abstract class FW_Db_Options_Model {
 	/**
 	 * @return string Must not contain '/'
 	 */
@@ -62,7 +62,7 @@ abstract class FW_Db_Option_Model {
 
 	/**
 	 * @param string $id
-	 * @return FW_Db_Option_Model
+	 * @return FW_Db_Options_Model
 	 * @internal
 	 */
 	final public static function _get_instance($id) {
@@ -163,7 +163,10 @@ abstract class FW_Db_Option_Model {
 		if (empty($option_id)) {
 			foreach ($options as $id => $option) {
 				$values[$id] = fw()->backend->option_type($options[$id]['type'])->storage_load(
-					$id, $options[$id], isset($values[$id]) ? $values[$id] : null, array()
+					$id,
+					$options[$id],
+					isset($values[$id]) ? $values[$id] : null,
+					$this->get_fw_storage_params($item_id)
 				);
 			}
 		} else {
@@ -172,7 +175,7 @@ abstract class FW_Db_Option_Model {
 					$option_id,
 					$options[ $option_id ],
 					isset($values[ $option_id ]) ? $values[ $option_id ] : null,
-					array()
+					$this->get_fw_storage_params($item_id)
 				);
 			}
 		}
