@@ -3,7 +3,7 @@
 }
 
 // Theme Settings Options
-class FW_Db_Option_Model_Settings extends FW_Db_Option_Model {
+class FW_Db_Options_Model_Settings extends FW_Db_Options_Model {
 	protected function get_id() {
 		return 'settings';
 	}
@@ -13,7 +13,7 @@ class FW_Db_Option_Model_Settings extends FW_Db_Option_Model {
 	}
 
 	protected function get_values($item_id) {
-		return FW_WP_Option::get('fw_theme_settings_options:'. fw()->theme->manifest->get_id());
+		return FW_WP_Option::get('fw_theme_settings_options:'. fw()->theme->manifest->get_id(), null, array());
 	}
 
 	protected function set_values($item_id, $value) {
@@ -35,7 +35,7 @@ class FW_Db_Option_Model_Settings extends FW_Db_Option_Model {
 		 * @return mixed|null
 		 */
 		function fw_get_db_settings_option( $option_id = null, $default_value = null, $get_original_value = null ) {
-			return FW_Db_Option_Model_Settings::_get_instance('settings')->get(null, $option_id, $default_value);
+			return FW_Db_Options_Model_Settings::_get_instance('settings')->get(null, $option_id, $default_value);
 		}
 
 		/**
@@ -45,265 +45,107 @@ class FW_Db_Option_Model_Settings extends FW_Db_Option_Model {
 		 * @param mixed $value
 		 */
 		function fw_set_db_settings_option( $option_id = null, $value ) {
-			FW_Db_Option_Model_Settings::_get_instance('settings')->set(null, $option_id, $value);
+			FW_Db_Options_Model_Settings::_get_instance('settings')->set(null, $option_id, $value);
 		}
 	}
 }
-new FW_Db_Option_Model_Settings();
+new FW_Db_Options_Model_Settings();
 
+// Post Options
+class FW_Db_Options_Model_Post extends FW_Db_Options_Model {
+	protected function get_id() {
+		return 'post';
+	}
 
-/** Post Options */
-{
-	/**
-	 * Get post option value from the database
-	 *
-	 * @param null|int $post_id
-	 * @param string|null $option_id Specific option id (accepts multikey). null - all options
-	 * @param null|mixed $default_value If no option found in the database, this value will be returned
-	 * @param null|bool $get_original_value REMOVED https://github.com/ThemeFuse/Unyson/issues/1676
-	 *
-	 * @return mixed|null
-	 */
-	function fw_get_db_post_option(
-		$post_id = null,
-		$option_id = null,
-		$default_value = null,
-		$get_original_value = null
-	) {
-		$meta_key = 'fw_options';
+	private function get_cache_key($key) {
+		return 'fw-options-model:'. $this->get_id() .'/'. $key;
+	}
 
-		if ( ! $post_id ) {
-			/** @var WP_Post $post */
-			global $post;
-
-			if ( ! $post ) {
-				return $default_value;
-			} else {
-				$post_id = $post->ID;
-			}
-
-			/**
-			 * Check if is Preview and use the preview post_id instead of real/current post id
-			 *
-			 * Note: WordPress changes the global $post content on preview:
-			 * 1. https://github.com/WordPress/WordPress/blob/2096b451c704715db3c4faf699a1184260deade9/wp-includes/query.php#L3573-L3583
-			 * 2. https://github.com/WordPress/WordPress/blob/4a31dd6fe8b774d56f901a29e72dcf9523e9ce85/wp-includes/revision.php#L485-L528
-			 */
-			if ( is_preview() && is_object($preview = wp_get_post_autosave($post->ID)) ) {
-				$post_id = $preview->ID;
-			}
-		}
-
-		$post_type = get_post_type(
-			($post_revision_id = wp_is_post_revision($post_id)) ? $post_revision_id : $post_id
-		);
+	private function get_post_id($post_id) {
+		$post_id = intval($post_id);
 
 		try {
-			$options = FW_Cache::get(
-				$cache_key = 'fw_post_options/only/'. $post_type
-			);
+			// Prevent too often execution of wp_get_post_autosave() because it does WP Query
+			return FW_Cache::get($cache_key = $this->get_cache_key('id/'. $post_id));
 		} catch (FW_Cache_Not_Found_Exception $e) {
-			FW_Cache::set($cache_key, $options = array()); // prevent recursion
+			if ( ! $post_id ) {
+				/** @var WP_Post $post */
+				global $post;
 
-			if (apply_filters('fw_get_db_post_option:fw-storage-enabled',
+				if ( ! $post ) {
+					return null;
+				} else {
+					$post_id = $post->ID;
+				}
+
 				/**
-				 * Slider extension has too many fw_get_db_post_option()
-				 * inside post options altering filter and it creates recursive mess.
-				 * add_filter() was added in Slider extension
-				 * but this hardcode can be replaced with `true`
-				 * only after all users will install new version 1.1.15.
+				 * Check if is Preview and use the preview post_id instead of real/current post id
+				 *
+				 * Note: WordPress changes the global $post content on preview:
+				 * 1. https://github.com/WordPress/WordPress/blob/2096b451c704715db3c4faf699a1184260deade9/wp-includes/query.php#L3573-L3583
+				 * 2. https://github.com/WordPress/WordPress/blob/4a31dd6fe8b774d56f901a29e72dcf9523e9ce85/wp-includes/revision.php#L485-L528
 				 */
-				$post_type !== 'fw-slider',
-				$post_type
-			)) {
-				FW_Cache::set(
-					$cache_key,
-					$options = fw_extract_only_options(
-						fw()->theme->get_post_options( $post_type )
-					)
-				);
-			}
-		}
-
-		if ($option_id) {
-			$option_id = explode('/', $option_id); // 'option_id/sub/keys'
-			$_option_id = array_shift($option_id); // 'option_id'
-			$sub_keys = empty($option_id) ? null : implode('/', $option_id); // 'sub/keys'
-			$option_id = $_option_id;
-			unset($_option_id);
-
-			$value = FW_WP_Meta::get(
-				'post',
-				$post_id,
-				$meta_key .'/'. $option_id,
-				null,
-				$get_original_value
-			);
-
-			if (isset($options[$option_id])) {
-				try {
-					$value = FW_Cache::get( $cache_key = 'fw_post_options/values/'. $post_id .'/'. $option_id );
-				} catch (FW_Cache_Not_Found_Exception $e) {
-					FW_Cache::set($cache_key, array()); // prevent recursion
-					FW_Cache::set(
-						$cache_key,
-						$value = fw()->backend->option_type($options[$option_id]['type'])->storage_load(
-							$option_id,
-							$options[$option_id],
-							$value,
-							array( 'post-id' => $post_id, )
-						)
-					);
+				if ( is_preview() && is_object($preview = wp_get_post_autosave($post->ID)) ) {
+					$post_id = $preview->ID;
 				}
 			}
 
-			if ($sub_keys) {
-				return fw_akg($sub_keys, $value, $default_value);
-			} else {
-				return is_null($value) ? $default_value : $value;
-			}
-		} else {
-			$value = FW_WP_Meta::get(
-				'post',
-				$post_id,
-				$meta_key,
-				$default_value,
-				$get_original_value
-			);
+			FW_Cache::set($cache_key, $post_id);
 
-			if (!is_array($value)) {
-				$value = array();
-			}
-
-			foreach ($options as $_option_id => $_option) {
-				try {
-					$value[$_option_id] = FW_Cache::get( $cache_key = 'fw_post_options/values/'. $post_id .'/'. $_option_id );
-				} catch (FW_Cache_Not_Found_Exception $e) {
-					FW_Cache::set($cache_key, array()); // prevent recursion
-					FW_Cache::set(
-						$cache_key,
-						$value[$_option_id] = fw()->backend->option_type($_option['type'])->storage_load(
-							$_option_id,
-							$_option,
-							isset($value[$_option_id]) ? $value[$_option_id] : null,
-							array( 'post-id' => $post_id, )
-						)
-					);
-				}
-			}
-
-			return $value;
+			return $post_id;
 		}
 	}
 
-	/**
-	 * Set post option value in database
-	 *
-	 * @param null|int $post_id
-	 * @param string|null $option_id Specific option id (accepts multikey). null - all options
-	 * @param $value
-	 */
-	function fw_set_db_post_option( $post_id = null, $option_id = null, $value ) {
-		FW_Cache::del('fw_post_options/values');
-
-		$meta_key = 'fw_options';
-		$post_id = intval($post_id);
-
-		if ( ! $post_id ) {
-			/** @var WP_Post $post */
-			global $post;
-
-			if ( ! $post ) {
-				return;
-			} else {
-				$post_id = $post->ID;
-			}
-		}
-
-		$post_type = get_post_type(
-			($post_revision_id = wp_is_post_revision($post_id)) ? $post_revision_id : $post_id
-		);
+	private function get_post_type($post_id) {
+		$post_id = $this->get_post_id($post_id);
 
 		try {
-			$options = FW_Cache::get(
-				$cache_key = 'fw_post_options/only/'. $post_type
-			);
+			return FW_Cache::get($cache_key = $this->get_cache_key('type/'. $post_id));
 		} catch (FW_Cache_Not_Found_Exception $e) {
-			FW_Cache::set($cache_key, $options = array()); // prevent recursion
+			FW_Cache::set(
+				$cache_key,
+				$post_type = get_post_type(
+					($post_revision_id = wp_is_post_revision($post_id)) ? $post_revision_id : $post_id
+				)
+			);
 
-			if (apply_filters('fw_get_db_post_option:fw-storage-enabled',
-				/**
-				 * Slider extension has too many fw_get_db_post_option()
-				 * inside post options altering filter and it creates recursive mess.
-				 * add_filter() was added in Slider extension
-				 * but this hardcode can be replaced with `true`
-				 * only after all users will install new version 1.1.15.
-				 */
-				$post_type !== 'fw-slider',
-				$post_type
-			)) {
-				FW_Cache::set(
-					$cache_key,
-					$options = fw_extract_only_options(
-						fw()->theme->get_post_options( $post_type )
-					)
-				);
-			}
+			return $post_type;
 		}
+	}
 
-		$sub_keys = null;
+	protected function get_options($item_id) {
+		$post_type = $this->get_post_type($item_id);
 
-		if ($option_id) {
-			$option_id = explode('/', $option_id); // 'option_id/sub/keys'
-			$_option_id = array_shift($option_id); // 'option_id'
-			$sub_keys = empty($option_id) ? null : implode('/', $option_id); // 'sub/keys'
-			$option_id = $_option_id;
-			unset($_option_id);
-
-			$old_value = fw_get_db_post_option($post_id, $option_id);
-
-			if ($sub_keys) { // update sub_key in old_value and use the entire value
-				$new_value = $old_value;
-				fw_aks($sub_keys, $value, $new_value);
-				$value = $new_value;
-				unset($new_value);
-
-				$old_value = fw_akg($sub_keys, $old_value);
-			}
-
-			if (isset($options[$option_id])) {
-				$value = fw()->backend->option_type($options[$option_id]['type'])->storage_save(
-					$option_id,
-					$options[$option_id],
-					$value,
-					array( 'post-id' => $post_id, )
-				);
-			}
-
-			FW_WP_Meta::set( 'post', $post_id, $meta_key .'/'. $option_id, $value );
+		if (apply_filters('fw_get_db_post_option:fw-storage-enabled',
+			/**
+			 * Slider extension has too many fw_get_db_post_option()
+			 * inside post options altering filter and it creates recursive mess.
+			 * add_filter() was added in Slider extension
+			 * but this hardcode can be replaced with `true`
+			 * only after all users will install new version 1.1.15.
+			 */
+			$post_type !== 'fw-slider',
+			$post_type
+		)) {
+			return fw()->theme->get_post_options( $post_type );
 		} else {
-			$old_value = fw_get_db_post_option($post_id);
-
-			if (!is_array($value)) {
-				$value = array();
-			}
-
-			foreach ($value as $_option_id => $_option_value) {
-				if (isset($options[$_option_id])) {
-					$value[$_option_id] = fw()->backend->option_type($options[$_option_id]['type'])->storage_save(
-						$_option_id,
-						$options[$_option_id],
-						$_option_value,
-						array( 'post-id' => $post_id, )
-					);
-				}
-			}
-
-			FW_WP_Meta::set( 'post', $post_id, $meta_key, $value );
+			return array();
 		}
+	}
 
-		FW_Cache::del('fw_post_options/values'); // fixes https://github.com/ThemeFuse/Unyson/issues/1538
+	protected function get_values($item_id) {
+		return FW_WP_Meta::get( 'post', $item_id, 'fw_options', array() );
+	}
 
+	protected function set_values($item_id, $value) {
+		FW_WP_Meta::set( 'post', $item_id, 'fw_options', $value );
+	}
+
+	protected function get_fw_storage_params($item_id) {
+		return array( 'post-id' => $item_id );
+	}
+
+	protected function _after_set($post_id, $option_id, $sub_keys, $old_value) {
 		/**
 		 * @deprecated
 		 */
@@ -343,7 +185,35 @@ new FW_Db_Option_Model_Settings();
 			$old_value
 		);
 	}
+
+	protected function _init() {
+		/**
+		 * Get post option value from the database
+		 *
+		 * @param null|int $post_id
+		 * @param string|null $option_id Specific option id (accepts multikey). null - all options
+		 * @param null|mixed $default_value If no option found in the database, this value will be returned
+		 * @param null|bool $get_original_value REMOVED https://github.com/ThemeFuse/Unyson/issues/1676
+		 *
+		 * @return mixed|null
+		 */
+		function fw_get_db_post_option($post_id = null, $option_id = null, $default_value = null, $get_original_value = null) {
+			return FW_Db_Options_Model::_get_instance('post')->get($post_id, $option_id, $default_value);
+		}
+
+		/**
+		 * Set post option value in database
+		 *
+		 * @param null|int $post_id
+		 * @param string|null $option_id Specific option id (accepts multikey). null - all options
+		 * @param $value
+		 */
+		function fw_set_db_post_option( $post_id = null, $option_id = null, $value ) {
+			FW_Db_Options_Model::_get_instance('post')->set($post_id, $option_id, $value);
+		}
+	}
 }
+new FW_Db_Options_Model_Post();
 
 /** Terms Options */
 {
