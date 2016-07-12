@@ -2,161 +2,55 @@
 	die( 'Forbidden' );
 }
 
-/** Theme Settings Options */
-{
-	/**
-	 * Get a theme settings option value from the database
-	 *
-	 * @param string|null $option_id Specific option id (accepts multikey). null - all options
-	 * @param null|mixed $default_value If no option found in the database, this value will be returned
-	 * @param null|bool $get_original_value REMOVED https://github.com/ThemeFuse/Unyson/issues/1676
-	 *
-	 * @return mixed|null
-	 */
-	function fw_get_db_settings_option( $option_id = null, $default_value = null, $get_original_value = null ) {
-		static $merge_values_with_defaults = false;
-
-		if (empty($option_id)) {
-			$sub_keys = null;
-		} else {
-			$option_id = explode('/', $option_id); // 'option_id/sub/keys'
-			$_option_id = array_shift($option_id); // 'option_id'
-			$sub_keys = empty($option_id) ? null : implode('/', $option_id); // 'sub/keys'
-			$option_id = $_option_id;
-			unset($_option_id);
-		}
-
-		try {
-			/**
-			 * Cached because values are merged with extracted default values
-			 */
-			$values = FW_Cache::get($cache_key = 'fw_settings_options/values');
-		} catch (FW_Cache_Not_Found_Exception $e) {
-			FW_Cache::set(
-				$cache_key,
-				$values = (array)FW_WP_Option::get(
-					'fw_theme_settings_options:'. fw()->theme->manifest->get_id(), null, array(), $get_original_value
-				)
-			);
-
-			$merge_values_with_defaults = true;
-		}
-
-		/**
-		 * If db value is not found and default value is provided
-		 * return default value before loading options file
-		 * to prevent infinite recursion in case if this function is called in options file
-		 */
-		if ( ! is_null($default_value) ) {
-			if ( empty( $option_id ) ) {
-				if ( empty( $values ) && is_array( $default_value ) ) {
-					return $default_value;
-				}
-			} else {
-				if ( is_null( $sub_keys ) ) {
-					if ( ! isset( $values[ $option_id ] ) ) {
-						return $default_value;
-					}
-				} else {
-					if ( is_null( fw_akg( $sub_keys, $values[ $option_id ] ) ) ) {
-						return $default_value;
-					}
-				}
-			}
-		}
-
-		try {
-			$options = FW_Cache::get( $cache_key = 'fw_only_options/settings' );
-		} catch (FW_Cache_Not_Found_Exception $e) {
-			FW_Cache::set($cache_key, array()); // prevent recursion
-			FW_Cache::set(
-				$cache_key,
-				$options = fw_extract_only_options(fw()->theme->get_settings_options())
-			);
-		}
-
-		/**
-		 * Complete missing db values with default values from options array
-		 */
-		if ($merge_values_with_defaults) {
-			$merge_values_with_defaults = false;
-			FW_Cache::set(
-				'fw_settings_options/values',
-				$values = array_merge(fw_get_options_values_from_input($options, array()), $values)
-			);
-		}
-
-		if (empty($option_id)) {
-			foreach ($options as $id => $option) {
-				$values[$id] = fw()->backend->option_type($options[$id]['type'])->storage_load(
-					$id, $options[$id], isset($values[$id]) ? $values[$id] : null, array()
-				);
-			}
-		} else {
-			if (isset($options[$option_id])) {
-				$values[ $option_id ] = fw()->backend->option_type( $options[ $option_id ]['type'] )->storage_load(
-					$option_id,
-					$options[ $option_id ],
-					isset($values[ $option_id ]) ? $values[ $option_id ] : null,
-					array()
-				);
-			}
-		}
-
-		if (empty($option_id)) {
-			return (empty($values) && is_array($default_value)) ? $default_value : $values;
-		} else {
-			if (is_null($sub_keys)) {
-				return isset($values[$option_id]) ? $values[$option_id] : $default_value;
-			} else {
-				return fw_akg($sub_keys, $values[$option_id], $default_value);
-			}
-		}
+// Theme Settings Options
+class FW_Db_Option_Model_Settings extends FW_Db_Option_Model {
+	protected function get_id() {
+		return 'settings';
 	}
 
-	/**
-	 * Set a theme settings option value in database
-	 *
-	 * @param null $option_id Specific option id (accepts multikey). null - all options
-	 * @param mixed $value
-	 */
-	function fw_set_db_settings_option( $option_id = null, $value ) {
-		FW_Cache::del('fw_settings_options/values');
+	protected function get_options($item_id) {
+		return fw()->theme->get_settings_options();
+	}
 
-		try {
-			$options = FW_Cache::get( $cache_key = 'fw_only_options/settings' );
-		} catch ( FW_Cache_Not_Found_Exception $e ) {
-			FW_Cache::set(
-				$cache_key,
-				$options = fw_extract_only_options(fw()->theme->get_settings_options())
-			);
+	protected function get_values($item_id) {
+		return FW_WP_Option::get('fw_theme_settings_options:'. fw()->theme->manifest->get_id());
+	}
+
+	protected function set_values($item_id, $value) {
+		FW_WP_Option::set('fw_theme_settings_options:' . fw()->theme->manifest->get_id(), null, $value);
+	}
+
+	protected function get_fw_storage_params($item_id) {
+		return array();
+	}
+
+	protected function _init() {
+		/**
+		 * Get a theme settings option value from the database
+		 *
+		 * @param string|null $option_id Specific option id (accepts multikey). null - all options
+		 * @param null|mixed $default_value If no option found in the database, this value will be returned
+		 * @param null|bool $get_original_value REMOVED https://github.com/ThemeFuse/Unyson/issues/1676
+		 *
+		 * @return mixed|null
+		 */
+		function fw_get_db_settings_option( $option_id = null, $default_value = null, $get_original_value = null ) {
+			return FW_Db_Option_Model_Settings::_get_instance('settings')->get(null, $option_id, $default_value);
 		}
 
-		if (empty($option_id)) {
-			foreach ($options as $id => $option) {
-				if (isset($value[$id])) {
-					$value[ $id ] = fw()->backend->option_type( $options[ $id ]['type'] )->storage_save(
-						$id, $options[ $id ], $value[$id], array()
-					);
-				}
-			}
-		} else {
-			if (isset($options[$option_id]) && isset($value[ $option_id ])) {
-				$value[ $option_id ] = fw()->backend->option_type( $options[ $option_id ]['type'] )->storage_save(
-					$option_id,
-					$options[ $option_id ],
-					$value[ $option_id ],
-					array()
-				);
-			}
+		/**
+		 * Set a theme settings option value in database
+		 *
+		 * @param null $option_id Specific option id (accepts multikey). null - all options
+		 * @param mixed $value
+		 */
+		function fw_set_db_settings_option( $option_id = null, $value ) {
+			FW_Db_Option_Model_Settings::_get_instance('settings')->set(null, $option_id, $value);
 		}
-
-		FW_WP_Option::set(
-			'fw_theme_settings_options:' . fw()->theme->manifest->get_id(),
-			$option_id, $value
-		);
 	}
 }
+new FW_Db_Option_Model_Settings();
+
 
 /** Post Options */
 {
@@ -691,62 +585,105 @@
 	 * @return mixed|null
 	 */
 	function fw_get_db_customizer_option( $option_id = null, $default_value = null ) {
-		// note: this contains only changed controls/options
-		$db_values = get_theme_mod(FW_Option_Type::get_default_name_prefix(), null);
+		static $merge_values_with_defaults = false;
 
-		if (
-			!is_null($default_value)
-			&&
-			is_null($option_id ? fw_akg($option_id, $db_values) : $db_values)
-		) {
+		if (empty($option_id)) {
+			$sub_keys = null;
+		} else {
+			$option_id = explode('/', $option_id); // 'option_id/sub/keys'
+			$_option_id = array_shift($option_id); // 'option_id'
+			$sub_keys = empty($option_id) ? null : implode('/', $option_id); // 'sub/keys'
+			$option_id = $_option_id;
+			unset($_option_id);
+		}
+
+		try {
 			/**
-			 * Default value was provided in case db value is empty.
-			 *
-			 * Do not extract default values from options files (below)
-			 * maybe this function was called from options files and it will cause infinite loop,
-			 * that's why the developer provided a default value to prevent that.
+			 * Cached because values are merged with extracted default values
 			 */
-			return $default_value;
+			$values = FW_Cache::get($cache_key = 'fw_customizer_options/values');
+		} catch (FW_Cache_Not_Found_Exception $e) {
+			FW_Cache::set(
+				$cache_key,
+				// note: this contains only changed controls/options
+				$values = (array)get_theme_mod(FW_Option_Type::get_default_name_prefix(), array())
+			);
+
+			$merge_values_with_defaults = true;
 		}
 
-		if (is_null($db_values)) {
-			$db_values = array();
-		}
-
-		if (
-			is_null($option_id)
-			||
-			(
-				($base_key = explode('/', $option_id)) // note: option_id can be a multi-key 'a/b/c'
-				&&
-				($base_key = array_shift($base_key))
-				&&
-				!array_key_exists($base_key, $db_values)
-			)
-		) {
-			// extract options default values
-			{
-				$cache_key = 'fw_default_options_values/customizer';
-
-				try {
-					$default_values = FW_Cache::get( $cache_key );
-				} catch ( FW_Cache_Not_Found_Exception $e ) {
-					// extract the default values from options array
-					$default_values = fw_get_options_values_from_input(
-						fw()->theme->get_customizer_options(),
-						array()
-					);
-
-					FW_Cache::set( $cache_key, $default_values );
+		/**
+		 * If db value is not found and default value is provided
+		 * return default value before loading options file
+		 * to prevent infinite recursion in case if this function is called in options file
+		 */
+		if ( ! is_null($default_value) ) {
+			if ( empty( $option_id ) ) {
+				if ( empty( $values ) && is_array( $default_value ) ) {
+					return $default_value;
+				}
+			} else {
+				if ( is_null( $sub_keys ) ) {
+					if ( ! isset( $values[ $option_id ] ) ) {
+						return $default_value;
+					}
+				} else {
+					if ( is_null( fw_akg( $sub_keys, $values[ $option_id ] ) ) ) {
+						return $default_value;
+					}
 				}
 			}
-
-			$db_values = array_merge($default_values, $db_values);
 		}
 
-		return is_null($option_id)
-			? $db_values
-			: fw_akg($option_id, $db_values, $default_value);
+		try {
+			$options = FW_Cache::get( $cache_key = 'fw_only_options/customizer' );
+		} catch (FW_Cache_Not_Found_Exception $e) {
+			FW_Cache::set($cache_key, array()); // prevent recursion
+			FW_Cache::set(
+				$cache_key,
+				$options = fw_extract_only_options(fw()->theme->get_customizer_options())
+			);
+		}
+
+		/**
+		 * Complete missing db values with default values from options array
+		 */
+		if ($merge_values_with_defaults) {
+			$merge_values_with_defaults = false;
+			FW_Cache::set(
+				'fw_customizer_options/values',
+				$values = array_merge(fw_get_options_values_from_input($options, array()), $values)
+			);
+		}
+
+		if (empty($option_id)) {
+			foreach ($options as $id => $option) {
+				$values[$id] = fw()->backend->option_type($options[$id]['type'])->storage_load(
+					$id, $options[$id], isset($values[$id]) ? $values[$id] : null, array()
+				);
+			}
+		} else {
+			if (isset($options[$option_id])) {
+				$values[ $option_id ] = fw()->backend->option_type( $options[ $option_id ]['type'] )->storage_load(
+					$option_id,
+					$options[ $option_id ],
+					isset($values[ $option_id ]) ? $values[ $option_id ] : null,
+					array()
+				);
+			}
+		}
+
+		if (empty($option_id)) {
+			return (empty($values) && is_array($default_value)) ? $default_value : $values;
+		} else {
+			if (is_null($sub_keys)) {
+				return isset($values[$option_id]) ? $values[$option_id] : $default_value;
+			} else {
+				return fw_akg($sub_keys, $values[$option_id], $default_value);
+			}
+		}
+
+		// todo: create a general helper to get/set db options, which will care about cache and fw-storage processing
 	}
 
 	/**
