@@ -50,6 +50,7 @@ if (defined('FW')) {
 				'class-fw-wp-option',
 				'class-fw-wp-meta',
 				'class-fw-db-options-model',
+				'fw-storage',
 				'database',
 				'class-fw-flash-messages',
 				'class-fw-resize',
