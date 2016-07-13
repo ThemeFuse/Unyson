@@ -8,19 +8,19 @@ class FW_Db_Options_Model_Settings extends FW_Db_Options_Model {
 		return 'settings';
 	}
 
-	protected function get_options($item_id) {
+	protected function get_options($item_id, array $extra_data = array()) {
 		return fw()->theme->get_settings_options();
 	}
 
-	protected function get_values($item_id) {
+	protected function get_values($item_id, array $extra_data = array()) {
 		return FW_WP_Option::get('fw_theme_settings_options:'. fw()->theme->manifest->get_id(), null, array());
 	}
 
-	protected function set_values($item_id, $value) {
-		FW_WP_Option::set('fw_theme_settings_options:' . fw()->theme->manifest->get_id(), null, $value);
+	protected function set_values($item_id, $values, array $extra_data = array()) {
+		FW_WP_Option::set('fw_theme_settings_options:' . fw()->theme->manifest->get_id(), null, $values);
 	}
 
-	protected function get_fw_storage_params($item_id) {
+	protected function get_fw_storage_params($item_id, array $extra_data = array()) {
 		return array();
 	}
 
@@ -113,7 +113,7 @@ class FW_Db_Options_Model_Post extends FW_Db_Options_Model {
 		}
 	}
 
-	protected function get_options($item_id) {
+	protected function get_options($item_id, array $extra_data = array()) {
 		$post_type = $this->get_post_type($item_id);
 
 		if (apply_filters('fw_get_db_post_option:fw-storage-enabled',
@@ -133,19 +133,27 @@ class FW_Db_Options_Model_Post extends FW_Db_Options_Model {
 		}
 	}
 
-	protected function get_values($item_id) {
+	protected function get_values($item_id, array $extra_data = array()) {
 		return FW_WP_Meta::get( 'post', $item_id, 'fw_options', array() );
 	}
 
-	protected function set_values($item_id, $value) {
-		FW_WP_Meta::set( 'post', $item_id, 'fw_options', $value );
+	protected function set_values($item_id, $values, array $extra_data = array()) {
+		FW_WP_Meta::set( 'post', $item_id, 'fw_options', $values );
 	}
 
-	protected function get_fw_storage_params($item_id) {
+	protected function get_fw_storage_params($item_id, array $extra_data = array()) {
 		return array( 'post-id' => $item_id );
 	}
 
-	protected function _after_set($post_id, $option_id, $sub_keys, $old_value) {
+	protected function _get_cache_key($key, $item_id, array $extra_data = array()) {
+		if ($key === 'options') {
+			return $this->get_post_type($item_id); // Cache options grouped by post-type, not by post id
+		} else {
+			return $item_id;
+		}
+	}
+
+	protected function _after_set($post_id, $option_id, $sub_keys, $old_value, array $extra_data = array()) {
 		/**
 		 * @deprecated
 		 */
@@ -198,7 +206,7 @@ class FW_Db_Options_Model_Post extends FW_Db_Options_Model {
 		 * @return mixed|null
 		 */
 		function fw_get_db_post_option($post_id = null, $option_id = null, $default_value = null, $get_original_value = null) {
-			return FW_Db_Options_Model::_get_instance('post')->get($post_id, $option_id, $default_value);
+			return FW_Db_Options_Model::_get_instance('post')->get(intval($post_id), $option_id, $default_value);
 		}
 
 		/**
@@ -209,112 +217,91 @@ class FW_Db_Options_Model_Post extends FW_Db_Options_Model {
 		 * @param $value
 		 */
 		function fw_set_db_post_option( $post_id = null, $option_id = null, $value ) {
-			FW_Db_Options_Model::_get_instance('post')->set($post_id, $option_id, $value);
+			FW_Db_Options_Model::_get_instance('post')->set(intval($post_id), $option_id, $value);
 		}
+
+		// todo: add_action() to clear the FW_Cache
 	}
 }
 new FW_Db_Options_Model_Post();
 
-/** Terms Options */
-{
-	/**
-	 * Get term option value from the database
-	 *
-	 * @param int $term_id
-	 * @param string $taxonomy
-	 * @param string|null $option_id Specific option id (accepts multikey). null - all options
-	 * @param null|mixed $default_value If no option found in the database, this value will be returned
-	 * @param null|bool $get_original_value REMOVED https://github.com/ThemeFuse/Unyson/issues/1676
-	 *
-	 * @return mixed|null
-	 */
-	function fw_get_db_term_option( $term_id, $taxonomy, $option_id = null, $default_value = null, $get_original_value = null ) {
-		if ( ! taxonomy_exists( $taxonomy ) ) {
-			return null;
-		}
-
-		$option_id = 'fw_options' . ( $option_id !== null ? '/' . $option_id : '' );
-
-		return FW_WP_Meta::get( 'fw_term', $term_id, $option_id, $default_value, $get_original_value );
+// Term Options
+class FW_Db_Options_Model_Term extends FW_Db_Options_Model {
+	protected function get_id() {
+		return 'term';
 	}
 
-	/**
-	 * Set term option value in database
-	 *
-	 * @param int $term_id
-	 * @param string $taxonomy
-	 * @param string|null $option_id Specific option id (accepts multikey). null - all options
-	 * @param mixed $value
-	 *
-	 * @return null
-	 */
-	function fw_set_db_term_option( $term_id, $taxonomy, $option_id = null, $value ) {
-		if ( ! taxonomy_exists( $taxonomy ) ) {
-			return null;
-		}
-		$option_id = 'fw_options' . ( $option_id !== null ? '/' . $option_id : '' );
+	protected function get_values($item_id, array $extra_data = array()) {
+		return FW_WP_Meta::get( 'fw_term', $item_id, 'fw_options', array(), null );
+	}
 
-		FW_WP_Meta::set( 'fw_term', $term_id, $option_id, $value );
+	protected function set_values($item_id, $values, array $extra_data = array()) {
+		FW_WP_Meta::set( 'fw_term', $item_id, 'fw_options', $values );
+	}
+
+	protected function get_options($item_id, array $extra_data = array()) {
+		return fw()->theme->get_taxonomy_options($extra_data['taxonomy']);
+	}
+
+	protected function get_fw_storage_params($item_id, array $extra_data = array()) {
+		return array(
+			'term-id' => $item_id,
+			'taxonomy' => $extra_data['taxonomy'],
+		);
+	}
+
+	protected function _get_cache_key($key, $item_id, array $extra_data = array()) {
+		if ($key === 'options') {
+			return $extra_data['taxonomy']; // Cache options grouped by taxonomy, not by term id
+		} else {
+			return $item_id;
+		}
+	}
+
+	protected function _init() {
+		/**
+		 * Get term option value from the database
+		 *
+		 * @param int $term_id
+		 * @param string $taxonomy
+		 * @param string|null $option_id Specific option id (accepts multikey). null - all options
+		 * @param null|mixed $default_value If no option found in the database, this value will be returned
+		 * @param null|bool $get_original_value REMOVED https://github.com/ThemeFuse/Unyson/issues/1676
+		 *
+		 * @return mixed|null
+		 */
+		function fw_get_db_term_option( $term_id, $taxonomy, $option_id = null, $default_value = null, $get_original_value = null ) {
+			if ( ! taxonomy_exists( $taxonomy ) ) {
+				return null;
+			}
+
+			return FW_Db_Options_Model::_get_instance('term')->get(intval($term_id), $option_id, $default_value, array(
+				'taxonomy' => $taxonomy
+			));
+		}
+
+		/**
+		 * Set term option value in database
+		 *
+		 * @param int $term_id
+		 * @param string $taxonomy
+		 * @param string|null $option_id Specific option id (accepts multikey). null - all options
+		 * @param mixed $value
+		 *
+		 * @return null
+		 */
+		function fw_set_db_term_option( $term_id, $taxonomy, $option_id = null, $value ) {
+			if ( ! taxonomy_exists( $taxonomy ) ) {
+				return null;
+			}
+
+			FW_Db_Options_Model::_get_instance('term')->set(intval($term_id), $option_id, $value, array(
+				'taxonomy' => $taxonomy
+			));
+		}
 	}
 }
-
-/**
- * Extensions Data
- *
- * Used by extensions to store custom data in database.
- * By using these functions, extension prevent database spam with wp options for each extension,
- * because these functions store all data in one wp option.
- */
-{
-	/**
-	 * Get extension's data from the database
-	 *
-	 * @param string $extension_name
-	 * @param string|null $multi_key The key of the data you want to get. null - all data
-	 * @param null|mixed $default_value If no option found in the database, this value will be returned
-	 * @param null|bool $get_original_value REMOVED https://github.com/ThemeFuse/Unyson/issues/1676
-	 *
-	 * @return mixed|null
-	 */
-	function fw_get_db_extension_data( $extension_name, $multi_key = null, $default_value = null, $get_original_value = null ) {
-		if ( ! fw()->extensions->get( $extension_name ) ) {
-			trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
-
-			return null;
-		}
-
-		if ( $multi_key ) {
-			$multi_key = $extension_name . '/' . $multi_key;
-		} else {
-			$multi_key = $extension_name;
-		}
-
-		return FW_WP_Option::get( 'fw_extensions', $multi_key, $default_value, $get_original_value );
-	}
-
-	/**
-	 * Set some extension's data in database
-	 *
-	 * @param string $extension_name
-	 * @param string|null $multi_key The key of the data you want to set. null - all data
-	 * @param mixed $value
-	 */
-	function fw_set_db_extension_data( $extension_name, $multi_key = null, $value ) {
-		if ( ! fw()->extensions->get( $extension_name ) ) {
-			trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
-
-			return;
-		}
-
-		if ( $multi_key ) {
-			$multi_key = $extension_name . '/' . $multi_key;
-		} else {
-			$multi_key = $extension_name;
-		}
-
-		FW_WP_Option::set( 'fw_extensions', $multi_key, $value );
-	}
-}
+new FW_Db_Options_Model_Term();
 
 /**
  * Extensions Settings Options
@@ -385,62 +372,6 @@ new FW_Db_Options_Model_Post();
 		}
 
 		FW_WP_Option::set( 'fw_ext_settings_options:' . $extension_name, $option_id, $value );
-	}
-}
-
-{
-	/**
-	 * Get user meta set by specific extension
-	 *
-	 * @param int $user_id
-	 * @param string $extension_name
-	 * @param string $keys
-	 *
-	 * If the extension doesn't exist or is disabled, or meta key doesn't exist, returns null,
-	 * else returns the meta key value
-	 *
-	 * @return mixed|null
-	 */
-	function fw_get_db_extension_user_data( $user_id, $extension_name, $keys = null ) {
-		if ( ! fw()->extensions->get( $extension_name ) ) {
-			trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
-
-			return null;
-		}
-		$data = get_user_meta( $user_id, 'fw_data', true );
-
-		if ( is_null( $keys ) ) {
-			return fw_akg( $extension_name, $data );
-		}
-
-		return fw_akg( $extension_name . '/' . $keys, $data );
-	}
-
-	/**
-	 * @param int $user_id
-	 * @param string $extension_name
-	 * @param mixed $value
-	 * @param string $keys
-	 *
-	 * In case the extension doesn't exist or is disabled, or the value is equal to previous, returns false
-	 *
-	 * @return bool|int
-	 */
-	function fw_set_db_extension_user_data( $user_id, $extension_name, $value, $keys = null ) {
-		if ( ! fw()->extensions->get( $extension_name ) ) {
-			trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
-
-			return false;
-		}
-		$data                    = get_user_meta( $user_id, 'fw_data', true );
-
-		if ( $keys == null ) {
-			fw_aks( $extension_name, $value, $data );
-		} else {
-			fw_aks( $extension_name . '/' . $keys, $value, $data );
-		}
-
-		return fw_update_user_meta( $user_id, 'fw_data', $data );
 	}
 }
 
@@ -575,6 +506,120 @@ new FW_Db_Options_Model_Post();
 			FW_Option_Type::get_default_name_prefix(),
 			$db_value
 		);
+	}
+}
+
+{
+	/**
+	 * Get user meta set by specific extension
+	 *
+	 * @param int $user_id
+	 * @param string $extension_name
+	 * @param string $keys
+	 *
+	 * If the extension doesn't exist or is disabled, or meta key doesn't exist, returns null,
+	 * else returns the meta key value
+	 *
+	 * @return mixed|null
+	 */
+	function fw_get_db_extension_user_data( $user_id, $extension_name, $keys = null ) {
+		if ( ! fw()->extensions->get( $extension_name ) ) {
+			trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
+
+			return null;
+		}
+		$data = get_user_meta( $user_id, 'fw_data', true );
+
+		if ( is_null( $keys ) ) {
+			return fw_akg( $extension_name, $data );
+		}
+
+		return fw_akg( $extension_name . '/' . $keys, $data );
+	}
+
+	/**
+	 * @param int $user_id
+	 * @param string $extension_name
+	 * @param mixed $value
+	 * @param string $keys
+	 *
+	 * In case the extension doesn't exist or is disabled, or the value is equal to previous, returns false
+	 *
+	 * @return bool|int
+	 */
+	function fw_set_db_extension_user_data( $user_id, $extension_name, $value, $keys = null ) {
+		if ( ! fw()->extensions->get( $extension_name ) ) {
+			trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
+
+			return false;
+		}
+		$data                    = get_user_meta( $user_id, 'fw_data', true );
+
+		if ( $keys == null ) {
+			fw_aks( $extension_name, $value, $data );
+		} else {
+			fw_aks( $extension_name . '/' . $keys, $value, $data );
+		}
+
+		return fw_update_user_meta( $user_id, 'fw_data', $data );
+	}
+}
+
+/**
+ * Extensions Data
+ *
+ * Used by extensions to store custom data in database.
+ * By using these functions, extension prevent database spam with wp options for each extension,
+ * because these functions store all data in one wp option.
+ */
+{
+	/**
+	 * Get extension's data from the database
+	 *
+	 * @param string $extension_name
+	 * @param string|null $multi_key The key of the data you want to get. null - all data
+	 * @param null|mixed $default_value If no option found in the database, this value will be returned
+	 * @param null|bool $get_original_value REMOVED https://github.com/ThemeFuse/Unyson/issues/1676
+	 *
+	 * @return mixed|null
+	 */
+	function fw_get_db_extension_data( $extension_name, $multi_key = null, $default_value = null, $get_original_value = null ) {
+		if ( ! fw()->extensions->get( $extension_name ) ) {
+			trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
+
+			return null;
+		}
+
+		if ( $multi_key ) {
+			$multi_key = $extension_name . '/' . $multi_key;
+		} else {
+			$multi_key = $extension_name;
+		}
+
+		return FW_WP_Option::get( 'fw_extensions', $multi_key, $default_value, $get_original_value );
+	}
+
+	/**
+	 * Set some extension's data in database
+	 *
+	 * @param string $extension_name
+	 * @param string|null $multi_key The key of the data you want to set. null - all data
+	 * @param mixed $value
+	 */
+	function fw_set_db_extension_data( $extension_name, $multi_key = null, $value ) {
+		if ( ! fw()->extensions->get( $extension_name ) ) {
+			trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
+
+			return;
+		}
+
+		if ( $multi_key ) {
+			$multi_key = $extension_name . '/' . $multi_key;
+		} else {
+			$multi_key = $extension_name;
+		}
+
+		FW_WP_Option::set( 'fw_extensions', $multi_key, $value );
 	}
 }
 

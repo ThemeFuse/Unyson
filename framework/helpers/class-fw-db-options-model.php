@@ -13,40 +13,52 @@ abstract class FW_Db_Options_Model {
 
 	/**
 	 * @param null|int $item_id
+	 * @param array $extra_data
 	 * @return mixed
 	 */
-	abstract protected function get_values($item_id);
+	abstract protected function get_values($item_id, array $extra_data = array());
 
 	/**
 	 * @param null|int $item_id
-	 * @param mixed $value
+	 * @param mixed $values
+	 * @param array $extra_data
 	 * @return void
 	 */
-	abstract protected function set_values($item_id, $value);
+	abstract protected function set_values($item_id, $values, array $extra_data = array());
 
 	/**
 	 * @param null|int $item_id
+	 * @param array $extra_data
 	 * @return array
 	 */
-	abstract protected function get_options($item_id);
+	abstract protected function get_options($item_id, array $extra_data = array());
 
 	/**
-	 * @param $item_id
+	 * @param null|int $item_id
+	 * @param array $extra_data
 	 * @return array E.g. for post options {'post-id': $item_id}
 	 * @see fw_db_option_storage_type()
 	 */
-	abstract protected function get_fw_storage_params($item_id);
+	abstract protected function get_fw_storage_params($item_id, array $extra_data = array());
 
 	abstract protected function _init();
 
-	protected function _after_set($item_id, $option_id, $sub_keys, $old_value) {}
+	/**
+	 * @param null|int $item_id
+	 * @param null|string $option_id
+	 * @param null|string $sub_keys
+	 * @param mixed $old_value
+	 * @param array $extra_data
+	 */
+	protected function _after_set($item_id, $option_id, $sub_keys, $old_value, array $extra_data = array()) {}
 
 	/**
 	 * @param string $key
 	 * @param null|int $item_id
+	 * @param array $extra_data
 	 * @return null|string
 	 */
-	protected function _get_cache_key($key, $item_id) {
+	protected function _get_cache_key($key, $item_id, array $extra_data = array()) {
 		return empty($item_id) ? null : $item_id;
 	}
 
@@ -79,8 +91,8 @@ abstract class FW_Db_Options_Model {
 		$this->_init();
 	}
 
-	private function get_cache_key($key, $item_id) {
-		$item_key = $this->_get_cache_key($key, $item_id);
+	private function get_cache_key($key, $item_id, array $extra_data = array()) {
+		$item_key = $this->_get_cache_key($key, $item_id, $extra_data);
 
 		return 'fw-options-model:'. $this->get_id() .'/'. $key . (empty($item_key) ? '' : '/'. $item_key);
 	}
@@ -89,9 +101,10 @@ abstract class FW_Db_Options_Model {
 	 * @param null|int $item_id Post or Term ID
 	 * @param null|string $option_id
 	 * @param mixed $default_value
+	 * @param array $extra_data
 	 * @return mixed
 	 */
-	final public function get( $item_id = null, $option_id = null, $default_value = null ) {
+	final public function get( $item_id = null, $option_id = null, $default_value = null, array $extra_data = array() ) {
 		if (empty($option_id)) {
 			$sub_keys = null;
 		} else {
@@ -106,11 +119,11 @@ abstract class FW_Db_Options_Model {
 			/**
 			 * Cached because values are merged with extracted default values
 			 */
-			$values = FW_Cache::get($cache_key_values = $this->get_cache_key('values', $item_id));
+			$values = FW_Cache::get($cache_key_values = $this->get_cache_key('values', $item_id, $extra_data));
 		} catch (FW_Cache_Not_Found_Exception $e) {
 			FW_Cache::set(
 				$cache_key_values,
-				$values = is_array($values = $this->get_values($item_id)) ? $values : array()
+				$values = is_array($values = $this->get_values($item_id, $extra_data)) ? $values : array()
 			);
 
 			self::$merge_values_with_defaults[ $this->get_id() ] = true;
@@ -140,10 +153,10 @@ abstract class FW_Db_Options_Model {
 		}
 
 		try {
-			$options = FW_Cache::get( $cache_key = $this->get_cache_key('options', $item_id));
+			$options = FW_Cache::get( $cache_key = $this->get_cache_key('options', $item_id, $extra_data));
 		} catch (FW_Cache_Not_Found_Exception $e) {
 			FW_Cache::set($cache_key, array()); // prevent recursion
-			FW_Cache::set($cache_key, $options = fw_extract_only_options($this->get_options($item_id)));
+			FW_Cache::set($cache_key, $options = fw_extract_only_options($this->get_options($item_id, $extra_data)));
 		}
 
 		/**
@@ -166,7 +179,7 @@ abstract class FW_Db_Options_Model {
 					$id,
 					$options[$id],
 					isset($values[$id]) ? $values[$id] : null,
-					$this->get_fw_storage_params($item_id)
+					$this->get_fw_storage_params($item_id, $extra_data)
 				);
 			}
 		} else {
@@ -175,7 +188,7 @@ abstract class FW_Db_Options_Model {
 					$option_id,
 					$options[ $option_id ],
 					isset($values[ $option_id ]) ? $values[ $option_id ] : null,
-					$this->get_fw_storage_params($item_id)
+					$this->get_fw_storage_params($item_id, $extra_data)
 				);
 			}
 		}
@@ -191,14 +204,14 @@ abstract class FW_Db_Options_Model {
 		}
 	}
 	
-	final public function set( $item_id = null, $option_id = null, $value ) {
-		FW_Cache::del($cache_key_values = $this->get_cache_key('values', $item_id));
+	final public function set( $item_id = null, $option_id = null, $value, array $extra_data = array() ) {
+		FW_Cache::del($cache_key_values = $this->get_cache_key('values', $item_id, $extra_data));
 		
 		try {
-			$options = FW_Cache::get($cache_key = $this->get_cache_key('options', $item_id));
+			$options = FW_Cache::get($cache_key = $this->get_cache_key('options', $item_id, $extra_data));
 		} catch (FW_Cache_Not_Found_Exception $e) {
 			FW_Cache::set($cache_key, array()); // prevent recursion
-			FW_Cache::set($cache_key, $options = fw_extract_only_options($this->get_options($item_id)));
+			FW_Cache::set($cache_key, $options = fw_extract_only_options($this->get_options($item_id, $extra_data)));
 		}
 
 		$sub_keys = null;
@@ -210,7 +223,7 @@ abstract class FW_Db_Options_Model {
 			$option_id = $_option_id;
 			unset($_option_id);
 
-			$old_values = is_array($old_values = $this->get_values($item_id)) ? $old_values : array();
+			$old_values = is_array($old_values = $this->get_values($item_id, $extra_data)) ? $old_values : array();
 			$old_value = isset($old_values[$option_id]) ? $old_values[$option_id] : null;
 
 			if ($sub_keys) { // update sub_key in old_value and use the entire value
@@ -227,17 +240,17 @@ abstract class FW_Db_Options_Model {
 					$option_id,
 					$options[$option_id],
 					$value,
-					$this->get_fw_storage_params($item_id)
+					$this->get_fw_storage_params($item_id, $extra_data)
 				);
 			}
 
 			$old_values[$option_id] = $value;
 
-			$this->set_values($item_id, $old_values);
+			$this->set_values($item_id, $old_values, $extra_data);
 
 			unset($old_values);
 		} else {
-			$old_value = is_array($old_values = $this->get_values($item_id)) ? $old_values : array();
+			$old_value = is_array($old_values = $this->get_values($item_id, $extra_data)) ? $old_values : array();
 
 			if ( ! is_array($value) ) {
 				$value = array();
@@ -249,16 +262,16 @@ abstract class FW_Db_Options_Model {
 						$_option_id,
 						$options[$_option_id],
 						$_option_value,
-						$this->get_fw_storage_params($item_id)
+						$this->get_fw_storage_params($item_id, $extra_data)
 					);
 				}
 			}
 
-			$this->set_values($item_id, $value);
+			$this->set_values($item_id, $value, $extra_data);
 		}
 
 		FW_Cache::del($cache_key_values); // fixes https://github.com/ThemeFuse/Unyson/issues/1538
 
-		$this->_after_set($item_id, $option_id, $sub_keys, $old_value);
+		$this->_after_set($item_id, $option_id, $sub_keys, $old_value, $extra_data);
 	}
 }
