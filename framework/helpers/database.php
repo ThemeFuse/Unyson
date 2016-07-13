@@ -303,77 +303,69 @@ class FW_Db_Options_Model_Term extends FW_Db_Options_Model {
 }
 new FW_Db_Options_Model_Term();
 
-/**
- * Extensions Settings Options
- */
-{
-	/**
-	 * Get extension's settings option value from the database
-	 *
-	 * @param string $extension_name
-	 * @param string|null $option_id
-	 * @param null|mixed $default_value If no option found in the database, this value will be returned
-	 * @param null|bool $get_original_value REMOVED https://github.com/ThemeFuse/Unyson/issues/1676
-	 *
-	 * @return mixed|null
-	 */
-	function fw_get_db_ext_settings_option( $extension_name, $option_id = null, $default_value = null, $get_original_value = null ) {
-		if ( ! ( $extension = fw()->extensions->get( $extension_name ) ) ) {
-			trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
-
-			return null;
-		}
-
-		$value = FW_WP_Option::get( 'fw_ext_settings_options:' . $extension_name, $option_id, $default_value, $get_original_value );
-
-		if ( is_null( $value ) ) {
-			/**
-			 * Maybe the options was never saved or the given option id does not exists
-			 * Extract the default values from the options array and try to find there the option id
-			 */
-
-			$cache_key = 'fw_default_options_values/ext_settings:' . $extension_name;
-
-			try {
-				$all_options_values = FW_Cache::get( $cache_key );
-			} catch ( FW_Cache_Not_Found_Exception $e ) {
-				// extract the default values from options array
-				$all_options_values = fw_get_options_values_from_input(
-					$extension->get_settings_options(),
-					array()
-				);
-
-				FW_Cache::set( $cache_key, $all_options_values );
-			}
-
-			if ( empty( $option_id ) ) {
-				// option id not specified, return all options values
-				return $all_options_values;
-			} else {
-				return fw_akg( $option_id, $all_options_values, $default_value );
-			}
-		} else {
-			return $value;
-		}
+// Extensions Settings Options
+class FW_Db_Options_Model_Extension extends FW_Db_Options_Model {
+	protected function get_id() {
+		return 'extension';
 	}
 
-	/**
-	 * Set extension's setting option value in database
-	 *
-	 * @param string $extension_name
-	 * @param string|null $option_id
-	 * @param mixed $value
-	 */
-	function fw_set_db_ext_settings_option( $extension_name, $option_id = null, $value ) {
-		if ( ! fw()->extensions->get( $extension_name ) ) {
-			trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
+	protected function get_values($item_id, array $extra_data = array()) {
+		return FW_WP_Option::get( 'fw_ext_settings_options:' . $item_id, null, array() );
+	}
 
-			return;
+	protected function set_values($item_id, $values, array $extra_data = array()) {
+		FW_WP_Option::set( 'fw_ext_settings_options:' . $item_id, null, $values );
+	}
+
+	protected function get_options($item_id, array $extra_data = array()) {
+		return fw_ext($item_id)->get_settings_options();
+	}
+
+	protected function get_fw_storage_params($item_id, array $extra_data = array()) {
+		return array(
+			'extension' => $item_id,
+		);
+	}
+
+	protected function _init() {
+		/**
+		 * Get extension's settings option value from the database
+		 *
+		 * @param string $extension_name
+		 * @param string|null $option_id
+		 * @param null|mixed $default_value If no option found in the database, this value will be returned
+		 * @param null|bool $get_original_value REMOVED https://github.com/ThemeFuse/Unyson/issues/1676
+		 *
+		 * @return mixed|null
+		 */
+		function fw_get_db_ext_settings_option( $extension_name, $option_id = null, $default_value = null, $get_original_value = null ) {
+			if ( ! ( $extension = fw_ext( $extension_name ) ) ) {
+				trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
+				return null;
+			}
+
+			return FW_Db_Options_Model::_get_instance('extension')->get($extension_name, $option_id, $default_value);
 		}
 
-		FW_WP_Option::set( 'fw_ext_settings_options:' . $extension_name, $option_id, $value );
+		/**
+		 * Set extension's setting option value in database
+		 *
+		 * @param string $extension_name
+		 * @param string|null $option_id
+		 * @param mixed $value
+		 */
+		function fw_set_db_ext_settings_option( $extension_name, $option_id = null, $value ) {
+			if ( ! fw_ext( $extension_name ) ) {
+				trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
+
+				return;
+			}
+
+			FW_Db_Options_Model::_get_instance('extension')->set($extension_name, $option_id, $value);
+		}
 	}
 }
+new FW_Db_Options_Model_Extension();
 
 /** Customizer Framework Options */
 {

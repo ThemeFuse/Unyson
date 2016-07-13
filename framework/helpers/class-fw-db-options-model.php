@@ -12,14 +12,14 @@ abstract class FW_Db_Options_Model {
 	abstract protected function get_id();
 
 	/**
-	 * @param null|int $item_id
+	 * @param null|int|string $item_id
 	 * @param array $extra_data
 	 * @return mixed
 	 */
 	abstract protected function get_values($item_id, array $extra_data = array());
 
 	/**
-	 * @param null|int $item_id
+	 * @param null|int|string $item_id
 	 * @param mixed $values
 	 * @param array $extra_data
 	 * @return void
@@ -27,14 +27,14 @@ abstract class FW_Db_Options_Model {
 	abstract protected function set_values($item_id, $values, array $extra_data = array());
 
 	/**
-	 * @param null|int $item_id
+	 * @param null|int|string $item_id
 	 * @param array $extra_data
 	 * @return array
 	 */
 	abstract protected function get_options($item_id, array $extra_data = array());
 
 	/**
-	 * @param null|int $item_id
+	 * @param null|int|string $item_id
 	 * @param array $extra_data
 	 * @return array E.g. for post options {'post-id': $item_id}
 	 * @see fw_db_option_storage_type()
@@ -44,7 +44,7 @@ abstract class FW_Db_Options_Model {
 	abstract protected function _init();
 
 	/**
-	 * @param null|int $item_id
+	 * @param null|int|string $item_id
 	 * @param null|string $option_id
 	 * @param null|string $sub_keys
 	 * @param mixed $old_value
@@ -54,7 +54,7 @@ abstract class FW_Db_Options_Model {
 
 	/**
 	 * @param string $key
-	 * @param null|int $item_id
+	 * @param null|int|string $item_id
 	 * @param array $extra_data
 	 * @return null|string
 	 */
@@ -98,7 +98,7 @@ abstract class FW_Db_Options_Model {
 	}
 
 	/**
-	 * @param null|int $item_id Post or Term ID
+	 * @param null|int|string $item_id
 	 * @param null|string $option_id
 	 * @param mixed $default_value
 	 * @param array $extra_data
@@ -203,7 +203,7 @@ abstract class FW_Db_Options_Model {
 			}
 		}
 	}
-	
+
 	final public function set( $item_id = null, $option_id = null, $value, array $extra_data = array() ) {
 		FW_Cache::del($cache_key_values = $this->get_cache_key('values', $item_id, $extra_data));
 		
