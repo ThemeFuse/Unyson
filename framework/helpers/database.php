@@ -21,7 +21,9 @@ class FW_Db_Options_Model_Settings extends FW_Db_Options_Model {
 	}
 
 	protected function get_fw_storage_params($item_id, array $extra_data = array()) {
-		return array();
+		return array(
+			'settings' => true
+		);
 	}
 
 	protected function _init() {
@@ -367,139 +369,55 @@ class FW_Db_Options_Model_Extension extends FW_Db_Options_Model {
 }
 new FW_Db_Options_Model_Extension();
 
-/** Customizer Framework Options */
-{
-	/**
-	 * Get a customizer framework option value from the database
-	 *
-	 * @param string|null $option_id Specific option id (accepts multikey). null - all options
-	 * @param null|mixed $default_value If no option found in the database, this value will be returned
-	 *
-	 * @return mixed|null
-	 */
-	function fw_get_db_customizer_option( $option_id = null, $default_value = null ) {
-		static $merge_values_with_defaults = false;
-
-		if (empty($option_id)) {
-			$sub_keys = null;
-		} else {
-			$option_id = explode('/', $option_id); // 'option_id/sub/keys'
-			$_option_id = array_shift($option_id); // 'option_id'
-			$sub_keys = empty($option_id) ? null : implode('/', $option_id); // 'sub/keys'
-			$option_id = $_option_id;
-			unset($_option_id);
-		}
-
-		try {
-			/**
-			 * Cached because values are merged with extracted default values
-			 */
-			$values = FW_Cache::get($cache_key = 'fw_customizer_options/values');
-		} catch (FW_Cache_Not_Found_Exception $e) {
-			FW_Cache::set(
-				$cache_key,
-				// note: this contains only changed controls/options
-				$values = (array)get_theme_mod(FW_Option_Type::get_default_name_prefix(), array())
-			);
-
-			$merge_values_with_defaults = true;
-		}
-
-		/**
-		 * If db value is not found and default value is provided
-		 * return default value before loading options file
-		 * to prevent infinite recursion in case if this function is called in options file
-		 */
-		if ( ! is_null($default_value) ) {
-			if ( empty( $option_id ) ) {
-				if ( empty( $values ) && is_array( $default_value ) ) {
-					return $default_value;
-				}
-			} else {
-				if ( is_null( $sub_keys ) ) {
-					if ( ! isset( $values[ $option_id ] ) ) {
-						return $default_value;
-					}
-				} else {
-					if ( is_null( fw_akg( $sub_keys, $values[ $option_id ] ) ) ) {
-						return $default_value;
-					}
-				}
-			}
-		}
-
-		try {
-			$options = FW_Cache::get( $cache_key = 'fw_only_options/customizer' );
-		} catch (FW_Cache_Not_Found_Exception $e) {
-			FW_Cache::set($cache_key, array()); // prevent recursion
-			FW_Cache::set(
-				$cache_key,
-				$options = fw_extract_only_options(fw()->theme->get_customizer_options())
-			);
-		}
-
-		/**
-		 * Complete missing db values with default values from options array
-		 */
-		if ($merge_values_with_defaults) {
-			$merge_values_with_defaults = false;
-			FW_Cache::set(
-				'fw_customizer_options/values',
-				$values = array_merge(fw_get_options_values_from_input($options, array()), $values)
-			);
-		}
-
-		if (empty($option_id)) {
-			foreach ($options as $id => $option) {
-				$values[$id] = fw()->backend->option_type($options[$id]['type'])->storage_load(
-					$id, $options[$id], isset($values[$id]) ? $values[$id] : null, array()
-				);
-			}
-		} else {
-			if (isset($options[$option_id])) {
-				$values[ $option_id ] = fw()->backend->option_type( $options[ $option_id ]['type'] )->storage_load(
-					$option_id,
-					$options[ $option_id ],
-					isset($values[ $option_id ]) ? $values[ $option_id ] : null,
-					array()
-				);
-			}
-		}
-
-		if (empty($option_id)) {
-			return (empty($values) && is_array($default_value)) ? $default_value : $values;
-		} else {
-			if (is_null($sub_keys)) {
-				return isset($values[$option_id]) ? $values[$option_id] : $default_value;
-			} else {
-				return fw_akg($sub_keys, $values[$option_id], $default_value);
-			}
-		}
-
-		// todo: create a general helper to get/set db options, which will care about cache and fw-storage processing
+// Customizer Options
+class FW_Db_Options_Model_Customizer extends FW_Db_Options_Model {
+	protected function get_id() {
+		return 'customizer';
 	}
 
-	/**
-	 * Set a theme customizer option value in database
-	 *
-	 * @param null $option_id Specific option id (accepts multikey). null - all options
-	 * @param mixed $value
-	 */
-	function fw_set_db_customizer_option( $option_id = null, $value ) {
-		$db_value = get_theme_mod(FW_Option_Type::get_default_name_prefix(), array());
+	protected function get_values($item_id, array $extra_data = array()) {
+		return get_theme_mod(FW_Option_Type::get_default_name_prefix(), array());
+	}
 
-		if (is_null($option_id)) {
-			$db_value = $value;
-		} else {
-			fw_aks($option_id, $value, $db_value);
-		}
+	protected function set_values($item_id, $values, array $extra_data = array()) {
+		set_theme_mod(FW_Option_Type::get_default_name_prefix(), $values);
+	}
 
-		set_theme_mod(
-			FW_Option_Type::get_default_name_prefix(),
-			$db_value
+	protected function get_options($item_id, array $extra_data = array()) {
+		return fw()->theme->get_customizer_options();
+	}
+
+	protected function get_fw_storage_params($item_id, array $extra_data = array()) {
+		return array(
+			'customizer' => true
 		);
 	}
+
+	protected function _init() {
+		/**
+		 * Get a customizer framework option value from the database
+		 *
+		 * @param string|null $option_id Specific option id (accepts multikey). null - all options
+		 * @param null|mixed $default_value If no option found in the database, this value will be returned
+		 *
+		 * @return mixed|null
+		 */
+		function fw_get_db_customizer_option( $option_id = null, $default_value = null ) {
+			FW_Db_Options_Model::_get_instance('customizer')->get(null, $option_id, $default_value);
+		}
+
+		/**
+		 * Set a theme customizer option value in database
+		 *
+		 * @param null $option_id Specific option id (accepts multikey). null - all options
+		 * @param mixed $value
+		 */
+		function fw_set_db_customizer_option( $option_id = null, $value ) {
+			FW_Db_Options_Model::_get_instance('customizer')->set(null, $option_id, $value);
+		}
+	}
 }
+new FW_Db_Options_Model_Customizer();
 
 {
 	/**
