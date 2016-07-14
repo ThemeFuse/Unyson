@@ -881,6 +881,10 @@ body.rtl .fw-postbox .handlediv:before {
 	border-bottom: 1px solid #eeeeee;
 }
 
+.fw-backend-option-design-default.fw-bottom-border-hidden {
+	border-bottom-color: transparent;
+}
+
 .fw-force-xs .fw-backend-option-design-default {
 	padding: 15px 12px;
 }

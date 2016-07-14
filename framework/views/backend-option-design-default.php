@@ -93,6 +93,11 @@
 			$classes['input']['responsive'] = 'fw-col-xs-12';
 			$classes['desc']['responsive']  = 'fw-col-xs-12';
 		}
+
+		$hide_bottom_border = fw_akg( 'hide-bottom-border', $option, false );
+		if( $hide_bottom_border ) {
+			$classes['option'][] = 'fw-bottom-border-hidden';
+		}
 	}
 
 	/** Additional classes for input div */
