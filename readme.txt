@@ -3,7 +3,7 @@ Contributors: unyson
 Tags: page builder, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.3
 Tested up to: 4.5
-Stable tag: 2.5.8
+Stable tag: 2.5.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,6 +82,12 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.5.9 =
+* Fixed missing function in WP < 4.5 [#1767](https://github.com/ThemeFuse/Unyson/issues/1767)
+* New option-type: [icon-v2](http://manual.unyson.io/en/latest/options/built-in-option-types.html#icon-v2)
+* Fixed `wp-editor` option-type bugs [#1739](https://github.com/ThemeFuse/Unyson/issues/1739)
+* Process `fw-storage` parameter in all options *(Theme Settings, Customizer, Post, Term, Extension Settings)* [#1551](https://github.com/ThemeFuse/Unyson/issues/1551)
 
 = 2.5.8 =
 * Fixed `wp-editor` bugs
