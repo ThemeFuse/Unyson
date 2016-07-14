@@ -11,28 +11,10 @@ class FW_WP_Editor_Manager {
 	private $option = null;
 	private $data = null;
 
-	/**
-	 * https://github.com/WordPress/WordPress/blob/master/wp-includes/class-wp-editor.php#L305
-	 * An _WP_Editors::editor_settings call mutates those fields I list below.
-	 *
-	 * I need them to be mocked and after the manipulations are done to be
-	 * safely restored. I don't to cause troubles to WordPress execution engine.
+	private $qt_settings = null;
+	private $mce_settings = null;
 
-	 * 1. self::$first_init set to array() in order to skip add_action(), then restore
-	 * 2. preserve self::$qt_settings value
-	 * 3. preserve self::$qt_buttons
-	 * 4. preserve self::$baseurl
-	 * 5. preserve self::$mce_locale
-	 * 6. preserve self::$first_init
-	 * 7. $set['teeny'] should be not set
-	 * 8. preserve self::$mce_settings
-	 */
-	private $fields_to_mock_in_wp_editors = array(
-		'first_init', 'qt_settings', 'qt_buttons', 'baseurl',
-		'mce_locale', 'first_init', 'mce_settings'
-	);
-	private $mock_data = null;
-	private $reflection_class = null;
+	private $priority = 999999999999999;
 
 	public function __construct($id, $option, $data) {
 		$this->id = $id;
@@ -46,6 +28,7 @@ class FW_WP_Editor_Manager {
 		 */
 		$this->editor_id = fw()->backend->option_type('wp-editor')->get_id_prefix() . fw_rand_md5();
 	}
+
 
 	public function get_html() {
 		ob_start();
@@ -75,7 +58,6 @@ class FW_WP_Editor_Manager {
 			$option['attr']['data-fw-editor-id'] = $this->editor_id;
 			$option['attr']['data-fw-mce-settings'] = json_encode($preinit_data['mce_settings']);
 			$option['attr']['data-fw-qt-settings'] = json_encode($preinit_data['qt_settings']);
-
 
 			if ($option['shortcodes']) {
 				$option['attr']['data-fw-shortcodes-list'] = json_encode(
@@ -141,7 +123,6 @@ class FW_WP_Editor_Manager {
 	}
 
 	public function get_set() {
-
 		$set = _WP_Editors::parse_settings(
 			$this->editor_id,
 			$this->get_settings()
@@ -162,21 +143,7 @@ class FW_WP_Editor_Manager {
 	 * fingerprints there.
 	 */
 	public function get_preinit_data_for_editor() {
-		$this->mock_wp_editors_class();
-
-		/**
-		 * We are safe to do any modifications to the _WP_Editors here.
-		 * Any mocked data will be restored after our manipulations.
-		 */
-
-		/**
-		 * Skip add_action()
-		 * https://github.com/WordPress/WordPress/blob/master/wp-includes/class-wp-editor.php#L308
-		 */
-		$this->set_static_field(
-			'first_init',
-			array()
-		);
+		$this->attach_filters();
 
 		/**
 		 * Set:
@@ -191,14 +158,8 @@ class FW_WP_Editor_Manager {
 			$this->get_set()
 		);
 
-		$mce_settings = $this->get_static_field('mce_settings');
-		$qt_settings = $this->get_static_field('qt_settings');
-
-		$mce_settings = fw_akg(
-			$this->editor_id,
-			$mce_settings,
-			array()
-		);
+		$mce_settings = $this->mce_settings;
+		$qt_settings = $this->qt_settings;
 
 		if ( isset($mce_settings['formats']) ) {
 			/**
@@ -235,60 +196,64 @@ class FW_WP_Editor_Manager {
 			}
 		}
 
-		$qt_settings = fw_akg(
-			$this->editor_id,
-			$qt_settings,
-			array()
-		);
-
 		$preinit_data = array(
 			'mce_settings' => $mce_settings,
 			'qt_settings' => $qt_settings
 		);
 
-		$this->restore_wp_editors_class();
+		$this->dettach_filters();
 
 		return $preinit_data;
 	}
 
-	public function mock_wp_editors_class() {
-		$this->reflection_class = new ReflectionClass('_WP_Editors');
-		$this->mock_data = array();
+	public function attach_filters() {
+		add_filter(
+			'tiny_mce_before_init',
+			array($this, 'mce_settings_callback'),
+			$this->priority
+		);
 
-		array_map(
-			array($this, 'backup_static_field'),
-			$this->fields_to_mock_in_wp_editors
+		add_filter(
+			'quicktags_settings',
+			array($this, 'quicktags_settings_callback'),
+			$this->priority
+		);
+
+		add_filter(
+			'teeny_mce_before_init',
+			array($this, 'mce_settings_callback'),
+			$this->priority
 		);
 	}
 
-	public function restore_wp_editors_class() {
-		array_map(
-			array($this, 'restore_static_field'),
-			$this->fields_to_mock_in_wp_editors
+	public function dettach_filters() {
+		remove_filter(
+			'quicktags_settings',
+			array($this, 'quicktags_settings_callback'),
+			$this->priority
 		);
 
-		$this->reflection_class = null;
-		$this->mock_data = null;
+		remove_filter(
+			'tiny_mce_before_init',
+			array($this, 'mce_settings_callback'),
+			$this->priority
+		);
+
+		remove_filter(
+			'teeny_mce_before_init',
+			array($this, 'mce_settings_callback'),
+			$this->priority
+		);
 	}
 
-	public function backup_static_field($field) {
-		$this->mock_data[$field] = $this->get_static_field($field);
+	public function quicktags_settings_callback($qt_settings) {
+		$this->qt_settings = $qt_settings;
+		return $qt_settings;
 	}
 
-	public function restore_static_field($field) {
-		$this->set_static_field($field, $this->mock_data[$field]);
-	}
-
-	public function set_static_field($field, $value) {
-		$property = $this->reflection_class->getProperty($field);
-		$property->setAccessible(true);
-		$property->setValue($value);
-	}
-
-	public function get_static_field($field) {
-		$property = $this->reflection_class->getProperty($field);
-		$property->setAccessible(true);
-		return $property->getValue();
+	public function mce_settings_callback($mce_settings) {
+		$this->mce_settings = $mce_settings;
+		return $mce_settings;
 	}
 }
 
