@@ -118,8 +118,10 @@ abstract class FW_Option_Type
 	 * @param array  $option
 	 * @param array  $data
 	 * @return array
+	 *
+	 * @since 2.5.10
 	 */
-	private function prepare(&$id, &$option, &$data)
+	public function prepare(&$id, &$option, &$data)
 	{
 		$data = array_merge(
 			array(
