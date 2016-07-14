@@ -449,14 +449,14 @@ final class _FW_Component_Backend {
 
 		wp_register_script(
 			'fw-moment',
+			/**
+			 * IMPORTANT: At the end of the script is added this line:
+			 * moment.locale(document.documentElement.lang.slice(0, 2)); // fixes https://github.com/ThemeFuse/Unyson/issues/1767
+			 */
 			fw_get_framework_directory_uri( '/static/libs/moment/moment-with-locales.min.js' ),
 			array(),
 			fw()->manifest->get_version(),
 			true
-		);
-		wp_add_inline_script(
-			'fw-moment',
-			'moment.locale("'. esc_js(substr(get_locale(), 0, 2)) .'");'
 		);
 
 		wp_register_script(
