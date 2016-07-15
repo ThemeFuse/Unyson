@@ -18,13 +18,13 @@ function fw_option_type_date_picker_initialize(object) {
 	var date = null;
 
 	if (options.minDate != null || options.minDate != undefined) {
-		date = options.minDate.split('-');
-		defaults.startDate = new Date(date[2], date[1], date[0]);
+		date = options.minDate.split('-').map(Number);
+		defaults.startDate = new Date(date[2], date[1] - 1, date[0]);
 	}
 
 	if (options.maxDate != null || options.maxDate != undefined) {
-		date = options.maxDate.split('-');
-		defaults.endDate = new Date(date[2], date[1], date[0]);
+		date = options.maxDate.split('-').map(Number);
+		defaults.endDate = new Date(date[2], date[1] - 1, date[0]);
 	}
 
 	if (options.weekStart != null || options.weekStart != undefined) {
