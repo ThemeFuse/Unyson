@@ -1026,6 +1026,7 @@ FW_Option_Type::register( 'FW_Option_Type_Select_Multiple' );
 class FW_Option_Type_Unique extends FW_Option_Type
 {
 	private static $ids = array();
+	private static $should_do_regeneration = true;
 
 	public function get_type()
 	{
@@ -1092,6 +1093,10 @@ class FW_Option_Type_Unique extends FW_Option_Type
 		self::$ids[$original_id] = array();
 	}
 
+	public function set_should_do_regeneration($new) {
+		self::$should_do_regeneration = $new;
+	}
+
 	protected function _get_value_from_input($option, $input_value) {
 		if (is_null($input_value)) {
 			$id = empty($option['value']) ? $this->generate_id($option['length']) : $option['value'];
@@ -1105,8 +1110,14 @@ class FW_Option_Type_Unique extends FW_Option_Type
 
 		/**
 		 * Regenerate if found the same id again
+		 *
+		 * Sometimes you don't need to to regeneration of ids.
+		 * You can use set_should_do_regeneration() method in order to skip
+		 * this step. You really should use this hook only if you know what
+		 * you're doing. You can really break some things around without
+		 * proper care.
 		 */
-		{
+		if (self::$should_do_regeneration) {
 			global $post;
 
 			if ($post) {
