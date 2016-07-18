@@ -403,7 +403,7 @@ class FW_Db_Options_Model_Customizer extends FW_Db_Options_Model {
 		 * @return mixed|null
 		 */
 		function fw_get_db_customizer_option( $option_id = null, $default_value = null ) {
-			FW_Db_Options_Model::_get_instance('customizer')->get(null, $option_id, $default_value);
+			return FW_Db_Options_Model::_get_instance('customizer')->get(null, $option_id, $default_value);
 		}
 
 		/**
