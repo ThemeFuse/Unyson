@@ -3031,6 +3031,33 @@ body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 	max-height: 800px;
 }
 
+.fw-sole-modal.fw-sole-confirm-modal {
+	text-align: center;
+}
+
+.fw-sole-modal.fw-sole-confirm-modal .fw-sole-confirm-button:not(:last-child) {
+	margin-right: 10px;
+}
+
+.fw-sole-modal.fw-sole-confirm-modal .fw-sole-confirm-button {
+	min-width: 65px;
+}
+
+.fw-sole-modal.fw-sole-confirm-modal span.dashicons {
+	font-size: 60px;
+	width: 60px;
+	height: 60px;
+	margin-top: 10px;
+}
+
+.fw-sole-modal.fw-sole-confirm-modal.fw-sole-confirm-warning span.dashicons {
+	color: #e04139;
+}
+
+.fw-sole-modal.fw-sole-confirm-modal.fw-sole-confirm-info span.dashicons {
+	color: #5dab20;
+}
+
 /* end: sizes */
 
 /* tabs fixes */
