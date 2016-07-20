@@ -1945,7 +1945,7 @@ fw.soleModal = (function(){
 
 			this.setSize(this.current.width, this.current.height);
 
-			this.current.afterOpenStart();
+			this.current.afterOpenStart(this.$modal);
 			this.currentMethodTimeoutId = setTimeout(_.bind(function() {
 				this.current.afterOpen();
 
@@ -2005,7 +2005,7 @@ fw.soleModal = (function(){
 
 			if (this.queue.length && !this.queue[0].hidePrevious) {
 				// replace content
-				this.current.afterCloseStart();
+				this.current.afterCloseStart(this.$modal);
 				this.$getContent().fadeOut('fast', _.bind(function(){
 					this.current.afterClose();
 
@@ -2028,7 +2028,7 @@ fw.soleModal = (function(){
 
 			this.$modal.addClass('fw-modal-closing');
 
-			this.current.afterCloseStart();
+			this.current.afterCloseStart(this.$modal);
 			this.currentMethodTimeoutId = setTimeout(_.bind(function(){
 				this.current.afterClose();
 
@@ -2121,3 +2121,158 @@ fw.soleModal = (function(){
 		}
 	};
 })();
+
+/**
+ * Simple mechanism of getting confirmations from the user.
+ *
+ * Usage:
+ *
+ * var confirm = fw.soleConfirm.create();
+ * confirm.result.then(function (confirm_object) {
+ *   // SUCCESS!!
+ * });
+ *
+ * confirm.result.fail(function (confirm_object) {
+ *   // FAIL!!
+ * });
+ *
+ * confirm.show();
+ *
+ * Note: confirm.result is a full-featured jQuery.Deferred object, you can also
+ * use methods like always, done, jQuery.when with it.
+ *
+ * Warning:
+ *   You confirm object will be garbage collected after the user will pick an
+ *   option, that is, it will become null. You should create one more confirm
+ *   afterwards, if you need it.
+ *
+ * TODO:
+ *  1. Maybe pass unknown options to fw.soleModal itself.
+ */
+fw.soleConfirm = (function ($) {
+	var hashMap = {};
+
+	function create (opts) {
+		var confirm = new Confirm(opts);
+		hashMap[confirm.id] = confirm;
+		return hashMap[confirm.id];
+	}
+
+	function Confirm (opts) {
+		this.result = jQuery.Deferred();
+		this.id = fw.randomMD5();
+
+		this.opts = _.extend({
+			severity: 'info', // warning | info
+			message: null,
+			backdrop: null
+		}, opts);
+	}
+
+	Confirm.prototype.destroy = function () {
+		hashMap[this.id] = null;
+		delete hashMap[this.id];
+	}
+
+	/**
+	 * Attached listeners on this.result will be lost after this operation.
+	 * You'll have to add them once again.
+	 */
+	Confirm.prototype.reset = function () {
+		if (hashMap[this.id]) {
+			throw "You can't reset till your promise is not resolved! Do a .destroy() if you don't need Confirm anymore!";
+		}
+
+		if (this.result.isRejected() || this.result.isResolved()) {
+			this.result = jQuery.Deferred();
+		}
+
+		hashMap[this.id] = this;
+	};
+
+	Confirm.prototype.show = function () {
+		this._checkIsSet();
+
+		fw.soleModal.show(this.id, this._getHtml(), {
+			wrapWithTable: false,
+			showCloseButton: false,
+			allowClose: false, // a confirm window can't be closed on click of it's backdrop
+			backdrop: this.opts.backdrop,
+			customClass: 'fw-sole-confirm-modal fw-sole-confirm-' + this.opts.severity,
+			updateIfCurrent: true,
+
+			afterOpenStart: _.bind(this._fireEvents, this),
+			afterCloseStart: _.bind(this._teardownEvents, this)
+		});
+	};
+
+	Confirm.prototype.hide = function (reason) {
+		this._checkIsSet();
+
+		fw.soleModal.hide(this.id);
+	};
+
+	//////////////////
+
+	Confirm.prototype._fireEvents = function ($modal) {
+		$modal.find('.fw-sole-confirm-button')
+			.on('click.fw-sole-confirm', _.bind(this._handleClose, this));
+	};
+
+	Confirm.prototype._teardownEvents = function ($modal) {
+		$modal.find('.fw-sole-confirm-button').off('click.fw-sole-confirm');
+	};
+
+	Confirm.prototype._checkIsSet = function () {
+		if (! hashMap[this.id]) {
+			throw "You can't do operations on fullfilled Confirm! Do a .reset() first.";
+		}
+	};
+
+	Confirm.prototype._handleClose = function (event) {
+		var action = $(event.target).attr('data-fw-sole-confirm-action');
+		var id = $(event.target).attr('data-fw-sole-confirm-id');
+		var confirm = hashMap[id];
+
+		if (confirm) {
+			_.contains(['reject', 'resolve'], action) &&
+				confirm.result[action](this) &&
+				confirm.hide();
+
+			confirm.destroy();
+			confirm = null;
+		}
+	};
+
+	Confirm.prototype._getHtml = function () {
+		var iconClass = 'dashicons-' + this.opts.severity;
+		var icon = '<span class="dashicons ' + iconClass + '"></span>';
+		var heading = '<h1>' + fw.capitalizeFirstLetter(this.opts.severity) + '</h1>';
+		var message = this.opts.message ? '<p>' + this.opts.message + '</p>' : '';
+
+		var cancelButton = $('<button>', {
+			html: _fw_localized.l10n.cancel
+		}).attr({
+			'data-fw-sole-confirm-action': 'reject',
+			'data-fw-sole-confirm-id': this.id,
+			type: 'button',
+		}).addClass('fw-sole-confirm-button button');
+
+		var okButton = $('<button>', {
+			html: _fw_localized.l10n.ok
+		}).attr({
+			'data-fw-sole-confirm-action': 'resolve',
+			'data-fw-sole-confirm-id': this.id,
+			type: 'button',
+		}).addClass('fw-sole-confirm-button button button-primary');
+
+		return icon + heading + message + selfHtml(cancelButton) + selfHtml(okButton);
+
+		function selfHtml (el) { return $('<div>').append(el).html(); }
+	};
+
+	return {
+		create: create
+	};
+})(jQuery);
+

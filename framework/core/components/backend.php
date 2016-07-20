@@ -358,6 +358,8 @@ final class _FW_Component_Backend {
 					'save'     => __( 'Save', 'fw' ),
 					'reset'    => __( 'Reset', 'fw' ),
 					'apply'    => __( 'Apply', 'fw' ),
+					'cancel'   => __( 'Cancel', 'fw' ),
+					'ok'       => __( 'Ok', 'fw' )
 				),
 			) );
 		}
