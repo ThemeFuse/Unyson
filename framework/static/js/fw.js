@@ -2136,7 +2136,7 @@ fw.soleModal = (function(){
  *   // FAIL!!
  * });
  *
- * confirm.open();
+ * confirm.show();
  *
  * Note: confirm.result is a full-featured jQuery.Deferred object, you can also
  * use methods like always, done, jQuery.when with it.
@@ -2196,6 +2196,7 @@ fw.soleConfirm = (function ($) {
 		fw.soleModal.show(this.id, this._getHtml(), {
 			wrapWithTable: false,
 			showCloseButton: false,
+			allowClose: false, // a confirm window can't be closed on click of it's backdrop
 			backdrop: this.opts.backdrop,
 			customClass: 'fw-sole-confirm-modal fw-sole-confirm-' + this.opts.severity,
 			updateIfCurrent: true,
