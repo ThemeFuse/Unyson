@@ -3,7 +3,12 @@
 	var init = function () {
 		var $option = $(this),
 			$textarea = $option.find('.wp-editor-area:first'),
-			id = $option.attr('data-fw-editor-id');
+			id = $option.attr('data-fw-editor-id'),
+			$wrap = $textarea.closest('.wp-editor-wrap'),
+			visualMode = (typeof $option.attr('data-mode') != 'undefined')
+				? ($option.attr('data-mode') == 'tinymce')
+				: $wrap.hasClass('tmce-active'),
+			hasAutoP = $option.attr('data-fw-has-autop') === 'true';
 
 		/**
 		 * Dynamically set tinyMCEPreInit.mceInit and tinyMCEPreInit.qtInit
@@ -26,7 +31,7 @@
 		 * TinyMCE Editor
 		 * http://stackoverflow.com/a/21519323/1794248
 		 */
-		{
+		if (mceSettings) {
 			if (typeof tinyMCEPreInit.mceInit[ id ] == 'undefined') {
 				console.error('Can\'t find "'+ id +'" in tinyMCEPreInit.mceInit');
 				return;
@@ -37,11 +42,7 @@
 			tinyMCEPreInit.mceInit[ id ].setup = function(ed) {
 				ed.once('init', function (e) {
 					var editor = e.target,
-						id = editor.id,
-						$wrap = $textarea.closest('.wp-editor-wrap'),
-						visualMode = (typeof $option.attr('data-mode') != 'undefined')
-							? ($option.attr('data-mode') == 'tinymce')
-							: $wrap.hasClass('tmce-active');
+						id = editor.id;
 
 					editor.on('change', function(){ editor.save(); });
 
@@ -79,8 +80,7 @@
 
 						$wrap.find('.switch-'+ (visualMode ? 'tmce' : 'html')).trigger('click');
 
-
-						if (!editor.getParam('wpautop') && !visualMode) {
+						if (!hasAutoP && !visualMode) {
 							$textarea.val(wp.editor.removep(editor.getContent()));
 						}
 					}
@@ -96,6 +96,16 @@
 			} catch(e){
 				console.error('wp-editor init error', id, e);
 				return;
+			}
+		} else {
+			/**
+			 * Quick Tags
+			 * http://stackoverflow.com/a/21519323/1794248
+			 */
+			{
+				new QTags( tinyMCEPreInit.qtInit[ id ] );
+
+				QTags._buttonsInit();
 			}
 		}
 	};
