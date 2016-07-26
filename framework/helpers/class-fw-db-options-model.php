@@ -63,11 +63,6 @@ abstract class FW_Db_Options_Model {
 	}
 
 	/**
-	 * @var array {'id': bool}
-	 */
-	private static $merge_values_with_defaults = array();
-
-	/**
 	 * @var array {'id': mixed}
 	 */
 	private static $instances = array();
@@ -80,7 +75,7 @@ abstract class FW_Db_Options_Model {
 	final public static function _get_instance($id) {
 		return self::$instances[$id];
 	}
-	
+
 	final public function __construct() {
 		if (isset(self::$instances[ $this->get_id() ])) {
 			trigger_error(__CLASS__ .' with id "'. $this->get_id() .'" was already defined', E_USER_ERROR);
@@ -120,13 +115,15 @@ abstract class FW_Db_Options_Model {
 			 * Cached because values are merged with extracted default values
 			 */
 			$values = FW_Cache::get($cache_key_values = $this->get_cache_key('values', $item_id, $extra_data));
+
+			$values_loaded = false;
 		} catch (FW_Cache_Not_Found_Exception $e) {
 			FW_Cache::set(
 				$cache_key_values,
 				$values = is_array($values = $this->get_values($item_id, $extra_data)) ? $values : array()
 			);
 
-			self::$merge_values_with_defaults[ $this->get_id() ] = true;
+			$values_loaded = true;
 		}
 
 		/**
@@ -159,38 +156,25 @@ abstract class FW_Db_Options_Model {
 			FW_Cache::set($cache_key, $options = fw_extract_only_options($this->get_options($item_id, $extra_data)));
 		}
 
-		/**
-		 * Complete missing db values with default values from options array
-		 */
-		if (self::$merge_values_with_defaults[ $this->get_id() ]) {
-			self::$merge_values_with_defaults[ $this->get_id() ] = false;
-			FW_Cache::set(
-				$cache_key_values,
-				$values = array_merge(
-					fw_get_options_values_from_input($options, array()),
-					$values
-				)
+		if ($values_loaded && $options) {
+			/**
+			 * Complete missing db values with default values from options array
+			 */
+			$values = array_merge(
+				fw_get_options_values_from_input($options, array()),
+				$values
 			);
-		}
 
-		if (empty($option_id)) {
 			foreach ($options as $id => $option) {
-				$values[$id] = fw()->backend->option_type($options[$id]['type'])->storage_load(
+				$values[$id] = fw()->backend->option_type($option['type'])->storage_load(
 					$id,
-					$options[$id],
+					$option,
 					isset($values[$id]) ? $values[$id] : null,
 					$this->get_fw_storage_params($item_id, $extra_data)
 				);
 			}
-		} else {
-			if (isset($options[$option_id])) {
-				$values[ $option_id ] = fw()->backend->option_type( $options[ $option_id ]['type'] )->storage_load(
-					$option_id,
-					$options[ $option_id ],
-					isset($values[ $option_id ]) ? $values[ $option_id ] : null,
-					$this->get_fw_storage_params($item_id, $extra_data)
-				);
-			}
+
+			FW_Cache::set($cache_key_values, $values);
 		}
 
 		if (empty($option_id)) {
@@ -206,7 +190,7 @@ abstract class FW_Db_Options_Model {
 
 	final public function set( $item_id = null, $option_id = null, $value, array $extra_data = array() ) {
 		FW_Cache::del($cache_key_values = $this->get_cache_key('values', $item_id, $extra_data));
-		
+
 		try {
 			$options = FW_Cache::get($cache_key = $this->get_cache_key('options', $item_id, $extra_data));
 		} catch (FW_Cache_Not_Found_Exception $e) {
