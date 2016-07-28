@@ -98,7 +98,7 @@ $extensions = array(
 			'Lets you insert Unyson shortcodes inside any wp-editor',
 			'fw'
 		),
-		'thumbnail'   => $thumbnails_uri . '/page-builder.jpg',
+		'thumbnail'   => $thumbnails_uri . '/wp-shortcodes.jpg',
 		'download'    => array(
 			'github' => array(
 				'user_repo' => 'ThemeFuse/Unyson-WP-Shortcodes-Extension',
