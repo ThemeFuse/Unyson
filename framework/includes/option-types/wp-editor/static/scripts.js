@@ -101,7 +101,14 @@
 			// fixes https://github.com/ThemeFuse/Unyson/issues/1615
 			if (typeof window.wpLink != 'undefined') {
 				window.wpLink.open(id);
-				window.wpLink.close(id);
+				window.wpLink.close();
+
+				/**
+				 * hide link edit toolbar on wp-editor destroy (on options modal close)
+				 */
+				$option.one('remove', function(){
+					window.wpLink.close();
+				});
 			}
 		} else {
 			/**
