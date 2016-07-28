@@ -97,6 +97,12 @@
 				console.error('wp-editor init error', id, e);
 				return;
 			}
+
+			// fixes https://github.com/ThemeFuse/Unyson/issues/1615
+			if (typeof window.wpLink != 'undefined') {
+				window.wpLink.open(id);
+				window.wpLink.close(id);
+			}
 		} else {
 			/**
 			 * Quick Tags
