@@ -8,6 +8,30 @@
  * @var bool $can_install
  */
 
+// Set extensions order same as in available extensions list
+{
+	$ordered = array(
+		'active' => array(),
+		'installed' => array(),
+	);
+
+	foreach ($lists['available'] as $name => &$_ext) {
+		foreach ($ordered as $type => &$_exts) {
+			if (isset($lists[$type][$name])) {
+				$ordered[$type][$name] = $lists[$type][$name];
+			}
+		}
+	}
+
+	foreach ($ordered as $type => &$_exts) {
+		if (!empty($ordered[$type])) {
+			$lists[$type] = array_merge($ordered[$type], $lists[$type]);
+		}
+	}
+
+	unset($ordered, $name, $_ext, $_exts, $type);
+}
+
 $dir = dirname(__FILE__);
 $extension_view_path = $dir .'/extension.php';
 

@@ -6,78 +6,6 @@ $thumbnails_uri = fw_get_framework_directory_uri( '/core/components/extensions/m
 $github_account = 'ThemeFuse';
 
 $extensions = array(
-	'slider' => array(
-		'display'     => true,
-		'parent'      => 'media',
-		'name'        => __( 'Sliders', 'fw' ),
-		'description' => __( 'Adds a sliders module to your website from where you\'ll be able to create different built in jQuery sliders for your homepage and rest of the pages.', 'fw' ),
-		'thumbnail'   => $thumbnails_uri . '/sliders.jpg',
-		'download'    => array(
-			'github' => array(
-				'user_repo' => $github_account . '/Unyson-Sliders-Extension',
-			),
-		),
-	),
-	'media' => array(
-		'display'     => false,
-		'parent'      => null,
-		'name'        => __( 'Media', 'fw' ),
-		'description' => '',
-		'thumbnail'   => 'about:blank',
-		'download'    => array(
-			'github' => array(
-				'user_repo' => $github_account . '/Unyson-Empty-Extension',
-			),
-		),
-	),
-	'population-method' => array(
-		'display'     => false,
-		'parent'      => 'media',
-		'name'        => __( 'Population method', 'fw' ),
-		'description' => '',
-		'thumbnail'   => 'about:blank',
-		'download'    => array(
-			'github' => array(
-				'user_repo' => $github_account . '/Unyson-PopulationMethods-Extension',
-			),
-		),
-	),
-	'styling' => array(
-		'display'     => true,
-		'parent'      => null,
-		'name'        => __( 'Styling', 'fw' ),
-		'description' => __( 'This extension lets you control the website visual style. Starting from predefined styles to changing specific fonts and colors across the website.', 'fw' ),
-		'thumbnail'   => $thumbnails_uri . '/styling.jpg',
-		'download'    => array(
-			'github' => array(
-				'user_repo' => $github_account . '/Unyson-Styling-Extension',
-			),
-		),
-	),
-	'megamenu' => array(
-		'display'     => true,
-		'parent'      => null,
-		'name'        => __( 'Mega Menu', 'fw' ),
-		'description' => __( 'The Mega Menu extension adds a user-friendly drop down menu that will let you easily create highly customized menu configurations.', 'fw' ),
-		'thumbnail'   => $thumbnails_uri . '/mega-menu.jpg',
-		'download'    => array(
-			'github' => array(
-				'user_repo' => $github_account . '/Unyson-MegaMenu-Extension',
-			),
-		),
-	),
-	'portfolio' => array(
-		'display'     => true,
-		'parent'      => null,
-		'name'        => __( 'Portfolio', 'fw' ),
-		'description' => __( 'This extension will add a fully fledged portfolio module that will let you display your projects using the built in portfolio pages.', 'fw' ),
-		'thumbnail'   => $thumbnails_uri . '/portfolio.jpg',
-		'download'    => array(
-			'github' => array(
-				'user_repo' => $github_account . '/Unyson-Portfolio-Extension',
-			),
-		),
-	),
 	'page-builder' => array(
 		'display'     => true,
 		'parent'      => 'shortcodes',
@@ -105,15 +33,63 @@ $extensions = array(
 			),
 		),
 	),
-	'shortcodes' => array(
-		'display'     => false,
+	'backups' => array(
+		'display'     => true,
 		'parent'      => null,
-		'name'        => __( 'Shortcodes', 'fw' ),
-		'description' => '',
-		'thumbnail'   => 'about:blank',
+		'name'        => __( 'Backup & Demo Content', 'fw' ),
+		'description' => __( 'This extension lets you create an automated backup schedule, import demo content or even create a demo content archive for migration purposes.', 'fw' ),
+		'thumbnail'   => $thumbnails_uri . '/backups.jpg',
 		'download'    => array(
 			'github' => array(
-				'user_repo' => $github_account . '/Unyson-Shortcodes-Extension',
+				'user_repo' => $github_account . '/Unyson-Backups-Extension',
+			),
+		),
+	),
+	'sidebars' => array(
+		'display'     => true,
+		'parent'      => null,
+		'name'        => __( 'Sidebars', 'fw' ),
+		'description' => __( 'Brings a new layer of customization freedom to your website by letting you add more than one sidebar to a page, or different sidebars on different pages.', 'fw' ),
+		'thumbnail'   => $thumbnails_uri . '/sidebars.jpg',
+		'download'    => array(
+			'github' => array(
+				'user_repo' => $github_account . '/Unyson-Sidebars-Extension',
+			),
+		),
+	),
+	'slider' => array(
+		'display'     => true,
+		'parent'      => 'media',
+		'name'        => __( 'Sliders', 'fw' ),
+		'description' => __( 'Adds a sliders module to your website from where you\'ll be able to create different built in jQuery sliders for your homepage and rest of the pages.', 'fw' ),
+		'thumbnail'   => $thumbnails_uri . '/sliders.jpg',
+		'download'    => array(
+			'github' => array(
+				'user_repo' => $github_account . '/Unyson-Sliders-Extension',
+			),
+		),
+	),
+	'portfolio' => array(
+		'display'     => true,
+		'parent'      => null,
+		'name'        => __( 'Portfolio', 'fw' ),
+		'description' => __( 'This extension will add a fully fledged portfolio module that will let you display your projects using the built in portfolio pages.', 'fw' ),
+		'thumbnail'   => $thumbnails_uri . '/portfolio.jpg',
+		'download'    => array(
+			'github' => array(
+				'user_repo' => $github_account . '/Unyson-Portfolio-Extension',
+			),
+		),
+	),
+	'megamenu' => array(
+		'display'     => true,
+		'parent'      => null,
+		'name'        => __( 'Mega Menu', 'fw' ),
+		'description' => __( 'The Mega Menu extension adds a user-friendly drop down menu that will let you easily create highly customized menu configurations.', 'fw' ),
+		'thumbnail'   => $thumbnails_uri . '/mega-menu.jpg',
+		'download'    => array(
+			'github' => array(
+				'user_repo' => $github_account . '/Unyson-MegaMenu-Extension',
 			),
 		),
 	),
@@ -141,54 +117,6 @@ $extensions = array(
 			),
 		),
 	),
-	'sidebars' => array(
-		'display'     => true,
-		'parent'      => null,
-		'name'        => __( 'Sidebars', 'fw' ),
-		'description' => __( 'Brings a new layer of customization freedom to your website by letting you add more than one sidebar to a page, or different sidebars on different pages.', 'fw' ),
-		'thumbnail'   => $thumbnails_uri . '/sidebars.jpg',
-		'download'    => array(
-			'github' => array(
-				'user_repo' => $github_account . '/Unyson-Sidebars-Extension',
-			),
-		),
-	),
-	'feedback' => array(
-		'display'     => true,
-		'parent'      => null,
-		'name'        => __( 'Feedback', 'fw' ),
-		'description' => __( 'Adds the possibility to leave feedback (comments, reviews and rating) about your products, articles, etc. This replaces the default comments system.', 'fw' ),
-		'thumbnail'   => $thumbnails_uri . '/feedback.jpg',
-		'download'    => array(
-			'github' => array(
-				'user_repo' => $github_account . '/Unyson-Feedback-Extension',
-			),
-		),
-	),
-	'backup' => array(
-		'display'     => true,
-		'parent'      => null,
-		'name'        => __( 'Backup', 'fw' ),
-		'description' => __( 'This extension lets you set up daily, weekly or monthly backup schedule. You can choose between a full backup or a data base only backup.', 'fw' ),
-		'thumbnail'   => $thumbnails_uri . '/backup.jpg',
-		'download'    => array(
-			'github' => array(
-				'user_repo' => $github_account . '/Unyson-Backup-Extension',
-			),
-		),
-	),
-	'backups' => array(
-		'display'     => true,
-		'parent'      => null,
-		'name'        => __( 'Backup & Demo Content', 'fw' ),
-		'description' => __( 'This extension lets you create an automated backup schedule, import demo content or even create a demo content archive for migration purposes.', 'fw' ),
-		'thumbnail'   => $thumbnails_uri . '/backups.jpg',
-		'download'    => array(
-			'github' => array(
-				'user_repo' => $github_account . '/Unyson-Backups-Extension',
-			),
-		),
-	),
 	'events' => array(
 		'display'     => true,
 		'parent'      => null,
@@ -213,15 +141,15 @@ $extensions = array(
 			),
 		),
 	),
-	'builder' => array(
-		'display'     => false,
+	'feedback' => array(
+		'display'     => true,
 		'parent'      => null,
-		'name'        => __( 'Builder', 'fw' ),
-		'description' => '',
-		'thumbnail'   => 'about:blank',
+		'name'        => __( 'Feedback', 'fw' ),
+		'description' => __( 'Adds the possibility to leave feedback (comments, reviews and rating) about your products, articles, etc. This replaces the default comments system.', 'fw' ),
+		'thumbnail'   => $thumbnails_uri . '/feedback.jpg',
 		'download'    => array(
 			'github' => array(
-				'user_repo' => $github_account . '/Unyson-Builder-Extension',
+				'user_repo' => $github_account . '/Unyson-Feedback-Extension',
 			),
 		),
 	),
@@ -234,6 +162,30 @@ $extensions = array(
 		'download'    => array(
 			'github' => array(
 				'user_repo' => $github_account . '/Unyson-Learning-Extension',
+			),
+		),
+	),
+	'shortcodes' => array(
+		'display'     => false,
+		'parent'      => null,
+		'name'        => __( 'Shortcodes', 'fw' ),
+		'description' => '',
+		'thumbnail'   => 'about:blank',
+		'download'    => array(
+			'github' => array(
+				'user_repo' => $github_account . '/Unyson-Shortcodes-Extension',
+			),
+		),
+	),
+	'builder' => array(
+		'display'     => false,
+		'parent'      => null,
+		'name'        => __( 'Builder', 'fw' ),
+		'description' => '',
+		'thumbnail'   => 'about:blank',
+		'download'    => array(
+			'github' => array(
+				'user_repo' => $github_account . '/Unyson-Builder-Extension',
 			),
 		),
 	),
@@ -270,6 +222,54 @@ $extensions = array(
 		'download'    => array(
 			'github' => array(
 				'user_repo' => $github_account . '/Unyson-Social-Extension',
+			),
+		),
+	),
+	'backup' => array(
+		'display'     => true,
+		'parent'      => null,
+		'name'        => __( 'Backup', 'fw' ),
+		'description' => __( 'This extension lets you set up daily, weekly or monthly backup schedule. You can choose between a full backup or a data base only backup.', 'fw' ),
+		'thumbnail'   => $thumbnails_uri . '/backup.jpg',
+		'download'    => array(
+			'github' => array(
+				'user_repo' => $github_account . '/Unyson-Backup-Extension',
+			),
+		),
+	),
+	'media' => array(
+		'display'     => false,
+		'parent'      => null,
+		'name'        => __( 'Media', 'fw' ),
+		'description' => '',
+		'thumbnail'   => 'about:blank',
+		'download'    => array(
+			'github' => array(
+				'user_repo' => $github_account . '/Unyson-Empty-Extension',
+			),
+		),
+	),
+	'population-method' => array(
+		'display'     => false,
+		'parent'      => 'media',
+		'name'        => __( 'Population method', 'fw' ),
+		'description' => '',
+		'thumbnail'   => 'about:blank',
+		'download'    => array(
+			'github' => array(
+				'user_repo' => $github_account . '/Unyson-PopulationMethods-Extension',
+			),
+		),
+	),
+	'styling' => array(
+		'display'     => true,
+		'parent'      => null,
+		'name'        => __( 'Styling', 'fw' ),
+		'description' => __( 'This extension lets you control the website visual style. Starting from predefined styles to changing specific fonts and colors across the website.', 'fw' ),
+		'thumbnail'   => $thumbnails_uri . '/styling.jpg',
+		'download'    => array(
+			'github' => array(
+				'user_repo' => $github_account . '/Unyson-Styling-Extension',
 			),
 		),
 	),
