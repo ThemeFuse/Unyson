@@ -3,7 +3,7 @@ Contributors: unyson
 Tags: page builder, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.3
 Tested up to: 4.5
-Stable tag: 2.5.10
+Stable tag: 2.5.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,6 +82,12 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.5.11 =
+* New extension: WordPress Shortcodes [#1807](https://github.com/ThemeFuse/Unyson/issues/1807)
+* Added javascript helper: `fw.soleConfirm` [#1803](https://github.com/ThemeFuse/Unyson/pull/1803)
+* Option type `wp-editor` fixes [#1615](https://github.com/ThemeFuse/Unyson/issues/1615)
+* Performance improvement in `fw_get_db_..._option()` functions
 
 = 2.5.10 =
 * Fixed `fw_get_db_customizer_option()` bug [#1796](https://github.com/ThemeFuse/Unyson/issues/1796)
