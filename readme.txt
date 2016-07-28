@@ -85,9 +85,9 @@ Yes; Unyson will work with any theme.
 
 = 2.5.11 =
 * New extension: WordPress Shortcodes [#1807](https://github.com/ThemeFuse/Unyson/issues/1807)
-* Added javascript helper: `fw.soleConfirm` [#1803](https://github.com/ThemeFuse/Unyson/pull/1803)
 * Option type `wp-editor` fixes [#1615](https://github.com/ThemeFuse/Unyson/issues/1615)
 * Performance improvement in `fw_get_db_..._option()` functions
+* Added javascript helper `fw.soleConfirm` [#1803](https://github.com/ThemeFuse/Unyson/pull/1803)
 
 = 2.5.10 =
 * Fixed `fw_get_db_customizer_option()` bug [#1796](https://github.com/ThemeFuse/Unyson/issues/1796)
