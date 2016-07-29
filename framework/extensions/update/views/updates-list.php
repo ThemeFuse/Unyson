@@ -32,7 +32,7 @@
 <?php if ($updates['theme'] !== false): ?>
 <div id="fw-ext-update-theme">
 	<a name="fw-theme"></a>
-	<h3><?php $theme = wp_get_theme(); _e(sprintf('%s Theme', $theme->parent()->get('Name')), 'fw') ?></h3>
+	<h3><?php $theme = wp_get_theme(); _e(sprintf('%s Theme', (is_child_theme() ? $theme->parent()->get('Name') : $theme->get('Name'))), 'fw') ?></h3>
 	<?php if (empty($updates['theme'])): ?>
 		<p><?php _e('Your theme is up to date.', 'fw') ?></p>
 	<?php else: ?>
