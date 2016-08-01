@@ -25,6 +25,19 @@ final class _FW_Extensions_Manager
 
 	private $default_thumbnail = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2PUsHf9DwAC8AGtfm5YCAAAAABJRU5ErkJgggAA';
 
+	/**
+	 * @var FW_Access_Key
+	 */
+	private static $access_key;
+
+	private static function get_access_key() {
+		if (!self::$access_key) {
+			self::$access_key = new FW_Access_Key('fw_ext_manager');
+		}
+
+		return self::$access_key;
+	}
+
 	public function __construct()
 	{
 		// In any case/permission, make sure to not miss the plugin update actions to prevent extensions delete
@@ -191,9 +204,46 @@ final class _FW_Extensions_Manager
 
 			return FW_Cache::get($cache_key);
 		} catch (FW_Cache_Not_Found_Exception $e) {
-			$vars = fw_get_variables_from_file( dirname( __FILE__ ) . '/available-extensions.php', array(
+			$extensions = fw_get_variables_from_file( dirname( __FILE__ ) . '/available-extensions.php', array(
 				'extensions' => array()
 			) );
+			$extensions = $extensions['extensions'];
+
+			// Allow others to register their extensions
+			{
+				require_once dirname( __FILE__ ) . '/includes/available-ext/class--fw-available-extensions-register.php';
+				require_once dirname( __FILE__ ) . '/includes/available-ext/class-fw-available-extension.php';
+
+				$register = new _FW_Available_Extensions_Register(self::get_access_key()->get_key());
+
+				/**
+				 * Usage:
+				 * $extension = new FW_Available_Extension();
+				 * $extension->set_...();
+				 * $register->register($extension);
+				 */
+				do_action('fw_available_extensions', $register);
+
+				foreach ($register->_get_types(self::$access_key) as $extension) {
+					/** @var FW_Available_Extension $extension */
+					if (isset($extensions[ $extension->get_name() ])) {
+						trigger_error(
+							'Overwriting default extension "'. $extension->get_name() .'" is not allowed',
+							E_USER_WARNING
+						);
+						continue;
+					} else {
+						$extensions[ $extension->get_name() ] = array(
+							'display'     => (bool)$extension->get_display(),
+							'parent'      => $extension->get_parent(),
+							'name'        => (string)$extension->get_title(),
+							'description' => (string)$extension->get_description(),
+							'thumbnail'   => (string)$extension->get_thumbnail(),
+							'download'    => $extension->get_download_sources(),
+						);
+					}
+				}
+			}
 
 			{
 				$installed_extensions = $this->get_installed_extensions();
@@ -201,7 +251,7 @@ final class _FW_Extensions_Manager
 
 				if (isset($installed_extensions['backup'])) {
 					// make sure only Backup or Backups can be installed
-					unset($vars['extensions']['backups']);
+					unset($extensions['backups']);
 				}
 
 				foreach (
@@ -213,14 +263,14 @@ final class _FW_Extensions_Manager
 						&&
 						!isset($installed_extensions[$obsolete_extension])
 					) {
-						unset($vars['extensions'][$obsolete_extension]);
+						unset($extensions[$obsolete_extension]);
 					}
 				}
 			}
 
-			FW_Cache::set($cache_key, $vars['extensions']);
+			FW_Cache::set($cache_key, $extensions);
 
-			return $vars['extensions'];
+			return $extensions;
 		}
 	}
 

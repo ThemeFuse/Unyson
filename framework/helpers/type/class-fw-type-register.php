@@ -1,6 +1,10 @@
 <?php if ( ! defined( 'FW' ) ) die( 'Forbidden' );
 
 /**
+ * Give users the possibility to register a type safely
+ * Instead of doing apply_filters('my_types', $types) where someone can mess your data
+ * with this class you do do_action('register_my_types', $types)
+ * and users will be able only to $types->register(new Allowed_Type_Class())
  * @since 2.4.10
  */
 abstract class FW_Type_Register {
