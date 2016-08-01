@@ -209,29 +209,24 @@ final class _FW_Extensions_Manager
 			) );
 			$extensions = $extensions['extensions'];
 
-			// Allow others to register their extensions
-			{
+			// Allow theme to register available extensions
+			if (file_exists(
+				$theme_available_ext_file = fw_fix_path(get_template_directory())
+					. fw_get_framework_customizations_dir_rel_path( '/theme/available-extensions.php' )
+			)) {
 				require_once dirname( __FILE__ ) . '/includes/available-ext/class--fw-available-extensions-register.php';
 				require_once dirname( __FILE__ ) . '/includes/available-ext/class-fw-available-extension.php';
 
 				$register = new _FW_Available_Extensions_Register(self::get_access_key()->get_key());
 
 				/**
-				 * This will install custom (unverified, dubious) extension in framework/extensions
-				 * and they will remain active after theme was disabled.
-				 *
-				 * Better include extensions in your plugin and use this solution to load them
-				 * http://manual.unyson.io/en/latest/extensions/introduction.html#custom-load-locations
+				 * Usage:
+				 * Create {theme}/framework-customizations/theme/available-extensions.php with the following contents:
+				 * $extension = new FW_Available_Extension();
+				 * $extension->set_...();
+				 * $register->register($extension);
 				 */
-				if (true) { // fixme: decide if allow this or not
-					/**
-					 * Usage:
-					 * $extension = new FW_Available_Extension();
-					 * $extension->set_...();
-					 * $register->register($extension);
-					 */
-					do_action( 'fw_available_extensions', $register );
-				}
+				fw_get_variables_from_file($theme_available_ext_file, array(), array('register' => $register));
 
 				foreach ($register->_get_types(self::$access_key) as $extension) {
 					/** @var FW_Available_Extension $extension */
@@ -243,6 +238,7 @@ final class _FW_Extensions_Manager
 						continue;
 					} else {
 						$extensions[ $extension->get_name() ] = array(
+							'theme'       => true, // Registered by theme
 							'display'     => (bool)$extension->get_display(),
 							'parent'      => $extension->get_parent(),
 							'name'        => (string)$extension->get_title(),
@@ -875,6 +871,7 @@ final class _FW_Extensions_Manager
 					'display' => isset($ext_data['display'])
 						? $ext_data['display']
 						: $this->manifest_default_values['display'],
+					'theme' => isset($ext_data['theme']) && $ext_data['theme'],
 				);
 			}
 
@@ -1201,14 +1198,22 @@ final class _FW_Extensions_Manager
 			 * Install parent extensions and the extension
 			 */
 			{
-				$current_extension_path = fw_get_framework_directory();
+				$destination_path = array(
+					'framework' => fw_get_framework_directory(),
+					'theme' => fw_fix_path(get_template_directory()) . fw_get_framework_customizations_dir_rel_path()
+				);
+				$current_extension_path = '';
 
 				foreach ($parents as $parent_extension_name) {
 					$current_extension_path .= '/extensions/'. $parent_extension_name;
+					$destination = (
+						isset($available_extensions[$parent_extension_name]['theme'])
+						&&
+						$available_extensions[$parent_extension_name]['theme']
+					) ? 'theme' : 'framework';
 
 					if (isset($installed_extensions[$parent_extension_name])) {
-						// skip already installed extensions
-						continue;
+						continue; // skip already installed extensions
 					}
 
 					if ($verbose) {
@@ -1269,7 +1274,9 @@ final class _FW_Extensions_Manager
 
 					$merge_result = $this->merge_extension(
 						$wp_fw_downloaded_dir,
-						FW_WP_Filesystem::real_path_to_filesystem_path($current_extension_path)
+						FW_WP_Filesystem::real_path_to_filesystem_path(
+							$destination_path[$destination] . $current_extension_path
+						)
 					);
 
 					if (is_wp_error($merge_result)) {
@@ -2800,6 +2807,13 @@ final class _FW_Extensions_Manager
 	private function get_supported_extensions_for_install()
 	{
 		$supported_extensions = fw()->theme->manifest->get('supported_extensions', array());
+
+		// Add Available Extensions registered by the theme
+		foreach ($this->get_available_extensions() as $name => $extension) {
+			if (isset($extension['theme']) && $extension['theme']) {
+				$supported_extensions[$name] = array();
+			}
+		}
 
 		if (empty($supported_extensions)) {
 			return array();
