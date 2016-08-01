@@ -217,12 +217,21 @@ final class _FW_Extensions_Manager
 				$register = new _FW_Available_Extensions_Register(self::get_access_key()->get_key());
 
 				/**
-				 * Usage:
-				 * $extension = new FW_Available_Extension();
-				 * $extension->set_...();
-				 * $register->register($extension);
+				 * This will install custom (unverified, dubious) extension in framework/extensions
+				 * and they will remain active after theme was disabled.
+				 *
+				 * Better include extensions in your plugin and use this solution to load them
+				 * http://manual.unyson.io/en/latest/extensions/introduction.html#custom-load-locations
 				 */
-				do_action('fw_available_extensions', $register);
+				if (true) { // fixme: decide if allow this or not
+					/**
+					 * Usage:
+					 * $extension = new FW_Available_Extension();
+					 * $extension->set_...();
+					 * $register->register($extension);
+					 */
+					do_action( 'fw_available_extensions', $register );
+				}
 
 				foreach ($register->_get_types(self::$access_key) as $extension) {
 					/** @var FW_Available_Extension $extension */
