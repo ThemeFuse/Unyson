@@ -13,11 +13,13 @@ $extensions = array(
 		'description' => __( "Let's you easily build countless pages with the help of the drag and drop visual page builder that comes with a lot of already created shortcodes.", 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/page-builder.jpg',
 		'download'    => array(
-			'github' => array(
-				'user_repo' => $github_account . '/Unyson-PageBuilder-Extension',
-			),
+			'source' => 'github',
+			'opts' => array(
+				'user_repo' => $github_account . '/Unyson-PageBuilder-Extension'
+			)
 		),
 	),
+
 	'wp-shortcodes' => array(
 		'display'     => true,
 		'parent'      => 'shortcodes',
@@ -28,11 +30,13 @@ $extensions = array(
 		),
 		'thumbnail'   => $thumbnails_uri . '/wp-shortcodes.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => 'ThemeFuse/Unyson-WP-Shortcodes-Extension',
 			),
 		),
 	),
+
 	'backups' => array(
 		'display'     => true,
 		'parent'      => null,
@@ -40,11 +44,13 @@ $extensions = array(
 		'description' => __( 'This extension lets you create an automated backup schedule, import demo content or even create a demo content archive for migration purposes.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/backups.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Backups-Extension',
 			),
 		),
 	),
+
 	'sidebars' => array(
 		'display'     => true,
 		'parent'      => null,
@@ -52,11 +58,13 @@ $extensions = array(
 		'description' => __( 'Brings a new layer of customization freedom to your website by letting you add more than one sidebar to a page, or different sidebars on different pages.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/sidebars.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Sidebars-Extension',
 			),
 		),
 	),
+
 	'slider' => array(
 		'display'     => true,
 		'parent'      => 'media',
@@ -64,11 +72,13 @@ $extensions = array(
 		'description' => __( 'Adds a sliders module to your website from where you\'ll be able to create different built in jQuery sliders for your homepage and rest of the pages.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/sliders.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Sliders-Extension',
 			),
 		),
 	),
+
 	'portfolio' => array(
 		'display'     => true,
 		'parent'      => null,
@@ -76,11 +86,13 @@ $extensions = array(
 		'description' => __( 'This extension will add a fully fledged portfolio module that will let you display your projects using the built in portfolio pages.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/portfolio.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Portfolio-Extension',
 			),
 		),
 	),
+
 	'megamenu' => array(
 		'display'     => true,
 		'parent'      => null,
@@ -88,11 +100,13 @@ $extensions = array(
 		'description' => __( 'The Mega Menu extension adds a user-friendly drop down menu that will let you easily create highly customized menu configurations.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/mega-menu.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-MegaMenu-Extension',
 			),
 		),
 	),
+
 	'breadcrumbs' => array(
 		'display'     => true,
 		'parent'      => null,
@@ -100,11 +114,13 @@ $extensions = array(
 		'description' => __( 'Creates a simplified navigation menu for the pages that can be placed anywhere in the theme. This will make navigating the website much easier.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/breadcrumbs.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Breadcrumbs-Extension',
 			),
 		),
 	),
+
 	'seo' => array(
 		'display'     => true,
 		'parent'      => null,
@@ -112,11 +128,13 @@ $extensions = array(
 		'description' => __( 'This extension will enable you to have a fully optimized WordPress website by adding optimized meta titles, keywords and descriptions.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/seo.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-SEO-Extension',
 			),
 		),
 	),
+
 	'events' => array(
 		'display'     => true,
 		'parent'      => null,
@@ -124,11 +142,13 @@ $extensions = array(
 		'description' => __( 'This extension adds a fully fledged Events module to your theme. It comes with built in pages that contain a calendar where events can be added.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/events.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Events-Extension',
 			),
 		),
 	),
+
 	'analytics' => array(
 		'display'     => true,
 		'parent'      => null,
@@ -136,11 +156,13 @@ $extensions = array(
 		'description' => __( 'Enables the possibility to add the Google Analytics tracking code that will let you get all the analytics about visitors, page views and more.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/analytics.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Analytics-Extension',
 			),
 		),
 	),
+
 	'feedback' => array(
 		'display'     => true,
 		'parent'      => null,
@@ -148,11 +170,13 @@ $extensions = array(
 		'description' => __( 'Adds the possibility to leave feedback (comments, reviews and rating) about your products, articles, etc. This replaces the default comments system.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/feedback.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Feedback-Extension',
 			),
 		),
 	),
+
 	'learning' => array(
 		'display'     => true,
 		'parent'      => null,
@@ -160,11 +184,13 @@ $extensions = array(
 		'description' => __( 'This extension adds a Learning module to your theme. Using this extension you can add courses, lessons and tests for your users to take.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/learning.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Learning-Extension',
 			),
 		),
 	),
+
 	'shortcodes' => array(
 		'display'     => false,
 		'parent'      => null,
@@ -172,11 +198,13 @@ $extensions = array(
 		'description' => '',
 		'thumbnail'   => 'about:blank',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Shortcodes-Extension',
 			),
 		),
 	),
+
 	'builder' => array(
 		'display'     => false,
 		'parent'      => null,
@@ -184,11 +212,13 @@ $extensions = array(
 		'description' => '',
 		'thumbnail'   => 'about:blank',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Builder-Extension',
 			),
 		),
 	),
+
 	'forms' => array(
 		'display'     => false,
 		'parent'      => null,
@@ -196,11 +226,13 @@ $extensions = array(
 		'description' => __( 'This extension adds the possibility to create a contact form. Use the drag & drop form builder to create any contact form you\'ll ever want or need.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/forms.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Forms-Extension',
 			),
 		),
 	),
+
 	'mailer' => array(
 		'display'     => false,
 		'parent'      => null,
@@ -208,11 +240,13 @@ $extensions = array(
 		'description' => __( 'This extension will let you set some global email options and it is used by other extensions (like Forms) to send emails.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/mailer.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Mailer-Extension',
 			),
 		),
 	),
+
 	'social' => array(
 		'display'     => true,
 		'parent'      => null,
@@ -220,11 +254,13 @@ $extensions = array(
 		'description' => __( 'Use this extension to configure all your social related APIs. Other extensions will use the Social extension to connect to your social accounts.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/social.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Social-Extension',
 			),
 		),
 	),
+
 	'backup' => array(
 		'display'     => true,
 		'parent'      => null,
@@ -232,11 +268,13 @@ $extensions = array(
 		'description' => __( 'This extension lets you set up daily, weekly or monthly backup schedule. You can choose between a full backup or a data base only backup.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/backup.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Backup-Extension',
 			),
 		),
 	),
+
 	'media' => array(
 		'display'     => false,
 		'parent'      => null,
@@ -244,11 +282,13 @@ $extensions = array(
 		'description' => '',
 		'thumbnail'   => 'about:blank',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Empty-Extension',
 			),
 		),
 	),
+
 	'population-method' => array(
 		'display'     => false,
 		'parent'      => 'media',
@@ -256,11 +296,13 @@ $extensions = array(
 		'description' => '',
 		'thumbnail'   => 'about:blank',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-PopulationMethods-Extension',
 			),
 		),
 	),
+
 	'styling' => array(
 		'display'     => true,
 		'parent'      => null,
@@ -268,11 +310,13 @@ $extensions = array(
 		'description' => __( 'This extension lets you control the website visual style. Starting from predefined styles to changing specific fonts and colors across the website.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/styling.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Styling-Extension',
 			),
 		),
 	),
+
 	'translation' => array(
 		'display'     => true,
 		'parent'      => null,
@@ -280,9 +324,11 @@ $extensions = array(
 		'description' => __( 'This extension lets you translate your website in any language or even add multiple languages for your users to change at their will from the front-end.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/translation.jpg',
 		'download'    => array(
-			'github' => array(
+			'source' => 'github',
+			'opts' => array(
 				'user_repo' => $github_account . '/Unyson-Translation-Extension',
-			),
+			)
 		),
 	),
 );
+

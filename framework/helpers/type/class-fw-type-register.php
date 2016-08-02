@@ -18,13 +18,13 @@ abstract class FW_Type_Register {
 	/**
 	 * @var FW_Type[]
 	 */
-	private $types = array();
+	protected $types = array();
 
 	/**
 	 * Only these access keys will be able to access the registered types
 	 * @var array {'key': true}
 	 */
-	private $access_keys = array();
+	protected $access_keys = array();
 
 	final public function __construct($access_keys) {
 		{
