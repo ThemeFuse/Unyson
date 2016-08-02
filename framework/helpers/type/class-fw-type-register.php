@@ -70,4 +70,20 @@ abstract class FW_Type_Register {
 
 		return $this->types;
 	}
+
+	/**
+	 * @param FW_Access_Key $access_key
+	 * @param $type
+	 *
+	 * @return FW_Type|null
+	 * @internal
+	 * @since 2.5.12
+	 */
+	public function _get_type(FW_Access_Key $access_key, $type) {
+		if (!isset($this->access_keys[$access_key->get_key()])) {
+			trigger_error('Method call denied', E_USER_ERROR);
+		}
+
+		return isset($this->types[$type]) ? $this->types[$type] : null;
+	}
 }

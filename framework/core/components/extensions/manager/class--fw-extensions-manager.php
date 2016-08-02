@@ -2475,9 +2475,16 @@ final class _FW_Extensions_Manager
 		 */
 		do_action( 'fw_register_ext_download_sources', $register );
 
-		$download_source = $register->by_source(
+		$download_source = $register->_get_type(
 			self::get_access_key(), $data['download']['source']
 		);
+
+		if (!$download_source) {
+			return new WP_Error(
+				'invalid_dl_source',
+				sprintf(__('Invalid download source: %s', 'fw'), $data['download']['source'])
+			);
+		}
 
 		return $this->perform_zip_download(
 			$download_source,
@@ -2491,6 +2498,8 @@ final class _FW_Extensions_Manager
 
 	private function perform_zip_download(FW_Ext_Download_Source $download_source, array $opts, $wp_fs_tmp_dir)
 	{
+		$wp_error_id = 'fw_extension_download';
+
 		/** @var WP_Filesystem_Base $wp_filesystem */
 		global $wp_filesystem;
 
