@@ -21,8 +21,6 @@ final class _FW_Extensions_Manager
 		'standalone' => false,
 	);
 
-	private $download_timeout = 300;
-
 	private $default_thumbnail = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2PUsHf9DwAC8AGtfm5YCAAAAABJRU5ErkJgggAA';
 
 	/**
@@ -244,7 +242,7 @@ final class _FW_Extensions_Manager
 							'name'        => (string)$extension->get_title(),
 							'description' => (string)$extension->get_description(),
 							'thumbnail'   => (string)$extension->get_thumbnail(),
-							'download'    => $extension->get_download_sources(),
+							'download'    => $extension->get_download_source(),
 						);
 					}
 				}
@@ -2418,7 +2416,7 @@ final class _FW_Extensions_Manager
 	/**
 	 * Download an extension
 	 *
-	 * global $wp_filesystem; must me initialized
+	 * global $wp_filesystem; must be initialized
 	 *
 	 * @param string $extension_name
 	 * @param array $data Extension data from the "available extensions" array
@@ -2428,6 +2426,7 @@ final class _FW_Extensions_Manager
 	{
 		$wp_error_id = 'fw_extension_download';
 
+		// TODO: more checks for $data['download']
 		if (empty($data['download'])) {
 			return new WP_Error(
 				$wp_error_id,
@@ -2460,220 +2459,94 @@ final class _FW_Extensions_Manager
 			}
 		}
 
-		$theme_ext_requirements = fw()->theme->manifest->get('requirements/extensions');
+		require_once dirname( __FILE__ ) . '/includes/download-source/class--fw-ext-download-source.php';
+		require_once dirname( __FILE__ ) . '/includes/download-source/class--fw-ext-download-source-register.php';
 
-		foreach ($data['download'] as $source => $source_data) {
-			switch ($source) {
-				case 'github':
-					if (empty($source_data['user_repo'])) {
-						return new WP_Error(
-							$wp_error_id,
-							sprintf(__('"%s" extension github source "user_repo" parameter is required', 'fw'), $this->get_extension_title($extension_name))
-						);
-					}
+		require_once dirname( __FILE__ ) . '/includes/download-source/types/init.php';
 
-					{
-						$transient_name = 'fw_ext_mngr_gh_dl';
-						$transient_ttl  = HOUR_IN_SECONDS;
+		$register = new _FW_Ext_Download_Source_Register(self::get_access_key()->get_key());
 
-						$cache = get_site_transient($transient_name);
+		/**
+		 * Register download sources for extensions.
+		 *
+		 * Usage:
+		 *   $download_source = new FW_Ext_Download_Source();
+		 *   $register->register($download_source);
+		 */
+		do_action( 'fw_register_ext_download_sources', $register );
 
-						if ($cache === false) {
-							$cache = array();
-						}
-					}
+		$download_source = $register->by_source(
+			self::get_access_key(), $data['download']['source']
+		);
 
-					if (isset($cache[ $source_data['user_repo'] ])) {
-						$download_link = $cache[ $source_data['user_repo'] ]['zipball_url'];
-					} else {
-						$http = new WP_Http();
+		return $this->perform_zip_download(
+			$download_source,
+			array_merge(array(
+				'extension_name' => $extension_name,
+				'extension_title' => $this->get_extension_title($extension_name)
+			), $data['download']['opts']),
+			$wp_fs_tmp_dir
+		);
+	}
 
-						if (
-							isset($theme_ext_requirements[$extension_name])
-							&&
-							isset($theme_ext_requirements[$extension_name]['max_version'])
-						) {
-							$tag = 'tags/v'. $theme_ext_requirements[$extension_name]['max_version'];
-						} else {
-							$tag = 'latest';
-						}
+	private function perform_zip_download(FW_Ext_Download_Source $download_source, array $opts, $wp_fs_tmp_dir)
+	{
+		/** @var WP_Filesystem_Base $wp_filesystem */
+		global $wp_filesystem;
 
-						$response = $http->get(
-							apply_filters('fw_github_api_url', 'https://api.github.com')
-							. '/repos/'. $source_data['user_repo'] .'/releases/'. $tag
-						);
+		$zip_path = $wp_fs_tmp_dir . '/temp.zip';
 
-						unset($http);
+		$download_result = $download_source->download($opts, $zip_path);
 
-						$response_code = intval(wp_remote_retrieve_response_code($response));
+		/**
+		 * Pass further the error, if the service returned one.
+		 */
+		if (is_wp_error($download_result)) {
+			return $download_result;
+		}
 
-						if ($response_code !== 200) {
-							if ($response_code === 403) {
-								if ($json_response = json_decode($response['body'], true)) {
-									return new WP_Error(
-										$wp_error_id,
-										__('Github error:', 'fw') .' '. $json_response['message']
-									);
-								} else {
-									return new WP_Error(
-										$wp_error_id,
-										sprintf(
-											__( 'Failed to access Github repository "%s" releases. (Response code: %d)', 'fw' ),
-											$source_data['user_repo'], $response_code
-										)
-									);
-								}
-							} elseif ($response_code) {
-								return new WP_Error(
-									$wp_error_id,
-									sprintf(
-										__( 'Failed to access Github repository "%s" releases. (Response code: %d)', 'fw' ),
-										$source_data['user_repo'], $response_code
-									)
-								);
-							} elseif (is_wp_error($response)) {
-								return new WP_Error(
-									$wp_error_id,
-									sprintf(
-										__( 'Failed to access Github repository "%s" releases. (%s)', 'fw' ),
-										$source_data['user_repo'], $response->get_error_message()
-									)
-								);
-							} else {
-								return new WP_Error(
-									$wp_error_id,
-									sprintf(
-										__( 'Failed to access Github repository "%s" releases.', 'fw' ),
-										$source_data['user_repo']
-									)
-								);
-							}
-						}
+		$extension_name = $opts['extension_name'];
 
-						$release = json_decode($response['body'], true);
+		$unzip_result = unzip_file(
+			FW_WP_Filesystem::filesystem_path_to_real_path($zip_path),
+			$wp_fs_tmp_dir
+		);
 
-						unset($response);
+		if (is_wp_error($unzip_result)) {
+			return $unzip_result;
+		}
 
-						if (empty($release)) {
-							return new WP_Error(
-								$wp_error_id,
-								sprintf(
-									__('"%s" extension github repository "%s" has no releases.', 'fw'),
-									$this->get_extension_title($extension_name), $source_data['user_repo']
-								)
-							);
-						}
+		// remove zip file
+		if (!$wp_filesystem->delete($zip_path, false, 'f')) {
+			return new WP_Error(
+				$wp_error_id,
+				sprintf(__('Cannot remove the "%s" extension downloaded zip.', 'fw'), $this->get_extension_title($extension_name))
+			);
+		}
 
-						{
-							$cache[ $source_data['user_repo'] ] = array(
-								'zipball_url' => 'https://github.com/'. $source_data['user_repo'] .'/archive/'. $release['tag_name'] .'.zip',
-								'tag_name' => $release['tag_name']
-							);
+		$unzipped_dir_files = $wp_filesystem->dirlist($wp_fs_tmp_dir);
 
-							set_site_transient($transient_name, $cache, $transient_ttl);
-						}
+		if (!$unzipped_dir_files) {
+			return new WP_Error(
+				$wp_error_id,
+				__('Cannot access the unzipped directory files.', 'fw')
+			);
+		}
 
-						$download_link = $cache[ $source_data['user_repo'] ]['zipball_url'];
-
-						unset($release);
-					}
-
-					{
-						$http = new WP_Http();
-
-						$response = $http->request($download_link, array(
-							'timeout' => $this->download_timeout,
-						));
-
-						unset($http);
-
-						if (($response_code = intval(wp_remote_retrieve_response_code($response))) !== 200) {
-							if ($response_code) {
-								return new WP_Error(
-									$wp_error_id,
-									sprintf( __( 'Cannot download the "%s" extension zip. (Response code: %d)', 'fw' ),
-										$this->get_extension_title( $extension_name ), $response_code
-									)
-								);
-							} elseif (is_wp_error($response)) {
-								return new WP_Error(
-									$wp_error_id,
-									sprintf( __( 'Cannot download the "%s" extension zip. %s', 'fw' ),
-										$this->get_extension_title( $extension_name ),
-										$response->get_error_message()
-									)
-								);
-							} else {
-								return new WP_Error(
-									$wp_error_id,
-									sprintf( __( 'Cannot download the "%s" extension zip.', 'fw' ),
-										$this->get_extension_title( $extension_name )
-									)
-								);
-							}
-						}
-
-						$zip_path = $wp_fs_tmp_dir .'/temp.zip';
-
-						// save zip to file
-						if (!$wp_filesystem->put_contents($zip_path, $response['body'])) {
-							return new WP_Error(
-								$wp_error_id,
-								sprintf(__('Cannot save the "%s" extension zip.', 'fw'), $this->get_extension_title($extension_name))
-							);
-						}
-
-						unset($response);
-
-						$unzip_result = unzip_file(
-							FW_WP_Filesystem::filesystem_path_to_real_path($zip_path),
-							$wp_fs_tmp_dir
-						);
-
-						if (is_wp_error($unzip_result)) {
-							return $unzip_result;
-						}
-
-						// remove zip file
-						if (!$wp_filesystem->delete($zip_path, false, 'f')) {
-							return new WP_Error(
-								$wp_error_id,
-								sprintf(__('Cannot remove the "%s" extension downloaded zip.', 'fw'), $this->get_extension_title($extension_name))
-							);
-						}
-
-						$unzipped_dir_files = $wp_filesystem->dirlist($wp_fs_tmp_dir);
-
-						if (!$unzipped_dir_files) {
-							return new WP_Error(
-								$wp_error_id,
-								__('Cannot access the unzipped directory files.', 'fw')
-							);
-						}
-
-						/**
-						 * get first found directory
-						 * (if everything worked well, there should be only one directory)
-						 */
-						foreach ($unzipped_dir_files as $file) {
-							if ($file['type'] == 'd') {
-								return $wp_fs_tmp_dir .'/'. $file['name'];
-							}
-						}
-
-						return new WP_Error(
-							$wp_error_id,
-							sprintf(__('The unzipped "%s" extension directory not found.', 'fw'), $this->get_extension_title($extension_name))
-						);
-					}
-					break;
-				default:
-					return new WP_Error(
-						$wp_error_id,
-						sprintf(__('Unknown "%s" extension download source "%s"', 'fw'), $this->get_extension_title($extension_name), $source)
-					);
+		/**
+		 * get first found directory
+		 * (if everything worked well, there should be only one directory)
+		 */
+		foreach ($unzipped_dir_files as $file) {
+			if ($file['type'] == 'd') {
+				return $wp_fs_tmp_dir .'/'. $file['name'];
 			}
 		}
+
+		return new WP_Error(
+			$wp_error_id,
+			sprintf(__('The unzipped "%s" extension directory not found.', 'fw'), $this->get_extension_title($extension_name))
+		);
 	}
 
 	/**

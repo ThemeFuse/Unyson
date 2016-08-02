@@ -38,7 +38,7 @@ class FW_Available_Extension extends FW_Type {
 	/**
 	 * @var array {id: data}
 	 */
-	private $download_sources = array();
+	private $download_source = array();
 
 	/**
 	 * @return string
@@ -96,11 +96,14 @@ class FW_Available_Extension extends FW_Type {
 		$this->thumbnail = $thumbnail;
 	}
 
-	public function get_download_sources() {
-		return $this->download_sources;
+	public function get_download_source() {
+		return $this->download_source;
 	}
 
-	public function add_download_source($id, $data) {
-		$this->download_sources[$id] = $data;
+	public function set_download_source($id, $data) {
+		$this->download_source = array(
+			'source' => $id,
+			'opts' => $data
+		);
 	}
 }
