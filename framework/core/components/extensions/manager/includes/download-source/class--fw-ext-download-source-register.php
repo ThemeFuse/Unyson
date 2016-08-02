@@ -16,6 +16,7 @@ class _FW_Ext_Download_Source_Register extends FW_Type_Register
 		foreach ($this->types as $download_source) {
 			if ($download_source->get_type() === $source) {
 				$download_source = $download_source;
+				break;
 			}
 		}
 
