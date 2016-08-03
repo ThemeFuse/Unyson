@@ -982,6 +982,7 @@ final class _FW_Extensions_Manager
 			if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				if (!isset($_POST[$nonce['name']]) || !wp_verify_nonce($_POST[$nonce['name']], $nonce['action'])) {
 					$skin->error(__('Invalid nonce.', 'fw'));
+					break;
 				}
 
 				if (!FW_WP_Filesystem::request_access(
@@ -1489,6 +1490,7 @@ final class _FW_Extensions_Manager
 			if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				if (!isset($_POST[$nonce['name']]) || !wp_verify_nonce($_POST[$nonce['name']], $nonce['action'])) {
 					$skin->error(__('Invalid nonce.', 'fw'));
+					break;
 				}
 
 				if (!FW_WP_Filesystem::request_access(
