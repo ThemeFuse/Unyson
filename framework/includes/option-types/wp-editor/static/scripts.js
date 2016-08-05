@@ -100,15 +100,22 @@
 
 			// fixes https://github.com/ThemeFuse/Unyson/issues/1615
 			if (typeof window.wpLink != 'undefined') {
-				window.wpLink.open(id);
-				window.wpLink.close();
+				try {
+					window.wpLink.open(id);
+				} catch (e) {}
 
-				/**
-				 * hide link edit toolbar on wp-editor destroy (on options modal close)
-				 */
-				$option.one('remove', function(){
+				try {
 					window.wpLink.close();
-				});
+
+					/**
+					 * hide link edit toolbar on wp-editor destroy (on options modal close)
+					 */
+					$option.one('remove', function () {
+						window.wpLink.close();
+					});
+				} catch (e) {
+					$('#wp-link-wrap,#wp-link-backdrop').css('display', '');
+				}
 			}
 		} else {
 			/**
