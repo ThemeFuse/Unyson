@@ -2,8 +2,8 @@
 Contributors: unyson
 Tags: page builder, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.3
-Tested up to: 4.5
-Stable tag: 2.5.11
+Tested up to: 4.6
+Stable tag: 2.5.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,6 +82,9 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.5.12 =
+* Fixed `wp-editor` option error when used in Theme Settings [#1860](https://github.com/ThemeFuse/Unyson/issues/1860)
 
 = 2.5.11 =
 * New extension: WordPress Shortcodes [#1807](https://github.com/ThemeFuse/Unyson/issues/1807)
