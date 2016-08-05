@@ -80,7 +80,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 		}
 
 		$editor_manager = new FW_WP_Editor_Manager($id, $option, $data);
-		echo $editor_manager->get_html();
+		return $editor_manager->get_html();
 	}
 
 	/**
