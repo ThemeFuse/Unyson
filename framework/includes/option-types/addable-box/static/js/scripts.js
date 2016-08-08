@@ -253,19 +253,16 @@ jQuery(document).ready(function ($) {
 
 			$boxes.append($newBox);
 
-			/**
-			 * Re-render wp-editor from newBox
-			 */
-			if ($option.find('.fw-option-box').length > 1 && window.fwWpEditorRefreshIds) {
-				if ($option.find('.fw-option-type-wp-editor').length > 0) {
-					fwWpEditorRefreshIds(
-						jQuery(
-							$option.find('.default-box-template').attr('data-template')
-						).find('textarea').attr('id'),
-
-						$newBox
-					);
-				}
+			// Re-render wp-editor
+			if (
+				window.fwWpEditorRefreshIds
+				&&
+				$newBox.find('.fw-option-type-wp-editor:first').length
+			) {
+				fwWpEditorRefreshIds(
+					$newBox.find('.fw-option-type-wp-editor textarea:first').attr('id'),
+					$newBox
+				);
 			}
 
 			methods.initControls($newBox);

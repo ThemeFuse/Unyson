@@ -71,9 +71,19 @@ jQuery(document).ready(function ($) {
 
 			$button.attr('data-increment', increment + 1);
 
-			$options.append(
-				$newOption
-			);
+			$options.append($newOption);
+
+			// Re-render wp-editor
+			if (
+				window.fwWpEditorRefreshIds
+				&&
+				$newOption.find('.fw-option-type-wp-editor:first').length
+			) {
+				fwWpEditorRefreshIds(
+					$newOption.find('.fw-option-type-wp-editor textarea:first').attr('id'),
+					$newOption
+				);
+			}
 
 			// remove focus form "Add" button to prevent pressing space/enter to add easy many options
 			$newOption.find('input,select,textarea').first().focus();
