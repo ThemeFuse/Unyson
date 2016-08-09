@@ -2,7 +2,22 @@
 
 /**
  * Persistent cache saved in uploads/fw-file-cache.php
- * It is reset when the user is logged in as administrator
+ *
+ * It is reset when:
+ * - the user is logged in as administrator
+ * - important action related to theme switch or file changes is triggered
+ *
+ * Usage:
+ * try {
+ *     return FW_File_Cache::get($cache_key = '...'. $rel_path);
+ * } catch (FW_File_Cache_Not_Found_Exception $e) {
+ *     $result = ...;
+ *
+ *     FW_File_Cache::set($cache_key, $result);
+ *
+ *     return $result; // IMPORTANT: Do not use FW_File_Cache::get($cache_key) again
+ * }
+ *
  * @since 2.5.13
  *
  * ToDo: Skip path on backup files export
@@ -29,6 +44,14 @@ class FW_File_Cache {
 	 * @var array
 	 */
 	private static $cache;
+
+	private static function get_defaults() {
+		return array(
+			'created' => time(),
+			'updated' => time(),
+			'data' => array(),
+		);
+	}
 
 	private static function load() {
 		if ( is_array( self::$cache ) ) {
@@ -72,11 +95,8 @@ class FW_File_Cache {
 			||
 		    !isset(self::$cache['data'])
 		) {
-			self::$cache = array(
-				'created' => time(),
-				'updated' => time(),
-				'data' => array(),
-			);
+			self::$cache = self::get_defaults();
+			self::$changed = true;
 		}
 
 		return true;
@@ -89,26 +109,21 @@ class FW_File_Cache {
 		self::$path = $path;
 	}
 
-	/**
-	 * @internal
-	 */
-	public static function _action_switch_blog() {
+	public static function reset() {
+		self::_save();
 		self::update_path();
-		self::$cache = null;
-		self::$changed = false;
+		self::$cache = self::get_defaults();
+		self::$changed = true;
 	}
 
-	/**
-	 * @internal
-	 */
-	public static function _action_shutdown() {
+	public static function save() {
 		if ( ! self::$changed ) {
 			return;
 		}
 
-		self::$cache['updated'] = time();
-
 		file_put_contents(self::$path, '<?php return '. var_export(self::$cache, true) .';');
+
+		self::$changed = false;
 	}
 
 	/**
@@ -117,8 +132,13 @@ class FW_File_Cache {
 	public static function _init() {
 		self::update_path();
 
-		add_action( 'switch_blog', array(__CLASS__, '_action_switch_blog') );
-		add_action( 'shutdown', array(__CLASS__, '_action_shutdown') );
+		add_action( 'shutdown', array(__CLASS__, 'save') );
+
+		foreach (array(
+			'switch_blog'
+		) as $action) {
+			add_action( $action, array(__CLASS__, 'reset') );
+		}
 	}
 
 	/**
@@ -149,7 +169,7 @@ class FW_File_Cache {
 		}
 
 		self::$changed = true;
-
+		self::$cache['updated'] = time();
 		self::$cache['data'][ $key ] = $value;
 
 		return true;

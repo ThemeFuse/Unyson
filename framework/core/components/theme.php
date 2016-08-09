@@ -46,15 +46,21 @@ final class _FW_Component_Theme
 	 */
 	public function locate_path($rel_path)
 	{
-		if (is_child_theme() && file_exists(fw_get_stylesheet_customizations_directory('/theme'. $rel_path))) {
-			return fw_get_stylesheet_customizations_directory('/theme'. $rel_path);
-		}
+		try {
+			return FW_File_Cache::get($cache_key = 'core:theme:path:'. $rel_path);
+		} catch (FW_File_Cache_Not_Found_Exception $e) {
+			if (is_child_theme() && file_exists(fw_get_stylesheet_customizations_directory('/theme'. $rel_path))) {
+				$path = fw_get_stylesheet_customizations_directory('/theme'. $rel_path);
+			} elseif (file_exists(fw_get_template_customizations_directory('/theme'. $rel_path))) {
+				$path = fw_get_template_customizations_directory('/theme'. $rel_path);
+			} else {
+				$path = false;
+			}
 
-		if (file_exists(fw_get_template_customizations_directory('/theme'. $rel_path))) {
-			return fw_get_template_customizations_directory('/theme'. $rel_path);
-		}
+			FW_File_Cache::set($cache_key, $path);
 
-		return false;
+			return $path;
+		}
 	}
 
 	/**
