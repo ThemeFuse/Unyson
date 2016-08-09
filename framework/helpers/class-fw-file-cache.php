@@ -6,6 +6,8 @@
  * @since 2.5.13
  *
  * ToDo: Skip path on backup files export
+ * ToDo: Reset if logged in as administrator
+ * ToDo: Reset on major actions like theme switch, because Jetpack can make changes without the user being logged in
  */
 class FW_File_Cache {
 	/**
