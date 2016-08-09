@@ -61,7 +61,7 @@ class FW_File_Cache {
 			return false; // cannot create the file
 		}
 
-		self::$cache = include($path);
+		self::$cache = include $path;
 
 		if (
 			!is_array(self::$cache)
@@ -108,7 +108,7 @@ class FW_File_Cache {
 
 		self::$cache['updated'] = time();
 
-		file_put_contents(self::$path, var_export(self::$cache));
+		file_put_contents(self::$path, '<?php return '. var_export(self::$cache, true) .';');
 	}
 
 	/**
@@ -131,8 +131,8 @@ class FW_File_Cache {
 			throw new FW_File_Cache_Not_Found_Exception();
 		}
 
-		if (array_key_exists($key, self::$cache)) {
-			return self::$cache[$key];
+		if (array_key_exists($key, self::$cache['data'])) {
+			return self::$cache['data'][$key];
 		} else {
 			throw new FW_File_Cache_Not_Found_Exception();
 		}
@@ -150,7 +150,7 @@ class FW_File_Cache {
 
 		self::$changed = true;
 
-		self::$cache[ $key ] = $value;
+		self::$cache['data'][ $key ] = $value;
 
 		return true;
 	}
