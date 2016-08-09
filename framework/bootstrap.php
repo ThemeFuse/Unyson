@@ -44,6 +44,7 @@ if (defined('FW')) {
 				'general',
 				'class-fw-wp-filesystem',
 				'class-fw-cache',
+				'class-fw-file-cache',
 				'class-fw-form',
 				'class-fw-request',
 				'class-fw-session',
