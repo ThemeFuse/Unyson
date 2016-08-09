@@ -89,11 +89,11 @@ class FW_File_Cache {
 		if (
 			!is_array(self::$cache)
 			||
-		    !isset(self::$cache['created'])
+			!isset(self::$cache['created'])
 			||
 			self::$cache['created'] < ( time() - self::$expires )
 			||
-		    !isset(self::$cache['data'])
+			!isset(self::$cache['data'])
 		) {
 			self::$cache = self::get_defaults();
 			self::$changed = true;
@@ -110,7 +110,7 @@ class FW_File_Cache {
 	}
 
 	public static function reset() {
-		self::_save();
+		self::save();
 		self::update_path();
 		self::$cache = self::get_defaults();
 		self::$changed = true;
