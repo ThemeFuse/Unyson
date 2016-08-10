@@ -234,11 +234,15 @@ class FW_Db_Options_Model_Term extends FW_Db_Options_Model {
 	}
 
 	protected function get_values($item_id, array $extra_data = array()) {
-		return FW_WP_Meta::get( 'fw_term', $item_id, 'fw_options', array(), null );
+		self::migrate($item_id);
+
+		return (array)get_term_meta( $item_id, 'fw_options', true);
 	}
 
 	protected function set_values($item_id, $values, array $extra_data = array()) {
-		FW_WP_Meta::set( 'fw_term', $item_id, 'fw_options', $values );
+		self::migrate($item_id);
+
+		update_term_meta($item_id, 'fw_options', $values);
 	}
 
 	protected function get_options($item_id, array $extra_data = array()) {
@@ -257,6 +261,96 @@ class FW_Db_Options_Model_Term extends FW_Db_Options_Model {
 			return $extra_data['taxonomy']; // Cache options grouped by taxonomy, not by term id
 		} else {
 			return $item_id;
+		}
+	}
+
+	/**
+	 * Cache termmeta table name if exists
+	 * @var string|false
+	 */
+	private static $old_table_name;
+
+	/**
+	 * @return string|false
+	 */
+	private static function get_old_table_name() {
+		if (is_null(self::$old_table_name)) {
+			/** @var WPDB $wpdb */
+			global $wpdb;
+
+			$table_name = $wpdb->get_results( "show tables like '{$wpdb->prefix}fw_termmeta'", ARRAY_A );
+			$table_name = $table_name ? array_pop($table_name[0]) : false;
+
+			if ( $table_name && ! $wpdb->get_results( "SELECT 1 FROM `{$table_name}` LIMIT 1" ) ) {
+				// The table is empty, delete it
+				$wpdb->query( "DROP TABLE `{$table_name}`" );
+				$table_name = false;
+			}
+
+			self::$old_table_name = $table_name;
+		}
+
+		return self::$old_table_name;
+	}
+
+	/**
+	 * @internal
+	 */
+	public static function _action_switch_blog() {
+		self::$old_table_name = null; // reset
+	}
+
+	/**
+	 * When a term is deleted, delete its meta from old fw_termmeta table
+	 *
+	 * @param mixed $term_id
+	 *
+	 * @return void
+	 * @internal
+	 */
+	public static function _action_fw_delete_term( $term_id ) {
+		if ( ! ( $table_name = self::get_old_table_name() ) ) {
+			return;
+		}
+
+		$term_id = (int) $term_id;
+
+		if ( ! $term_id ) {
+			return;
+		}
+
+		/** @var WPDB $wpdb */
+		global $wpdb;
+
+		$wpdb->delete( $table_name, array( 'fw_term_id' => $term_id ), array( '%d' ) );
+	}
+
+	/**
+	 * In WP 4.4 was introduced native term meta https://codex.wordpress.org/Version_4.4#For_Developers
+	 * All data from old table must be migrated to native term meta
+	 * @param int $term_id
+	 * @return bool
+	 */
+	private static function migrate($term_id) {
+		global $wpdb; /** @var wpdb $wpdb */
+
+		if (
+			( $old_table_name = self::get_old_table_name() )
+			&&
+			( $value = $wpdb->get_col( $wpdb->prepare(
+				"SELECT meta_value FROM `{$old_table_name}` WHERE fw_term_id = %d AND meta_key = 'fw_options' LIMIT 1",
+				$term_id
+			) ) )
+			&&
+			( $value = unserialize( $value[0] ) )
+		) { // Migrate value from old table to native term meta added in
+			$wpdb->delete( $old_table_name, array( 'fw_term_id' => $term_id ), array( '%d' ) );
+
+			update_term_meta( $term_id, 'fw_options', $value );
+
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -301,6 +395,9 @@ class FW_Db_Options_Model_Term extends FW_Db_Options_Model {
 				'taxonomy' => $taxonomy
 			));
 		}
+
+		add_action( 'switch_blog', array( __CLASS__, '_action_switch_blog' ) );
+		add_action( 'delete_term', array( __CLASS__, '_action_fw_delete_term' ) );
 	}
 }
 new FW_Db_Options_Model_Term();
