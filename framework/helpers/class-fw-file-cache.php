@@ -130,7 +130,7 @@ class FW_File_Cache {
 	}
 
 	public static function reset() {
-		self::_save();
+		self::save();
 		self::update_path();
 		self::$cache = self::get_defaults();
 		self::$changed = true;
