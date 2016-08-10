@@ -2,7 +2,6 @@
 
 /**
  * Memory Cache
- * Only for internal usage in other functions/methods, because it throws exceptions
  *
  * Recommended usage example:
  *  try {
