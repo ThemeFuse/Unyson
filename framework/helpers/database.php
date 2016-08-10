@@ -343,7 +343,7 @@ class FW_Db_Options_Model_Term extends FW_Db_Options_Model {
 			) ) )
 			&&
 			( $value = unserialize( $value[0] ) )
-		) { // Migrate value from old table to native term meta added in
+		) {
 			$wpdb->delete( $old_table_name, array( 'fw_term_id' => $term_id ), array( '%d' ) );
 
 			update_term_meta( $term_id, 'fw_options', $value );
