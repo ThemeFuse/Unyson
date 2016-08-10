@@ -5,7 +5,7 @@
  *
  * It is reset when:
  * - the user is logged in as administrator
- * - important action related to theme switch or file changes is triggered
+ * - important action related to theme switch or file changes is triggered (for e.g. JetPack can do changes remotely)
  *
  * Usage:
  * try {
@@ -19,10 +19,6 @@
  * }
  *
  * @since 2.5.13
- *
- * ToDo: Skip path on backup files export
- * ToDo: Reset if logged in as administrator
- * ToDo: Reset on major actions like theme switch, because Jetpack can make changes without the user being logged in
  */
 class FW_File_Cache {
 	/**
@@ -58,10 +54,19 @@ class FW_File_Cache {
 			return true; // already loaded
 		}
 
+		$dir  = dirname(self::$path);
 		$path = self::$path;
 		$code = '<?php return array();';
 		$shhh = defined('DOING_AJAX') && DOING_AJAX; // prevent warning in ajax requests
 
+		// check directory
+		if ( ! file_exists($dir) ) {
+			if ( ! mkdir($dir, 0755, true) ) {
+				return false;
+			}
+		}
+
+		// check file
 		if ( file_exists($path) ) {
 			if ( ! is_writable($path) ) {
 				if (
@@ -86,17 +91,32 @@ class FW_File_Cache {
 
 		self::$cache = include $path;
 
-		if (
-			!is_array(self::$cache)
-			||
-		    !isset(self::$cache['created'])
-			||
-			self::$cache['created'] < ( time() - self::$expires )
-			||
-		    !isset(self::$cache['data'])
-		) {
-			self::$cache = self::get_defaults();
-			self::$changed = true;
+		// check the loaded cache
+		{
+			$reset = false;
+
+			do {
+				foreach ( self::get_defaults() as $def_key => $def_val ) {
+					if (
+						!isset( self::$cache[ $def_key ] )
+						||
+						gettype( self::$cache[ $def_key ] ) !== gettype($def_val)
+					) {
+						$reset = true;
+						break 2;
+					}
+				}
+
+				if ( self::$cache['created'] < ( time() - self::$expires ) ) {
+					$reset = true;
+					break;
+				}
+			} while(false);
+
+			if ($reset) {
+				self::$cache = self::get_defaults();
+				self::$changed = true;
+			}
 		}
 
 		return true;
@@ -104,7 +124,7 @@ class FW_File_Cache {
 
 	private static function update_path() {
 		$path = wp_upload_dir();
-		$path = fw_fix_path($path['basedir']) .'/fw-file-cache.php';
+		$path = fw_fix_path($path['basedir']) .'/fw/file-cache.php';
 
 		self::$path = $path;
 	}
