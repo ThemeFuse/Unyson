@@ -129,11 +129,21 @@ class FW_File_Cache {
 		self::$path = $path;
 	}
 
-	public static function reset() {
+	/**
+	 * @param mixed $filter_value When this method is used in filter, it must return the unchanged filter value
+	 * @return bool
+	 */
+	public static function reset($filter_value = null) {
+		if ( ! self::load() ) {
+			return is_null($filter_value) ? true : $filter_value;
+		}
+
 		self::save();
 		self::update_path();
 		self::$cache = self::get_defaults();
 		self::$changed = true;
+
+		return is_null($filter_value) ? true : $filter_value;
 	}
 
 	public static function save() {
@@ -152,13 +162,39 @@ class FW_File_Cache {
 	public static function _init() {
 		self::update_path();
 
-		add_action( 'shutdown', array(__CLASS__, 'save') );
-
-		foreach (array(
-			'switch_blog'
-		) as $action) {
-			add_action( $action, array(__CLASS__, 'reset') );
+		/**
+		 * Reset when current user is administrator
+		 * because it can be a developer that added/removed some files
+		 */
+		if ( current_user_can('manage_options') ) {
+			self::reset();
+		} else {
+			/**
+			 * Reset on actions which may change something related to files
+			 * - themes/plugins activation (new files must be loaded from other paths)
+			 * - after some files was added/deleted
+			 */
+			foreach (array(
+				'switch_blog' => true,
+				'fw_extensions_before_activation' => true,
+				'fw_extensions_after_activation' => true,
+				'fw_extensions_before_deactivation' => true,
+				'fw_extensions_after_deactivation' => true,
+				'fw_extensions_install' => true,
+				'fw_extensions_uninstall' => true,
+				'activated_plugin' => true,
+				'deactivated_plugin' => true,
+				'switch_theme' => true,
+				'after_switch_theme' => true,
+				'upgrader_post_install' => true,
+				'automatic_updates_complete' => true,
+				'upgrader_process_complete' => true,
+			) as $action => $x) {
+				add_action( $action, array(__CLASS__, 'reset') );
+			}
 		}
+
+		add_action( 'shutdown', array(__CLASS__, 'save') );
 	}
 
 	/**
