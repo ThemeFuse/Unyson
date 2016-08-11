@@ -148,7 +148,7 @@ final class _FW_Component_Extensions
 		}
 
 		try {
-			$dirs = FW_File_Cache::get($cache_key = 'core:ext:load:glob:'. $data['rel_path']);
+			$dirs = FW_File_Cache::get($cache_key = 'core:ext:load:glob:'. $data['path']);
 		} catch (FW_File_Cache_Not_Found_Exception $e) {
 			$dirs = glob($data['path'] .'/*', GLOB_ONLYDIR);
 
