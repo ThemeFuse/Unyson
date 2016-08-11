@@ -1,13 +1,13 @@
 (function ($, _, fwEvents, window) {
 	var addablePopup = function () {
 		var $this = $(this),
-			$defaultItem = $this.find('.item.default'),
+			$defaultItem = $this.find('.default-item:first'),
 			nodes = {
 				$optionWrapper: $this,
 				$addButton: $this.find('.add-new-item'),
 				$itemsWrapper: $this.find('.items-wrapper'),
 				getDefaultItem: function () {
-					return $defaultItem.clone().removeClass('default');
+					return $defaultItem.clone().removeClass('default-item').addClass('item');
 				}
 			},
 			data = JSON.parse(
@@ -20,10 +20,10 @@
 					size : data.size
 				}),
 				countItems: function () {
-					return nodes.$itemsWrapper.find('.item:not(.default)').length;
+					return nodes.$itemsWrapper.find('> .item').length;
 				},
 				removeDefaultItem: function () {
-					nodes.$itemsWrapper.find('.item.default').remove();
+					nodes.$optionWrapper.find('.default-item:first').remove();
 				},
 				toogleNodes : function(){
 					utils.toogleItemsWrapper();
@@ -56,7 +56,7 @@
 					}
 
 					nodes.$itemsWrapper.sortable({
-						items: '.item:not(.default)',
+						items: '> .item',
 						cursor: 'move',
 						distance: 2,
 						tolerance: 'pointer',
@@ -75,7 +75,7 @@
 					});
 				},
 				initItemsTemplates: function () {
-					var $items = nodes.$itemsWrapper.find('.item:not(.default)');
+					var $items = nodes.$itemsWrapper.find('> .item');
 					if ($items.length > 0) {
 						$items.each(function () {
 							utils.editItem($(this), JSON.parse($(this).find('input').val()));
@@ -136,7 +136,7 @@
 			nodes.$optionWrapper.trigger('change'); // for customizer
 		});
 
-		nodes.$itemsWrapper.on('click', '.item', function (e) {
+		nodes.$itemsWrapper.on('click', '> .item', function (e) {
 			e.preventDefault();
 
 			var values = {};

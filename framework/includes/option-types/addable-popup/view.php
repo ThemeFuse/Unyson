@@ -17,24 +17,12 @@ if ($option['sortable']) {
 $increment_placeholder = '###-addable-popup-increment-'. fw_rand_md5() .'-###';
 ?>
 <div <?php echo fw_attr_to_html($attr); ?>>
+	<!-- Fixes https://github.com/ThemeFuse/Unyson/issues/1278 -->
+	<?php echo fw()->backend->option_type('hidden')->render($id, array('value' => '~'), array(
+		'id_prefix' => $data['id_prefix'],
+		'name_prefix' => $data['name_prefix'],
+	)); ?>
 	<div class="items-wrapper">
-		<!-- Fixes https://github.com/ThemeFuse/Unyson/issues/1278 -->
-		<?php echo fw()->backend->option_type('hidden')->render($id, array('value' => '~'), array(
-			'id_prefix' => $data['id_prefix'],
-			'name_prefix' => $data['name_prefix'],
-		)); ?>
-		<div class="item default">
-			<div class="input-wrapper">
-				<?php echo fw()->backend->option_type('hidden')->render('', array('value' => '[]'), array(
-					'id_prefix' => $data['id_prefix'] . $id . '-' . $increment_placeholder,
-					'name_prefix' => $data['name_prefix'] . '[' . $id . ']',
-				)); ?>
-			</div>
-			<img src="<?php echo esc_attr($sortable_image); ?>" class="sort-item"/>
-
-			<div class="content"></div>
-			<a href="#" class="dashicons fw-x delete-item"></a>
-		</div>
 		<?php foreach ($data['value'] as $key => $value): ?>
 			<div class="item">
 				<div class="input-wrapper">
@@ -50,7 +38,18 @@ $increment_placeholder = '###-addable-popup-increment-'. fw_rand_md5() .'-###';
 			</div>
 		<?php endforeach; ?>
 	</div>
-	<!--<div class="dashicons dashicons-plus add-new-item"></div>-->
+	<div class="default-item">
+		<div class="input-wrapper">
+			<?php echo fw()->backend->option_type('hidden')->render('', array('value' => '[]'), array(
+				'id_prefix' => $data['id_prefix'] . $id . '-' . $increment_placeholder,
+				'name_prefix' => $data['name_prefix'] . '[' . $id . ']',
+			)); ?>
+		</div>
+		<img src="<?php echo esc_attr($sortable_image); ?>" class="sort-item"/>
+
+		<div class="content"></div>
+		<a href="#" class="dashicons fw-x delete-item"></a>
+	</div>
 	<?php
 	echo fw_html_tag('button', array(
 		'type' => 'button',
