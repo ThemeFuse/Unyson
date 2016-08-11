@@ -45,18 +45,26 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 	{
 		unset($option['attr']['name'], $option['attr']['value']);
 
-		$option['attr']['data-for-js'] = json_encode(array(
-			'title' => empty($option['popup-title']) ? $option['label'] : $option['popup-title'],
-			'options' => $this->transform_options($option['popup-options']),
-			'template' => $option['template'],
-			'size' => $option['size'],
-			'limit' => $option['limit']
+		$option['attr']['data-for-js'] =
+			/**
+			 * Prevent js error when the generated html is used in another option type js template with {{...}}
+			 * Do this trick because {{ is not escaped/encoded by fw_htmlspecialchars()
+			 * Fixes https://github.com/ThemeFuse/Unyson/issues/1877
+			 */
+			json_encode(explode('{{',
+			json_encode(array(
+				'title' => empty($option['popup-title']) ? $option['label'] : $option['popup-title'],
+				'options' => $this->transform_options($option['popup-options']),
+				'template' => $option['template'],
+				'size' => $option['size'],
+				'limit' => $option['limit']
+			))
 		));
 
 		$sortable_image = fw_get_framework_directory_uri('/static/img/sort-vertically.png');
 
 		return fw_render_view(
-			fw_get_framework_directory('/includes/option-types/' . $this->get_type() . '/views/view.php'),
+			fw_get_framework_directory('/includes/option-types/' . $this->get_type() . '/view.php'),
 			compact('id', 'option', 'data', 'sortable_image')
 		);
 	}

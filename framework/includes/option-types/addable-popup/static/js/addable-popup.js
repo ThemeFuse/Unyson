@@ -10,7 +10,9 @@
 					return $defaultItem.clone().removeClass('default');
 				}
 			},
-			data = JSON.parse(nodes.$optionWrapper.attr('data-for-js')),
+			data = JSON.parse(
+				JSON.parse(nodes.$optionWrapper.attr('data-for-js')).join('{{') // check option php class
+			),
 			utils = {
 				modal: new fw.OptionsModal({
 					title: data.title,
@@ -99,7 +101,6 @@
 						 * may throw error in in template is used an option id added after some items was already saved
 						 */
 						values._context = $clonedItem.find('.content');
-						values._itemsWrapper = nodes.$itemsWrapper;
 
 						template = _.template(
 							$.trim(data.template),
