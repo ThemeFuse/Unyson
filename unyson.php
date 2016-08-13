@@ -38,26 +38,7 @@ if (defined('FW')) {
 	{
 		/** @internal */
 		function _action_fw_plugin_activate() {
-			{
-				require_once dirname(__FILE__) .'/framework/includes/term-meta/function_fw_term_meta_setup_blog.php';
-
-				if (is_multisite() && is_network_admin()) {
-					global $wpdb;
-
-					$blogs = $wpdb->get_col( "SELECT blog_id FROM {$wpdb->blogs} WHERE site_id = '{$wpdb->siteid}'" );
-					foreach ( $blogs as $blog_id ) {
-						switch_to_blog( $blog_id );
-						_fw_term_meta_setup_blog( $blog_id );
-					}
-
-					do {} while ( restore_current_blog() );
-				} else {
-					_fw_term_meta_setup_blog();
-				}
-			}
-
-			// add special option (is used in another action)
-			update_option('_fw_plugin_activated', true, false);
+			update_option('_fw_plugin_activated', true, false); // add special option (is used in another action)
 		}
 		register_activation_hook( __FILE__, '_action_fw_plugin_activate' );
 
@@ -69,20 +50,11 @@ if (defined('FW')) {
 				do_action('fw_after_plugin_activate');
 			}
 		}
-		add_action('current_screen', '_action_fw_plugin_check_if_was_activated', 100);
-		// as late as possible, but to be able to make redirects (content not started)
-
-		/** @internal */
-		function _action_fw_term_meta_new_blog( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
-			if ( is_plugin_active_for_network( plugin_basename( __FILE__ ) ) ) {
-				require_once dirname(__FILE__) .'/framework/includes/term-meta/function_fw_term_meta_setup_blog.php';
-
-				switch_to_blog( $blog_id );
-				_fw_term_meta_setup_blog();
-				do {} while ( restore_current_blog() );
-			}
-		}
-		add_action( 'wpmu_new_blog', '_action_fw_term_meta_new_blog', 10, 6 );
+		add_action(
+			'current_screen', // as late as possible, but to be able to make redirects (content not started)
+			'_action_fw_plugin_check_if_was_activated',
+			100
+		);
 
 		/**
 		 * @param int $blog_id Blog ID
@@ -90,13 +62,11 @@ if (defined('FW')) {
 		 * @internal
 		 */
 		function _action_fw_delete_blog( $blog_id, $drop ) {
-			if ($drop) { // delete table created by the _fw_term_meta_setup_blog() function
-				/** @var WPDB $wpdb */
-				global $wpdb;
+			if ($drop) {
+				global $wpdb; /** @var WPDB $wpdb */
 
-				if (property_exists($wpdb, 'fw_termmeta')) { // it should exist, but check to be sure
-					$wpdb->query("DROP TABLE IF EXISTS {$wpdb->fw_termmeta};");
-				}
+				// delete old termmeta table
+				$wpdb->query("DROP TABLE IF EXISTS `{$wpdb->prefix}fw_termmeta`;");
 			}
 		}
 		add_action( 'delete_blog', '_action_fw_delete_blog', 10, 2 );
