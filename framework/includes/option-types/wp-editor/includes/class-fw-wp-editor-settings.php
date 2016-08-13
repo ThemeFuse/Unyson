@@ -182,17 +182,19 @@ class FW_WP_Editor_Manager {
 		/**
 		 * Loop thought all settings and decode json values
 		 */
-		foreach ($mce_settings as &$setting) {
-			if (
-				is_string($setting)
-				&&
-				!empty($setting)
-				&&
-				in_array($setting{0}, array('[', '{'), true)
-				&&
-				! is_null($decoded = json_decode($setting))
-			) {
-				$setting = $decoded;
+		if ($mce_settings) {
+			foreach ($mce_settings as &$setting) {
+				if (
+					is_string($setting)
+					&&
+					!empty($setting)
+					&&
+					in_array($setting{0}, array('[', '{'), true)
+					&&
+					! is_null($decoded = json_decode($setting))
+				) {
+					$setting = $decoded;
+				}
 			}
 		}
 
