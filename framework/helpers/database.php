@@ -26,6 +26,31 @@ class FW_Db_Options_Model_Settings extends FW_Db_Options_Model {
 		);
 	}
 
+	protected function _after_set($item_id, $option_id, $sub_keys, $old_value, array $extra_data = array()) {
+		/**
+		 * @since 2.5.13
+		 */
+		do_action('fw_settings_options_update', array(
+			/**
+			 * Option id
+			 * First level multi-key
+			 * For e.g. if $option_id is 'hello/world/7' this will be 'hello'
+			 */
+			'option_id' => $option_id,
+			/**
+			 * The remaining sub-keys
+			 * For e.g.
+			 * if $option_id is 'hello/world/7' this will be array('world', '7')
+			 * if $option_id is 'hello' this will be array()
+			 */
+			'sub_keys' => explode('/', $sub_keys),
+			/**
+			 * Old option(s) value
+			 */
+			'old_value' => $old_value
+		));
+	}
+
 	protected function _init() {
 		/**
 		 * Get a theme settings option value from the database
@@ -169,23 +194,14 @@ class FW_Db_Options_Model_Post extends FW_Db_Options_Model {
 			/**
 			 * Option id
 			 * First level multi-key
-			 *
-			 * For e.g.
-			 *
-			 * if $option_id is 'hello/world/7'
-			 * this will be 'hello'
+			 * For e.g. if $option_id is 'hello/world/7' this will be 'hello'
 			 */
 			$option_id,
 			/**
 			 * The remaining sub-keys
-			 *
 			 * For e.g.
-			 *
-			 * if $option_id is 'hello/world/7'
-			 * $option_id_keys will be array('world', '7')
-			 *
-			 * if $option_id is 'hello'
-			 * $option_id_keys will be array()
+			 * if $option_id is 'hello/world/7' this will be array('world', '7')
+			 * if $option_id is 'hello' this will be array()
 			 */
 			explode('/', $sub_keys),
 			/**
@@ -354,6 +370,33 @@ class FW_Db_Options_Model_Term extends FW_Db_Options_Model {
 		}
 	}
 
+	protected function _after_set($item_id, $option_id, $sub_keys, $old_value, array $extra_data = array()) {
+		/**
+		 * @since 2.5.13
+		 */
+		do_action('fw_term_options_update', array(
+			'term_id' => $item_id,
+			'taxonomy' => $extra_data['taxonomy'],
+			/**
+			 * Option id
+			 * First level multi-key
+			 * For e.g. if $option_id is 'hello/world/7' this will be 'hello'
+			 */
+			'option_id' => $option_id,
+			/**
+			 * The remaining sub-keys
+			 * For e.g.
+			 * if $option_id is 'hello/world/7' this will be array('world', '7')
+			 * if $option_id is 'hello' this will be array()
+			 */
+			'sub_keys' => explode('/', $sub_keys),
+			/**
+			 * Old option(s) value
+			 */
+			'old_value' => $old_value
+		));
+	}
+
 	protected function _init() {
 		/**
 		 * Get term option value from the database
@@ -488,6 +531,31 @@ class FW_Db_Options_Model_Customizer extends FW_Db_Options_Model {
 		return array(
 			'customizer' => true
 		);
+	}
+
+	protected function _after_set($item_id, $option_id, $sub_keys, $old_value, array $extra_data = array()) {
+		/**
+		 * @since 2.5.13
+		 */
+		do_action('fw_customizer_options_update', array(
+			/**
+			 * Option id
+			 * First level multi-key
+			 * For e.g. if $option_id is 'hello/world/7' this will be 'hello'
+			 */
+			'option_id' => $option_id,
+			/**
+			 * The remaining sub-keys
+			 * For e.g.
+			 * if $option_id is 'hello/world/7' this will be array('world', '7')
+			 * if $option_id is 'hello' this will be array()
+			 */
+			'sub_keys' => explode('/', $sub_keys),
+			/**
+			 * Old option(s) value
+			 */
+			'old_value' => $old_value
+		));
 	}
 
 	protected function _init() {
