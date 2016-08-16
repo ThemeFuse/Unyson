@@ -52,3 +52,27 @@ function _fw_filter_github_api_url($url) {
 	return 'http://github-api-cache.unyson.io';
 }
 add_filter('fw_github_api_url', '_fw_filter_github_api_url');
+
+/**
+ * Javascript events related to tinymce init
+ * @since 2.5.13
+ */
+{
+	add_action('wp_tiny_mce_init', '_fw_action_tiny_mce_init');
+	function _fw_action_tiny_mce_init($mce_settings) {
+?>
+<script type="text/javascript">
+	if (typeof fwEvents != 'undefined') { fwEvents.trigger('fw:tinymce:init:before'); }
+</script>
+<?php
+	}
+
+	add_action('after_wp_tiny_mce', '_fw_action_after_wp_tiny_mce');
+	function _fw_action_after_wp_tiny_mce($mce_settings) {
+?>
+<script type="text/javascript">
+	if (typeof fwEvents != 'undefined') { fwEvents.trigger('fw:tinymce:init:after'); }
+</script>
+<?php
+	}
+}
