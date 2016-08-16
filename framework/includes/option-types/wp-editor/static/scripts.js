@@ -93,6 +93,9 @@
 
 			try {
 				tinymce.init( tinyMCEPreInit.mceInit[ id ] );
+
+				// Remove garbage. This caused lag on page scroll after OptionsModal with wp-editor close
+				$option.on('remove', function(){ tinymce.execCommand('mceRemoveEditor', false, id); });
 			} catch(e){
 				console.error('wp-editor init error', id, e);
 				return;
