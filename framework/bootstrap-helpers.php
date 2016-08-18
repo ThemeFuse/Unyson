@@ -23,13 +23,16 @@ function fw_fix_path($path) {
  * @return string
  */
 function fw_get_framework_customizations_dir_rel_path($append = '') {
-	static $cache = null;
-
-	if ($cache === null) {
-		$cache = apply_filters('fw_framework_customizations_dir_rel_path', '/framework-customizations');
+	try {
+		$dir = FW_Cache::get($cache_key = 'fw_customizations_dir_rel_path');
+	} catch (FW_Cache_Not_Found_Exception $e) {
+		FW_Cache::set(
+			$cache_key,
+			$dir = apply_filters('fw_framework_customizations_dir_rel_path', '/framework-customizations')
+		);
 	}
 
-	return $cache . $append;
+	return $dir . $append;
 }
 
 /** Child theme related functions */
@@ -71,13 +74,16 @@ function fw_get_framework_customizations_dir_rel_path($append = '') {
 	 * @return string
 	 */
 	function fw_get_template_customizations_directory($rel_path = '') {
-		static $cache = null;
-
-		if ($cache === null) {
-			$cache = get_template_directory() . fw_get_framework_customizations_dir_rel_path();
+		try {
+			$dir = FW_Cache::get($cache_key = 'fw_template_customizations_dir');
+		} catch (FW_Cache_Not_Found_Exception $e) {
+			FW_Cache::set(
+				$cache_key,
+				$dir = get_template_directory() . fw_get_framework_customizations_dir_rel_path()
+			);
 		}
 
-		return $cache . $rel_path;
+		return $dir . $rel_path;
 	}
 
 	/**
@@ -86,13 +92,16 @@ function fw_get_framework_customizations_dir_rel_path($append = '') {
 	 * @return string
 	 */
 	function fw_get_template_customizations_directory_uri($rel_path = '') {
-		static $cache = null;
-
-		if ($cache === null) {
-			$cache = get_template_directory_uri() . fw_get_framework_customizations_dir_rel_path();
+		try {
+			$dir = FW_Cache::get($cache_key = 'fw_template_customizations_dir_uri');
+		} catch (FW_Cache_Not_Found_Exception $e) {
+			FW_Cache::set(
+				$cache_key,
+				$dir = get_template_directory_uri() . fw_get_framework_customizations_dir_rel_path()
+			);
 		}
 
-		return $cache . $rel_path;
+		return $dir . $rel_path;
 	}
 }
 
@@ -104,13 +113,16 @@ function fw_get_framework_customizations_dir_rel_path($append = '') {
 	 * @return string
 	 */
 	function fw_get_framework_directory($rel_path = '') {
-		static $cache = null;
-
-		if ($cache === null) {
-			$cache = apply_filters('fw_framework_directory', dirname(__FILE__));
+		try {
+			$dir = FW_Cache::get($cache_key = 'fw_framework_dir');
+		} catch (FW_Cache_Not_Found_Exception $e) {
+			FW_Cache::set(
+				$cache_key,
+				$dir = apply_filters('fw_framework_directory', dirname(__FILE__))
+			);
 		}
 
-		return $cache . $rel_path;
+		return $dir . $rel_path;
 	}
 
 	/**
@@ -119,12 +131,15 @@ function fw_get_framework_customizations_dir_rel_path($append = '') {
 	 * @return string
 	 */
 	function fw_get_framework_directory_uri($rel_path = '') {
-		static $cache = null;
-
-		if ($cache === null) {
-			$cache = apply_filters('fw_framework_directory_uri', get_template_directory_uri() . '/framework');
+		try {
+			$dir = FW_Cache::get($cache_key = 'fw_framework_dir_uri');
+		} catch (FW_Cache_Not_Found_Exception $e) {
+			FW_Cache::set(
+				$cache_key,
+				$dir = apply_filters('fw_framework_directory_uri', get_template_directory_uri() . '/framework')
+			);
 		}
 
-		return $cache . $rel_path;
+		return $dir . $rel_path;
 	}
 }

@@ -150,14 +150,17 @@ class FW_Cache
 			'clean_user_cache' => true,
 			'process_text_diff_html' => true,
 		) as $hook => $tmp) {
-			add_filter($hook, array(__CLASS__, 'free_memory'), 9999);
+			add_filter($hook, array(__CLASS__, 'free_memory'), 1);
 		}
 
 		/**
-		 * When WP global state is changed, better to flush the cache
+		 * Flush the cache when something major is changed (files or db values)
 		 */
 		foreach (array(
 			'switch_blog' => true,
+			'upgrader_post_install' => true,
+			'upgrader_process_complete' => true,
+			'switch_theme' => true,
 		) as $hook => $tmp) {
 			add_filter($hook, array(__CLASS__, 'clear'), 1);
 		}
@@ -262,7 +265,7 @@ class FW_Cache
 
 	/**
 	 * Empty the cache
-	 * @param mixed $dummy
+	 * @param mixed $dummy When method is used in add_filter()
 	 * @return mixed
 	 */
 	public static function clear($dummy = null)
