@@ -50,11 +50,11 @@ class FW_Available_Extension extends FW_Type {
 		return (
 			!empty($this->name) && is_string($this->name)
 			&&
-		    !empty($this->title) && is_string($this->title)
+			!empty($this->title) && is_string($this->title)
 			&&
-		    !empty($this->description) && is_string($this->description)
+			!empty($this->description) && is_string($this->description)
 			&&
-		    !empty($this->download_source)
+			!empty($this->download_source)
 			&&
 		    is_bool($this->display)
 			&&
