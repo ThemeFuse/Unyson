@@ -11,8 +11,9 @@ abstract class FW_Ext_Download_Source extends FW_Type
 	 * It should download, by convention, a zip file which absolute path
 	 * is $path.
 	 *
-	 * @param array $opts
-	 * @param string $path Absolute file of the future ZIP file
+	 * @param array $opts {extension_name: '...', extension_title: '...', ...}
+	 * @param string $zip_path Absolute file of the future ZIP file
+	 * @return null|WP_Error
 	 */
 	abstract public function download(array $opts, $zip_path);
 }

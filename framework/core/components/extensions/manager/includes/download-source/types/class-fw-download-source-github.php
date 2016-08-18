@@ -1,15 +1,19 @@
 <?php if (! defined('FW')) { die('Forbidden'); }
 
-class FW_Ext_Github_Download_Source extends FW_Ext_Download_Source
+class FW_Ext_Download_Source_Github extends FW_Ext_Download_Source
 {
-	private $source_key = 'github';
-
 	private $download_timeout = 300;
 
 	public function get_type() {
-		return $this->source_key;
+		return 'github';
 	}
 
+	/**
+	 * @param array $opts {user_repo: 'ThemeFuse/Unyson'}
+	 * @param string $zip_path
+	 *
+	 * @return WP_Error
+	 */
 	public function download(array $opts, $zip_path) {
 		$wp_error_id = 'fw_ext_github_download_source';
 		$theme_ext_requirements = fw()->theme->manifest->get('requirements/extensions');
@@ -26,7 +30,6 @@ class FW_Ext_Github_Download_Source extends FW_Ext_Download_Source
 				sprintf(__('"%s" extension github source "user_repo" parameter is required', 'fw'), $extension_title)
 			);
 		}
-
 
 		{
 			$transient_name = 'fw_ext_mngr_gh_dl';

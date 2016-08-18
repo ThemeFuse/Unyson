@@ -33,12 +33,34 @@ class FW_Available_Extension extends FW_Type {
 	/**
 	 * @var string Image url
 	 */
-	private $thumbnail = 'about:blank';
+	private $thumbnail = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2PUsHf9DwAC8AGtfm5YCAAAAABJRU5ErkJgggAA';
 
 	/**
-	 * @var array {id: data}
+	 * @var array {source: id, opts: {...}}
+	 * @see FW_Ext_Download_Source::get_type() is id
+	 * @see FW_Ext_Download_Source
 	 */
 	private $download_source = array();
+
+	/**
+	 * @return bool
+	 * @since 2.5.13
+	 */
+	public function is_valid() {
+		return (
+			!empty($this->name) && is_string($this->name)
+			&&
+		    !empty($this->title) && is_string($this->title)
+			&&
+		    !empty($this->description) && is_string($this->description)
+			&&
+		    !empty($this->download_source)
+			&&
+		    is_bool($this->display)
+			&&
+			(is_null($this->parent) || is_string($this->parent))
+		);
+	}
 
 	/**
 	 * @return string

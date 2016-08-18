@@ -44,6 +44,17 @@ final class _FW_Extensions_Manager
 			add_action('fw_plugin_post_update', array($this, '_action_plugin_post_update'));
 		}
 
+		// Preserve {theme}/framework-customizations/theme/available-extensions.php
+		{
+			add_filter('upgrader_pre_install',  array($this, '_filter_theme_available_extensions_copy'), 999, 2);
+
+			/**
+			 * Must be executed after
+			 * https://github.com/WordPress/WordPress/blob/4.6/wp-admin/includes/class-theme-upgrader.php#L204-L205
+			 */
+			add_action('upgrader_process_complete', array($this, '_action_theme_available_extensions_restore'), 999, 2);
+		}
+
 		if (!is_admin()) {
 			return;
 		}
@@ -202,9 +213,10 @@ final class _FW_Extensions_Manager
 
 			return FW_Cache::get($cache_key);
 		} catch (FW_Cache_Not_Found_Exception $e) {
-			$extensions = fw_get_variables_from_file( dirname( __FILE__ ) . '/available-extensions.php', array(
-				'extensions' => array()
-			) );
+			$extensions = fw_get_variables_from_file(
+				dirname( __FILE__ ) . '/available-extensions.php',
+				array( 'extensions' => array() )
+			);
 			$extensions = $extensions['extensions'];
 
 			// Allow theme to register available extensions
@@ -234,14 +246,20 @@ final class _FW_Extensions_Manager
 							E_USER_WARNING
 						);
 						continue;
+					} elseif (!$extension->is_valid()) {
+						trigger_error(
+							'Theme extension "'. $extension->get_name() .'" is not valid',
+							E_USER_WARNING
+						);
+						continue;
 					} else {
 						$extensions[ $extension->get_name() ] = array(
 							'theme'       => true, // Registered by theme
-							'display'     => (bool)$extension->get_display(),
+							'display'     => $extension->get_display(),
 							'parent'      => $extension->get_parent(),
-							'name'        => (string)$extension->get_title(),
-							'description' => (string)$extension->get_description(),
-							'thumbnail'   => (string)$extension->get_thumbnail(),
+							'name'        => $extension->get_title(),
+							'description' => $extension->get_description(),
+							'thumbnail'   => $extension->get_thumbnail(),
 							'download'    => $extension->get_download_source(),
 						);
 					}
@@ -871,6 +889,13 @@ final class _FW_Extensions_Manager
 						: $this->manifest_default_values['display'],
 					'theme' => isset($ext_data['theme']) && $ext_data['theme'],
 				);
+
+				if ($lists['available'][$ext_name]['theme']) {
+					$lists['supported'][$ext_name] = array(
+						'name' => $lists['available'][$ext_name]['name'],
+						'description' => $lists['available'][$ext_name]['description'],
+					);
+				}
 			}
 
 			foreach (fw()->theme->manifest->get('supported_extensions', array()) as $required_ext_name => $required_ext_data) {
@@ -3151,6 +3176,9 @@ final class _FW_Extensions_Manager
 		return $extensions;
 	}
 
+	/**
+	 * @internal
+	 */
 	public function _action_admin_notices() {
 		/**
 		 * In v2.4.12 was done a terrible mistake https://github.com/ThemeFuse/Unyson-Extensions-Approval/issues/160
@@ -3171,6 +3199,225 @@ final class _FW_Extensions_Manager
 			, fw_html_tag('a', array('href' => $this->get_link() .'&sub-page=install&supported'),
 				__('Install theme compatible extensions', 'fw'))
 			, '</p></div>';
+		}
+	}
+
+	/**
+	 * Copy Theme Available Extensions to a tmp directory
+	 * Used before theme update
+	 * @since 2.5.13
+	 * @return null|WP_Error
+	 */
+	public function theme_available_extensions_copy() {
+		/** @var WP_Filesystem_Base $wp_filesystem */
+		global $wp_filesystem;
+
+		if (!$wp_filesystem || (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code())) {
+			return new WP_Error(
+				'fs_not_initialized',
+				__('WP Filesystem is not initialized', 'fw')
+			);
+		}
+
+		// Prepare temporary directory
+		{
+			$wpfs_tmp_dir = FW_WP_Filesystem::real_path_to_filesystem_path(
+				$this->get_tmp_dir('/theme-ext')
+			);
+
+			if (
+				$wp_filesystem->exists( $wpfs_tmp_dir )
+				&&
+				! $wp_filesystem->rmdir( $wpfs_tmp_dir, true )
+			) {
+				return new WP_Error(
+					'tmp_dir_rm_fail',
+					sprintf(__('Temporary directory cannot be removed: %s', 'fw'), $wpfs_tmp_dir)
+				);
+			}
+
+			if ( ! FW_WP_Filesystem::mkdir_recursive( $wpfs_tmp_dir ) ) {
+				return new WP_Error(
+					'tmp_dir_rm_fail',
+					sprintf(__('Temporary directory cannot be created: %s', 'fw'), $wpfs_tmp_dir)
+				);
+			}
+		}
+
+		$available_extensions = $this->get_available_extensions();
+		$installed_extensions = $this->get_installed_extensions(true);
+		$base_dir = fw_get_template_customizations_directory('/extensions');
+
+		foreach ($installed_extensions as $name => $ext) {
+			if ( ! (
+				isset($available_extensions[$name])
+				&&
+				isset($available_extensions[$name]['theme'])
+				&&
+				$available_extensions[$name]['theme']
+			) ) {
+				continue;
+			}
+
+			if ( ($rel_path = preg_replace('/^'. preg_quote($base_dir, '/') .'/', '', $ext['path'])) === $base_dir ) {
+				return new WP_Error(
+					'rel_path_failed',
+					sprintf(__('Failed to extract relative directory from: %s', 'fw'), $ext['path'])
+				);
+			}
+
+			if ( ($wpfs_path = FW_WP_Filesystem::real_path_to_filesystem_path($ext['path'])) === false) {
+				return new WP_Error(
+					'real_to_wpfs_filed',
+					sprintf(__('Failed to extract relative directory from: %s', 'fw'), $ext['path'])
+				);
+			}
+
+			$wpfs_dest_dir = $wpfs_tmp_dir . $rel_path;
+
+			if ( ! FW_WP_Filesystem::mkdir_recursive($wpfs_dest_dir) ) {
+				return new WP_Error(
+					'dest_dir_mk_fail',
+					sprintf(__('Failed to create directory %s', 'fw'), $wpfs_dest_dir)
+				);
+			}
+
+			if ( is_wp_error( $copy_result = copy_dir($wpfs_path, $wpfs_dest_dir) ) ) {
+				/** @var WP_Error $copy_result */
+				return new WP_Error(
+					'ext_copy_failed',
+					sprintf( __('Failed to copy extension to %s', 'fw'), $wpfs_dest_dir )
+				);
+			}
+		}
+	}
+
+	/**
+	 * Copy Theme Available Extensions from tmp directory to theme
+	 * Used after theme update
+	 * @since 2.5.13
+	 * @return null|WP_Error
+	 */
+	public function theme_available_extensions_restore() {
+		/** @var WP_Filesystem_Base $wp_filesystem */
+		global $wp_filesystem;
+
+		if (!$wp_filesystem || (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code())) {
+			return new WP_Error(
+				'fs_not_initialized',
+				__('WP Filesystem is not initialized', 'fw')
+			);
+		}
+
+		if ( ! $wp_filesystem->exists(
+			$wpfs_tmp_dir = FW_WP_Filesystem::real_path_to_filesystem_path(
+				$this->get_tmp_dir('/theme-ext')
+			)
+		) ) {
+			return new WP_Error(
+				'no_tmp_dir',
+				sprintf(__('Temporary directory does not exist: %s', 'fw'), $wpfs_tmp_dir)
+			);
+		}
+
+		/**
+		 * Fixes the case when the theme path before update was
+		 * wp-content/themes/theme-name/theme-name-parent
+		 * but after update it became
+		 * wp-content/themes/theme-name-parent
+		 *
+		 * and at this point get_template_directory() returns old theme directory
+		 * so fw_get_template_customizations_directory() also returns old path
+		 */
+		$theme_dir = wp_get_theme()->parent()->get_theme_root() .'/'. wp_get_theme()->get_template();
+
+		if ( ! ($wpfs_base_dir = FW_WP_Filesystem::real_path_to_filesystem_path(
+			$base_dir = $theme_dir . fw_get_framework_customizations_dir_rel_path('/extensions')
+		) ) ) {
+			return new WP_Error(
+				'base_dir_to_wpfs_fail',
+				sprintf( __('Cannot obtain WP Filesystem dir for %s', 'fw'), $base_dir )
+			);
+		}
+
+		if ( ! ( $dirlist = $wp_filesystem->dirlist($wpfs_tmp_dir) ) ) {
+			return;
+		}
+
+		foreach ( $dirlist as $filename => $fileinfo ) {
+			if ( 'd' !== $fileinfo['type'] ) {
+				continue;
+			}
+
+			if ( is_wp_error($merge_result = $this->merge_extension(
+				$wpfs_tmp_dir .'/'. $filename, $wpfs_base_dir .'/'. $filename
+			)) ) {
+				return $merge_result;
+			}
+		}
+
+		$wp_filesystem->rmdir( $wpfs_tmp_dir, true );
+	}
+
+	/**
+	 * Copy Theme Available Extensions to tmp dir
+	 * @param bool|WP_Error $result
+	 * @param array $data
+	 *
+	 * @return bool|WP_Error
+	 */
+	public function _filter_theme_available_extensions_copy($result, $data) {
+		if (
+			!is_wp_error($result)
+			&&
+			is_array($data)
+			&&
+			isset($data['theme'])
+			&&
+			$data['theme'] === wp_get_theme()->get_template()
+		) {
+			if ( is_wp_error( $copy_result = fw()->extensions->manager->theme_available_extensions_copy() ) ) {
+				return $copy_result;
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Restore Theme Available Extensions from tmp dir
+	 * @param Theme_Upgrader $instance
+	 * @param array $data
+	 *
+	 * @return bool|WP_Error
+	 */
+	public function _action_theme_available_extensions_restore($instance, $data) {
+		if (
+			is_array($data)
+			&&
+			isset($data['action']) && $data['action'] === 'update'
+			&&
+			isset($data['type']) && $data['type'] === 'theme'
+			&&
+			isset($data['themes'])
+			&&
+			($template = wp_get_theme()->get_template())
+			&&
+			(
+				in_array($template, $data['themes'])
+				||
+				/**
+				 * Fixes the case when the theme path before update was
+				 * wp-content/themes/theme-name/theme-name-parent
+				 * but after update it became
+				 * wp-content/themes/theme-name-parent
+				 */
+				( preg_match($regex = '/\-parent$/', $template)
+					? in_array( preg_replace($regex, '', $template) .'/'. $template, $data['themes'] )
+					: false )
+			)
+		) {
+			fw()->extensions->manager->theme_available_extensions_restore();
 		}
 	}
 }
