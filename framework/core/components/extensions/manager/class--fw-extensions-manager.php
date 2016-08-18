@@ -3329,7 +3329,7 @@ final class _FW_Extensions_Manager
 		 * and at this point get_template_directory() returns old theme directory
 		 * so fw_get_template_customizations_directory() also returns old path
 		 */
-		$theme_dir = wp_get_theme()->parent()->get_theme_root() .'/'. wp_get_theme()->get_template();
+		$theme_dir = wp_get_theme()->get_theme_root() .'/'. wp_get_theme()->get_template();
 
 		if ( ! ($wpfs_base_dir = FW_WP_Filesystem::real_path_to_filesystem_path(
 			$base_dir = $theme_dir . fw_get_framework_customizations_dir_rel_path('/extensions')
