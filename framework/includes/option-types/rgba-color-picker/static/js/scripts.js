@@ -97,7 +97,7 @@ jQuery(function($){
 			 */
 			$input.one('focus', function(){
 				if (!$.trim($input.val()).length) { // If the input value is empty, there a glitches with opacity slider
-					$input.val('rgba(0,0,0,0)');
+					$input.val('rgba(255,255,255,1)');
 				}
 
 				$input.iris({
