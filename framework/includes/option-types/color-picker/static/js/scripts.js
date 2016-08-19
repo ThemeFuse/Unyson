@@ -2,7 +2,7 @@ jQuery(document).ready(function($){
 	var helpers = {
 		optionClass: 'fw-option-type-color-picker',
 		eventNamespace: '.fwOptionTypeColorPicker',
-		colorRegex: /^#[a-f0-9]{3}([a-f0-9]{3})?$/,
+		colorRegex: /^#[a-f0-9]{3}([a-f0-9]{3})?$/i,
 		localized: window._fw_option_type_color_picker_localized,
 		/**
 		 * Return true if color is dark
