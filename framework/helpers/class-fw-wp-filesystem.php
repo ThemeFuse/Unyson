@@ -302,7 +302,7 @@ class FW_WP_Filesystem
 				}
 			}
 
-			if (!$wp_filesystem->mkdir($path, FS_CHMOD_DIR)) {
+			if (!$wp_filesystem->mkdir($path)) {
 				return false;
 			}
 		}

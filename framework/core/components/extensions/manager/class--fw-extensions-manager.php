@@ -3393,6 +3393,8 @@ final class _FW_Extensions_Manager
 	 */
 	public function _action_theme_available_extensions_restore($instance, $data) {
 		if (
+			!is_wp_error($instance->skin->result)
+			&&
 			is_array($data)
 			&&
 			isset($data['action']) && $data['action'] === 'update'
