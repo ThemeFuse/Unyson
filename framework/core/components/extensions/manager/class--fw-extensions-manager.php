@@ -2644,6 +2644,7 @@ final class _FW_Extensions_Manager
 					 * Source extension is empty
 					 * It happens when you merge a directory which contains child extensions
 					 * Do not delete current destination files, just go in the next child extensions level
+					 * Used by https://github.com/ThemeFuse/Unyson/issues/1874
 					 */
 				} else {
 					// the directory contains some files, delete everything
