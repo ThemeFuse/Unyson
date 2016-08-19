@@ -2600,18 +2600,20 @@ final class _FW_Extensions_Manager
 
 		$wp_error_id = 'fw_extensions_merge';
 
-		$source_files = $wp_filesystem->dirlist($source_wp_fs_dir);
+		// check source
+		{
+			$source_files = $wp_filesystem->dirlist($source_wp_fs_dir);
 
-		if ($source_files === false) {
-			return new WP_Error(
-				$wp_error_id,
-				sprintf(__('Cannot read directory "%s".', 'fw'), $source_wp_fs_dir)
-			);
-		}
+			if ($source_files === false) {
+				return new WP_Error(
+					$wp_error_id,
+					sprintf(__('Cannot read directory "%s".', 'fw'), $source_wp_fs_dir)
+				);
+			}
 
-		if (empty($source_files)) {
-			// directory is empty, nothing to move
-			return;
+			if (empty($source_files)) {
+				return; // directory is empty, nothing to move
+			}
 		}
 
 		/**
@@ -2629,18 +2631,41 @@ final class _FW_Extensions_Manager
 			}
 
 			if (!empty($destination_files)) {
-				// the directory contains some files, delete everything
-				foreach ($destination_files as $file) {
-					if ($file['name'] === 'extensions' && $file['type'] === 'd') {
-						// do not touch the extensions/ directory
-						continue;
-					}
+				if (
+					count($source_files) == 1
+					&&
+					($file = reset($source_files))
+					&&
+					$file['name'] === 'extensions'
+					&&
+					$file['type'] === 'd'
+				) {
+					/**
+					 * Source extension is empty
+					 * It happens when you merge a directory which contains child extensions
+					 * Do not delete current destination files, just go in the next child extensions level
+					 */
+				} else {
+					// the directory contains some files, delete everything
+					foreach ($destination_files as $file) {
+						if ($file['name'] === 'extensions' && $file['type'] === 'd') {
+							// do not touch the extensions/ directory
+							continue;
+						}
 
-					if (!$wp_filesystem->delete($destination_wp_fs_dir .'/'. $file['name'], true, $file['type'])) {
-						return new WP_Error(
-							$wp_error_id,
-							sprintf(__('Cannot delete "%s".', 'fw'), $destination_wp_fs_dir .'/'. $file['name'])
-						);
+						if (!$wp_filesystem->delete(
+							$destination_wp_fs_dir .'/'. $file['name'],
+							true,
+							$file['type']
+						)) {
+							return new WP_Error(
+								$wp_error_id,
+								sprintf(
+									__('Cannot delete "%s".', 'fw'),
+									$destination_wp_fs_dir .'/'. $file['name']
+								)
+							);
+						}
 					}
 				}
 
@@ -2655,28 +2680,30 @@ final class _FW_Extensions_Manager
 			}
 		}
 
-		$has_sub_extensions = false;
+		// Move files from source to destination
+		{
+			$has_sub_extensions = false;
 
-		foreach ($source_files as $file) {
-			if ($file['name'] === 'extensions' && $file['type'] === 'd') {
-				// do not touch the extensions/ directory
-				$has_sub_extensions = true;
-				continue;
+			foreach ($source_files as $file) {
+				if ($file['name'] === 'extensions' && $file['type'] === 'd') {
+					$has_sub_extensions = true; // do not touch the extensions/ directory
+					continue;
+				}
+
+				if (!$wp_filesystem->move($source_wp_fs_dir .'/'. $file['name'], $destination_wp_fs_dir .'/'. $file['name'])) {
+					return new WP_Error(
+						$wp_error_id,
+						sprintf(
+							__('Cannot move "%s" to "%s".', 'fw'),
+							$source_wp_fs_dir .'/'. $file['name'],
+							$destination_wp_fs_dir .'/'. $file['name']
+						)
+					);
+				}
 			}
 
-			if (!$wp_filesystem->move($source_wp_fs_dir .'/'. $file['name'], $destination_wp_fs_dir .'/'. $file['name'])) {
-				return new WP_Error(
-					$wp_error_id,
-					sprintf(
-						__('Cannot move "%s" to "%s".', 'fw'),
-						$source_wp_fs_dir .'/'. $file['name'],
-						$destination_wp_fs_dir .'/'. $file['name']
-					)
-				);
-			}
+			unset($source_files);
 		}
-
-		unset($source_files);
 
 		if (!$has_sub_extensions) {
 			return;
@@ -3350,7 +3377,8 @@ final class _FW_Extensions_Manager
 			}
 
 			if ( is_wp_error($merge_result = $this->merge_extension(
-				$wpfs_tmp_dir .'/'. $filename, $wpfs_base_dir .'/'. $filename
+				$wpfs_tmp_dir  .'/'. $filename,
+				$wpfs_base_dir .'/'. $filename
 			)) ) {
 				return $merge_result;
 			}
