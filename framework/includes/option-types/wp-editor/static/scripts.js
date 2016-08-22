@@ -104,13 +104,8 @@
 			// fixes https://github.com/ThemeFuse/Unyson/issues/1615
 			if (typeof window.wpLink != 'undefined') {
 				try {
-					// Looks like the close method will be enough
-					// to initialize link modal and won't break the normal
-					// focus flow
-					// window.wpLink.open(id);
-				} catch (e) {}
+					// do not do .open() // fixes https://github.com/ThemeFuse/Unyson/issues/1901
 
-				try {
 					window.wpLink.close();
 
 					/**
