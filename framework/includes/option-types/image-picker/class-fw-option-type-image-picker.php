@@ -117,8 +117,7 @@ class Fw_Option_Type_Image_Picker extends FW_Option_Type
 					$attr['selected'] = 'selected';
 				}
 
-				if (is_string($choice)) {
-					// is 'http://.../small.png'
+				if (is_string($choice)) { // is 'http://.../small.png'
 					$choice = array(
 						'small' => array(
 							'src' => $choice
@@ -126,16 +125,14 @@ class Fw_Option_Type_Image_Picker extends FW_Option_Type
 					);
 				}
 
-				if (is_string($choice['small'])) {
-					// is 'http://.../small.png'
+				if (is_string($choice['small'])) { // is 'http://.../small.png'
 					$choice['small'] = array(
 						'src' => $choice['small']
 					);
 				}
 				$attr['data-small-img-attr'] = json_encode($choice['small']);
 
-				// required by image-picker plugin
-				$attr['data-img-src'] = $choice['small']['src'];
+				$attr['data-img-src'] = $choice['small']['src']; // required by image-picker plugin
 
 				if (!empty($choice['large'])) {
 					if (is_string($choice['large'])) {
@@ -153,6 +150,10 @@ class Fw_Option_Type_Image_Picker extends FW_Option_Type
 				if (!empty($choice['data'])) {
 					// used in js events
 					$attr['data-extra-data'] = json_encode($choice['data']);
+				}
+
+				if (!empty($choice['attr'])) {
+					$attr = array_merge($choice['attr'], $attr);
 				}
 
 				$html .= fw_html_tag('option', $attr, fw_htmlspecialchars(isset($choice['label']) ? $choice['label'] : ''));
