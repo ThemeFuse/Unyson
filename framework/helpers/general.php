@@ -753,33 +753,38 @@ function fw_collect_options(&$result, &$options, $settings = array(), $_recursio
 		 * @type int Limit the number of options that will be collected
 		 */
 		'limit' => 0,
+		/**
+		 * @type callable Executed on each collected option
+		 * @since 2.5.13
+		 */
+		'callback' => null,
 	);
 
 	static $access_key = null;
-
-	if (is_null($access_key)) {
-		$access_key = new FW_Access_Key('fw_collect_options');
-	}
 
 	if (empty($options)) {
 		return;
 	}
 
-	$settings = array_merge($default_settings, $settings);
-
 	if (empty($_recursion_data)) {
+		if (is_null($access_key)) {
+			$access_key = new FW_Access_Key('fw_collect_options');
+		}
+
+		$settings = array_merge($default_settings, $settings);
+
 		$_recursion_data = array(
 			'level' => 1,
 			'access_key' => $access_key,
 			// todo: maybe add 'parent' => array('id' => '{id}', 'type' => 'container|option') ?
 		);
-	} elseif (
-		!isset($_recursion_data['access_key'])
-		||
-		!($_recursion_data['access_key'] instanceof FW_Access_Key)
-		||
-		!($_recursion_data['access_key']->get_key() === 'fw_collect_options')
-	) {
+	} elseif (!(
+		isset($_recursion_data['access_key'])
+		&&
+		($_recursion_data['access_key'] instanceof FW_Access_Key)
+		&&
+		($_recursion_data['access_key']->get_key() === 'fw_collect_options')
+	)) {
 		trigger_error('Call not allowed', E_USER_ERROR);
 	}
 
@@ -824,6 +829,14 @@ function fw_collect_options(&$result, &$options, $settings = array(), $_recursio
 					);
 				} else {
 					$result[$option_id] = &$option;
+				}
+
+				if ($settings['callback']) {
+					call_user_func_array($settings['callback'], array(array(
+						'group' => 'container',
+						'id' => $option_id,
+						'option' => &$option,
+					)));
 				}
 			} while(false);
 
@@ -895,6 +908,14 @@ function fw_collect_options(&$result, &$options, $settings = array(), $_recursio
 				);
 			} else {
 				$result[$option_id] = &$option;
+			}
+
+			if ($settings['callback']) {
+				call_user_func_array($settings['callback'], array(array(
+					'group' => 'option',
+					'id' => $option_id,
+					'option' => &$option,
+				)));
 			}
 		} else {
 			trigger_error('Invalid option: '. $option_id, E_USER_WARNING);

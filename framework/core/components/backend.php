@@ -1587,15 +1587,21 @@ final class _FW_Component_Backend {
 			'limit_option_types' => false,
 			'limit_container_types' => false,
 			'limit_level' => 0,
-			'info_wrapper' => true,
+			'callback' => array(__CLASS__, '_callback_fw_collect_options_enqueue_static'),
 		) );
 
-		foreach ( $collected as &$option ) {
-			if ($option['group'] === 'option') {
-				fw()->backend->option_type($option['option']['type'])->enqueue_static($option['id'], $option['option']);
-			} elseif ($option['group'] === 'container') {
-				fw()->backend->container_type($option['option']['type'])->enqueue_static($option['id'], $option['option']);
-			}
+		unset($collected);
+	}
+
+	/**
+	 * @internal
+	 * @param array $data
+	 */
+	public static function _callback_fw_collect_options_enqueue_static($data) {
+		if ($data['group'] === 'option') {
+			fw()->backend->option_type($data['option']['type'])->enqueue_static($data['id'], $data['option']);
+		} elseif ($data['group'] === 'container') {
+			fw()->backend->container_type($data['option']['type'])->enqueue_static($data['id'], $data['option']);
 		}
 	}
 
@@ -1963,9 +1969,9 @@ final class _FW_Component_Backend {
 			 * not existing container types will throw notices.
 			 * To prevent that, extract and send it only options (without containers)
 			 */
-			fw_collect_options($options_for_enqueue, $customizer_options);
-
-			fw()->backend->enqueue_options_static($options_for_enqueue);
+			fw_collect_options($options_for_enqueue, $customizer_options, array(
+				'callback' => array(__CLASS__, '_callback_fw_collect_options_enqueue_static'),
+			));
 
 			unset($options_for_enqueue, $customizer_options);
 		}
@@ -1973,7 +1979,7 @@ final class _FW_Component_Backend {
 		wp_enqueue_script(
 			'fw-backend-customizer',
 			fw_get_framework_directory_uri( '/static/js/backend-customizer.js' ),
-			array( 'jquery', 'fw-events', 'backbone' ),
+			array( 'jquery', 'fw-events', 'backbone', 'fw-backend-options' ),
 			fw()->manifest->get_version(),
 			true
 		);
