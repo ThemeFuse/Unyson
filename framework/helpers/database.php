@@ -161,15 +161,15 @@ class FW_Db_Options_Model_Post extends FW_Db_Options_Model {
 	}
 
 	protected function get_values($item_id, array $extra_data = array()) {
-		return FW_WP_Meta::get( 'post', $item_id, 'fw_options', array() );
+		return FW_WP_Meta::get( 'post', $this->get_post_id($item_id), 'fw_options', array() );
 	}
 
 	protected function set_values($item_id, $values, array $extra_data = array()) {
-		FW_WP_Meta::set( 'post', $item_id, 'fw_options', $values );
+		FW_WP_Meta::set( 'post', $this->get_post_id($item_id), 'fw_options', $values );
 	}
 
 	protected function get_fw_storage_params($item_id, array $extra_data = array()) {
-		return array( 'post-id' => $item_id );
+		return array( 'post-id' => $this->get_post_id($item_id) );
 	}
 
 	protected function _get_cache_key($key, $item_id, array $extra_data = array()) {
