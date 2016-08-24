@@ -13,8 +13,31 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 	$(document).on(
 		'input',
 		'.fw-icon-v2-icons-library .fw-icon-v2-toolbar input',
-		applyFilters
+        handleInput
 	);
+
+    var throttledApplyFilters = _.throttle(applyFilters, 200);
+
+	var previousSearch = '';
+
+	function handleInput () {
+		console.log(previousSearch);
+
+        if (
+			previousSearch.trim().length === 0
+			&&
+			$(this).val().trim().length === 0
+		) return;
+
+		if ( $(this).val().trim().length === 0 ) {
+			throttledApplyFilters();
+		}
+
+		if ($(this).val().trim().length > 2)
+			throttledApplyFilters();
+
+		previousSearch = $(this).val();
+	}
 
 	return {
 		pick: pick
@@ -439,5 +462,5 @@ window.fwOptionTypeIconV2Picker = (function ($) {
 			).height() - toolbarHeight - 50
 		);
 	}
-
 })(jQuery);
+
