@@ -38,21 +38,27 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 	 */
 	protected function _enqueue_static($id, $option, $data)
 	{
+		static $enqueue = true;
 		$uri = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type());
 
-		wp_enqueue_style(
-			'fw-option-type-' . $this->get_type(),
-			$uri . '/static/css/multi-picker.css',
-			array(),
-			fw()->manifest->get_version()
-		);
-		wp_enqueue_script(
-			'fw-option-type-' . $this->get_type(),
-			$uri . '/static/js/multi-picker.js',
-			array('jquery', 'fw-events'),
-			fw()->manifest->get_version(),
-			true
-		);
+		if($enqueue) {
+			wp_enqueue_style(
+				'fw-option-type-' . $this->get_type(),
+				$uri . '/static/css/multi-picker.css',
+				array(),
+				fw()->manifest->get_version()
+			);
+
+			wp_enqueue_script(
+				'fw-option-type-' . $this->get_type(),
+				$uri . '/static/js/multi-picker.js',
+				array('jquery', 'fw-events'),
+				fw()->manifest->get_version(),
+				true
+			);
+
+			$enqueue = false;
+		}
 
 		fw()->backend->enqueue_options_static($this->prepare_option($id, $option));
 
