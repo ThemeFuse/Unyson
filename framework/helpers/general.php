@@ -755,7 +755,7 @@ function fw_collect_options(&$result, &$options, $settings = array(), $_recursio
 		'limit' => 0,
 		/**
 		 * @type callable Executed on each collected option
-		 * @since 2.5.13
+		 * @since 2.6.0
 		 */
 		'callback' => null,
 	);

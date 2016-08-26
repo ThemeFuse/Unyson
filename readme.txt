@@ -3,7 +3,7 @@ Contributors: unyson
 Tags: page builder, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 2.5.12
+Stable tag: 2.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,9 +44,9 @@ Theme developers can test the compatibility of their themes with new extensions 
 
 = Minimum Requirements =
 
-* WordPress 4.0 or greater
+* WordPress 4.4 or greater
 * PHP version 5.2.4 or greater
-* MySQL version 5.0 or greater
+* MySQL version 5.6 or greater
 
 = Installation =
 
@@ -82,6 +82,12 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.6.0 =
+* Added [File Cache](https://github.com/ThemeFuse/Unyson/blob/16709330f1acc29453928fce0fafe69a8ea592c7/framework/helpers/class-fw-file-cache.php) [#1828](https://github.com/ThemeFuse/Unyson/issues/1828)
+* Migration to native term meta [#1745](https://github.com/ThemeFuse/Unyson/issues/1745)
+* The possibility to [register Available Extensions from theme](https://github.com/ThemeFuse/Unyson/blob/16709330f1acc29453928fce0fafe69a8ea592c7/framework/core/components/extensions/manager/class--fw-extensions-manager.php#L232-L238)
+* Fixed [#1860](https://github.com/ThemeFuse/Unyson/issues/1860), [#1877](https://github.com/ThemeFuse/Unyson/issues/1877), [#1897](https://github.com/ThemeFuse/Unyson/issues/1897), [#1810](https://github.com/ThemeFuse/Unyson/issues/1810)
 
 = 2.5.12 =
 * Fixed `wp-editor` option error when used in Theme Settings [#1860](https://github.com/ThemeFuse/Unyson/issues/1860)
@@ -305,73 +311,4 @@ Yes; Unyson will work with any theme.
 * Options can be used in [Customizer](https://codex.wordpress.org/Theme_Customization_API) [#410](https://github.com/ThemeFuse/Unyson/issues/410)
 * Fixed [#77](https://github.com/ThemeFuse/Unyson/issues/77)
 
-= 2.2.10 =
-* Fixed [#539](https://github.com/ThemeFuse/Unyson/issues/539)
-
-= 2.2.9 =
-* Fixed [#530](https://github.com/ThemeFuse/Unyson/issues/530), [#529](https://github.com/ThemeFuse/Unyson/issues/529), [#502](https://github.com/ThemeFuse/Unyson/issues/502)
-* Fixes for [#520](https://github.com/ThemeFuse/Unyson/issues/520)
-* Minor fix in autosave
-
-= 2.2.8 =
-* Fixed [#453](https://github.com/ThemeFuse/Unyson/issues/453)
-* Improved option type `multi-picker` html render [#442](https://github.com/ThemeFuse/Unyson/issues/442)
-* Option type `rgba-color-picker` optimizations [#442](https://github.com/ThemeFuse/Unyson/issues/442)
-* `fw_resize()` improvements [#447](https://github.com/ThemeFuse/Unyson/issues/447)
-* Fixed [#445](https://github.com/ThemeFuse/Unyson/issues/445), [#161](https://github.com/ThemeFuse/Unyson/issues/161), [#484](https://github.com/ThemeFuse/Unyson/issues/484), [#456](https://github.com/ThemeFuse/Unyson/issues/456)
-* Added the possibility to prevent box auto-close [#466](https://github.com/ThemeFuse/Unyson/issues/466)
-* Fixed the `_get_value_from_input()` method in some option types [#275](https://github.com/ThemeFuse/Unyson/issues/275#issuecomment-94084590)
-* Added the `limit` parameter for option type `addable-popup` [#478](https://github.com/ThemeFuse/Unyson/issues/478)
-* Fixed popup position in IE [#483](https://github.com/ThemeFuse/Unyson/issues/483)
-* Created `fw_post_options_update` action
-* Improved post save: Options are saved in revision and autosave. Restore from revision works.
-
-= 2.2.7 =
-* Option type `popup` fixes
-* Added "Show/Hide other extensions" button [#307](https://github.com/ThemeFuse/Unyson/issues/307)
-* `fw.soleModal` added `afterOpen` and `afterClose` callbacks [#379](https://github.com/ThemeFuse/Unyson/issues/379)
-* Fixed [#432](https://github.com/ThemeFuse/Unyson/issues/432), [#408](https://github.com/ThemeFuse/Unyson/issues/408)
-
-= 2.2.6 =
-* Fixed [#404](https://github.com/ThemeFuse/Unyson/issues/404)
-* Added the Translation extension in Available Extensions list
-
-= 2.2.5 =
-* Fixed [PageBuilder#26](https://github.com/ThemeFuse/Unyson-PageBuilder-Extension/issues/26)
-
-= 2.2.4 =
-* Fixed [#398](https://github.com/ThemeFuse/Unyson/issues/398)
-* Removed option type `runnable` [#399](https://github.com/ThemeFuse/Unyson/issues/399)
-
-= 2.2.3 =
-* Fixed [#397](https://github.com/ThemeFuse/Unyson/issues/397), [#394](https://github.com/ThemeFuse/Unyson/issues/394), [#389](https://github.com/ThemeFuse/Unyson/issues/389), [#384](https://github.com/ThemeFuse/Unyson/issues/384), [#355](https://github.com/ThemeFuse/Unyson/issues/355)
-* Added option type `runnable`
-
-= 2.2.2 =
-* Added experimental `$option['option_handler']` [636ed56](https://github.com/ThemeFuse/Unyson/commit/636ed56fe499a4e855b5f49198747460833539a3)
-* `<input required ... />` works in `fw.OptionsModal` [#274](https://github.com/ThemeFuse/Unyson/issues/274)
-* Fixed [#381](https://github.com/ThemeFuse/Unyson/issues/381), [#382](https://github.com/ThemeFuse/Unyson/issues/382), [#385](https://github.com/ThemeFuse/Unyson/issues/385), [Shortcodes#15](https://github.com/ThemeFuse/Unyson-Shortcodes-Extension/issues/15)
-
-= 2.2.1 =
-* Fixed: Sub-extensions were not loaded [#368](https://github.com/ThemeFuse/Unyson/issues/368)
-* Fixed: $extension->locate_URI('/...') bug
-
-= 2.2.0 =
-* Added the possibility to load extensions from any directory
-
-    ```
-    function _filter_my_plugin_extensions($locations) {
-        $locations['/path/to/plugin/extensions'] = 'https://uri.to/plugin/extensions';
-        return $locations;
-    }
-    add_filter('fw_extensions_locations', '_filter_my_plugin_extensions');
-    ```
-
-    **Important!** Prefix your extension names to prevent conflicts.
-
-* Removed `array_merge($old_opts, $new_opts)` from options save [#266](https://github.com/ThemeFuse/Unyson/issues/266)
-* Tabs, Boxes, Groups, Options are now displayed in the order they are in array (not grouped) [#319](https://github.com/ThemeFuse/Unyson/issues/319)
-* Option type `multi-picker` fixes [#296](https://github.com/ThemeFuse/Unyson/issues/296)
-* Added the possibility to use custom `framework-customizations` directory name [#276](https://github.com/ThemeFuse/Unyson/issues/276)
-* Minor fixes
 

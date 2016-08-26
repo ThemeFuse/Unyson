@@ -3233,7 +3233,7 @@ final class _FW_Extensions_Manager
 	/**
 	 * Copy Theme Available Extensions to a tmp directory
 	 * Used before theme update
-	 * @since 2.5.13
+	 * @since 2.6.0
 	 * @return null|WP_Error
 	 */
 	public function theme_available_extensions_copy() {
@@ -3323,7 +3323,7 @@ final class _FW_Extensions_Manager
 	/**
 	 * Copy Theme Available Extensions from tmp directory to theme
 	 * Used after theme update
-	 * @since 2.5.13
+	 * @since 2.6.0
 	 * @return null|WP_Error
 	 */
 	public function theme_available_extensions_restore() {

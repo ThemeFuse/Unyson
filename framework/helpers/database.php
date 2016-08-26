@@ -28,7 +28,7 @@ class FW_Db_Options_Model_Settings extends FW_Db_Options_Model {
 
 	protected function _after_set($item_id, $option_id, $sub_keys, $old_value, array $extra_data = array()) {
 		/**
-		 * @since 2.5.13
+		 * @since 2.6.0
 		 */
 		do_action('fw_settings_options_update', array(
 			/**
@@ -372,7 +372,7 @@ class FW_Db_Options_Model_Term extends FW_Db_Options_Model {
 
 	protected function _after_set($item_id, $option_id, $sub_keys, $old_value, array $extra_data = array()) {
 		/**
-		 * @since 2.5.13
+		 * @since 2.6.0
 		 */
 		do_action('fw_term_options_update', array(
 			'term_id' => $item_id,
@@ -535,7 +535,7 @@ class FW_Db_Options_Model_Customizer extends FW_Db_Options_Model {
 
 	protected function _after_set($item_id, $option_id, $sub_keys, $old_value, array $extra_data = array()) {
 		/**
-		 * @since 2.5.13
+		 * @since 2.6.0
 		 */
 		do_action('fw_customizer_options_update', array(
 			/**

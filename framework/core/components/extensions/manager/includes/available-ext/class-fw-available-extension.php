@@ -44,7 +44,7 @@ class FW_Available_Extension extends FW_Type {
 
 	/**
 	 * @return bool
-	 * @since 2.5.13
+	 * @since 2.6.0
 	 */
 	public function is_valid() {
 		return (
