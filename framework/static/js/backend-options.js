@@ -129,8 +129,10 @@ jQuery(document).ready(function($){
 					.closest('form')
 					.off('submit.fw-tabs')
 					.on('submit.fw-tabs', function () {
-						// All options needs to be present in html to be sent in POST on submit
-						initAllTabs($(this));
+						if (!$(this).hasClass('prevent-all-tabs-init')) {
+							// All options needs to be present in html to be sent in POST on submit
+							initAllTabs($(this));
+						}
 					});
 			} else {
 				$tabs.tabs();

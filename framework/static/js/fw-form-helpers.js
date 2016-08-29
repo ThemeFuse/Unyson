@@ -31,6 +31,7 @@ var fwForm = {
 					);
 				}
 			},
+			afterSubmitDelay: function(elements){},
 			onErrors: function (elements, data) {
 				if (isAdmin) {
 					fwForm.backend.showFlashMessages(
@@ -125,41 +126,58 @@ var fwForm = {
 
 			opts.hideErrors(elements);
 
-			/**
-			 * If you want to submit your ajaxified Theme Settings form without
-			 * any notification for the user add class fw-silent-submit to
-			 * the form element itself. This class will be removed
-			 * automatically after this particular submit, so that popup will
-			 * show when the user will press Submit button next time.
-			 */
-			opts.loading(elements, ! $form.hasClass('fw-silent-submit'));
+			var delaySubmit = parseInt(
+				opts.loading(
+					elements,
+					/**
+					 * If you want to submit your ajaxified Theme Settings form without
+					 * any notification for the user add class fw-silent-submit to
+					 * the form element itself. This class will be removed
+					 * automatically after this particular submit, so that popup will
+					 * show when the user will press Submit button next time.
+					 */
+					! $form.hasClass('fw-silent-submit')
+				)
+			);
+			delaySubmit = (isNaN(delaySubmit) || delaySubmit < 0) ? 0 : delaySubmit;
+
 			$form.removeClass('fw-silent-submit');
 
 			isBusy = true;
 
-			jQuery.ajax({
-				type: "POST",
-				url: opts.ajaxUrl,
-				data: $form.serialize() + ($submitButton.length ? '&'+ $submitButton.attr('name') +'='+ $submitButton.attr('value') : ''),
-				dataType: 'json'
-			}).done(function(r){
-				isBusy = false;
-				opts.loading(elements, false);
-
-				if (r.success) {
-					opts.onSuccess(elements, r.data);
-				} else {
-					opts.onErrors(elements, r.data);
+			setTimeout(function(){
+				if (delaySubmit) {
+					opts.afterSubmitDelay(elements);
 				}
-			}).fail(function(jqXHR, textStatus, errorThrown){
-				isBusy = false;
-				opts.loading(elements, false);
-				opts.onAjaxError(elements, {
-					jqXHR: jqXHR,
-					textStatus: textStatus,
-					errorThrown: errorThrown
+
+				jQuery.ajax({
+					type: "POST",
+					url: opts.ajaxUrl,
+					data: $form.serialize() + (
+						$submitButton.length
+						? '&'+ $submitButton.attr('name') +'='+ $submitButton.attr('value')
+						: ''
+					),
+					dataType: 'json'
+				}).done(function(r){
+					isBusy = false;
+					opts.loading(elements, false);
+
+					if (r.success) {
+						opts.onSuccess(elements, r.data);
+					} else {
+						opts.onErrors(elements, r.data);
+					}
+				}).fail(function(jqXHR, textStatus, errorThrown){
+					isBusy = false;
+					opts.loading(elements, false);
+					opts.onAjaxError(elements, {
+						jqXHR: jqXHR,
+						textStatus: textStatus,
+						errorThrown: errorThrown
+					});
 				});
-			});
+			}, delaySubmit);
 		});
 	},
 	backend: {
