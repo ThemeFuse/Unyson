@@ -55,7 +55,7 @@ add_filter('fw_github_api_url', '_fw_filter_github_api_url');
 
 /**
  * Javascript events related to tinymce init
- * @since 2.5.13
+ * @since 2.6.0
  */
 {
 	add_action('wp_tiny_mce_init', '_fw_action_tiny_mce_init');

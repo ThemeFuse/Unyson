@@ -18,7 +18,7 @@
  *     return $result; // IMPORTANT: Do not use FW_File_Cache::get($cache_key) again
  * }
  *
- * @since 2.5.13
+ * @since 2.6.0
  */
 class FW_File_Cache {
 	/**
