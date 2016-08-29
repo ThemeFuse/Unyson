@@ -1850,8 +1850,8 @@ final class _FW_Component_Backend {
 	 * @return FW_Option_Type|FW_Option_Type_Undefined
 	 */
 	public function option_type( $option_type ) {
-		if ( is_array( $this->option_types_pending_registration ) ) {
-			// This method is called first time
+		if ( is_array( $this->option_types_pending_registration ) ) { // This method is called for the first time
+			require_once dirname(__FILE__) .'/../extends/class-fw-option-type.php';
 
 			do_action('fw_option_types_init');
 
@@ -1897,8 +1897,8 @@ final class _FW_Component_Backend {
 	 * @return FW_Container_Type|FW_Container_Type_Undefined
 	 */
 	public function container_type( $container_type ) {
-		if ( is_array( $this->container_types_pending_registration ) ) {
-			// This method is called first time
+		if ( is_array( $this->container_types_pending_registration ) ) { // This method is called for the first time
+			require_once dirname(__FILE__) .'/../extends/class-fw-container-type.php';
 
 			do_action('fw_container_types_init');
 
