@@ -23,16 +23,19 @@ $input_attr['placeholder'] = $option['attr']['placeholder'];
 	</div>
 	<div class="fw-oembed-preview">
 		<?php
-		$iframe = empty( $option['preview']['keep_ratio'] ) ? fw_oembed_get( $data['value'], array(
-			'height' => $option['preview']['height'],
-			'width'  => $option['preview']['width']
-		) ) :
-			wp_oembed_get( $data['value'], array(
+		$value = fw_akg('value', $data);
+		if ( filter_var( $value, FILTER_VALIDATE_URL ) ) {
+			$iframe = empty( $option['preview']['keep_ratio'] ) ? fw_oembed_get( $value, array(
 				'height' => $option['preview']['height'],
 				'width'  => $option['preview']['width']
-			) );
+			) ) :
+				wp_oembed_get( $value, array(
+					'height' => $option['preview']['height'],
+					'width'  => $option['preview']['width']
+				) );
 
-		echo $iframe;
+			echo $iframe;
+		}
 		?>
 	</div>
 </div>

@@ -128,8 +128,7 @@ abstract class FW_Db_Options_Model {
 
 		/**
 		 * If db value is not found and default value is provided
-		 * return default value before loading options file
-		 * to prevent infinite recursion in case if this function is called in options file
+		 * return default value before the options file is loaded
 		 */
 		if ( ! is_null($default_value) ) {
 			if ( empty( $option_id ) ) {
