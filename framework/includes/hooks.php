@@ -16,15 +16,14 @@
 	add_action('fw_option_types_init', '_action_fw_init_option_types');
 
 	/**
-	 * This option type has `add_action('wp_ajax_...`
+	 * Some option-types have add_action('wp_ajax_...')
+	 * so init all option-types if current request is ajax
 	 */
-	if (is_admin()) {
-		require_once dirname(__FILE__) . '/option-types/multi-select/class-fw-option-type-multi-select.php';
-
-		if (!class_exists('FW_Option_Type_Icon_v2')) {
-			require_once dirname(__FILE__) .
-				'/option-types/icon-v2/class-fw-option-type-icon-v2.php';
+	if (defined('DOING_AJAX') && DOING_AJAX) {
+		function _action_fw_init_option_types_on_ajax() {
+			fw()->backend->option_type('text');
 		}
+		add_action('fw_init', '_action_fw_init_option_types_on_ajax');
 	}
 }
 
