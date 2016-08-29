@@ -703,7 +703,6 @@ final class _FW_Component_Backend {
 			'limit_option_types' => false,
 			'limit_container_types' => false,
 			'limit_level' => 1,
-			'info_wrapper' => true,
 		) );
 
 		if (empty($collected)) {
@@ -712,27 +711,27 @@ final class _FW_Component_Backend {
 
 		$values = fw_get_db_post_option( $post->ID );
 
-		foreach ( $collected as &$option ) {
+		foreach ( $collected as $id => &$option ) {
 			if (
-				$option['group'] === 'container'
+				isset($option['options']) // container
 				&&
-				$option['option']['type'] === 'box'
+				$option['type'] === 'box'
 			) { // this is a box, add it as a metabox
-				$context  = isset( $option['option']['context'] )
-					? $option['option']['context']
+				$context  = isset( $option['context'] )
+					? $option['context']
 					: 'normal';
-				$priority = isset( $option['option']['priority'] )
-					? $option['option']['priority']
+				$priority = isset( $option['priority'] )
+					? $option['priority']
 					: 'default';
 
 				add_meta_box(
-					'fw-options-box-' . $option['id'],
-					empty( $option['option']['title'] ) ? ' ' : $option['option']['title'],
+					'fw-options-box-' . $id,
+					empty( $option['title'] ) ? ' ' : $option['title'],
 					$this->print_meta_box_content_callback,
 					$post_type,
 					$context,
 					$priority,
-					$this->render_options( $option['option']['options'], $values )
+					$this->render_options( $option['options'], $values )
 				);
 			} else { // this is not a box, wrap it in auto-generated box
 				add_meta_box(
@@ -742,7 +741,7 @@ final class _FW_Component_Backend {
 					$post_type,
 					'normal',
 					'default',
-					$this->render_options( array($option['id'] => $option['option']), $values )
+					$this->render_options( array($id => $option), $values )
 				);
 			}
 		}
