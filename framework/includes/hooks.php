@@ -18,6 +18,7 @@
 	/**
 	 * Some option-types have add_action('wp_ajax_...')
 	 * so init all option-types if current request is ajax
+	 * @since 2.6.1
 	 */
 	if (defined('DOING_AJAX') && DOING_AJAX) {
 		function _action_fw_init_option_types_on_ajax() {
