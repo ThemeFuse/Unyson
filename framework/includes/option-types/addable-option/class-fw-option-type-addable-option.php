@@ -36,7 +36,7 @@ class FW_Option_Type_Addable_Option extends FW_Option_Type
 	{
 		static $enqueue = true;
 
-		if($enqueue) {
+		if ($enqueue) {
 			wp_enqueue_style(
 				'fw-option-'. $this->get_type(),
 				fw_get_framework_directory_uri('/includes/option-types/'. $this->get_type() .'/static/css/styles.css'),

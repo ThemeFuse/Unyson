@@ -41,7 +41,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 		static $enqueue = true;
 		$uri = fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type());
 
-		if($enqueue) {
+		if ($enqueue) {
 			wp_enqueue_style(
 				'fw-option-type-' . $this->get_type(),
 				$uri . '/static/css/multi-picker.css',
