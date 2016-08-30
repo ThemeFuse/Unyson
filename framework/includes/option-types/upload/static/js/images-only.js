@@ -29,20 +29,20 @@
 		}
 
 		var createFrame = function() {
-				frame = wp.media({
-					library: {
-						type: haveFilesDetails ? parsedFilesDetails.mime_types : 'image'
-					},
-					states: new wp.media.controller.Library({
-                        library:   wp.media.query( { type: 'image' } ),
-                        multiple:  false,
-                        title:     l10n.modalTitle,
-                        filterable: 'uploaded',
-                        priority:  20
-                    })
-				});
+			frame = wp.media({
+				library: {
+					type: haveFilesDetails ? parsedFilesDetails.mime_types : 'image'
+				},
+				states: new wp.media.controller.Library({
+					library:   wp.media.query( { type: 'image' } ),
+					multiple:  false,
+					title:     l10n.modalTitle,
+					filterable: 'uploaded',
+					priority:  20
+				})
+			});
 
-			if(haveFilesDetails) {
+			if (haveFilesDetails) {
 				frame.on('content:render', function () {
 					var $view = this.first().frame.views.get('.media-frame-uploader')[0];
 
@@ -65,67 +65,37 @@
 				});
 			}
 
-				frame.on('ready', function() {
-					frame.modal.$el.addClass('fw-option-type-upload');
-				});
+			frame.on('ready', function() {
+				frame.modal.$el.addClass('fw-option-type-upload');
+			});
 
-				// opens the modal with the correct attachment selected
-				frame.on('open', function() {
-					var selection = frame.state().get('selection'),
-						attatchmentId = elements.$input.val(),
-						attachment = wp.media.attachment(attatchmentId);
+			// opens the modal with the correct attachment selected
+			frame.on('open', function() {
+				var selection = frame.state().get('selection'),
+					attatchmentId = elements.$input.val(),
+					attachment = wp.media.attachment(attatchmentId);
 
-					frame.reset();
-					if (attachment.id) {
-						selection.add(attachment);
-					}
-				});
+				frame.reset();
 
-				frame.on('select', function() {
-					var attachment = frame.state().get('selection').first(),
-						url, filename, compiled;
+				if (attachment.id) {
+					selection.add(attachment);
+				}
+			});
 
-					if (attachment.get('sizes')) {
-						url = attachment.get('sizes').thumbnail
-								? attachment.get('sizes').thumbnail.url
-								: attachment.get('sizes').full.url;
-					} else {
-						url = attachment.get('url');
-					}
-					filename = attachment.get('filename');
-					compiled = _.template(
-						templates.thumb.notEmpty,
-						undefined,
-						{variable: 'data'}
-					)({src: url, alt: filename});
-
-					elements.$uploadButton.text(l10n.buttonEdit);
-					elements.$thumb
-								.html(compiled)
-								.attr({
-									'data-attid': attachment.id,
-									'data-origsrc': attachment.get('url')
-								});
-					elements.$urlInput.val(attachment.get('url'));
-					elements.$input.val(attachment.id).trigger('change');
-					elements.$container.removeClass('empty');
-
-					fwe.trigger('fw:option-type:upload:change', {
-						$element: elements.$container,
-						attachment: attachment
-					});
-					elements.$container.trigger('fw:option-type:upload:change', {
-						attachment: attachment
-					});
-				});
-			};
+			frame.on('select', function() {
+				var attachment = frame.state().get('selection').first();
+				elements.$input.val(attachment.id);
+				performSelection(attachment);
+			});
+		};
 
 		elements.$uploadButton.on('click', function(e) {
 			e.preventDefault();
 
-			if (!frame) {
+			if (! frame) {
 				createFrame();
 			}
+
 			frame.open();
 		});
 
@@ -146,6 +116,61 @@
 
 			e.preventDefault();
 		});
+
+		elements.$input.on('change', function () {
+			var attachment = wp.media.attachment($(this).val());
+
+			if (! attachment.get('url')) {
+				attachment.fetch().then(function (data) {
+					performSelection(attachment);
+				});
+
+				return;
+			}
+
+			performSelection(attachment);
+		});
+
+		function performSelection (attachment) {
+			var url, filename, compiled;
+
+			if (attachment.get('sizes')) {
+				url = attachment.get('sizes').thumbnail
+						? attachment.get('sizes').thumbnail.url
+						: attachment.get('sizes').full.url;
+			} else {
+				url = attachment.get('url');
+			}
+
+			filename = attachment.get('filename');
+
+			compiled = _.template(
+				templates.thumb.notEmpty,
+				undefined,
+				{variable: 'data'}
+			)({src: url, alt: filename});
+
+			elements.$uploadButton.text(l10n.buttonEdit);
+
+			elements.$thumb
+						.html(compiled)
+						.attr({
+							'data-attid': attachment.id,
+							'data-origsrc': attachment.get('url')
+						});
+
+			elements.$urlInput.val(attachment.get('url'));
+			elements.$container.removeClass('empty');
+
+			fwe.trigger('fw:option-type:upload:change', {
+				$element: elements.$container,
+				attachment: attachment
+			});
+
+			elements.$container.trigger('fw:option-type:upload:change', {
+				attachment: attachment
+			});
+		}
 	};
 
 	fwe.on('fw:options:init', function(data) {
