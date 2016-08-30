@@ -201,7 +201,7 @@
 }
 
 .fw-icon-v2-picker-modal h2:only-of-type {
-    display: none;
+    /* display: none; */
 }
 
 .fw-icon-v2-picker-modal h2 span {

@@ -42,6 +42,17 @@
 			$root.data('unique-id', fw.randomMD5());
 		}
 
+		fwOptionTypeIconV2Instance.set('size', modalSize);
+
+		fwOptionTypeIconV2Instance.open(getDataForRoot($root))
+			.then(function (data) {
+				setDataForRoot($root, data);
+			})
+			.fail(function () {
+				// modal closed without save
+			});
+
+        /*
 		fwOptionTypeIconV2Picker.pick(
 			getDataForRoot($root),
 			$root.data('unique-id'),
@@ -53,6 +64,7 @@
 			},
 			modalSize
 		);
+        */
 	}
 
 	function removeIcon (event) {
@@ -189,10 +201,14 @@
 
 		$root.find('input').val(
 			JSON.stringify(
-				_.extend(
-					{},
-					currentData,
-					data
+				_.omit(
+					_.extend(
+						{},
+						currentData,
+						data
+					),
+
+					'attachment'
 				)
 			)
 		).trigger('change');

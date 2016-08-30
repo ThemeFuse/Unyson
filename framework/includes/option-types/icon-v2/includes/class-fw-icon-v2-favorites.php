@@ -17,6 +17,18 @@ class FW_Icon_V2_Favorites_Manager
 			'wp_ajax_fw_icon_v2_get_favorites',
 			array($this, 'get_favorites_action')
 		);
+
+		add_action(
+			'wp_ajax_fw_icon_v2_get_icons',
+			array($this, 'get_icon_packs')
+		);
+	}
+
+	public function get_icon_packs()
+	{
+		wp_send_json_success(
+			fw()->backend->option_type('icon-v2')->packs_loader->get_packs(true)
+		);
 	}
 
 	public function set_favorites_action()

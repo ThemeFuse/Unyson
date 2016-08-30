@@ -14,6 +14,8 @@ class FW_Icon_V2_Packs_Loader
 	 */
 	public $filtered_icon_packs = null;
 
+	private $icons_for_packs_parsed = null;
+
 	public function __construct()
 	{
 		/**
@@ -43,6 +45,14 @@ class FW_Icon_V2_Packs_Loader
 		 *       //
 		 *       'css_file' => 'path_to_your_css_file',
 		 *       'css_file_uri' => 'network_accessible_path_to_your_css_file',
+		 *
+		 *       // Sometimes, you don't want to enqueue one more CSS file for
+		 *       // an already existing pack. Just give the correct handle here
+		 *       // and it'll work as expected.
+		 *       // Please note that the handle should be correctly registered
+		 *       // with wp_register_style() or wp_enqueue_style().
+		 *       'admin_wp_enqueue_handle' => null,
+		 *       'frontend_wp_enqueue_handle' => null,
 		 *
 		 *       // By default, the option type will enqueue all CSS from all
 		 *       // packs. You can handle CSS by yourself by making this option falsy.
@@ -101,6 +111,8 @@ class FW_Icon_V2_Packs_Loader
 					'css_class_prefix' => $pack_name,
 					'css_file' => false,
 					'css_file_uri' => false,
+					'admin_wp_enqueue_handle' => null,
+					'frontend_wp_enqueue_handle' => null,
 					'require_css_file' => true,
 					'icons' => false,
 					'apply_root_class' => true
@@ -115,7 +127,7 @@ class FW_Icon_V2_Packs_Loader
 
 	public function enqueue_frontend_css()
 	{
-		foreach ($this->icon_packs as $pack_name => $pack) {
+		foreach ($this->get_packs() as $pack_name => $pack) {
 			/**
 			 * The file will be required on the frontend side only if you want
 			 * it to. You can totally change this behavior by using
@@ -132,10 +144,18 @@ class FW_Icon_V2_Packs_Loader
 			 */
 			if ($pack['require_css_file']) {
 
+				if ($pack['frontend_wp_enqueue_handle']) {
+					if (wp_style_is($pack['frontend_wp_enqueue_handle'], 'registered')) {
+						wp_enqueue_style($pack['frontend_wp_enqueue_handle']);
+						continue;
+					}
+				}
+
 				wp_enqueue_style(
-					'fw-option-type-icon-v2-pack-' . $pack_name . '-css',
+					'fw-option-type-icon-v2-pack-' . $pack_name,
 					$pack['css_file_uri'],
-					array()
+					array(),
+					fw()->manifest->get_version()
 				);
 
 			}
@@ -150,19 +170,33 @@ class FW_Icon_V2_Packs_Loader
 	 */
 	public function enqueue_admin_css()
 	{
-		foreach ($this->icon_packs as $pack_name => $pack) {
+		foreach ($this->get_packs() as $pack_name => $pack) {
+			if ($pack['admin_wp_enqueue_handle']) {
+				if (wp_style_is($pack['admin_wp_enqueue_handle'], 'registered')) {
+					wp_enqueue_style($pack['admin_wp_enqueue_handle']);
+					continue;
+				}
+			}
+
 			wp_enqueue_style(
-				'fw-option-type-icon-v2-pack-' . $pack_name . '-css',
+				'fw-option-type-icon-v2-pack-' . $pack_name,
 				$pack['css_file_uri'],
 				array(),
-				'1.0'
+				fw()->manifest->get_version()
 			);
 		}
 	}
 
-	public function get_packs()
+	public function get_packs($needs_to_load_icons_for_each_pack = false)
 	{
-		$this->_load_icons_for_each_pack();
+		/**
+		 * Be aggressive about doing this operation. It costs lots of time.
+		 * Totally don't want it to be in frontend.
+		 */
+		if ($needs_to_load_icons_for_each_pack) {
+			$this->_load_icons_for_each_pack();
+		}
+
 		$this->_load_filtered_icon_packs();
 
 		return $this->_get_packs_for_names(
@@ -183,6 +217,8 @@ class FW_Icon_V2_Packs_Loader
 
 	private function _load_icons_for_each_pack()
 	{
+		if ($this->icons_for_packs_parsed) { return; }
+
 		foreach ($this->icon_packs as $pack_name => $pack) {
 			$this->icon_packs[$pack_name]['icons'] = array();
 
@@ -229,6 +265,8 @@ class FW_Icon_V2_Packs_Loader
 				}
 			}
 		}
+
+		$this->icons_for_packs_parsed = true;
 	}
 
 	private function _load_filtered_icon_packs()
@@ -272,6 +310,8 @@ class FW_Icon_V2_Packs_Loader
 				'css_file_uri' => fw_get_framework_directory_uri(
 					'/static/libs/font-awesome/css/font-awesome.min.css'
 				),
+
+				'admin_wp_enqueue_handle' => 'fw-font-awesome'
 			),
 
 			'entypo' => array(
@@ -335,7 +375,9 @@ class FW_Icon_V2_Packs_Loader
 				'css_file' => fw_get_framework_directory( '/static/libs/unycon/unycon.css' ),
 				'css_file_uri' => fw_get_framework_directory_uri(
 					'/static/libs/unycon/unycon.css'
-				)
+				),
+
+				'admin_wp_enqueue_handle' => 'fw-unycon'
 			)
 		);
 	}

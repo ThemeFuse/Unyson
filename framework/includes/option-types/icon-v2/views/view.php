@@ -26,3 +26,4 @@ unset($option['attr']['class'], $option['attr']['id']);
 <div <?php echo fw_attr_to_html($wrapper_attr) ?>>
 	<input <?php echo fw_attr_to_html($option['attr']) ?> type="hidden" />
 </div>
+
