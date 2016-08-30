@@ -198,6 +198,10 @@ abstract class FW_Option_Type
 	 */
 	final public function enqueue_static($id = '', $option = array(), $data = array())
 	{
+		if ($this->static_enqueued) {
+			return false;
+		}
+
 		if (
 			!doing_action('admin_enqueue_scripts')
 			&&
@@ -231,10 +235,6 @@ abstract class FW_Option_Type
 
 				$option_types_static_enqueued = true;
 			}
-		}
-
-		if ($this->static_enqueued) {
-			return false;
 		}
 
 		$this->prepare($id, $option, $data);
