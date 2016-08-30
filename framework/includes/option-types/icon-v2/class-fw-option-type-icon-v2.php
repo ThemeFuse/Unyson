@@ -75,17 +75,7 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 			'fw_icon_v2_data',
 			array(
 				'edit_icon_label' => __('Change Icon', 'fw'),
-				'add_icon_label' => __('Add Icon', 'fw'),
-				'icon_fonts_label' => __('Icons', 'fw'),
-				'custom_upload_label' => __('Upload', 'fw'),
-				'favorites_label' => __('Favorites', 'fw'),
-				'search_label' => __('Search Icon', 'fw'),
-				'select_pack_label' => __('Select Pack', 'fw'),
-				'all_packs_label' => __('All Packs', 'fw'),
-				'favorites_empty_label' => __(
-					'<h4>You have no favorite icons yet.</h4> To add icons here, simply click on the star (<i class="fw-icon-v2-info dashicons dashicons-star-filled"></i>) button that\'s on top of each icon.',
-					'fw'
-				)
+				'add_icon_label' => __('Add Icon', 'fw')
 			)
 		);
 	}
