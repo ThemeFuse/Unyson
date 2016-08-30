@@ -17,9 +17,6 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 
 	public function _init()
 	{
-		$this->packs_loader = new FW_Icon_V2_Packs_Loader();
-		$this->favorites = new FW_Icon_V2_Favorites_Manager();
-
 		/**
 		 * CSS for each pack is not loaded by default in frontend.
 		 *
@@ -27,6 +24,16 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 		 *
 		 * fw()->backend->option_type('icon-v2')->packs_loader->enqueue_frontend_css()
 		 */
+		$this->packs_loader = new FW_Icon_V2_Packs_Loader();
+
+		if (! is_admin()) { return; }
+
+		$this->favorites = new FW_Icon_V2_Favorites_Manager();
+
+		add_action(
+			'admin_footer',
+			array($this, 'load_templates')
+		);
 	}
 
 	protected function _enqueue_static($id, $option, $data)
@@ -49,12 +56,11 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 		);
 
 		wp_enqueue_script(
-			'fw-option-type-'. $this->get_type() .'-backend-picker',
-			$static_URI . 'js/icon-picker.js',
-			array(
-				'fw-option-type-'. $this->get_type() .'-backend-previews'
-			),
-			fw()->manifest->get_version()
+			'fw-option-type-'. $this->get_type() .'-backend-picker-v2',
+			$static_URI . 'js/icon-picker-v2.js',
+			array( 'fw' ),
+			fw()->manifest->get_version(),
+			true
 		);
 
 		wp_enqueue_style(
@@ -69,18 +75,16 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 			'fw_icon_v2_data',
 			array(
 				'edit_icon_label' => __('Change Icon', 'fw'),
-				'add_icon_label' => __('Add Icon', 'fw'),
-				'icon_fonts_label' => __('Icons', 'fw'),
-				'custom_upload_label' => __('Upload', 'fw'),
-				'favorites_label' => __('Favorites', 'fw'),
-				'search_label' => __('Search Icon', 'fw'),
-				'select_pack_label' => __('Select Pack', 'fw'),
-				'all_packs_label' => __('All Packs', 'fw'),
-				'favorites_empty_label' => __(
-					'<h4>You have no favorite icons yet.</h4> To add icons here, simply click on the star (<i class="fw-icon-v2-info dashicons dashicons-star-filled"></i>) button that\'s on top of each icon.',
-					'fw'
-				),
-				'icons' => $this->packs_loader->get_packs()
+				'add_icon_label' => __('Add Icon', 'fw')
+			)
+		);
+	}
+
+	public function load_templates() {
+		echo fw_render_view(
+			dirname(__FILE__) . '/views/templates.php',
+			array(
+				'packs_loader' => $this->packs_loader
 			)
 		);
 	}
@@ -92,7 +96,7 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 		$option['attr']['value'] = $json;
 
 		return fw_render_view(
-			dirname(__FILE__) . '/view.php',
+			dirname(__FILE__) . '/views/view.php',
 			compact('id', 'option', 'data', 'json')
 		);
 	}

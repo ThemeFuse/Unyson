@@ -5,7 +5,8 @@
  * @var array $options_data
  */
 
-$lazy_tabs = fw()->theme->get_config('lazy_tabs');
+$global_lazy_tabs = fw()->theme->get_config('lazy_tabs');
+
 ?>
 <div class="fw-options-tabs-wrapper">
 	<div class="fw-options-tabs-list">
@@ -26,6 +27,8 @@ $lazy_tabs = fw()->theme->get_config('lazy_tabs');
 				// prepare attributes
 				{
 					$attr = isset($tab['attr']) ? $tab['attr'] : array();
+
+					$lazy_tabs = isset($tab['lazy_tabs']) ? $tab['lazy_tabs'] : $global_lazy_tabs;
 
 					$attr['id'] = 'fw-options-tab-'. esc_attr($tab_id);
 
