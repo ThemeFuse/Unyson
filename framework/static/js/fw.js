@@ -624,6 +624,7 @@ fw.getQueryString = function(name) {
 			 */
 			html: '',
 			modalCustomClass: '',
+			emptyHtmlOnClose: true,
 			disableLazyTabs: false,
 			size: 'small' // small, medium, large
 		},
@@ -875,7 +876,9 @@ fw.getQueryString = function(name) {
 				 * clear html
 				 * to prevent same ids in html when another modal with same options will be opened
 				 */
-				modal.set('html', '');
+				if (modal.get('emptyHtmlOnClose')) {
+					modal.set('html', '');
+				}
 
 				modal.frame.modal.$el.removeClass('fw-modal-open');
 
@@ -1130,6 +1133,10 @@ fw.getValuesFromServer = function (data) {
 			}
 		}),
 		defaults: _.extend(
+			/**
+			 * Don't mutate original one!!!
+			 */
+			{},
 			fw.Modal.prototype.defaults,
 			{
 				/**
