@@ -1556,6 +1556,8 @@ final class _FW_Component_Backend {
 	 * @param array $options
 	 */
 	public function enqueue_options_static( $options ) {
+		static $static_enqueue = true;
+		
 		if (
 			!doing_action('admin_enqueue_scripts')
 			&&
@@ -1573,11 +1575,15 @@ final class _FW_Component_Backend {
 			 * in case if this method is called before enqueue_scripts action
 			 * and option types has some of these in their dependencies
 			 */
-			$this->register_static();
-
-			wp_enqueue_media();
-			wp_enqueue_style( 'fw-backend-options' );
-			wp_enqueue_script( 'fw-backend-options' );
+			if ($static_enqueue) {
+				$this->register_static();
+	
+				wp_enqueue_media();
+				wp_enqueue_style( 'fw-backend-options' );
+				wp_enqueue_script( 'fw-backend-options' );
+				
+				$static_enqueue = false;
+			}
 		}
 
 		$collected = array();
