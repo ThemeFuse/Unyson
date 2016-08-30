@@ -842,39 +842,6 @@ final class _FW_Component_Backend {
 	}
 
 	/**
-	 * Experimental custom options save
-	 * @param array $options
-	 * @param array $values
-	 * @return array
-	 */
-	private function process_options_handlers($options, $values)
-	{
-		$handled_values = array();
-
-		foreach (
-			fw_extract_only_options($options)
-			as $option_id => $option
-		) {
-			if (
-				isset($option['option_handler'])
-				&&
-				$option['option_handler'] instanceof FW_Option_Handler
-			) {
-				/*
-				 * if the option has a custom option_handler
-				 * the saving is delegated to the handler,
-				 * so it does not go to the post_meta
-				 */
-				$option['option_handler']->save_option_value($option_id, $option, $values[$option_id]);
-
-				$handled_values[$option_id] = true;
-			}
-		}
-
-		return $handled_values;
-	}
-
-	/**
 	 * Save meta from $_POST to fw options (post meta)
 	 * @param int $post_id
 	 * @param WP_Post $post
@@ -906,19 +873,12 @@ final class _FW_Component_Backend {
 			}
 
 			$old_values = (array)fw_get_db_post_option($post_id);
-			$current_values = fw_get_options_values_from_input(
-				fw()->theme->get_post_options($post->post_type)
-			);
 
 			fw_set_db_post_option(
 				$post_id,
 				null,
-				array_diff_key( // remove handled values
-					$current_values,
-					$this->process_options_handlers(
-						fw()->theme->get_post_options($post->post_type),
-						$current_values
-					)
+				fw_get_options_values_from_input(
+					fw()->theme->get_post_options($post->post_type)
 				)
 			);
 
@@ -948,19 +908,11 @@ final class _FW_Component_Backend {
 					break;
 				}
 
-				$current_values = fw_get_options_values_from_input(
-					fw()->theme->get_post_options($parent->post_type)
-				);
-
 				fw_set_db_post_option(
 					$post->ID,
 					null,
-					array_diff_key( // remove handled values
-						$current_values,
-						$this->process_options_handlers(
-							fw()->theme->get_post_options($parent->post_type),
-							$current_values
-						)
+					fw_get_options_values_from_input(
+						fw()->theme->get_post_options($parent->post_type)
 					)
 				);
 			} while(false);
@@ -1641,18 +1593,6 @@ final class _FW_Component_Backend {
 
 		if ( ! isset( $data['id_prefix'] ) ) {
 			$data['id_prefix'] = FW_Option_Type::get_default_id_prefix();
-		}
-
-		if (
-			isset($option['option_handler']) &&
-			$option['option_handler'] instanceof FW_Option_Handler
-		) {
-
-			/*
-			 * if the option has a custom option_handler
-			 * then the handler provides the option's value
-			 */
-			$data['value'] = $option['option_handler']->get_option_value($id, $option, $data);
 		}
 
 		$data = apply_filters(
