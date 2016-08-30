@@ -60,6 +60,21 @@ $packs = array(
 				'to' => "url('../fonts/typicons"
 			)
 		)
+	),
+
+	'font-awesome' => array(
+		'name' => 'font-awesome',
+		'github-repo' => 'FortAwesome/Font-Awesome',
+		'css-file' => 'css/font-awesome.min.css',
+		'css-file-output' => 'font-awesome.min.css',
+		'fonts' => array(
+			'fonts/FontAwesome.otf',
+			'fonts/fontawesome-webfont.eot',
+			'fonts/fontawesome-webfont.svg',
+			'fonts/fontawesome-webfont.ttf',
+			'fonts/fontawesome-webfont.woff',
+			'fonts/fontawesome-webfont.woff2'
+		)
 	)
 );
 
@@ -86,10 +101,16 @@ function download_css($pack) {
 
 	$url = github_or_network_for($pack['css-file'], $pack);
 
+	$file_name = $pack['name'] . '.css';
+
+	if (isset($pack['css-file-output'])) {
+		$file_name = $pack['css-file-output'];
+	}
+
 	download_file(
 		$url,
 		// __DIR__ . '/static/css/' . $pack['name'] . '.css'
-		get_libs_dir() . $pack['name'] . '/css/' . $pack['name'] . '.css'
+		get_libs_dir() . $pack['name'] . '/css/' . $file_name
 	);
 }
 
