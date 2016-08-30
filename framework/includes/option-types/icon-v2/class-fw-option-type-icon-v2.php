@@ -30,14 +30,15 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 
 		$this->favorites = new FW_Icon_V2_Favorites_Manager();
 
-		add_action(
-			'admin_footer',
-			array($this, 'load_templates')
-		);
 	}
 
 	protected function _enqueue_static($id, $option, $data)
 	{
+		add_action(
+			'admin_footer',
+			array($this, 'load_templates')
+		);
+
 		$this->packs_loader->enqueue_admin_css();
 
 		$static_URI = fw_get_framework_directory_uri(
