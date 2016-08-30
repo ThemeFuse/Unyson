@@ -104,20 +104,19 @@
 		});
 
 		elements.$thumb.on('click', '.clear-uploads-thumb', function(e) {
-			elements.$uploadButton.text(l10n.buttonAdd);
-			elements.$thumb
-						.html(templates.thumb.empty)
-						.removeAttr('data-attid data-origsrc');
-			elements.$input.val('').trigger('change');
-			elements.$container.addClass('empty');
+			clearAttachment();
 
-			fwe.trigger('fw:option-type:upload:clear', {$element: elements.$container});
-			elements.$container.trigger('fw:option-type:upload:clear');
+			elements.$input.val('');
 
 			e.preventDefault();
 		});
 
 		elements.$input.on('change', function () {
+			if (! $(this).val()) {
+				clearAttachment();
+				return;
+			}
+
 			var attachment = wp.media.attachment($(this).val());
 
 			if (! attachment.get('url')) {
@@ -130,6 +129,17 @@
 
 			performSelection(attachment);
 		});
+
+		function clearAttachment () {
+			elements.$uploadButton.text(l10n.buttonAdd);
+			elements.$thumb
+						.html(templates.thumb.empty)
+						.removeAttr('data-attid data-origsrc');
+			elements.$container.addClass('empty');
+
+			fwe.trigger('fw:option-type:upload:clear', {$element: elements.$container});
+			elements.$container.trigger('fw:option-type:upload:clear');
+		}
 
 		function performSelection (attachment) {
 			var url, filename, compiled;

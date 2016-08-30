@@ -89,18 +89,17 @@
 		});
 
 		elements.$deleteButton.on('click', function(e) {
-			elements.$textField.text('');
-			elements.$uploadButton.text(l10n.buttonAdd);
-			elements.$input.val('').trigger('change');
-			elements.$container.addClass('empty');
-
-			fwe.trigger('fw:option-type:upload:clear', {$element: elements.$container});
-			elements.$container.trigger('fw:option-type:upload:clear');
-
+			clearAttachment();
+			elements.$input.val('');
 			e.preventDefault();
 		});
 
 		elements.$input.on('change', function () {
+			if (! $(this).val()) {
+				clearAttachment();
+				return;
+			}
+
 			var attachment = wp.media.attachment($(this).val());
 
 			if (! attachment.get('url')) {
@@ -113,6 +112,15 @@
 
 			performSelection(attachment);
 		})
+
+		function clearAttachment () {
+			elements.$textField.text('');
+			elements.$uploadButton.text(l10n.buttonAdd);
+			elements.$container.addClass('empty');
+
+			fwe.trigger('fw:option-type:upload:clear', {$element: elements.$container});
+			elements.$container.trigger('fw:option-type:upload:clear');
+		}
 
 		function performSelection (attachment) {
 			elements.$textField.text(attachment.get('filename'));
