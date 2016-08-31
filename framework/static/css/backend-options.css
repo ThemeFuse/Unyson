@@ -878,6 +878,7 @@ body.rtl .fw-postbox .handlediv:before {
 .fw-backend-option-design-default {
 	position: relative;
 	padding: 24px 27px 21px;
+	border: 0px solid #eeeeee;
 	border-bottom: 1px solid #eeeeee;
 }
 

@@ -103,10 +103,10 @@ body.rtl .fw-option-type-radio.fw-option-type-radio-inline > div:not(:last-child
 
 /* modal fixes */
 
-.fw-modal .media-frame input[type=email],
-.fw-modal .media-frame input[type=number],
 .fw-modal .media-frame input[type=password],
+.fw-modal .media-frame input[type=number],
 .fw-modal .media-frame input[type=search],
+.fw-modal .media-frame input[type=email],
 .fw-modal .media-frame input[type=text],
 .fw-modal .media-frame input[type=url],
 .fw-modal .media-frame select,
@@ -125,8 +125,12 @@ body.rtl .fw-option-type-radio.fw-option-type-radio-inline > div:not(:last-child
 	height: auto;
 }
 
-.fw-modal .media-frame input[type=text],
 .fw-modal .media-frame input[type=password],
+.fw-modal .media-frame input[type=number],
+.fw-modal .media-frame input[type=search],
+.fw-modal .media-frame input[type=email],
+.fw-modal .media-frame input[type=text],
+.fw-modal .media-frame input[type=url],
 .fw-modal .media-frame textarea {
 	padding: 3px 5px;
 }

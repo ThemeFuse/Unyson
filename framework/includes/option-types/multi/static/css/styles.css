@@ -6,6 +6,10 @@
 	border-bottom-width: 0;
 }
 
+.fw-option-type-multi > .fw-backend-option.fw-backend-option-type-multi + .fw-backend-option.fw-backend-option-type-multi {
+	border-top-width: 1px;
+}
+
 /* show options separator borders */
 
 .fw-option-type-multi.fw-option-type-multi-show-borders > .fw-backend-option {
