@@ -116,7 +116,6 @@ body.rtl .fw-option-type-radio.fw-option-type-radio-inline > div:not(:last-child
 
 .fw-modal .media-frame select {
 	line-height: 28px;
-	height: 28px;
 	padding: 2px;
 	margin: 1px;
 }
