@@ -36,19 +36,23 @@
 		if ('FW_Option_Type' === $class) {
 			require_once dirname(__FILE__) .'/../core/extends/class-fw-option-type.php';
 
-			FW_Flash_Messages::add(
-				'option-type-register-wrong',
-				__("Please register option-types on 'fw_option_types_init' action", 'fw'),
-				'warning'
-			);
+			if (is_admin()) {
+				FW_Flash_Messages::add(
+					'option-type-register-wrong',
+					__("Please register option-types on 'fw_option_types_init' action", 'fw'),
+					'warning'
+				);
+			}
 		} elseif ('FW_Container_Type' === $class) {
 			require_once dirname(__FILE__) .'/../core/extends/class-fw-container-type.php';
 
-			FW_Flash_Messages::add(
-				'container-type-register-wrong',
-				__("Please register container-types on 'fw_container_types_init' action", 'fw'),
-				'warning'
-			);
+			if (is_admin()) {
+				FW_Flash_Messages::add(
+					'container-type-register-wrong',
+					__("Please register container-types on 'fw_container_types_init' action", 'fw'),
+					'warning'
+				);
+			}
 		}
 	}
 	spl_autoload_register('_fw_autoload_option_types');
