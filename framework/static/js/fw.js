@@ -755,6 +755,8 @@ fw.getQueryString = function(name) {
 					$modalWrapper.addClass('fw-modal-' + modal.defaults.size);
 				}
 
+				$modalWrapper.addClass('fw-modal-level-'+ stackSize);
+
 				if (stackSize) {
 					$modal.css({
 						border: (stackSize * 30) +'px solid transparent'
