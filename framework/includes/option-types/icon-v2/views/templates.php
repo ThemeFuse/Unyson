@@ -111,12 +111,6 @@ $tabs = fw()->backend->render_options(
 <script type="text/html" id="tmpl-fw-icon-v2-favorites">
 
 <div class="fw-icon-v2-icon-favorites">
-	<h2>
-		<span>
-			<?php echo __('Your Favorites', 'fw'); ?>
-		</span>
-	</h2>
-
 	<# if (data.favorites.length === 0) { #>
 
 		<h4>You have no favorite icons yet.</h4>
