@@ -146,7 +146,7 @@ class FW_File_Cache {
 		return is_null($filter_value) ? true : $filter_value;
 	}
 
-	public static function save() { echo 'lok';
+	public static function save() {
 		if ( ! self::$changed ) {
 			return;
 		}
