@@ -1217,7 +1217,9 @@ final class _FW_Component_Backend {
 		}
 
 		wp_send_json_success( array(
-			'html' => fw()->backend->render_options( $options, $values, $data )
+			'html' => fw()->backend->render_options( $options, $values, $data ),
+			/** @since 2.6.1 */
+			'default_values' => fw_get_options_values_from_input($options, array()),
 		) );
 	}
 

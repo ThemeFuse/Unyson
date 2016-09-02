@@ -1317,6 +1317,11 @@ fw.getValuesFromServer = function (data) {
 
 					htmlCache[cacheId] = response.data.html;
 
+					if (_.isEmpty(modal.get('values'))) {
+						// fixes https://github.com/ThemeFuse/Unyson/issues/1042#issuecomment-244364121
+						modal.set('values', response.data.default_values);
+					}
+
 					modal.set('html', response.data.html);
 				},
 				error: function (xhr, status, error) {
