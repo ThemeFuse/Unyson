@@ -75,7 +75,7 @@ class FW_File_Cache {
 						:  unlink($path)
 					)
 					&&
-					file_put_contents($path, $code)
+					file_put_contents($path, $code, LOCK_EX)
 				) {
 					// file re-created
 				} else {
@@ -83,8 +83,8 @@ class FW_File_Cache {
 				}
 			}
 		} elseif ( ! ( $shhh
-			? @file_put_contents($path, $code)
-			:  file_put_contents($path, $code)
+			? @file_put_contents($path, $code, LOCK_EX)
+			:  file_put_contents($path, $code, LOCK_EX)
 		) ) {
 			return false; // cannot create the file
 		}
@@ -151,8 +151,8 @@ class FW_File_Cache {
 			return;
 		}
 
-		if ( ! file_put_contents(self::$path, '<?php return '. var_export(self::$cache, true) .';') ) {
-			file_put_contents(self::$path, '<?php return array();');
+		if ( ! file_put_contents(self::$path, '<?php return '. var_export(self::$cache, true) .';', LOCK_EX) ) {
+			file_put_contents(self::$path, '<?php return array();', LOCK_EX);
 		}
 
 		self::$changed = false;
@@ -196,15 +196,7 @@ class FW_File_Cache {
 			}
 		}
 
-		/**
-		 * Do not use 'shutdown' action because it is very risky
-		 * because php may abort the execution if the file write it's too slow
-		 * and the site will throw fatal error https://github.com/ThemeFuse/Unyson/issues/1968
-		 */
-		{
-			add_action( 'admin_footer', array(__CLASS__, 'save'), 99999 );
-			add_action( 'wp_footer', array(__CLASS__, 'save'), 99999 );
-		}
+		add_action( 'shutdown', array(__CLASS__, 'save') );
 	}
 
 	/**
