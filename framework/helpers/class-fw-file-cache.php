@@ -196,7 +196,15 @@ class FW_File_Cache {
 			}
 		}
 
-		add_action( 'shutdown', array(__CLASS__, 'save') );
+		/**
+		 * Do not use 'shutdown' action because it is very risky
+		 * because php may abort the execution if the file write it's too slow
+		 * and the site will throw fatal error https://github.com/ThemeFuse/Unyson/issues/1968
+		 */
+		{
+			add_action( 'admin_footer', array(__CLASS__, 'save'), 99999 );
+			add_action( 'wp_footer', array(__CLASS__, 'save'), 99999 );
+		}
 	}
 
 	/**
