@@ -146,12 +146,14 @@ class FW_File_Cache {
 		return is_null($filter_value) ? true : $filter_value;
 	}
 
-	public static function save() {
+	public static function save() { echo 'lok';
 		if ( ! self::$changed ) {
 			return;
 		}
 
-		file_put_contents(self::$path, '<?php return '. var_export(self::$cache, true) .';');
+		if ( ! file_put_contents(self::$path, '<?php return '. var_export(self::$cache, true) .';') ) {
+			file_put_contents(self::$path, '<?php return array();');
+		}
 
 		self::$changed = false;
 	}
