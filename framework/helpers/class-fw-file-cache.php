@@ -151,8 +151,14 @@ class FW_File_Cache {
 			return;
 		}
 
-		if ( ! file_put_contents(self::$path, '<?php return '. var_export(self::$cache, true) .';', LOCK_EX) ) {
-			file_put_contents(self::$path, '<?php return array();', LOCK_EX);
+		$shhh = defined('DOING_AJAX') && DOING_AJAX; // prevent warning in ajax requests
+
+		if (!(
+			$shhh
+			? @file_put_contents(self::$path, '<?php return ' . var_export(self::$cache, true) . ';', LOCK_EX)
+			:  file_put_contents(self::$path, '<?php return ' . var_export(self::$cache, true) . ';', LOCK_EX)
+		)) {
+			@file_put_contents(self::$path, '<?php return array();', LOCK_EX);
 		}
 
 		self::$changed = false;
