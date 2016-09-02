@@ -75,7 +75,7 @@ class FW_File_Cache {
 						:  unlink($path)
 					)
 					&&
-					file_put_contents($path, $code)
+					file_put_contents($path, $code, LOCK_EX)
 				) {
 					// file re-created
 				} else {
@@ -83,8 +83,8 @@ class FW_File_Cache {
 				}
 			}
 		} elseif ( ! ( $shhh
-			? @file_put_contents($path, $code)
-			:  file_put_contents($path, $code)
+			? @file_put_contents($path, $code, LOCK_EX)
+			:  file_put_contents($path, $code, LOCK_EX)
 		) ) {
 			return false; // cannot create the file
 		}
@@ -151,7 +151,15 @@ class FW_File_Cache {
 			return;
 		}
 
-		file_put_contents(self::$path, '<?php return '. var_export(self::$cache, true) .';');
+		$shhh = defined('DOING_AJAX') && DOING_AJAX; // prevent warning in ajax requests
+
+		if (!(
+			$shhh
+			? @file_put_contents(self::$path, '<?php return ' . var_export(self::$cache, true) . ';', LOCK_EX)
+			:  file_put_contents(self::$path, '<?php return ' . var_export(self::$cache, true) . ';', LOCK_EX)
+		)) {
+			@file_put_contents(self::$path, '<?php return array();', LOCK_EX);
+		}
 
 		self::$changed = false;
 	}
