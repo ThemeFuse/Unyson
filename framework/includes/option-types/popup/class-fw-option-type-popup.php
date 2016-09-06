@@ -135,9 +135,9 @@ class FW_Option_Type_Popup extends FW_Option_Type {
 			/**
 			 * Don't decode if we have already an array
 			 */
-			$values = $input_value;
+			$values = fw_get_options_values_from_input($option['popup-options'], $input_value);
 		} else {
-			$values = json_decode( $input_value, true );
+			$values = fw_get_options_values_from_input($option['popup-options'], json_decode( $input_value, true ));
 		}
 
 		return $values;

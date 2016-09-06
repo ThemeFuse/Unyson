@@ -1238,7 +1238,6 @@ fw.getValuesFromServer = function (data) {
 
 			return this;
 		},
-
 		/**
 		 * @param {String} [actualValues] A string containing correctly serialized
 		 *                                data that will be sent to the server.
@@ -1262,7 +1261,6 @@ fw.getValuesFromServer = function (data) {
 				actualValues: actualValues
 			});
 		},
-
 		/**
 		 * @returns {Promise} jQuery promise
 		 *
@@ -1272,7 +1270,6 @@ fw.getValuesFromServer = function (data) {
 		getActualValues: function () {
 			return this.getValuesFromServer(this.content.$el.serialize());
 		},
-
 		getHtmlCacheId: function(values) {
 			return fw.md5(
 				JSON.stringify(this.get('options')) +
