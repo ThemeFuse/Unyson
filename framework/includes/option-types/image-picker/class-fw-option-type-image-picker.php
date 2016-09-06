@@ -104,7 +104,7 @@ class Fw_Option_Type_Image_Picker extends FW_Option_Type
 		{
 			$html .= '<select ' . fw_attr_to_html($option['attr']) . '>';
 
-			if (!empty($option['blank']) and $option['blank'] === true) {
+			if ($option['blank'] === true) {
 				$html .= '<option value=""></option>';
 			}
 
@@ -172,13 +172,16 @@ class Fw_Option_Type_Image_Picker extends FW_Option_Type
 	 */
 	protected function _get_value_from_input($option, $input_value)
 	{
-		if (is_null($input_value)) {
+		if (!is_string($input_value)) {
 			return $option['value'];
 		}
 
 		if (!isset($option['choices'][$input_value])) {
-			if (
-				empty($option['choices']) ||
+			if ($option['blank']) {
+				$input_value = '';
+			} elseif (
+				! empty($option['choices'])
+				&&
 				isset($option['choices'][ $option['value'] ])
 			) {
 				$input_value = $option['value'];
