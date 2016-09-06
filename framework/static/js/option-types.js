@@ -1,7 +1,7 @@
 jQuery(document).ready(function ($) {
-	setTimeout(function(){
-		fwEvents.trigger('fw:options:init', {
-			$elements: $(document.body)
+	_.delay(function(){
+		_.defer(function(){
+			fwEvents.trigger('fw:options:init', {$elements: $(document.body)});
 		});
 	}, 30);
 });
