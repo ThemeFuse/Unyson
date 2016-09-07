@@ -54,11 +54,21 @@ jQuery(document).ready(function($){
 			 * Do not initialize all pickers on the page, for performance reasons, maybe none of them will be opened
 			 */
 			$input.one('focus', function(){
+				var initialValue = $input.val();
+
 				$input.iris({
 					hide: true,
 					defaultColor: false,
 					clear: function(){},
 					change: function(event, ui){
+						// prevent useless 'change' event when nothing has changed (happens right after init)
+						if (initialValue !== null && $input.val() === initialValue) {
+							initialValue = null;
+							return;
+						} else {
+							initialValue = null; // make sure the above `if` is executed only once
+						}
+
 						/**
 						 * If we trigger the 'change' right here, that will block the picker (I don't know why)
 						 */
@@ -74,6 +84,8 @@ jQuery(document).ready(function($){
 					},
 					palettes: JSON.parse($input.attr('data-palettes'))
 				});
+
+				$input.addClass('iris-initialized');
 
 				var $picker = helpers.getInstance($input).picker;
 

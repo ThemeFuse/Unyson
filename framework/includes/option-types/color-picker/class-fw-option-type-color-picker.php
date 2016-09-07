@@ -48,7 +48,7 @@ class FW_Option_Type_Color_Picker extends FW_Option_Type
 	 */
 	protected function _render($id, $option, $data)
 	{
-		$option['attr']['value']  = (string)$data['value'];
+		$option['attr']['value']  = strtolower($data['value']);
 		$option['attr']['class'] .= ' code';
 		$option['attr']['size']   = '7';
 		$option['attr']['maxlength'] = '7';
