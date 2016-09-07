@@ -122,6 +122,11 @@ class FW_Option_Type_Popup extends FW_Option_Type {
 				return array();
 			}
 
+			/**
+			 * $option['value'] has DB format (not $input_value HTML format)
+			 * so it can't be used as second parameter in fw_get_options_values_from_input()
+			 * thus we need to move each option value in option array default values
+			 */
 			$popup_options = array();
 			foreach (fw_extract_only_options($option['popup-options']) as $popup_option_id => $popup_option) {
 				if (isset($option['value'][$popup_option_id])) {
