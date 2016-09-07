@@ -52,6 +52,8 @@ class FW_File_Cache {
 	private static function load() {
 		if ( is_array( self::$cache ) ) {
 			return true; // already loaded
+		} elseif ( false === self::$cache ) {
+			return false;
 		}
 
 		$dir  = dirname(self::$path);
@@ -59,9 +61,17 @@ class FW_File_Cache {
 		$code = '<?php return array();';
 		$shhh = defined('DOING_AJAX') && DOING_AJAX; // prevent warning in ajax requests
 
+		// prevent useless multiple execution of this method when uploads/ is not writable
+		self::$cache = false;
+
 		// check directory
 		if ( ! file_exists($dir) ) {
-			if ( ! mkdir($dir, 0755, true) ) {
+			if ( ! is_writable( dirname( $dir ) )) { // check parent dir if writable ( should be uploads/ )
+				return false;
+			} elseif ( ! ( $shhh
+				? @mkdir($dir, 0755, true)
+				:  mkdir($dir, 0755, true)
+			) ) {
 				return false;
 			}
 		}
@@ -75,7 +85,10 @@ class FW_File_Cache {
 						:  unlink($path)
 					)
 					&&
-					file_put_contents($path, $code, LOCK_EX)
+					( $shhh
+						? @file_put_contents($path, $code, LOCK_EX)
+						:  file_put_contents($path, $code, LOCK_EX)
+					)
 				) {
 					// file re-created
 				} else {
