@@ -145,10 +145,8 @@ class FW_Icon_V2_Packs_Loader
 			if ($pack['require_css_file']) {
 
 				if ($pack['frontend_wp_enqueue_handle']) {
-					if (wp_style_is($pack['frontend_wp_enqueue_handle'], 'registered')) {
-						wp_enqueue_style($pack['frontend_wp_enqueue_handle']);
-						continue;
-					}
+					wp_enqueue_style($pack['frontend_wp_enqueue_handle']);
+					continue;
 				}
 
 				wp_enqueue_style(
@@ -172,10 +170,8 @@ class FW_Icon_V2_Packs_Loader
 	{
 		foreach ($this->get_packs() as $pack_name => $pack) {
 			if ($pack['admin_wp_enqueue_handle']) {
-				if (wp_style_is($pack['admin_wp_enqueue_handle'], 'registered')) {
-					wp_enqueue_style($pack['admin_wp_enqueue_handle']);
-					continue;
-				}
+				wp_enqueue_style($pack['admin_wp_enqueue_handle']);
+				continue;
 			}
 
 			wp_enqueue_style(
