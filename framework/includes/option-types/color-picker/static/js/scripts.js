@@ -61,19 +61,19 @@ jQuery(document).ready(function($){
 					defaultColor: false,
 					clear: function(){},
 					change: function(event, ui){
-						// prevent useless 'change' event when nothing has changed (happens right after init)
-						if (initialValue !== null && $input.val() === initialValue) {
-							initialValue = null;
-							return;
-						} else {
-							initialValue = null; // make sure the above `if` is executed only once
-						}
-
 						/**
 						 * If we trigger the 'change' right here, that will block the picker (I don't know why)
 						 */
 						clearTimeout(changeTimeoutId);
 						changeTimeoutId = setTimeout(function(){
+							// prevent useless 'change' event when nothing has changed (happens right after init)
+							if (initialValue !== null && $input.val() === initialValue) {
+								initialValue = null;
+								return;
+							} else {
+								initialValue = null; // make sure the above `if` is executed only once
+							}
+
 							$input.trigger('fw:color:picker:changed', { // should be 'fw:option-type:color-picker:change'
 								$element: $input,
 								event   : event,
@@ -193,24 +193,5 @@ jQuery(document).ready(function($){
 
 			$input.addClass('initialized');
 		});
-
-		/*
-		// fixme: where this code is needed? why it does full page selectors instead of only specific initialized option?
-		$('.fw-inner').on('click', '.fw-option-type-color-picker', function () {
-			var $this = $(this);
-			$('.fw-option-type-color-picker.initialized').iris('hide');
-
-			$this.iris('show');
-
-			var widthParent = $this.closest('.fw-backend-option').outerWidth(),
-				widthPiker = $this.next('.iris-picker').outerWidth(),
-				offsetPiker = ($this.next('.iris-picker').offset().left - $this.closest('.fw-backend-option').offset().left) + widthPiker;
-
-			if (offsetPiker > widthParent) {
-				$this.next('.iris-picker').css('right', '0');
-			}
-			return false;
-		});
-		*/
 	});
 });
