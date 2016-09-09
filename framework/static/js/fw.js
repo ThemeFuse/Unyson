@@ -1159,7 +1159,9 @@ fw.getValuesFromServer = function (data) {
 				 * Values of the options {'option-id': 'option value'}
 				 * also used in fw()->backend->render_options()
 				 */
-				values: {}
+				values: {},
+
+				silentReceiveOfDefaultValues: false
 			}
 		),
 		initializeFrame: function(settings) {
@@ -1316,7 +1318,11 @@ fw.getValuesFromServer = function (data) {
 
 					if (_.isEmpty(modal.get('values'))) {
 						// fixes https://github.com/ThemeFuse/Unyson/issues/1042#issuecomment-244364121
-						modal.set('values', response.data.default_values);
+						modal.set(
+							'values',
+							response.data.default_values,
+							{silent: modal.get('silentReceiveOfDefaultValues')}
+						);
 					}
 
 					modal.set('html', response.data.html);
