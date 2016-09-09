@@ -59,8 +59,6 @@ class FW_File_Cache {
 	private static function load() {
 		if ( is_null(self::$blog_id) ) {
 			self::$blog_id = get_current_blog_id();
-			self::save(); // do save() here because in reset() below it is not possible
-			self::$cache = false; // prevent recursion because reset() calls load()
 			self::reset();
 		} else {
 			if (is_array(self::$cache)) {
