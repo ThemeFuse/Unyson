@@ -41,6 +41,13 @@ class FW_File_Cache {
 	 */
 	private static $cache;
 
+	/**
+	 * If this was changed then cache must reset
+	 * Fixes https://github.com/ThemeFuse/Unyson/issues/1986
+	 * @var int
+	 */
+	private static $blog_id;
+
 	private static function get_defaults() {
 		return array(
 			'created' => time(),
@@ -50,14 +57,21 @@ class FW_File_Cache {
 	}
 
 	private static function load() {
-		if ( is_array( self::$cache ) ) {
-			return true; // already loaded
-		} elseif ( false === self::$cache ) {
-			return false;
+		if ( is_null(self::$blog_id) ) {
+			self::$blog_id = get_current_blog_id();
+			self::save(); // do save() here because in reset() below it is not possible
+			self::$cache = false; // prevent recursion because reset() calls load()
+			self::reset();
+		} else {
+			if (is_array(self::$cache)) {
+				return true; // already loaded
+			} elseif (false === self::$cache) {
+				return false;
+			}
 		}
 
-		$dir  = dirname(self::$path);
-		$path = self::$path;
+		$dir  = dirname(self::get_path());
+		$path = self::get_path();
 		$code = '<?php return array();';
 		$shhh = defined('DOING_AJAX') && DOING_AJAX; // prevent warning in ajax requests
 
@@ -135,11 +149,13 @@ class FW_File_Cache {
 		return true;
 	}
 
-	private static function update_path() {
-		$path = wp_upload_dir();
-		$path = fw_fix_path($path['basedir']) .'/fw/file-cache.php';
+	private static function get_path() {
+		if (is_null(self::$path)) {
+			self::$path = wp_upload_dir();
+			self::$path = fw_fix_path(self::$path['basedir']) . '/fw/file-cache.php';
+		}
 
-		self::$path = $path;
+		return self::$path;
 	}
 
 	/**
@@ -152,7 +168,7 @@ class FW_File_Cache {
 		}
 
 		self::save();
-		self::update_path();
+		self::$path = null;
 		self::$cache = self::get_defaults();
 		self::$changed = true;
 
@@ -168,10 +184,10 @@ class FW_File_Cache {
 
 		if (!(
 			$shhh
-			? @file_put_contents(self::$path, '<?php return ' . var_export(self::$cache, true) . ';', LOCK_EX)
-			:  file_put_contents(self::$path, '<?php return ' . var_export(self::$cache, true) . ';', LOCK_EX)
+			? @file_put_contents(self::get_path(), '<?php return ' . var_export(self::$cache, true) . ';', LOCK_EX)
+			:  file_put_contents(self::get_path(), '<?php return ' . var_export(self::$cache, true) . ';', LOCK_EX)
 		)) {
-			@file_put_contents(self::$path, '<?php return array();', LOCK_EX);
+			@file_put_contents(self::get_path(), '<?php return array();', LOCK_EX);
 		}
 
 		self::$changed = false;
@@ -181,8 +197,6 @@ class FW_File_Cache {
 	 * @internal
 	 */
 	public static function _init() {
-		self::update_path();
-
 		/**
 		 * Reset when current user is administrator
 		 * because it can be a developer that added/removed some files
@@ -196,7 +210,6 @@ class FW_File_Cache {
 			 * - after some files was added/deleted
 			 */
 			foreach (array(
-				'switch_blog' => true,
 				'fw_extensions_before_activation' => true,
 				'fw_extensions_after_activation' => true,
 				'fw_extensions_before_deactivation' => true,
@@ -210,12 +223,14 @@ class FW_File_Cache {
 				'upgrader_post_install' => true,
 				'automatic_updates_complete' => true,
 				'upgrader_process_complete' => true,
+				// 'switch_blog' => true, // fixes https://github.com/ThemeFuse/Unyson/issues/1986
 			) as $action => $x) {
 				add_action( $action, array(__CLASS__, 'reset') );
 			}
 		}
 
 		add_action( 'shutdown', array(__CLASS__, 'save') );
+		add_action( 'switch_blog', array(__CLASS__, '_reset_blog_id') );
 	}
 
 	/**
@@ -250,6 +265,13 @@ class FW_File_Cache {
 		self::$cache['data'][ $key ] = $value;
 
 		return true;
+	}
+
+	/**
+	 * @internal
+	 */
+	public function _reset_blog_id() {
+		self::$blog_id = null;
 	}
 }
 
