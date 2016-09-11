@@ -3,7 +3,7 @@ Contributors: unyson
 Tags: page builder, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 2.6.2
+Stable tag: 2.6.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,6 +82,9 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.6.3 =
+* Fixed [#1993](https://github.com/ThemeFuse/Unyson/issues/1993)
 
 = 2.6.2 =
 * Option-types must be loaded on `fw_option_types_init` [action](http://manual.unyson.io/en/latest/options/create-option-type.html?#create-option-type) [#1827](https://github.com/ThemeFuse/Unyson/issues/1827)
