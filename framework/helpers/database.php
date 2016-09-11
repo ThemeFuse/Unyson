@@ -516,11 +516,11 @@ class FW_Db_Options_Model_Customizer extends FW_Db_Options_Model {
 	}
 
 	protected function get_values($item_id, array $extra_data = array()) {
-		return get_theme_mod(FW_Option_Type::get_default_name_prefix(), array());
+		return get_theme_mod('fw_options', array());
 	}
 
 	protected function set_values($item_id, $values, array $extra_data = array()) {
-		set_theme_mod(FW_Option_Type::get_default_name_prefix(), $values);
+		set_theme_mod('fw_options', $values);
 	}
 
 	protected function get_options($item_id, array $extra_data = array()) {

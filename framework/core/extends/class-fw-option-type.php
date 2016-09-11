@@ -75,7 +75,7 @@ abstract class FW_Option_Type
 	 */
 	final public static function get_default_id_prefix()
 	{
-		return 'fw-option-';
+		return fw()->backend->get_options_id_attr_prefix();
 	}
 
 	/**
@@ -85,7 +85,7 @@ abstract class FW_Option_Type
 	 */
 	final public static function get_default_name_prefix()
 	{
-		return 'fw_options';
+		return fw()->backend->get_options_name_attr_prefix();
 	}
 
 	final public function __construct()

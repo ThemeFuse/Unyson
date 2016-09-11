@@ -932,7 +932,7 @@ function fw_collect_options(&$result, &$options, $settings = array(), $_recursio
  */
 function fw_get_options_values_from_input(array $options, $input_array = null) {
 	if (!is_array($input_array)) {
-		$input_array = FW_Request::POST(FW_Option_Type::get_default_name_prefix());
+		$input_array = FW_Request::POST(fw()->backend->get_options_name_attr_prefix());
 	}
 
 	$values = array();

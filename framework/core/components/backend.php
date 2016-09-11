@@ -69,6 +69,22 @@ final class _FW_Component_Backend {
 		return 'fw-settings';
 	}
 
+	/**
+	 * @return string
+	 * @since 2.6.3
+	 */
+	public function get_options_name_attr_prefix() {
+		return 'fw_options';
+	}
+
+	/**
+	 * @return string
+	 * @since 2.6.3
+	 */
+	public function get_options_id_attr_prefix() {
+		return 'fw-option-';
+	}
+
 	private function get_current_edit_taxonomy() {
 		static $cache_current_taxonomy_data = null;
 
@@ -853,7 +869,7 @@ final class _FW_Component_Backend {
 			&&
 			intval($_POST['post_ID']) === intval($post_id)
 			&&
-			!empty($_POST[ FW_Option_Type::get_default_name_prefix() ]) // this happens on Quick Edit
+			!empty($_POST[ $this->get_options_name_attr_prefix() ]) // this happens on Quick Edit
 		) {
 			/**
 			 * This happens on regular post form submit
@@ -903,7 +919,7 @@ final class _FW_Component_Backend {
 					break;
 				}
 
-				if (empty($_POST[ FW_Option_Type::get_default_name_prefix() ])) {
+				if (empty($_POST[ $this->get_options_name_attr_prefix() ])) {
 					// this happens on Quick Edit
 					break;
 				}
@@ -1255,7 +1271,7 @@ final class _FW_Component_Backend {
 			if ( isset( $_POST['name_prefix'] ) ) {
 				$name_prefix = FW_Request::POST( 'name_prefix' );
 			} else {
-				$name_prefix = FW_Option_Type::get_default_name_prefix();
+				$name_prefix = $this->get_options_name_attr_prefix();
 			}
 		}
 
@@ -1280,7 +1296,7 @@ final class _FW_Component_Backend {
 			return $data;
 		}
 
-		if ( $values = FW_Request::POST( FW_Option_Type::get_default_name_prefix() ) ) {
+		if ( $values = FW_Request::POST( $this->get_options_name_attr_prefix() ) ) {
 			// This is form submit, extract correct values from $_POST values
 			$values = fw_get_options_values_from_input( $options, $values );
 		} else {
@@ -1600,7 +1616,7 @@ final class _FW_Component_Backend {
 		}
 
 		if ( ! isset( $data['id_prefix'] ) ) {
-			$data['id_prefix'] = FW_Option_Type::get_default_id_prefix();
+			$data['id_prefix'] = $this->get_options_id_attr_prefix();
 		}
 
 		$data = apply_filters(
@@ -2031,7 +2047,7 @@ final class _FW_Component_Backend {
 					unset($children_data);
 					break;
 				case 'option':
-					$setting_id = FW_Option_Type::get_default_name_prefix() .'['. $opt['id'] .']';
+					$setting_id = $this->get_options_name_attr_prefix() .'['. $opt['id'] .']';
 
 					{
 						$args_control = array(

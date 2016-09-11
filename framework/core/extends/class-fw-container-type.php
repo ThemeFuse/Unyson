@@ -100,8 +100,8 @@ abstract class FW_Container_Type
 	{
 		$data = array_merge(
 			array(
-				'id_prefix'   => FW_Option_Type::get_default_id_prefix(),   // attribute id prefix
-				'name_prefix' => FW_Option_Type::get_default_name_prefix(), // attribute name prefix
+				'id_prefix'   => fw()->backend->get_options_id_attr_prefix(),   // attribute id prefix
+				'name_prefix' => fw()->backend->get_options_name_attr_prefix(), // attribute name prefix
 			),
 			$data
 		);
