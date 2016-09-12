@@ -92,23 +92,8 @@ final class _FW_Component_Extensions
 	{
 		require dirname(__FILE__) .'/extensions/class-fw-extension-default.php';
 
-		if (
-			/**
-			 * Do not load in frontend because it has no functionality that can be useful in frontend
-			 */
-			is_admin()
-			||
-			/**
-			 * While in cron request (on auto-update), is_admin() is false
-			 * but we need the actions that moves extensions to a tmp dir then back, on plugin update
-			 * todo: maybe move those actions here in this class?
-			 */
-			defined( 'DOING_CRON' )
-		) {
-			require dirname(__FILE__) .'/extensions/manager/class--fw-extensions-manager.php';
-
-			$this->manager = new _FW_Extensions_Manager();
-		}
+		require dirname(__FILE__) .'/extensions/manager/class--fw-extensions-manager.php';
+		$this->manager = new _FW_Extensions_Manager();
 	}
 
 	/**

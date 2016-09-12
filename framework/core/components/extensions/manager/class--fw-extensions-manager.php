@@ -55,6 +55,9 @@ final class _FW_Extensions_Manager
 			add_action('upgrader_process_complete', array($this, '_action_theme_available_extensions_restore'), 999, 2);
 		}
 
+		add_action('fw_after_plugin_activate', array($this, '_action_after_plugin_activate'), 100);
+		add_action('after_switch_theme', array($this, '_action_theme_switch'));
+
 		if (!is_admin()) {
 			return;
 		}
@@ -70,8 +73,6 @@ final class _FW_Extensions_Manager
 			add_action('network_admin_menu', array($this, '_action_admin_menu'));
 			add_action('admin_footer', array($this, '_action_admin_footer'));
 			add_action('admin_enqueue_scripts', array($this, '_action_enqueue_scripts'));
-			add_action('fw_after_plugin_activate', array($this, '_action_after_plugin_activate'), 100);
-			add_action('after_switch_theme', array($this, '_action_theme_switch'));
 			add_action('admin_notices', array($this, '_action_admin_notices'));
 
 			if ($this->can_install()) {
@@ -383,13 +384,9 @@ final class _FW_Extensions_Manager
 			)
 		);
 
-		if ($this->can_install()) {
-			if ($this->get_supported_extensions_for_install()) {
-				$link = $this->get_link();
-
-				wp_redirect($link . '&sub-page=install&supported');
-				exit;
-			}
+		if (is_admin() && $this->can_install() && $this->get_supported_extensions_for_install()) {
+			wp_redirect($this->get_link() . '&sub-page=install&supported');
+			exit;
 		}
 	}
 
