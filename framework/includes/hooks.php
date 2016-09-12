@@ -36,7 +36,7 @@
 		if ('FW_Option_Type' === $class) {
 			require_once dirname(__FILE__) .'/../core/extends/class-fw-option-type.php';
 
-			if (is_admin()) {
+			if (is_admin() && defined('WP_DEBUG') && WP_DEBUG) {
 				FW_Flash_Messages::add(
 					'option-type-register-wrong',
 					__("Please register option-types on 'fw_option_types_init' action", 'fw'),
@@ -46,7 +46,7 @@
 		} elseif ('FW_Container_Type' === $class) {
 			require_once dirname(__FILE__) .'/../core/extends/class-fw-container-type.php';
 
-			if (is_admin()) {
+			if (is_admin() && defined('WP_DEBUG') && WP_DEBUG) {
 				FW_Flash_Messages::add(
 					'container-type-register-wrong',
 					__("Please register container-types on 'fw_container_types_init' action", 'fw'),
