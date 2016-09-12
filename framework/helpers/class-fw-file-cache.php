@@ -268,7 +268,7 @@ class FW_File_Cache {
 	/**
 	 * @internal
 	 */
-	public function _reset_blog_id() {
+	public static function _reset_blog_id() {
 		self::$blog_id = null;
 	}
 }
