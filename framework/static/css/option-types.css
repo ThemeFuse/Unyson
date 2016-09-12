@@ -130,9 +130,12 @@ body.rtl .fw-option-type-radio.fw-option-type-radio-inline > div:not(:last-child
 .fw-modal .media-frame input[type=search],
 .fw-modal .media-frame input[type=email],
 .fw-modal .media-frame input[type=text],
-.fw-modal .media-frame input[type=url],
-.fw-modal .media-frame textarea {
+.fw-modal .media-frame input[type=url] {
 	height: 28px;
+	padding: 3px 5px;
+}
+
+.fw-modal .media-frame textarea {
 	padding: 3px 5px;
 }
 
