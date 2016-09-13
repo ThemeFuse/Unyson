@@ -1129,7 +1129,7 @@ fw.getValuesFromServer = function (data) {
 						 * user completed the form with data and wants to submit data
 						 * do not delete all his work
 						 */
-						alert(status +': '+ error.message);
+						alert(status +': '+ String(error));
 					}
 				});
 			}
@@ -1330,7 +1330,7 @@ fw.getValuesFromServer = function (data) {
 				error: function (xhr, status, error) {
 					fw.loading.hide(fwLoadingId);
 
-					modal.set('html', status+ ': '+ error.message);
+					modal.set('html', status+ ': '+ String(error));
 				}
 			});
 		}
