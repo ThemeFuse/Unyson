@@ -1161,7 +1161,7 @@ fw.getValuesFromServer = function (data) {
 				 */
 				values: {},
 
-				silentReceiveOfDefaultValues: false
+				silentReceiveOfDefaultValues: true
 			}
 		),
 		initializeFrame: function(settings) {
