@@ -58,7 +58,6 @@ class FW_File_Cache {
 	 *
 	 * adding ' /* ' at the end of the array fixes the problem
 	 *
-	 *
 	 *   'some-key' => 'some-val',
 	 * ); /*
 	 * 'some-old-key' => 'some-old-val', // these will be commented
