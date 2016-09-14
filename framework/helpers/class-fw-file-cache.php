@@ -48,6 +48,26 @@ class FW_File_Cache {
 	 */
 	private static $blog_id;
 
+	/**
+	 * Even if we use LOCK_EX in file_put_contents() sometimes a write happens over another
+	 * and the file cache is corrupted resulting in fatal error on the site
+	 *
+	 *   'some-key' => 'some-val',
+	 * ); // here the file must end, but it contains old array content
+	 * 'some-old-key' => 'some-old-val',
+	 *
+	 * adding ' /* ' at the end of the array fixes the problem
+	 *
+	 *
+	 *   'some-key' => 'some-val',
+	 * ); /*
+	 * 'some-old-key' => 'some-old-val', // these will be commented
+	 *
+	 * It produces a php warning but we hide it using `@ include '/path/to/file-cache.php';`
+	 * @var string
+	 */
+	private static $content_end = ' /* ';
+
 	private static function get_defaults() {
 		return array(
 			'created' => time(),
@@ -70,7 +90,7 @@ class FW_File_Cache {
 
 		$dir  = dirname(self::get_path());
 		$path = self::get_path();
-		$code = '<?php return array();';
+		$code = '<?php return array();'. self::$content_end;
 		$shhh = defined('DOING_AJAX') && DOING_AJAX; // prevent warning in ajax requests
 
 		// prevent useless multiple execution of this method when uploads/ is not writable
@@ -114,7 +134,7 @@ class FW_File_Cache {
 			return false; // cannot create the file
 		}
 
-		self::$cache = include $path;
+		self::$cache = @include($path); // use @ because this file contains unterminated comment /*
 
 		// check the loaded cache
 		{
@@ -182,10 +202,14 @@ class FW_File_Cache {
 
 		if (!(
 			$shhh
-			? @file_put_contents(self::get_path(), '<?php return ' . var_export(self::$cache, true) . ';', LOCK_EX)
-			:  file_put_contents(self::get_path(), '<?php return ' . var_export(self::$cache, true) . ';', LOCK_EX)
+			? @file_put_contents(self::get_path(),
+				'<?php return '. var_export(self::$cache, true) .';'. self::$content_end,
+				LOCK_EX)
+			:  file_put_contents(self::get_path(),
+				'<?php return '. var_export(self::$cache, true) .';'. self::$content_end,
+				LOCK_EX)
 		)) {
-			@file_put_contents(self::get_path(), '<?php return array();', LOCK_EX);
+			@file_put_contents(self::get_path(), '<?php return array();'. self::$content_end, LOCK_EX);
 		}
 
 		self::$changed = false;
