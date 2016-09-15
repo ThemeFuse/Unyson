@@ -53,6 +53,7 @@ abstract class FW_Db_Options_Model {
 	protected function _after_set($item_id, $option_id, $sub_keys, $old_value, array $extra_data = array()) {}
 
 	/**
+	 * Get sub-key. For e.g. if each item must have a separate key or not.
 	 * @param string $key
 	 * @param null|int|string $item_id
 	 * @param array $extra_data
