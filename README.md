@@ -85,5 +85,5 @@ A good bug report includes full details to easily understand the issue you are h
 Code and documentation copyright 2014 ThemeFuse LTD. Code released under [the GPL license](https://github.com/ThemeFuse/Unyson/blob/master/framework/LICENSE). Docs released under [Creative Commons](https://github.com/ThemeFuse/Unyson-Documentation/blob/master/LICENSE).
 
 [![PhpStorm IDE](https://rawgit.com/ThemeFuse/Unyson/master/.github/img/phpstorm.png)](https://www.jetbrains.com/phpstorm/)
-[![Build Status](https://travis-ci.org/ThemeFuse/Unyson.svg?branch=master)](https://travis-ci.org/ThemeFuse/Unyson) [![Stories in Ready](https://badge.waffle.io/ThemeFuse/Unyson.svg?label=ready&title=Ready)](http://waffle.io/ThemeFuse/Unyson)
+[![Build Status](https://travis-ci.org/ThemeFuse/Unyson.svg?branch=master)](https://travis-ci.org/ThemeFuse/Unyson)
 
