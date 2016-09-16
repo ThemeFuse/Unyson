@@ -343,32 +343,31 @@ abstract class FW_Extension
 	 */
 	final public function get_options($name, array $variables = array())
 	{
-		$path = $this->locate_path('/options/'. $name .'.php');
+		try {
+			return FW_Cache::get($cache_key = $this->get_cache_key('/options/'. $name));
+		} catch (FW_Cache_Not_Found_Exception $e) {
+			if ($path = $this->locate_path('/options/'. $name .'.php')) {
+				$variables = fw_get_variables_from_file($path, array('options' => array()), $variables);
+			} else {
+				$variables = array('options' => array());
+			}
 
-		if (!$path) {
-			return array();
+			FW_Cache::set($cache_key, $variables['options']);
+
+			return $variables['options'];
 		}
-
-		$variables = fw_get_variables_from_file($path, array('options' => array()), $variables);
-
-		return $variables['options'];
 	}
 
 	final public function get_settings_options()
 	{
-		$cache_key = $this->get_cache_key() .'/settings_options';
-
 		try {
-			return FW_Cache::get($cache_key);
+			return FW_Cache::get($cache_key = $this->get_cache_key('/settings_options'));
 		} catch (FW_Cache_Not_Found_Exception $e) {
-			$path = $this->get_path('/settings-options.php');
-
-			if (!file_exists($path)) {
-				FW_Cache::set($cache_key, array());
-				return array();
+			if (file_exists($path = $this->get_path('/settings-options.php'))) {
+				$variables = fw_get_variables_from_file($path, array('options' => array()));
+			} else {
+				$variables = array('options' => array());
 			}
-
-			$variables = fw_get_variables_from_file($path, array('options' => array()));
 
 			FW_Cache::set($cache_key, $variables['options']);
 
