@@ -76,6 +76,12 @@ class FW_File_Cache {
 	}
 
 	private static function load() {
+		/**
+		 * Fixes https://github.com/ThemeFuse/Unyson/issues/2029
+		 * Disable entirely file-cache. Maybe in future somebody will find a solution.
+		 */
+		return false;
+
 		if ( is_null(self::$blog_id) ) {
 			self::$blog_id = get_current_blog_id();
 			self::reset();
