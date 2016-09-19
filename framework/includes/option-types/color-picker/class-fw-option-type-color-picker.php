@@ -81,10 +81,10 @@ class FW_Option_Type_Color_Picker extends FW_Option_Type
 				!preg_match('/^#[a-f0-9]{3}([a-f0-9]{3})?$/i', $input_value)
 			)
 		) {
-			$input_value = $option['value'];
+			return (string)$option['value'];
+		} else {
+			return (string)$input_value;
 		}
-
-		return (string)$input_value;
 	}
 
 	/**
@@ -102,7 +102,7 @@ class FW_Option_Type_Color_Picker extends FW_Option_Type
 	{
 		return array(
 			'value' => '',
-			'palettes'=> true
+			'palettes'=> true,
 		);
 	}
 }
