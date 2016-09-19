@@ -35,7 +35,7 @@
 				frame.on('content:render', function () {
 					var $view = this.first().frame.views.get('.media-frame-uploader')[0];
 
-					if(parsedFilesDetails.extra_mime_types.length > 0  && _.isArray(parsedFilesDetails.extra_mime_types)){
+					if (parsedFilesDetails.extra_mime_types.length > 0  && _.isArray(parsedFilesDetails.extra_mime_types)) {
 						_.each(parsedFilesDetails.extra_mime_types, function(mime_type){
 							mOxie.Mime.addMimeType(mime_type);
 						});
@@ -73,7 +73,9 @@
 
 				frame.on('select', function() {
 					var attachment = frame.state().get('selection').first();
-					elements.$input.val(attachment.id);
+					elements.$input
+						.val(attachment.id)
+						.trigger('change'); // trigger Customizer update
 					performSelection(attachment);
 				});
 			};
@@ -90,7 +92,9 @@
 
 		elements.$deleteButton.on('click', function(e) {
 			clearAttachment();
-			elements.$input.val('');
+			elements
+				.$input.val('')
+				.trigger('change'); // trigger Customizer update
 			e.preventDefault();
 		});
 

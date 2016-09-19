@@ -84,7 +84,9 @@
 
 			frame.on('select', function() {
 				var attachment = frame.state().get('selection').first();
-				elements.$input.val(attachment.id);
+				elements.$input
+					.val(attachment.id)
+					.trigger('change'); // trigger Customizer update
 				performSelection(attachment);
 			});
 		};
@@ -106,7 +108,9 @@
 		elements.$thumb.on('click', '.clear-uploads-thumb', function(e) {
 			clearAttachment();
 
-			elements.$input.val('');
+			elements.$input
+				.val('')
+				.trigger('change'); // trigger Customizer update
 
 			e.preventDefault();
 		});
@@ -169,7 +173,9 @@
 							'data-origsrc': attachment.get('url')
 						});
 
-			elements.$urlInput.val(attachment.get('url'));
+			elements.$urlInput
+				.val(attachment.get('url'))
+				.trigger('change'); // trigger Customizer update
 			elements.$container.removeClass('empty');
 
 			fwe.trigger('fw:option-type:upload:change', {
