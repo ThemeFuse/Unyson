@@ -2,6 +2,11 @@
 
 class FW_Option_Type_Addable_Popup extends FW_Option_Type
 {
+	public function get_type()
+	{
+		return 'addable-popup';
+	}
+
 	public function _get_backend_width_type()
 	{
 		return 'fixed';
@@ -15,17 +20,23 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 	{
 		static $enqueue = true;
 
+		/**
+		 * Use hardcoded type because this class is extended and type is changed, but the paths must be the same
+		 * Fixes https://github.com/ThemeFuse/Unyson/issues/1769#issuecomment-247054955
+		 */
+		$option_type = 'addable-popup';
+
 		if ($enqueue) {
 			wp_enqueue_style(
-				'fw-option-' . $this->get_type(),
-				fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/css/styles.css'),
+				'fw-option-' . $option_type,
+				fw_get_framework_directory_uri('/includes/option-types/' . $option_type . '/static/css/styles.css'),
 				array('fw'),
 				fw()->manifest->get_version()
 			);
 
 			wp_enqueue_script(
-				'fw-option-' . $this->get_type(),
-				fw_get_framework_directory_uri('/includes/option-types/' . $this->get_type() . '/static/js/' . $this->get_type() . '.js'),
+				'fw-option-' . $option_type,
+				fw_get_framework_directory_uri('/includes/option-types/' . $option_type . '/static/js/scripts.js'),
 				array('underscore', 'fw-events', 'jquery-ui-sortable', 'fw'),
 				fw()->manifest->get_version(),
 				true
@@ -70,7 +81,7 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 		$sortable_image = fw_get_framework_directory_uri('/static/img/sort-vertically.png');
 
 		return fw_render_view(
-			fw_get_framework_directory('/includes/option-types/' . $this->get_type() . '/view.php'),
+			fw_get_framework_directory('/includes/option-types/addable-popup/view.php'),
 			compact('id', 'option', 'data', 'sortable_image')
 		);
 	}
@@ -100,15 +111,6 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 		}
 
 		return $new_options;
-	}
-
-	/**
-	 * Option's unique type, used in option array in 'type' key
-	 * @return string
-	 */
-	public function get_type()
-	{
-		return 'addable-popup';
 	}
 
 	/**
@@ -192,3 +194,26 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 }
 
 FW_Option_Type::register('FW_Option_Type_Addable_Popup');
+
+class FW_Option_Type_Addable_Popup_Full extends FW_Option_Type_Addable_Popup
+{
+	public function get_type()
+	{
+		return 'addable-popup-full';
+	}
+
+	public function _get_backend_width_type()
+	{
+		return 'full';
+	}
+
+	protected function _render($id, $option, $data)
+	{
+		// Use styles and scripts from parent option
+		$option['attr']['class'] .= ' fw-option-type-addable-popup';
+
+		return parent::_render($id, $option, $data);
+	}
+}
+
+FW_Option_Type::register('FW_Option_Type_Addable_Popup_Full');
