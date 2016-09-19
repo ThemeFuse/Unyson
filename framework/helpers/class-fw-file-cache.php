@@ -133,7 +133,9 @@ class FW_File_Cache {
 			return false; // cannot create the file
 		}
 
+		ob_start(); // suppress warning
 		self::$cache = @include($path); // use @ because this file contains unterminated comment /*
+		ob_end_clean();
 
 		// check the loaded cache
 		{
