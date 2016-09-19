@@ -75,7 +75,7 @@ class FW_Option_Type_Color_Picker extends FW_Option_Type
 			is_null($input_value)
 			||
 			(
-				!is_null($input_value)
+				!empty($input_value)
 				&&
 				!preg_match('/^#[a-f0-9]{3}([a-f0-9]{3})?$/i', $input_value)
 			)
