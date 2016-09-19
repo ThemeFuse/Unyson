@@ -53,7 +53,7 @@ class FW_Option_Type_Rgba_Color_Picker extends FW_Option_Type {
 	 * @internal
 	 */
 	protected function _render( $id, $option, $data ) {
-		$option['attr']['value'] = empty($data['value']) ? $option['value'] : $data['value'];
+		$option['attr']['value'] = $data['value'];
 		$option['attr']['data-default'] = $option['value'];
 
 		$palettes = (bool) $option['palettes'];
