@@ -86,7 +86,7 @@ Yes; Unyson will work with any theme.
 = 2.6.6 =
 * Disabled File Cache [#2029](https://github.com/ThemeFuse/Unyson/issues/2029)
 * Added option-type `addable-popup-full` [#1769](https://github.com/ThemeFuse/Unyson/issues/1769#issuecomment-247054955)
-* Fixed [#2025](https://github.com/ThemeFuse/Unyson/issues/2025), [#2031](https://github.com/ThemeFuse/Unyson/issues/2031)
+* Fixed [#2034](https://github.com/ThemeFuse/Unyson/issues/2034), [#2025](https://github.com/ThemeFuse/Unyson/issues/2025), [#2031](https://github.com/ThemeFuse/Unyson/issues/2031)
 
 = 2.6.5 =
 * [Minor fixes](https://github.com/ThemeFuse/Unyson/compare/v2.6.4...v2.6.5)
