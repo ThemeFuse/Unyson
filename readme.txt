@@ -3,7 +3,7 @@ Contributors: unyson
 Tags: page builder, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 2.6.5
+Stable tag: 2.6.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,6 +82,11 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.6.6 =
+* Disabled File Cache [#2029](https://github.com/ThemeFuse/Unyson/issues/2029)
+* Added option-type `addable-popup-full` [#1769](https://github.com/ThemeFuse/Unyson/issues/1769#issuecomment-247054955)
+* Fixed [#2025](https://github.com/ThemeFuse/Unyson/issues/2025), [#2031](https://github.com/ThemeFuse/Unyson/issues/2031)
 
 = 2.6.5 =
 * [Minor fixes](https://github.com/ThemeFuse/Unyson/compare/v2.6.4...v2.6.5)
