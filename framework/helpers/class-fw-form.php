@@ -160,16 +160,30 @@ class FW_Form {
 		 * check nonce
 		 */
 		if ( $this->attr['method'] == 'post' ) {
-			$nonce_name = '_nonce_' . md5( $this->id );
+			$nonce_name = $this->get_nonce_name();
 
-			if ( ! isset( $_REQUEST[ $nonce_name ] ) || wp_verify_nonce( $_REQUEST[ $nonce_name ],
-					'submit_fwf' ) === false
+			if (
+				! isset( $_REQUEST[ $nonce_name ] )
+				||
+				wp_verify_nonce( $_REQUEST[ $nonce_name ], 'submit_fwf' ) === false
 			) {
 				$errors[ $nonce_name ] = __( 'Nonce verification failed', 'fw' );
 			}
 		}
 
 		$this->errors = $errors;
+	}
+
+	/**
+	 * Some forms (like Forms extension frontend form) uses the same FW_Form instance for all sub-forms
+	 * and they must be differentiated somehow.
+	 * Fixes https://github.com/ThemeFuse/Unyson/issues/2033
+	 * @param array $render_data
+	 * @return string
+	 * @since 2.6.6
+	 */
+	private function get_nonce_name($render_data = array()) {
+		return '_nonce_' . md5( $this->id . apply_filters('fw:form:nonce-name-data', '', $this, $render_data) );
 	}
 
 	protected function save() {
@@ -227,7 +241,7 @@ class FW_Form {
 			$this->validate_and_save_called = true;
 		}
 
-		if ( ! $this->is_submitted() ) {
+		if ( ! $this->is_submitted() || ! isset( $_POST[ $this->get_nonce_name() ] ) ) {
 			return null;
 		}
 
@@ -378,6 +392,10 @@ class FW_Form {
 
 			unset($submitted_form); // not needed anymore, below will be used only with $this (because it's the same form)
 
+			if ( ! isset( $_POST[ $this->get_nonce_name($render_data) ] )) {
+				break;
+			}
+
 			if ( $this->is_valid() ) {
 				break;
 			}
@@ -426,7 +444,7 @@ class FW_Form {
 		));
 
 		if ( $render_data['attr']['method'] == 'post' ) {
-			wp_nonce_field( 'submit_fwf', '_nonce_' . md5( $this->id ) );
+			wp_nonce_field( 'submit_fwf', $this->get_nonce_name($render_data) );
 		}
 
 		if ( ! empty( $render_data['attr']['action'] ) && $render_data['attr']['method'] == 'get' ) {
@@ -469,24 +487,24 @@ class FW_Form {
 	 * @return bool
 	 */
 	public function is_submitted() {
-		if ( is_null( $this->is_submitted ) ) {
-			$method = strtoupper( $this->attr( 'method' ) );
-
-			if ( $method === 'POST' ) {
-				$this->is_submitted = (
-					isset( $_POST[ self::$id_input_name ] )
-					&&
-					FW_Request::POST( self::$id_input_name ) === $this->id
-				);
-
-			} elseif ( $method === 'GET' ) {
-				$this->is_submitted = (
-					isset( $_GET[ self::$id_input_name ] )
-					&&
-					FW_Request::GET( self::$id_input_name ) === $this->id
-				);
-			} else {
-				$this->is_submitted = false;
+		if (is_null($this->is_submitted)) {
+			switch (strtoupper( $this->attr( 'method' ) )) {
+				case 'POST':
+					$this->is_submitted = (
+						isset( $_POST[ self::$id_input_name ] )
+						&&
+						FW_Request::POST( self::$id_input_name ) === $this->id
+					);
+					break;
+				case 'GET':
+					$this->is_submitted = (
+						isset( $_GET[ self::$id_input_name ] )
+						&&
+						FW_Request::GET( self::$id_input_name ) === $this->id
+					);
+					break;
+				default:
+					$this->is_submitted = false;
 			}
 		}
 
