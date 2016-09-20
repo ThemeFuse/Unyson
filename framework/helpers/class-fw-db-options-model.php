@@ -112,19 +112,13 @@ abstract class FW_Db_Options_Model {
 		}
 
 		try {
-			/**
-			 * Cached because values are merged with extracted default values
-			 */
+			// Cached because values are merged with extracted default values
 			$values = FW_Cache::get($cache_key_values = $this->get_cache_key('values', $item_id, $extra_data));
-
-			$values_loaded = false;
 		} catch (FW_Cache_Not_Found_Exception $e) {
 			FW_Cache::set(
 				$cache_key_values,
-				$values = is_array($values = $this->get_values($item_id, $extra_data)) ? $values : array()
+				$values = (is_array($values = $this->get_values($item_id, $extra_data)) ? $values : array())
 			);
-
-			$values_loaded = true;
 		}
 
 		/**
@@ -156,25 +150,31 @@ abstract class FW_Db_Options_Model {
 			FW_Cache::set($cache_key, $options = fw_extract_only_options($this->get_options($item_id, $extra_data)));
 		}
 
-		if ($values_loaded && $options) {
-			/**
-			 * Complete missing db values with default values from options array
-			 */
-			$values = array_merge(
-				fw_get_options_values_from_input($options, array()),
-				$values
-			);
-
-			foreach ($options as $id => $option) {
-				$values[$id] = fw()->backend->option_type($option['type'])->storage_load(
-					$id,
-					$option,
-					isset($values[$id]) ? $values[$id] : null,
-					$this->get_fw_storage_params($item_id, $extra_data)
+		if ($options) {
+			try {
+				FW_Cache::get(
+					// fixes https://github.com/ThemeFuse/Unyson/issues/2034
+					$cache_key_values_processed = $this->get_cache_key('values:processed', $item_id, $extra_data)
 				);
-			}
+			} catch (FW_Cache_Not_Found_Exception $e) {
+				// Complete missing db values with default values from options array
+				$values = array_merge(
+					fw_get_options_values_from_input($options, array()),
+					$values
+				);
 
-			FW_Cache::set($cache_key_values, $values);
+				foreach ($options as $id => $option) {
+					$values[$id] = fw()->backend->option_type($option['type'])->storage_load(
+						$id,
+						$option,
+						isset($values[$id]) ? $values[$id] : null,
+						$this->get_fw_storage_params($item_id, $extra_data)
+					);
+				}
+
+				FW_Cache::set($cache_key_values, $values);
+				FW_Cache::set($cache_key_values_processed, true);
+			}
 		}
 
 		if (empty($option_id)) {
@@ -190,6 +190,7 @@ abstract class FW_Db_Options_Model {
 
 	final public function set( $item_id = null, $option_id = null, $value, array $extra_data = array() ) {
 		FW_Cache::del($cache_key_values = $this->get_cache_key('values', $item_id, $extra_data));
+		FW_Cache::del($cache_key_values_processed = $this->get_cache_key('values:processed', $item_id, $extra_data));
 
 		try {
 			$options = FW_Cache::get($cache_key = $this->get_cache_key('options', $item_id, $extra_data));
@@ -255,6 +256,7 @@ abstract class FW_Db_Options_Model {
 		}
 
 		FW_Cache::del($cache_key_values); // fixes https://github.com/ThemeFuse/Unyson/issues/1538
+		FW_Cache::del($cache_key_values_processed);
 
 		$this->_after_set($item_id, $option_id, $sub_keys, $old_value, $extra_data);
 	}
