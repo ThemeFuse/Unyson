@@ -26,6 +26,7 @@ if (defined('FW')) {
 
 		// these are required when fw() is executed below
 		{
+			require $fw_dir .'/helpers/class-fw-dumper.php';
 			require $fw_dir .'/helpers/general.php';
 			require $fw_dir .'/helpers/class-fw-cache.php';
 		}
@@ -46,7 +47,7 @@ if (defined('FW')) {
 			array(
 				'meta',
 				'class-fw-access-key',
-				'class-fw-dumper',
+				// 'class-fw-dumper', // included below
 				// 'general', // included below
 				'class-fw-wp-filesystem',
 				// 'class-fw-cache', // included below
