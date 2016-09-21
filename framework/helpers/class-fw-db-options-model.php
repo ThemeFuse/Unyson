@@ -157,6 +157,10 @@ abstract class FW_Db_Options_Model {
 					$cache_key_values_processed = $this->get_cache_key('values:processed', $item_id, $extra_data)
 				);
 			} catch (FW_Cache_Not_Found_Exception $e) {
+				/**
+				 * Set cache value before processing options
+				 * Fixes https://github.com/ThemeFuse/Unyson/issues/2034#issuecomment-248571149
+				 */
 				FW_Cache::set($cache_key_values_processed, true);
 
 				// Complete missing db values with default values from options array
