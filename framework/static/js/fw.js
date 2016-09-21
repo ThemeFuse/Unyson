@@ -1067,6 +1067,11 @@ fw.getValuesFromServer = function (data) {
 							return;
 						}
 
+						/**
+						 * Make sure the second set() will trigger the 'change' event
+						 * Fixes https://github.com/ThemeFuse/Unyson/issues/1998#issuecomment-248671721
+						 */
+						view.model.set('values', {}, {silent: true});
 						view.model.set('values', response.data.values);
 
 						if (! view.model.frame.$el.hasClass('fw-options-modal-no-close')) {
