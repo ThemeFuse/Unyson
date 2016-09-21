@@ -157,6 +157,8 @@ abstract class FW_Db_Options_Model {
 					$cache_key_values_processed = $this->get_cache_key('values:processed', $item_id, $extra_data)
 				);
 			} catch (FW_Cache_Not_Found_Exception $e) {
+				FW_Cache::set($cache_key_values_processed, true);
+
 				// Complete missing db values with default values from options array
 				$values = array_merge(
 					fw_get_options_values_from_input($options, array()),
@@ -173,7 +175,6 @@ abstract class FW_Db_Options_Model {
 				}
 
 				FW_Cache::set($cache_key_values, $values);
-				FW_Cache::set($cache_key_values_processed, true);
 			}
 		}
 
