@@ -1581,6 +1581,18 @@ final class _FW_Component_Backend {
 			}
 		}
 	}
+	
+	/**
+	 * @internal
+	 * @param array $data
+	 */
+	public static function _callback_fw_collect_options_enqueue_static($data) {
+		if ($data['group'] === 'option') {
+			fw()->backend->option_type($data['option']['type'])->enqueue_static($data['id'], $data['option']);
+		} elseif ($data['group'] === 'container') {
+			fw()->backend->container_type($data['option']['type'])->enqueue_static($data['id'], $data['option']);
+		}
+	}
 
 	/**
 	 * Render option enclosed in backend design
