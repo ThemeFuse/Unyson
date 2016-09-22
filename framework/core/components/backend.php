@@ -1565,16 +1565,18 @@ final class _FW_Component_Backend {
 		$encode = json_encode( $options );
 		preg_match_all( '#"type":"(.+?)"#siu', $encode, $matches );
 
-		if( isset( $matches[1] ) ) {
-			foreach( $matches[1] as $type ) {
-				if( ! in_array( $type, $this->required_static ) ) {
-					if( array_key_exists($type, $this->container_types ) ) {
+		if ( isset( $matches[1] ) ) {
+			foreach ( $matches[1] as $type ) {
+				if ( ! isset( $this->required_static[$type] ) ) {
+					if ( isset( $this->container_types[$type] ) ) {
 						fw()->backend->container_type( $type )->enqueue_static();
-					} else {
+					}
+
+					if ( isset( $this->option_types[$type] ) ) {
 						fw()->backend->option_type( $type )->enqueue_static();
 					}
 
-					$this->required_static[] = $type;
+					$this->required_static[$type] = true;
 				}
 			}
 		}
