@@ -44,10 +44,6 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 
 			$enqueue = false;
 		}
-
-		fw()->backend->enqueue_options_static($option['popup-options']);
-
-		return true;
 	}
 
 	/**

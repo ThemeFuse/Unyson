@@ -36,10 +36,6 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 
 			$enqueue = false;
 		}
-
-		fw()->backend->enqueue_options_static($option['box-options']);
-
-		return true;
 	}
 
 	/*

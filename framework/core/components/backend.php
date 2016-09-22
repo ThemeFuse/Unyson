@@ -63,6 +63,12 @@ final class _FW_Component_Backend {
 	private $access_key;
 
 	/**
+	 * Contains all required container and option types.
+	 * @var array
+	 */
+	private $required_static = array();
+
+	/**
 	 * @internal
 	 */
 	public function _get_settings_page_slug() {
@@ -1527,7 +1533,7 @@ final class _FW_Component_Backend {
 	 */
 	public function enqueue_options_static( $options ) {
 		static $static_enqueue = true;
-		
+
 		if (
 			!doing_action('admin_enqueue_scripts')
 			&&
@@ -1547,36 +1553,30 @@ final class _FW_Component_Backend {
 			 */
 			if ($static_enqueue) {
 				$this->register_static();
-	
+
 				wp_enqueue_media();
 				wp_enqueue_style( 'fw-backend-options' );
 				wp_enqueue_script( 'fw-backend-options' );
-				
+
 				$static_enqueue = false;
 			}
 		}
 
-		$collected = array();
+		$encode = json_encode( $options );
+		preg_match_all( '#"type":"(.+?)"#siu', $encode, $matches );
 
-		fw_collect_options( $collected, $options, array(
-			'limit_option_types' => false,
-			'limit_container_types' => false,
-			'limit_level' => 0,
-			'callback' => array(__CLASS__, '_callback_fw_collect_options_enqueue_static'),
-		) );
+		if( isset( $matches[1] ) ) {
+			foreach( $matches[1] as $type ) {
+				if( ! in_array( $type, $this->required_static ) ) {
+					if( array_key_exists($type, $this->container_types ) ) {
+						fw()->backend->container_type( $type )->enqueue_static();
+					} else {
+						fw()->backend->option_type( $type )->enqueue_static();
+					}
 
-		unset($collected);
-	}
-
-	/**
-	 * @internal
-	 * @param array $data
-	 */
-	public static function _callback_fw_collect_options_enqueue_static($data) {
-		if ($data['group'] === 'option') {
-			fw()->backend->option_type($data['option']['type'])->enqueue_static($data['id'], $data['option']);
-		} elseif ($data['group'] === 'container') {
-			fw()->backend->container_type($data['option']['type'])->enqueue_static($data['id'], $data['option']);
+					$this->required_static[] = $type;
+				}
+			}
 		}
 	}
 
