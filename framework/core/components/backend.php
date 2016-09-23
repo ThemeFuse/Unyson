@@ -1562,6 +1562,10 @@ final class _FW_Component_Backend {
 			}
 		}
 
+		/**
+		 * Search option and container types with regular expresion.
+		 * @see https://github.com/ThemeFuse/Unyson/issues/2047
+		 */
 		$encode = json_encode( $options );
 		preg_match_all( '#"type":"(.+?)"#siu', $encode, $matches );
 
@@ -1581,7 +1585,7 @@ final class _FW_Component_Backend {
 			}
 		}
 	}
-	
+
 	/**
 	 * @internal
 	 * @param array $data
