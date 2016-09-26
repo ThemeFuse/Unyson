@@ -558,6 +558,13 @@ class FW_Db_Options_Model_Customizer extends FW_Db_Options_Model {
 		));
 	}
 
+	/**
+	 * @internal
+	 */
+	public function _reset_cache() {
+		FW_Cache::del($this->get_main_cache_key());
+	}
+
 	protected function _init() {
 		/**
 		 * Get a customizer framework option value from the database
@@ -580,6 +587,9 @@ class FW_Db_Options_Model_Customizer extends FW_Db_Options_Model {
 		function fw_set_db_customizer_option( $option_id = null, $value ) {
 			FW_Db_Options_Model::_get_instance('customizer')->set(null, $option_id, $value);
 		}
+
+		// Fixes https://github.com/ThemeFuse/Unyson/issues/2053
+		add_action('customize_preview_init', array($this, '_reset_cache'));
 	}
 }
 new FW_Db_Options_Model_Customizer();

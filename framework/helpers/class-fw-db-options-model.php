@@ -77,6 +77,14 @@ abstract class FW_Db_Options_Model {
 		return self::$instances[$id];
 	}
 
+	/**
+	 * @return string
+	 * @since 2.6.7
+	 */
+	final public function get_main_cache_key() {
+		return 'fw-options-model:'. $this->get_id();
+	}
+
 	final public function __construct() {
 		if (isset(self::$instances[ $this->get_id() ])) {
 			trigger_error(__CLASS__ .' with id "'. $this->get_id() .'" was already defined', E_USER_ERROR);
@@ -90,7 +98,7 @@ abstract class FW_Db_Options_Model {
 	private function get_cache_key($key, $item_id, array $extra_data = array()) {
 		$item_key = $this->_get_cache_key($key, $item_id, $extra_data);
 
-		return 'fw-options-model:'. $this->get_id() .'/'. $key . (empty($item_key) ? '' : '/'. $item_key);
+		return $this->get_main_cache_key() .'/'. $key . (empty($item_key) ? '' : '/'. $item_key);
 	}
 
 	/**
