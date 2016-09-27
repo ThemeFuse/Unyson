@@ -35,9 +35,11 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 	protected function _enqueue_static($id, $option, $data)
 	{
 		add_action(
-			'admin_footer',
+			'admin_print_scripts',
 			array($this, 'load_templates')
 		);
+
+		wp_enqueue_media();
 
 		$this->packs_loader->enqueue_admin_css();
 
