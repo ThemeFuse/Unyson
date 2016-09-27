@@ -17,6 +17,8 @@ function _action_fw_theme_settings_footer_scripts() {
 		(function ($) {
 			var fwLoadingId = 'fw-theme-settings';
 
+			<?php if (wp_script_is('fw-option-types')): ?>
+			// there are options on the page. show loading now and hide it after the options were initialized
 			{
 				fw.loading.show(fwLoadingId);
 
@@ -24,6 +26,7 @@ function _action_fw_theme_settings_footer_scripts() {
 					fw.loading.hide(fwLoadingId);
 				});
 			}
+			<?php endif; ?>
 
 			$(function ($) {
 				$(document.body).on({
