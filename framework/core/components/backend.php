@@ -1169,7 +1169,7 @@ final class _FW_Component_Backend {
 		 */
 		{
 			if (
-				'edit-tags' === $current_screen->base
+				in_array($current_screen->base, array('edit-tags', 'term'), true)
 				&&
 				$current_screen->taxonomy
 			) {
