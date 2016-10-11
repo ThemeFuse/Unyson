@@ -589,7 +589,9 @@ class FW_Db_Options_Model_Customizer extends FW_Db_Options_Model {
 		}
 
 		// Fixes https://github.com/ThemeFuse/Unyson/issues/2053
-		add_action('customize_preview_init', array($this, '_reset_cache'));
+		add_action('customize_preview_init', array($this, '_reset_cache'),
+			1 // Fixes https://github.com/ThemeFuse/Unyson/issues/2104
+		);
 	}
 }
 new FW_Db_Options_Model_Customizer();
@@ -638,7 +640,8 @@ new FW_Db_Options_Model_Customizer();
 
 			return false;
 		}
-		$data                    = get_user_meta( $user_id, 'fw_data', true );
+
+		$data = get_user_meta( $user_id, 'fw_data', true );
 
 		if ( $keys == null ) {
 			fw_aks( $extension_name, $value, $data );
