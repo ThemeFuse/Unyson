@@ -219,19 +219,18 @@ class FW_Option_Type_Multi_Upload extends FW_Option_Type
 		if (empty($input_value)) {
 			return $option['value'];
 		} else {
-			return $this->get_attachments_info($input_value);
+			return $this->get_attachments_info($input_value, $option);
 		}
 	}
 
-	private function get_attachments_info($attachment_ids)
+	private function get_attachments_info($attachment_ids, $option)
 	{
-		$decoded_ids = json_decode($attachment_ids, true);
-		if (
-			!is_array($decoded_ids) ||
-			empty($decoded_ids)
-		) {
-			$defaults = $this->get_defaults();
-			return $defaults['value'];
+		if (!(
+			is_string($attachment_ids)
+			&&
+			is_array($decoded_ids = json_decode($attachment_ids, true))
+		)) {
+			return $option['value'];
 		}
 
 		$return_arr = array();
