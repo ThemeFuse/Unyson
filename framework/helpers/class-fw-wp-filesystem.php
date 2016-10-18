@@ -309,4 +309,16 @@ class FW_WP_Filesystem
 
 		return true;
 	}
+
+	/**
+	 * If is initialized and has no errors
+	 * @return bool
+	 * @since 2.6.8
+	 */
+	public static function is_ready() {
+		/** @var WP_Filesystem_Base $wp_filesystem */
+		global $wp_filesystem;
+
+		return $wp_filesystem && is_wp_error($wp_filesystem->errors) && !$wp_filesystem->errors->get_error_code();
+	}
 }
