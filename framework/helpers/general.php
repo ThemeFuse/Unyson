@@ -531,6 +531,13 @@ function fw_locate_theme_path($rel_path) {
 }
 
 /**
+ * There is a theme which does: if (!defined('FW')): function fw_render_view() { ... } endif;
+ * It works fine, except in this case
+ * https://github.com/ThemeFuse/Unyson/commit/07be8b1f4b50eaf0f1f7e85ea1c6912a0415d241#diff-cf866bf08b8f747e3120221a6b1b07cfR48
+ * it throws fatal error because this function here is defined after that
+ */
+if (!function_exists('fw_render_view')):
+/**
  * Safe render a view and return html
  * In view will be accessible only passed variables
  * Use this function to not include files directly and to not give access to current context variables (like $this)
@@ -551,6 +558,7 @@ function fw_render_view($file_path, $view_variables = array(), $return = true) {
 		require $file_path;
 	}
 }
+endif;
 
 /**
  * Safe load variables from an file
