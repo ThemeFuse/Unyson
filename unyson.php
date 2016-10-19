@@ -39,6 +39,17 @@ if (defined('FW')) {
 		/** @internal */
 		function _action_fw_plugin_activate() {
 			update_option('_fw_plugin_activated', true, false); // add special option (is used in another action)
+
+			if (
+				did_action('after_setup_theme') // @see framework/bootstrap.php
+				&&
+				!did_action('fw_init') // must not be loaded
+			) {
+				_action_init_framework(); // load (prematurely) the plugin
+
+				/** @since 2.6.8 */
+				do_action('fw_plugin_activate');
+			}
 		}
 		register_activation_hook( __FILE__, '_action_fw_plugin_activate' );
 

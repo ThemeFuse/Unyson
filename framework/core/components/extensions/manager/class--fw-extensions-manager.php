@@ -55,6 +55,7 @@ final class _FW_Extensions_Manager
 			add_action('upgrader_process_complete', array($this, '_action_theme_available_extensions_restore'), 999, 2);
 		}
 
+		add_action('fw_plugin_activate', array($this, '_action_plugin_activate_install_compatible_extensions'), 100);
 		add_action('fw_after_plugin_activate', array($this, '_action_after_plugin_activate'), 100);
 		add_action('after_switch_theme', array($this, '_action_theme_switch'));
 
@@ -3446,6 +3447,25 @@ final class _FW_Extensions_Manager
 			)
 		) {
 			fw()->extensions->manager->theme_available_extensions_restore();
+		}
+	}
+
+	/**
+	 * Install compatible extensions on plugin install -> activate
+	 *
+	 * In order for this to work, int TGM config must be set: 'is_automatic' => true
+	 * http://tgmpluginactivation.com/configuration/
+	 *
+	 * @internal
+	 */
+	public function _action_plugin_activate_install_compatible_extensions() {
+		if (!FW_WP_Filesystem::is_ready()) {
+			return;
+		}
+
+		if ($compatible_extensions = $this->get_supported_extensions_for_install()) {
+			$this->install_extensions($compatible_extensions);
+			// the result is not used because we don't know here if we can print the errors or not
 		}
 	}
 }
