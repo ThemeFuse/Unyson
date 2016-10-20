@@ -145,7 +145,7 @@ class FW_WP_Filesystem
 		$real_path = fw_fix_path($real_path);
 
 		foreach (self::get_base_dirs_map() as $base_real_path => $base_wp_filesystem_path) {
-			$prefix_regex = '/^'. preg_quote($base_real_path, '/') .'/';
+			$prefix_regex = '/^'. preg_quote($base_real_path, '/') .'\//';
 
 			// check if path is inside base path
 			if (!preg_match($prefix_regex, $real_path)) {
@@ -182,7 +182,7 @@ class FW_WP_Filesystem
 		$wp_filesystem_path = fw_fix_path($wp_filesystem_path);
 
 		foreach (self::get_base_dirs_map() as $base_real_path => $base_wp_filesystem_path) {
-			$prefix_regex = '/^'. preg_quote($base_wp_filesystem_path, '/') .'/';
+			$prefix_regex = '/^'. preg_quote($base_wp_filesystem_path, '/') .'\//';
 
 			// check if path is inside base path
 			if (!preg_match($prefix_regex, $wp_filesystem_path)) {
@@ -254,7 +254,7 @@ class FW_WP_Filesystem
 		$path = false;
 
 		foreach (self::get_base_dirs_map() as $base_real_path => $base_wp_filesystem_path) {
-			$prefix_regex = '/^'. preg_quote($base_wp_filesystem_path, '/') .'/';
+			$prefix_regex = '/^'. preg_quote($base_wp_filesystem_path, '/') .'\//';
 
 			// check if path is inside base path
 			if (!preg_match($prefix_regex, $wp_filesystem_dir_path)) {
