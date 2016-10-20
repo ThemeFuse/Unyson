@@ -27,6 +27,7 @@
 .fw-icon-v2-preview i {
     color: #7a7a7a;
     background-repeat: no-repeat;
+    line-height: 1em;
 }
 
 .fw-icon-v2-preview a {
@@ -145,7 +146,7 @@
 
 .fw-icon-v2-picker-modal .fw-icon-v2-library-packs-wrapper {
     overflow-y: auto;
-    overflow-x: hidden; 
+    overflow-x: hidden;
     padding: 0 20px;
 }
 
