@@ -400,7 +400,7 @@ final class _FW_Extensions_Manager
 		/** @var WP_Filesystem_Base $wp_filesystem */
 		global $wp_filesystem;
 
-		if (!$wp_filesystem || (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code())) {
+		if (!FW_WP_Filesystem::is_ready()) {
 			return;
 		}
 
@@ -449,7 +449,7 @@ final class _FW_Extensions_Manager
 		/** @var WP_Filesystem_Base $wp_filesystem */
 		global $wp_filesystem;
 
-		if ( !$wp_filesystem || (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code()) ) {
+		if (!FW_WP_Filesystem::is_ready()) {
 			return;
 		}
 
@@ -1125,7 +1125,7 @@ final class _FW_Extensions_Manager
 
 		global $wp_filesystem;
 
-		if (!$wp_filesystem || (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code())) {
+		if (!FW_WP_Filesystem::is_ready()) {
 			return new WP_Error(
 				'fs_not_initialized',
 				__('WP Filesystem is not initialized', 'fw')
@@ -1610,7 +1610,7 @@ final class _FW_Extensions_Manager
 		/** @var WP_Filesystem_Base $wp_filesystem */
 		global $wp_filesystem;
 
-		if (!$wp_filesystem || (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code())) {
+		if (!FW_WP_Filesystem::is_ready()) {
 			return new WP_Error(
 				'fs_not_initialized',
 				__('WP Filesystem is not initialized', 'fw')
@@ -3238,7 +3238,7 @@ final class _FW_Extensions_Manager
 		/** @var WP_Filesystem_Base $wp_filesystem */
 		global $wp_filesystem;
 
-		if (!$wp_filesystem || (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code())) {
+		if (!FW_WP_Filesystem::is_ready()) {
 			return new WP_Error(
 				'fs_not_initialized',
 				__('WP Filesystem is not initialized', 'fw')
@@ -3328,7 +3328,7 @@ final class _FW_Extensions_Manager
 		/** @var WP_Filesystem_Base $wp_filesystem */
 		global $wp_filesystem;
 
-		if (!$wp_filesystem || (is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code())) {
+		if (!FW_WP_Filesystem::is_ready()) {
 			return new WP_Error(
 				'fs_not_initialized',
 				__('WP Filesystem is not initialized', 'fw')
