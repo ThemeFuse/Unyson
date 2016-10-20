@@ -145,7 +145,7 @@ class FW_WP_Filesystem
 		$real_path = fw_fix_path($real_path);
 
 		foreach (self::get_base_dirs_map() as $base_real_path => $base_wp_filesystem_path) {
-			$prefix_regex = '/^'. preg_quote($base_real_path, '/') .'\//';
+			$prefix_regex = '/^'. preg_quote($base_real_path, '/') .'($|\/.*)/';
 
 			// check if path is inside base path
 			if (!preg_match($prefix_regex, $real_path)) {
@@ -155,7 +155,7 @@ class FW_WP_Filesystem
 			if ($base_real_path === '/') {
 				$relative_path = $real_path;
 			} else {
-				$relative_path = preg_replace($prefix_regex, '', $real_path);
+				$relative_path = preg_replace($prefix_regex, '$1', $real_path);
 			}
 
 			return $base_wp_filesystem_path . $relative_path;
@@ -182,7 +182,7 @@ class FW_WP_Filesystem
 		$wp_filesystem_path = fw_fix_path($wp_filesystem_path);
 
 		foreach (self::get_base_dirs_map() as $base_real_path => $base_wp_filesystem_path) {
-			$prefix_regex = '/^'. preg_quote($base_wp_filesystem_path, '/') .'\//';
+			$prefix_regex = '/^'. preg_quote($base_wp_filesystem_path, '/') .'($|\/.*)/';
 
 			// check if path is inside base path
 			if (!preg_match($prefix_regex, $wp_filesystem_path)) {
@@ -192,7 +192,7 @@ class FW_WP_Filesystem
 			if ($base_wp_filesystem_path === '/') {
 				$relative_path = $wp_filesystem_path;
 			} else {
-				$relative_path = preg_replace($prefix_regex, '', $wp_filesystem_path);
+				$relative_path = preg_replace($prefix_regex, '$1', $wp_filesystem_path);
 			}
 
 			return $base_real_path . $relative_path;
@@ -254,7 +254,7 @@ class FW_WP_Filesystem
 		$path = false;
 
 		foreach (self::get_base_dirs_map() as $base_real_path => $base_wp_filesystem_path) {
-			$prefix_regex = '/^'. preg_quote($base_wp_filesystem_path, '/') .'\//';
+			$prefix_regex = '/^'. preg_quote($base_wp_filesystem_path, '/') .'($|\/)/';
 
 			// check if path is inside base path
 			if (!preg_match($prefix_regex, $wp_filesystem_dir_path)) {
@@ -280,7 +280,7 @@ class FW_WP_Filesystem
 		if ($path === '/') {
 			$rel_path = $wp_filesystem_dir_path;
 		} else {
-			$rel_path = preg_replace('/^'. preg_quote($path, '/') .'/', '', $wp_filesystem_dir_path);
+			$rel_path = preg_replace('/^'. preg_quote($path, '/') .'($|\/.*)/', '$1', $wp_filesystem_dir_path);
 		}
 
 		// improvement: do not check directory for existence if it's known that sure it doesn't exist
