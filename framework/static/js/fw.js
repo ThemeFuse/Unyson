@@ -734,11 +734,9 @@ fw.getQueryString = function(name) {
 
 			this.frame.once('ready', function(){
 				var $modalWrapper    = modal.frame.modal.$el,
-					$modal           = $modalWrapper.find('.media-modal'),
 					$backdrop        = $modalWrapper.find('.media-modal-backdrop'),
 					size             = modal.get('size'),
 					modalCustomClass = modal.get('modalCustomClass'),
-					stackSize        = modalsStack.getSize(),
 					$close           = $modalWrapper.find('.media-modal-close');
 
 				modal.frame.$el.addClass('hide-toolbar');
@@ -753,40 +751,6 @@ fw.getQueryString = function(name) {
 					$modalWrapper.addClass('fw-modal-' + size);
 				} else {
 					$modalWrapper.addClass('fw-modal-' + modal.defaults.size);
-				}
-
-				$modalWrapper.addClass('fw-modal-level-'+ stackSize);
-
-				if (stackSize) {
-					$modal.css({
-						border: (stackSize * 30) +'px solid transparent'
-					});
-				}
-
-				/**
-				 * Adjust the z-index for the new frame's backdrop and modal
-				 */
-				{
-					$backdrop.css('z-index',
-						/**
-						 * Use modal z-index because backdrop z-index in some cases can be too smaller
-						 * and when there are 2+ modals open, first modal will cover the second backdrop
-						 *
-						 * For e.g.
-						 *
-						 * - second modal | z-index: 560003
-						 * - second backdrop | z-index: 559902
-						 *
-						 * - first modal | z-index: 560002 (This will cover the above backdrop)
-						 * - first backdrop | z-index: 559901
-						 */
-						parseInt($modal.css('z-index'))
-						+ stackSize * 2 + 1
-					);
-					$modal.css('z-index',
-						parseInt($modal.css('z-index'))
-						+ stackSize * 2 + 2
-					);
 				}
 
 				/**
@@ -848,7 +812,54 @@ fw.getQueryString = function(name) {
 			});
 
 			this.frame.on('open', function() {
-				var $modalWrapper = modal.frame.modal.$el;
+				var $modalWrapper = modal.frame.modal.$el,
+					$modal = $modalWrapper.find('.media-modal'),
+					$backdrop = $modalWrapper.find('.media-modal-backdrop');
+
+				// Adjust modal level related properties
+				{
+					var stackSize = modalsStack.getSize();
+
+					$modalWrapper
+						.removeClass( // 'fw-modal-level-0 fw-modal-level-1 ...'
+							Array.apply(null, {length: 10})
+								.map(Number.call, Number)
+								.map(function(i){ return 'fw-modal-level-'+ i; })
+								.join(' ')
+						)
+						.addClass('fw-modal-level-'+ stackSize);
+
+					if (stackSize) {
+						$modal.css({
+							border: (stackSize * 30) +'px solid transparent'
+						});
+					}
+
+					/**
+					 * Adjust the z-index for the new frame's backdrop and modal
+					 */
+					$backdrop.css('z-index',
+						/**
+						 * Use modal z-index because backdrop z-index in some cases can be too smaller
+						 * and when there are 2+ modals open, first modal will cover the second backdrop
+						 *
+						 * For e.g.
+						 *
+						 * - second modal | z-index: 560003
+						 * - second backdrop | z-index: 559902
+						 *
+						 * - first modal | z-index: 560002 (This will cover the above backdrop)
+						 * - first backdrop | z-index: 559901
+						 */
+						parseInt($modal.css('z-index'))
+						+ stackSize * 2 + 1
+					);
+
+					$modal.css('z-index',
+						parseInt($modal.css('z-index'))
+						+ stackSize * 2 + 2
+					);
+				}
 
 				$modalWrapper.addClass('fw-modal-open');
 
