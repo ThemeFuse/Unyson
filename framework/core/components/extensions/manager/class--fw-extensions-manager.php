@@ -98,20 +98,16 @@ final class _FW_Extensions_Manager
 	 */
 	public function can_activate()
 	{
-		static $can_activate = null;
+		$can_activate = current_user_can('manage_options');
 
-		if ($can_activate === null) {
-			$can_activate = current_user_can('manage_options');
+		if ($can_activate) {
+			// also you can use this method to get the capability
+			$can_activate = 'manage_options';
+		}
 
-			if ($can_activate) {
-				// also you can use this method to get the capability
-				$can_activate = 'manage_options';
-			}
-
-			if (!$can_activate) {
-				// make sure if can install, then also can activate. (can install) > (can activate)
-				$can_activate = $this->can_install();
-			}
+		if (!$can_activate) {
+			// make sure if can install, then also can activate. (can install) > (can activate)
+			$can_activate = $this->can_install();
 		}
 
 		return $can_activate;
@@ -125,22 +121,18 @@ final class _FW_Extensions_Manager
 	 */
 	public function can_install()
 	{
-		static $can_install = null;
+		$capability = 'install_plugins';
 
-		if ($can_install === null) {
-			$capability = 'install_plugins';
+		if (is_multisite()) {
+			// only network admin can change files that affects the entire network
+			$can_install = current_user_can_for_blog(get_current_blog_id(), $capability);
+		} else {
+			$can_install = current_user_can($capability);
+		}
 
-			if (is_multisite()) {
-				// only network admin can change files that affects the entire network
-				$can_install = current_user_can_for_blog(get_current_blog_id(), $capability);
-			} else {
-				$can_install = current_user_can($capability);
-			}
-
-			if ($can_install) {
-				// also you can use this method to get the capability
-				$can_install = $capability;
-			}
+		if ($can_install) {
+			// also you can use this method to get the capability
+			$can_install = $capability;
 		}
 
 		return $can_install;
