@@ -377,6 +377,8 @@ final class _FW_Extensions_Manager
 			)
 		);
 
+		do_action('fw_after_plugin_activate:before_potential_redirect');
+
 		if (is_admin() && $this->can_install() && $this->get_supported_extensions_for_install()) {
 			wp_redirect($this->get_link() . '&sub-page=install&supported');
 			exit;
