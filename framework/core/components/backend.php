@@ -10,7 +10,7 @@ final class _FW_Component_Backend {
 	/** @var callable */
 	private $print_meta_box_content_callback;
 
-	/** @var FW_Form */
+	/** @var FW_Settings_Form */
 	private $settings_form;
 
 	private $available_render_designs = array( 'default', 'taxonomy', 'customizer' );
@@ -143,11 +143,13 @@ final class _FW_Component_Backend {
 	 */
 	public function _init() {
 		if ( is_admin() ) {
-			$this->settings_form = new FW_Form('fw_settings', array(
-				'render' => array($this, '_settings_form_render'),
-				'validate' => array($this, '_settings_form_validate'),
-				'save' => array($this, '_settings_form_save'),
-			));
+			require_once dirname(__FILE__) .'/backend/class-fw-settings-form-theme.php';
+			$this->settings_form = new FW_Settings_Form_Theme('theme-settings');
+			$this->settings_form
+				->set_is_ajax_submit( fw()->theme->get_config('settings_form_ajax_submit') )
+				->set_is_side_tabs( fw()->theme->get_config('settings_form_side_tabs') )
+				->set_values( 'fw_get_db_settings_option' )
+				->set_string( 'title', __('Theme Settings', 'fw') );
 		}
 
 		$this->add_actions();
@@ -170,7 +172,6 @@ final class _FW_Component_Backend {
 
 	private function add_actions() {
 		if ( is_admin() ) {
-			add_action('admin_menu', array($this, '_action_admin_menu'));
 			add_action('add_meta_boxes', array($this, '_action_create_post_meta_boxes'), 10, 2);
 			add_action('init', array($this, '_action_init'), 20);
 			add_action('admin_enqueue_scripts', array($this, '_action_admin_register_scripts'),
@@ -495,83 +496,6 @@ final class _FW_Component_Backend {
 		$this->static_registered = true;
 	}
 
-	/**
-	 * @internal
-	 */
-	public function _action_admin_menu() {
-		$data = array(
-			'capability'       => 'manage_options',
-			'slug'             => $this->_get_settings_page_slug(),
-			'content_callback' => array( $this, '_print_settings_page' ),
-		);
-
-		if ( ! current_user_can( $data['capability'] ) ) {
-			return;
-		}
-
-		if ( ! fw()->theme->locate_path('/options/settings.php') ) {
-			return;
-		}
-
-		/**
-		 * Collect $hookname that contains $data['slug'] before the action
-		 * and skip them in verification after action
-		 */
-		{
-			global $_registered_pages;
-
-			$found_hooknames = array();
-
-			if ( ! empty( $_registered_pages ) ) {
-				foreach ( $_registered_pages as $hookname => $b ) {
-					if ( strpos( $hookname, $data['slug'] ) !== false ) {
-						$found_hooknames[ $hookname ] = true;
-					}
-				}
-			}
-		}
-
-		/**
-		 * Use this action if you what to add the settings page in a custom place in menu
-		 * Usage example http://pastebin.com/gvAjGRm1
-		 */
-		do_action( 'fw_backend_add_custom_settings_menu', $data );
-
-		/**
-		 * Check if settings menu was added in the action above
-		 */
-		{
-			$menu_exists = false;
-
-			if ( ! empty( $_registered_pages ) ) {
-				foreach ( $_registered_pages as $hookname => $b ) {
-					if ( isset( $found_hooknames[ $hookname ] ) ) {
-						continue;
-					}
-
-					if ( strpos( $hookname, $data['slug'] ) !== false ) {
-						$menu_exists = true;
-						break;
-					}
-				}
-			}
-		}
-
-		if ( $menu_exists ) {
-			return;
-		}
-
-		add_theme_page(
-			__( 'Theme Settings', 'fw' ),
-			__( 'Theme Settings', 'fw' ),
-			$data['capability'],
-			$data['slug'],
-			$data['content_callback']
-		);
-
-		add_action( 'admin_menu', array( $this, '_action_admin_change_theme_settings_order' ), 9999 );
-	}
-
 	public function _filter_admin_footer_text( $html ) {
 		if (
 			(
@@ -637,69 +561,6 @@ final class _FW_Component_Backend {
 		} else {
 			return $html;
 		}
-	}
-
-	public function _action_admin_change_theme_settings_order() {
-		global $submenu;
-
-		if ( ! isset( $submenu['themes.php'] ) ) {
-			// probably current user doesn't have this item in menu
-			return;
-		}
-
-		$id    = $this->_get_settings_page_slug();
-		$index = null;
-
-		foreach ( $submenu['themes.php'] as $key => $sm ) {
-			if ( $sm[2] == $id ) {
-				$index = $key;
-				break;
-			}
-		}
-
-		if ( ! empty( $index ) ) {
-			$item = $submenu['themes.php'][ $index ];
-			unset( $submenu['themes.php'][ $index ] );
-			array_unshift( $submenu['themes.php'], $item );
-		}
-	}
-
-	public function _print_settings_page() {
-		echo '<div class="wrap">';
-
-		if ( fw()->theme->get_config( 'settings_form_side_tabs' ) ) {
-			// this is needed for flash messages (admin notices) to be displayed properly
-			echo '<h2 class="fw-hidden"></h2>';
-		} else {
-			$title = __( 'Theme Settings', 'fw' );
-
-			// Extract page title from menu title
-			do {
-				global $menu, $submenu;
-
-				foreach ($menu as $_menu) {
-					if ($_menu[2] === $this->_get_settings_page_slug()) {
-						$title = $_menu[0];
-						break 2;
-					}
-				}
-
-				foreach ($submenu as $_menu) {
-					foreach ($_menu as $_submenu) {
-						if ($_submenu[2] === $this->_get_settings_page_slug()) {
-							$title = $_submenu[0];
-							break 3;
-						}
-					}
-				}
-			} while(false);
-
-			echo '<h2>' . esc_html($title) . '</h2><br/>';
-		}
-
-		$this->settings_form->render();
-
-		echo '</div>';
 	}
 
 	/**
@@ -1140,16 +1001,8 @@ final class _FW_Component_Backend {
 
 		/**
 		 * Enqueue settings options static in <head>
+		 * @see FW_Settings_Form_Theme::_action_admin_enqueue_scripts()
 		 */
-		{
-			if ( $this->_get_settings_page_slug() === $plugin_page ) {
-				fw()->backend->enqueue_options_static(
-					fw()->theme->get_settings_options()
-				);
-
-				do_action( 'fw_admin_enqueue_scripts:settings' );
-			}
-		}
 
 		/**
 		 * Enqueue post options static in <head>
@@ -1281,108 +1134,6 @@ final class _FW_Component_Backend {
 				FW_Request::POST( fw_html_attr_name_to_array_multi_key( $name_prefix ), array() )
 			)
 		) );
-	}
-
-	public function _settings_form_render( $data ) {
-		{
-			$this->enqueue_options_static( array() );
-
-			wp_enqueue_script( 'fw-form-helpers' );
-		}
-
-		$options = fw()->theme->get_settings_options();
-
-		if ( empty( $options ) ) {
-			return $data;
-		}
-
-		if ( $values = FW_Request::POST( $this->get_options_name_attr_prefix() ) ) {
-			// This is form submit, extract correct values from $_POST values
-			$values = fw_get_options_values_from_input( $options, $values );
-		} else {
-			// Extract previously saved correct values
-			$values = fw_get_db_settings_option();
-		}
-
-		$ajax_submit = fw()->theme->get_config( 'settings_form_ajax_submit' );
-		$side_tabs   = fw()->theme->get_config( 'settings_form_side_tabs' );
-
-		$data['attr']['class'] = 'fw-settings-form';
-
-		if ( $side_tabs ) {
-			$data['attr']['class'] .= ' fw-backend-side-tabs';
-		}
-
-		$data['submit']['html'] = '<!-- -->'; // is generated in view
-
-		do_action( 'fw_settings_form_render', array(
-			'ajax_submit' => $ajax_submit,
-			'side_tabs'   => $side_tabs,
-		) );
-
-		fw_render_view( fw_get_framework_directory( '/views/backend-settings-form.php' ), array(
-			'options'              => $options,
-			'values'               => $values,
-			'reset_input_name'     => '_fw_reset_options',
-			'ajax_submit'          => $ajax_submit,
-			'side_tabs'            => $side_tabs,
-		), false );
-
-		return $data;
-	}
-
-	public function _settings_form_validate( $errors ) {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			$errors['_no_permission'] = __( 'You have no permissions to change settings options', 'fw' );
-		}
-
-		return $errors;
-	}
-
-	public function _settings_form_save( $data ) {
-		$flash_id   = 'fw_settings_form_save';
-		$old_values = (array) fw_get_db_settings_option();
-
-		if ( ! empty( $_POST['_fw_reset_options'] ) ) { // The "Reset" button was pressed
-			fw_set_db_settings_option(
-				null,
-				/**
-				 * Some values that don't relate to design, like API credentials, are useful to not be wiped out.
-				 *
-				 * Usage:
-				 *
-				 * add_filter('fw_settings_form_reset:values', '_filter_add_persisted_option', 10, 2);
-				 * function _filter_add_persisted_option ($current_persisted, $old_values) {
-				 *   $value_to_persist = fw_akg('my/multi/key', $old_values);
-				 *   fw_aks('my/multi/key', $value_to_persist, $current_persisted);
-				 *
-				 *   return $current_persisted;
-				 * }
-				 */
-				apply_filters('fw_settings_form_reset:values', array(), $old_values)
-			);
-
-			FW_Flash_Messages::add( $flash_id, __( 'The options were successfully reset', 'fw' ), 'success' );
-
-			do_action( 'fw_settings_form_reset', $old_values );
-		} else { // The "Save" button was pressed
-			fw_set_db_settings_option(
-				null,
-				fw_get_options_values_from_input(
-					fw()->theme->get_settings_options()
-				)
-			);
-
-			FW_Flash_Messages::add( $flash_id, __( 'The options were successfully saved', 'fw' ), 'success' );
-
-			do_action( 'fw_settings_form_saved', $old_values );
-		}
-
-		$redirect_url = fw_current_url();
-
-		$data['redirect'] = $redirect_url;
-
-		return $data;
 	}
 
 	/**

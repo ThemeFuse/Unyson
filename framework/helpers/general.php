@@ -1,7 +1,5 @@
 <?php if (!defined('FW')) die('Forbidden');
-/**
- * Util functions
- */
+// Useful functions
 
 /**
  * Recursively find a key's value in array
@@ -1658,15 +1656,13 @@ function fw_get_mime_type_by_ext( $type = array() ) {
  * @return array
  */
 function fw_multi_ext2type( $ext_array = array() ) {
-
-	$type_collector = array();
+	$result = array();
 
 	foreach ( $ext_array as $ext ) {
-		$type = wp_ext2type( $ext );
-		if ( ! in_array( $type, $type_collector ) ) {
-			$type_collector[] = $type;
+		if ( ! in_array( $type = wp_ext2type( $ext ), $result ) ) {
+			$result[] = $type;
 		}
 	}
 
-	return $type_collector;
+	return $result;
 }

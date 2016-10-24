@@ -1,74 +1,16 @@
 <?php if (!defined('FW')) die('Forbidden');
 /**
- * @var array $options
+ * @var FW_Settings_Form $form
  * @var array $values
  * @var string $reset_input_name
- * @var bool $ajax_submit
- * @var bool $side_tabs
+ * @var string $fw_form_id
  */
 ?>
 
-<?php
-if (!function_exists('_action_fw_theme_settings_footer_scripts')):
-
-function _action_fw_theme_settings_footer_scripts() {
-	?>
-	<script type="text/javascript">
-		(function ($) {
-			var fwLoadingId = 'fw-theme-settings';
-
-			<?php if (wp_script_is('fw-option-types')): ?>
-			// there are options on the page. show loading now and hide it after the options were initialized
-			{
-				fw.loading.show(fwLoadingId);
-
-				fwEvents.one('fw:options:init', function (data) {
-					fw.loading.hide(fwLoadingId);
-				});
-			}
-			<?php endif; ?>
-
-			$(function ($) {
-				$(document.body).on({
-					'fw:settings-form:before-html-reset': function () {
-						fw.loading.show(fwLoadingId);
-					},
-					'fw:settings-form:reset': function () {
-						fw.loading.hide(fwLoadingId);
-					}
-				});
-			});
-		})(jQuery);
-	</script>
-<?php
-}
-add_action('admin_print_footer_scripts', '_action_fw_theme_settings_footer_scripts', 20);
-
-endif;
-
-$texts = apply_filters('fw_settings_form_texts', array(
-	'save_button' => __('Save Changes', 'fw'),
-	'reset_button' => __('Reset Options', 'fw'),
-));
-?>
-
-<?php if ($side_tabs): ?>
+<?php if ($form->get_is_side_tabs()): ?>
 	<div class="fw-settings-form-header fw-row">
 		<div class="fw-col-xs-12 fw-col-sm-6">
-			<h2><?php echo fw()->theme->manifest->get_name() ?>
-				<?php if (fw()->theme->manifest->get('author')): ?>
-					<?php
-					if (fw()->theme->manifest->get('author_uri')) {
-						echo fw_html_tag('a', array(
-							'href' => fw()->theme->manifest->get('author_uri'),
-							'target' => '_blank'
-						), '<small>'. __('by', 'fw') .' '. fw()->theme->manifest->get('author') .'</small>');
-					} else {
-						echo '<small>'. fw()->theme->manifest->get('author') .'</small>';
-					}
-					?>
-				<?php endif; ?>
-			</h2>
+			<h2><?php echo $form->get_string('title'); ?></h2>
 		</div>
 		<div class="fw-col-xs-12 fw-col-sm-6">
 			<div class="form-header-buttons">
@@ -93,13 +35,13 @@ $texts = apply_filters('fw_settings_form_texts', array(
 						fw_html_tag('input', array(
 							'type' => 'submit',
 							'name' => '_fw_reset_options',
-							'value' => $texts['reset_button'],
+							'value' => $form->get_string('reset_button'),
 							'class' => 'button-secondary button-large submit-button-reset',
 						)),
 						fw_html_tag('input', array(
 							'type' => 'submit',
 							'name' => '_fw_save_options',
-							'value' => $texts['save_button'],
+							'value' => $form->get_string('save_button'),
 							'class' => 'button-primary button-large submit-button-save',
 						))
 					))
@@ -110,30 +52,30 @@ $texts = apply_filters('fw_settings_form_texts', array(
 	</div>
 	<script type="text/javascript">
 		jQuery(function($){
-			fwEvents.on('fw:options:init', function(data){
+			fwEvents.one('fw:options:init', function(data){
 				data.$elements.find('.fw-settings-form-header:not(.initialized)').addClass('initialized');
 			});
 		});
 	</script>
 <?php endif; ?>
 
-<?php echo fw()->backend->render_options($options, $values); ?>
+<?php echo fw()->backend->render_options($form->get_options(), $values); ?>
 
 <div class="form-footer-buttons">
 <!-- This div is required to follow after options in order to have special styles in case options will contain tabs (css adjacent selector + ) -->
 <?php echo implode(
-	$side_tabs ? ' ' : ' &nbsp;&nbsp; ',
+	$form->get_is_side_tabs() ? ' ' : ' &nbsp;&nbsp; ',
 	apply_filters('fw_settings_form_footer_buttons', array(
 		fw_html_tag('input', array(
 			'type' => 'submit',
 			'name' => '_fw_save_options',
-			'value' => $texts['save_button'],
+			'value' => $form->get_string('save_button'),
 			'class' => 'button-primary button-large',
 		)),
 		fw_html_tag('input', array(
 			'type' => 'submit',
 			'name' => '_fw_reset_options',
-			'value' => $texts['reset_button'],
+			'value' => $form->get_string('reset_button'),
 			'class' => 'button-secondary button-large',
 		))
 	))
@@ -143,31 +85,35 @@ $texts = apply_filters('fw_settings_form_texts', array(
 <!-- reset warning -->
 <script type="text/javascript">
 	jQuery(function($){
-		$(document.body).on('click.fw-reset-warning', 'form[data-fw-form-id="fw_settings"] input[name="<?php echo esc_js($reset_input_name) ?>"]', function(e){
-			/**
-			 * on confirm() the submit input looses focus
-			 * fwForm.isAdminPage() must be able to select the input to send it in _POST
-			 * so use alternative solution http://stackoverflow.com/a/5721762
-			 */
-			{
-				$(this).closest('form').find('[clicked]:submit').removeAttr('clicked');
-				$(this).attr('clicked', '');
-			}
+		$(document.body).on(
+			'click.fw-reset-warning',
+			'form[data-fw-form-id="<?php echo esc_js($fw_form_id) ?>"] input[name="<?php echo esc_js($reset_input_name) ?>"]',
+			function(e){
+				/**
+				 * on confirm() the submit input looses focus
+				 * fwForm.isAdminPage() must be able to select the input to send it in _POST
+				 * so use alternative solution http://stackoverflow.com/a/5721762
+				 */
+				{
+					$(this).closest('form').find('[clicked]:submit').removeAttr('clicked');
+					$(this).attr('clicked', '');
+				}
 
-			if (!confirm('<?php
-				echo esc_js(__("Click OK to reset.\nAll settings will be lost and replaced with default settings!", 'fw'))
-			?>')) {
-				e.preventDefault();
-				$(this).removeAttr('clicked');
+				if (!confirm('<?php
+					echo esc_js(__("Click OK to reset.\nAll settings will be lost and replaced with default settings!", 'fw'))
+				?>')) {
+					e.preventDefault();
+					$(this).removeAttr('clicked');
+				}
 			}
-		});
+		);
 	});
 </script>
 <!-- end: reset warning -->
 
 <script type="text/javascript">
 	jQuery(function($){
-		var $form = $('form[data-fw-form-id="fw_settings"]:first'),
+		var $form = $('form[data-fw-form-id="<?php echo esc_js($fw_form_id) ?>"]:first'),
 			timeoutId = 0;
 
 		$form.on('change.fw_settings_form_delayed_change', function(){
@@ -182,7 +128,7 @@ $texts = apply_filters('fw_settings_form_texts', array(
 	});
 </script>
 
-<?php if ($ajax_submit): ?>
+<?php if ($form->get_is_ajax_submit()): ?>
 <!-- ajax submit -->
 <div id="fw-settings-form-ajax-save-extra-message"
      data-html="<?php echo fw_htmlspecialchars(apply_filters('fw_settings_form_ajax_save_loading_extra_message', '')) ?>"></div>
@@ -192,7 +138,7 @@ $texts = apply_filters('fw_settings_form_texts', array(
 			return $submitButton.length && $submitButton.attr('name') == '<?php echo esc_js($reset_input_name) ?>';
 		}
 
-		var formSelector = 'form[data-fw-form-id="fw_settings"]',
+		var formSelector = 'form[data-fw-form-id="<?php echo esc_js($fw_form_id) ?>"]',
 			loadingExtraMessage = $('#fw-settings-form-ajax-save-extra-message').attr('data-html');
 
 		$(formSelector).addClass('prevent-all-tabs-init'); // fixes https://github.com/ThemeFuse/Unyson/issues/1491
@@ -373,7 +319,7 @@ $texts = apply_filters('fw_settings_form_texts', array(
 <!-- end: ajax submit -->
 <?php endif; ?>
 
-<?php if ($side_tabs && apply_filters('fw:settings-form:side-tabs:open-all-boxes', true)): ?>
+<?php if ($form->get_is_side_tabs() && apply_filters('fw:settings-form:side-tabs:open-all-boxes', true)): ?>
 <!-- open all postboxes -->
 <script type="text/javascript">
 	jQuery(function ($) {

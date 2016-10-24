@@ -53,6 +53,7 @@ if (defined('FW')) {
 				// 'class-fw-cache', // included below
 				'class-fw-file-cache',
 				'class-fw-form',
+				'class-fw-settings-form',
 				'class-fw-request',
 				'class-fw-session',
 				'class-fw-wp-option',
