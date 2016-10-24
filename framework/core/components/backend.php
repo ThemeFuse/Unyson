@@ -145,11 +145,6 @@ final class _FW_Component_Backend {
 		if ( is_admin() ) {
 			require_once dirname(__FILE__) .'/backend/class-fw-settings-form-theme.php';
 			$this->settings_form = new FW_Settings_Form_Theme('theme-settings');
-			$this->settings_form
-				->set_is_ajax_submit( fw()->theme->get_config('settings_form_ajax_submit') )
-				->set_is_side_tabs( fw()->theme->get_config('settings_form_side_tabs') )
-				->set_values( 'fw_get_db_settings_option' )
-				->set_string( 'title', __('Theme Settings', 'fw') );
 		}
 
 		$this->add_actions();

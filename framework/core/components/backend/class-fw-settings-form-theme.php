@@ -6,15 +6,23 @@
  */
 class FW_Settings_Form_Theme extends FW_Settings_Form {
 	protected function _init() {
-		add_action('admin_init', array($this, '_action_get_title_from_menu'));
-		add_action('admin_menu', array($this, '_action_admin_menu'));
-		add_action('admin_enqueue_scripts', array($this, '_action_admin_enqueue_scripts'),
-			/**
-			 * In case some custom defined option types are using script/styles registered
-			 * in actions with default priority 10 (make sure the enqueue is executed after register)
-			 */
-			11
-		);
+		$this
+			->set_is_ajax_submit( fw()->theme->get_config('settings_form_ajax_submit') )
+			->set_is_side_tabs( fw()->theme->get_config('settings_form_side_tabs') )
+			->set_string( 'title', __('Theme Settings', 'fw') );
+
+		{
+			add_action('admin_init', array($this, '_action_get_title_from_menu'));
+			add_action('admin_menu', array($this, '_action_admin_menu'));
+			add_action('admin_enqueue_scripts', array($this, '_action_admin_enqueue_scripts'),
+				/**
+				 * In case some custom defined option types are using script/styles registered
+				 * in actions with default priority 10 (make sure the enqueue is executed after register)
+				 * @see _FW_Component_Backend::add_actions()
+				 */
+				11
+			);
+		}
 	}
 
 	public function get_options() {

@@ -53,7 +53,8 @@ abstract class FW_Settings_Form {
 	 */
 	private $strings;
 
-	private static $reset_input_name = '_fw_reset_options';
+	private static $input_name_reset = '_fw_reset_options';
+	private static $input_name_save = '_fw_save_options';
 
 	final public function __construct($id) {
 		if (isset(self::$ids[$id])) {
@@ -72,6 +73,7 @@ abstract class FW_Settings_Form {
 			'title' => __('Settings', 'fw'),
 			'save_button' => __('Save Changes', 'fw'),
 			'reset_button' => __('Reset Options', 'fw'),
+			'reset_warning' => __("Click OK to reset.\nAll settings will be lost and replaced with default settings!", 'fw'),
 		);
 
 		$this->_init();
@@ -235,8 +237,10 @@ abstract class FW_Settings_Form {
 				// Use saved values
 				: ($values = $this->get_values())
 			),
-			'reset_input_name' => self::$reset_input_name,
-			'fw_form_id' => $this->fw_form->get_id(),
+			'is_theme_settings' => $this->is_theme_settings(),
+			'input_name_reset' => self::$input_name_reset,
+			'input_name_save' => self::$input_name_save,
+			'js_form_selector' => 'form[data-fw-form-id="'. esc_js($this->fw_form->get_id()) .'"]',
 		), false );
 
 		return $data;
@@ -264,7 +268,7 @@ abstract class FW_Settings_Form {
 		$flash_id   = 'fw-settings-form:save:'. $this->get_id();
 		$old_values = (array)$this->get_values();
 
-		if ( ! empty( $_POST[ self::$reset_input_name ] ) ) { // The "Reset" button was pressed
+		if ( ! empty( $_POST[ self::$input_name_reset ] ) ) { // The "Reset" button was pressed
 			$this->set_values(
 				$this->is_theme_settings()
 					/**
