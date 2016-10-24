@@ -61,9 +61,12 @@
 	<script type="text/javascript">
 		jQuery(function($){
 			fwEvents.one('fw:options:init', function(data){
-				data.$elements.find(
-					'<?php echo $js_form_selector ?> .fw-settings-form-header:not(.initialized)'
-				).addClass('initialized');
+				$('<?php echo $js_form_selector ?>').on(
+					'fw:settings-form:reset fw:settings-form:init-header',
+					function(){
+						$(this).find('.fw-settings-form-header:not(.initialized)').addClass('initialized');
+					}
+				).trigger('fw:settings-form:init-header');
 			});
 		});
 	</script>

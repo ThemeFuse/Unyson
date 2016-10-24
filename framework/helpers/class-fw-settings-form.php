@@ -96,6 +96,7 @@ abstract class FW_Settings_Form {
 	}
 
 	/**
+	 * In order for this to work, you must call $this->enqueue_static() on `admin_enqueue_scripts` action
 	 * @param bool $is_ajax_submit
 	 * @return $this
 	 */
