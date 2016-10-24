@@ -377,6 +377,8 @@ final class _FW_Extensions_Manager
 			)
 		);
 
+		do_action('fw_after_plugin_activate:before_potential_redirect');
+
 		if (is_admin() && $this->can_install() && $this->get_supported_extensions_for_install()) {
 			wp_redirect($this->get_link() . '&sub-page=install&supported');
 			exit;
@@ -3198,11 +3200,18 @@ final class _FW_Extensions_Manager
 	 * @internal
 	 */
 	public function _action_admin_notices() {
+		$should_notify = apply_filters(
+			'fw_notify_about_missing_extensions',
+			true
+		);
+
 		/**
 		 * In v2.4.12 was done a terrible mistake https://github.com/ThemeFuse/Unyson-Extensions-Approval/issues/160
 		 * Show a warning with link to install theme supported extensions
 		 */
 		if (
+			$should_notify
+			&&
 			!isset($_GET['supported']) // already on 'Install Supported Extensions' page
 			&&
 			$this->can_install()

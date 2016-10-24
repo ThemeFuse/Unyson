@@ -1584,11 +1584,19 @@ final class _FW_Component_Backend {
 			return $this->option_types[ $option_type ];
 		} else {
 			if ( is_admin() ) {
-				FW_Flash_Messages::add(
-					'fw-get-option-type-undefined-' . $option_type,
-					sprintf( __( 'Undefined option type: %s', 'fw' ), $option_type ),
-					'warning'
+				$should_write_flash = apply_filters(
+					'fw_backend_undefined_option_type_warn_user',
+					true,
+					$option_type
 				);
+
+				if ($should_write_flash) {
+					FW_Flash_Messages::add(
+						'fw-get-option-type-undefined-' . $option_type,
+						sprintf( __( 'Undefined option type: %s', 'fw' ), $option_type ),
+						'warning'
+					);
+				}
 			}
 
 			if (!$this->undefined_option_type) {
