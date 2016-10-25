@@ -286,7 +286,7 @@ abstract class FW_Settings_Form {
 					 * }
 					 */
 					? apply_filters('fw_settings_form_reset:values', array(), $old_values)
-					: apply_filters('fw:settings-form:reset:values:'. $this->get_id(), array(), $old_values)
+					: apply_filters('fw:settings-form:'. $this->get_id() .':reset:values', array(), $old_values)
 			);
 
 			FW_Flash_Messages::add(
@@ -298,7 +298,7 @@ abstract class FW_Settings_Form {
 			if ($this->is_theme_settings()) {
 				do_action('fw_settings_form_reset', $old_values);
 			} else {
-				do_action('fw:settings-form:reset:'. $this->get_id(), $old_values);
+				do_action('fw:settings-form:'. $this->get_id() .':reset', $old_values);
 			}
 		} else { // The "Save" button was pressed
 			$this->set_values( fw_get_options_values_from_input( $this->get_options() ) );
@@ -312,7 +312,7 @@ abstract class FW_Settings_Form {
 			if ($this->is_theme_settings()) {
 				do_action('fw_settings_form_saved', $old_values);
 			} else {
-				do_action('fw:settings-form:saved:'. $this->get_id(), $old_values);
+				do_action('fw:settings-form:'. $this->get_id() .':saved', $old_values);
 			}
 		}
 
