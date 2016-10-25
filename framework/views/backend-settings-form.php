@@ -43,7 +43,7 @@
 								'type' => 'submit',
 								'name' => $input_name_reset,
 								'value' => $form->get_string('reset_button'),
-								'class' => 'button-secondary button-large submit-button-reset',
+								'class' => 'button-secondary button-large submit-button-reset fw-settings-form-reset-btn',
 							)),
 							fw_html_tag('input', array(
 								'type' => 'submit',
@@ -93,7 +93,7 @@
 				'type' => 'submit',
 				'name' => $input_name_reset,
 				'value' => $form->get_string('reset_button'),
-				'class' => 'button-secondary button-large',
+				'class' => 'button-secondary button-large fw-settings-form-reset-btn',
 			))
 		)
 	)
