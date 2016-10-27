@@ -49,7 +49,8 @@
 			'fw-backend-option',
 			'fw-backend-option-design-customizer',
 			'fw-backend-option-type-'. $option['type'],
-			'fw-row'
+			'fw-row',
+			'fw-clearfix',
 		),
 		'label' => array(
 			'fw-backend-option-label',
@@ -58,6 +59,7 @@
 		'input' => array(
 			'fw-backend-option-input',
 			'fw-backend-option-input-type-'. $option['type'],
+			'fw-clearfix',
 			'responsive' => 'fw-col-xs-12',
 		),
 		'desc' => array(
@@ -101,10 +103,9 @@
 <div class="<?php echo esc_attr($classes['option']) ?>" id="fw-backend-option-<?php echo esc_attr($data['id_prefix'] . $id) ?>">
 	<?php if ($option['label'] !== false): ?>
 		<div class="<?php echo esc_attr($classes['label']) ?>">
-			<div class="fw-inner">
+			<div class="fw-inner fw-clearfix">
 				<label for="<?php echo esc_attr($data['id_prefix']) . esc_attr($id) ?>"><span class="customize-control-title"><?php echo fw_htmlspecialchars($option['label']) ?></span></label>
 				<?php if ($help): ?><div class="fw-option-help fw-option-help-in-label <?php echo esc_attr($help['class']) ?>" title="<?php echo esc_attr($help['html']) ?>"></div><?php endif; ?>
-				<div class="fw-clear"></div>
 			</div>
 		</div>
 	<?php endif; ?>
@@ -114,13 +115,10 @@
 		</div>
 	<?php endif; ?>
 	<div class="<?php echo esc_attr($classes['input']) ?>">
-		<div class="fw-inner fw-pull-<?php echo is_rtl() ? 'right' : 'left'; ?>">
+		<div class="fw-inner fw-pull-<?php echo is_rtl() ? 'right' : 'left'; ?> fw-clearfix">
 			<div class="fw-inner-option">
 				<?php echo fw()->backend->option_type($option['type'])->render($id, $option, $data) ?>
 			</div>
-			<div class="fw-clear"></div>
 		</div>
-		<div class="fw-clear"></div>
 	</div>
-	<div class="fw-clear"></div>
 </div>

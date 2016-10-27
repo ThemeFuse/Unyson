@@ -63,7 +63,8 @@
 			'fw-backend-option',
 			'fw-backend-option-design-default',
 			'fw-backend-option-type-'. $option['type'],
-			'fw-row'
+			'fw-row',
+			'fw-clearfix',
 		),
 		'label' => array(
 			'fw-backend-option-label',
@@ -72,6 +73,7 @@
 		'input' => array(
 			'fw-backend-option-input',
 			'fw-backend-option-input-type-'. $option['type'],
+			'fw-clearfix',
 			'responsive' => $responsive_classes['input'],
 		),
 		'desc' => array(
@@ -120,28 +122,23 @@
 <div class="<?php echo esc_attr($classes['option']) ?>" id="fw-backend-option-<?php echo esc_attr($data['id_prefix'] . $id) ?>">
 	<?php if ($option['label'] !== false): ?>
 		<div class="<?php echo esc_attr($classes['label']) ?>">
-			<div class="fw-inner">
+			<div class="fw-inner fw-clearfix">
 				<label for="<?php echo esc_attr($data['id_prefix']) . esc_attr($id) ?>"><?php echo fw_htmlspecialchars($option['label']) ?></label>
 				<?php if ($help): ?><div class="fw-option-help fw-option-help-in-label fw-visible-xs-block <?php echo esc_attr($help['class']) ?>" title="<?php echo esc_attr($help['html']) ?>"></div><?php endif; ?>
-				<div class="fw-clear"></div>
 			</div>
 		</div>
 	<?php endif; ?>
 	<div class="<?php echo esc_attr($classes['input']) ?>">
-		<div class="fw-inner fw-pull-<?php echo is_rtl() ? 'right' : 'left'; ?>">
+		<div class="fw-inner fw-pull-<?php echo is_rtl() ? 'right' : 'left'; ?> fw-clearfix">
 			<?php if ($help): ?><div class="fw-option-help fw-option-help-in-input fw-pull-right fw-hidden-xs <?php echo esc_attr($help['class']) ?>" title="<?php echo esc_attr($help['html']) ?>"></div><?php endif; ?>
-			<div class="fw-inner-option">
+			<div class="fw-inner-option fw-clearfix">
 				<?php echo fw()->backend->option_type($option['type'])->render($id, $option, $data) ?>
 			</div>
-			<div class="fw-clear"></div>
 		</div>
-		<div class="fw-clear"></div>
 	</div>
-	<div class="fw-clear"></div>
 	<?php if ($option['desc']): ?>
 		<div class="<?php echo esc_attr($classes['desc']) ?>">
 			<div class="fw-inner"><?php echo ($option['desc'] ? $option['desc'] : '') ?></div>
 		</div>
 	<?php endif; ?>
-	<div class="fw-clear"></div>
 </div>
