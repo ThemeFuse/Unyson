@@ -118,6 +118,21 @@
 	}
 	unset($key, $_classes);
 }
+
+try {
+	$desc_under_label = FW_Cache::get(
+		$cache_key = 'fw:backend-option-view:desc-under-label'
+	);
+} catch (FW_Cache_Not_Found_Exception $e) {
+	FW_Cache::set(
+		$cache_key,
+		/**
+		 * Fixes https://github.com/ThemeFuse/Unyson/issues/2143
+		 * @since 2.6.9
+		 */
+		$desc_under_label = apply_filters('fw:backend-option-view:design-default:desc-under-label', false)
+	);
+}
 ?>
 <div class="<?php echo esc_attr($classes['option']) ?>" id="fw-backend-option-<?php echo esc_attr($data['id_prefix'] . $id) ?>">
 	<?php if ($option['label'] !== false): ?>
@@ -125,6 +140,7 @@
 			<div class="fw-inner fw-clearfix">
 				<label for="<?php echo esc_attr($data['id_prefix']) . esc_attr($id) ?>"><?php echo fw_htmlspecialchars($option['label']) ?></label>
 				<?php if ($help): ?><div class="fw-option-help fw-option-help-in-label fw-visible-xs-block <?php echo esc_attr($help['class']) ?>" title="<?php echo esc_attr($help['html']) ?>"></div><?php endif; ?>
+				<?php if ($option['desc'] && $desc_under_label): ?><div class="fw-clear"></div><p><em class="fw-text-muted"><?php echo ($option['desc'] ? $option['desc'] : '') ?></em></p><?php endif; ?>
 			</div>
 		</div>
 	<?php endif; ?>
@@ -136,7 +152,7 @@
 			</div>
 		</div>
 	</div>
-	<?php if ($option['desc']): ?>
+	<?php if ($option['desc'] && !$desc_under_label): ?>
 		<div class="<?php echo esc_attr($classes['desc']) ?>">
 			<div class="fw-inner"><?php echo ($option['desc'] ? $option['desc'] : '') ?></div>
 		</div>
