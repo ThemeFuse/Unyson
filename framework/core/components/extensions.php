@@ -392,11 +392,12 @@ final class _FW_Component_Extensions
 				);
 			}
 
+			/**
+			 * @since 2.6.9
+			 */
+			$locations = apply_filters('fw_extensions_locations_after', $locations);
+
 			FW_Cache::set($cache_key, $locations);
-			
-			$locations = apply_filters(
-				'fw_extensions_locations_after', $locations
-			);
 
 			return $locations;
 		}
