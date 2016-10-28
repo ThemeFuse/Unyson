@@ -393,6 +393,10 @@ final class _FW_Component_Extensions
 			}
 
 			FW_Cache::set($cache_key, $locations);
+			
+			$locations = apply_filters(
+				'fw_extensions_locations_after', $locations
+			);
 
 			return $locations;
 		}
