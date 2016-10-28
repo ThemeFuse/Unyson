@@ -69,7 +69,7 @@
 					 * Quick Tags
 					 * http://stackoverflow.com/a/21519323/1794248
 					 */
-					{
+					if (tinyMCEPreInit.qtInit[ id ]) {
 						new QTags( tinyMCEPreInit.qtInit[ id ] );
 
 						QTags._buttonsInit();
@@ -123,7 +123,7 @@
 			 * Quick Tags
 			 * http://stackoverflow.com/a/21519323/1794248
 			 */
-			{
+			if (tinyMCEPreInit.qtInit[ id ]) {
 				new QTags( tinyMCEPreInit.qtInit[ id ] );
 
 				QTags._buttonsInit();
