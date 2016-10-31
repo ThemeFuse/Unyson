@@ -144,6 +144,10 @@ abstract class FW_Settings_Form {
 		return $this;
 	}
 
+	public function form_capability() {
+		return 'manage_options';
+	}
+
 	public function enqueue_static() {
 		fw()->backend->enqueue_options_static($this->get_options());
 
@@ -253,7 +257,7 @@ abstract class FW_Settings_Form {
 	 * @internal
 	 */
 	public function _form_validate( $errors ) {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can($this->form_capability()) ) {
 			$errors['_no_permission'] = __( 'You have no permissions to change settings options', 'fw' );
 		}
 
