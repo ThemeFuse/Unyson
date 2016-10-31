@@ -123,6 +123,45 @@ abstract class FW_Manifest
 
 		foreach ($this->requirements_for_verification as $requirement => $requirements) {
 			switch ($requirement) {
+				case 'php':
+					if ( ! function_exists( 'phpversion' ) ) {
+						FW_Flash_Messages::add(
+							'fw-requirements-phpversion',
+							"<strong>phpversion()</strong> "
+							. __( 'function is disabled by hosting provider by security reasons.', 'fw' ),
+							'warning'
+						);
+						break;
+					}
+					if (
+						isset($requirements['min_version'])
+						&&
+						version_compare(phpversion(), $requirements['min_version'], '<')
+					) {
+						$this->not_met_requirement = array(
+							'requirement'  => $requirement,
+							'requirements' => $requirements
+						);
+						$this->not_met_is_final = true;
+						break 2;
+					}
+
+					if (
+						isset($requirements['max_version'])
+						&&
+						version_compare(phpversion(), $requirements['max_version'], '>')
+					) {
+						$this->not_met_requirement = array(
+							'requirement'  => $requirement,
+							'requirements' => $requirements
+						);
+						$this->not_met_is_final = true;
+						break 2;
+					}
+
+					// met
+					unset($this->requirements_for_verification[$requirement]);
+					break;
 				case 'wordpress':
 					if (
 						isset($requirements['min_version'])
@@ -301,6 +340,16 @@ abstract class FW_Manifest
 		$requirement = implode(' '. __('and', 'fw') .' ', $requirement);
 
 		switch ($this->not_met_requirement['requirement']) {
+			case 'php':
+				if ( ! function_exists( 'phpversion' ) ) {
+					break;
+				}
+
+				$requirement = sprintf(
+					__('Current WordPress version is %s, %s', 'fw'),
+					phpversion(), $requirement
+				);
+				break;
 			case 'wordpress':
 				global $wp_version;
 
@@ -359,6 +408,10 @@ class FW_Framework_Manifest extends FW_Manifest
 	protected function get_default_requirements()
 	{
 		return array(
+			'php' => array(
+				'min_version' => '5.2.4',
+				/*'max_version' => '10000.0.0',*/
+			),
 			'wordpress' => array(
 				'min_version' => '4.0',
 				/*'max_version' => '10000.0.0',*/
@@ -429,6 +482,10 @@ class FW_Theme_Manifest extends FW_Manifest
 	protected function get_default_requirements()
 	{
 		return array(
+			'php' => array(
+				'min_version' => '5.2.4',
+				/*'max_version' => '10000.0.0',*/
+			),
 			'wordpress' => array(
 				'min_version' => '4.0',
 				/*'max_version' => '10000.0.0',*/
@@ -486,6 +543,10 @@ class FW_Extension_Manifest extends FW_Manifest
 	protected function get_default_requirements()
 	{
 		return array(
+			'php' => array(
+				'min_version' => '5.2.4',
+				/*'max_version' => '10000.0.0',*/
+			),
 			'wordpress' => array(
 				'min_version' => '4.0',
 				/*'max_version' => '10000.0.0',*/
