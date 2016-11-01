@@ -185,6 +185,36 @@ if (!$installed_data && !$is_compatible) {
 
 							foreach (fw_akg('requirements', $installed_data['manifest'], array()) as $req_name => $req_data) {
 								switch ($req_name) {
+									case 'php':
+										if (empty($req_data['min_version']) && empty($req_data['max_version'])) {
+											break;
+										}
+
+										if ( ! empty( $req_data['min_version'] ) ) {
+											if (!version_compare($req_data['min_version'], phpversion(), '<=')) {
+												if ($can_install) {
+													$requirements[] = sprintf(
+														__( 'You need to update Php to %s', 'fw' ),
+														$req_data['min_version']
+													);
+												} else {
+													$requirements[] = sprintf(
+														__( 'Php needs to be updated to %s', 'fw' ),
+														$req_data['min_version']
+													);
+												}
+											}
+										}
+
+										if ( ! empty( $req_data['max_version'] ) ) {
+											if (!version_compare($req_data['max_version'], phpversion(), '>=')) {
+												$requirements[] = sprintf(
+													__('Maximum supported Php version is %s', 'fw'),
+													$req_data['max_version']
+												);
+											}
+										}
+										break;
 									case 'wordpress':
 										if (empty($req_data['min_version']) && empty($req_data['max_version'])) {
 											break;
