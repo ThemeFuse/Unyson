@@ -497,8 +497,10 @@ final class _FW_Extensions_Manager
 	 *
 	 * @param bool $reset_cache
 	 * @return array
+	 *
+	 * @since 2.6.9
 	 */
-	private function get_installed_extensions($reset_cache = false)
+	public function get_installed_extensions($reset_cache = false)
 	{
 		$cache_key = $this->get_cache_key('installed_extensions');
 
