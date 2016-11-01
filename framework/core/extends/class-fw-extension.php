@@ -77,18 +77,7 @@ abstract class FW_Extension
 		$this->parent   = $data['parent'];
 		$this->depth    = $data['depth'];
 		$this->customizations_locations = $data['customizations_locations'];
-
-		{
-			$variables = fw_get_variables_from_file($this->path .'/manifest.php', array('manifest' => array()));
-			$manifest  = $variables['manifest'];
-			unset($variables);
-
-			if (empty($manifest['name'])) {
-				$manifest['name'] = fw_id_to_title($this->get_name());
-			}
-
-			$this->manifest = new FW_Extension_Manifest($manifest);
-		}
+		$this->manifest = _FW_Component_Extensions::_get_manifest($this->get_name(), self::$access_key);
 	}
 
 	/**

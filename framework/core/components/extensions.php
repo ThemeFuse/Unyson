@@ -58,6 +58,9 @@ final class _FW_Component_Extensions
 	 */
 	private static $access_key;
 
+	/** @var FW_Extension_Manifest[] All extensions manifests */
+	private static $manifests = array();
+
 	/**
 	 * @var null|_FW_Extensions_Manager
 	 */
@@ -97,29 +100,44 @@ final class _FW_Component_Extensions
 	}
 
 	/**
+	 * @param string $extension_name
+	 * @param FW_Access_Key $access_key
+	 * @return FW_Extension_Manifest|null
+	 * @internal
+	 * @since 2.6.9
+	 */
+	public static function _get_manifest($extension_name, FW_Access_Key $access_key) {
+		if (!in_array($access_key->get_key(), array('extension', self::$access_key->get_key()), true)) {
+			trigger_error('Method call denied', E_USER_ERROR);
+		}
+
+		if (isset(self::$all_extensions[$extension_name])) {
+			if (!isset(self::$manifests[$extension_name])) {
+				$manifest = fw_get_variables_from_file(
+					self::$all_extensions[$extension_name]['path'] .'/manifest.php', array('manifest' => array())
+				);
+				$manifest = $manifest['manifest'];
+
+				if (empty($manifest['name'])) {
+					$manifest['name'] = fw_id_to_title($extension_name);
+				}
+
+				self::$manifests[$extension_name] = new FW_Extension_Manifest($manifest);
+			}
+
+			return self::$manifests[$extension_name];
+		} else {
+			return null;
+		}
+	}
+
+	/**
 	 * Load extension from directory
 	 *
 	 * @param array $data
 	 */
 	private static function load_extensions($data)
 	{
-		if (false) {
-			$data = array(
-				'rel_path' => '/extension',
-				'path' => '/path/to/extension',
-				'uri' => 'https://uri.to/extension',
-				'customizations_locations' => array(
-					'/path/to/parent/theme/customizations/extensions/ext/rel/path' => 'https://uri.to/customization/path',
-					'/path/to/child/theme/customizations/extensions/ext/rel/path'  => 'https://uri.to/customization/path',
-				),
-
-				'all_extensions_tree' => array(),
-				'all_extensions' => array(),
-				'current_depth' => 1,
-				'parent' => '&$parent_extension_instance',
-			);
-		}
-
 		/**
 		 * Do not check all keys
 		 * if one not set, then sure others are not set (this is a private method)
@@ -166,11 +184,11 @@ final class _FW_Component_Extensions
 			}
 
 			if (isset($data['all_extensions'][$extension_name])) {
-				if ($data['all_extensions'][$extension_name]->get_parent() !== $data['parent']) {
+				if ($data['all_extensions'][$extension_name]['parent'] !== $data['parent']) {
 					// extension with the same name exists in another tree
 					trigger_error(
 						'Extension "'. $extension_name .'" is already defined '.
-						'in "'. $data['all_extensions'][$extension_name]->get_declared_path() .'" '.
+						'in "'. $data['all_extensions'][$extension_name]['path'] .'" '.
 						'found again in "'. $extension_dir .'"',
 						E_USER_ERROR
 					);
@@ -187,40 +205,23 @@ final class _FW_Component_Extensions
 					'all_extensions_tree' => &$data['all_extensions_tree'][$extension_name],
 					'all_extensions' => &$data['all_extensions'],
 					'current_depth' => $data['current_depth'] + 1,
-					'parent' => &$data['all_extensions'][$extension_name],
+					'parent' => $extension_name,
 				));
 			} else {
-				$class_file_name = 'class-fw-extension-'. $extension_name .'.php';
-
 				if (file_exists($extension_dir .'/manifest.php')) {
 					$data['all_extensions_tree'][$extension_name] = array();
 
 					self::$extension_to_all_tree[$extension_name] = &$data['all_extensions_tree'][$extension_name];
 
-					if (fw_include_file_isolated($extension_dir .'/'. $class_file_name)) {
-						$class_name = 'FW_Extension_'. fw_dirname_to_classname($extension_name);
-					} else {
-						$parent_class_name = get_class($data['parent']);
-						// check if parent extension has been defined custom Default class for its child extensions
-						if (class_exists($parent_class_name .'_Default')) {
-							$class_name = $parent_class_name .'_Default';
-						} else {
-							$class_name = 'FW_Extension_Default';
-						}
-					}
-
-					if (!is_subclass_of($class_name, 'FW_Extension')) {
-						trigger_error('Extension "'. $extension_name .'" must extend FW_Extension class', E_USER_ERROR);
-					}
-
-					$data['all_extensions'][$extension_name] = new $class_name(array(
+					$data['all_extensions'][$extension_name] = array(
 						'rel_path' => $data['rel_path'] .'/'. $extension_name,
 						'path' => $data['path'] .'/'. $extension_name,
 						'uri' => $data['uri'] .'/'. $extension_name,
 						'parent' => $data['parent'],
 						'depth' => $data['current_depth'],
 						'customizations_locations' => $customizations_locations,
-					));
+						'instance' => null, // created on activation
+					);
 				} else {
 					/**
 					 * The manifest file does not exist, do not load this extension.
@@ -230,12 +231,12 @@ final class _FW_Component_Extensions
 				}
 
 				self::load_extensions(array(
-					'rel_path' => $data['all_extensions'][$extension_name]->get_rel_path() .'/extensions',
-					'path' => $data['all_extensions'][$extension_name]->get_path() .'/extensions',
-					'uri' => $data['all_extensions'][$extension_name]->get_uri() .'/extensions',
+					'rel_path' => $data['all_extensions'][$extension_name]['rel_path'] .'/extensions',
+					'path' => $data['all_extensions'][$extension_name]['path'] .'/extensions',
+					'uri' => $data['all_extensions'][$extension_name]['uri'] .'/extensions',
 					'customizations_locations' => $customizations_locations,
 
-					'parent' => &$data['all_extensions'][$extension_name],
+					'parent' => $extension_name,
 					'all_extensions_tree' => &$data['all_extensions_tree'][$extension_name],
 					'all_extensions' => &$data['all_extensions'],
 					'current_depth' => $data['current_depth'] + 1,
@@ -422,20 +423,53 @@ final class _FW_Component_Extensions
 	private function activate_extensions($parent_extension_name = null)
 	{
 		if ($parent_extension_name === null) {
-			$all_tree =& self::$all_extensions_tree;
+			$all_tree = &self::$all_extensions_tree;
 		} else {
-			$all_tree =& self::$extension_to_all_tree[$parent_extension_name];
+			$all_tree = &self::$extension_to_all_tree[$parent_extension_name];
 		}
 
 		foreach ($all_tree as $extension_name => &$sub_extensions) {
 			if (fw()->extensions->get($extension_name)) {
-				// extension already active
-				continue;
+				continue; // already active
 			}
 
-			$extension =& self::$all_extensions[$extension_name];
+			$manifest = self::_get_manifest($extension_name, self::$access_key);
 
-			if ($extension->manifest->check_requirements()) {
+			{
+				$class_file_name = 'class-fw-extension-'. $extension_name .'.php';
+
+				if (fw_include_file_isolated(self::$all_extensions[$extension_name]['path'] .'/'. $class_file_name)) {
+					$class_name = 'FW_Extension_'. fw_dirname_to_classname($extension_name);
+				} else {
+					$parent_class_name = get_class(
+						fw()->extensions->get(self::$all_extensions[$extension_name]['parent'])
+					);
+
+					// check if parent extension has been defined custom Default class for its child extensions
+					if (class_exists($parent_class_name .'_Default')) {
+						$class_name = $parent_class_name .'_Default';
+					} else {
+						$class_name = 'FW_Extension_Default';
+					}
+				}
+
+				if (!is_subclass_of($class_name, 'FW_Extension')) {
+					trigger_error('Extension "'. $extension_name .'" must extend FW_Extension class', E_USER_ERROR);
+				}
+
+				self::$all_extensions[$extension_name]['instance'] = new $class_name(array(
+					'rel_path' => self::$all_extensions[$extension_name]['rel_path'],
+					'path' => self::$all_extensions[$extension_name]['path'],
+					'uri' => self::$all_extensions[$extension_name]['uri'],
+					'parent' => fw()->extensions->get(self::$all_extensions[$extension_name]['parent']),
+					'depth' => self::$all_extensions[$extension_name]['depth'],
+					'customizations_locations' => self::$all_extensions[$extension_name]['customizations_locations'],
+				));
+			}
+
+			$extension = &self::$all_extensions[$extension_name]['instance'];
+
+			if ($manifest->check_requirements()) {
 				if (!$this->_get_db_active_extensions($extension_name)) {
 					// extension is not set as active
 				} elseif (
@@ -459,7 +493,7 @@ final class _FW_Component_Extensions
 			} else {
 				// requirements not met, tell required extensions that this extension is waiting for them
 
-				foreach ($extension->manifest->get_required_extensions() as $required_extension_name => $requirements) {
+				foreach ($manifest->get_required_extensions() as $required_extension_name => $requirements) {
 					if (!isset(self::$extensions_required_by_extensions[$required_extension_name])) {
 						self::$extensions_required_by_extensions[$required_extension_name] = array();
 					}
@@ -478,41 +512,43 @@ final class _FW_Component_Extensions
 	private function activate_extension($extension_name)
 	{
 		if (fw()->extensions->get($extension_name)) {
-			// already active
-			return false;
+			return false; // already active
 		}
 
-		if (!self::$all_extensions[$extension_name]->manifest->requirements_met()) {
+		if (!self::_get_manifest($extension_name, self::$access_key)->requirements_met()) {
 			trigger_error('Wrong '. __METHOD__ .' call', E_USER_WARNING);
 			return false;
 		}
 
-		// add to active extensions so inside includes/ and extension it will be accessible from fw()->extensions->get(...)
-		self::$active_extensions[$extension_name] =& self::$all_extensions[$extension_name];
+		/**
+		 * Add to active extensions so inside includes/ and extension it will be accessible from fw()->extensions->get(...)
+		 * self::$all_extensions[$extension_name]['instance'] is created in $this->activate_extensions()
+		 */
+		self::$active_extensions[$extension_name] = &self::$all_extensions[$extension_name]['instance'];
 
-		$parent = self::$all_extensions[$extension_name]->get_parent();
+		$parent = self::$all_extensions[$extension_name]['instance']->get_parent();
 
 		if ($parent) {
 			self::$extension_to_active_tree[ $parent->get_name() ][$extension_name] = array();
-			self::$extension_to_active_tree[$extension_name] =& self::$extension_to_active_tree[ $parent->get_name() ][$extension_name];
+			self::$extension_to_active_tree[$extension_name] = &self::$extension_to_active_tree[ $parent->get_name() ][$extension_name];
 		} else {
 			self::$active_extensions_tree[$extension_name] = array();
-			self::$extension_to_active_tree[$extension_name] =& self::$active_extensions_tree[$extension_name];
+			self::$extension_to_active_tree[$extension_name] = &self::$active_extensions_tree[$extension_name];
 		}
 
 		self::include_extension_directory_all_locations($extension_name, '/includes');
 		self::include_extension_file_all_locations($extension_name, '/helpers.php');
 		self::include_extension_file_all_locations($extension_name, '/hooks.php');
 
-		if (self::$all_extensions[$extension_name]->_call_init(self::$access_key) !== false) {
+		if (self::$all_extensions[$extension_name]['instance']->_call_init(self::$access_key) !== false) {
 			$this->activate_extensions($extension_name);
 		}
 
 		// check if other extensions are waiting for this extension and try to activate them
 		if (isset(self::$extensions_required_by_extensions[$extension_name])) {
 			foreach (self::$extensions_required_by_extensions[$extension_name] as $waiting_extension_name) {
-				if (self::$all_extensions[$waiting_extension_name]->manifest->check_requirements()) {
-					$waiting_extension = self::$all_extensions[$waiting_extension_name];
+				if (self::_get_manifest($waiting_extension_name, self::$access_key)->check_requirements()) {
+					$waiting_extension = self::$all_extensions[$waiting_extension_name]['instance'];
 
 					if (!$this->_get_db_active_extensions($waiting_extension_name)) {
 						// extension is set as active
