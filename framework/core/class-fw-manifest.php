@@ -125,12 +125,6 @@ abstract class FW_Manifest
 			switch ($requirement) {
 				case 'php':
 					if ( ! function_exists( 'phpversion' ) ) {
-						FW_Flash_Messages::add(
-							'fw-requirements-phpversion',
-							"<strong>phpversion()</strong> "
-							. __( 'function is disabled by hosting provider by security reasons.', 'fw' ),
-							'warning'
-						);
 						break;
 					}
 					if (
