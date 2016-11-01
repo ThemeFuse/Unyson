@@ -194,12 +194,12 @@ if (!$installed_data && !$is_compatible) {
 											if (!version_compare($req_data['min_version'], phpversion(), '<=')) {
 												if ($can_install) {
 													$requirements[] = sprintf(
-														__( 'You need to update Php to %s', 'fw' ),
+														__( 'You need to update PHP to %s', 'fw' ),
 														$req_data['min_version']
 													);
 												} else {
 													$requirements[] = sprintf(
-														__( 'Php needs to be updated to %s', 'fw' ),
+														__( 'PHP needs to be updated to %s', 'fw' ),
 														$req_data['min_version']
 													);
 												}
@@ -209,7 +209,7 @@ if (!$installed_data && !$is_compatible) {
 										if ( ! empty( $req_data['max_version'] ) ) {
 											if (!version_compare($req_data['max_version'], phpversion(), '>=')) {
 												$requirements[] = sprintf(
-													__('Maximum supported Php version is %s', 'fw'),
+													__('Maximum supported PHP version is %s', 'fw'),
 													$req_data['max_version']
 												);
 											}

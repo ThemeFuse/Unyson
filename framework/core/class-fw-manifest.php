@@ -340,7 +340,7 @@ abstract class FW_Manifest
 				}
 
 				$requirement = sprintf(
-					__('Current WordPress version is %s, %s', 'fw'),
+					__('Current PHP version is %s, %s', 'fw'),
 					phpversion(), $requirement
 				);
 				break;
