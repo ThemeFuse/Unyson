@@ -199,8 +199,10 @@ final class _FW_Extensions_Manager
 	/**
 	 * Extensions available for download
 	 * @return array {name => data}
+	 *
+	 * @since 2.6.9
 	 */
-	private function get_available_extensions()
+	public function get_available_extensions()
 	{
 		try {
 			$cache_key = $this->get_cache_key( 'available_extensions' );
@@ -2735,7 +2737,10 @@ final class _FW_Extensions_Manager
 		}
 	}
 
-	private function get_supported_extensions_for_install()
+	/**
+	 * @since 2.6.9
+	 */
+	public function get_supported_extensions()
 	{
 		$supported_extensions = fw()->theme->manifest->get('supported_extensions', array());
 
@@ -2757,14 +2762,23 @@ final class _FW_Extensions_Manager
 			return array();
 		}
 
-		// remove already installed extensions
-		$supported_extensions = array_diff_key($supported_extensions, $this->get_installed_extensions());
-
 		if (empty($supported_extensions)) {
 			return array();
 		}
 
 		return $supported_extensions;
+	}
+
+	/**
+	 * @since 2.6.9
+	 */
+	public function get_supported_extensions_for_install()
+	{
+		// remove already installed extensions
+		return array_diff_key(
+			$this->get_supported_extensions(),
+			$this->get_installed_extensions()
+		);
 	}
 
 	/**
