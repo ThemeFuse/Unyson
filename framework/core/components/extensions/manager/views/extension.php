@@ -181,11 +181,11 @@ if (!$installed_data && !$is_compatible) {
 							</div>
 							<div class="fw-col-xs-12 fw-col-sm-9 fw-text-right">
 							<?php
+
 							$requirements = fw()
 								->extensions
 								->manager->collect_extension_requirements(
-									$name,
-									$can_install
+									$name
 								);
 
 							?>

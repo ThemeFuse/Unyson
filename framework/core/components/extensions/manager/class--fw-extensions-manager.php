@@ -3486,8 +3486,12 @@ final class _FW_Extensions_Manager
 		}
 	}
 
-	public function collect_extension_requirements($extension_name, $can_install = false) {
+	public function collect_extension_requirements($extension_name, $can_install = null) {
 		$installed_extensions = $this->get_installed_extensions();
+
+		if (is_null($can_install)) {
+			$can_install = $this->can_install();
+		}
 
 		if (! isset($installed_extensions[$extension_name])) {
 			return array();
@@ -3508,17 +3512,10 @@ final class _FW_Extensions_Manager
 
 					if ( ! empty( $req_data['min_version'] ) ) {
 						if (!version_compare($req_data['min_version'], phpversion(), '<=')) {
-							if ($can_install) {
-								$result[] = sprintf(
-									__( 'You need to update PHP to %s', 'fw' ),
-									$req_data['min_version']
-								);
-							} else {
-								$result[] = sprintf(
-									__( 'PHP needs to be updated to %s', 'fw' ),
-									$req_data['min_version']
-								);
-							}
+							$result[] = sprintf(
+								__( 'PHP needs to be updated to %s', 'fw' ),
+								$req_data['min_version']
+							);
 						}
 					}
 
@@ -3530,7 +3527,9 @@ final class _FW_Extensions_Manager
 							);
 						}
 					}
+
 					break;
+
 				case 'wordpress':
 					if (empty($req_data['min_version']) && empty($req_data['max_version'])) {
 						break;
@@ -3563,7 +3562,9 @@ final class _FW_Extensions_Manager
 							);
 						}
 					}
+
 					break;
+
 				case 'framework':
 					if (empty($req_data['min_version']) && empty($req_data['max_version'])) {
 						break;
@@ -3599,7 +3600,9 @@ final class _FW_Extensions_Manager
 							);
 						}
 					}
+
 					break;
+
 				case 'extensions':
 					foreach ($req_data as $req_ext => $req_ext_data) {
 						if ($ext = fw()->extensions->get($req_ext)) {
@@ -3671,7 +3674,9 @@ final class _FW_Extensions_Manager
 							}
 						}
 					}
+
 					break;
+
 				default:
 					trigger_error('Invalid requirement: '. $req_name, E_USER_WARNING);
 					continue;
