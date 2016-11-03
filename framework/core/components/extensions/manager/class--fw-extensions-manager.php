@@ -3486,6 +3486,9 @@ final class _FW_Extensions_Manager
 		}
 	}
 
+	/**
+	 * @since 2.6.9
+	 */
 	public function collect_extension_requirements($extension_name, $can_install = null) {
 		$installed_extensions = $this->get_installed_extensions();
 
