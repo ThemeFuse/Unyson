@@ -3485,4 +3485,204 @@ final class _FW_Extensions_Manager
 			// the result is not used because we don't know here if we can print the errors or not
 		}
 	}
+
+	public function collect_extension_requirements($extension_name, $can_install = null) {
+		$installed_extensions = $this->get_installed_extensions();
+
+		if (is_null($can_install)) {
+			$can_install = $this->can_install();
+		}
+
+		if (! isset($installed_extensions[$extension_name])) {
+			return array();
+		} else {
+			$data = $installed_extensions[$extension_name];
+		}
+
+		$result = array();
+
+		$manifest_requirements = fw_akg('requirements', $data['manifest'], array());
+
+		foreach ($manifest_requirements as $req_name => $req_data) {
+			switch ($req_name) {
+				case 'php':
+					if (empty($req_data['min_version']) && empty($req_data['max_version'])) {
+						break;
+					}
+
+					if ( ! empty( $req_data['min_version'] ) ) {
+						if (!version_compare($req_data['min_version'], phpversion(), '<=')) {
+							$result[] = sprintf(
+								__( 'PHP needs to be updated to %s', 'fw' ),
+								$req_data['min_version']
+							);
+						}
+					}
+
+					if ( ! empty( $req_data['max_version'] ) ) {
+						if (!version_compare($req_data['max_version'], phpversion(), '>=')) {
+							$result[] = sprintf(
+								__('Maximum supported PHP version is %s', 'fw'),
+								$req_data['max_version']
+							);
+						}
+					}
+
+					break;
+
+				case 'wordpress':
+					if (empty($req_data['min_version']) && empty($req_data['max_version'])) {
+						break;
+					}
+
+					global $wp_version;
+
+					if ( ! empty( $req_data['min_version'] ) ) {
+						if (!version_compare($req_data['min_version'], $wp_version, '<=')) {
+							if ($can_install) {
+								$result[] = sprintf(
+									__( 'You need to update WordPress to %s: %s', 'fw' ),
+									$req_data['min_version'],
+									fw_html_tag( 'a', array( 'href' => self_admin_url( 'update-core.php' ) ), __( 'Update WordPress', 'fw' ) )
+								);
+							} else {
+								$result[] = sprintf(
+									__( 'WordPress needs to be updated to %s', 'fw' ),
+									$req_data['min_version']
+								);
+							}
+						}
+					}
+
+					if ( ! empty( $req_data['max_version'] ) ) {
+						if (!version_compare($req_data['max_version'], $wp_version, '>=')) {
+							$result[] = sprintf(
+								__('Maximum supported WordPress version is %s', 'fw'),
+								$req_data['max_version']
+							);
+						}
+					}
+
+					break;
+
+				case 'framework':
+					if (empty($req_data['min_version']) && empty($req_data['max_version'])) {
+						break;
+					}
+
+					if ( ! empty( $req_data['min_version'] ) ) {
+						if (!version_compare($req_data['min_version'], fw()->manifest->get_version(), '<=')) {
+							if ($can_install) {
+								$result[] = sprintf(
+									__( 'You need to update %s to %s: %s', 'fw' ),
+									fw()->manifest->get_name(),
+									$req_data['min_version'],
+									fw_html_tag( 'a', array( 'href' => self_admin_url( 'update-core.php' ) ),
+										sprintf( __( 'Update %s', 'fw' ), fw()->manifest->get_name() )
+									)
+								);
+							} else {
+								$result[] = sprintf(
+									__( '%s needs to be updated to %s', 'fw' ),
+									fw()->manifest->get_name(),
+									$req_data['min_version']
+								);
+							}
+						}
+					}
+
+					if ( ! empty( $req_data['max_version'] ) ) {
+						if (!version_compare($req_data['max_version'], fw()->manifest->get_version(), '>=')) {
+							$result[] = sprintf(
+								__( 'Maximum supported %s version is %s', 'fw' ),
+								fw()->manifest->get_name(),
+								$req_data['max_version']
+							);
+						}
+					}
+
+					break;
+
+				case 'extensions':
+					foreach ($req_data as $req_ext => $req_ext_data) {
+						if ($ext = fw()->extensions->get($req_ext)) {
+							if (empty($req_ext_data['min_version']) && empty($req_ext_data['max_version'])) {
+								continue;
+							}
+
+							if ( ! empty( $req_ext_data['min_version'] ) ) {
+								if (!version_compare($req_ext_data['min_version'], $ext->manifest->get_version(), '<=')) {
+									if ($can_install) {
+										$result[] = sprintf(
+											__('You need to update the %s extension to %s: %s', 'fw'),
+											$ext->manifest->get_name(),
+											$req_ext_data['min_version'],
+											fw_html_tag('a', array('href' => self_admin_url('update-core.php')),
+												sprintf(__('Update %s', 'fw'), $ext->manifest->get_name())
+											)
+										);
+									} else {
+										$result[] = sprintf(
+											__('The %s extension needs to be updated to %s', 'fw'),
+											$ext->manifest->get_name(),
+											$req_ext_data['min_version']
+										);
+									}
+								}
+							}
+
+							if ( ! empty( $req_ext_data['max_version'] ) ) {
+								if (!version_compare($req_ext_data['max_version'], $ext->manifest->get_version(), '>=')) {
+									$result[] = sprintf(
+										__( 'Maximum supported %s extension version is %s', 'fw' ),
+										$ext->manifest->get_name(),
+										$req_ext_data['max_version']
+									);
+								}
+							}
+						} else {
+							$ext_title = fw_id_to_title($req_ext);
+
+							if (isset($lists['installed'][$req_ext])) {
+								$ext_title = fw_akg('name', $lists['installed'][$req_ext]['manifest'], $ext_title);
+
+								ob_start(); ?>
+								<form action="<?php echo esc_attr($link) ?>&sub-page=activate&extension=<?php echo esc_attr($req_ext) ?>" method="post" style="display: inline;">
+									<?php wp_nonce_field($nonces['activate']['action'], $nonces['activate']['name']); ?>
+									<?php echo sprintf(__( 'The %s extension is disabled', 'fw' ), $ext_title); ?>:
+									<a href="#" onclick="jQuery(this).closest('form').submit(); return false;"><?php echo sprintf(__('Activate %s', 'fw'), $ext_title); ?></a>
+								</form>
+								<?php
+								$result[] = ob_get_clean();
+							} else {
+								if ($can_install && isset($lists['available'][$req_ext])) {
+									$ext_title = $lists['available'][ $req_ext ]['name'];
+
+									$result[] = sprintf(
+										__( 'The %s extension is not installed: %s', 'fw' ),
+										$ext_title,
+										fw_html_tag( 'a', array( 'href' => $link . '&sub-page=install&extension=' . $req_ext ),
+											sprintf( __( 'Install %s', 'fw' ), $ext_title )
+										)
+									);
+								} else {
+									$result[] = sprintf(
+										__( 'The %s extension is not installed', 'fw' ),
+										$ext_title
+									);
+								}
+							}
+						}
+					}
+
+					break;
+
+				default:
+					trigger_error('Invalid requirement: '. $req_name, E_USER_WARNING);
+					continue;
+			}
+		}
+
+		return $result;
+	}
 }
