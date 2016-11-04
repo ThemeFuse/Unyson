@@ -1476,7 +1476,7 @@ class Parsedown
             return self::$instances[$name];
         }
 
-        $instance = new static();
+        $instance = new self(); // static doesn't work in php 5.2
 
         self::$instances[$name] = $instance;
 
