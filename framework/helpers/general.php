@@ -1666,3 +1666,12 @@ function fw_multi_ext2type( $ext_array = array() ) {
 
 	return $result;
 }
+
+if ( ! function_exists( 'fw_resize' ) ) {
+	function fw_resize( $url, $width = false, $height = false, $crop = false ) {
+		$fw_resize = FW_Resize::getInstance();
+		$response  = $fw_resize->process( $url, $width, $height, $crop );
+
+		return ( ! is_wp_error( $response ) && ! empty( $response['src'] ) ) ? $response['src'] : $url;
+	}
+}

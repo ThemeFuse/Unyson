@@ -571,37 +571,3 @@ class FW_Form {
 		}
 	}
 }
-
-if ( is_admin() ) {
-	/**
-	 * Display form errors in admin side
-	 * @internal
-	 */
-	function _action_fw_form_show_errors_in_admin() {
-		$form = FW_Form::get_submitted();
-
-		if ( ! $form || $form->is_valid() ) {
-			return;
-		}
-
-		foreach ( $form->get_errors() as $input_name => $error_message ) {
-			FW_Flash_Messages::add( 'fw-form-admin-' . $input_name, $error_message, 'error' );
-		}
-	}
-	add_action( 'wp_loaded', '_action_fw_form_show_errors_in_admin', 111 );
-} else {
-	/**
-	 * to disable this use remove_action('wp_print_styles', '_action_fw_form_frontend_default_styles');
-	 * @internal
-	 */
-	function _action_fw_form_frontend_default_styles() {
-		$form = FW_Form::get_submitted();
-
-		if ( ! $form || $form->is_valid() ) {
-			return;
-		}
-
-		echo '<style type="text/css">.fw-form-errors { color: #bf0000; }</style>';
-	}
-	add_action( 'wp_print_styles', '_action_fw_form_frontend_default_styles' );
-}

@@ -156,27 +156,3 @@ if ( ! class_exists( 'FW_Resize' ) ) {
 		}
 	}
 }
-
-if ( ! function_exists( 'fw_resize' ) ) {
-	function fw_resize( $url, $width = false, $height = false, $crop = false ) {
-		$fw_resize = FW_Resize::getInstance();
-		$response  = $fw_resize->process( $url, $width, $height, $crop );
-
-		return ( ! is_wp_error( $response ) && ! empty( $response['src'] ) ) ? $response['src'] : $url;
-	}
-}
-
-if ( ! function_exists( 'fw_delete_resized_thumbnails' ) ) {
-	function fw_delete_resized_thumbnails( $id ) {
-		$images = wp_get_attachment_metadata( $id );
-		if ( ! empty( $images['resizes'] ) ) {
-			$uploads_dir = wp_upload_dir();
-			foreach ( $images['resizes'] as $image ) {
-				$file = $uploads_dir['basedir'] . '/' . $image;
-				@unlink( $file );
-			}
-		}
-	}
-
-	add_action( 'delete_attachment', 'fw_delete_resized_thumbnails' );
-}
