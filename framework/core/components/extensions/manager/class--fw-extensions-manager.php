@@ -153,19 +153,6 @@ final class _FW_Extensions_Manager
 		return fw_get_framework_directory_uri('/core/components/extensions/manager'. $append);
 	}
 
-	private function get_markdown_parser()
-	{
-		if (!$this->markdown_parser) {
-			if (!class_exists('Parsedown')) {
-				require_once dirname(__FILE__) .'/includes/parsedown/Parsedown.php';
-			}
-
-			$this->markdown_parser = new Parsedown();
-		}
-
-		return $this->markdown_parser;
-	}
-
 	private function get_nonce($form) {
 		switch ($form) {
 			case 'install':
@@ -1885,12 +1872,14 @@ final class _FW_Extensions_Manager
 
 	private function display_extension_docs_page($extension_name, $data)
 	{
-		$installed_extensions = $this->get_installed_extensions();
-		$docs_path = $installed_extensions[$extension_name]['path'] .'/readme.md.php';
-		unset($installed_extensions);
+		$ext = fw_ext($extension_name);
+		$docs = $ext->get_rendered_docs();
 
-		if (!file_exists($docs_path)) {
-			return __('Extension has no Install Instructions', 'fw');
+		if (! $docs) {
+			return __(
+				'Extension has no documentation. Maybe ask its developer to write some?',
+				'fw'
+			);
 		}
 
 		echo fw()->backend->render_box(
@@ -1900,9 +1889,7 @@ final class _FW_Extensions_Manager
 				'docs' => array(
 					'label' => false,
 					'type'  => 'html-full',
-					'html'  => $this->get_markdown_parser()->text(
-						fw_render_view($docs_path, array())
-					),
+					'html'  => $docs
 				),
 			))
 		);

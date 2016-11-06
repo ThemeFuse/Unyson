@@ -365,6 +365,25 @@ abstract class FW_Extension
 	}
 
 	/**
+	 * @since 2.6.9
+	 */
+	final public function get_rendered_docs() {
+		$docs_path = $this->get_path('/readme.md.php');
+
+		if (! file_exists($docs_path)) {
+			return false;
+		}
+
+		return fw()->backend->get_markdown_parser()->text(
+			/**
+			 * TODO: Perhaps send here some values in order to make extension docs
+			 * more dynamic???
+			 */
+			fw_render_view($docs_path, array())
+		);
+	}
+
+	/**
 	 * Get extension's settings option value from the database
 	 *
 	 * @param string|null $option_id

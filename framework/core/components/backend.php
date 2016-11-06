@@ -18,6 +18,14 @@ final class _FW_Component_Backend {
 	private $default_render_design = 'default';
 
 	/**
+	 * The singleton instance of Parsedown class that is used across
+	 * whole framework.
+	 *
+	 * @since 2.6.9
+	 */
+	private $markdown_parser = null;
+
+	/**
 	 * Store option types for registration, until they will be required
 	 * @var array|false
 	 *      array Can have some pending option types in it
@@ -1895,5 +1903,29 @@ final class _FW_Component_Backend {
 		} else {
 			$this->default_render_design = $design;
 		}
+	}
+
+	/**
+	 * Get markdown parser with autoloading and caching
+	 *
+	 * Usage:
+	 *   fw()->backend->get_markdown_parser()
+	 *
+	 * @param bool $fresh_instance Whether to force return a fresh instance of the class
+	 *
+	 * @since 2.6.9
+	 */
+	public function get_markdown_parser($fresh_instance = false) {
+		if (! $this->markdown_parser || $fresh_instance) {
+			$path = dirname(__FILE__) . '/extensions/manager/includes/parsedown/Parsedown.php';
+
+			if (! class_exists('Parsedown')) {
+				require_once $path;
+			}
+
+			$this->markdown_parser = new Parsedown();
+		}
+
+		return $this->markdown_parser;
 	}
 }
