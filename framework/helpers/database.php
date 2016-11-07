@@ -84,7 +84,7 @@ class FW_Db_Options_Model_Post extends FW_Db_Options_Model {
 		return 'post';
 	}
 
-	private function get_cache_key($key) {
+	private function get_cache_key($key, $item_id, array $extra_data = array()) {
 		return 'fw-options-model:'. $this->get_id() .'/'. $key;
 	}
 
