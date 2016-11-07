@@ -11,11 +11,6 @@ final class _FW_Extensions_Manager
 	 */
 	private $extension_settings_form;
 
-	/**
-	 * @var Parsedown
-	 */
-	private $markdown_parser;
-
 	private $manifest_default_values = array(
 		'display' => false,
 		'standalone' => false,
