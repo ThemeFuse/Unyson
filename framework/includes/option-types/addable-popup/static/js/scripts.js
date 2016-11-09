@@ -169,6 +169,25 @@
 			nodes.$optionWrapper.trigger('change'); // for customizer
 		});
 
+		_.map(
+			[
+				'open',
+				'render',
+				'close'
+			],
+
+			function (ev) {
+				utils.modal.on(ev, _.partial(triggerEvent, ev));
+
+				function triggerEvent (eventName, modal) {
+					eventName = 'fw:option-type:addable-popup:options-modal:' + eventName;
+					fwEvents.trigger(eventName, { modal: this });
+				}
+			}
+		)
+
+
+
 		utils.init();
 	};
 
