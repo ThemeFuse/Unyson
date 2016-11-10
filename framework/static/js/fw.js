@@ -1537,10 +1537,10 @@ fw.getValuesFromServer = function (data) {
 				id: id,
 				position: {
 					viewport: $(document.body),
-					at: 'top center',
-					my: 'bottom center',
+					at: $i.attr('data-custom-at') ? ( $i.attr('data-custom-at')) : 'top center',
+					my: $i.attr('data-custom-my') ? ( $i.attr('data-custom-my')) : 'bottom center',
 					adjust: {
-						y: 2
+						y: $i.attr('data-adjust') ? ( + $i.attr('data-adjust')) : 2
 					}
 				},
 				style: {
