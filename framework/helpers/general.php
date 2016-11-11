@@ -10,7 +10,7 @@
  * @param string $keys_delimiter
  * @return null|mixed
  */
-function fw_akg($keys, &$array_or_object, $default_value = null, $keys_delimiter = '/') {
+function fw_akg($keys, $array_or_object, $default_value = null, $keys_delimiter = '/') {
 	if (!is_array($keys)) {
 		$keys = explode( $keys_delimiter, (string) $keys );
 	}
