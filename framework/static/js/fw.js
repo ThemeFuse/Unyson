@@ -835,6 +835,10 @@ fw.getQueryString = function(name) {
 						});
 					}
 
+					// reset to initial css value
+					// fixes https://github.com/ThemeFuse/Unyson/issues/2167
+					$modal.css('z-index', '');
+
 					/**
 					 * Adjust the z-index for the new frame's backdrop and modal
 					 */
