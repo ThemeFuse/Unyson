@@ -46,6 +46,7 @@ if (defined('FW')) {
 					'FW_Access_Key' => 'class-fw-access-key',
 					'FW_WP_Filesystem' => 'class-fw-wp-filesystem',
 					'FW_File_Cache' => 'class-fw-file-cache',
+					'FW_File_Storage' => 'class-fw-file-storage',
 					'FW_Form' => 'class-fw-form',
 					'FW_Settings_Form' => 'class-fw-settings-form',
 					'FW_Request' => 'class-fw-request',
