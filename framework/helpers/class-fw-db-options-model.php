@@ -254,14 +254,27 @@ abstract class FW_Db_Options_Model {
 				$value = array();
 			}
 
-			foreach ($value as $_option_id => $_option_value) {
-				if (isset($options[$_option_id])) {
-					$value[$_option_id] = fw()->backend->option_type($options[$_option_id]['type'])->storage_save(
+			if (empty($value)) {
+				// All options reset. Reset all fw-storage values too
+				// Fixes https://github.com/ThemeFuse/Unyson/issues/2179
+				foreach ($options as $_option_id => $_option) {
+					fw()->backend->option_type($options[$_option_id]['type'])->storage_save(
 						$_option_id,
-						$options[$_option_id],
-						$_option_value,
+						$_option,
+						fw()->backend->option_type($options[$_option_id]['type'])->get_defaults('value'),
 						$this->get_fw_storage_params($item_id, $extra_data)
 					);
+				}
+			} else {
+				foreach ($value as $_option_id => $_option_value) {
+					if (isset($options[$_option_id])) {
+						$value[$_option_id] = fw()->backend->option_type($options[$_option_id]['type'])->storage_save(
+							$_option_id,
+							$options[$_option_id],
+							$_option_value,
+							$this->get_fw_storage_params($item_id, $extra_data)
+						);
+					}
 				}
 			}
 

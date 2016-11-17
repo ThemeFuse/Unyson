@@ -273,9 +273,10 @@ abstract class FW_Option_Type
 	 * This makes possible an option array to have required only one parameter: array('type' => '...')
 	 * Other parameters are merged with array returned from this method
 	 *
+	 * @param string Multikey. Since 2.6.9
 	 * @return array
 	 */
-	final public function get_defaults()
+	final public function get_defaults($key = null)
 	{
 		$option = $this->_get_defaults();
 
@@ -291,7 +292,7 @@ abstract class FW_Option_Type
 			$option['value'] = array();
 		}
 
-		return $option;
+		return is_string($key) ? fw_akg($key, $option) : $option;
 	}
 
 	/**
