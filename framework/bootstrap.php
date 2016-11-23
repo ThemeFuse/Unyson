@@ -45,7 +45,6 @@ if (defined('FW')) {
 				static $class_to_file = array(
 					'FW_Access_Key' => 'class-fw-access-key',
 					'FW_WP_Filesystem' => 'class-fw-wp-filesystem',
-					'FW_File_Cache' => 'class-fw-file-cache',
 					'FW_Form' => 'class-fw-form',
 					'FW_Settings_Form' => 'class-fw-settings-form',
 					'FW_Request' => 'class-fw-request',
