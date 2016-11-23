@@ -452,6 +452,12 @@ final class _FW_Component_Backend {
 			array(),
 			fw()->manifest->get_version()
 		);
+		/**
+		 * backwards compatibility, in case extensions are not up-to-date
+		 * todo: remove in next major version
+		 * @deprecated
+		 */
+		wp_register_style('fw-font-awesome', fw_get_framework_directory_uri( '/static/libs/font-awesome/css/font-awesome.min.css' ));
 
 		wp_register_script(
 			'backbone-relational',
