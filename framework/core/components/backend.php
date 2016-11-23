@@ -455,6 +455,7 @@ final class _FW_Component_Backend {
 		/**
 		 * backwards compatibility, in case extensions are not up-to-date
 		 * todo: remove in next major version
+		 * https://github.com/ThemeFuse/Unyson/issues/2198
 		 * @deprecated
 		 */
 		wp_register_style('fw-font-awesome', fw_get_framework_directory_uri( '/static/libs/font-awesome/css/font-awesome.min.css' ));
