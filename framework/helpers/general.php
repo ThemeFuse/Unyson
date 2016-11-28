@@ -487,20 +487,12 @@ function fw_current_screen_match(array $rules) {
  * @return string URI
  */
 function fw_locate_theme_path_uri($rel_path) {
-	try {
-		return FW_File_Cache::get($cache_key = 'theme-uri:'. $rel_path);
-	} catch (FW_File_Cache_Not_Found_Exception $e) {
-		if (is_child_theme() && file_exists(get_stylesheet_directory() . $rel_path)) {
-			$result = get_stylesheet_directory_uri() . $rel_path;
-		} elseif (file_exists(get_template_directory() . $rel_path)) {
-			$result = get_template_directory_uri() . $rel_path;
-		} else {
-			$result = 'about:blank#theme-file-not-found:'. $rel_path;
-		}
-
-		FW_File_Cache::set($cache_key, $result);
-
-		return $result;
+	if (is_child_theme() && file_exists(get_stylesheet_directory() . $rel_path)) {
+		return get_stylesheet_directory_uri() . $rel_path;
+	} elseif (file_exists(get_template_directory() . $rel_path)) {
+		return get_template_directory_uri() . $rel_path;
+	} else {
+		return 'about:blank#theme-file-not-found:'. $rel_path;
 	}
 }
 
@@ -511,20 +503,12 @@ function fw_locate_theme_path_uri($rel_path) {
  * @return string URI
  */
 function fw_locate_theme_path($rel_path) {
-	try {
-		return FW_File_Cache::get($cache_key = 'theme-path:'. $rel_path);
-	} catch (FW_File_Cache_Not_Found_Exception $e) {
-		if (is_child_theme() && file_exists(get_stylesheet_directory() . $rel_path)) {
-			$result = get_stylesheet_directory() . $rel_path;
-		} elseif (file_exists(get_template_directory() . $rel_path)) {
-			$result = get_template_directory() . $rel_path;
-		} else {
-			$result = false;
-		}
-
-		FW_File_Cache::set($cache_key, $result);
-
-		return $result;
+	if (is_child_theme() && file_exists(get_stylesheet_directory() . $rel_path)) {
+		return get_stylesheet_directory() . $rel_path;
+	} elseif (file_exists(get_template_directory() . $rel_path)) {
+		return get_template_directory() . $rel_path;
+	} else {
+		return false;
 	}
 }
 

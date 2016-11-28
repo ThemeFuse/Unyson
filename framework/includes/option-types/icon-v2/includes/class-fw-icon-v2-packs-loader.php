@@ -307,7 +307,7 @@ class FW_Icon_V2_Packs_Loader
 					'/static/libs/font-awesome/css/font-awesome.min.css'
 				),
 
-				'admin_wp_enqueue_handle' => 'fw-font-awesome'
+				'admin_wp_enqueue_handle' => 'font-awesome'
 			),
 
 			'entypo' => array(

@@ -141,25 +141,14 @@ abstract class FW_Extension
 	 */
 	final public function locate_path($rel_path)
 	{
-		try {
-			return FW_File_Cache::get($cache_key = 'ext:'. $this->get_name() .':path:'. $rel_path);
-		} catch (FW_File_Cache_Not_Found_Exception $e) {
-			$result = false;
-			$locations = $this->customizations_locations;
-			$locations[$this->get_path()] = $this->get_uri();
+		$locations = $this->customizations_locations;
+		$locations[$this->get_path()] = $this->get_uri();
 
-			foreach ($locations as $path => $uri) {
-				if (file_exists($path . $rel_path)) {
-					$result = $path . $rel_path;
-					break;
-				}
+		foreach ($locations as $path => $uri) {
+			if (file_exists($path . $rel_path)) {
+				return $path . $rel_path;
 			}
-
-			FW_File_Cache::set($cache_key, $result);
-
-			return $result;
 		}
-
 
 		return false;
 	}
@@ -170,24 +159,16 @@ abstract class FW_Extension
 	 */
 	final public function locate_URI($rel_path)
 	{
-		try {
-			return FW_File_Cache::get($cache_key = 'ext:'. $this->get_name() .':uri:'. $rel_path);
-		} catch (FW_File_Cache_Not_Found_Exception $e) {
-			$result = false;
-			$locations = $this->customizations_locations;
-			$locations[$this->get_path()] = $this->get_uri();
+		$locations = $this->customizations_locations;
+		$locations[$this->get_path()] = $this->get_uri();
 
-			foreach ($locations as $path => $uri) {
-				if (file_exists($path . $rel_path)) {
-					$result = $uri . $rel_path;
-					break;
-				}
+		foreach ($locations as $path => $uri) {
+			if (file_exists($path . $rel_path)) {
+				return $uri . $rel_path;
 			}
-
-			FW_File_Cache::set($cache_key, $result);
-
-			return $result;
 		}
+
+		return false;
 	}
 
 	/**

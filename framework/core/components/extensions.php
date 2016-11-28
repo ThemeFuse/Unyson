@@ -150,13 +150,7 @@ final class _FW_Component_Extensions
 			$data['parent'] = null;
 		}
 
-		try {
-			$dirs = FW_File_Cache::get($cache_key = 'core:ext:load:glob:'. $data['path']);
-		} catch (FW_File_Cache_Not_Found_Exception $e) {
-			$dirs = glob($data['path'] .'/*', GLOB_ONLYDIR);
-
-			FW_File_Cache::set($cache_key, $dirs);
-		}
+		$dirs = glob($data['path'] .'/*', GLOB_ONLYDIR);
 
 		if (empty($dirs)) {
 			return;
@@ -298,13 +292,7 @@ final class _FW_Component_Extensions
 		}
 
 		foreach ($paths as $path => $uri) {
-			try {
-				$files = FW_File_Cache::get($cache_key = 'core:ext:glob:inc-all-php:'. $extension->get_name() .':'. $path);
-			} catch (FW_File_Cache_Not_Found_Exception $e) {
-				$files = glob($path . $dir_rel_path .'/*.php');
-
-				FW_File_Cache::set($cache_key, $files);
-			}
+			$files = glob($path . $dir_rel_path .'/*.php');
 
 			if ($files) {
 				foreach ($files as $dir_file_path) {
