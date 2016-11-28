@@ -280,7 +280,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 								$terms = $wpdb->get_results(
 									"SELECT terms.term_id, terms.name " .
 									"FROM $wpdb->terms as terms, $wpdb->term_taxonomy as taxonomies " .
-									"WHERE taxonomies.taxonomy IN ('" . implode( "', ", $source ) . "') " .
+									"WHERE taxonomies.taxonomy IN ('" . implode( "', '", $source ) . "') " .
 									"AND terms.term_id = taxonomies.term_id " .
 									"AND taxonomies.term_id = taxonomies.term_taxonomy_id"
 								);
