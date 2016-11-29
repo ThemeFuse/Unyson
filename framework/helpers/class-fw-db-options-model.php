@@ -194,9 +194,13 @@ abstract class FW_Db_Options_Model {
 			return (empty($values) && is_array($default_value)) ? $default_value : $values;
 		} else {
 			if (is_null($sub_keys)) {
-				return isset($values[$option_id]) ? $values[$option_id] : $default_value;
+				return isset($values[$option_id])
+					? $values[$option_id]
+					: $default_value;
 			} else {
-				return fw_akg($sub_keys, $values[$option_id], $default_value);
+				return isset($values[$option_id])
+					? fw_akg($sub_keys, $values[$option_id], $default_value)
+					: $default_value;
 			}
 		}
 	}
