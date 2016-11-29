@@ -65,18 +65,22 @@ class FW_Settings_Form_Theme extends FW_Settings_Form {
 			do {
 				global $menu, $submenu;
 
-				foreach ($menu as $_menu) {
-					if ($_menu[2] === fw()->backend->_get_settings_page_slug()) {
-						$title = $_menu[0];
-						break 2;
+				if (is_array($menu)) {
+					foreach ($menu as $_menu) {
+						if ($_menu[2] === fw()->backend->_get_settings_page_slug()) {
+							$title = $_menu[0];
+							break 2;
+						}
 					}
 				}
 
-				foreach ($submenu as $_menu) {
-					foreach ($_menu as $_submenu) {
-						if ($_submenu[2] === fw()->backend->_get_settings_page_slug()) {
-							$title = $_submenu[0];
-							break 3;
+				if (is_array($submenu)) {
+					foreach ($submenu as $_menu) {
+						foreach ($_menu as $_submenu) {
+							if ($_submenu[2] === fw()->backend->_get_settings_page_slug()) {
+								$title = $_submenu[0];
+								break 3;
+							}
 						}
 					}
 				}
