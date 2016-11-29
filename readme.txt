@@ -84,7 +84,7 @@ Yes; Unyson will work with any theme.
 == Changelog ==
 
 = 2.6.10 =
-* Fixed [#2216](https://github.com/ThemeFuse/Unyson/issues/2216)
+* Fixed [#2216](https://github.com/ThemeFuse/Unyson/issues/2216), [#2212](https://github.com/ThemeFuse/Unyson/issues/2212), [#2214](https://github.com/ThemeFuse/Unyson/issues/2214)
 
 = 2.6.9 =
 * Fixed [#1743](https://github.com/ThemeFuse/Unyson/issues/1743), [#2143](https://github.com/ThemeFuse/Unyson/issues/2143), [#2148](https://github.com/ThemeFuse/Unyson/issues/2148), [#2154](https://github.com/ThemeFuse/Unyson/pull/2154), [#2159](https://github.com/ThemeFuse/Unyson/pull/2159), [#2139](https://github.com/ThemeFuse/Unyson/issues/2139), [#2167](https://github.com/ThemeFuse/Unyson/issues/2167), [#2179](https://github.com/ThemeFuse/Unyson/issues/2179), [#2180](https://github.com/ThemeFuse/Unyson/pull/2180)
