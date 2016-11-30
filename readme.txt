@@ -11,7 +11,7 @@ A simple and easy way to build a powerful website.
 
 == Description ==
 
-> Did you find this plugin helpful? Please consider [leaving a 5-star review](http://wordpress.org/support/view/plugin-reviews/social-icons-widget-by-wpzoom).
+> Did you find this plugin helpful? Please consider [leaving a 5-star review](https://wordpress.org/support/plugin/unyson/reviews/).
 
 [Unyson](http://unyson.io/) - A free drag & drop framework that comes with a bunch of built in extensions that will help you develop premium themes fast & easy.
 
