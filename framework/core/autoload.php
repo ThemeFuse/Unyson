@@ -85,3 +85,15 @@ function _fw_core_extends_autoload( $class ) {
 			break;
 	}
 }
+
+spl_autoload_register( '_fw_code_exceptions_autoload' );
+function _fw_code_exceptions_autoload( $class ) {
+	switch ( $class ) {
+		case 'FW_Option_Type_Exception' :
+		case 'FW_Option_Type_Exception_Not_Found' :
+		case 'FW_Option_Type_Exception_Invalid_Class' :
+		case 'FW_Option_Type_Exception_Already_Registered' :
+			require_once dirname( __FILE__ ) . '/exceptions/class-fw-option-type-exception.php';
+			break;
+	}
+}

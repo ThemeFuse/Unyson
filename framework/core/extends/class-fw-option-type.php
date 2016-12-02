@@ -319,8 +319,8 @@ abstract class FW_Option_Type
 	 *
 	 * @param string|FW_Option_Type $option_type_class
 	 */
-	final public static function register( $option_type_class ) {
-		fw()->backend->_register_option_type( self::get_access_key(), $option_type_class );
+	final public static function register( $option_type_class, $type = null ) {
+		fw()->backend->_register_option_type( self::get_access_key(), $option_type_class, $type );
 	}
 
 	/**
