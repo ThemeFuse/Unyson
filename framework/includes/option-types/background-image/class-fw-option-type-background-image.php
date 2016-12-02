@@ -139,5 +139,3 @@ class FW_Option_Type_Background_Image extends FW_Option_Type {
 		return $input_value;
 	}
 }
-
-FW_Option_Type::register('FW_Option_Type_Background_Image');

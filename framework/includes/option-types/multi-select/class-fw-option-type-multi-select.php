@@ -490,9 +490,6 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 		}
 	}
 
-	FW_Option_Type::register( 'FW_Option_Type_Multi_Select' );
-
 	add_action( 'wp_ajax_admin_action_get_ajax_response',
 		array( "FW_Option_Type_Multi_Select", '_admin_action_get_ajax_response' ) );
-
 endif;

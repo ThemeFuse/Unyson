@@ -91,11 +91,7 @@ final class _FW_Component_Extensions
 		}
 	}
 
-	public function __construct()
-	{
-		require dirname(__FILE__) .'/extensions/class-fw-extension-default.php';
-
-		require dirname(__FILE__) .'/extensions/manager/class--fw-extensions-manager.php';
+	public function __construct() {
 		$this->manager = new _FW_Extensions_Manager();
 	}
 

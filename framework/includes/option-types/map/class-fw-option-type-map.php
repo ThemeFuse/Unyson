@@ -103,5 +103,3 @@ class FW_Option_Type_Map extends FW_Option_Type {
 		return FW_Option_Type_GMap_Key::get_key();
 	}
 }
-
-FW_Option_Type::register( 'FW_Option_Type_Map' );

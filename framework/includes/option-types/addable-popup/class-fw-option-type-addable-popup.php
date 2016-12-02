@@ -193,8 +193,6 @@ class FW_Option_Type_Addable_Popup extends FW_Option_Type
 
 }
 
-FW_Option_Type::register('FW_Option_Type_Addable_Popup');
-
 class FW_Option_Type_Addable_Popup_Full extends FW_Option_Type_Addable_Popup
 {
 	public function get_type()
@@ -215,5 +213,3 @@ class FW_Option_Type_Addable_Popup_Full extends FW_Option_Type_Addable_Popup
 		return parent::_render($id, $option, $data);
 	}
 }
-
-FW_Option_Type::register('FW_Option_Type_Addable_Popup_Full');

@@ -77,23 +77,11 @@ function fw_db_option_storage_type($type = null) {
 	static $types = null;
 
 	if (is_null($types)) {
-		$dir = fw_get_framework_directory('/includes/option-storage');
-
-		if (!class_exists('FW_Option_Storage_Type')) {
-			require_once $dir .'/class-fw-option-storage-type.php';
-		}
-		if (!class_exists('_FW_Option_Storage_Type_Register')) {
-			require_once $dir .'/class--fw-option-storage-type-register.php';
-		}
-
 		$access_key = new FW_Access_Key('fw:option-storage-register');
 		$register = new _FW_Option_Storage_Type_Register($access_key->get_key());
 
 		{
-			require_once $dir .'/type/class-fw-option-storage-type-post-meta.php';
 			$register->register(new FW_Option_Storage_Type_Post_Meta());
-
-			require_once $dir .'/type/class-fw-option-storage-type-wp-option.php';
 			$register->register(new FW_Option_Storage_Type_WP_Option());
 		}
 

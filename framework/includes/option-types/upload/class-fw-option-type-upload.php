@@ -231,4 +231,3 @@ class FW_Option_Type_Upload extends FW_Option_Type
 		}
 	}
 }
-FW_Option_Type::register('FW_Option_Type_Upload');

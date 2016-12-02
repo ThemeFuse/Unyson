@@ -246,4 +246,3 @@ class FW_Option_Type_Multi_Upload extends FW_Option_Type
 		return $return_arr;
 	}
 }
-FW_Option_Type::register('FW_Option_Type_Multi_Upload');
