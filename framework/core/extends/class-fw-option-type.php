@@ -6,6 +6,11 @@
 abstract class FW_Option_Type
 {
 	/**
+	 * @var FW_Access_Key
+	 */
+	private static $access_key;
+
+	/**
 	 * Option's unique type, used in option array in 'type' key
 	 * @return string
 	 */
@@ -311,16 +316,11 @@ abstract class FW_Option_Type
 
 	/**
 	 * Use this method to register a new option type
+	 *
 	 * @param string|FW_Option_Type $option_type_class
 	 */
-	final public static function register($option_type_class) {
-		static $registration_access_key = null;
-
-		if ($registration_access_key === null) {
-			$registration_access_key = new FW_Access_Key('fw_option_type');
-		}
-
-		fw()->backend->_register_option_type($registration_access_key, $option_type_class);
+	final public static function register( $option_type_class ) {
+		fw()->backend->_register_option_type( self::get_access_key(), $option_type_class );
 	}
 
 	/**
@@ -399,5 +399,13 @@ abstract class FW_Option_Type
 	 */
 	protected function _storage_save($id, array $option, $value, array $params) {
 		return fw_db_option_storage_save($id, $option, $value, $params);
+	}
+
+	private static function get_access_key(){
+		if ( self::$access_key === null ) {
+			self::$access_key = new FW_Access_Key('fw_option_type');
+		}
+
+		return self::$access_key;
 	}
 }
