@@ -401,9 +401,9 @@ abstract class FW_Option_Type
 		return fw_db_option_storage_save($id, $option, $value, $params);
 	}
 
-	private static function get_access_key(){
+	private static function get_access_key() {
 		if ( self::$access_key === null ) {
-			self::$access_key = new FW_Access_Key('fw_option_type');
+			self::$access_key = new FW_Access_Key( 'fw_option_type' );
 		}
 
 		return self::$access_key;
