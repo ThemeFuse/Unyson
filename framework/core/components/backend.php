@@ -551,6 +551,7 @@ final class _FW_Component_Backend {
 	 * @param FW_Option_Type $option
 	 *
 	 * @return FW_Option_Type
+	 *
 	 * @since 2.6.11
 	 */
 	protected function set_option_in_storage( FW_Option_Type $option ) {
@@ -2009,6 +2010,8 @@ final class _FW_Component_Backend {
 	 *   fw()->backend->get_markdown_parser()
 	 *
 	 * @param bool $fresh_instance Whether to force return a fresh instance of the class
+	 *
+	 * @return Parsedown
 	 *
 	 * @since 2.6.9
 	 */

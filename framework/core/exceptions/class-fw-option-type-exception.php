@@ -2,6 +2,7 @@
 	die( 'Forbidden' );
 }
 
+
 /**
  * Class FW_Option_Type_Exception
  *
