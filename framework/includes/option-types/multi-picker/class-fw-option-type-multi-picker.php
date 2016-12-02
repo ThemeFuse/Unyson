@@ -366,4 +366,3 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 		return fw_db_option_storage_save($id, $option, $value, $params);
 	}
 }
-FW_Option_Type::register('FW_Option_Type_Multi_Picker');

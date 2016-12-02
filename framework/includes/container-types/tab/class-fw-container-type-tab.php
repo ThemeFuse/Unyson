@@ -26,4 +26,3 @@ class FW_Container_Type_Tab extends FW_Container_Type {
 		);
 	}
 }
-FW_Container_Type::register('FW_Container_Type_Tab');

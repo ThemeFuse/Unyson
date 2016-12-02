@@ -90,5 +90,3 @@ class FW_Option_Type_Gradient extends FW_Option_Type
 		);
 	}
 }
-
-FW_Option_Type::register('FW_Option_Type_Gradient');

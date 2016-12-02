@@ -121,4 +121,3 @@ class FW_Option_Type_Radio_Text extends FW_Option_Type
 		}
 	}
 }
-FW_Option_Type::register('FW_Option_Type_Radio_Text');

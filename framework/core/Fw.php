@@ -34,8 +34,6 @@ final class _Fw
 
 		// manifest
 		{
-			require $fw_dir .'/core/class-fw-manifest.php';
-
 			require $fw_dir .'/manifest.php';
 			/** @var array $manifest */
 
@@ -44,18 +42,10 @@ final class _Fw
 			add_action('fw_init', array($this, '_check_requirements'), 1);
 		}
 
-		require $fw_dir .'/core/extends/class-fw-extension.php';
-		require $fw_dir .'/core/extends/interface-fw-option-handler.php'; // option handler (experimental)
-
 		// components
 		{
-			require $fw_dir .'/core/components/extensions.php';
 			$this->extensions = new _FW_Component_Extensions();
-
-			require $fw_dir .'/core/components/backend.php';
 			$this->backend = new _FW_Component_Backend();
-
-			require $fw_dir .'/core/components/theme.php';
 			$this->theme = new _FW_Component_Theme();
 		}
 	}

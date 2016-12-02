@@ -33,6 +33,7 @@ if (defined('FW')) {
 
 		// Load core
 		{
+			require $fw_dir .'/core/autoload.php';
 			require $fw_dir .'/core/Fw.php';
 
 			fw();
@@ -71,6 +72,7 @@ if (defined('FW')) {
 			}
 		}
 
+		require $fw_dir .'/includes/autoload.php';
 		require $fw_dir .'/includes/hooks.php';
 
 		/**

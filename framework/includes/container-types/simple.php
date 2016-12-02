@@ -38,4 +38,3 @@ class FW_Container_Type_Group extends FW_Container_Type {
 		return $html;
 	}
 }
-FW_Container_Type::register('FW_Container_Type_Group');

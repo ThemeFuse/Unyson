@@ -13,5 +13,3 @@ class FW_Option_Type_Slider_Short extends FW_Option_Type_Slider {
 		return parent::_render( $id, $option, $data );
 	}
 }
-
-FW_Option_Type::register( 'FW_Option_Type_Slider_Short' );

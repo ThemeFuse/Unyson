@@ -96,4 +96,3 @@ class FW_Option_Type_Addable_Option extends FW_Option_Type
 		return $value;
 	}
 }
-FW_Option_Type::register('FW_Option_Type_Addable_Option');

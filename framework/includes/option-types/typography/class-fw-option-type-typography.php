@@ -143,5 +143,3 @@ class FW_Option_Type_Typography extends FW_Option_Type
 		return 'fixed';
 	}
 }
-
-FW_Option_Type::register('FW_Option_Type_Typography');

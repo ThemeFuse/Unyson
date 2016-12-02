@@ -202,5 +202,3 @@ class Fw_Option_Type_Image_Picker extends FW_Option_Type
 		return 'auto';
 	}
 }
-
-FW_Option_Type::register('FW_Option_Type_Image_Picker');

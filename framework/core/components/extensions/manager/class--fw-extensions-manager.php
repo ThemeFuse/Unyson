@@ -202,9 +202,6 @@ final class _FW_Extensions_Manager
 				$theme_available_ext_file = fw_fix_path(get_template_directory())
 					. fw_get_framework_customizations_dir_rel_path( '/theme/available-extensions.php' )
 			)) {
-				require_once dirname( __FILE__ ) . '/includes/available-ext/class--fw-available-extensions-register.php';
-				require_once dirname( __FILE__ ) . '/includes/available-ext/class-fw-available-extension.php';
-
 				$register = new _FW_Available_Extensions_Register(self::get_access_key()->get_key());
 
 				/**
@@ -964,12 +961,6 @@ final class _FW_Extensions_Manager
 		}
 
 		{
-			if (!class_exists('_FW_Extensions_Install_Upgrader_Skin')) {
-				fw_include_file_isolated(
-					dirname(__FILE__) .'/includes/class--fw-extensions-install-upgrader-skin.php'
-				);
-			}
-
 			$skin = new _FW_Extensions_Install_Upgrader_Skin(array(
 				'title' => $supported
 					? _n('Install Compatible Extension', 'Install Compatible Extensions', count($extensions), 'fw')
@@ -1474,12 +1465,6 @@ final class _FW_Extensions_Manager
 		$extensions = array_fill_keys(array_map('trim', explode(',', FW_Request::GET('extension', ''))), array());
 
 		{
-			if (!class_exists('_FW_Extensions_Delete_Upgrader_Skin')) {
-				fw_include_file_isolated(
-					dirname(__FILE__) .'/includes/class--fw-extensions-delete-upgrader-skin.php'
-				);
-			}
-
 			$skin = new _FW_Extensions_Delete_Upgrader_Skin(array(
 				'title' => _n('Delete Extension', 'Delete Extensions', count($extensions), 'fw'),
 			));
@@ -2463,9 +2448,6 @@ final class _FW_Extensions_Manager
 				);
 			}
 		}
-
-		require_once dirname( __FILE__ ) . '/includes/download-source/class--fw-ext-download-source.php';
-		require_once dirname( __FILE__ ) . '/includes/download-source/class--fw-ext-download-source-register.php';
 
 		require_once dirname( __FILE__ ) . '/includes/download-source/types/init.php';
 

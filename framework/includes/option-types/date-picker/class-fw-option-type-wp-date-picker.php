@@ -121,5 +121,3 @@ class FW_Option_Type_Date_Picker extends FW_Option_Type {
 		return (string)$input_value;
 	}
 }
-
-FW_Option_Type::register('FW_Option_Type_Date_Picker');

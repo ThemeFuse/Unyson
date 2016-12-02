@@ -179,5 +179,3 @@ class FW_Option_Type_Typography_v2 extends FW_Option_Type {
 	}
 
 }
-
-FW_Option_Type::register( 'FW_Option_Type_Typography_v2' );

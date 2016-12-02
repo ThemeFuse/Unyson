@@ -151,7 +151,6 @@ final class _FW_Component_Backend {
 	 */
 	public function _init() {
 		if ( is_admin() ) {
-			require_once dirname(__FILE__) .'/backend/class-fw-settings-form-theme.php';
 			$this->settings_form = new FW_Settings_Form_Theme('theme-settings');
 		}
 
@@ -1576,8 +1575,6 @@ final class _FW_Component_Backend {
 	 */
 	public function option_type( $option_type ) {
 		if ( is_array( $this->option_types_pending_registration ) ) { // This method is called for the first time
-			require_once dirname(__FILE__) .'/../extends/class-fw-option-type.php';
-
 			do_action('fw_option_types_init');
 
 			// Register pending option types
@@ -1615,8 +1612,6 @@ final class _FW_Component_Backend {
 			}
 
 			if (!$this->undefined_option_type) {
-				require_once fw_get_framework_directory('/includes/option-types/class-fw-option-type-undefined.php');
-
 				$this->undefined_option_type = new FW_Option_Type_Undefined();
 			}
 
@@ -1631,8 +1626,6 @@ final class _FW_Component_Backend {
 	 */
 	public function container_type( $container_type ) {
 		if ( is_array( $this->container_types_pending_registration ) ) { // This method is called for the first time
-			require_once dirname(__FILE__) .'/../extends/class-fw-container-type.php';
-
 			do_action('fw_container_types_init');
 
 			// Register pending container types
@@ -1662,8 +1655,6 @@ final class _FW_Component_Backend {
 			}
 
 			if (!$this->undefined_container_type) {
-				require_once fw_get_framework_directory('/includes/container-types/class-fw-container-type-undefined.php');
-
 				$this->undefined_container_type = new FW_Container_Type_Undefined();
 			}
 
@@ -1851,14 +1842,6 @@ final class _FW_Component_Backend {
 						}
 					}
 
-					if (!class_exists('_FW_Customizer_Setting_Option')) {
-						require_once fw_get_framework_directory('/includes/customizer/class--fw-customizer-setting-option.php');
-					}
-
-					if (!class_exists('_FW_Customizer_Control_Option_Wrapper')) {
-						require_once fw_get_framework_directory('/includes/customizer/class--fw-customizer-control-option-wrapper.php');
-					}
-
 					{
 						$args_setting = array(
 							'default' => fw()->backend->option_type($opt['option']['type'])->get_value_from_input($opt['option'], null),
@@ -1924,12 +1907,6 @@ final class _FW_Component_Backend {
 	 */
 	public function get_markdown_parser($fresh_instance = false) {
 		if (! $this->markdown_parser || $fresh_instance) {
-			$path = dirname(__FILE__) . '/extensions/manager/includes/parsedown/Parsedown.php';
-
-			if (! class_exists('Parsedown')) {
-				require_once $path;
-			}
-
 			$this->markdown_parser = new Parsedown();
 		}
 

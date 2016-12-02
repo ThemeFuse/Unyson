@@ -63,8 +63,6 @@ class FW_Option_Type_Hidden extends FW_Option_Type {
 	}
 }
 
-FW_Option_Type::register( 'FW_Option_Type_Hidden' );
-
 class FW_Option_Type_Text extends FW_Option_Type {
 	public function get_type() {
 		return 'text';
@@ -114,8 +112,6 @@ class FW_Option_Type_Text extends FW_Option_Type {
 	}
 }
 
-FW_Option_Type::register( 'FW_Option_Type_Text' );
-
 class FW_Option_Type_Short_Text extends FW_Option_Type_Text {
 	public function get_type() {
 		return 'short-text';
@@ -144,8 +140,6 @@ class FW_Option_Type_Short_Text extends FW_Option_Type_Text {
 		return 'auto';
 	}
 }
-
-FW_Option_Type::register( 'FW_Option_Type_Short_Text' );
 
 class FW_Option_Type_Password extends FW_Option_Type {
 	public function get_type() {
@@ -195,8 +189,6 @@ class FW_Option_Type_Password extends FW_Option_Type {
 		);
 	}
 }
-
-FW_Option_Type::register( 'FW_Option_Type_Password' );
 
 class FW_Option_Type_Textarea extends FW_Option_Type {
 	public function get_type() {
@@ -253,8 +245,6 @@ class FW_Option_Type_Textarea extends FW_Option_Type {
 		);
 	}
 }
-
-FW_Option_Type::register( 'FW_Option_Type_Textarea' );
 
 class FW_Option_Type_Html extends FW_Option_Type {
 	public function get_type() {
@@ -330,8 +320,6 @@ class FW_Option_Type_Html extends FW_Option_Type {
 	}
 }
 
-FW_Option_Type::register( 'FW_Option_Type_Html' );
-
 /**
  * Same html but displayed in fixed width
  */
@@ -347,8 +335,6 @@ class FW_Option_Type_Html_Fixed extends FW_Option_Type_Html {
 		return 'fixed';
 	}
 }
-
-FW_Option_Type::register( 'FW_Option_Type_Html_Fixed' );
 
 /**
  * Same html but displayed in full width
@@ -366,7 +352,6 @@ class FW_Option_Type_Html_Full extends FW_Option_Type_Html {
 	}
 }
 
-FW_Option_Type::register( 'FW_Option_Type_Html_Full' );
 
 class FW_Option_Type_Checkbox extends FW_Option_Type {
 	public function get_type() {
@@ -455,8 +440,6 @@ class FW_Option_Type_Checkbox extends FW_Option_Type {
 		);
 	}
 }
-
-FW_Option_Type::register( 'FW_Option_Type_Checkbox' );
 
 /**
  * Checkboxes list
@@ -588,8 +571,6 @@ class FW_Option_Type_Checkboxes extends FW_Option_Type {
 	}
 }
 
-FW_Option_Type::register( 'FW_Option_Type_Checkboxes' );
-
 /**
  * Radio list
  */
@@ -707,8 +688,6 @@ class FW_Option_Type_Radio extends FW_Option_Type {
 		);
 	}
 }
-
-FW_Option_Type::register( 'FW_Option_Type_Radio' );
 
 /**
  * Select
@@ -861,8 +840,6 @@ class FW_Option_Type_Select extends FW_Option_Type {
 	}
 }
 
-FW_Option_Type::register( 'FW_Option_Type_Select' );
-
 class FW_Option_Type_Short_Select extends FW_Option_Type_Select {
 	public function get_type() {
 		return 'short-select';
@@ -891,8 +868,6 @@ class FW_Option_Type_Short_Select extends FW_Option_Type_Select {
 		return 'auto';
 	}
 }
-
-FW_Option_Type::register( 'FW_Option_Type_Short_Select' );
 
 /**
  * Select Multiple
@@ -1019,9 +994,6 @@ class FW_Option_Type_Select_Multiple extends FW_Option_Type_Select {
 		);
 	}
 }
-
-FW_Option_Type::register( 'FW_Option_Type_Select_Multiple' );
-
 
 class FW_Option_Type_Unique extends FW_Option_Type
 {
@@ -1178,7 +1150,6 @@ class FW_Option_Type_Unique extends FW_Option_Type
 		return $value;
 	}
 }
-FW_Option_Type::register('FW_Option_Type_Unique');
 
 /**
  * Input for Google Maps API Key which is stored in a wp_option
@@ -1235,5 +1206,3 @@ class FW_Option_Type_GMap_Key extends FW_Option_Type_Text {
 		return parent::_storage_save( $id, $option, $value, $params );
 	}
 }
-
-FW_Option_Type::register( 'FW_Option_Type_GMap_Key' );

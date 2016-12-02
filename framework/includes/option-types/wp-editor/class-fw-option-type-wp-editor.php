@@ -168,5 +168,3 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 		return 'auto';
 	}
 }
-
-FW_Option_Type::register( 'FW_Option_Type_Wp_Editor' );

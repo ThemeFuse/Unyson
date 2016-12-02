@@ -216,4 +216,3 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 		return 'auto';
 	}
 }
-FW_Option_Type::register('FW_Option_Type_Addable_Box');

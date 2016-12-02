@@ -116,8 +116,6 @@ class FW_Option_Type_Oembed extends FW_Option_Type {
 	}
 }
 
-FW_Option_Type::register( 'FW_Option_Type_Oembed' );
-
 add_action(
 	'wp_ajax_get_oembed_response',
 	array( "FW_Option_Type_Oembed", '_action_get_oembed_response' )
