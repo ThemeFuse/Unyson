@@ -250,17 +250,26 @@
 
 					var noErrors = _.isEmpty(ajaxData.flash_messages.error) && _.isEmpty(ajaxData.flash_messages.warning);
 
-					fw.soleModal.show(
-						'fw-options-ajax-save-success',
-						'<div style="margin: 0 35px;">'+ fw.soleModal.renderFlashMessages(ajaxData.flash_messages) +'</div>',
-						{
-							autoHide: noErrors
-								? 1000 // hide fast the message if everything went fine
-								: 10000,
-							showCloseButton: false,
-							hidePrevious: noErrors ? false : true // close and open popup when there are errors
-						}
-					);
+					// remove success messages, do not make user wait
+					ajaxData.flash_messages = _.omit(ajaxData.flash_messages, 'success');
+
+					var modalHtml = fw.soleModal.renderFlashMessages(ajaxData.flash_messages);
+
+					if (modalHtml.length) {
+						fw.soleModal.show(
+							'fw-options-ajax-save-success',
+							'<div style="margin: 0 35px;">' + modalHtml + '</div>',
+							{
+								autoHide: noErrors
+									? 1000 // hide fast the message if everything went fine
+									: 10000,
+								showCloseButton: false,
+								hidePrevious: noErrors ? false : true // close and open popup when there are errors
+							}
+						);
+					} else {
+						fw.soleModal.hide();
+					}
 				} while(false);
 
 				/**

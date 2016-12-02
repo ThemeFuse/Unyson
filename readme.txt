@@ -2,14 +2,16 @@
 Contributors: unyson
 Tags: page builder, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
 Requires at least: 4.4
-Tested up to: 4.6
-Stable tag: 2.6.9
+Tested up to: 4.7
+Stable tag: 2.6.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 A simple and easy way to build a powerful website.  
 
 == Description ==
+
+> Did you find this plugin helpful? Please consider [leaving a 5-star review](https://wordpress.org/support/plugin/unyson/reviews/).
 
 [Unyson](http://unyson.io/) - A free drag & drop framework that comes with a bunch of built in extensions that will help you develop premium themes fast & easy.
 
@@ -82,6 +84,9 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.6.10 =
+* Fixed [#2216](https://github.com/ThemeFuse/Unyson/issues/2216), [#2212](https://github.com/ThemeFuse/Unyson/issues/2212), [#2214](https://github.com/ThemeFuse/Unyson/issues/2214)
 
 = 2.6.9 =
 * Fixed [#1743](https://github.com/ThemeFuse/Unyson/issues/1743), [#2143](https://github.com/ThemeFuse/Unyson/issues/2143), [#2148](https://github.com/ThemeFuse/Unyson/issues/2148), [#2154](https://github.com/ThemeFuse/Unyson/pull/2154), [#2159](https://github.com/ThemeFuse/Unyson/pull/2159), [#2139](https://github.com/ThemeFuse/Unyson/issues/2139), [#2167](https://github.com/ThemeFuse/Unyson/issues/2167), [#2179](https://github.com/ThemeFuse/Unyson/issues/2179), [#2180](https://github.com/ThemeFuse/Unyson/pull/2180)
@@ -173,7 +178,6 @@ Yes; Unyson will work with any theme.
 * Fixed [#1062](https://github.com/ThemeFuse/Unyson/issues/1062), [#1278](https://github.com/ThemeFuse/Unyson/issues/1278), [#1292](https://github.com/ThemeFuse/Unyson/issues/1292), [#1293](https://github.com/ThemeFuse/Unyson/issues/1293), [#1310](https://github.com/ThemeFuse/Unyson/pull/1310), [#1295](https://github.com/ThemeFuse/Unyson/issues/1295), [#767](https://github.com/ThemeFuse/Unyson/issues/767), [#1322](https://github.com/ThemeFuse/Unyson/pull/1322), [#1323](https://github.com/ThemeFuse/Unyson/pull/1323), [#1321](https://github.com/ThemeFuse/Unyson/issues/1321), [#1054](https://github.com/ThemeFuse/Unyson/issues/1054), [#1309](https://github.com/ThemeFuse/Unyson/issues/1309), [#1347](https://github.com/ThemeFuse/Unyson/issues/1347), [#2777093](https://wordpress.org/support/topic/bootstrap-datepicker-not-translated-on-backend), [#1355](https://github.com/ThemeFuse/Unyson/issues/1355), [#1354](https://github.com/ThemeFuse/Unyson/issues/1354), [#1379](https://github.com/ThemeFuse/Unyson/issues/1379), [#1394](https://github.com/ThemeFuse/Unyson/issues/1394), [#1391](https://github.com/ThemeFuse/Unyson/issues/1391), [#1403](https://github.com/ThemeFuse/Unyson/pull/1403)
 * Fixes for [WP 4.5 BackboneJS & UnderscoreJS latest version](https://make.wordpress.org/core/2016/02/17/backbone-and-underscore-updated-to-latest-versions/)
 
-
 = 2.5.0 =
 * Added the possibility to save options in separate database location [#838](https://github.com/ThemeFuse/Unyson/issues/838)
 
@@ -188,159 +192,3 @@ Yes; Unyson will work with any theme.
 * Added the [`.pot` file](https://github.com/ThemeFuse/Unyson/tree/master/framework/languages) [#1256](https://github.com/ThemeFuse/Unyson/issues/1256)
 
 * Fixed [#1072](https://github.com/ThemeFuse/Unyson/issues/1072), [#1052](https://github.com/ThemeFuse/Unyson/issues/1052), [#1235](https://github.com/ThemeFuse/Unyson/issues/1235), [#1236](https://github.com/ThemeFuse/Unyson/issues/1236), [#1251](https://github.com/ThemeFuse/Unyson/issues/1251), [#1246](https://github.com/ThemeFuse/Unyson/issues/1246), [#1242](https://github.com/ThemeFuse/Unyson/issues/1242), [#941](https://github.com/ThemeFuse/Unyson/issues/941), [#1250](https://github.com/ThemeFuse/Unyson/issues/1250), [#1243](https://github.com/ThemeFuse/Unyson/issues/1243), [#1261](https://github.com/ThemeFuse/Unyson/issues/1261)
-
-= 2.4.17 =
-* Fixed [#1197](https://github.com/ThemeFuse/Unyson/issues/1197)
-* Added `'oembed'` option type ([docs](http://manual.unyson.io/en/latest/options/built-in-option-types.html#oembed))
-* fixed: `fw_get_db_customizer_option()` infinite recursion when called with default value inside `customizer.php`
-
-= 2.4.16 =
-* Fixed [#1178](https://github.com/ThemeFuse/Unyson/issues/1178), [#1179](https://github.com/ThemeFuse/Unyson/issues/1179), [#1169](https://github.com/ThemeFuse/Unyson/issues/1169), [#1085](https://github.com/ThemeFuse/Unyson/issues/1085)
-
-= 2.4.15 =
-* Fixed [#1164](https://github.com/ThemeFuse/Unyson/issues/1164), [#1080](https://github.com/ThemeFuse/Unyson/issues/1080), [#1006](https://github.com/ThemeFuse/Unyson/issues/1006), [#1139](https://github.com/ThemeFuse/Unyson/pull/1139), [#1152](https://github.com/ThemeFuse/Unyson/pull/1152), [#1157](https://github.com/ThemeFuse/Unyson/pull/1157)
-
-= 2.4.14 =
-* Customizer options: Added `wp-customizer-args` parameter. [#1097](https://github.com/ThemeFuse/Unyson/issues/1097), [#1082](https://github.com/ThemeFuse/Unyson/issues/1082)
-
-        $options = array(
-            'b' => array(
-                'wp-customizer-args' => array( // <---
-                    'priority' => 10,
-                    'active_callback' => 'is_front_page',
-                ),
-                'type' => 'box',
-                'options' => array(
-                    'o' => array('type' => 'text')
-                )
-            )
-        );
-
-* Option type `switch`: Changed html input value structure. [#1083](https://github.com/ThemeFuse/Unyson/issues/1083)
-* Improved the `FW_WP_Filesystem` helper. [#1127](https://github.com/ThemeFuse/Unyson/issues/1127)
-
-= 2.4.13 =
-* **IMPORTANT!!!** Updating from v2.4.12 to any newer version will uninstall all extensions [#1105](https://github.com/ThemeFuse/Unyson/issues/1105#issuecomment-163966468)
-
-    We are very sorry
-
-    To install all extensions compatible with your theme, open the following link:
-
-    ```
-    {site.domain}/wp-admin/admin.php?page=fw-extensions&sub-page=install&supported
-    ```
-
-* Fixed [#1089](https://github.com/ThemeFuse/Unyson/issues/1089), [#1077](https://github.com/ThemeFuse/Unyson/pull/1077#issuecomment-163324948)
-
-= 2.4.12 =
-* WordPress 4.4 fixes
-* Fixed
-  [#1039](https://github.com/ThemeFuse/Unyson/issues/1039),
-  [#1044](https://github.com/ThemeFuse/Unyson/issues/1044),
-  [#1055](https://github.com/ThemeFuse/Unyson/pull/1055),
-  [#1072](https://github.com/ThemeFuse/Unyson/issues/1072),
-  [#1049](https://github.com/ThemeFuse/Unyson/issues/1049),
-  [#1086](https://github.com/ThemeFuse/Unyson/issues/1086),
-  [PageBuilder#40](https://github.com/ThemeFuse/Unyson-PageBuilder-Extension/issues/40#issuecomment-160135453)
-
-= 2.4.11 =
-* Fixed a bug in `popup` option-type: Options were not saved
-
-= 2.4.10 =
-* New extension: [Backup & Demo Content](http://manual.unyson.io/en/latest/extension/backups/#content) *(Note: It will not be visible in extensions list if old Backup extension is set as supported in [theme manifest](http://manual.unyson.io/en/latest/manifest/theme.html#content))*
-* Soft removed 3 extensions: Styling, Translation, Learning [#874](https://github.com/ThemeFuse/Unyson/issues/874)
-* Added option type `short-slider` (same as `slider`, but it's smaller)
-* Fixed html validation error. Added current url in `FW_Form` `<form action="...">`
-* Option type `upload`: Added `files_ext` and `extra_mime_types` parameters ([docs](http://manual.unyson.io/en/latest/options/built-in-option-types.html#upload))
-* `fw.Modal`: added `headerElements` attribute to set html elements in modal header
-* `fw.soleModal`: added `backdrop: null|bool` parameter to set backdrop transparent, white or dark
-* Added classes: `FW_Type` and `FW_Type_Register` *(used in the new Backup extension)*
-* Fixed [#993](https://github.com/ThemeFuse/Unyson/issues/993)
-* RTL fixes
-* Other minor fixes ([the diff](https://github.com/ThemeFuse/Unyson/compare/v2.4.9...v2.4.10))
-
-= 2.4.9 =
-* Fixed [#889](https://github.com/ThemeFuse/Unyson/issues/889) Some scripts/styles were enqueued too early
-* Minor fixes and improvements ([diff](https://github.com/ThemeFuse/Unyson/compare/v2.4.8...v2.4.9))
-
-= 2.4.8 =
-* Option type `color-picker` and `rgba-color-picker`: Added "Reset" button [#831](https://github.com/ThemeFuse/Unyson/issues/831)
-* Fixed [#853](https://github.com/ThemeFuse/Unyson/issues/853), [#856](https://github.com/ThemeFuse/Unyson/issues/856), [#794](https://github.com/ThemeFuse/Unyson/issues/794), [#865](https://github.com/ThemeFuse/Unyson/issues/865), [#873](https://github.com/ThemeFuse/Unyson/issues/873), [#876](https://github.com/ThemeFuse/Unyson/issues/876)
-* Unycon v2: Removed strange (not useful) icons
-
-    Demo and search `http://{your-site.com}/wp-content/plugins/unyson/framework/static/libs/unycon/`
-
-* For extension developers: Now you can set font icon as [thumbnail](http://manual.unyson.io/en/latest/manifest/extension.html)
-
-    ```
-    $manifest['thumbnail'] = 'fa fa-btc'; // or 'dashicons' or 'unycon'
-    ```
-
-* Extensions list: Changed extension buttons *(Install, Activate, Deactive, Remove)* position to make more space for description
-
-= 2.4.7 =
-* FontAwesome 4.4.0
-* Improved extension ajax install/uninstall [#809](https://github.com/ThemeFuse/Unyson/issues/809)
-* Fixed [#829](https://github.com/ThemeFuse/Unyson/issues/829), [#820](https://github.com/ThemeFuse/Unyson/issues/820), [Shortcodes#31](https://github.com/ThemeFuse/Unyson-Shortcodes-Extension/issues/31)
-
-= 2.4.6 =
-* Fixed: Extensions uninstalled after auto-update [#263](https://github.com/ThemeFuse/Unyson/issues/263)
-
-= 2.4.5 =
-* Fixed [#768](https://github.com/ThemeFuse/Unyson/issues/768)
-* Create `ABSPATH .'/fw-update.log'` on plugin update to help solve [#263](https://github.com/ThemeFuse/Unyson/issues/263)
-
-= 2.4.4 =
-* Fixed [#757](https://github.com/ThemeFuse/Unyson/issues/757), [#752](https://github.com/ThemeFuse/Unyson/issues/752#issuecomment-124839194)
-* fw.OptionsModal: Prevent Reset button to change the value. It should reset only the form's html
-* Minor refactor in code that is responsible for auto-save post options save
-
-= 2.4.3 =
-* [An attempt](https://github.com/ThemeFuse/Unyson/commit/9985875d56520caae4ce72c7111aea1e326777a5) to fix [#263](https://github.com/ThemeFuse/Unyson/issues/263)
-
-= 2.4.2 =
-* Allow containers without the `type` parameter in [Customizer options](http://manual.unyson.io/en/latest/options/introduction.html#customizer)
-
-= 2.4.1 =
-* Fixed [#742](https://github.com/ThemeFuse/Unyson/issues/742), [#731](https://github.com/ThemeFuse/Unyson/issues/731), [#728](https://github.com/ThemeFuse/Unyson/issues/728), [#726](https://github.com/ThemeFuse/Unyson/issues/726), [Shortcodes#29](https://github.com/ThemeFuse/Unyson-Shortcodes-Extension/issues/29)
-* Fixed: `addable-popup` option type wasn't saved in Customizer
-
-= 2.4.0 =
-* Created "Container Types" and container type `popup` [#615](https://github.com/ThemeFuse/Unyson/issues/615)
-* Created the `fw_collect_options()` function [#740](https://github.com/ThemeFuse/Unyson/issues/740)
-* Added Unycon font icon. Demo `http://{your-host}/wp-content/plugins/unyson/framework/static/libs/unycon/demo/`
-* Minor fixes
-
-= 2.3.3 =
-* Fixed [#628](https://github.com/ThemeFuse/Unyson/issues/628), [#649](https://github.com/ThemeFuse/Unyson/issues/649), [#637](https://github.com/ThemeFuse/Unyson/issues/637), [#358](https://github.com/ThemeFuse/Unyson/issues/358)
-* Added option type `typography-v2`
-* Option type `addable-option`, `addable-box` and `addable-popup`: Added the `add-button-text` and `sortable` parameters [#631](https://github.com/ThemeFuse/Unyson/issues/631)
-* Optimized option type `typography` fonts select (now it loads faster)
-* Extension download improvement: Fetch only [the latest release](https://developer.github.com/v3/repos/releases/#get-the-latest-release) instead of [all releases](https://developer.github.com/v3/repos/releases/#list-releases-for-a-repository)
-* Improved the `fw.loading` js helper. Changed the loading image.
-* Option type `range-slider`: fixed bug with default value
-* Option type `checkbox` and `switch`: Fix boolean values when the option is used in options modal inside other options
-* Call `FW_Option_Type::_init()` after the option type has been registered
-* `fw.OptionsModal`: Added html cache [#](https://github.com/ThemeFuse/Unyson/issues/675#issuecomment-112555557)
-* Added `$old_value` parameter in `'fw_post_options_update'` action
-* Added the `fw_get_image_sizes()` function
-* Enabled the `colorpicker` and `textcolor` plugins for the `wp-editor` option type
-* Option type `background-image` and `multi-picker`: minor css fixes
-* Updated `selectize.js` to `0.12.1`
-
-= 2.3.2 =
-* Added option-type `unique` to make possible [this](http://manual.unyson.io/en/latest/extension/shortcodes/index.html#enqueue-shortcode-dynamic-css-in-page-head)
-* Added the `fw_get_google_fonts_v2()` function
-* Fixed: The newline character in textarea option in Customizer was replaced with `'rn'` string
-* Fixed: Post options (meta) lost after Quick Edit
-* Option-type `multi-picker`: Allow support for any option type in picker ([docs](http://manual.unyson.io/en/latest/options/built-in-option-types.html#multi-picker-add-support-for-new-option-type-in-picker))
-
-= 2.3.1 =
-* Fixed [#566](https://github.com/ThemeFuse/Unyson/issues/566), [#550](https://github.com/ThemeFuse/Unyson/issues/550)
-* Fixed: Options default values not working in Customizer [#410](https://github.com/ThemeFuse/Unyson/issues/410#issuecomment-103343955)
-
-= 2.3.0 =
-* Options can be used in [Customizer](https://codex.wordpress.org/Theme_Customization_API) [#410](https://github.com/ThemeFuse/Unyson/issues/410)
-* Fixed [#77](https://github.com/ThemeFuse/Unyson/issues/77)
-
-

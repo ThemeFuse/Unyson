@@ -2139,6 +2139,10 @@ fw.soleModal = (function(){
 				}
 
 				jQuery.each(messages, function(messageId, message){
+					if (!typeTitle.length) {
+						return;
+					}
+
 					typeHtml.push(
 						'<li>'+
 							'<h2 class="'+ typeMessageClass +'"><span class="'+ typeIconClass +'"></span> '+ typeTitle +'</h2>'+
