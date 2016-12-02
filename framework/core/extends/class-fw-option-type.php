@@ -111,6 +111,10 @@ abstract class FW_Option_Type
 		}
 	}
 
+	public function __construct() {
+
+	}
+
 	/**
 	 * Fixes and prepare defaults
 	 *
