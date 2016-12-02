@@ -487,6 +487,17 @@ final class _FW_Component_Backend {
 		$this->static_registered = true;
 	}
 
+	/**
+	 * @param $key
+	 * @param $type
+	 * @param $parent_class
+	 *
+	 * @return FW_Option_Type|FW_Container_Type
+	 * @throws FW_Option_Type_Exception
+	 * @throws FW_Option_Type_Exception_Not_Found
+	 *
+	 * @since 2.6.11
+	 */
 	protected function get_item_from_storage( $key, $type, $parent_class ) {
 		try {
 			$object = FW_Cache::get( "$key:$type" );
@@ -503,6 +514,8 @@ final class _FW_Component_Backend {
 	/**
 	 * @param $key
 	 * @param FW_Option_Type|FW_Container_Type $item
+	 *
+	 * @since 2.6.11
 	 */
 	protected function set_item_in_storage( $key, $item ) {
 		FW_Cache::set( "$key:{$item->get_type()}", $item );
@@ -514,6 +527,8 @@ final class _FW_Component_Backend {
 	 * @return FW_Option_Type
 	 * @throws FW_Option_Type_Exception
 	 * @throws FW_Option_Type_Exception_Not_Found
+	 *
+	 * @since 2.6.11
 	 */
 	protected function get_option_from_storage( $type ) {
 		return $this->get_item_from_storage( "$this->storage_key:option-types", $type, 'FW_Option_Type' );
@@ -525,6 +540,8 @@ final class _FW_Component_Backend {
 	 * @return FW_Container_Type
 	 * @throws FW_Option_Type_Exception
 	 * @throws FW_Option_Type_Exception_Not_Found
+	 *
+	 * @since 2.6.11
 	 */
 	protected function get_container_from_storage( $type ) {
 		return $this->get_item_from_storage( "$this->storage_key:container-types", $type, 'FW_Option_Type' );
@@ -534,6 +551,7 @@ final class _FW_Component_Backend {
 	 * @param FW_Option_Type $option
 	 *
 	 * @return FW_Option_Type
+	 * @since 2.6.11
 	 */
 	protected function set_option_in_storage( FW_Option_Type $option ) {
 		$this->set_item_in_storage( "$this->storage_key:option-types", $option );
