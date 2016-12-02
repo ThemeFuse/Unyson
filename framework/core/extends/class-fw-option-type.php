@@ -93,11 +93,6 @@ abstract class FW_Option_Type
 		return fw()->backend->get_options_name_attr_prefix();
 	}
 
-	final public function __construct()
-	{
-		// does nothing at the moment, but maybe in the future will do something
-	}
-
 	/**
 	 * @param FW_Access_Key $access_key
 	 * @internal
