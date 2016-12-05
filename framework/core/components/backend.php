@@ -1746,6 +1746,7 @@ final class _FW_Component_Backend {
 	 * @since 2.6.11
 	 */
 	public function get_option_types() {
+		$this->option_type('text'); // trigger init
 		return array_keys( $this->option_types );
 	}
 
@@ -1757,6 +1758,7 @@ final class _FW_Component_Backend {
 	 * @since 2.6.11
 	 */
 	public function get_container_types() {
+		$this->container_type('box'); // trigger init
 		return array_keys( $this->container_types );
 	}
 
