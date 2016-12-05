@@ -1671,6 +1671,8 @@ function fw_get_path_url($path) {
 		if (is_multisite() && WPMU_PLUGIN_DIR) {
 			$paths_to_urls[ fw_fix_path(WPMU_PLUGIN_DIR) ] = WPMU_PLUGIN_URL;
 		}
+
+		FW_Cache::set($cache_key, $paths_to_urls);
 	}
 
 	foreach ($paths_to_urls as $_path => $_url) {
