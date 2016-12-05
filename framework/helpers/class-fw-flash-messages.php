@@ -113,6 +113,10 @@ class FW_Flash_Messages
 	 */
 	public static function _print_backend()
 	{
+		if (!session_id()) {
+			return; // fixes https://github.com/ThemeFuse/Unyson/issues/2219
+		}
+
 		self::process_pending_remove_ids();
 
 		$html = array_fill_keys(array_keys(self::$available_types), '');
