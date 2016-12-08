@@ -47,6 +47,9 @@ function _fw_includes_option_storage_autoload( $class ) {
 		case 'FW_Option_Storage_Type_Post_Meta' :
 			require_once dirname( __FILE__ ) . '/option-storage/type/class-fw-option-storage-type-post-meta.php';
 			break;
+		case 'FW_Option_Storage_Type_Term_Meta' :
+			require_once dirname( __FILE__ ) . '/option-storage/type/class-fw-option-storage-type-term-meta.php';
+			break;
 		case 'FW_Option_Storage_Type_WP_Option' :
 			require_once dirname( __FILE__ ) . '/option-storage/type/class-fw-option-storage-type-wp-option.php';
 			break;

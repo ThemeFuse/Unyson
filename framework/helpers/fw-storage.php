@@ -81,8 +81,9 @@ function fw_db_option_storage_type($type = null) {
 		$register = new _FW_Option_Storage_Type_Register($access_key->get_key());
 
 		{
-			$register->register(new FW_Option_Storage_Type_Post_Meta());
 			$register->register(new FW_Option_Storage_Type_WP_Option());
+			$register->register(new FW_Option_Storage_Type_Post_Meta());
+			$register->register(new FW_Option_Storage_Type_Term_Meta());
 		}
 
 		do_action('fw:option-storage-types:register', $register);
