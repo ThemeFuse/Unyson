@@ -1675,6 +1675,8 @@ function fw_get_path_url($path) {
 		FW_Cache::set($cache_key, $paths_to_urls);
 	}
 
+	$path = fw_fix_path($path);
+
 	foreach ($paths_to_urls as $_path => $_url) {
 		if (preg_match($regex = '/^'. preg_quote($_path, '/') .'($|\/)/', $path)) {
 			return $_url .'/'. preg_replace($regex, '', $path);
