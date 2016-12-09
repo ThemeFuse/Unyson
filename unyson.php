@@ -16,15 +16,6 @@ if (defined('FW')) {
 	 * The plugin was already loaded (maybe as another plugin with different directory name)
 	 */
 } else {
-
-	{
-		/** @internal */
-		function _filter_fw_framework_plugin_directory_uri() {
-			return plugin_dir_url( __FILE__ ) . 'framework';
-		}
-		add_filter( 'fw_framework_directory_uri', '_filter_fw_framework_plugin_directory_uri' );
-	}
-
 	require dirname( __FILE__ ) . '/framework/bootstrap.php';
 
 	/**

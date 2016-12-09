@@ -132,15 +132,20 @@ function fw_get_framework_customizations_dir_rel_path($append = '') {
 	 */
 	function fw_get_framework_directory_uri($rel_path = '') {
 		try {
-			$dir = FW_Cache::get($cache_key = 'fw_framework_dir_uri');
+			$uri = FW_Cache::get($cache_key = 'fw_framework_dir_uri');
 		} catch (FW_Cache_Not_Found_Exception $e) {
 			FW_Cache::set(
 				$cache_key,
-				$dir = apply_filters('fw_framework_directory_uri', get_template_directory_uri() . '/framework')
+				$uri = apply_filters(
+					'fw_framework_directory_uri',
+					($uri = fw_get_path_url(fw_get_framework_directory()))
+						? $uri
+						: get_template_directory_uri() . '/framework'
+				)
 			);
 		}
 
-		return $dir . $rel_path;
+		return $uri . $rel_path;
 	}
 }
 
