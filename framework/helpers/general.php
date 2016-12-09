@@ -115,7 +115,10 @@ function fw_get_framework_customizations_dir_rel_path($append = '') {
 		} catch (FW_Cache_Not_Found_Exception $e) {
 			FW_Cache::set(
 				$cache_key,
-				$dir = apply_filters('fw_framework_directory', dirname(__FILE__))
+				$dir = apply_filters(
+					'fw_framework_directory',
+					fw_fix_path(dirname(dirname(__FILE__))) // double dirname() to remove '/helpers', use parent dir
+				)
 			);
 		}
 
