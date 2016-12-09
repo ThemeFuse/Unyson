@@ -24,7 +24,7 @@ if (defined('FW')) {
 	 * Note:
 	 * The framework doesn't know that it's used as a plugin.
 	 * It can be localed in the theme directory or any other directory.
-	 * Only its path and uri is known (specified above)
+	 * Only its path and uri is known
 	 */
 	{
 		/** @internal */
