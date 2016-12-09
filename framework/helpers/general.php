@@ -2,6 +2,154 @@
 // Useful functions
 
 /**
+ * Convert to Unix style directory separators
+ */
+function fw_fix_path($path) {
+	$fixed_path = untrailingslashit( str_replace(array('//', '\\'), array('/', '/'), $path) );
+
+	if (empty($fixed_path) && !empty($path)) {
+		$fixed_path = '/';
+	}
+
+	return $fixed_path;
+}
+
+/**
+ * Relative path of the framework customizations directory
+ * @param string $append
+ * @return string
+ */
+function fw_get_framework_customizations_dir_rel_path($append = '') {
+	try {
+		$dir = FW_Cache::get($cache_key = 'fw_customizations_dir_rel_path');
+	} catch (FW_Cache_Not_Found_Exception $e) {
+		FW_Cache::set(
+			$cache_key,
+			$dir = apply_filters('fw_framework_customizations_dir_rel_path', '/framework-customizations')
+		);
+	}
+
+	return $dir . $append;
+}
+
+/** Child theme related functions */
+{
+	/**
+	 * Full path to the child-theme framework customizations directory
+	 * @param string $rel_path
+	 * @return null|string
+	 */
+	function fw_get_stylesheet_customizations_directory($rel_path = '') {
+		if (is_child_theme()) {
+			return get_stylesheet_directory() . fw_get_framework_customizations_dir_rel_path($rel_path);
+		} else {
+			// check is_child_theme() before using this function
+			return null;
+		}
+	}
+
+	/**
+	 * URI to the child-theme framework customizations directory
+	 * @param string $rel_path
+	 * @return null|string
+	 */
+	function fw_get_stylesheet_customizations_directory_uri($rel_path = '') {
+		if (is_child_theme()) {
+			return get_stylesheet_directory_uri() . fw_get_framework_customizations_dir_rel_path($rel_path);
+		} else {
+			// check is_child_theme() before using this function
+			return null;
+		}
+	}
+}
+
+/** Parent theme related functions */
+{
+	/**
+	 * Full path to the parent-theme framework customizations directory
+	 * @param string $rel_path
+	 * @return string
+	 */
+	function fw_get_template_customizations_directory($rel_path = '') {
+		try {
+			$dir = FW_Cache::get($cache_key = 'fw_template_customizations_dir');
+		} catch (FW_Cache_Not_Found_Exception $e) {
+			FW_Cache::set(
+				$cache_key,
+				$dir = get_template_directory() . fw_get_framework_customizations_dir_rel_path()
+			);
+		}
+
+		return $dir . $rel_path;
+	}
+
+	/**
+	 * URI to the parent-theme framework customizations directory
+	 * @param string $rel_path
+	 * @return string
+	 */
+	function fw_get_template_customizations_directory_uri($rel_path = '') {
+		try {
+			$dir = FW_Cache::get($cache_key = 'fw_template_customizations_dir_uri');
+		} catch (FW_Cache_Not_Found_Exception $e) {
+			FW_Cache::set(
+				$cache_key,
+				$dir = get_template_directory_uri() . fw_get_framework_customizations_dir_rel_path()
+			);
+		}
+
+		return $dir . $rel_path;
+	}
+}
+
+/** Framework related functions */
+{
+	/**
+	 * Full path to the parent-theme/framework directory
+	 * @param string $rel_path
+	 * @return string
+	 */
+	function fw_get_framework_directory($rel_path = '') {
+		try {
+			$dir = FW_Cache::get($cache_key = 'fw_framework_dir');
+		} catch (FW_Cache_Not_Found_Exception $e) {
+			FW_Cache::set(
+				$cache_key,
+				$dir = apply_filters(
+					'fw_framework_directory',
+					fw_fix_path(dirname(dirname(__FILE__))) // double dirname() to remove '/helpers', use parent dir
+				)
+			);
+		}
+
+		return $dir . $rel_path;
+	}
+
+	/**
+	 * URI to the parent-theme/framework directory
+	 * @param string $rel_path
+	 * @return string
+	 */
+	function fw_get_framework_directory_uri($rel_path = '') {
+		try {
+			$uri = FW_Cache::get($cache_key = 'fw_framework_dir_uri');
+		} catch (FW_Cache_Not_Found_Exception $e) {
+			FW_Cache::set(
+				$cache_key,
+				$uri = apply_filters(
+					'fw_framework_directory_uri',
+					($uri = fw_get_path_url(fw_get_framework_directory()))
+						? $uri
+						: get_template_directory_uri() . '/framework'
+				)
+			);
+		}
+
+		return $uri . $rel_path;
+	}
+}
+
+/**
  * Recursively find a key's value in array
  *
  * @param string $keys 'a/b/c'
@@ -1351,8 +1499,7 @@ function fw_oembed_get($url, $args = array()) {
  * http://www.zimuel.it/en/strong-cryptography-in-php/
  * > Don't use rand() or mt_rand()
  */
-function fw_secure_rand($length)
-{
+function fw_secure_rand($length) {
 	if (function_exists('openssl_random_pseudo_bytes')) {
 		$rnd = openssl_random_pseudo_bytes($length, $strong);
 		if ($strong) {
@@ -1494,7 +1641,6 @@ function fw_make_stylesheet_portable($href, $contents = null) {
  * @return array|bool
  */
 function fw_get_image_sizes( $size = '' ) {
-
 	global $_wp_additional_image_sizes;
 
 	$sizes = array();
@@ -1502,34 +1648,26 @@ function fw_get_image_sizes( $size = '' ) {
 
 	// Create the full array with sizes and crop info
 	foreach( $get_intermediate_image_sizes as $_size ) {
-
 		if ( in_array( $_size, array( 'thumbnail', 'medium', 'large' ) ) ) {
-
 			$sizes[ $_size ]['width'] = get_option( $_size . '_size_w' );
 			$sizes[ $_size ]['height'] = get_option( $_size . '_size_h' );
 			$sizes[ $_size ]['crop'] = (bool) get_option( $_size . '_crop' );
-
 		} elseif ( isset( $_wp_additional_image_sizes[ $_size ] ) ) {
-
 			$sizes[ $_size ] = array(
 				'width' => $_wp_additional_image_sizes[ $_size ]['width'],
 				'height' => $_wp_additional_image_sizes[ $_size ]['height'],
 				'crop' =>  $_wp_additional_image_sizes[ $_size ]['crop']
 			);
-
 		}
-
 	}
 
 	// Get only 1 size if found
 	if ( $size ) {
-
 		if( isset( $sizes[ $size ] ) ) {
 			return $sizes[ $size ];
 		} else {
 			return false;
 		}
-
 	}
 
 	return $sizes;
@@ -1658,4 +1796,40 @@ if ( ! function_exists( 'fw_resize' ) ) {
 
 		return ( ! is_wp_error( $response ) && ! empty( $response['src'] ) ) ? $response['src'] : $url;
 	}
+}
+
+/**
+ * fw_get_path_url( dirname(__FILE__) .'/test.css' ) --> http://site.url/path/to/test.css
+ * @param string $path
+ * @return string|null
+ * @since 2.6.11
+ */
+function fw_get_path_url($path) {
+	try {
+		$paths_to_urls = FW_Cache::get($cache_key = 'fw:paths_to_urls');
+	} catch (FW_Cache_Not_Found_Exception $e) {
+		$wp_upload_dir = wp_upload_dir();
+
+		$paths_to_urls = array(
+			fw_fix_path(WP_PLUGIN_DIR) => plugins_url(),
+			fw_fix_path(get_theme_root()) => get_theme_root_uri(),
+			fw_fix_path($wp_upload_dir['basedir']) => $wp_upload_dir['baseurl'],
+		);
+
+		if (is_multisite() && WPMU_PLUGIN_DIR) {
+			$paths_to_urls[ fw_fix_path(WPMU_PLUGIN_DIR) ] = WPMU_PLUGIN_URL;
+		}
+
+		FW_Cache::set($cache_key, $paths_to_urls);
+	}
+
+	$path = fw_fix_path($path);
+
+	foreach ($paths_to_urls as $_path => $_url) {
+		if (preg_match($regex = '/^'. preg_quote($_path, '/') .'($|\/)/', $path)) {
+			return $_url .'/'. preg_replace($regex, '', $path);
+		}
+	}
+
+	return null;
 }

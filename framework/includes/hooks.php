@@ -82,7 +82,9 @@
 	 */
 	if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 		function _action_fw_init_option_types_on_ajax() {
-			fw()->backend->option_type( 'text' );
+			foreach (fw()->backend->get_option_types() as $type) {
+				fw()->backend->option_type($type);
+			}
 		}
 
 		add_action( 'fw_init', '_action_fw_init_option_types_on_ajax' );

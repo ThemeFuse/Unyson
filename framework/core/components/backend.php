@@ -1739,6 +1739,30 @@ final class _FW_Component_Backend {
 	}
 
 	/**
+	 * Return an array with all option types names
+	 *
+	 * @return array
+	 *
+	 * @since 2.6.11
+	 */
+	public function get_option_types() {
+		$this->option_type('text'); // trigger init
+		return array_keys( $this->option_types );
+	}
+
+	/**
+	 * Return an array with all container types names
+	 *
+	 * @return array
+	 *
+	 * @since 2.6.11
+	 */
+	public function get_container_types() {
+		$this->container_type('box'); // trigger init
+		return array_keys( $this->container_types );
+	}
+
+	/**
 	 * @param string $container_type
 	 *
 	 * @return FW_Container_Type|FW_Container_Type_Undefined

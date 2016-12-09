@@ -16,15 +16,6 @@ if (defined('FW')) {
 	 * The plugin was already loaded (maybe as another plugin with different directory name)
 	 */
 } else {
-
-	{
-		/** @internal */
-		function _filter_fw_framework_plugin_directory_uri() {
-			return plugin_dir_url( __FILE__ ) . 'framework';
-		}
-		add_filter( 'fw_framework_directory_uri', '_filter_fw_framework_plugin_directory_uri' );
-	}
-
 	require dirname( __FILE__ ) . '/framework/bootstrap.php';
 
 	/**
@@ -33,7 +24,7 @@ if (defined('FW')) {
 	 * Note:
 	 * The framework doesn't know that it's used as a plugin.
 	 * It can be localed in the theme directory or any other directory.
-	 * Only its path and uri is known (specified above)
+	 * Only its path and uri is known
 	 */
 	{
 		/** @internal */
