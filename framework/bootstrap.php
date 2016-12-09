@@ -22,8 +22,6 @@ if (defined('FW')) {
 
 		$fw_dir = dirname(__FILE__);
 
-		include $fw_dir .'/bootstrap-helpers.php';
-
 		// these are required when fw() is executed below
 		{
 			require $fw_dir .'/helpers/class-fw-dumper.php';
