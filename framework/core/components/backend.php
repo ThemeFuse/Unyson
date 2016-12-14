@@ -1028,7 +1028,7 @@ final class _FW_Component_Backend {
 							.'<p>with</p>'
 							.'<pre>\'fw-storage\' => array('
 							."\n	'type' => 'post-meta',"
-							."\n	'post-meta' => 'fw_option:review-rating',"
+							."\n	'post-meta' => 'fw_option:{your-option-id}',"
 							."\n)</pre>"
 							.'<p>in <code>{theme}'. fw_get_framework_customizations_dir_rel_path('/theme/options/posts/'. $post_type .'.php') .'</code></p>'
 							.'<p><a href="'. esc_attr('http://manual.unyson.io/en/latest/options/storage.html#content') .'" target="_blank">'. esc_html__('Info about fw-storage', 'fw') .'</a></p>',
