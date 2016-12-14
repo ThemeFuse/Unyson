@@ -992,26 +992,19 @@ final class _FW_Component_Backend {
 	 * @deprecated since 2.5.0
 	 */
 	public function _sync_post_separate_meta( $post_id ) {
-		$post_type = get_post_type( $post_id );
-
-		if ( ! $post_type ) {
+		if ( ! ( $post_type = get_post_type( $post_id ) ) ) {
 			return false;
 		}
 
 		$meta_prefix = 'fw_option:';
+		$only_options = fw_extract_only_options( fw()->theme->get_post_options( $post_type ) );
+		$separate_meta_options = array();
 
-		/**
-		 * Collect all options that needs to be saved in separate meta
-		 */
+		// Collect all options that needs to be saved in separate meta
 		{
 			$options_values = fw_get_db_post_option( $post_id );
 
-			$separate_meta_options = array();
-
-			foreach (
-				fw_extract_only_options( fw()->theme->get_post_options( $post_type ) )
-				as $option_id => $option
-			) {
+			foreach ($only_options as $option_id => $option) {
 				if (
 					isset( $option['save-in-separate-meta'] )
 					&&
@@ -1021,7 +1014,7 @@ final class _FW_Component_Backend {
 				) {
 					if (defined('WP_DEBUG') && WP_DEBUG) {
 						FW_Flash_Messages::add(
-							'migrate:save-in-separate-meta:'. $option_id,
+							'save-in-separate-meta:deprecated',
 							'<p>The <code>save-in-separate-meta</code> option parameter is <strong>deprecated</strong>.</p>'
 							.'<p>Please replace</p>'
 							.'<pre>\'save-in-separate-meta\' => true</pre>'
@@ -1043,9 +1036,7 @@ final class _FW_Component_Backend {
 			unset( $options_values );
 		}
 
-		/**
-		 * Delete meta that starts with $meta_prefix
-		 */
+		// Delete meta that starts with $meta_prefix
 		{
 			/** @var wpdb $wpdb */
 			global $wpdb;
@@ -1059,10 +1050,17 @@ final class _FW_Component_Backend {
 						$wpdb->esc_like( $meta_prefix ) . '%',
 						$post_id
 					)
-				)
-				as $row
+				) as $row
 			) {
-				if ( array_key_exists( $row->meta_key, $separate_meta_options ) ) {
+				if (
+					array_key_exists( $row->meta_key, $separate_meta_options )
+					||
+					( // skip options containing 'fw-storage'
+						($option_id = substr($row->meta_key, 10))
+						&&
+						isset($only_options[$option_id]['fw-storage'])
+					)
+				) {
 					/**
 					 * This meta exists and will be updated below.
 					 * Do not delete for performance reasons, instead of delete->insert will be performed only update
