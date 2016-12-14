@@ -1019,6 +1019,23 @@ final class _FW_Component_Backend {
 					&&
 					array_key_exists( $option_id, $options_values )
 				) {
+					if (defined('WP_DEBUG') && WP_DEBUG) {
+						FW_Flash_Messages::add(
+							'migrate:save-in-separate-meta:'. $option_id,
+							'<p>The <code>save-in-separate-meta</code> option parameter is <strong>deprecated</strong>.</p>'
+							.'<p>Please replace</p>'
+							.'<pre>\'save-in-separate-meta\' => true</pre>'
+							.'<p>with</p>'
+							.'<pre>\'fw-storage\' => array('
+							."\n	'type' => 'post-meta',"
+							."\n	'post-meta' => 'fw_option:review-rating',"
+							."\n)</pre>"
+							.'<p>in <code>{theme}'. fw_get_framework_customizations_dir_rel_path('/theme/options/posts/'. $post_type .'.php') .'</code></p>'
+							.'<p><a href="'. esc_attr('http://manual.unyson.io/en/latest/options/storage.html#content') .'" target="_blank">'. esc_html__('Info about fw-storage', 'fw') .'</a></p>',
+							'warning'
+						);
+					}
+
 					$separate_meta_options[ $meta_prefix . $option_id ] = $options_values[ $option_id ];
 				}
 			}
