@@ -71,7 +71,11 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 		/**
 		 * @internal
 		 */
-		public static function _admin_action_get_ajax_response() {
+		public static function _ajax_autocomplete() {
+			if (!current_user_can('edit_posts')) {
+				wp_send_json_error();
+			}
+
 			/**
 			 * @var WPDB $wpdb
 			 */
@@ -199,7 +203,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 		 * @internal
 		 */
 		protected function _render( $id, $option, $data ) {
-			$items      = '';
+			$items      = array();
 			$population = 'array';
 			$source     = array();
 
@@ -212,211 +216,27 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 						break;
 					case 'posts' :
 						if ( isset( $option['source'] ) ) {
-							/**
-							 * @var WPDB $wpdb
-							 */
-							global $wpdb;
-
 							$source     = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
 							$population = 'posts';
-
-							if ( isset( $option['prepopulate'] )
-							     && ( $number = (int) ( $option['prepopulate'] ) ) > 0
-							     && ! empty( $source )
-							) {
-
-								$posts = $wpdb->get_results(
-									"SELECT posts.ID, posts.post_title " .
-									"FROM $wpdb->posts as posts " .
-									"WHERE post_type IN ('" . implode( "', '", $source ) . "') " .
-									"AND post_status IN ( 'publish', 'private' ) " .
-									"ORDER BY post_date DESC LIMIT $number"
-								);
-
-								if ( ! empty( $posts ) || ! is_wp_error( $posts ) ) {
-									$items = wp_list_pluck( $posts, 'post_title', 'ID' );
-								}
-								unset( $posts );
-							}
-
-							if ( empty( $data['value'] ) ) {
-								break;
-							}
-
-							$ids = $data['value'];
-							foreach ( $ids as $post_id ) {
-								$ids[] = intval( $post_id );
-							}
-							$ids = implode( ', ', array_unique( $ids ) );
-
-							$query = $wpdb->get_results(
-								"SELECT posts.ID, posts.post_title " .
-								"FROM $wpdb->posts as posts " .
-								"WHERE posts.ID IN ( $ids )"
-							);
-
-							if ( is_wp_error( $query ) ) {
-								break;
-							}
-
-							foreach ( $query as $post ) {
-								$items[ $post->ID ] = $post->post_title;
-							}
-
 						}
 						break;
 					case 'taxonomy' :
 						if ( isset( $option['source'] ) ) {
-							/**
-							 * @var WPDB $wpdb
-							 */
-							global $wpdb;
 							$population = 'taxonomy';
 							$source     = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
-
-							if ( isset( $option['prepopulate'] ) && ! empty( $source )
-							     && ( $number = (int) ( $option['prepopulate'] ) ) > 0
-							) {
-								$terms = $wpdb->get_results(
-									"SELECT terms.term_id, terms.name " .
-									"FROM $wpdb->terms as terms, $wpdb->term_taxonomy as taxonomies " .
-									"WHERE taxonomies.taxonomy IN ('" . implode( "', '", $source ) . "') " .
-									"AND terms.term_id = taxonomies.term_id " .
-									"AND taxonomies.term_id = taxonomies.term_taxonomy_id"
-								);
-
-								if ( ! empty( $terms ) || ! is_wp_error( $terms ) ) {
-									$items = wp_list_pluck( $terms, 'name', 'term_id' );
-								}
-								unset( $terms );
-							}
-
-							if ( empty( $data['value'] ) ) {
-								break;
-							}
-
-							/**
-							 * @var WPDB $wpdb
-							 */
-							global $wpdb;
-
-							$ids = $data['value'];
-							foreach ( $ids as $post_id ) {
-								$ids[] = intval( $post_id );
-							}
-							$ids = implode( ', ', array_unique( $ids ) );
-
-							$in_sources = array();
-							foreach ( $source as $_source ) {
-								$in_sources[] = $wpdb->prepare( '%s', $_source );
-							}
-							$in_sources = implode( ', ', $in_sources );
-
-							$query = $wpdb->get_results(
-								"SELECT terms.term_id id, terms.name title " .
-								"FROM $wpdb->terms as terms, $wpdb->term_taxonomy as taxonomies " .
-								"WHERE terms.term_id IN ( $ids ) AND taxonomies.taxonomy IN ( $in_sources ) " .
-								"AND terms.term_id = taxonomies.term_id " .
-								"AND taxonomies.term_id = taxonomies.term_taxonomy_id"
-							);
-
-							if ( is_wp_error( $query ) || empty( $query ) ) {
-								break;
-							}
-
-							$items = array();
-
-							foreach ( $query as $term ) {
-								$items[ $term->id ] = $term->title;
-							}
 						}
 						break;
 					case 'users' :
-						/**
-						 * @var WPDB $wpdb
-						 */
-						global $wpdb;
 						$population = 'users';
-
-						if ( isset( $option['prepopulate'] )
-						     && ( $number = (int) ( $option['prepopulate'] ) ) > 0
-						) {
-							$users = $wpdb->get_results(
-								"SELECT DISTINCT users.ID, users.user_nicename " .
-								"FROM $wpdb->users as users, $wpdb->usermeta usermeta " .
-								( ! empty( $source )
-									? "WHERE usermeta.meta_key = 'wp_capabilities'" .
-									  " AND usermeta.meta_value IN ('" . implode( "', ", $source ) . "')" .
-									  " AND usermeta.user_id = users.ID"
-									: '' ) . " LIMIT $number"
-							);
-
-							if ( ! empty( $users ) || ! is_wp_error( $users ) ) {
-								$items = wp_list_pluck( $users, 'user_nicename', 'ID' );
-							}
-							unset( $users );
-						}
 
 						if ( isset( $option['source'] ) && ! empty( $option['source'] ) ) {
 							$source = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
-
-							if ( empty( $data['value'] ) ) {
-								break;
-							}
-
-							$ids = $data['value'];
-							foreach ( $ids as $post_id ) {
-								$ids[] = intval( $post_id );
-							}
-							$ids = implode( ', ', array_unique( $ids ) );
-
-							$in_sources = array();
-							foreach ( $source as $_source ) {
-								$in_sources[] = $wpdb->prepare( 'usermeta.meta_value LIKE %s',
-									'%' . $wpdb->esc_like( $_source ) . '%' );
-							}
-							$in_sources = implode( ' OR ', $in_sources );
-
-							$query = $wpdb->get_results(
-								"SELECT users.id, users.user_nicename title " .
-								"FROM $wpdb->users as users, $wpdb->usermeta usermeta " .
-								"WHERE users.ID IN ($ids) AND usermeta.meta_key = 'wp_capabilities' AND ( $in_sources ) " .
-								"AND usermeta.user_id = users.ID"
-							);
-
 						} else {
 							$source = array();
-
-							if ( empty( $data['value'] ) ) {
-								break;
-							}
-
-							$ids = $data['value'];
-							foreach ( $ids as $post_id ) {
-								$ids[] = intval( $post_id );
-							}
-							$ids = implode( ', ', array_unique( $ids ) );
-
-							$query = $wpdb->get_results(
-								"SELECT users.id, users.user_nicename title " .
-								"FROM $wpdb->users as users " .
-								"WHERE users.ID IN ($ids)"
-							);
 						}
-
-						if ( is_wp_error( $query ) || empty( $query ) ) {
-							break;
-						}
-
-						$items = array();
-
-						foreach ( $query as $term ) {
-							$items[ $term->id ] = $term->title;
-						}
-
 						break;
 					default :
-						$items = '';
+						return '(Invalid <code>population</code> parameter)';
 				}
 
 				$option['attr']['data-options']    = json_encode( $this->convert_array( $items ) );
@@ -424,8 +244,9 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				$option['attr']['data-source']     = json_encode( $source );
 				$option['attr']['data-limit']      = ( intval( $option['limit'] ) > 0 ) ? $option['limit'] : 0;
 			} else {
-				return '';
+				return '(The <code>population</code> parameter is required)';
 			}
+
 			if ( ! empty( $data['value'] ) ) {
 				$data['value'] = implode( '/*/', $data['value'] );
 			} else {
@@ -490,6 +311,6 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 		}
 	}
 
-	add_action( 'wp_ajax_admin_action_get_ajax_response',
-		array( "FW_Option_Type_Multi_Select", '_admin_action_get_ajax_response' ) );
+	add_action( 'wp_ajax_fw_option_type_multi_select_autocomplete',
+		array( "FW_Option_Type_Multi_Select", '_ajax_autocomplete' ) );
 endif;
