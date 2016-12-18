@@ -2208,7 +2208,7 @@ fw.soleConfirm = (function ($) {
 			message: null,
 			backdrop: null,
 			renderFunction: null,
-			hideAfterResolve: function (confirm, el, action) { return true; },
+			shouldResolvePromise: function (confirm, el, action) { return true; },
 			okHTML: _fw_localized.l10n.ok,
 			cancelHTML: _fw_localized.l10n.cancel,
 			customClass: ''
@@ -2308,7 +2308,7 @@ fw.soleConfirm = (function ($) {
 					modal_container: modal_container
 				});
 			} else {
-				var shouldHideAfterResolve = confirm.opts.hideAfterResolve(
+				var shouldHideAfterResolve = confirm.opts.shouldResolvePromise(
 					confirm, modal_container
 				);
 
