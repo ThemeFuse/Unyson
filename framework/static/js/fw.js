@@ -2287,15 +2287,23 @@ fw.soleConfirm = (function ($) {
 
 	Confirm.prototype._handleClose = function (event) {
         event.preventDefault();
-		var action = $(event.target).attr('data-fw-sole-confirm-action');
-		var id = $(event.target).attr('data-fw-sole-confirm-id');
+
+		var $el = $(event.target);
+
+		if (! $el.hasClass('fw-sole-confirm-button')) {
+			$el = $el.closest('.fw-sole-confirm-button');
+		}
+
+		var action = $el.attr('data-fw-sole-confirm-action');
+		var id = $el.attr('data-fw-sole-confirm-id');
 		var confirm = hashMap[id];
 
 		if (confirm) {
+
 			_.contains(['reject', 'resolve'], action) &&
 				confirm.result[action]({
 					confirm: this,
-					modal_container: $(event.target).closest('.fw-sole-modal')[0]
+					modal_container: $el.closest('.fw-sole-modal')[0]
 				}) && confirm.hide();
 
 			confirm.destroy();
