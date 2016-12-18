@@ -2208,6 +2208,7 @@ fw.soleConfirm = (function ($) {
 			message: null,
 			backdrop: null,
 			renderFunction: null,
+			hideAfterResolve: function (confirm, el, action) { return true; },
 			okHTML: _fw_localized.l10n.ok,
 			cancelHTML: _fw_localized.l10n.cancel,
 			customClass: ''
@@ -2302,9 +2303,17 @@ fw.soleConfirm = (function ($) {
 
 			_.contains(['reject', 'resolve'], action) &&
 				confirm.result[action]({
-					confirm: this,
+					confirm: confirm,
 					modal_container: $el.closest('.fw-sole-modal')[0]
-				}) && confirm.hide();
+				})
+
+			if (confirm.opts.hideAfterResolve(
+				confirm,
+				$el.closest('.fw-sole-modal')[0],
+				action
+			) && action !== 'reject') {
+				confirm.hide();
+			}
 
 			confirm.destroy();
 			confirm = null;
