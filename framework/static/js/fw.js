@@ -2286,6 +2286,7 @@ fw.soleConfirm = (function ($) {
 	};
 
 	Confirm.prototype._handleClose = function (event) {
+        event.preventDefault();
 		var action = $(event.target).attr('data-fw-sole-confirm-action');
 		var id = $(event.target).attr('data-fw-sole-confirm-id');
 		var confirm = hashMap[id];
@@ -2303,20 +2304,18 @@ fw.soleConfirm = (function ($) {
 	};
 
 	Confirm.prototype._getHtml = function () {
+		if (this.opts.renderFunction) {
+			return this.opts.renderFunction(this);
+		}
+
 		var topHtml = '';
 
-		if (this.opts.renderFunction) {
+		var iconClass = 'dashicons-' + this.opts.severity;
+		var icon = '<span class="dashicons ' + iconClass + '"></span>';
+		var heading = '<h1>' + fw.capitalizeFirstLetter(this.opts.severity) + '</h1>';
+		var message = this.opts.message ? '<p>' + this.opts.message + '</p>' : '';
 
-			topHtml = this.opts.renderFunction(this);
-
-		} else {
-			var iconClass = 'dashicons-' + this.opts.severity;
-			var icon = '<span class="dashicons ' + iconClass + '"></span>';
-			var heading = '<h1>' + fw.capitalizeFirstLetter(this.opts.severity) + '</h1>';
-			var message = this.opts.message ? '<p>' + this.opts.message + '</p>' : '';
-
-			topHtml = icon + heading + message;
-		}
+		topHtml = icon + heading + message;
 
 		var cancelButton = $('<button>', {
 			html: this.opts.cancelHTML
