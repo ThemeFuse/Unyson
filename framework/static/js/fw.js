@@ -2300,18 +2300,29 @@ fw.soleConfirm = (function ($) {
 		var confirm = hashMap[id];
 
 		if (confirm) {
+			var modal_container = $el.closest('.fw-sole-modal')[0];
 
-			_.contains(['reject', 'resolve'], action) &&
-				confirm.result[action]({
+			if (action === 'reject') {
+				confirm.result.reject({
 					confirm: confirm,
-					modal_container: $el.closest('.fw-sole-modal')[0]
-				})
+					modal_container: modal_container
+				});
+			} else {
+				var shouldHideAfterResolve = confirm.opts.hideAfterResolve(
+					confirm, modal_container
+				);
 
-			if (confirm.opts.hideAfterResolve(
-				confirm,
-				$el.closest('.fw-sole-modal')[0],
-				action
-			) && action !== 'reject') {
+				if (! shouldHideAfterResolve) {
+					return;
+				}
+
+				// probably keep this syntax for another actions in future
+				_.contains(['resolve'], action) &&
+					confirm.result[action]({
+						confirm: confirm,
+						modal_container: $el.closest('.fw-sole-modal')[0]
+					});
+
 				confirm.hide();
 			}
 
