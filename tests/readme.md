@@ -11,7 +11,7 @@ Requirements:
 Run `install-wp-tests` helper. Please make sure that you have a mysql daemon
 running. This script will do a couple of things:
 
-- Will install a fresh `/tmp/wordpress` WordPress with correct `wp-config.php` for you
+- Will install a fresh WordPress to the `/tmp/wordpress` directory with correct `wp-config.php`
 - Will copy WordPress test helpers to `/tmp/wordpress-tests-lib` - this should point the $WP_TESTS_DIR to. Unyson [knows](https://github.com/ThemeFuse/Unyson/blob/v2.6.10/tests/bootstrap.php#L20) how to handle it well
 - Will create an empty database that will be re-created at each tests run
 
