@@ -1,4 +1,4 @@
-Running Unyson Unin Tests via PHPUnit.
+Running Unyson Unit Tests via PHPUnit.
 
 Requirements:
 
