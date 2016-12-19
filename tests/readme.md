@@ -15,6 +15,7 @@ running. This script will do a couple of things:
 - Will copy WordPress test helpers to `/tmp/wordpress-tests-lib` - this should point the $WP_TESTS_DIR to. Unyson [knows](https://github.com/ThemeFuse/Unyson/blob/v2.6.10/tests/bootstrap.php#L20) how to handle it well
 - Will create an empty database that will be re-created at each tests run
 
+Run this:
 
 ```bash
 install-wp-tests <DB_NAME> <DB_USER> <DB_PASS> <DB_HOST - optionally, localhost by default>
