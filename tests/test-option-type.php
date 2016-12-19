@@ -72,14 +72,16 @@ class TestsUnysonOptionTypes extends WP_Unyson_UnitTestCase {
 		//
 		// FW_Option_Type::register('Test_Option_Type');
 
-		$option = fw()->backend->option_type('test-option-type');
+		$test_option = fw()->backend->option_type('test-option-type');
 
-		$value = $option->get_value_from_input(
-			array(), // type would be added from defaults
+		$this->assertEquals(
+			$test_option->get_value_from_input(array(), 'value-inserted-by-user'),
 			'value-inserted-by-user'
 		);
-
-		$this->assertEquals($value, 'value-inserted-by-user');
+		$this->assertEquals(
+			$test_option->get_value_from_input(array(), null),
+			$test_option->get_defaults('value')
+		);
 	}
 
 	public function test_option_type_give_right_default_when_provided_null() {
