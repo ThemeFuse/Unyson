@@ -68,6 +68,145 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			);
 		}
 
+		private static function query_posts(array $limits) {
+			$limits = array_merge(array(
+				'type' => array(
+					'post' => true,
+					'page' => true,
+				),
+				'title' => '',
+				'id' => array( /* 1, 7, 120 */ ),
+			), $limits);
+
+			/** @var WPDB $wpdb */
+			global $wpdb;
+
+			$sql = "SELECT ID val, post_title title"
+				." FROM $wpdb->posts"
+				." WHERE post_status IN ( 'publish', 'private' )";
+				//." AND NULLIF(post_password, '') IS NULL"; todo: review
+
+			{
+				$prepare = array();
+
+				if ($limits['id']) {
+					$sql .= " AND ID IN ( "
+						. implode( ', ', array_fill( 1, count( $limits['id'] ), '%d' ) )
+						. " ) ";
+					$prepare = array_merge($prepare, $limits['id']);
+				}
+
+				if ($limits['type']) {
+					$sql .= " AND post_type IN ( "
+						. implode( ', ', array_fill( 1, count( $limits['type'] ), '%s' ) )
+						. " ) ";
+					$prepare = array_merge($prepare, array_keys($limits['type']));
+				}
+
+				if ($limits['title']) {
+					$sql .= " AND post_title LIKE %s";
+					$prepare[] = '%'. $wpdb->esc_like( $limits['title'] ) .'%';
+				}
+			}
+
+			$sql .= " LIMIT 100";
+
+			return $wpdb->get_results($wpdb->prepare($sql, $prepare), ARRAY_A);
+		}
+
+		private static function query_terms(array $limits) {
+			$limits = array_merge(array(
+				'taxonomy' => array(
+					'category' => true,
+				),
+				'title' => '',
+				'id' => array( /* 1, 7, 120 */ ),
+			), $limits);
+
+			/** @var WPDB $wpdb */
+			global $wpdb;
+
+			$sql = "SELECT terms.term_id val, terms.name title"
+				." FROM $wpdb->terms AS terms, $wpdb->term_taxonomy AS taxonomies"
+				." WHERE terms.term_id = taxonomies.term_id AND taxonomies.term_id = taxonomies.term_taxonomy_id";
+
+			{
+				$prepare = array();
+
+				if ($limits['id']) {
+					$sql .= " AND terms.term_id IN ( "
+						. implode( ', ', array_fill( 1, count( $limits['id'] ), '%d' ) )
+						. " ) ";
+					$prepare = array_merge($prepare, $limits['id']);
+				}
+
+				if ($limits['taxonomy']) {
+					$sql .= " AND taxonomies.taxonomy IN ( "
+						. implode( ', ', array_fill( 1, count( $limits['taxonomy'] ), '%s' ) )
+						. " ) ";
+					$prepare = array_merge($prepare, array_keys($limits['taxonomy']));
+				}
+
+				if ($limits['title']) {
+					$sql .= " AND terms.name LIKE %s";
+					$prepare[] = '%'. $wpdb->esc_like( $limits['title'] ) .'%';
+				}
+			}
+
+			$sql .= " LIMIT 100";
+
+			return $wpdb->get_results($wpdb->prepare($sql, $prepare), ARRAY_A);
+		}
+
+		private static function query_users(array $limits) {
+			$limits = array_merge(array(
+				'name' => '',
+				'role' => array(
+					'editor' => true,
+				),
+				'id' => array( /* 1, 7, 120 */ ),
+			), $limits);
+
+			/** @var WPDB $wpdb */
+			global $wpdb;
+
+			$sql = "SELECT users.id val, users.user_nicename title"
+				." FROM $wpdb->users AS users, $wpdb->usermeta AS usermeta"
+				." WHERE usermeta.user_id = users.ID";
+
+			{
+				$prepare = array();
+
+				if ($limits['id']) {
+					$sql .= " AND users.id IN ( "
+						. implode( ', ', array_fill( 1, count( $limits['id'] ), '%d' ) )
+						. " ) ";
+					$prepare = array_merge($prepare, $limits['id']);
+				}
+
+				if ($limits['role']) {
+					$sql .= " AND usermeta.meta_key = 'wp_capabilities' "
+						. "AND ( "
+						. implode( ' OR ',
+							array_fill( 1, count( $limits['role'] ), 'usermeta.meta_value LIKE %s' ) ) .
+						" ) ";
+
+					foreach ( $limits['role'] as $name ) {
+						$prepare[] = '%' . $wpdb->esc_like( $name ) . '%';
+					}
+				}
+
+				if ($limits['name']) {
+					$sql .= " AND users.user_nicename LIKE %s";
+					$prepare[] = '%'. $wpdb->esc_like( $limits['name'] ) .'%';
+				}
+			}
+
+			$sql .= " LIMIT 100";
+
+			return $wpdb->get_results($wpdb->prepare($sql, $prepare), ARRAY_A);
+		}
+
 		/**
 		 * @internal
 		 */
@@ -76,116 +215,30 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				wp_send_json_error();
 			}
 
-			/**
-			 * @var WPDB $wpdb
-			 */
-			global $wpdb;
-
 			$type  = FW_Request::POST( 'data/type' );
-			$names = json_decode( FW_Request::POST( 'data/names' ), true );
+			$names = ($names = json_decode( FW_Request::POST( 'data/names' ), true )) ? $names : array();
 			$title = FW_Request::POST( 'data/string' );
 
 			$items = array();
 
 			switch ( $type ) {
 				case 'posts':
-					$items = $wpdb->get_results(
-						call_user_func_array(
-							array( $wpdb, 'prepare' ),
-							array_merge(
-								array(
-									"SELECT ID val, post_title title " .
-									"FROM $wpdb->posts " .
-									"WHERE post_title LIKE %s " .
-									"AND post_status IN ( 'publish', 'private' ) " .
-									//"AND NULLIF(post_password, '') IS NULL " . todo: review
-									"AND post_type IN ( " .
-									implode( ', ', array_fill( 1, count( $names ), '%s' ) ) .
-									" ) " .
-									"LIMIT 100",
-									'%' . $wpdb->esc_like( $title ) . '%'
-								),
-								/**
-								 * These strings may contain '%abc'
-								 * so we cannot use them directly in sql
-								 * because $wpdb->prepare() will return false
-								 * also you can test that with sprintf()
-								 */
-								$names
-							)
-						)
-					);
+					$items = self::query_posts(array(
+						'type' => array_fill_keys($names, true),
+						'title' => $title,
+					));
 					break;
 				case 'taxonomy':
-					$items = $wpdb->get_results(
-						call_user_func_array(
-							array( $wpdb, 'prepare' ),
-							array_merge(
-								array(
-									"SELECT terms.term_id val, terms.name title " .
-									"FROM $wpdb->terms as terms, $wpdb->term_taxonomy as taxonomies " .
-									"WHERE terms.name LIKE %s AND taxonomies.taxonomy IN ( " .
-									implode( ', ', array_fill( 1, count( $names ), '%s' ) ) .
-									" ) " .
-									"AND terms.term_id = taxonomies.term_id " .
-									"AND taxonomies.term_id = taxonomies.term_taxonomy_id " .
-									"LIMIT 100",
-									'%' . $wpdb->esc_like( $title ) . '%'
-								),
-								/**
-								 * These strings may contain '%abc'
-								 * so we cannot use them directly in sql
-								 * because $wpdb->prepare() will return false
-								 * also you can test that with sprintf()
-								 */
-								$names
-							)
-						)
-					);
+					$items = self::query_terms(array(
+						'taxonomy' => array_fill_keys($names, true),
+						'title' => $title,
+					));
 					break;
 				case 'users':
-					if ( empty( $names ) ) {
-						$items = $wpdb->get_results(
-							$wpdb->prepare(
-								"SELECT users.id val, users.user_nicename title " .
-								"FROM $wpdb->users as users " .
-								"WHERE users.user_nicename LIKE %s " .
-								"LIMIT 100",
-								'%' . $wpdb->esc_like( $title ) . '%'
-							)
-						);
-					} else {
-						$like_user_meta = array();
-						foreach ( $names as $name ) {
-							$like_user_meta[] = '%' . $wpdb->esc_like( $name ) . '%';
-						}
-
-						$items = $wpdb->get_results(
-							call_user_func_array(
-								array( $wpdb, 'prepare' ),
-								array_merge(
-									array(
-										"SELECT users.id val, users.user_nicename title " .
-										"FROM $wpdb->users as users, $wpdb->usermeta as usermeta " .
-										"WHERE users.user_nicename LIKE %s AND usermeta.meta_key = 'wp_capabilities' " .
-										"AND ( " .
-										implode( ' OR ',
-											array_fill( 1, count( $like_user_meta ), 'usermeta.meta_value LIKE %s' ) ) .
-										" ) " .
-										"AND usermeta.user_id = users.ID",
-										'%' . $wpdb->esc_like( $title ) . '%'
-									),
-									/**
-									 * These strings may contain '%abc'
-									 * so we cannot use them directly in sql
-									 * because $wpdb->prepare() will return false
-									 * also you can test that with sprintf()
-									 */
-									$like_user_meta
-								)
-							)
-						);
-					}
+					$items = self::query_users(array(
+						'role' => array_fill_keys($names, true),
+						'name' => $title,
+					));
 					break;
 			}
 
@@ -203,43 +256,65 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 		 * @internal
 		 */
 		protected function _render( $id, $option, $data ) {
-			$items      = array();
-			$population = 'array';
+			$population = $option['population'];
 			$source     = array();
+			$items      = array();
 
 			if ( isset( $option['population'] ) ) {
 				switch ( $option['population'] ) {
 					case 'array' :
 						if ( isset( $option['choices'] ) && is_array( $option['choices'] ) ) {
-							$items = $option['choices'];
+							foreach ($option['choices'] as $c_key => $c_val) {
+								$items[] = array(
+									'val' => $c_key,
+									'title' => $c_val,
+								);
+							}
 						}
 						break;
 					case 'posts' :
 						if ( isset( $option['source'] ) ) {
-							$source     = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
-							$population = 'posts';
+							$source = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
+
+							if ($data['value']) {
+								$items = self::query_posts(array(
+									'type' => array_fill_keys($source, true),
+									'id' => $data['value'],
+								));
+							}
 						}
 						break;
 					case 'taxonomy' :
 						if ( isset( $option['source'] ) ) {
-							$population = 'taxonomy';
-							$source     = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
+							$source = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
+
+							if ($data['value']) {
+								$items = self::query_terms(array(
+									'taxonomy' => array_fill_keys($source, true),
+									'id' => $data['value'],
+								));
+							}
 						}
 						break;
 					case 'users' :
-						$population = 'users';
-
 						if ( isset( $option['source'] ) && ! empty( $option['source'] ) ) {
 							$source = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
 						} else {
 							$source = array();
+						}
+
+						if ($data['value']) {
+							$items = self::query_users(array(
+								'role' => array_fill_keys($source, true),
+								'id' => $data['value'],
+							));
 						}
 						break;
 					default :
 						return '(Invalid <code>population</code> parameter)';
 				}
 
-				$option['attr']['data-options']    = json_encode( $this->convert_array( $items ) );
+				$option['attr']['data-options']    = json_encode( $items );
 				$option['attr']['data-population'] = $population;
 				$option['attr']['data-source']     = json_encode( $source );
 				$option['attr']['data-limit']      = ( intval( $option['limit'] ) > 0 ) ? $option['limit'] : 0;
@@ -276,25 +351,6 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			);
 
 			fw()->backend->option_type( 'text' )->enqueue_static();
-		}
-
-		/**
-		 * @internal
-		 */
-		private function convert_array( $array = array() ) {
-			if ( ! is_array( $array ) || empty( $array ) ) {
-				return array();
-			}
-
-			$return = array();
-			foreach ( $array as $key => $item ) {
-				$return[] = array(
-					'val'   => $key,
-					'title' => ( $item ) ? $item : $key . ' (' . __( 'No title', 'fw' ) . ')',
-				);
-			}
-
-			return $return;
 		}
 
 		/**
