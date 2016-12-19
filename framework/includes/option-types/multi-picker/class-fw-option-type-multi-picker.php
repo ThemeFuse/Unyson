@@ -306,7 +306,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 					if (is_array($settings['for'])) {
 						// Insert location: after/before.
 						$location = fw_akg('location', $settings, 'before');
-						foreach($settings['for'] as $name) {
+						foreach ($settings['for'] as $name) {
 							if (isset($choices[$name])) {
 								if ('before' === $location) {
 									$result[$name] = array_merge(
@@ -323,7 +323,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 						}
 					}
 				} else {
-					if ( ! $result[$key] ) {
+					if ( ! isset($result[$key]) ) {
 						$result[$key] = $settings;
 					}
 				}
