@@ -1,4 +1,4 @@
-Running Unyson Unit Tests via PHPUnit.
+# Running Unyson Unit Tests via PHPUnit.
 
 Requirements:
 
@@ -6,7 +6,7 @@ Requirements:
 2. Get [`install-wp-tests.sh`](https://github.com/wp-cli/wp-cli/blob/master/templates/install-wp-tests.sh) helper and put it somewhere in your PATH, name it `install-wp-tests`
 
 
-# Steps to follow:
+## Steps to follow:
 
 Run `install-wp-tests` helper. Please make sure that you have a mysql daemon
 running. This script will do a couple of things:
