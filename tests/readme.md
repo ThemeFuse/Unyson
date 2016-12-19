@@ -1,6 +1,7 @@
 Running Unyson Unin Tests via PHPUnit.
 
 Requirements:
+
 1. Make sure you have installed PHPUnit and you have it available in your PATH as `phpunit`
 2. Get [`install-wp-tests.sh`](https://github.com/wp-cli/wp-cli/blob/master/templates/install-wp-tests.sh) helper and put it somewhere in your PATH, name it `install-wp-tests`
 
