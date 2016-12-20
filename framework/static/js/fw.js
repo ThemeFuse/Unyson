@@ -2264,7 +2264,12 @@ fw.soleConfirm = (function ($) {
 	//////////////////
 
 	Confirm.prototype._fireEvents = function ($modal) {
+		$modal.attr('data-fw-sole-confirm-id', this.id);
+
 		$modal.find('.fw-sole-confirm-button')
+			.add(
+				$modal.find('.media-modal-backdrop')
+			)
 			.on('click.fw-sole-confirm', _.bind(this._handleClose, this));
 
 		if (this.opts.onFireEvents) {
@@ -2273,7 +2278,11 @@ fw.soleConfirm = (function ($) {
 	};
 
 	Confirm.prototype._teardownEvents = function ($modal) {
-		$modal.find('.fw-sole-confirm-button').off('click.fw-sole-confirm');
+		$modal.find('.fw-sole-confirm-button')
+			.add(
+				$modal.find('.media-modal-backdrop')
+			)
+			.off('click.fw-sole-confirm');
 
 		if (this.opts.onTeardownEvents) {
 			this.opts.onTeardownEvents(this, $modal[0]);
@@ -2291,12 +2300,16 @@ fw.soleConfirm = (function ($) {
 
 		var $el = $(event.target);
 
-		if (! $el.hasClass('fw-sole-confirm-button')) {
+		if ($el.hasClass('media-modal-backdrop')) {
+
+			// do not do any transformation on $el here by intent
+
+		} else if (! $el.hasClass('fw-sole-confirm-button')) {
 			$el = $el.closest('.fw-sole-confirm-button');
 		}
 
-		var action = $el.attr('data-fw-sole-confirm-action');
-		var id = $el.attr('data-fw-sole-confirm-id');
+		var action = $el.attr('data-fw-sole-confirm-action') || 'reject';
+		var id = $el.closest('.fw-sole-modal').attr('data-fw-sole-confirm-id');
 		var confirm = hashMap[id];
 
 		if (confirm) {
@@ -2323,8 +2336,9 @@ fw.soleConfirm = (function ($) {
 						modal_container: $el.closest('.fw-sole-modal')[0]
 					});
 
-				confirm.hide();
 			}
+
+			confirm.hide();
 
 			confirm.destroy();
 			confirm = null;
@@ -2349,7 +2363,6 @@ fw.soleConfirm = (function ($) {
 			html: this.opts.cancelHTML
 		}).attr({
 			'data-fw-sole-confirm-action': 'reject',
-			'data-fw-sole-confirm-id': this.id,
 			type: 'button',
 		}).addClass('fw-sole-confirm-button button');
 
@@ -2357,7 +2370,6 @@ fw.soleConfirm = (function ($) {
 			html: this.opts.okHTML
 		}).attr({
 			'data-fw-sole-confirm-action': 'resolve',
-			'data-fw-sole-confirm-id': this.id,
 			type: 'button',
 		}).addClass('fw-sole-confirm-button button button-primary');
 
