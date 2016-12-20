@@ -1,6 +1,6 @@
 <?php if (!defined('FW')) die('Forbidden');
 
-require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader-skins.php';
+require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 
 class _FW_Extensions_Install_Upgrader_Skin extends WP_Upgrader_Skin
 {
