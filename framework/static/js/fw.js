@@ -1842,6 +1842,8 @@ fw.soleModal = (function(){
 		},
 		setSize: function(width, height) {
 			var $size = this.$modal.find('> .media-modal');
+			var $modal = this.$modal;
+			$modal.addClass('fw-modal-opening');
 
 			if (
 				$size.height() != height
@@ -1851,7 +1853,9 @@ fw.soleModal = (function(){
 				$size.animate({
 					'height': height +'px',
 					'width': width +'px'
-				}, this.animationTime);
+				}, this.animationTime, function () {
+					$modal.removeClass('fw-modal-opening');
+				});
 			}
 
 			$size = undefined;
