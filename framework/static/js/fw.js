@@ -1196,16 +1196,19 @@ fw.getValuesFromServer = function (data) {
 						text: _fw_localized.l10n.save,
 						priority: 40,
 						click: triggerSubmit
-					},
-					{
-						style: '',
-						text: _fw_localized.l10n.reset,
-						priority: -1,
-						click: function () {
-							modal.content.resetForm();
-						}
 					}
 				];
+
+			if (! settings.disableResetButton) {
+				buttons = buttons.concat([{
+					style: '',
+					text: _fw_localized.l10n.reset,
+					priority: -1,
+					click: function () {
+						modal.content.resetForm();
+					}
+				}]);
+			}
 
 			/**
 			 * Sometimes we want an apply button in order to save changes
@@ -1842,6 +1845,8 @@ fw.soleModal = (function(){
 		},
 		setSize: function(width, height) {
 			var $size = this.$modal.find('> .media-modal');
+			var $modal = this.$modal;
+			$modal.addClass('fw-modal-opening');
 
 			if (
 				$size.height() != height
@@ -1851,7 +1856,9 @@ fw.soleModal = (function(){
 				$size.animate({
 					'height': height +'px',
 					'width': width +'px'
-				}, this.animationTime);
+				}, this.animationTime, function () {
+					$modal.removeClass('fw-modal-opening');
+				});
 			}
 
 			$size = undefined;
