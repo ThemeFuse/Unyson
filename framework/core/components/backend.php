@@ -1993,6 +1993,7 @@ final class _FW_Component_Backend {
 						$args_setting = array(
 							'default' => fw()->backend->option_type($opt['option']['type'])->get_value_from_input($opt['option'], null),
 							'fw_option' => $opt['option'],
+							'fw_option_id' => $opt['id'],
 						);
 
 						if (isset($opt['option']['wp-customizer-setting-args']) && is_array($opt['option']['wp-customizer-setting-args'])) {
