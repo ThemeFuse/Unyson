@@ -2945,15 +2945,7 @@ body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 	transition: opacity .3s ease-in-out;
 }
 
-.fw-modal.fw-modal-open:not(.fw-sole-modal) > .media-modal > .media-modal-content {
-	-webkit-animation: fwGrowIn .3s ease-in-out;
-	-moz-animation: fwGrowIn .3s ease-in-out;
-	-ms-animation: fwGrowIn .3s ease-in-out;
-	-o-animation: fwGrowIn .3s ease-in-out;
-	animation: fwGrowIn .3s ease-in-out;
-}
-
-.fw-modal.fw-sole-modal.fw-modal-opening > .media-modal > .media-modal-content {
+.fw-modal.fw-modal-opening > .media-modal > .media-modal-content {
 	-webkit-animation: fwGrowIn .3s ease-in-out;
 	-moz-animation: fwGrowIn .3s ease-in-out;
 	-ms-animation: fwGrowIn .3s ease-in-out;

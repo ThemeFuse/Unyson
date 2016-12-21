@@ -866,6 +866,11 @@ fw.getQueryString = function(name) {
 				}
 
 				$modalWrapper.addClass('fw-modal-open');
+				$modalWrapper.addClass('fw-modal-opening');
+
+				setTimeout(function () {
+					$modalWrapper.removeClass('fw-modal-opening');
+				}, 300);
 
 				modalsStack.push($modalWrapper.find('.media-modal'));
 
@@ -1856,10 +1861,12 @@ fw.soleModal = (function(){
 				$size.animate({
 					'height': height +'px',
 					'width': width +'px'
-				}, this.animationTime, function () {
-					$modal.removeClass('fw-modal-opening');
-				});
+				}, this.animationTime);
 			}
+
+			setTimeout(function () {
+				$modal.removeClass('fw-modal-opening');
+			}, this.animationTime);
 
 			$size = undefined;
 		},
