@@ -44,7 +44,10 @@
 					var editor = e.target,
 						id = editor.id;
 
-					editor.on('change', function(){ editor.save(); });
+					editor.on('change', function(){
+						editor.save();
+						$textarea.trigger('change'); // fixes https://github.com/ThemeFuse/Unyson/issues/2273
+					});
 
 					/**
 					 * Fixes when wpautop is false
