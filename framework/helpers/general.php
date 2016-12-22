@@ -1246,14 +1246,18 @@ function fw_current_url() {
 	if ($url === null) {
 		$url = 'http://';
 
-		if ($_SERVER['SERVER_NAME'] === '_') { // https://github.com/ThemeFuse/Unyson/issues/126
-			$url .= $_SERVER['HTTP_HOST'];
+		$server_name = (isset($_SERVER['SERVER_NAME'])) ? $_SERVER['SERVER_NAME'] : '';
+		$http_host = (isset($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : '';
+		$server_port = (isset($_SERVER['SERVER_PORT'])) ? $_SERVER['SERVER_PORT'] : '';
+
+		if ($server_name === '_') { // https://github.com/ThemeFuse/Unyson/issues/126
+			$url .= $http_host;
 		} else {
-			$url .= $_SERVER['SERVER_NAME'];
+			$url .= $server_name;
 		}
 
-		if (!in_array(intval($_SERVER['SERVER_PORT']), array(80, 443))) {
-			$url .= ':'. $_SERVER['SERVER_PORT'];
+		if (!in_array(intval($server_port), array(80, 443))) {
+			$url .= ':'. $server_port;
 		}
 
 		$url .= $_SERVER['REQUEST_URI'];

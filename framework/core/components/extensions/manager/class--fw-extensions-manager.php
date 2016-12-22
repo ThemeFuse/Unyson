@@ -1558,7 +1558,7 @@ final class _FW_Extensions_Manager
 			unset($opts);
 		}
 
-		if (!$this->can_install()) {
+		if (!$this->can_install() && !defined('WP_CLI')) {
 			return new WP_Error(
 				'access_denied',
 				__('You have no permissions to uninstall extensions', 'fw')
@@ -1942,7 +1942,7 @@ final class _FW_Extensions_Manager
 	 */
 	public function activate_extensions(array $extensions, $cancel_on_error = false)
 	{
-		if (!$this->can_activate()) {
+		if (!$this->can_activate() && !defined('WP_CLI')) {
 			return new WP_Error(
 				'access_denied',
 				__('You have no permissions to activate extensions', 'fw')
@@ -2157,7 +2157,7 @@ final class _FW_Extensions_Manager
 	 */
 	public function deactivate_extensions(array $extensions, $cancel_on_error = false)
 	{
-		if (!$this->can_activate()) {
+		if (!$this->can_activate() && !defined( 'WP_CLI' )) {
 			return new WP_Error(
 				'access_denied',
 				__('You have no permissions to deactivate extensions', 'fw')
