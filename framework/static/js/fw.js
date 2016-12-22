@@ -1200,7 +1200,13 @@ fw.getValuesFromServer = function (data) {
 						style: 'primary',
 						text: _fw_localized.l10n.save,
 						priority: 40,
-						click: triggerSubmit
+						click: function () {
+							if (settings.shouldSaveWithoutClose) {
+								modal.frame.$el.addClass('fw-options-modal-no-close');
+							}
+
+							triggerSubmit();
+						}
 					}
 				];
 
