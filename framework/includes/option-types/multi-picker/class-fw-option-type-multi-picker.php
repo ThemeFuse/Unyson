@@ -347,6 +347,11 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 		}
 
 		$value = array();
+		
+		/**
+		 * @since 2.6.11
+		 */
+		$option = $this->prepare_choices($option);
 
 		if (is_null($input_value) && isset($option['value'][$picker_key])) {
 			$value[$picker_key] = $option['value'][$picker_key];
