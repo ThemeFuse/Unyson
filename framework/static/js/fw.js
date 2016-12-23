@@ -866,6 +866,13 @@ fw.getQueryString = function(name) {
 				}
 
 				$modalWrapper.addClass('fw-modal-open');
+
+				/**
+				 * We probably don't need this class anymore due to the
+				 * fact that we hacked CSS specificity away.
+				 *
+				 * I'll be keeping it here for integrity with fw.soleModal.
+				 */
 				$modalWrapper.addClass('fw-modal-opening');
 
 				setTimeout(function () {
