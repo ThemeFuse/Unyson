@@ -1205,7 +1205,7 @@ fw.getValuesFromServer = function (data) {
 				buttons = [
 					{
 						style: 'primary',
-						text: _fw_localized.l10n.save,
+						text: settings.saveText || _fw_localized.l10n.save,
 						priority: 40,
 						click: function () {
 							if (settings.shouldSaveWithoutClose) {
