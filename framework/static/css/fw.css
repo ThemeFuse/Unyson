@@ -2969,9 +2969,9 @@ body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 
 /**
  * Dirty hack to keep specificity intact
- * Specificity score: 5
+ * Specificity score: 5.1
  */
-.wp-admin .fw-modal.fw-modal-closing > .media-modal > .media-modal-content {
+body.wp-core-ui .fw-modal.fw-modal-closing > .media-modal > .media-modal-content {
 	-webkit-animation: fwGrowOut .3s ease-in-out;
 	-moz-animation: fwGrowOut .3s ease-in-out;
 	-ms-animation: fwGrowOut .3s ease-in-out;
