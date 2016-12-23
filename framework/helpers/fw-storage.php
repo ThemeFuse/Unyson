@@ -49,6 +49,18 @@ function fw_db_option_storage_load($id, array $option, $value, array $params = a
 	if (
 		!empty($option['fw-storage'])
 		&&
+		// fixes https://github.com/ThemeFuse/Unyson/issues/2265#issuecomment-268829683
+		// do nothing if there is a POST preview value for this option
+		!(
+			isset($params['customizer'])
+			&&
+			is_customize_preview()
+			&&
+			isset($_POST['customized'])
+			&&
+			strpos($_POST['customized'], '\"fw_options['. $id .']') !== false
+		)
+		&&
 		($storage = is_array($option['fw-storage'])
 			? $option['fw-storage']
 			: array('type' => $option['fw-storage'])
