@@ -76,6 +76,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				),
 				'title' => '',
 				'id' => array( /* 1, 7, 120 */ ),
+				'limit' => 100,
 			), $limits);
 
 			/** @var WPDB $wpdb */
@@ -109,7 +110,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				}
 			}
 
-			$sql .= " LIMIT 100";
+			$sql .= " LIMIT ". intval($limits['limit']);
 
 			return $wpdb->get_results($wpdb->prepare($sql, $prepare), ARRAY_A);
 		}
@@ -121,6 +122,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				),
 				'title' => '',
 				'id' => array( /* 1, 7, 120 */ ),
+				'limit' => 100,
 			), $limits);
 
 			/** @var WPDB $wpdb */
@@ -153,7 +155,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				}
 			}
 
-			$sql .= " LIMIT 100";
+			$sql .= " LIMIT ". intval($limits['limit']);
 
 			return $wpdb->get_results($wpdb->prepare($sql, $prepare), ARRAY_A);
 		}
@@ -165,6 +167,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 					'editor' => true,
 				),
 				'id' => array( /* 1, 7, 120 */ ),
+				'limit' => 100,
 			), $limits);
 
 			/** @var WPDB $wpdb */
@@ -202,7 +205,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				}
 			}
 
-			$sql .= " LIMIT 100";
+			$sql .= " LIMIT ". intval($limits['limit']);
 
 			return $wpdb->get_results($wpdb->prepare($sql, $prepare), ARRAY_A);
 		}
@@ -275,25 +278,21 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 					case 'posts' :
 						if ( isset( $option['source'] ) ) {
 							$source = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
-
-							if ($data['value']) {
-								$items = self::query_posts(array(
-									'type' => array_fill_keys($source, true),
-									'id' => $data['value'],
-								));
-							}
+							$items = self::query_posts(array(
+								'type' => array_fill_keys($source, true),
+								'id' => $data['value'],
+								'limit' => $option['prepopulate'],
+							));
 						}
 						break;
 					case 'taxonomy' :
 						if ( isset( $option['source'] ) ) {
 							$source = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
-
-							if ($data['value']) {
-								$items = self::query_terms(array(
-									'taxonomy' => array_fill_keys($source, true),
-									'id' => $data['value'],
-								));
-							}
+							$items = self::query_terms(array(
+								'taxonomy' => array_fill_keys($source, true),
+								'id' => $data['value'],
+								'limit' => $option['prepopulate'],
+							));
 						}
 						break;
 					case 'users' :
@@ -303,12 +302,11 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 							$source = array();
 						}
 
-						if ($data['value']) {
-							$items = self::query_users(array(
-								'role' => array_fill_keys($source, true),
-								'id' => $data['value'],
-							));
-						}
+						$items = self::query_users(array(
+							'role' => array_fill_keys($source, true),
+							'id' => $data['value'],
+							'limit' => $option['prepopulate'],
+						));
 						break;
 					default :
 						return '(Invalid <code>population</code> parameter)';
