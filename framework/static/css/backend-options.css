@@ -1258,13 +1258,23 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 
 .fw-selectize.selectize-control.multi > .selectize-input > input {
 	padding: 2px 5px !important;
-	height: 26px;
+	height: auto;
+	font-size: 14px;
 	vertical-align: middle;
+}
+
+.fw-modal .media-frame .fw-selectize.selectize-control.multi > .selectize-input > input {
+	height: 26px;
 }
 
 .fw-selectize.selectize-control.multi .selectize-input > div {
 	margin: 2px;
+	padding: 0 3px;
 	vertical-align: middle;
+}
+
+.fw-modal .media-frame .fw-selectize.selectize-control.multi .selectize-input > div {
+	padding: 2px 5px;
 }
 
 .fw-selectize.selectize-control .selectize-dropdown {
