@@ -49,19 +49,6 @@ function fw_db_option_storage_load($id, array $option, $value, array $params = a
 	if (
 		!empty($option['fw-storage'])
 		&&
-		// fixes https://github.com/ThemeFuse/Unyson/issues/2265#issuecomment-268829683
-		// do nothing if there is a POST preview value for this option
-		// fixme: https://github.com/ThemeFuse/Unyson/issues/2265#issuecomment-269019736
-		/*!(
-			isset($params['customizer'])
-			&&
-			is_customize_preview()
-			&&
-			isset($_POST['customized'])
-			&&
-			strpos($_POST['customized'], '\"fw_options['. $id .']') !== false
-		)
-		&&*/
 		($storage = is_array($option['fw-storage'])
 			? $option['fw-storage']
 			: array('type' => $option['fw-storage'])
@@ -71,6 +58,21 @@ function fw_db_option_storage_load($id, array $option, $value, array $params = a
 		&&
 		($storage_type = fw_db_option_storage_type($storage['type']))
 	) {
+		// Fixes https://github.com/ThemeFuse/Unyson/issues/2265
+		if (isset($params['customizer']) && is_customize_preview()) {
+			/** @var WP_Customize_Manager $wp_customize */
+			global $wp_customize;
+
+			if (
+				($setting = $wp_customize->get_setting($setting_id = 'fw_options[' . $id . ']'))
+				&&
+				!is_null($wp_customize->post_value($setting))
+			) {
+				// Use POST preview value
+				return $value;
+			}
+		}
+
 		$option['fw-storage'] = $storage;
 	} else {
 		return $value;
