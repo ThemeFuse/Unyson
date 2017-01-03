@@ -62,8 +62,6 @@ final class _FW_Component_Backend {
 	 */
 	private $access_key;
 
-	private $storage_key = 'fw-option-type';
-
 	/**
 	 * @internal
 	 */
@@ -488,90 +486,6 @@ final class _FW_Component_Backend {
 	}
 
 	/**
-	 * @param $key
-	 * @param $type
-	 * @param $parent_class
-	 *
-	 * @return FW_Option_Type|FW_Container_Type
-	 * @throws FW_Option_Type_Exception
-	 * @throws FW_Option_Type_Exception_Not_Found
-	 *
-	 * @since 2.6.11
-	 */
-	protected function get_item_from_storage( $key, $type, $parent_class ) {
-		try {
-			$object = FW_Cache::get( "$key:$type" );
-			if ( ! is_subclass_of( $object, $parent_class ) ) {
-				throw new FW_Option_Type_Exception( $type );
-			}
-
-			return $object;
-		} catch ( FW_Cache_Not_Found_Exception $exception ) {
-			throw new FW_Option_Type_Exception_Not_Found( $type );
-		}
-	}
-
-	/**
-	 * @param $key
-	 * @param FW_Option_Type|FW_Container_Type $item
-	 *
-	 * @since 2.6.11
-	 */
-	protected function set_item_in_storage( $key, $item ) {
-		FW_Cache::set( "$key:{$item->get_type()}", $item );
-	}
-
-	/**
-	 * @param $type
-	 *
-	 * @return FW_Option_Type
-	 * @throws FW_Option_Type_Exception
-	 * @throws FW_Option_Type_Exception_Not_Found
-	 *
-	 * @since 2.6.11
-	 */
-	protected function get_option_from_storage( $type ) {
-		return $this->get_item_from_storage( "$this->storage_key:option-types", $type, 'FW_Option_Type' );
-	}
-
-	/**
-	 * @param $type
-	 *
-	 * @return FW_Container_Type
-	 * @throws FW_Option_Type_Exception
-	 * @throws FW_Option_Type_Exception_Not_Found
-	 *
-	 * @since 2.6.11
-	 */
-	protected function get_container_from_storage( $type ) {
-		return $this->get_item_from_storage( "$this->storage_key:container-types", $type, 'FW_Option_Type' );
-	}
-
-	/**
-	 * @param FW_Option_Type $option
-	 *
-	 * @return FW_Option_Type
-	 *
-	 * @since 2.6.11
-	 */
-	protected function set_option_in_storage( FW_Option_Type $option ) {
-		$this->set_item_in_storage( "$this->storage_key:option-types", $option );
-
-		return $option;
-	}
-
-	/**
-	 * @param FW_Option_Type $option
-	 *
-	 * @return FW_Option_Type
-	 */
-	protected function set_container_in_storage( FW_Container_Type $option ) {
-		$this->set_item_in_storage( "$this->storage_key:container-types", $option );
-
-		return $option;
-	}
-
-	/**
 	 * @param $class
 	 *
 	 * @return FW_Option_Type
@@ -589,50 +503,6 @@ final class _FW_Component_Backend {
 		}
 
 		return new $class;
-	}
-
-	/**
-	 * @param $type
-	 *
-	 * @return FW_Option_Type
-	 * @throws FW_Option_Type_Exception
-	 * @throws FW_Option_Type_Exception_Not_Found
-	 * @throws FW_Option_Type_Exception_Invalid_Class
-	 */
-	protected function get_option_type( $type ) {
-		try {
-			return $this->get_option_from_storage( $type );
-		} catch ( FW_Option_Type_Exception $exception ) {
-			if ( isset( $this->option_types[ $type ] ) ) {
-				$option = $this->get_instance( $this->option_types[ $type ] );
-				$option->_call_init( $this->get_access_key() );
-
-				return $this->set_option_in_storage( $option );
-			}
-			throw new FW_Option_Type_Exception_Not_Found( $type );
-		}
-	}
-
-	/**
-	 * @param $type
-	 *
-	 * @return FW_Container_Type
-	 * @throws FW_Option_Type_Exception
-	 * @throws FW_Option_Type_Exception_Not_Found
-	 * @throws FW_Option_Type_Exception_Invalid_Class
-	 */
-	protected function get_container_type( $type ) {
-		try {
-			return $this->get_container_from_storage( $type );
-		} catch ( FW_Option_Type_Exception $exception ) {
-			if ( isset( $this->container_types[ $type ] ) ) {
-				$option = $this->get_instance( $this->container_types[ $type ] );
-				$option->_call_init( $this->get_access_key() );
-
-				return $this->set_container_in_storage( $option );
-			}
-			throw new FW_Option_Type_Exception_Not_Found( $type );
-		}
 	}
 
 	public function _filter_admin_footer_text( $html ) {
@@ -1714,42 +1584,35 @@ final class _FW_Component_Backend {
 	}
 
 	/**
-	 * @param string $option_type
-	 *
-	 * @return FW_Option_Type|FW_Option_Type_Undefined
+	 * @param string $type
+	 * @return FW_Option_Type
 	 */
-	public function option_type( $option_type ) {
-		static $did_action = false;
-
-		if ( ! $did_action ) {
-			do_action( 'fw_option_types_init' );
-			$did_action = true;
+	public function option_type( $type ) {
+		if ( ! did_action( $init_action = 'fw_option_types_init' ) ) {
+			do_action( $init_action );
 		}
 
-		try {
-			return $this->get_option_type( $option_type );
-		} catch ( FW_Option_Type_Exception_Not_Found $exception ) {
-			if ( is_admin() ) {
-				$should_write_flash = apply_filters(
-					'fw_backend_undefined_option_type_warn_user',
-					true,
-					$option_type
-				);
+		if ( isset( $this->option_types[ $type ] ) ) {
+			if (is_string($this->option_types[$type])) {
+				$this->option_types[$type] = $this->get_instance($this->option_types[$type]);
+				$this->option_types[$type]->_call_init($this->get_access_key());
+			}
 
-				if ( $should_write_flash ) {
-					FW_Flash_Messages::add(
-						'fw-get-option-type-undefined-' . $option_type,
-						sprintf( __( 'Undefined option type: %s', 'fw' ), $option_type ),
-						'warning'
-					);
-				}
+			return $this->option_types[$type];
+		} else {
+			if ( is_admin() && apply_filters('fw_backend_undefined_option_type_warn_user', true, $type) ) {
+				FW_Flash_Messages::add(
+					'fw-get-option-type-undefined-' . $type,
+					sprintf( __( 'Undefined option type: %s', 'fw' ), $type ),
+					'warning'
+				);
 			}
 
 			if ( ! $this->undefined_option_type ) {
 				$this->undefined_option_type = new FW_Option_Type_Undefined();
+			} else {
+				return $this->undefined_option_type;
 			}
-
-			return $this->undefined_option_type;
 		}
 	}
 
@@ -1778,34 +1641,35 @@ final class _FW_Component_Backend {
 	}
 
 	/**
-	 * @param string $container_type
-	 *
-	 * @return FW_Container_Type|FW_Container_Type_Undefined
+	 * @param string $type
+	 * @return FW_Container_Type
 	 */
-	public function container_type( $container_type ) {
-		static $did_action = false;
-
-		if ( ! $did_action ) {
-			do_action( 'fw_container_types_init' );
-			$did_action = true;
+	public function container_type( $type ) {
+		if ( ! did_action( $init_action = 'fw_container_types_init' ) ) {
+			do_action( $init_action );
 		}
 
-		try {
-			return $this->get_container_type( $container_type );
-		} catch ( FW_Option_Type_Exception_Not_Found $exception ) {
+		if ( isset( $this->container_types[ $type ] ) ) {
+			if ( is_string( $this->container_types[ $type ] ) ) {
+				$this->container_types[ $type ] = $this->get_instance( $this->container_types[$type] );
+				$this->container_types[ $type ]->_call_init( $this->get_access_key() );
+			}
+
+			return $this->container_types[ $type ];
+		} else {
 			if ( is_admin() ) {
 				FW_Flash_Messages::add(
-					'fw-get-container-type-undefined-' . $container_type,
-					sprintf( __( 'Undefined container type: %s', 'fw' ), $container_type ),
+					'fw-get-container-type-undefined-' . $type,
+					sprintf( __( 'Undefined container type: %s', 'fw' ), $type ),
 					'warning'
 				);
 			}
 
-			if ( ! $this->undefined_option_type ) {
-				$this->undefined_option_type = new FW_Container_Type_Undefined();
+			if ( ! $this->undefined_container_type ) {
+				$this->undefined_container_type = new FW_Container_Type_Undefined();
+			} else {
+				return $this->undefined_container_type;
 			}
-
-			return $this->undefined_container_type;
 		}
 	}
 
