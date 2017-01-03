@@ -1,19 +1,8 @@
 <?php
 
 class Tests_Unyson_Main extends WP_Unyson_UnitTestCase {
-
-	/**
-	 * Activate the plugin, mock all the things
-	 */
 	public function setUp() {
 		parent::setUp();
-
-		if (!function_exists('fw_fix_path')) {
-			/**
-			 * Start the framework
-			 */
-			_action_init_framework();
-		}
 	}
 
 	public function test_helpers_existence() {

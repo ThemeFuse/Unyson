@@ -1,9 +1,9 @@
 === Unyson ===
 Contributors: unyson
-Tags: page builder, grid, layout, responsive, back up, backup, db backup, dump, migrate, schedule, search engine optimization, seo, media, slideshow, shortcode, slide, slideshare, slideshow, google sitemaps, sitemaps, analytics, google analytics, calendar, event, events, google maps, learning, lessons, sidebars, breadcrumbs, review, portfolio, framework
+Tags: page builder, shortcodes, backup, seo, breadcrumbs, portfolio, framework
 Requires at least: 4.4
 Tested up to: 4.7
-Stable tag: 2.6.10
+Stable tag: 2.6.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,15 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.6.11 =
+* Fixed [#2198](https://github.com/ThemeFuse/Unyson/issues/2198), [#2216](https://github.com/ThemeFuse/Unyson/issues/2216), [#2219](https://github.com/ThemeFuse/Unyson/issues/2219), [#2234](https://github.com/ThemeFuse/Unyson/issues/2234), [#2254](https://github.com/ThemeFuse/Unyson/issues/2254), [#2264](https://github.com/ThemeFuse/Unyson/issues/2264), [#2265](https://github.com/ThemeFuse/Unyson/issues/2265), [#2273](https://github.com/ThemeFuse/Unyson/issues/2273)
+* Option-type `multi-select` improvements
+* Option-type `multi-picker`: The same options can be used for multiple choices [#2251](https://github.com/ThemeFuse/Unyson/pull/2251)
+* Autoload a lot of classes [#2225](https://github.com/ThemeFuse/Unyson/pull/2225)
+* New [helper function](https://github.com/ThemeFuse/Unyson/commit/e378efd45e4d6b7435ebac5a836a7556c866a920#diff-1a10d08376d32331dbdc651256766d37R1654) `fw_get_path_url()`
+* Deprecated warning for the `save-in-separate-meta` option parameter
+* Deleted `FW_File_Cache` helper
 
 = 2.6.10 =
 * Fixed [#2216](https://github.com/ThemeFuse/Unyson/issues/2216), [#2212](https://github.com/ThemeFuse/Unyson/issues/2212), [#2214](https://github.com/ThemeFuse/Unyson/issues/2214)

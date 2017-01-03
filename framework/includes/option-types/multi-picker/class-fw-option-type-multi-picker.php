@@ -214,6 +214,11 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 				E_USER_ERROR
 			);
 		}
+		
+		/**
+		 * @since 2.6.11
+		 */
+		$option = $this->prepare_choices($option);
 
 		{
 			reset($option['picker']);
@@ -283,6 +288,51 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 
 		return array_merge($picker_group, $choices_groups);
 	}
+	
+	/**
+	 * Prepare `choices` array.
+	 *
+	 * @since 2.6.11
+	 * @param array $option Options.
+	 * @return array
+	 */
+	protected function prepare_choices($option) {
+		$result = array();
+		$choices = fw_akg('choices', $option);
+
+		if (is_array($choices)) {
+			foreach ($choices as $key => $settings) {
+				if (isset($settings['for']) && isset($settings['options'])) {
+					if (is_array($settings['for'])) {
+						// Insert location: after/before.
+						$location = fw_akg('location', $settings, 'before');
+						foreach ($settings['for'] as $name) {
+							if (isset($choices[$name])) {
+								if ('before' === $location) {
+									$result[$name] = array_merge(
+										$settings['options'], $choices[$name]
+									);
+								} else {
+									$result[$name] = array_merge(
+										$choices[$name], $settings['options']
+									);
+								}
+							} else {
+								$result[$name] = $settings['options'];
+							}
+						}
+					}
+				} else {
+					if ( ! isset($result[$key]) ) {
+						$result[$key] = $settings;
+					}
+				}
+			}
+		}
+
+		fw_aks('choices', $result, $option);
+		return $option;
+	}
 
 	/**
 	 * @internal
@@ -297,6 +347,11 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 		}
 
 		$value = array();
+		
+		/**
+		 * @since 2.6.11
+		 */
+		$option = $this->prepare_choices($option);
 
 		if (is_null($input_value) && isset($option['value'][$picker_key])) {
 			$value[$picker_key] = $option['value'][$picker_key];

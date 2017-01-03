@@ -45,10 +45,19 @@ class FW_Option_Storage_Type_Post_Meta extends FW_Option_Storage_Type {
 	protected function _load( $id, array $option, $value, array $params ) {
 		if ($post_id = $this->get_post_id($option, $params)) {
 			$meta_id = $this->get_meta_id($id, $option, $params);
-			$meta_value = get_post_meta($post_id, $meta_id, true);
+			$meta_value = get_post_meta($post_id, $meta_id,
+				/**
+				 * Do not set this to `true` because the below verification if value exists or not will be impossible
+				 * because if the value is not in db it will be an empty string '' instead of NULL
+				 * so we can't treat empty string as non value because the actual value can be an empty string
+				 */
+				false
+			);
 
-			if ($meta_value === '' && is_array($value)) {
+			if (empty($meta_value)) {
 				return $value;
+			} else {
+				$meta_value = $meta_value[0];
 			}
 
 			if (isset($option['fw-storage']['key'])) {

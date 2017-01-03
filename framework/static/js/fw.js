@@ -867,6 +867,18 @@ fw.getQueryString = function(name) {
 
 				$modalWrapper.addClass('fw-modal-open');
 
+				/**
+				 * We probably don't need this class anymore due to the
+				 * fact that we hacked CSS specificity away.
+				 *
+				 * I'll be keeping it here for integrity with fw.soleModal.
+				 */
+				$modalWrapper.addClass('fw-modal-opening');
+
+				setTimeout(function () {
+					$modalWrapper.removeClass('fw-modal-opening');
+				}, 300);
+
 				modalsStack.push($modalWrapper.find('.media-modal'));
 
 				// Resize .fw-options-tabs-contents to fit entire window
@@ -1193,19 +1205,28 @@ fw.getValuesFromServer = function (data) {
 				buttons = [
 					{
 						style: 'primary',
-						text: _fw_localized.l10n.save,
+						text: settings.saveText || _fw_localized.l10n.save,
 						priority: 40,
-						click: triggerSubmit
-					},
-					{
-						style: '',
-						text: _fw_localized.l10n.reset,
-						priority: -1,
 						click: function () {
-							modal.content.resetForm();
+							if (settings.shouldSaveWithoutClose) {
+								modal.frame.$el.addClass('fw-options-modal-no-close');
+							}
+
+							triggerSubmit();
 						}
 					}
 				];
+
+			if (! settings.disableResetButton) {
+				buttons = buttons.concat([{
+					style: '',
+					text: _fw_localized.l10n.reset,
+					priority: -1,
+					click: function () {
+						modal.content.resetForm();
+					}
+				}]);
+			}
 
 			/**
 			 * Sometimes we want an apply button in order to save changes
@@ -1842,6 +1863,8 @@ fw.soleModal = (function(){
 		},
 		setSize: function(width, height) {
 			var $size = this.$modal.find('> .media-modal');
+			var $modal = this.$modal;
+			$modal.addClass('fw-modal-opening');
 
 			if (
 				$size.height() != height
@@ -1853,6 +1876,10 @@ fw.soleModal = (function(){
 					'width': width +'px'
 				}, this.animationTime);
 			}
+
+			setTimeout(function () {
+				$modal.removeClass('fw-modal-opening');
+			}, this.animationTime);
 
 			$size = undefined;
 		},
@@ -2169,11 +2196,11 @@ fw.soleModal = (function(){
  * Usage:
  *
  * var confirm = fw.soleConfirm.create();
- * confirm.result.then(function (confirm_object) {
+ * confirm.result.then(function (data) {
  *   // SUCCESS!!
  * });
  *
- * confirm.result.fail(function (confirm_object) {
+ * confirm.result.fail(function (data) {
  *   // FAIL!!
  * });
  *
@@ -2206,7 +2233,12 @@ fw.soleConfirm = (function ($) {
 		this.opts = _.extend({
 			severity: 'info', // warning | info
 			message: null,
-			backdrop: null
+			backdrop: null,
+			renderFunction: null,
+			shouldResolvePromise: function (confirm, el, action) { return true; },
+			okHTML: _fw_localized.l10n.ok,
+			cancelHTML: _fw_localized.l10n.cancel,
+			customClass: ''
 		}, opts);
 	}
 
@@ -2239,11 +2271,14 @@ fw.soleConfirm = (function ($) {
 			showCloseButton: false,
 			allowClose: false, // a confirm window can't be closed on click of it's backdrop
 			backdrop: this.opts.backdrop,
-			customClass: 'fw-sole-confirm-modal fw-sole-confirm-' + this.opts.severity,
+			customClass: 'fw-sole-confirm-modal fw-sole-confirm-' + this.opts.severity + ' ' + this.opts.customClass,
 			updateIfCurrent: true,
 
 			afterOpenStart: _.bind(this._fireEvents, this),
-			afterCloseStart: _.bind(this._teardownEvents, this)
+			afterCloseStart: _.bind(this._teardownEvents, this),
+
+			onFireEvents: jQuery.noop,
+			onTeardownEvents: jQuery.noop
 		});
 	};
 
@@ -2256,12 +2291,29 @@ fw.soleConfirm = (function ($) {
 	//////////////////
 
 	Confirm.prototype._fireEvents = function ($modal) {
+		$modal.attr('data-fw-sole-confirm-id', this.id);
+
 		$modal.find('.fw-sole-confirm-button')
+			.add(
+				$modal.find('.media-modal-backdrop')
+			)
 			.on('click.fw-sole-confirm', _.bind(this._handleClose, this));
+
+		if (this.opts.onFireEvents) {
+			this.opts.onFireEvents(this, $modal[0]);
+		}
 	};
 
 	Confirm.prototype._teardownEvents = function ($modal) {
-		$modal.find('.fw-sole-confirm-button').off('click.fw-sole-confirm');
+		$modal.find('.fw-sole-confirm-button')
+			.add(
+				$modal.find('.media-modal-backdrop')
+			)
+			.off('click.fw-sole-confirm');
+
+		if (this.opts.onTeardownEvents) {
+			this.opts.onTeardownEvents(this, $modal[0]);
+		}
 	};
 
 	Confirm.prototype._checkIsSet = function () {
@@ -2271,14 +2323,49 @@ fw.soleConfirm = (function ($) {
 	};
 
 	Confirm.prototype._handleClose = function (event) {
-		var action = $(event.target).attr('data-fw-sole-confirm-action');
-		var id = $(event.target).attr('data-fw-sole-confirm-id');
+        event.preventDefault();
+
+		var $el = $(event.target);
+
+		if ($el.hasClass('media-modal-backdrop')) {
+
+			// do not do any transformation on $el here by intent
+
+		} else if (! $el.hasClass('fw-sole-confirm-button')) {
+			$el = $el.closest('.fw-sole-confirm-button');
+		}
+
+		var action = $el.attr('data-fw-sole-confirm-action') || 'reject';
+		var id = $el.closest('.fw-sole-modal').attr('data-fw-sole-confirm-id');
 		var confirm = hashMap[id];
 
 		if (confirm) {
-			_.contains(['reject', 'resolve'], action) &&
-				confirm.result[action](this) &&
-				confirm.hide();
+			var modal_container = $el.closest('.fw-sole-modal')[0];
+
+			if (action === 'reject') {
+				confirm.result.reject({
+					confirm: confirm,
+					modal_container: modal_container
+				});
+			} else {
+				var shouldHideAfterResolve = confirm.opts.shouldResolvePromise(
+					confirm, modal_container
+				);
+
+				if (! shouldHideAfterResolve) {
+					return;
+				}
+
+				// probably keep this syntax for another actions in future
+				_.contains(['resolve'], action) &&
+					confirm.result[action]({
+						confirm: confirm,
+						modal_container: $el.closest('.fw-sole-modal')[0]
+					});
+
+			}
+
+			confirm.hide();
 
 			confirm.destroy();
 			confirm = null;
@@ -2286,28 +2373,34 @@ fw.soleConfirm = (function ($) {
 	};
 
 	Confirm.prototype._getHtml = function () {
+		if (this.opts.renderFunction) {
+			return this.opts.renderFunction(this);
+		}
+
+		var topHtml = '';
+
 		var iconClass = 'dashicons-' + this.opts.severity;
 		var icon = '<span class="dashicons ' + iconClass + '"></span>';
 		var heading = '<h1>' + fw.capitalizeFirstLetter(this.opts.severity) + '</h1>';
 		var message = this.opts.message ? '<p>' + this.opts.message + '</p>' : '';
 
+		topHtml = icon + heading + message;
+
 		var cancelButton = $('<button>', {
-			html: _fw_localized.l10n.cancel
+			html: this.opts.cancelHTML
 		}).attr({
 			'data-fw-sole-confirm-action': 'reject',
-			'data-fw-sole-confirm-id': this.id,
 			type: 'button',
 		}).addClass('fw-sole-confirm-button button');
 
 		var okButton = $('<button>', {
-			html: _fw_localized.l10n.ok
+			html: this.opts.okHTML
 		}).attr({
 			'data-fw-sole-confirm-action': 'resolve',
-			'data-fw-sole-confirm-id': this.id,
 			type: 'button',
 		}).addClass('fw-sole-confirm-button button button-primary');
 
-		return icon + heading + message + selfHtml(cancelButton) + selfHtml(okButton);
+		return topHtml + selfHtml(cancelButton) + selfHtml(okButton);
 
 		function selfHtml (el) { return $('<div>').append(el).html(); }
 	};

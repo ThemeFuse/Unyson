@@ -10,9 +10,7 @@ class _FW_Customizer_Control_Option_Wrapper extends WP_Customize_Control {
 				<?php
 				echo fw()->backend->render_options(
 					array($this->id => $this->setting->get_fw_option()),
-					array(
-						$this->id => $this->value()
-					),
+					array($this->id => $this->value()),
 					array(),
 					'customizer'
 				);
