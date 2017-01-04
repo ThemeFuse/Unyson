@@ -173,7 +173,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			/** @var WPDB $wpdb */
 			global $wpdb;
 
-			$sql = "SELECT users.id val, users.user_nicename title"
+			$sql = "SELECT DISTINCT users.id val, users.user_nicename title"
 				." FROM $wpdb->users AS users, $wpdb->usermeta AS usermeta"
 				." WHERE usermeta.user_id = users.ID";
 
@@ -188,14 +188,14 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				}
 
 				if ($limits['role']) {
-					$sql .= " AND usermeta.meta_key = 'wp_capabilities' "
+					$sql .= " AND usermeta.meta_key = '{$wpdb->prefix}capabilities' "
 						. "AND ( "
 						. implode( ' OR ',
 							array_fill( 1, count( $limits['role'] ), 'usermeta.meta_value LIKE %s' ) ) .
 						" ) ";
 
-					foreach ( $limits['role'] as $name ) {
-						$prepare[] = '%' . $wpdb->esc_like( $name ) . '%';
+					foreach ( $limits['role'] as $name => $filter_by ) {
+						$prepare[] = ( $filter_by ) ? '%' . $wpdb->esc_like( $name ) . '%' : '';
 					}
 				}
 
