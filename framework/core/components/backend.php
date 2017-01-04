@@ -226,11 +226,9 @@ final class _FW_Component_Backend {
 		}
 
 		if ( isset( $this->option_types[ $type ] ) ) {
-			if ( isset( $this->option_types[ $type ] ) ) {
-				trigger_error( 'Option type "' . $type . '" already registered', E_USER_WARNING );
+			trigger_error( 'Option type "' . $type . '" already registered', E_USER_WARNING );
 
-				return;
-			}
+			return;
 		}
 
 		$this->option_types[$type] = $option_type_class;
@@ -256,11 +254,9 @@ final class _FW_Component_Backend {
 		}
 
 		if ( isset( $this->container_types[ $type ] ) ) {
-			if ( isset( $this->container_types[ $type ] ) ) {
-				trigger_error( 'Container type "' . $type . '" already registered', E_USER_WARNING );
+			trigger_error( 'Container type "' . $type . '" already registered', E_USER_WARNING );
 
-				return;
-			}
+			return;
 		}
 
 		$this->container_types[$type] = $container_type_class;
@@ -1588,8 +1584,10 @@ final class _FW_Component_Backend {
 	 * @return FW_Option_Type
 	 */
 	public function option_type( $type ) {
-		if ( ! did_action( $init_action = 'fw_option_types_init' ) ) {
-			do_action( $init_action );
+		static $did_options_init = false;
+		if ( ! $did_options_init ) {
+			$did_options_init = true;
+			do_action( 'fw_option_types_init' );
 		}
 
 		if ( isset( $this->option_types[ $type ] ) ) {
@@ -1610,9 +1608,9 @@ final class _FW_Component_Backend {
 
 			if ( ! $this->undefined_option_type ) {
 				$this->undefined_option_type = new FW_Option_Type_Undefined();
-			} else {
-				return $this->undefined_option_type;
 			}
+
+			return $this->undefined_option_type;
 		}
 	}
 
@@ -1645,8 +1643,10 @@ final class _FW_Component_Backend {
 	 * @return FW_Container_Type
 	 */
 	public function container_type( $type ) {
-		if ( ! did_action( $init_action = 'fw_container_types_init' ) ) {
-			do_action( $init_action );
+		static $did_containers_init = false;
+		if ( ! $did_containers_init ) {
+			$did_containers_init = true;
+			do_action( 'fw_container_types_init' );
 		}
 
 		if ( isset( $this->container_types[ $type ] ) ) {
@@ -1667,9 +1667,9 @@ final class _FW_Component_Backend {
 
 			if ( ! $this->undefined_container_type ) {
 				$this->undefined_container_type = new FW_Container_Type_Undefined();
-			} else {
-				return $this->undefined_container_type;
 			}
+
+			return $this->undefined_container_type;
 		}
 	}
 
