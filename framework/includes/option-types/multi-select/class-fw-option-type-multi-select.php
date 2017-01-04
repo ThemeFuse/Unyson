@@ -173,7 +173,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			/** @var WPDB $wpdb */
 			global $wpdb;
 
-			$sql = "SELECT users.id val, users.user_nicename title"
+			$sql = "SELECT DISTINCT users.id val, users.user_nicename title"
 				." FROM $wpdb->users AS users, $wpdb->usermeta AS usermeta"
 				." WHERE usermeta.user_id = users.ID";
 
