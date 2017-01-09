@@ -1217,7 +1217,11 @@ fw.getValuesFromServer = function (data) {
 					}
 				];
 
-			if (! settings.disableResetButton) {
+			if (!(
+				typeof settings.disableResetButton === 'undefined'
+					? _fw_localized.options_modal.default_reset_bnt_disabled
+					: settings.disableResetButton
+			)) {
 				buttons = buttons.concat([{
 					style: '',
 					text: _fw_localized.l10n.reset,
