@@ -357,6 +357,7 @@ final class _FW_Component_Backend {
 					'ok'       => __( 'Ok', 'fw' )
 				),
 				'options_modal' => array(
+					/** @since 2.6.13 */
 					'default_reset_bnt_disabled' => apply_filters('fw:option-modal:default:reset-btn-disabled', false)
 				),
 			) );
