@@ -42,7 +42,7 @@ $color_regex = '/^#[a-f0-9]{6}$/i';
 		);
 		?>
 	</div>
-	<?php if ( ! empty( $option['value']['secondary'] ) ): ?>
+	<?php if ( isset( $option['value']['secondary'] ) ): ?>
 		<div class="delimiter"><?php echo __( 'to', 'fw' ) ?></div>
 		<div class="secondary-color">
 			<?php
