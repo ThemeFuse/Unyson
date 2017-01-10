@@ -17,5 +17,3 @@ if (count($fw_cli_commands)) {
 		require_once $command_class_file;
 	}
 }
-
-require __DIR__ . '/components/fw-cli-command-unyson.php';

@@ -6,8 +6,8 @@ if (!defined('ABSPATH')) {
 
 class FW_CLI_Command_Extensions extends FW_CLI_Command {
 
-	public function activate() {
-		$extension = (isset($this->params[1])) ? $this->params[1] : false;
+	public function activate($params, $args) {
+		$extension = (isset($params[0])) ? $params[0] : false;
 		if ( $extension ) {
 			$deactivated_extensions = $this->get_deactivated_extensions();
 			if (isset($deactivated_extensions[$extension])) {
@@ -26,8 +26,8 @@ class FW_CLI_Command_Extensions extends FW_CLI_Command {
 		}
 	}
 
-	public function deactivate() {
-		$extension = (isset($this->params[1])) ? $this->params[1] : false;
+	public function deactivate($params, $args) {
+		$extension = (isset($params[0])) ? $params[0] : false;
 		if ( $extension ) {
 			$active_extenions = $this->get_active_extensions();
 			if (isset($active_extenions[$extension])) {
@@ -46,8 +46,8 @@ class FW_CLI_Command_Extensions extends FW_CLI_Command {
 		}
 	}
 
-	public function uninstall() {
-		$extension = (isset($this->params[1])) ? $this->params[1] : false;
+	public function uninstall($params, $args) {
+		$extension = (isset($params[1])) ? $params[0] : false;
 		if ( $extension ) {
 			$deactivated_extensions = $this->get_deactivated_extensions();
 			if (isset($deactivated_extensions[$extension])) {
@@ -68,7 +68,10 @@ class FW_CLI_Command_Extensions extends FW_CLI_Command {
 		}
 	}
 
-	public function list_() {
+	/**
+	 * @subcommand list
+	 */
+	public function _list() {
 		$formater_header = array('#', 'slug', 'name');
 		$active_extensions = $this->get_active_extensions();
 		$deactivated_extensions = $this->get_deactivated_extensions();
@@ -203,3 +206,5 @@ class FW_CLI_Command_Extensions extends FW_CLI_Command {
 	}
 
 }
+
+WP_CLI::add_command( 'unyson-ext', 'FW_CLI_Command_Extensions' );
