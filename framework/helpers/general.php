@@ -15,6 +15,8 @@ function fw_fix_path($path) {
 	if ($windows_network_path) {
 		$fixed_path = '//'. ltrim($fixed_path, '/');
 	}
+
+	return $fixed_path;
 }
 
 /**
