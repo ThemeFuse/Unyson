@@ -47,10 +47,11 @@ class FW_CLI_Command_Extensions extends FW_CLI_Command {
 	}
 
 	public function uninstall($params, $args) {
-		$extension = (isset($params[1])) ? $params[0] : false;
+		$extension = (isset($params[0])) ? $params[0] : false;
 		if ( $extension ) {
 			$deactivated_extensions = $this->get_deactivated_extensions();
 			if (isset($deactivated_extensions[$extension])) {
+				$this->require_filesystem();
 				$run = fw()->extensions->manager->uninstall_extensions(array(
 					$extension => array()
 				), array(
@@ -207,4 +208,4 @@ class FW_CLI_Command_Extensions extends FW_CLI_Command {
 
 }
 
-WP_CLI::add_command( 'unyson-ext', 'FW_CLI_Command_Extensions' );
+WP_CLI::add_command( 'unyson extensions', 'FW_CLI_Command_Extensions' );

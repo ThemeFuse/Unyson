@@ -20,4 +20,9 @@ class FW_CLI_Command extends WP_CLI_Command {
 		}
 	}
 
+	protected function require_filesystem() {
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		WP_Filesystem();
+	}
+
 }

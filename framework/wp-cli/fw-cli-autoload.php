@@ -10,10 +10,5 @@ if (!defined('WP_CLI')) {
 
 require __DIR__ . '/components/fw-cli-command.php';
 
-$fw_cli_commands = glob( __DIR__ . '/commands/*.php' );
-
-if (count($fw_cli_commands)) {
-	foreach ( $fw_cli_commands as $command_class_file ) {
-		require_once $command_class_file;
-	}
-}
+require_once __DIR__ . '/commands/fw-cli-command-unyson.php';
+require_once __DIR__ . '/commands/fw-cli-command-extensions.php';
