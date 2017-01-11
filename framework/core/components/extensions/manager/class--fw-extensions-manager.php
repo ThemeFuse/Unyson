@@ -1080,7 +1080,7 @@ final class _FW_Extensions_Manager
 			unset($opts);
 		}
 
-		if (!$this->can_install()) {
+		if (!$this->can_install() && !defined('WP_CLI')) {
 			return new WP_Error(
 				'access_denied',
 				__('You have no permissions to install extensions', 'fw')

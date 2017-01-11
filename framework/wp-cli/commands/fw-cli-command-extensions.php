@@ -6,6 +6,19 @@ if (!defined('ABSPATH')) {
 
 class FW_CLI_Command_Extensions extends FW_CLI_Command {
 
+	/**
+	 * Activate extension.
+	 *
+	 * ## OPTIONS
+	 *
+	 * <extension>
+	 * : Extension name.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *	# Activate `seo` extension.
+	 *	$ wp unyson extensions activate seo
+	 */
 	public function activate($params, $args) {
 		$extension = (isset($params[0])) ? $params[0] : false;
 		if ( $extension ) {
@@ -26,6 +39,19 @@ class FW_CLI_Command_Extensions extends FW_CLI_Command {
 		}
 	}
 
+	/**
+	 * Deactivate extension
+	 *
+	 * ## OPTIONS
+	 *
+	 * <extension>
+	 * : Extension name.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *	# Deactivate `seo` extension.
+	 *	$ wp unyson extensions deactivate seo
+	 */
 	public function deactivate($params, $args) {
 		$extension = (isset($params[0])) ? $params[0] : false;
 		if ( $extension ) {
@@ -46,6 +72,22 @@ class FW_CLI_Command_Extensions extends FW_CLI_Command {
 		}
 	}
 
+	/**
+	 * Uninstall extension.
+	 *
+	 * ## OPTIONS
+	 *
+	 * <extension>
+	 * : Extension name.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *	# First of all we must to deactivate extension.
+	 *	$ wp unyson extensions deactivate page-builder
+	 *
+	 *	# Uninstall `page-builder` extension.
+	 *	$ wp unyson extensions uninstall page-builder
+	 */
 	public function uninstall($params, $args) {
 		$extension = (isset($params[0])) ? $params[0] : false;
 		if ( $extension ) {
@@ -70,9 +112,66 @@ class FW_CLI_Command_Extensions extends FW_CLI_Command {
 	}
 
 	/**
+	 * Install extension.
+	 *
+	 * ## OPTIONS
+	 *
+	 * <extension>
+	 * : Extension name.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *	# Install `page-builder` extension.
+	 *	$ wp unyson extensions install page-builder
+	 */
+	public function install($params, $args) {
+		$extension = (isset($params[0])) ? $params[0] : false;
+		if ( $extension ) {
+			$avaible_extensions = $this->get_avaible_extensions();
+			if ( isset($avaible_extensions[$extension]) ) {
+				$this->require_filesystem();
+
+				$run = fw()->extensions->manager->install_extensions(array(
+					$extension => array()
+				), array(
+					'cancel_on_error' => true
+				));
+
+				$this->wp_error($run);
+
+				WP_CLI::success("Extension {$extension} successfully installed.");
+			} else {
+				WP_CLI::error("Extension {$extension} is not found in list of avaible extensions.");
+			}
+		} else {
+			WP_CLI::error("Extension doesn't exists");
+		}
+	}
+
+	/**
+	 * List of extensions.
+	 *
+	 * ## OPTIONS
+	 *
+	 * <status>
+	 * : Extension status: active, deactivated, avaible.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *	# List of all extensions.
+	 *	$ wp unyson extensions list
+	 *
+	 *	# Display only active extensions
+	 *	$ wp unyson extensions list 'active'
+	 *
+	 *	# Display only avaible to install.
+	 *	$ wp unyson extensions list 'avaible'
+	 *
 	 * @subcommand list
 	 */
-	public function _list() {
+	public function _list($params, $args) {
+		$only = (isset($params[0])) ? $params[0] : 'all';
+
 		$formater_header = array('#', 'slug', 'name');
 		$active_extensions = $this->get_active_extensions();
 		$deactivated_extensions = $this->get_deactivated_extensions();
@@ -121,24 +220,30 @@ class FW_CLI_Command_Extensions extends FW_CLI_Command {
 		}
 
 		// Display active extenions.
-		WP_CLI::line();
-		WP_CLI::line('Active Extensions: ' . count($display_active));
-		if (count($display_active)) {
-			$this->display_formatter($formater_header, $display_active);
+		if( 'active' === $only || 'all' === $only ) {
+			WP_CLI::line();
+			WP_CLI::line('Active Extensions: ' . count($display_active));
+			if (count($display_active)) {
+				$this->display_formatter($formater_header, $display_active);
+			}
 		}
 
 		// Display deactivated extensions.
-		WP_CLI::line();
-		WP_CLI::line('Deactive Extensions: ' . count($display_deactivated));
-		if (count($display_deactivated)) {
-			$this->display_formatter($formater_header, $display_deactivated);
+		if( 'deactivated' === $only || 'all' === $only ) {
+			WP_CLI::line();
+			WP_CLI::line('Deactive Extensions: ' . count($display_deactivated));
+			if (count($display_deactivated)) {
+				$this->display_formatter($formater_header, $display_deactivated);
+			}
 		}
 
 		// Display avaible extensions.
-		WP_CLI::line();
-		WP_CLI::line('Avaible Extensions: ' . count($display_avaible));
-		if (count($display_avaible)) {
-			$this->display_formatter($formater_header, $display_avaible);
+		if( 'avaible' === $only || 'all' === $only ) {
+			WP_CLI::line();
+			WP_CLI::line('Avaible Extensions: ' . count($display_avaible));
+			if (count($display_avaible)) {
+				$this->display_formatter($formater_header, $display_avaible);
+			}
 		}
 
 		WP_CLI::line();
