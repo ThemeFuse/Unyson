@@ -5,10 +5,15 @@
  * Convert to Unix style directory separators
  */
 function fw_fix_path($path) {
+	$windows_network_path = isset($_SERVER['windir']) && in_array(substr($path, 0, 2), array('//', '\\\\'), true);
 	$fixed_path = untrailingslashit( str_replace(array('//', '\\'), array('/', '/'), $path) );
 
 	if (empty($fixed_path) && !empty($path)) {
 		$fixed_path = '/';
+	}
+
+	if ($windows_network_path) {
+		$fixed_path = '//'. ltrim($fixed_path, '/');
 	}
 
 	return $fixed_path;
