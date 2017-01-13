@@ -25,4 +25,9 @@ class FW_CLI_Command extends WP_CLI_Command {
 		WP_Filesystem();
 	}
 
+	protected function command_exist($cmd) {
+		$returnVal = shell_exec(sprintf("which %s", escapeshellarg($cmd)));
+		return !empty($returnVal);
+	}
+
 }
