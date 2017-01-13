@@ -111,7 +111,11 @@ final class _FW_Component_Theme
 		try {
 			return FW_Cache::get($cache_key);
 		} catch (FW_Cache_Not_Found_Exception $e) {
-			$options = apply_filters('fw_post_options', $this->get_options('posts/'. $post_type), $post_type);
+			$options = apply_filters(
+				'fw_post_options',
+				apply_filters( "fw_post_options:$post_type", $this->get_options( 'posts/' . $post_type ) ),
+				$post_type
+			);
 
 			FW_Cache::set($cache_key, $options);
 
@@ -126,8 +130,9 @@ final class _FW_Component_Theme
 		try {
 			return FW_Cache::get($cache_key);
 		} catch (FW_Cache_Not_Found_Exception $e) {
-			$options = apply_filters('fw_taxonomy_options',
-				$this->get_options('taxonomies/'. $taxonomy),
+			$options = apply_filters(
+				'fw_taxonomy_options',
+				apply_filters( "fw_taxonomy_options:$taxonomy", $this->get_options( 'taxonomies/' . $taxonomy ) ),
 				$taxonomy
 			);
 
