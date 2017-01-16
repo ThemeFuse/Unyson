@@ -3,7 +3,7 @@ Contributors: unyson
 Tags: page builder, shortcodes, backup, seo, breadcrumbs, portfolio, framework
 Requires at least: 4.4
 Tested up to: 4.7
-Stable tag: 2.6.12
+Stable tag: 2.6.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,9 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.6.13 =
+* Fixed [#2310](https://github.com/ThemeFuse/Unyson/issues/2310), [#2308](https://github.com/ThemeFuse/Unyson/issues/2308), [#961](https://github.com/ThemeFuse/Unyson/issues/961), [#2073](https://github.com/ThemeFuse/Unyson/issues/2073)
 
 = 2.6.12 =
 * Fixed [#2283](https://github.com/ThemeFuse/Unyson/issues/2283), [#2265](https://github.com/ThemeFuse/Unyson/issues/2265), [#2286](https://github.com/ThemeFuse/Unyson/issues/2286), [#2288](https://github.com/ThemeFuse/Unyson/issues/2288)
