@@ -1921,21 +1921,29 @@ function fw_get_path_url( $path ) {
 }
 
 /**
- * @param string|array $function Function name
- * @param array $args
+ * @param string|array $callback Callback function
+ * @param array $args Callback arguments
+ * @param bool $cache Whenever you want to cache the function value after it's first call or not
+ * Recommend when the function call may require many resources or time (database requests) , or the value is small
+ * Not recommended using on very large values
  *
  * @return FW_Callback
+ *
+ * @since 2.6.14
  */
-function fw_callback( $function, array $args = array() ) {
-	return new FW_Callback( $function, $args );
+function fw_callback( $callback, array $args = array(), $cache = true ) {
+	return new FW_Callback( $callback, $args, $cache );
 }
 
 /**
  * In the value is instance of FW_Callback class then it is executed and returns the callback value
  * In other case function returns the provided value
+ *
  * @param mixed|FW_Callback $value
  *
  * @return mixed
+ *
+ * @since 2.6.14
  */
 function fw_call( $value ) {
 	if ( $value instanceof FW_Callback ) {
