@@ -103,6 +103,7 @@ function _fw_autoload_helper_classes($class) {
 	static $class_to_file = array(
 		'FW_Dumper' => 'class-fw-dumper',
 		'FW_Cache' => 'class-fw-cache',
+		'FW_Callback' => 'class-fw-callback',
 		'FW_Access_Key' => 'class-fw-access-key',
 		'FW_WP_Filesystem' => 'class-fw-wp-filesystem',
 		'FW_Form' => 'class-fw-form',
