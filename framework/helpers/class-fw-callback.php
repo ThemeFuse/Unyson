@@ -78,7 +78,7 @@ class FW_Callback {
 	 * Whenever you want to clear the cached value or the function
 	 */
 	public function clear_cache() {
-		FW_Cache::del( $this->id );
+		FW_Cache::del( $this->get_id() );
 	}
 
 	/**
