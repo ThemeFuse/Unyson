@@ -27,7 +27,7 @@
 
 $components = (isset($option['components']) && is_array($option['components']))
 	? array_merge($defaults['components'], $option['components'])
-	: $defaults['components']; fw_print($components);
+	: $defaults['components'];
 ?>
 <div <?php echo fw_attr_to_html( $wrapper_attr ) ?>>
 	<?php if ( $components['family'] ) : ?>
