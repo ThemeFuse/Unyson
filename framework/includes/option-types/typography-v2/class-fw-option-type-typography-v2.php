@@ -173,7 +173,10 @@ class FW_Option_Type_Typography_v2 extends FW_Option_Type {
 				'size'           => true,
 				'line-height'    => true,
 				'letter-spacing' => true,
-				'color'          => true
+				'color'          => true,
+				'weight'         => true,
+				'style'          => true,
+				'variation'      => true,
 			)
 		);
 	}
