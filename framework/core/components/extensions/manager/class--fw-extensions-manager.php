@@ -1021,6 +1021,14 @@ final class _FW_Extensions_Manager
 				$skin->after(array(
 					'extensions_page_link' => $this->get_link()
 				));
+
+				if ($supported && $install_result === true) {
+					/**
+					 * @since 2.6.14
+					 * Fixes https://github.com/ThemeFuse/Unyson/issues/2330
+					 */
+					do_action( 'fw_after_supported_extensions_install_success' );
+				}
 			} else {
 				echo '<form method="post">';
 
