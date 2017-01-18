@@ -118,18 +118,14 @@
 						.html(getFontsOptionHTML($fontFamilySelect.attr('data-value')))
 						.selectize({
 							onChange: function (selected) {
-								var results = $.grep(googleFonts['items'], function (font) {
-									return font['family'] === selected;
-								});
-								var $variations = this.$dropdown.closest(optionTypeClass).find('.fw-option-typography-v2-option-variation');
-								var $subsets = this.$dropdown.closest(optionTypeClass).find('.fw-option-typography-v2-option-subset');
-
-								var $style = this.$dropdown.closest(optionTypeClass).find('.fw-option-typography-v2-option-style');
-								var $weight = this.$dropdown.closest(optionTypeClass).find('.fw-option-typography-v2-option-weight');
+								var results = $.grep(googleFonts['items'], function (font) { return font['family'] === selected; }),
+									$variations = $option.find('.fw-option-typography-v2-option-variation'),
+									$subsets = $option.find('.fw-option-typography-v2-option-subset'),
+									$style = $option.find('.fw-option-typography-v2-option-style'),
+									$weight = $option.find('.fw-option-typography-v2-option-weight');
 
 								if (results.length === 1) {
-									var variations = '';
-									var subsets = '';
+									var variations = '', subsets = '';
 									_.each(results[0]['variants'], function (variation) {
 										variations += '<option value="' + variation + '">' + variation + '</option>';
 									});
