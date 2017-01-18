@@ -24,6 +24,11 @@ class FW_Callback {
 	private $cache;
 
 	/**
+	 * @var string
+	 */
+	private $id;
+
+	/**
 	 * FW_Callback constructor.
 	 *
 	 * @param string|array $callback Callback function
@@ -64,14 +69,16 @@ class FW_Callback {
 			try {
 				return FW_Cache::get( $this->get_id() );
 			} catch ( FW_Cache_Not_Found_Exception $e ) {
-				$value = $this->get_value();
-				FW_Cache::set( $this->get_id(), $value );
+				FW_Cache::set(
+					$this->get_id(),
+					$value = $this->get_value()
+				);
 
 				return $value;
 			}
+		} else {
+			return $this->get_value();
 		}
-
-		return $this->get_value();
 	}
 
 	/**
@@ -90,8 +97,14 @@ class FW_Callback {
 	}
 
 	protected function get_id() {
-		return 'fw-callback-' . md5( ! is_string( $this->callback )
-			? serialize( $this->callback )
-			: $this->callback );
+		if ( ! is_string( $this->id ) ) {
+			$this->id = 'fw-callback-' . md5(
+					is_string( $this->callback )
+						? $this->callback
+						: serialize( $this->callback )
+				);
+		}
+
+		return $this->id;
 	}
 }
