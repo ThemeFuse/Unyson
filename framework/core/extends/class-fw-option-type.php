@@ -111,6 +111,10 @@ abstract class FW_Option_Type
 		}
 	}
 
+	public function __construct() {
+
+	}
+
 	/**
 	 * Fixes and prepare defaults
 	 *
@@ -184,7 +188,7 @@ abstract class FW_Option_Type
 
 		$this->enqueue_static($id, $option, $data);
 
-		return $this->_render($id, $option, $data);
+		return $this->_render( $id, $this->load_callbacks( $option ), $data );
 	}
 
 	/**
@@ -264,7 +268,7 @@ abstract class FW_Option_Type
 			)
 		);
 
-		return $this->_get_value_from_input($option, $input_value);
+		return $this->_get_value_from_input( $this->load_callbacks( $option ), $input_value);
 	}
 
 	/**
@@ -402,5 +406,13 @@ abstract class FW_Option_Type
 		}
 
 		return self::$access_key;
+	}
+
+	protected function load_callbacks( $data ) {
+		if ( ! is_array( $data ) ) {
+			return $data;
+		}
+
+		return array_map( 'fw_call', $data );
 	}
 }
