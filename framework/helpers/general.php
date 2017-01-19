@@ -187,6 +187,8 @@ function fw_akg( $keys, $array_or_object, $default_value = null, $keys_delimiter
 		$keys = explode( $keys_delimiter, (string) $keys );
 	}
 
+	$array_or_object = fw_call( $array_or_object );
+
 	$key_or_property = array_shift( $keys );
 	if ( $key_or_property === null ) {
 		return $default_value;

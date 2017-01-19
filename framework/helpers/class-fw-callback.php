@@ -98,13 +98,20 @@ class FW_Callback {
 
 	protected function get_id() {
 		if ( ! is_string( $this->id ) ) {
-			$this->id = 'fw-callback-' . md5(
-					is_string( $this->callback )
-						? $this->callback
-						: serialize( $this->callback )
-				);
+			$this->id = 'fw-callback-' . md5( $this->serialize_callback() . serialize( $this->args ) );
 		}
 
 		return $this->id;
+	}
+
+	protected function serialize_callback() {
+		//Closures cannot be serialized and at the moment do not have a solution
+		//So the Closures will be replaced with a unique Id
+		return ( $this->callback instanceof Closure )
+			? uniqid( 'fw-callback-' )
+			: (
+			is_string( $this->callback )
+				? $this->callback
+				: serialize( $this->callback ) );
 	}
 }
