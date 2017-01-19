@@ -1147,6 +1147,32 @@ function fw_get_options_values_from_input( array $options, $input_array = null )
 }
 
 /**
+ * Return the options default values
+ *
+ * @param array $options
+ *
+ * @return array
+ *
+ * @since 2.6.14
+ */
+function fw_get_options_default_values( array $options ) {
+	return array_map( 'fw_get_option_default_value', wp_list_pluck( fw_extract_only_options( $options ), 'type' ) );
+}
+
+/**
+ * Return option type default value
+ *
+ * @param $type
+ *
+ * @return mixed
+ *
+ * @since 2.6.14
+ */
+function fw_get_option_default_value( $type ) {
+	return fw()->backend->option_type( $type )->get_defaults( 'value' );
+}
+
+/**
  * @param $attr_name
  * @param bool $set_mode
  *
