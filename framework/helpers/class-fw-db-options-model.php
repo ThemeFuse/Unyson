@@ -172,10 +172,7 @@ abstract class FW_Db_Options_Model {
 				FW_Cache::set($cache_key_values_processed, true);
 
 				// Complete missing db values with default values from options array
-				$values = array_merge(
-					fw_get_options_values_from_input($options, array()),
-					$values
-				);
+				$values = array_merge( fw_get_options_default_values( $options ), $values );
 
 				foreach ($options as $id => $option) {
 					$values[$id] = fw()->backend->option_type($option['type'])->storage_load(
