@@ -1156,20 +1156,25 @@ function fw_get_options_values_from_input( array $options, $input_array = null )
  * @since 2.6.14
  */
 function fw_get_options_default_values( array $options ) {
-	return array_map( 'fw_get_option_default_value', wp_list_pluck( fw_extract_only_options( $options ), 'type' ) );
+	return array_map( 'fw_get_option_default_value', fw_extract_only_options( $options ) );
 }
 
 /**
  * Return option type default value
  *
- * @param $type
+ * @param $option
  *
  * @return mixed
  *
  * @since 2.6.14
  */
-function fw_get_option_default_value( $type ) {
-	return fw()->backend->option_type( $type )->get_defaults( 'value' );
+function fw_get_option_default_value( array $option ) {
+	return isset( $option['value'] )
+		? $option['value']
+		: fw()
+			->backend
+			->option_type( fw_akg( 'type', $option ) )
+			->get_defaults( 'value' );
 }
 
 /**
