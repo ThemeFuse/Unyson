@@ -188,7 +188,7 @@ abstract class FW_Option_Type
 
 		$this->enqueue_static($id, $option, $data);
 
-		return $this->_render( $id, $this->load_callbacks( $option ), $this->load_callbacks( $data ) );
+		return $this->_render( $id, $this->load_callbacks( $option ), $data );
 	}
 
 	/**
