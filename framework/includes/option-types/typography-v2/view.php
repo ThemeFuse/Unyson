@@ -25,7 +25,9 @@
 
 }
 
-$components = (isset($option['components']) && is_array($option['components'])) ? array_merge($defaults['components'], $option['components']) : $defaults['components'];
+$components = (isset($option['components']) && is_array($option['components']))
+	? array_merge($defaults['components'], $option['components'])
+	: $defaults['components'];
 ?>
 <div <?php echo fw_attr_to_html( $wrapper_attr ) ?>>
 	<?php if ( $components['family'] ) : ?>
@@ -38,6 +40,7 @@ $components = (isset($option['components']) && is_array($option['components'])) 
 			<div class="fw-inner"><?php _e('Font face', 'fw'); ?></div>
 		</div>
 
+		<?php if ( $components['style'] ) : ?>
 		<div class="fw-option-typography-v2-option fw-option-typography-v2-option-style fw-border-box-sizing fw-col-sm-3"
 		     style="display: <?php echo ( $google_font ) ? 'none' : 'inline-block'; ?>;">
 			<select data-type="style" name="<?php echo esc_attr( $option['attr']['name'] ) ?>[style]"
@@ -57,7 +60,9 @@ $components = (isset($option['components']) && is_array($option['components'])) 
 
 			<div class="fw-inner"><?php _e( 'Style', 'fw' ); ?></div>
 		</div>
+		<?php endif; ?>
 
+		<?php if ( $components['weight'] ) : ?>
 		<div class="fw-option-typography-v2-option fw-option-typography-v2-option-weight fw-border-box-sizing fw-col-sm-3"
 		     style="display: <?php echo ( $google_font ) ? 'none' : 'inline-block'; ?>;">
 			<select data-type="weight" name="<?php echo esc_attr( $option['attr']['name'] ) ?>[weight]"
@@ -83,6 +88,7 @@ $components = (isset($option['components']) && is_array($option['components'])) 
 
 			<div class="fw-inner"><?php _e( 'Weight', 'fw' ); ?></div>
 		</div>
+		<?php endif; ?>
 
 		<div class="fw-option-typography-v2-option fw-option-typography-v2-option-subset fw-border-box-sizing fw-col-sm-2"
 		     style="display: <?php echo ( $google_font ) ? 'inline-block' : 'none'; ?>;">
@@ -100,6 +106,8 @@ $components = (isset($option['components']) && is_array($option['components'])) 
 			<div class="fw-inner"><?php _e( 'Script', 'fw' ); ?></div>
 		</div>
 
+
+		<?php if ( $components['variation'] ) : ?>
 		<div
 			class="fw-option-typography-v2-option fw-option-typography-v2-option-variation fw-border-box-sizing fw-col-sm-2"
 			style="display: <?php echo ( $google_font ) ? 'inline-block' : 'none'; ?>;">
@@ -114,8 +122,9 @@ $components = (isset($option['components']) && is_array($option['components'])) 
 				?>
 			</select>
 
-			<div class="fw-inner"><?php _e( 'Style', 'fw' ); ?></div>
+			<div class="fw-inner"><?php esc_html_e( 'Style', 'fw' ); ?></div>
 		</div>
+		<?php endif; ?>
 	<?php endif; ?>
 
 	<?php if ( $components['size'] ) : ?>
@@ -124,7 +133,7 @@ $components = (isset($option['components']) && is_array($option['components'])) 
 			       class="fw-option-typography-v2-option-size-input" type="text"
 			       value="<?php echo esc_attr($data['value']['size']); ?>">
 
-			<div class="fw-inner"><?php _e( 'Size', 'fw' ); ?></div>
+			<div class="fw-inner"><?php esc_html_e( 'Size', 'fw' ); ?></div>
 		</div>
 	<?php endif; ?>
 
@@ -135,7 +144,7 @@ $components = (isset($option['components']) && is_array($option['components'])) 
 			       value="<?php echo esc_attr($data['value']['line-height']); ?>"
 			       class="fw-option-typography-v2-option-line-height-input" type="text">
 
-			<div class="fw-inner"><?php _e( 'Line height', 'fw' ); ?></div>
+			<div class="fw-inner"><?php esc_html_e( 'Line height', 'fw' ); ?></div>
 		</div>
 	<?php endif; ?>
 
@@ -146,7 +155,7 @@ $components = (isset($option['components']) && is_array($option['components'])) 
 			       value="<?php echo esc_attr($data['value']['letter-spacing']); ?>"
 			       class="fw-option-typography-v2-option-letter-spacing-input" type="text">
 
-			<div class="fw-inner"><?php _e( 'Letter spacing', 'fw' ); ?></div>
+			<div class="fw-inner"><?php esc_html_e( 'Spacing', 'fw' ); ?></div>
 		</div>
 	<?php endif; ?>
 
@@ -169,7 +178,7 @@ $components = (isset($option['components']) && is_array($option['components'])) 
 				)
 			)
 			?>
-			<div class="fw-inner"><?php _e( 'Color', 'fw' ); ?></div>
+			<div class="fw-inner"><?php esc_html_e( 'Color', 'fw' ); ?></div>
 		</div>
 	<?php endif; ?>
 
