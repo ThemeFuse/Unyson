@@ -1150,13 +1150,22 @@ function fw_get_options_values_from_input( array $options, $input_array = null )
  * Return the options default values
  *
  * @param array $options
- *
  * @return array
- *
  * @since 2.6.14
  */
 function fw_get_options_default_values( array $options ) {
-	return array_map( 'fw_get_option_default_value', fw_extract_only_options( $options ) );
+	$values = array();
+	$skip_types_process = apply_filters('fw:options-default-values:skip-types', array(
+		// 'type' => true
+	));
+
+	foreach (fw_extract_only_options( $options ) as $option_id => $option) {
+		$values[ $option_id ] = isset($skip_types_process[ $option['type'] ])
+			? fw_get_option_default_value($option)
+			: fw()->backend->option_type($option['type'])->get_value_from_input($option, null);
+	}
+
+	return $values;
 }
 
 /**
