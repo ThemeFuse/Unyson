@@ -27,6 +27,7 @@ class FW_Option_Storage_Type_WP_Option extends FW_Option_Storage_Type {
 			} else {
 				if (empty($value)) {
 					delete_option($wp_option);
+					return $value; // Preserve value (don't return default below) because it can be false|0|array()
 				} else {
 					update_option($wp_option, $value, false);
 				}
