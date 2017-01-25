@@ -1147,54 +1147,6 @@ function fw_get_options_values_from_input( array $options, $input_array = null )
 }
 
 /**
- * Return the options default values
- *
- * @param array $options
- * @return array
- * @since 2.6.14
- */
-function fw_get_options_default_values( array $options ) {
-	$values = array();
-
-	try {
-		$skip_types_process = FW_Cache::get($cache_key = 'fw:options-default-values:skip-types');
-	} catch (FW_Cache_Not_Found_Exception $e) {
-		FW_Cache::set(
-			$cache_key,
-			$skip_types_process = apply_filters('fw:options-default-values:skip-types', array(
-				// 'type' => true
-			))
-		);
-	}
-
-	foreach (fw_extract_only_options( $options ) as $option_id => $option) {
-		$values[ $option_id ] = isset($skip_types_process[ $option['type'] ])
-			? fw_get_option_default_value($option)
-			: fw()->backend->option_type($option['type'])->get_value_from_input($option, null);
-	}
-
-	return $values;
-}
-
-/**
- * Return option type default value
- *
- * @param $option
- *
- * @return mixed
- *
- * @since 2.6.14
- */
-function fw_get_option_default_value( array $option ) {
-	return isset( $option['value'] )
-		? $option['value']
-		: fw()
-			->backend
-			->option_type( fw_akg( 'type', $option ) )
-			->get_defaults( 'value' );
-}
-
-/**
  * @param $attr_name
  * @param bool $set_mode
  *
