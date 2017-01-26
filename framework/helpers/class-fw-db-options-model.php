@@ -184,8 +184,8 @@ abstract class FW_Db_Options_Model {
 						);
 					}
 
-					foreach (array_diff_key(fw_extract_only_options( $options ), $values) as $option_id => $option) {
-						$values[ $option_id ] = isset($skip_types_process[ $option['type'] ])
+					foreach (array_diff_key(fw_extract_only_options( $options ), $values) as $id => $option) {
+						$values[ $id ] = isset($skip_types_process[ $option['type'] ])
 							? (
 							isset($option['value'])
 								? $option['value']
