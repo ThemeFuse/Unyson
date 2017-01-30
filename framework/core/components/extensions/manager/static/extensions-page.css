@@ -245,3 +245,17 @@
 }
 
 /* end: form ajax loading */
+
+
+/* anchor */
+
+.fw-extensions-list .fw-extensions-list-item a.fw-ext-anchor {
+	position: absolute;
+	top: -15px;
+}
+
+body.admin-bar .fw-extensions-list .fw-extensions-list-item a.fw-ext-anchor {
+	top: -50px;
+}
+
+/* end: anchor */
