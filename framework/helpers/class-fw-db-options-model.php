@@ -172,7 +172,28 @@ abstract class FW_Db_Options_Model {
 				FW_Cache::set($cache_key_values_processed, true);
 
 				// Complete missing db values with default values from options array
-				$values = array_merge( fw_get_options_default_values( $options ), $values );
+				{
+					try {
+						$skip_types_process = FW_Cache::get($cache_key = 'fw:options-default-values:skip-types');
+					} catch (FW_Cache_Not_Found_Exception $e) {
+						FW_Cache::set(
+							$cache_key,
+							$skip_types_process = apply_filters('fw:options-default-values:skip-types', array(
+								// 'type' => true
+							))
+						);
+					}
+
+					foreach (array_diff_key(fw_extract_only_options( $options ), $values) as $id => $option) {
+						$values[ $id ] = isset($skip_types_process[ $option['type'] ])
+							? (
+							isset($option['value'])
+								? $option['value']
+								: fw()->backend->option_type( $option['type'] )->get_defaults( 'value' )
+							)
+							: fw()->backend->option_type($option['type'])->get_value_from_input($option, null);
+					}
+				}
 
 				foreach ($options as $id => $option) {
 					$values[$id] = fw()->backend->option_type($option['type'])->storage_load(

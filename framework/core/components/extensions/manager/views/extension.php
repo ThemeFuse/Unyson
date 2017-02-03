@@ -64,6 +64,7 @@ if (!$installed_data && !$is_compatible) {
 }
 ?>
 <div class="<?php echo esc_attr($wrapper_class) ?>" id="fw-ext-<?php echo esc_attr($name) ?>">
+	<a class="fw-ext-anchor" name="ext-<?php echo esc_attr($name) ?>"></a>
 	<div class="inner">
 		<div class="fw-extension-list-item-table">
 			<div class="fw-extension-list-item-table-row">
