@@ -577,6 +577,14 @@ final class _FW_Component_Backend {
 	 * @param WP_Post $post
 	 */
 	public function _action_create_post_meta_boxes( $post_type, $post ) {
+		if ('comment' === $post_type) {
+			/**
+			 * This is wrong, comment is not a post(type)
+			 * it is stored in a separate db table and has a separate meta (wp_comments and wp_commentmeta)
+			 */
+			return;
+		}
+
 		$options = fw()->theme->get_post_options( $post_type );
 
 		if ( empty( $options ) ) {
