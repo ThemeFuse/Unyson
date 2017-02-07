@@ -210,7 +210,7 @@ class FW_Flash_Messages
 	/**
 	 * Clear the FW_Flash_Messages messages
 	 *
-	 * @since 2.6.15
+	 * @since 2.6.14
 	 */
 	public static function _clear() {
 		self::set_messages(array());
