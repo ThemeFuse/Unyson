@@ -178,12 +178,14 @@ class FW_Form {
 	 * Some forms (like Forms extension frontend form) uses the same FW_Form instance for all sub-forms
 	 * and they must be differentiated somehow.
 	 * Fixes https://github.com/ThemeFuse/Unyson/issues/2033
+	 *
 	 * @param array $render_data
+	 *
 	 * @return string
 	 * @since 2.6.6
 	 */
-	private function get_nonce_name($render_data = array()) {
-		return '_nonce_' . md5( $this->id . apply_filters('fw:form:nonce-name-data', '', $this, $render_data) );
+	private function get_nonce_name( $render_data = array() ) {
+		return '_nonce_' . md5( $this->id . apply_filters( 'fw:form:nonce-name-data', '', $this, $render_data ) );
 	}
 
 	protected function save() {
@@ -221,7 +223,9 @@ class FW_Form {
 	}
 
 	protected function is_ajax() {
-		return defined( 'DOING_AJAX' ) && DOING_AJAX;
+		return ( defined( 'DOING_AJAX' ) && DOING_AJAX )
+		       ||
+		       strtolower( fw_akg( 'HTTP_X_REQUESTED_WITH', $_SERVER ) ) == 'xmlhttprequest';
 	}
 
 	/**
@@ -265,11 +269,11 @@ class FW_Form {
 			{
 				$flash_messages = array();
 
-				foreach (FW_Flash_Messages::_get_messages(true) as $type => $messages) {
-					$flash_messages[$type] = array();
+				foreach ( FW_Flash_Messages::_get_messages( true ) as $type => $messages ) {
+					$flash_messages[ $type ] = array();
 
-					foreach ($messages as $id => $message_data) {
-						$flash_messages[$type][$id] = $message_data['message'];
+					foreach ( $messages as $id => $message_data ) {
+						$flash_messages[ $type ][ $id ] = $message_data['message'];
 					}
 				}
 
@@ -297,9 +301,9 @@ class FW_Form {
 			 */
 
 			if ( $this->is_valid() ) {
-				wp_send_json_success($json_data);
+				wp_send_json_success( $json_data );
 			} else {
-				wp_send_json_error($json_data);
+				wp_send_json_error( $json_data );
 			}
 		} else {
 			if ( ! $this->is_valid() ) {
@@ -349,8 +353,8 @@ class FW_Form {
 				 */
 				'html'  => null,
 			),
-			'data' => $data,
-			'attr' => $this->attr,
+			'data'   => $data,
+			'attr'   => $this->attr,
 		);
 
 		unset( $data );
@@ -374,7 +378,7 @@ class FW_Form {
 
 		// display form errors in frontend
 		do {
-			if (is_admin()) {
+			if ( is_admin() ) {
 				// errors in admin side are displayed by a script at the end of this file
 				break;
 			}
@@ -390,9 +394,9 @@ class FW_Form {
 				break;
 			}
 
-			unset($submitted_form); // not needed anymore, below will be used only with $this (because it's the same form)
+			unset( $submitted_form ); // not needed anymore, below will be used only with $this (because it's the same form)
 
-			if ( ! isset( $_POST[ $this->get_nonce_name($render_data) ] )) {
+			if ( ! isset( $_POST[ $this->get_nonce_name( $render_data ) ] ) ) {
 				break;
 			}
 
@@ -403,7 +407,7 @@ class FW_Form {
 			/**
 			 * Use this action to customize errors display in your theme
 			 */
-			do_action('fw_form_display_errors_frontend', $this);
+			do_action( 'fw_form_display_errors_frontend', $this );
 
 			if ( $this->errors_accessed() ) {
 				// already displayed, prevent/cancel default display
@@ -412,13 +416,13 @@ class FW_Form {
 
 			$errors = $this->get_errors();
 
-			if (empty($errors)) {
+			if ( empty( $errors ) ) {
 				break;
 			}
 
 			echo '<ul class="fw-form-errors">';
 
-			foreach ($errors as $input_name => $error_message) {
+			foreach ( $errors as $input_name => $error_message ) {
 				echo fw_html_tag(
 					'li',
 					array(
@@ -430,21 +434,22 @@ class FW_Form {
 
 			echo '</ul>';
 
-			unset($errors);
-		} while(false);
+			unset( $errors );
+		} while ( false );
 
-		echo '<form '. fw_attr_to_html( $render_data['attr'] ) .' >';
+		echo '<form ' . fw_attr_to_html( $render_data['attr'] ) . ' >';
 
-		do_action('fw_form_display:before', $this);
+		do_action( 'fw_form_display:before', $this );
 
-		echo fw_html_tag('input', array(
-			'type'  => 'hidden',
-			'name'  => self::$id_input_name,
-			'value' => $this->id,
-		));
+		echo fw_html_tag( 'input',
+			array(
+				'type'  => 'hidden',
+				'name'  => self::$id_input_name,
+				'value' => $this->id,
+			) );
 
 		if ( $render_data['attr']['method'] == 'post' ) {
-			wp_nonce_field( 'submit_fwf', $this->get_nonce_name($render_data) );
+			wp_nonce_field( 'submit_fwf', $this->get_nonce_name( $render_data ) );
 		}
 
 		if ( ! empty( $render_data['attr']['action'] ) && $render_data['attr']['method'] == 'get' ) {
@@ -456,11 +461,12 @@ class FW_Form {
 
 			if ( ! empty( $query_vars ) ) {
 				foreach ( $query_vars as $var_name => $var_value ) {
-					echo fw_html_tag('input', array(
-						'type'  => 'hidden',
-						'name'  => $var_name,
-						'value' => $var_value,
-					));
+					echo fw_html_tag( 'input',
+						array(
+							'type'  => 'hidden',
+							'name'  => $var_name,
+							'value' => $var_value,
+						) );
 				}
 			}
 		}
@@ -471,13 +477,14 @@ class FW_Form {
 		if ( isset( $render_data['submit']['html'] ) ) {
 			echo $render_data['submit']['html'];
 		} else {
-			echo fw_html_tag('input', array(
-				'type' => 'submit',
-				'value' => $render_data['submit']['value']
-			));
+			echo fw_html_tag( 'input',
+				array(
+					'type'  => 'submit',
+					'value' => $render_data['submit']['value']
+				) );
 		}
 
-		do_action('fw_form_display:after', $this);
+		do_action( 'fw_form_display:after', $this );
 
 		echo '</form>';
 	}
@@ -487,8 +494,8 @@ class FW_Form {
 	 * @return bool
 	 */
 	public function is_submitted() {
-		if (is_null($this->is_submitted)) {
-			switch (strtoupper( $this->attr( 'method' ) )) {
+		if ( is_null( $this->is_submitted ) ) {
+			switch ( strtoupper( $this->attr( 'method' ) ) ) {
 				case 'POST':
 					$this->is_submitted = (
 						isset( $_POST[ self::$id_input_name ] )
@@ -540,8 +547,7 @@ class FW_Form {
 		return $this->errors;
 	}
 
-	public function errors_accessed()
-	{
+	public function errors_accessed() {
 		return $this->errors_accessed;
 	}
 
