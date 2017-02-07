@@ -223,7 +223,9 @@ class FW_Form {
 	}
 
 	protected function is_ajax() {
-		return defined( 'DOING_AJAX' ) && DOING_AJAX;
+		return ( defined( 'DOING_AJAX' ) && DOING_AJAX )
+		       ||
+		       strtolower( fw_akg( 'HTTP_X_REQUESTED_WITH', $_SERVER ) ) == 'xmlhttprequest';
 	}
 
 	/**
