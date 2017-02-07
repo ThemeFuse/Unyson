@@ -1196,6 +1196,18 @@ fw.getValuesFromServer = function (data) {
 				silentReceiveOfDefaultValues: true
 			}
 		),
+		initialize: function () {
+			fw.Modal.prototype.initialize.call(this);
+
+			// Forward events to fwEvents
+			{
+				/** @since 2.6.14 */
+				this.on('open',  function () { fwEvents.trigger('fw:options-modal:open',  {modal: this}); });
+
+				/** @since 2.6.14 */
+				this.on('close', function () { fwEvents.trigger('fw:options-modal:close', {modal: this}); });
+			}
+		},
 		initializeFrame: function(settings) {
 			fw.Modal.prototype.initializeFrame.call(this, settings);
 
