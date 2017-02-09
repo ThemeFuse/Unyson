@@ -347,14 +347,21 @@ final class _FW_Component_Backend {
 				'FW_URI'     => fw_get_framework_directory_uri(),
 				'SITE_URI'   => site_url(),
 				'LOADER_URI' => apply_filters( 'fw_loader_image', fw_get_framework_directory_uri() . '/static/img/logo.svg' ),
-				'l10n'       => array(
-					'done'     => __( 'Done', 'fw' ),
-					'ah_sorry' => __( 'Ah, Sorry', 'fw' ),
-					'save'     => __( 'Save', 'fw' ),
-					'reset'    => __( 'Reset', 'fw' ),
-					'apply'    => __( 'Apply', 'fw' ),
-					'cancel'   => __( 'Cancel', 'fw' ),
-					'ok'       => __( 'Ok', 'fw' )
+				'l10n'       => array_merge(
+					$l10n = array(
+						'modal_save_btn' => __( 'Save', 'fw' ),
+						'done'     => __( 'Done', 'fw' ),
+						'ah_sorry' => __( 'Ah, Sorry', 'fw' ),
+						'reset'    => __( 'Reset', 'fw' ),
+						'apply'    => __( 'Apply', 'fw' ),
+						'cancel'   => __( 'Cancel', 'fw' ),
+						'ok'       => __( 'Ok', 'fw' )
+					),
+					/**
+					 * fixes https://github.com/ThemeFuse/Unyson/issues/2381
+					 * @since 2.6.14
+					 */
+					apply_filters('fw_js_l10n', $l10n)
 				),
 				'options_modal' => array(
 					/** @since 2.6.13 */

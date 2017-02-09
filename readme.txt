@@ -85,6 +85,10 @@ Yes; Unyson will work with any theme.
 
 == Changelog ==
 
+= 2.6.14 =
+* Fixed infinite loop when php memory limit is `-1`
+* Minor changes
+
 = 2.6.13 =
 * Fixed [#2310](https://github.com/ThemeFuse/Unyson/issues/2310), [#2308](https://github.com/ThemeFuse/Unyson/issues/2308), [#961](https://github.com/ThemeFuse/Unyson/issues/961), [#2073](https://github.com/ThemeFuse/Unyson/issues/2073)
 
