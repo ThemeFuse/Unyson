@@ -9,32 +9,42 @@ class FW_Form {
 	/**
 	 * Store all form ids created with this class
 	 * @var FW_Form[] {'form_id' => instance}
+	 *
+	 * @deprecated 2.6.15 Use FW_Form::get_forms()
 	 */
 	protected static $forms = array();
 
 	/**
 	 * The id of the submitted form id
 	 * @var string
+	 *
+	 * @deprecated 2.6.15
 	 */
 	protected static $submitted_id;
 
 	/**
 	 * Hidden input name that stores the form id
 	 * @var string
+	 *
+	 * @deprecated 2.6.15 Use self::get_form_id_name()
 	 */
 	protected static $id_input_name = 'fwf';
 
 	/**
 	 * Form id
 	 * @var string
+	 *
+	 * @deprecated 2.6.15 Use $this->get_id()
 	 */
 	protected $id;
 
 	/**
 	 * Html attributes for <form> tag
 	 * @var array
+	 *
+	 * @deprecated 2.6.15 Use $this->attr()
 	 */
-	protected $attr;
+	protected $attr = array();
 
 	/**
 	 * Found validation errors
@@ -51,19 +61,30 @@ class FW_Form {
 	/**
 	 * If current request is the submit of this form
 	 * @var bool
+	 *
+	 * @deprecated 2.6.15 Use $this->is_submitted()
 	 */
 	protected $is_submitted;
 
 	/**
 	 * @var bool
+	 *
+	 * @deprecated 2.6.15
 	 */
 	protected $validate_and_save_called = false;
 
+	/**
+	 * @var array
+	 *
+	 * @deprecated 2.6.15 Use $this->get_callbacks()
+	 */
 	protected $callbacks = array(
 		'render'   => false,
 		'validate' => false,
 		'save'     => false
 	);
+
+	private $request;
 
 	/**
 	 * @param string $id Unique
@@ -76,50 +97,27 @@ class FW_Form {
 	 * )
 	 */
 	public function __construct( $id, $data = array() ) {
-		if ( isset( self::$forms[ $id ] ) ) {
+		try {
+			self::get_form( $id );
 			trigger_error( sprintf( __( 'Form with id "%s" was already defined', 'fw' ), $id ), E_USER_ERROR );
+
+			return;
+		} catch ( FW_Form_Not_Found_Exception $e ) {
 		}
 
-		$this->id = $id;
+		$this
+			// set id
+			->set_id( $id )
+			// prepare callbacks
+			->set_callbacks( array(
+				'render'   => fw_akg( 'render', $data, false ),
+				'validate' => fw_akg( 'validate', $data, false ),
+				'save'     => fw_akg( 'save', $data, false ),
+			) )
+			// prepare attributes
+			->set_attr( (array) fw_akg( 'attr', $data, array() ) );
 
-		self::$forms[ $this->id ] =& $this;
-
-		// prepare $this->attr
-		{
-			if ( ! isset( $data['attr'] ) || ! is_array( $data['attr'] ) ) {
-				$data['attr'] = array();
-			}
-
-			$data['attr']['data-fw-form-id'] = $this->id;
-
-			/** @deprecated */
-			$data['attr']['class'] = 'fw_form_' . $this->id;
-
-			if ( isset( $data['attr']['method'] ) ) {
-				$data['attr']['method'] = strtolower( $data['attr']['method'] );
-
-				$data['attr']['method'] = in_array( $data['attr']['method'], array( 'get', 'post' ) )
-					? $data['attr']['method']
-					: 'post';
-			} else {
-				$data['attr']['method'] = 'post';
-			}
-
-			if ( ! isset( $data['attr']['action'] ) ) {
-				$data['attr']['action'] = fw_current_url();
-			}
-
-			$this->attr = $data['attr'];
-		}
-
-		// prepare $this->callbacks
-		{
-			$this->callbacks = array(
-				'render'   => empty( $data['render'] ) ? false : $data['render'],
-				'validate' => empty( $data['validate'] ) ? false : $data['validate'],
-				'save'     => empty( $data['save'] ) ? false : $data['save'],
-			);
-		}
+		self::$forms[ $this->get_id() ] =& $this;
 
 		if ( did_action( 'wp_loaded' ) ) {
 			// in case if form instance was created after action
@@ -130,102 +128,36 @@ class FW_Form {
 		}
 	}
 
-	protected function validate() {
-		if ( is_array( $this->errors ) ) {
-			trigger_error( __METHOD__ . ' already called', E_USER_WARNING );
-
-			return;
-		}
-
-		/**
-		 * Errors array {'input[name]' => 'Error message'}
-		 */
-		$errors = array();
-
-		/**
-		 * Call validate callback
-		 *
-		 * Callback must 'manually' extract input values from $_POST (or $_GET)
-		 */
-		if ( $this->callbacks['validate'] ) {
-			$errors = call_user_func_array( $this->callbacks['validate'], array( $errors ) );
-
-			if ( ! is_array( $errors ) ) {
-
-				$errors = array();
-			}
-		}
-
-		/**
-		 * check nonce
-		 */
-		if ( $this->attr['method'] == 'post' ) {
-			$nonce_name = $this->get_nonce_name();
-
-			if (
-				! isset( $_REQUEST[ $nonce_name ] )
-				||
-				wp_verify_nonce( $_REQUEST[ $nonce_name ], 'submit_fwf' ) === false
-			) {
-				$errors[ $nonce_name ] = __( 'Nonce verification failed', 'fw' );
-			}
-		}
-
-		$this->errors = $errors;
+	/**
+	 * @return string
+	 */
+	public function get_id() {
+		return $this->id;
 	}
 
 	/**
-	 * Some forms (like Forms extension frontend form) uses the same FW_Form instance for all sub-forms
-	 * and they must be differentiated somehow.
-	 * Fixes https://github.com/ThemeFuse/Unyson/issues/2033
-	 *
-	 * @param array $render_data
-	 *
-	 * @return string
-	 * @since 2.6.6
+	 * Get validation errors
+	 * @return array
 	 */
-	private function get_nonce_name( $render_data = array() ) {
-		return '_nonce_' . md5( $this->id . apply_filters( 'fw:form:nonce-name-data', '', $this, $render_data ) );
-	}
+	public function get_errors() {
+		if ( ! $this->validate_and_save_called ) {
+			fw_print( debug_backtrace() );
+			trigger_error( __METHOD__ . ' called before validation', E_USER_WARNING );
 
-	protected function save() {
-		$save_data = array(
-			// you can set here a url for redirect after save
-			'redirect' => null
-		);
-
-		/**
-		 * Call save callback
-		 *
-		 * Callback must 'manually' extract input values from $_POST (or $_GET)
-		 */
-		if ( $this->callbacks['save'] ) {
-			$data = call_user_func_array( $this->callbacks['save'], array( $save_data ) );
-
-			if ( ! is_array( $data ) ) {
-				// fix if returned wrong data from callback
-				$data = $save_data;
-			}
-
-			$save_data = $data;
-
-			unset( $data );
+			return array( '~' => true );
 		}
 
-		if ( ! $this->is_ajax() ) {
-			if ( isset( $save_data['redirect'] ) ) {
-				wp_redirect( $save_data['redirect'] );
-				exit;
-			}
-		}
+		$this->errors_accessed = true;
 
-		return $save_data;
+		return $this->_get_errors();
 	}
 
-	protected function is_ajax() {
-		return ( defined( 'DOING_AJAX' ) && DOING_AJAX )
-		       ||
-		       strtolower( fw_akg( 'HTTP_X_REQUESTED_WITH', $_SERVER ) ) == 'xmlhttprequest';
+	public function get_callbacks() {
+		return $this->callbacks;
+	}
+
+	public function errors_accessed() {
+		return $this->errors_accessed;
 	}
 
 	/**
@@ -233,94 +165,38 @@ class FW_Form {
 	 *
 	 * Note: This callback can abort script execution if save does redirect
 	 *
-	 * @return bool|null
 	 * @internal
 	 */
 	public function _validate_and_save() {
-		if ( $this->validate_and_save_called ) {
-			trigger_error( __METHOD__ . ' already called', E_USER_WARNING );
 
-			return null;
-		} else {
-			$this->validate_and_save_called = true;
+		if ( ! self::is_form_submitted( $this->get_id() ) || $this->validate_and_save_called ) {
+			return;
 		}
 
-		if ( ! $this->is_submitted() || ! isset( $_POST[ $this->get_nonce_name() ] ) ) {
-			return null;
+		$this->validate_and_save_called = true;
+
+		try {
+			$data = $this->submit( self::get_form_request( $this->get_id() ) );
+
+			if ( $this->_is_ajax() ) {
+				wp_send_json_success( array(
+					'save_data'      => $data,
+					'flash_messages' => self::collect_flash_messages(),
+				) );
+			}
+
+			if ( ( $redirect = fw_akg( 'redirect', $data ) ) ) {
+				wp_redirect( $redirect );
+				exit;
+			}
+		} catch ( FW_Form_Invalid_Submission_Exception $e ) {
+			if ( $this->_is_ajax() ) {
+				wp_send_json_error( array(
+					'errors'         => $this->get_errors(),
+					'flash_messages' => self::collect_flash_messages()
+				) );
+			}
 		}
-
-		$this->validate();
-
-		if ( $this->is_ajax() ) {
-			$json_data = array();
-
-			if ( $this->is_valid() ) {
-				$json_data['save_data'] = $this->save();
-			} else {
-				$json_data['errors'] = $this->get_errors();
-			}
-
-			/**
-			 * Transform flash messages structure from
-			 * array( 'type' => array( 'message_id' => array(...) ) )
-			 * to
-			 * array( 'type' => array( 'message_id' => 'Message' ) )
-			 */
-			{
-				$flash_messages = array();
-
-				foreach ( FW_Flash_Messages::_get_messages( true ) as $type => $messages ) {
-					$flash_messages[ $type ] = array();
-
-					foreach ( $messages as $id => $message_data ) {
-						$flash_messages[ $type ][ $id ] = $message_data['message'];
-					}
-				}
-
-				$json_data['flash_messages'] = $flash_messages;
-			}
-
-			/**
-			 * Important!
-			 * We can't send form html in response:
-			 *
-			 * ob_start();
-			 * $this->render();
-			 * $json_data['html'] = ob_get_clean();
-			 *
-			 * because the render() method is not called within this class
-			 * but by the code that created and owns the $form,
-			 * and it's usually called with some custom data $this->render(array(...))
-			 * that it's impossible to know here which data is that.
-			 * If we will call $this->render(); without data, this may throw errors because
-			 * the render callback may expect some custom data.
-			 * Also it may be called or not, depending on the owner code inner logic.
-			 *
-			 * The only way to get the latest form html on ajax submit
-			 * is to make a new ajax GET to current page and extract form html from the response.
-			 */
-
-			if ( $this->is_valid() ) {
-				wp_send_json_success( $json_data );
-			} else {
-				wp_send_json_error( $json_data );
-			}
-		} else {
-			if ( ! $this->is_valid() ) {
-				return false;
-			}
-
-			$this->save();
-		}
-
-		return true;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function get_id() {
-		return $this->id;
 	}
 
 	/**
@@ -331,11 +207,9 @@ class FW_Form {
 	 * @return array|string
 	 */
 	public function attr( $name = null ) {
-		if ( $name ) {
-			return isset( $this->attr[ $name ] ) ? $this->attr[ $name ] : null;
-		} else {
-			return $this->attr;
-		}
+		return $name !== null
+			? fw_akg( $name, $this->attr )
+			: $this->attr;
 	}
 
 	/**
@@ -354,15 +228,15 @@ class FW_Form {
 				'html'  => null,
 			),
 			'data'   => $data,
-			'attr'   => $this->attr,
+			'attr'   => $this->attr(),
 		);
 
-		unset( $data );
+		$html = '';
 
-		if ( $this->callbacks['render'] ) {
+		if ( $render_callback = fw_akg( 'render', $this->get_callbacks() ) ) {
 			ob_start();
 
-			$data = call_user_func_array( $this->callbacks['render'], array( $render_data, $this ) );
+			$data = call_user_func_array( $render_callback, array( $render_data, $this ) );
 
 			$html = ob_get_clean();
 
@@ -372,71 +246,11 @@ class FW_Form {
 			}
 
 			$render_data = $data;
-
-			unset( $data );
 		}
 
+		do_action( 'fw_form_display:before_form', $this );
+
 		// display form errors in frontend
-		do {
-			if ( is_admin() ) {
-				// errors in admin side are displayed by a script at the end of this file
-				break;
-			}
-
-			$submitted_form = FW_Form::get_submitted();
-
-			if ( ! $submitted_form ) {
-				break;
-			}
-
-			if ( $submitted_form->get_id() !== $this->get_id() ) {
-				// the submitted form is not current form
-				break;
-			}
-
-			unset( $submitted_form ); // not needed anymore, below will be used only with $this (because it's the same form)
-
-			if ( ! isset( $_POST[ $this->get_nonce_name( $render_data ) ] ) ) {
-				break;
-			}
-
-			if ( $this->is_valid() ) {
-				break;
-			}
-
-			/**
-			 * Use this action to customize errors display in your theme
-			 */
-			do_action( 'fw_form_display_errors_frontend', $this );
-
-			if ( $this->errors_accessed() ) {
-				// already displayed, prevent/cancel default display
-				break;
-			}
-
-			$errors = $this->get_errors();
-
-			if ( empty( $errors ) ) {
-				break;
-			}
-
-			echo '<ul class="fw-form-errors">';
-
-			foreach ( $errors as $input_name => $error_message ) {
-				echo fw_html_tag(
-					'li',
-					array(
-						'data-input-name' => $input_name,
-					),
-					$error_message
-				);
-			}
-
-			echo '</ul>';
-
-			unset( $errors );
-		} while ( false );
-
 		echo '<form ' . fw_attr_to_html( $render_data['attr'] ) . ' >';
 
 		do_action( 'fw_form_display:before', $this );
@@ -444,13 +258,11 @@ class FW_Form {
 		echo fw_html_tag( 'input',
 			array(
 				'type'  => 'hidden',
-				'name'  => self::$id_input_name,
-				'value' => $this->id,
+				'name'  => self::get_form_id_name(),
+				'value' => $this->get_id(),
 			) );
 
-		if ( $render_data['attr']['method'] == 'post' ) {
-			wp_nonce_field( 'submit_fwf', $this->get_nonce_name( $render_data ) );
-		}
+		wp_nonce_field( $this->get_nonce_action(), $this->get_nonce_name( $render_data ) );
 
 		if ( ! empty( $render_data['attr']['action'] ) && $render_data['attr']['method'] == 'get' ) {
 			/**
@@ -487,6 +299,8 @@ class FW_Form {
 		do_action( 'fw_form_display:after', $this );
 
 		echo '</form>';
+
+		do_action( 'fw_form_display:after_form', $this );
 	}
 
 	/**
@@ -494,61 +308,226 @@ class FW_Form {
 	 * @return bool
 	 */
 	public function is_submitted() {
-		if ( is_null( $this->is_submitted ) ) {
-			switch ( strtoupper( $this->attr( 'method' ) ) ) {
-				case 'POST':
-					$this->is_submitted = (
-						isset( $_POST[ self::$id_input_name ] )
-						&&
-						FW_Request::POST( self::$id_input_name ) === $this->id
-					);
-					break;
-				case 'GET':
-					$this->is_submitted = (
-						isset( $_GET[ self::$id_input_name ] )
-						&&
-						FW_Request::GET( self::$id_input_name ) === $this->id
-					);
-					break;
-				default:
-					$this->is_submitted = false;
-			}
-		}
-
-		return $this->is_submitted;
+		return $this->request !== null;
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function is_valid() {
-		if ( ! $this->validate_and_save_called ) {
-			trigger_error( __METHOD__ . ' called before validation', E_USER_WARNING );
-
+		if ( ! $this->is_submitted() ) {
 			return null;
 		}
 
-		return empty( $this->errors );
+		return count( $this->_get_errors() ) == 0;
 	}
 
 	/**
-	 * Get validation errors
-	 * @return array
+	 * @param array $request
+	 *
+	 * @throws FW_Form_Invalid_Submission_Exception
+	 *
+	 * @return mixed
 	 */
-	public function get_errors() {
-		if ( ! $this->validate_and_save_called ) {
-			trigger_error( __METHOD__ . ' called before validation', E_USER_WARNING );
+	public function submit( array $request = array() ) {
+		$this->request = $request;
+		//Updated the deprecated member for those that extended the class and use it in code
+		$this->is_submitted = true;
 
-			return array( '~' => true );
+		$errors = $this->validate();
+
+		if ( ! empty( $errors ) ) {
+			throw new FW_Form_Invalid_Submission_Exception( $errors );
 		}
 
-		$this->errors_accessed = true;
+		return $this->save();
+	}
 
+	protected function get_default_attr() {
+		return array(
+			'data-fw-form-id' => $this->get_id(),
+			'method'          => 'post',
+			'action'          => fw_current_url(),
+			'class'           => 'fw_form_' . $this->get_id()
+		);
+	}
+
+	/**
+	 * @param array $attr
+	 *
+	 * @return $this
+	 */
+	protected function set_attr( array $attr ) {
+		$this->attr = array_merge( $this->get_default_attr(), $attr );
+
+		return $this;
+	}
+
+	/**
+	 * @param null $key
+	 *
+	 * @return array|mixed|null
+	 *
+	 * @since 2.6.15
+	 */
+	protected function get_request( $key = null ) {
+		return $key === null ? (array) $this->request : fw_akg( $key, $this->request );
+	}
+
+	/**
+	 * @return string|null
+	 *
+	 * @since 2.6.15
+	 */
+	protected function get_nonce() {
+		return $this->get_request( $this->get_nonce_name() );
+	}
+
+	/**
+	 * Returns forms errors without counting them as accessed
+	 * @return array
+	 */
+	protected function _get_errors() {
 		return $this->errors;
 	}
 
-	public function errors_accessed() {
-		return $this->errors_accessed;
+	/**
+	 * @return string
+	 *
+	 * @since 2.6.15
+	 */
+	protected function get_nonce_action() {
+		return 'submit_fwf';
+	}
+
+	protected function check_nonce( $nonce ) {
+		return wp_verify_nonce( $nonce, $this->get_nonce_action() );
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function validate() {
+		/**
+		 * Errors array {'input[name]' => 'Error message'}
+		 */
+		$errors = array();
+
+		if ( ! $this->check_nonce( $this->get_nonce() ) ) {
+			$errors[ $this->get_nonce_name() ] = __( 'Nonce verification failed', 'fw' );
+		}
+
+		/**
+		 * Call validate callback
+		 *
+		 * Callback must 'manually' extract input values from $_POST (or $_GET)
+		 */
+		if ( ( $validate = fw_akg( 'validate', $this->get_callbacks() ) ) ) {
+			$errors = (array) call_user_func( $validate, $errors );
+		}
+
+		return $this->set_errors( $errors )->_get_errors();
+	}
+
+	/**
+	 * @return array|mixed
+	 */
+	protected function save() {
+		$save_data = array(
+			// you can set here a url for redirect after save
+			'redirect' => null
+		);
+
+		/**
+		 * Call save callback
+		 *
+		 * Callback must 'manually' extract input values from $_POST (or $_GET)
+		 */
+		if ( ( $save_callback = fw_akg( 'save', $this->get_callbacks() ) ) ) {
+			$data = call_user_func_array( $save_callback, array( $save_data ) );
+
+			if ( ! is_array( $data ) ) {
+				// fix if returned wrong data from callback
+				$data = $save_data;
+			}
+
+			$save_data = $data;
+
+			unset( $data );
+		}
+
+		return $save_data;
+	}
+
+	/**
+	 * @return bool
+	 *
+	 * @deprecated 2.6.15
+	 */
+	protected function is_ajax() {
+		return self::_is_ajax();
+	}
+
+	protected function set_id( $id ) {
+		$this->id = $id;
+
+		return $this;
+	}
+
+	/**
+	 * @param array $callbacks
+	 *
+	 * @return $this
+	 */
+	protected function set_callbacks( array $callbacks ) {
+		$this->callbacks = $callbacks;
+
+		return $this;
+	}
+
+	protected function set_errors( array $errors ) {
+		$this->errors = $errors;
+
+		return $this;
+	}
+
+	/**
+	 * Some forms (like Forms extension frontend form) uses the same FW_Form instance for all sub-forms
+	 * and they must be differentiated somehow.
+	 * Fixes https://github.com/ThemeFuse/Unyson/issues/2033
+	 *
+	 * @param array $render_data
+	 *
+	 * @return string
+	 * @since 2.6.6
+	 */
+	private function get_nonce_name( $render_data = array() ) {
+		return '_nonce_' . md5( $this->id . apply_filters( 'fw:form:nonce-name-data', '', $this, $render_data ) );
+	}
+
+	/**
+	 * @return FW_Form[]
+	 *
+	 * @since 2.6.15
+	 */
+	public static function get_forms() {
+		return self::$forms;
+	}
+
+	/**
+	 * @param $id
+	 *
+	 * @return FW_Form
+	 * @throws FW_Form_Not_Found_Exception
+	 *
+	 * @since 2.6.15
+	 */
+	public static function get_form( $id ) {
+		if ( ! isset( self::$forms[ $id ] ) ) {
+			throw new FW_Form_Not_Found_Exception( "FW_Form $id was not defined" );
+		}
+
+		return self::$forms[ $id ];
 	}
 
 	/**
@@ -556,24 +535,114 @@ class FW_Form {
 	 * @return FW_Form|false
 	 */
 	public static function get_submitted() {
-		if ( is_null( self::$submitted_id ) ) {
-			// method called first time, search for submitted form
-			do {
-				foreach ( self::$forms as $form ) {
-					if ( $form->is_submitted() ) {
-						self::$submitted_id = $form->get_id();
-						break 2;
-					}
-				}
-
-				self::$submitted_id = false;
-			} while ( false );
+		foreach ( self::get_forms() as $id => $form ) {
+			if ( self::is_form_submitted( $id ) ) {
+				return $form;
+			}
 		}
 
-		if ( is_string( self::$submitted_id ) ) {
-			return self::$forms[ self::$submitted_id ];
-		} else {
-			return false;
+		return false;
+	}
+
+	/**
+	 * @return bool
+	 *
+	 * @since 2.6.15
+	 */
+	public static function _is_ajax() {
+		return ( defined( 'DOING_AJAX' ) && DOING_AJAX )
+		       ||
+		       strtolower( fw_akg( 'HTTP_X_REQUESTED_WITH', $_SERVER ) ) == 'xmlhttprequest';
+	}
+
+	public static function get_form_request( $id ) {
+		if ( FW_Request::POST( self::get_form_id_name() ) == $id ) {
+			return FW_Request::POST();
 		}
+
+		if ( FW_Request::GET( self::get_form_id_name() ) == $id ) {
+			return FW_Request::GET();
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param FW_Form $form
+	 *
+	 * @internal
+	 */
+	public static function _action_fw_form_show_errors( $form ) {
+		if (
+			// errors in admin side are displayed by a script at the end of this file
+			is_admin()
+			|| ! $form->is_submitted()
+			|| $form->is_valid()
+			|| $form->errors_accessed()
+		) {
+
+			return;
+		}
+
+		/**
+		 * Use this action to customize errors display in your theme
+		 */
+		do_action( 'fw_form_display_errors_frontend', $form );
+
+		$errors = $form->get_errors();
+
+		if ( empty( $errors ) ) {
+			return;
+		}
+
+		echo '<ul class="fw-form-errors">';
+
+		foreach ( $errors as $input_name => $error_message ) {
+			echo fw_html_tag(
+				'li',
+				array(
+					'data-input-name' => $input_name,
+				),
+				$error_message
+			);
+		}
+
+		echo '</ul>';
+	}
+
+	/**
+	 * @return string
+	 *
+	 * @since 2.6.15
+	 */
+	protected static function get_form_id_name() {
+		return 'fwf';
+	}
+
+	/**
+	 * @param $id
+	 *
+	 * @return bool
+	 *
+	 * @since 2.6.15
+	 */
+	protected static function is_form_submitted( $id ) {
+		return self::get_form_request( $id ) !== null;
+	}
+
+	private static function collect_flash_messages() {
+		$flash_messages = array();
+
+		foreach ( FW_Flash_Messages::_get_messages( true ) as $type => $messages ) {
+			$flash_messages[ $type ] = array();
+
+			foreach ( $messages as $id => $message_data ) {
+				$flash_messages[ $type ][ $id ] = $message_data['message'];
+			}
+		}
+
+		return $flash_messages;
 	}
 }
+
+add_action( 'fw_form_display:before_form', array( 'FW_Form', '_action_fw_form_show_errors' ) );
