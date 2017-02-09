@@ -126,6 +126,8 @@ class FW_Form {
 			// attach to an action before 'send_headers' action, to be able to do redirects
 			add_action( 'wp_loaded', array( $this, '_validate_and_save' ), 101 );
 		}
+
+		add_action( 'fw_form_display:before_form', array( $this, '_action_fw_form_show_errors' ) );
 	}
 
 	/**
@@ -197,6 +199,52 @@ class FW_Form {
 				) );
 			}
 		}
+	}
+
+	/**
+	 * @param FW_Form $form
+	 *
+	 * @internal
+	 *
+	 * You can overwrite it in case you do not need the errors to be shown for your form
+	 */
+	public function _action_fw_form_show_errors( $form ) {
+		if (
+			$form->get_id() != $this->get_id()
+			// errors in admin side are displayed by a script at the end of this file
+			|| is_admin()
+			|| ! $form->is_submitted()
+			|| $form->is_valid()
+			|| $form->errors_accessed()
+		) {
+
+			return;
+		}
+
+		/**
+		 * Use this action to customize errors display in your theme
+		 */
+		do_action( 'fw_form_display_errors_frontend', $form );
+
+		$errors = $form->get_errors();
+
+		if ( empty( $errors ) ) {
+			return;
+		}
+
+		echo '<ul class="fw-form-errors">';
+
+		foreach ( $errors as $input_name => $error_message ) {
+			echo fw_html_tag(
+				'li',
+				array(
+					'data-input-name' => $input_name,
+				),
+				$error_message
+			);
+		}
+
+		echo '</ul>';
 	}
 
 	/**
@@ -568,49 +616,6 @@ class FW_Form {
 	}
 
 	/**
-	 * @param FW_Form $form
-	 *
-	 * @internal
-	 */
-	public static function _action_fw_form_show_errors( $form ) {
-		if (
-			// errors in admin side are displayed by a script at the end of this file
-			is_admin()
-			|| ! $form->is_submitted()
-			|| $form->is_valid()
-			|| $form->errors_accessed()
-		) {
-
-			return;
-		}
-
-		/**
-		 * Use this action to customize errors display in your theme
-		 */
-		do_action( 'fw_form_display_errors_frontend', $form );
-
-		$errors = $form->get_errors();
-
-		if ( empty( $errors ) ) {
-			return;
-		}
-
-		echo '<ul class="fw-form-errors">';
-
-		foreach ( $errors as $input_name => $error_message ) {
-			echo fw_html_tag(
-				'li',
-				array(
-					'data-input-name' => $input_name,
-				),
-				$error_message
-			);
-		}
-
-		echo '</ul>';
-	}
-
-	/**
 	 * @return string
 	 *
 	 * @since 2.6.15
@@ -644,5 +649,3 @@ class FW_Form {
 		return $flash_messages;
 	}
 }
-
-add_action( 'fw_form_display:before_form', array( 'FW_Form', '_action_fw_form_show_errors' ) );
