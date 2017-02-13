@@ -791,7 +791,7 @@ class FW_Option_Type_Select extends FW_Option_Type {
 		return $result;
 	}
 
-	protected function render_choices( &$choices, &$value ) {
+	protected function render_choices( $choices, $value ) {
 		if ( empty( $choices ) || ! is_array( $choices ) ) {
 			return '';
 		}
@@ -946,7 +946,7 @@ class FW_Option_Type_Select_Multiple extends FW_Option_Type_Select {
 		return $input_value;
 	}
 
-	protected function render_choices( &$choices, &$value ) {
+	protected function render_choices( $choices, $value ) {
 		if ( empty( $choices ) || ! is_array( $choices ) ) {
 			return '';
 		}

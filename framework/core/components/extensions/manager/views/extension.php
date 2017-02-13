@@ -26,14 +26,25 @@ if (isset($lists['available'][$name])) {
 }
 
 {
-	$thumbnail = $default_thumbnail;
-
 	if (isset($lists['available'][$name])) {
 		$thumbnail = $lists['available'][$name]['thumbnail'];
+	} else {
+		$thumbnail = $default_thumbnail;
 	}
 
 	if (isset($lists['installed'][$name])) {
 		$thumbnail = fw_akg('thumbnail', $lists['installed'][$name]['manifest'], $thumbnail);
+
+		// local image
+		if (
+			substr($thumbnail, 0, 11) !== 'data:image/'
+			&&
+			!filter_var($thumbnail, FILTER_VALIDATE_URL)
+			&&
+			file_exists($thumbnail_path = $lists['installed'][$name]['path'] .'/'. $thumbnail)
+		) {
+			$thumbnail = fw_get_path_url($thumbnail_path);
+		}
 	}
 }
 
@@ -53,6 +64,7 @@ if (!$installed_data && !$is_compatible) {
 }
 ?>
 <div class="<?php echo esc_attr($wrapper_class) ?>" id="fw-ext-<?php echo esc_attr($name) ?>">
+	<a class="fw-ext-anchor" name="ext-<?php echo esc_attr($name) ?>"></a>
 	<div class="inner">
 		<div class="fw-extension-list-item-table">
 			<div class="fw-extension-list-item-table-row">

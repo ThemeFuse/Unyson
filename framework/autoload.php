@@ -103,9 +103,12 @@ function _fw_autoload_helper_classes($class) {
 	static $class_to_file = array(
 		'FW_Dumper' => 'class-fw-dumper',
 		'FW_Cache' => 'class-fw-cache',
+		'FW_Callback' => 'class-fw-callback',
 		'FW_Access_Key' => 'class-fw-access-key',
 		'FW_WP_Filesystem' => 'class-fw-wp-filesystem',
 		'FW_Form' => 'class-fw-form',
+		'FW_Form_Not_Found_Exception' => 'exceptions/class-fw-form-not-found-exception',
+		'FW_Form_Invalid_Submission_Exception' => 'exceptions/class-fw-form-invalid-submission-exception',
 		'FW_Settings_Form' => 'class-fw-settings-form',
 		'FW_Request' => 'class-fw-request',
 		'FW_Session' => 'class-fw-session',

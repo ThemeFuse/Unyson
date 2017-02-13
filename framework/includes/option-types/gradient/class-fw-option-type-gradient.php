@@ -43,13 +43,14 @@ class FW_Option_Type_Gradient extends FW_Option_Type
 	 */
 	protected function _render($id, $option, $data)
 	{
-		$output = fw_render_view(fw_get_framework_directory('/includes/option-types/' . $this->get_type() . '/view.php'), array(
-			'id' => $id,
-			'option' => $option,
-			'data' => $data
-		));
-
-		return $output;
+		return fw_render_view(
+			fw_get_framework_directory('/includes/option-types/' . $this->get_type() . '/view.php'),
+			array(
+				'id' => $id,
+				'option' => $option,
+				'data' => $data
+			)
+		);
 	}
 
 	public function get_type()
@@ -62,16 +63,33 @@ class FW_Option_Type_Gradient extends FW_Option_Type
 	 */
 	protected function _get_value_from_input($option, $input_value)
 	{
-		if (is_array($input_value)) {
-			if (!isset($input_value['primary']) || !preg_match('/^#[a-f0-9]{6}$/i', $input_value['primary'])) {
+		if (!is_array($input_value)) {
+			return $option['value'];
+		}
+
+		if (
+			isset($input_value['primary'])   && $input_value['primary'] === ''
+			&&
+			isset($input_value['secondary']) && $input_value['secondary'] === ''
+		) {
+			return array(
+				'primary' => '',
+				'secondary' => '',
+			);
+		} else {
+			$color_regex = '/^#([a-f0-9]{3}){1,2}$/i';
+
+			if (
+				!isset($input_value['primary']) || !preg_match($color_regex, $input_value['primary'])
+			) {
 				$input_value['primary'] = $option['value']['primary'];
 			}
 
-			if (!isset($input_value['secondary']) || !preg_match('/^#[a-f0-9]{6}$/i', $input_value['secondary'])) {
-				$input_value['secondary'] = (isset($option['value']['secondary'])) ? $option['value']['secondary'] : false;
+			if (
+				!isset($input_value['secondary']) || !preg_match($color_regex, $input_value['secondary'])
+			) {
+				$input_value['secondary'] = (isset($option['value']['secondary'])) ? $input_value['primary'] : false;
 			}
-		} else {
-			$input_value = $option['value'];
 		}
 
 		return $input_value;
@@ -84,8 +102,8 @@ class FW_Option_Type_Gradient extends FW_Option_Type
 	{
 		return array(
 			'value' => array(
-				'primary'   => '#FF0000',
-				'secondary' => '#0000FF',
+				'primary'   => '',
+				'secondary' => '',
 			)
 		);
 	}

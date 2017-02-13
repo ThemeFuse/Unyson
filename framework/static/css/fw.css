@@ -2945,12 +2945,41 @@ body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 	transition: opacity .3s ease-in-out;
 }
 
-.fw-modal.fw-modal-opening > .media-modal > .media-modal-content {
+/**
+ * Specificity score: 5
+ */
+.fw-modal.fw-sole-modal.fw-modal-opening > .media-modal > .media-modal-content {
 	-webkit-animation: fwGrowIn .3s ease-in-out;
 	-moz-animation: fwGrowIn .3s ease-in-out;
 	-ms-animation: fwGrowIn .3s ease-in-out;
 	-o-animation: fwGrowIn .3s ease-in-out;
 	animation: fwGrowIn .3s ease-in-out;
+}
+
+/**
+ * Specificity score: 5
+ */
+.fw-modal:not(.fw-sole-modal).fw-modal-open > .media-modal > .media-modal-content {
+	-webkit-animation: fwGrowIn .3s ease-in-out;
+	-moz-animation: fwGrowIn .3s ease-in-out;
+	-ms-animation: fwGrowIn .3s ease-in-out;
+	-o-animation: fwGrowIn .3s ease-in-out;
+	animation: fwGrowIn .3s ease-in-out;
+}
+
+/**
+ * Dirty hack to keep specificity intact
+ * Specificity score: 5.1
+ */
+body.wp-core-ui .fw-modal.fw-modal-closing > .media-modal > .media-modal-content {
+	-webkit-animation: fwGrowOut .3s ease-in-out;
+	-moz-animation: fwGrowOut .3s ease-in-out;
+	-ms-animation: fwGrowOut .3s ease-in-out;
+	-o-animation: fwGrowOut .3s ease-in-out;
+	animation: fwGrowOut .3s ease-in-out;
+
+	-webkit-animation-fill-mode: forwards; /* Chrome, Safari, Opera */
+	animation-fill-mode: forwards;
 }
 
 .fw-modal > .media-modal > .media-modal-close {
@@ -2977,17 +3006,6 @@ body.wp-customizer > div:not(.fw-modal) > .media-modal-backdrop {
 
 .fw-modal.fw-modal-closing > .media-modal-backdrop {
 	opacity: .0;
-}
-
-.fw-modal.fw-modal-closing > .media-modal > .media-modal-content {
-	-webkit-animation: fwGrowOut .3s ease-in-out;
-	-moz-animation: fwGrowOut .3s ease-in-out;
-	-ms-animation: fwGrowOut .3s ease-in-out;
-	-o-animation: fwGrowOut .3s ease-in-out;
-	animation: fwGrowOut .3s ease-in-out;
-
-	-webkit-animation-fill-mode: forwards; /* Chrome, Safari, Opera */
-	animation-fill-mode: forwards;
 }
 
 .fw-modal.fw-modal-closing > .media-modal > .media-modal-close {

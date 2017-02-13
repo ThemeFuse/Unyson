@@ -201,9 +201,18 @@ class FW_Flash_Messages
 		$messages = self::get_messages();
 
 		if ($clear) {
-			self::set_messages(array());
+			self::_clear();
 		}
 
 		return $messages;
+	}
+
+	/**
+	 * Clear the FW_Flash_Messages messages
+	 *
+	 * @since 2.6.15
+	 */
+	public static function _clear() {
+		self::set_messages(array());
 	}
 }

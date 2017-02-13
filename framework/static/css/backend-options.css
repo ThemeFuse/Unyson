@@ -1211,26 +1211,6 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 
 /* Add Selectize support for all selects with fw-selectize class */
 
-.fw-selectize.selectize-control.single .selectize-input {
-	background: none;
-	margin: 1px;
-	vertical-align: middle;
-	border: 1px solid #dddddd;
-	color: #333333;
-	height: 28px;
-	line-height: 27px;
-	font-size: 14px;
-	padding: 0 6px;
-
-	-webkit-border-radius: 0;
-	   -moz-border-radius: 0;
-	   		border-radius: 0;
-
-	-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .07);
-	   -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .07);
-   			box-shadow: inset 0 1px 2px rgba(0, 0, 0, .07);
-}
-
 .fw-selectize.selectize-control.single .selectize-input:before {
 	height: 0;
 	background: none;
@@ -1244,27 +1224,51 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 	border-color: #000000 transparent transparent transparent;
 }
 
-.fw-selectize.selectize-control.multi > .selectize-input,
-.fw-selectize.selectize-control.multi > .selectize-input.has-items {
-	display: block;
+.fw-selectize.selectize-control > .selectize-input,
+.fw-selectize.selectize-control > .selectize-input.has-items,
+.fw-selectize.selectize-control > .selectize-input.input-active {
+	display: block !important;
 	padding: 0;
 	margin: 1px;
 	border-radius: 0;
 	border: 1px solid #ddd;
+	color: #333333;
 
 	-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.07);
 	box-shadow: inset 0 1px 2px rgba(0,0,0,.07);
 }
 
-.fw-selectize.selectize-control.multi > .selectize-input > input {
+.fw-selectize.selectize-control > .selectize-input > input {
 	padding: 2px 5px !important;
-	height: 26px;
+	height: auto;
+	font-size: 14px;
 	vertical-align: middle;
+}
+
+.fw-modal .media-frame .fw-selectize.selectize-control > .selectize-input > input {
+	height: 26px;
+}
+
+.fw-selectize.selectize-control .selectize-input > div {
+	vertical-align: middle;
+}
+
+.fw-selectize.selectize-control.single .selectize-input > div {
+	padding: 2px 5px;
+	font-size: 14px;
+}
+
+.fw-modal .media-frame .fw-selectize.selectize-control.single .selectize-input > div {
+	padding: 4px 5px;
 }
 
 .fw-selectize.selectize-control.multi .selectize-input > div {
 	margin: 2px;
-	vertical-align: middle;
+	padding: 0 3px;
+}
+
+.fw-modal .media-frame .fw-selectize.selectize-control.multi .selectize-input > div {
+	padding: 2px 5px;
 }
 
 .fw-selectize.selectize-control .selectize-dropdown {

@@ -65,6 +65,10 @@ class FW_Cache
 	{
 		$memory_limit = ini_get('memory_limit');
 
+		if ($memory_limit === '-1') { // This happens in WP CLI
+			return 256 * 1024 * 1024;
+		}
+
 		switch (substr($memory_limit, -1)) {
 			case 'M': return intval($memory_limit) * 1024 * 1024;
 			case 'K': return intval($memory_limit) * 1024;

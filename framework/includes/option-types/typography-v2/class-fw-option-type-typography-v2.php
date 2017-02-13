@@ -101,8 +101,8 @@ class FW_Option_Type_Typography_v2 extends FW_Option_Type {
 		$default = $this->get_defaults();
 		$values  = array_merge( $default['value'], $option['value'], is_array($input_value) ? $input_value : array());
 
-		if ( ! preg_match( '/^#[a-f0-9]{6}$/i', $values['color'] ) ) {
-			$values = ( isset( $option['value']['color'] ) ) ? $option['value']['color'] : $default['value']['color'];
+		if ( ! empty($values['color']) && ! preg_match( '/^#[a-f0-9]{6}$/i', $values['color'] ) ) {
+			$values['color'] = isset( $option['value']['color'] ) ? $option['value']['color'] : $default['value']['color'];
 		}
 
 		$components = array_merge( $default['components'], $option['components'] );
@@ -173,7 +173,10 @@ class FW_Option_Type_Typography_v2 extends FW_Option_Type {
 				'size'           => true,
 				'line-height'    => true,
 				'letter-spacing' => true,
-				'color'          => true
+				'color'          => true,
+				'weight'         => true,
+				'style'          => true,
+				'variation'      => true,
 			)
 		);
 	}
