@@ -39,13 +39,22 @@ class FW_CLI_Command_Extensions extends FW_CLI_Command {
 		}
 	}
 
+	protected function deactivate_extension($extension_name) {
+		return fw()->extensions->manager->deactivate_extensions(array(
+			$extension_name => array(), true
+		));
+	}
+
 	/**
 	 * Deactivate extension
 	 *
 	 * ## OPTIONS
 	 *
-	 * <extension>
+	 * [<extension>]
 	 * : Extension name.
+	 *
+	 * [--all]
+	 * : If set, all extensions will be deactivated.
 	 *
 	 * ## EXAMPLES
 	 *
@@ -53,19 +62,29 @@ class FW_CLI_Command_Extensions extends FW_CLI_Command {
 	 *	$ wp unyson extensions deactivate seo
 	 */
 	public function deactivate($params, $args) {
+		$list = array();
+		$deactivate_all = (isset($args['all'])) ? true : false;
 		$extension = (isset($params[0])) ? $params[0] : false;
-		if ( $extension ) {
-			$active_extenions = $this->get_active_extensions();
-			if (isset($active_extenions[$extension])) {
-				$run = fw()->extensions->manager->deactivate_extensions(array(
-					$extension => array(), true
-				));
 
-				$this->wp_error($run);
+		$active_extenions = $this->get_active_extensions();
+		if( $deactivate_all ) {
+			$list = array_keys($active_extenions);
+		} else {
+			if($extension) {
+				$list[] = $extension;
+			}
+		}
 
-				WP_CLI::success("Extension {$extension} is deactivated");
-			} else {
-				WP_CLI::error("Extension {$extension} is not found in list of active extensions.");
+		if (count($list)) {
+			foreach($list as $extension_name) {
+				if (isset($active_extenions[$extension_name])) {
+					$run = $this->deactivate_extension($extension_name);
+					$this->wp_error($run);
+
+					WP_CLI::success("Extension {$extension_name} is deactivated.");
+				} else {
+					WP_CLI::error("Extension {$extension_name} is not found in list of active extensions.");
+				}
 			}
 		} else {
 			WP_CLI::error("Extension doesn't exists");
@@ -153,7 +172,7 @@ class FW_CLI_Command_Extensions extends FW_CLI_Command {
 	 *
 	 * ## OPTIONS
 	 *
-	 * <status>
+	 * [<status>]
 	 * : Extension status: active, deactivated, avaible.
 	 *
 	 * ## EXAMPLES
