@@ -114,7 +114,12 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 
 			$sql .= " LIMIT ". intval($limits['limit']);
 
-			return $wpdb->get_results($wpdb->prepare($sql, $prepare), ARRAY_A);
+			return $wpdb->get_results(
+				$prepare
+					? $wpdb->prepare($sql, $prepare)
+					: $sql,
+				ARRAY_A
+			);
 		}
 
 		private static function query_terms(array $limits) {
@@ -161,7 +166,12 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 
 			$sql .= " LIMIT ". intval($limits['limit']);
 
-			return $wpdb->get_results($wpdb->prepare($sql, $prepare), ARRAY_A);
+			return $wpdb->get_results(
+				$prepare
+					? $wpdb->prepare($sql, $prepare)
+					: $sql,
+				ARRAY_A
+			);
 		}
 
 		private static function query_users(array $limits) {
@@ -213,7 +223,12 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 
 			$sql .= " LIMIT ". intval($limits['limit']);
 
-			return $wpdb->get_results($wpdb->prepare($sql, $prepare), ARRAY_A);
+			return $wpdb->get_results(
+				$prepare
+					? $wpdb->prepare($sql, $prepare)
+					: $sql,
+				ARRAY_A
+			);
 		}
 
 		/**
