@@ -79,6 +79,8 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				'limit' => 100,
 			), $limits);
 
+			$limits['limit'] = max($limits['limit'], 1);
+
 			/** @var WPDB $wpdb */
 			global $wpdb;
 
@@ -125,6 +127,8 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				'limit' => 100,
 			), $limits);
 
+			$limits['limit'] = max($limits['limit'], 1);
+
 			/** @var WPDB $wpdb */
 			global $wpdb;
 
@@ -170,10 +174,12 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				'limit' => 100,
 			), $limits);
 
+			$limits['limit'] = max($limits['limit'], 1);
+
 			/** @var WPDB $wpdb */
 			global $wpdb;
 
-			$sql = "SELECT DISTINCT users.id val, users.user_nicename title"
+			$sql = "SELECT DISTINCT users.ID AS val, users.user_nicename AS title"
 				." FROM $wpdb->users AS users, $wpdb->usermeta AS usermeta"
 				." WHERE usermeta.user_id = users.ID";
 
@@ -181,7 +187,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				$prepare = array();
 
 				if ($limits['id']) {
-					$sql .= " AND users.id IN ( "
+					$sql .= " AND users.ID IN ( "
 						. implode( ', ', array_fill( 1, count( $limits['id'] ), '%d' ) )
 						. " ) ";
 					$prepare = array_merge($prepare, $limits['id']);
