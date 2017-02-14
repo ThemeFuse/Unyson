@@ -74,11 +74,37 @@ class FW_CLI_Command_Theme_Settings extends FW_CLI_Command {
 	 *	# Set new value.
 	 *	$ wp unyson theme-settings set link/color/value #00000
 	 *
-	 *	# Save value as array.
-	 *	$ wp unyson theme-settings set logo/img {"link": "logo.png"} --array
+	 *	# Output
 	 *
-	 *	# Save json without decoding.
-	 *  $ wp unyson theme-settings set user/info {"age": "20"}
+	 *	array(
+	 *		link => array(
+	 *			color => array(
+	 *				value => #00000
+	 *			)
+	 *		)
+	 *	)
+	 *
+	 *	# Save value as array.
+	 *	$ wp unyson theme-settings set logo/img '{"link": "logo.png"}' --array
+	 *
+	 *	# Output
+	 *
+	 *	array(
+	 *		logo => array(
+	 *			img => array(
+	 *				link => logo.png
+	 *			)
+	 *		)
+	 *	)
+	 *
+	 *	# Save json as string.
+	 *	$ wp unyson theme-settings set user/info '{"age": "20"}'
+	 *
+	 *	array(
+	 *		user => array(
+	 *			info => '{"age": "20"}'
+	 *		)
+	 *	)
 	 *
 	 */
 	public function set($params, $args) {
