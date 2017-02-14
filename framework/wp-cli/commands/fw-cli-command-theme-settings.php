@@ -97,7 +97,7 @@ class FW_CLI_Command_Theme_Settings extends FW_CLI_Command {
 			WP_CLI::success("Done!");
 		}
 
-		WP_CLI::error("Extension doesn't exists");
+		WP_CLI::error("Missed path or value.");
 	}
 
 }
