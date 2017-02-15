@@ -14,7 +14,7 @@
 			QTags._buttonsInit();
 
 			if ($wrap.hasClass('html-active')) { // fixes glitch on init
-				$wrap.find('.switch-html').trigger('click');
+				$wrap.find('.switch-html:first').trigger('click');
 			}
 
 			var visualMode = (typeof activeVisualMode[ id ] != 'undefined')
@@ -25,11 +25,11 @@
 					: $wrap.hasClass('tmce-active')
 				);
 
-			$wrap.find('.switch-'+ (visualMode ? 'tmce' : 'html')).trigger('click');
-
 			$wrap.on('click', '.wp-switch-editor', function () {
 				activeVisualMode[ id ] = $(this).hasClass('switch-tmce');
 			});
+
+			$wrap.find('.switch-'+ (visualMode ? 'tmce' : 'html') +':first').trigger('click');
 
 			if (editor && !visualMode) {
 				$textarea.val(wp.editor.removep(editor.getContent()));
@@ -64,6 +64,8 @@
 			tinymce.execCommand('mceRemoveEditor', false, id);
 
 			tinyMCEPreInit.mceInit[ id ].setup = function(ed) {
+				var initialContent = $textarea.val(); // before \r\n were replaced
+
 				ed.once('init', function (e) {
 					var editor = e.target,
 						id = editor.id;
@@ -75,6 +77,11 @@
 
 					// Fixes when wpautop is false
 					if (!editor.getParam('wpautop')) {
+						if (initialContent.indexOf('<p>') !== -1) {
+							initialContent = wp.editor.removep(initialContent);
+						}
+						editor.setContent(initialContent.replace(/\r?\n/g, '<br />'));
+
 						editor
 							.on('SaveContent', function(event){
 								// Remove <p> in Visual mode
@@ -91,12 +98,21 @@
 					}
 
 					qTagsInit(id, $option, $wrap, $textarea, editor);
+
+					if (!editor.getParam('wpautop') && $wrap.hasClass('tmce-active')) {
+						/**
+						 * fixes: when initialContent is with <p>
+						 *        if no changes are made in editor the <p> are not removed
+						 */
+						{
+							$wrap.find('.switch-html:first').trigger('click');
+							$wrap.find('.switch-tmce:first').trigger('click');
+						}
+					}
+
+					initialContent = null; // free memory
 				});
 			};
-
-			if (!tinyMCEPreInit.mceInit[ id ].wpautop) {
-				$textarea.val( wp.editor.autop($textarea.val()) );
-			}
 
 			try {
 				tinymce.init( tinyMCEPreInit.mceInit[ id ] );
