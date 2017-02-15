@@ -144,9 +144,9 @@ class FW_CLI_Command_Theme_Settings extends FW_CLI_Command {
 
 		if ( ! $confirm ) {
 			WP_CLI::error( "The reset command must have --confirm parameter." );
+		} else {
+			fw_set_db_settings_option(null, array());
 		}
-
-		fw_set_db_settings_option(null, array());
 	}
 
 }
