@@ -126,6 +126,29 @@ class FW_CLI_Command_Theme_Settings extends FW_CLI_Command {
 		WP_CLI::error("Missed path or value.");
 	}
 
+	/**
+	 * Reset Theme Settings values.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--confirm]
+	 * : Confirm reset action
+	 *
+	 * ## EXAMPLES
+	 *
+	 *	$ wp unyson theme-settings reset --confirm
+	 *
+	 */
+	public function reset($params, $args) {
+		$confirm = (isset($args['confirm'])) ? true : false;
+
+		if ( ! $confirm ) {
+			WP_CLI::error( "The reset command must have --confirm parameter." );
+		}
+
+		fw_set_db_settings_option(null, array());
+	}
+
 }
 
 WP_CLI::add_command( 'unyson theme-settings', 'FW_CLI_Command_Theme_Settings' );
