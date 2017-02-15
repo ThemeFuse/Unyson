@@ -174,7 +174,8 @@ class FW_Db_Options_Model_Post extends FW_Db_Options_Model {
 
 	protected function _get_cache_key($key, $item_id, array $extra_data = array()) {
 		if ($key === 'options') {
-			return $this->get_post_type($item_id); // Cache options grouped by post-type, not by post id
+			// Cache options grouped by post-type, not by post id
+			return ($post_type = $this->get_post_type($item_id)) ? $post_type : '?';
 		} else {
 			return $this->get_post_id($item_id);
 		}
