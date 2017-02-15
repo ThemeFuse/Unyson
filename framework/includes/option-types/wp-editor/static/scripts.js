@@ -1,37 +1,61 @@
 (function ($, fwe) {
+	var activeVisualMode = {},
+		/**
+		 * Quick Tags
+		 * http://stackoverflow.com/a/21519323/1794248
+		 */
+		qTagsInit = function (id, $option, $wrap, $textarea, editor) {
+			if (!tinyMCEPreInit.qtInit[ id ]) {
+				return;
+			}
+
+			new QTags( tinyMCEPreInit.qtInit[ id ] );
+
+			QTags._buttonsInit();
+
+			if ($wrap.hasClass('html-active')) { // fixes glitch on init
+				$wrap.find('.switch-html:first').trigger('click');
+			}
+
+			var visualMode = (typeof activeVisualMode[ id ] != 'undefined')
+				? activeVisualMode[ id ]
+				: (
+					(typeof $option.attr('data-mode') != 'undefined')
+					? ($option.attr('data-mode') == 'tinymce')
+					: $wrap.hasClass('tmce-active')
+				);
+
+			$wrap.on('click', '.wp-switch-editor', function () {
+				activeVisualMode[ id ] = $(this).hasClass('switch-tmce');
+			});
+
+			$wrap.find('.switch-'+ (visualMode ? 'tmce' : 'html') +':first').trigger('click');
+
+			if (editor && !visualMode) {
+				$textarea.val(wp.editor.removep(editor.getContent()));
+			}
+		};
 
 	var init = function () {
 		var $option = $(this),
 			$textarea = $option.find('.wp-editor-area:first'),
-			id = $option.attr('data-fw-editor-id'),
 			$wrap = $textarea.closest('.wp-editor-wrap'),
-			visualMode = (typeof $option.attr('data-mode') != 'undefined')
-				? ($option.attr('data-mode') == 'tinymce')
-				: $wrap.hasClass('tmce-active'),
-			hasAutoP = $option.attr('data-fw-has-autop') === 'true';
+			id = $option.attr('data-fw-editor-id');
 
 		/**
 		 * Dynamically set tinyMCEPreInit.mceInit and tinyMCEPreInit.qtInit
 		 * based on the data-fw-mce-settings and data-fw-qt-settings
 		 */
-		var mceSettings = JSON.parse($option.attr('data-fw-mce-settings'));
-		var qtSettings = JSON.parse($option.attr('data-fw-qt-settings'));
+		tinyMCEPreInit.mceInit[ id ] = JSON.parse($option.attr('data-fw-mce-settings'));
+		tinyMCEPreInit.qtInit[ id ] = JSON.parse($option.attr('data-fw-qt-settings'));
 
-		tinyMCEPreInit.mceInit[ id ] = mceSettings;
-		tinyMCEPreInit.qtInit[ id ] = qtSettings;
-
-		/**
-		 * Set width
-		 */
+		// Set width
 		$option.closest('.fw-backend-option-input-type-wp-editor').addClass(
 			'width-type-'+ ($option.attr('data-size') == 'large' ? 'full' : 'fixed')
 		);
 
-		/**
-		 * TinyMCE Editor
-		 * http://stackoverflow.com/a/21519323/1794248
-		 */
-		if (mceSettings) {
+		// TinyMCE Editor http://stackoverflow.com/a/21519323/1794248
+		if (tinyMCEPreInit.mceInit[ id ]) {
 			if (typeof tinyMCEPreInit.mceInit[ id ] == 'undefined') {
 				console.error('Can\'t find "'+ id +'" in tinyMCEPreInit.mceInit');
 				return;
@@ -40,6 +64,8 @@
 			tinymce.execCommand('mceRemoveEditor', false, id);
 
 			tinyMCEPreInit.mceInit[ id ].setup = function(ed) {
+				var initialContent = $textarea.val(); // before \r\n were replaced
+
 				ed.once('init', function (e) {
 					var editor = e.target,
 						id = editor.id;
@@ -49,10 +75,13 @@
 						$textarea.trigger('change'); // fixes https://github.com/ThemeFuse/Unyson/issues/2273
 					});
 
-					/**
-					 * Fixes when wpautop is false
-					 */
+					// Fixes when wpautop is false
 					if (!editor.getParam('wpautop')) {
+						if (initialContent.indexOf('<p>') !== -1) {
+							initialContent = wp.editor.removep(initialContent);
+						}
+						editor.setContent(initialContent.replace(/\r?\n/g, '<br />'));
+
 						editor
 							.on('SaveContent', function(event){
 								// Remove <p> in Visual mode
@@ -68,31 +97,22 @@
 							});
 					}
 
-					/**
-					 * Quick Tags
-					 * http://stackoverflow.com/a/21519323/1794248
-					 */
-					if (tinyMCEPreInit.qtInit[ id ]) {
-						new QTags( tinyMCEPreInit.qtInit[ id ] );
+					qTagsInit(id, $option, $wrap, $textarea, editor);
 
-						QTags._buttonsInit();
-
-						if ($wrap.hasClass('html-active')) {
-							$wrap.find('.switch-html').trigger('click');
-						}
-
-						$wrap.find('.switch-'+ (visualMode ? 'tmce' : 'html')).trigger('click');
-
-						if (!hasAutoP && !visualMode) {
-							$textarea.val(wp.editor.removep(editor.getContent()));
+					if (!editor.getParam('wpautop') && $wrap.hasClass('tmce-active')) {
+						/**
+						 * fixes: when initialContent is with <p>
+						 *        if no changes are made in editor the <p> are not removed
+						 */
+						{
+							$wrap.find('.switch-html:first').trigger('click');
+							$wrap.find('.switch-tmce:first').trigger('click');
 						}
 					}
+
+					initialContent = null; // free memory
 				});
 			};
-
-			if (!tinyMCEPreInit.mceInit[ id ].wpautop) {
-				$textarea.val( wp.editor.autop($textarea.val()) );
-			}
 
 			try {
 				tinymce.init( tinyMCEPreInit.mceInit[ id ] );
@@ -122,15 +142,7 @@
 				}
 			}
 		} else {
-			/**
-			 * Quick Tags
-			 * http://stackoverflow.com/a/21519323/1794248
-			 */
-			if (tinyMCEPreInit.qtInit[ id ]) {
-				new QTags( tinyMCEPreInit.qtInit[ id ] );
-
-				QTags._buttonsInit();
-			}
+			qTagsInit(id, $option, $wrap, $textarea);
 		}
 	};
 

@@ -78,7 +78,7 @@ class FW_Option_Type_Color_Picker extends FW_Option_Type
 				// do not use `!is_null()` allow empty values https://github.com/ThemeFuse/Unyson/issues/2025
 				!empty($input_value)
 				&&
-				!preg_match('/^#[a-f0-9]{3}([a-f0-9]{3})?$/i', $input_value)
+				!preg_match('/^#([a-f0-9]{3}){1,2}$/i', $input_value)
 			)
 		) {
 			return (string)$option['value'];
