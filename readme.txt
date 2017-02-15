@@ -3,7 +3,7 @@ Contributors: unyson
 Tags: page builder, shortcodes, backup, seo, breadcrumbs, portfolio, framework
 Requires at least: 4.4
 Tested up to: 4.7
-Stable tag: 2.6.14
+Stable tag: 2.6.15
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,6 +22,7 @@ A simple and easy way to build a powerful website.
 **Features include:**
 
 * **Drag & Drop Page Builder.** Create countless pages using the content and media shortcodes.
+* **Backup & Demo Content.** Create an automated backup schedule, import demo content or even create a demo content archive for migration purposes.
 * **Sliders.** To make you life even easier we have already built in 3 of them that support images and videos.
 * **Mega Menu.** User-friendly drop down menu that will let you easily create highly customized menu configurations.
 * **Sidebars.** This module will let your users customize WordPress pages with dynamic sidebars.
@@ -31,7 +32,6 @@ A simple and easy way to build a powerful website.
 * **SEO.** SEO settings at finger tips without installing further plugins.
 * **Feedback.** We've added a way for users to submit reviews and ratings for events, projects, etc.
 * **Events.** It's pretty simple to use and it has Calendar and Map shortcodes.
-* **Backup & Demo Content.** Create an automated backup schedule, import demo content or even create a demo content archive for migration purposes.
 
 **Get involved**
 
@@ -84,6 +84,9 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.6.15 =
+* Fixed [#2380](https://github.com/ThemeFuse/Unyson/issues/2380), [#2397](https://github.com/ThemeFuse/Unyson/issues/2397), [#2212](https://github.com/ThemeFuse/Unyson/issues/2212#issuecomment-278954170)
 
 = 2.6.14 =
 * Fixed infinite loop when php memory limit is `-1`
