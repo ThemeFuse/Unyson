@@ -35,7 +35,7 @@ jQuery(function($){
 	var helpers = {
 		optionClass: 'fw-option-type-rgba-color-picker',
 		eventNamespace: '.fwOptionTypeRgbaColorPicker',
-		hexColorRegex: /^#[a-f0-9]{3}([a-f0-9]{3})?$/i,
+		hexColorRegex: /^#([a-f0-9]{3}){1,2}$/i,
 		localized: window._fw_option_type_rgba_color_picker_localized,
 		increment: 0,
 		isColorDark: function(rgbaColor) {

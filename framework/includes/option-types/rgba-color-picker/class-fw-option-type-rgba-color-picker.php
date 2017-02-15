@@ -78,7 +78,7 @@ class FW_Option_Type_Rgba_Color_Picker extends FW_Option_Type {
 				!empty($input_value)
 				&&
 				!(
-					preg_match( '/^#[a-f0-9]{3}([a-f0-9]{3})?$/i', $input_value )
+					preg_match( '/^#([a-f0-9]{3}){1,2}$/i', $input_value )
 					||
 					preg_match( '/^rgba\( *([01]?\d\d?|2[0-4]\d|25[0-5]) *\, *([01]?\d\d?|2[0-4]\d|25[0-5]) *\, *([01]?\d\d?|2[0-4]\d|25[0-5]) *\, *(1|0|0?.\d+) *\)$/', $input_value )
 				)
