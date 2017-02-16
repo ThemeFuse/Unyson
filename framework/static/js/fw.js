@@ -950,7 +950,7 @@ fw.getQueryString = function(name) {
 			this.once('closing', function () {
 				fwEvents.trigger(
 					'fw:options:teardown',
-					{ $elements: modal.content.$el, $modal: modal }
+					{ $elements: modal.content.$el, modal: modal }
 				);
 			});
 
