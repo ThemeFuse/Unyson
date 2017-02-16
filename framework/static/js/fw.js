@@ -945,6 +945,15 @@ fw.getQueryString = function(name) {
 		open: function() {
 			this.frame.open();
 
+			var modal = this;
+
+			this.once('closing', function () {
+				fwEvents.trigger(
+					'fw:options:teardown',
+					modal.content.$el
+				);
+			});
+
 			return this;
 		},
 		close: function() {
