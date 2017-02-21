@@ -74,6 +74,14 @@ class FW_CLI_Command_Backup extends FW_CLI_Command {
 		);
 	}
 
+	/**
+	 * @internal
+	 * @param FW_Ext_Backups_Task_Collection $collection
+	 */
+	public function __action_log_fails(FW_Ext_Backups_Task_Collection $collection) {
+		WP_CLI::error('Execution Failed');
+	}
+
 	protected function feedback_hooks($enable) {
 		foreach (array(
 			'fw:ext:backups:tasks:start' => array(
@@ -84,6 +92,9 @@ class FW_CLI_Command_Backup extends FW_CLI_Command {
 			),
 			'fw:ext:backups:task:fail' => array(
 				'callback' => array($this, '__action_log_fail'),
+			),
+			'fw:ext:backups:tasks:fail' => array(
+				'callback' => array($this, '__action_log_fails'),
 			),
 			'fw:ext:backups:tasks:success' => array(
 				'callback' => array($this, '__action_log_success'),
@@ -163,6 +174,36 @@ class FW_CLI_Command_Backup extends FW_CLI_Command {
 		} else {
 			WP_CLI::error('Cannot delete');
 		}
+	}
+
+	/**
+	 * Restore from a Backup Archive
+	 */
+	public function restore($params, $args) {
+		self::check();
+
+		if (empty($params[0])) {
+			WP_CLI::warning('Archive name is required');
+			exit();
+		}
+
+		$name = $params[0];
+		$archives = self::extension()->get_archives();
+
+		if (!isset($archives[$name])) {
+			WP_CLI::error('Archive does not exist');
+			exit();
+		}
+
+		$wp_filesystem_credentials = array();
+
+		$this->feedback_hooks(true);
+		self::extension()->tasks()->do_restore(
+			$archives[$name]['full'],
+			$archives[$name]['path'],
+			$wp_filesystem_credentials
+		);
+		$this->feedback_hooks(false);
 	}
 }
 
