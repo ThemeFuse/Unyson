@@ -31,7 +31,7 @@ class FW_Callback {
 	/**
 	 * FW_Callback constructor.
 	 *
-	 * @param string|array $callback Callback function
+	 * @param string|array|Closure $callback Callback function
 	 * @param array $args Callback arguments
 	 * @param bool $cache Whenever you want to cache the function value after it's first call or not
 	 * Recommend when the function call may require many resources or time (database requests) , or the value is small
@@ -105,13 +105,25 @@ class FW_Callback {
 	}
 
 	protected function serialize_callback() {
-		//Closures cannot be serialized and at the moment do not have a solution
-		//So the Closures will be replaced with a unique Id
-		return ( $this->callback instanceof Closure )
-			? uniqid( 'fw-callback-' )
-			: (
-			is_string( $this->callback )
-				? $this->callback
-				: serialize( $this->callback ) );
+
+		if ( is_string( $this->callback ) ) {
+			return $this->callback;
+		}
+
+		if ( is_object( $this->callback ) ) {
+			return spl_object_hash( $this->callback );
+		}
+
+		if ( is_array( $this->callback ) ) {
+			$callback = $this->callback;
+
+			if ( is_object( ( $first = array_shift( $callback ) ) ) ) {
+				return spl_object_hash( $first ) . serialize( $callback );
+			}
+
+			return serialize( $this->callback );
+		}
+
+		return uniqid();
 	}
 }
