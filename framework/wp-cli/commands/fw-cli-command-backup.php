@@ -13,17 +13,63 @@ class FW_CLI_Command_Backup extends FW_CLI_Command {
 	}
 
 	/**
+	 * @var cli\progress\Bar|WP_CLI\NoOp|null
+	 */
+	protected static $progress_bar;
+
+	/**
+	 * @param FW_Ext_Backups_Task_Collection|FW_Ext_Backups_Task|WP_Error|true $state
+	 */
+	protected static function update_progress_bar($state) {
+		if ($state instanceof FW_Ext_Backups_Task_Collection) {
+			if (self::$progress_bar) {
+				self::$progress_bar->finish();
+			}
+
+			self::$progress_bar = \WP_CLI\Utils\make_progress_bar( 'Working', count($state->get_tasks()) );
+			self::$progress_bar->fw_backup_collection = $state;
+			self::$progress_bar->display();
+			self::$progress_bar->tick(0);
+		} elseif ($state instanceof FW_Ext_Backups_Task) {
+			if (!self::$progress_bar) {
+				WP_CLI::warning('Wrong method call '. __METHOD__);
+				return;
+			}
+
+			$i = 1;
+			foreach (self::$progress_bar->fw_backup_collection->get_tasks() as $task) {
+				/** @var FW_Ext_Backups_Task $task */
+				if ($task->get_id() === $state->get_id()) {
+					break;
+				} else {
+					++$i;
+				}
+			}
+
+			while (self::$progress_bar->current() < $i) {
+				self::$progress_bar->increment();
+			}
+
+			self::$progress_bar->tick(0);
+		} else {
+			if (self::$progress_bar) {
+				self::$progress_bar->finish();
+			}
+
+			self::$progress_bar = null;
+		}
+	}
+
+	/**
 	 * Check user environment
 	 */
 	public static function check() {
 		if (!self::extension()) {
 			WP_CLI::error("Backup extension is not active");
-			exit();
 		}
 
 		if (version_compare(fw_ext('backups')->manifest->get_version(), '2.0.23', '<')) {
 			WP_CLI::error("Backup extension is outdated. v2.0.23 or newer is required");
-			exit();
 		}
 
 		if (!is_writable($dir = self::extension()->get_tmp_dir())) {
@@ -34,16 +80,23 @@ class FW_CLI_Command_Backup extends FW_CLI_Command {
 			}
 
 			WP_CLI::error('You have no write permissions for '. $dir .' Execute the command as user: '. $owner);
-			exit();
 		}
 	}
 
 	/**
 	 * @internal
+	 * @param FW_Ext_Backups_Task_Collection $collection
 	 */
-	public static function __action_log_step() {
-		//WP_CLI::log('.'); // this makes new line for each dot
-		echo '.';
+	public static function __action_log_start(FW_Ext_Backups_Task_Collection $collection) {
+		self::update_progress_bar($collection);
+	}
+
+	/**
+	 * @internal
+	 * @param FW_Ext_Backups_Task $task
+	 */
+	public static function __action_log_step(FW_Ext_Backups_Task $task) {
+		self::update_progress_bar($task);
 	}
 
 	/**
@@ -51,40 +104,34 @@ class FW_CLI_Command_Backup extends FW_CLI_Command {
 	 * @param FW_Ext_Backups_Task_Collection $collection
 	 */
 	public static function __action_log_success(FW_Ext_Backups_Task_Collection $collection) {
+		self::update_progress_bar(true);
 		WP_CLI::success(':)');
 	}
 
 	/**
 	 * @internal
+	 * @param FW_Ext_Backups_Task_Collection $collection
 	 * @param FW_Ext_Backups_Task $task
 	 */
-	public static function __action_log_fail(FW_Ext_Backups_Task $task) {
+	public static function __action_log_fail(FW_Ext_Backups_Task_Collection $collection, FW_Ext_Backups_Task $task) {
+		self::update_progress_bar(false);
 		WP_CLI::error(
-			is_wp_error($task->get_result()) ? $task->get_result()->get_error_message() : 'Unknown'
+			is_wp_error($task->get_result()) ? $task->get_result()->get_error_message() : 'Unknown',
+			false
 		);
-	}
-
-	/**
-	 * @internal
-	 * @param FW_Ext_Backups_Task_Collection $collection
-	 */
-	public static function __action_log_fails(FW_Ext_Backups_Task_Collection $collection) {
-		WP_CLI::error('Execution Failed');
 	}
 
 	public static function __feedback_hooks($enable) {
 		foreach (array(
 			'fw:ext:backups:tasks:start' => array(
-				'callback' => array(__CLASS__, '__action_log_step'),
+				'callback' => array(__CLASS__, '__action_log_start'),
 			),
 			'fw:ext:backups:task:executed' => array(
 				'callback' => array(__CLASS__, '__action_log_step'),
 			),
-			'fw:ext:backups:task:fail' => array(
-				'callback' => array(__CLASS__, '__action_log_fail'),
-			),
 			'fw:ext:backups:tasks:fail' => array(
-				'callback' => array(__CLASS__, '__action_log_fails'),
+				'callback' => array(__CLASS__, '__action_log_fail'),
+				'accepted_args' => 2,
 			),
 			'fw:ext:backups:tasks:success' => array(
 				'callback' => array(__CLASS__, '__action_log_success'),
@@ -156,7 +203,6 @@ class FW_CLI_Command_Backup extends FW_CLI_Command {
 
 		if (!isset($archives[$name])) {
 			WP_CLI::error('Archive does not exist');
-			exit();
 		}
 
 		if (@unlink($archives[$name]['path'])) {
@@ -182,7 +228,6 @@ class FW_CLI_Command_Backup extends FW_CLI_Command {
 
 		if (!isset($archives[$name])) {
 			WP_CLI::error('Archive does not exist');
-			exit();
 		}
 
 		$wp_filesystem_credentials = array();
