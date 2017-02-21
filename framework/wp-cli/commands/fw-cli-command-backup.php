@@ -15,24 +15,14 @@ class FW_CLI_Command_Backup extends FW_CLI_Command {
 	/**
 	 * Check user environment
 	 */
-	protected static function check() {
-		if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-			WP_CLI::error("Backups works only on UNIX");
-			exit();
-		}
-
-		if (!function_exists('shell_exec')) {
-			WP_CLI::error("Unknown php function shell_exec");
-			exit();
-		}
-
+	public static function check() {
 		if (!self::extension()) {
 			WP_CLI::error("Backup extension is not active");
 			exit();
 		}
 
-		if (version_compare(self::extension()->manifest->get_version(), '2.0.23', '<')) {
-			WP_CLI::error("Backup extension is outdated (v2.0.23 or newer is required)");
+		if (version_compare(fw_ext('backups')->manifest->get_version(), '2.0.23', '<')) {
+			WP_CLI::error("Backup extension is outdated. v2.0.23 or newer is required");
 			exit();
 		}
 
@@ -51,7 +41,7 @@ class FW_CLI_Command_Backup extends FW_CLI_Command {
 	/**
 	 * @internal
 	 */
-	public function __action_log_step() {
+	public static function __action_log_step() {
 		//WP_CLI::log('.'); // this makes new line for each dot
 		echo '.';
 	}
@@ -60,7 +50,7 @@ class FW_CLI_Command_Backup extends FW_CLI_Command {
 	 * @internal
 	 * @param FW_Ext_Backups_Task_Collection $collection
 	 */
-	public function __action_log_success(FW_Ext_Backups_Task_Collection $collection) {
+	public static function __action_log_success(FW_Ext_Backups_Task_Collection $collection) {
 		WP_CLI::success(':)');
 	}
 
@@ -68,7 +58,7 @@ class FW_CLI_Command_Backup extends FW_CLI_Command {
 	 * @internal
 	 * @param FW_Ext_Backups_Task $task
 	 */
-	public function __action_log_fail(FW_Ext_Backups_Task $task) {
+	public static function __action_log_fail(FW_Ext_Backups_Task $task) {
 		WP_CLI::error(
 			is_wp_error($task->get_result()) ? $task->get_result()->get_error_message() : 'Unknown'
 		);
@@ -78,26 +68,26 @@ class FW_CLI_Command_Backup extends FW_CLI_Command {
 	 * @internal
 	 * @param FW_Ext_Backups_Task_Collection $collection
 	 */
-	public function __action_log_fails(FW_Ext_Backups_Task_Collection $collection) {
+	public static function __action_log_fails(FW_Ext_Backups_Task_Collection $collection) {
 		WP_CLI::error('Execution Failed');
 	}
 
-	protected function feedback_hooks($enable) {
+	public static function __feedback_hooks($enable) {
 		foreach (array(
 			'fw:ext:backups:tasks:start' => array(
-				'callback' => array($this, '__action_log_step'),
+				'callback' => array(__CLASS__, '__action_log_step'),
 			),
 			'fw:ext:backups:task:executed' => array(
-				'callback' => array($this, '__action_log_step'),
+				'callback' => array(__CLASS__, '__action_log_step'),
 			),
 			'fw:ext:backups:task:fail' => array(
-				'callback' => array($this, '__action_log_fail'),
+				'callback' => array(__CLASS__, '__action_log_fail'),
 			),
 			'fw:ext:backups:tasks:fail' => array(
-				'callback' => array($this, '__action_log_fails'),
+				'callback' => array(__CLASS__, '__action_log_fails'),
 			),
 			'fw:ext:backups:tasks:success' => array(
-				'callback' => array($this, '__action_log_success'),
+				'callback' => array(__CLASS__, '__action_log_success'),
 			),
 		) as $hook => $data) {
 			$enable
@@ -113,9 +103,9 @@ class FW_CLI_Command_Backup extends FW_CLI_Command {
 	public function full($params, $args) {
 		self::check();
 
-		$this->feedback_hooks(true);
+		self::__feedback_hooks(true);
 		self::extension()->tasks()->do_backup(true);
-		$this->feedback_hooks(false);
+		self::__feedback_hooks(false);
 	}
 
 	/**
@@ -125,9 +115,9 @@ class FW_CLI_Command_Backup extends FW_CLI_Command {
 	public function content($params, $args) {
 		self::check();
 
-		$this->feedback_hooks(true);
+		self::__feedback_hooks(true);
 		self::extension()->tasks()->do_backup(false);
-		$this->feedback_hooks(false);
+		self::__feedback_hooks(false);
 	}
 
 	/**
@@ -197,13 +187,13 @@ class FW_CLI_Command_Backup extends FW_CLI_Command {
 
 		$wp_filesystem_credentials = array();
 
-		$this->feedback_hooks(true);
+		self::__feedback_hooks(true);
 		self::extension()->tasks()->do_restore(
 			$archives[$name]['full'],
 			$archives[$name]['path'],
 			$wp_filesystem_credentials
 		);
-		$this->feedback_hooks(false);
+		self::__feedback_hooks(false);
 	}
 }
 
