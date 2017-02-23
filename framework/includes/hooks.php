@@ -357,3 +357,25 @@ add_filter( 'fw_github_api_url', '_fw_filter_github_api_url' );
 		add_action( 'delete_attachment', 'fw_delete_resized_thumbnails' );
 	}
 }
+
+//WPML Hooks
+{
+	if ( is_admin() ) {
+		add_action( 'icl_save_term_translation', '_fw_action_wpml_duplicate_term_options', 20, 2 );
+		function _fw_action_wpml_duplicate_term_options( $original, $translated ) {
+			$original_options = fw_get_db_term_option(
+				fw_akg( 'term_id', $original ),
+				fw_akg( 'taxonomy', $original )
+			);
+
+			if ( $original_options !== null ) {
+				fw_set_db_term_option(
+					fw_akg( 'term_id', $translated ),
+					fw_akg( 'taxonomy', $original ),
+					null,
+					$original_options
+				);
+			}
+		}
+	}
+}
