@@ -295,6 +295,7 @@
 							elements.$form.css('transition', 'opacity ease .3s');
 							elements.$form.css('opacity', '0');
 							elements.$form.trigger('fw:settings-form:before-html-reset');
+							fwEvents.trigger('fw:options:teardown', {$elements: elements.$form});
 
 							setTimeout(function() {
 								var scrollTop = jQuery(window).scrollTop();
