@@ -228,6 +228,8 @@ function fw_akg( $keys, $array_or_object, $default_value = null, $keys_delimiter
  * @param mixed $value
  * @param array|object $array_or_object
  * @param string $keys_delimiter
+ *
+ * @return array|object
  */
 function fw_aks( $keys, $value, &$array_or_object, $keys_delimiter = '/' ) {
 	if ( ! is_array( $keys ) ) {
@@ -236,7 +238,7 @@ function fw_aks( $keys, $value, &$array_or_object, $keys_delimiter = '/' ) {
 
 	$key_or_property = array_shift( $keys );
 	if ( $key_or_property === null ) {
-		return;
+		return $array_or_object;
 	}
 
 	$is_object = is_object( $array_or_object );
@@ -286,6 +288,8 @@ function fw_aks( $keys, $value, &$array_or_object, $keys_delimiter = '/' ) {
 			$array_or_object[ $key_or_property ] = $value;
 		}
 	}
+
+	return $array_or_object;
 }
 
 /**
@@ -294,6 +298,8 @@ function fw_aks( $keys, $value, &$array_or_object, $keys_delimiter = '/' ) {
  * @param string $keys 'a/b/c' -> unset($arr['a']['b']['c']);
  * @param array|object $array_or_object
  * @param string $keys_delimiter
+ *
+ * @return array|object
  */
 function fw_aku( $keys, &$array_or_object, $keys_delimiter = '/' ) {
 	if ( ! is_array( $keys ) ) {
@@ -302,18 +308,18 @@ function fw_aku( $keys, &$array_or_object, $keys_delimiter = '/' ) {
 
 	$key_or_property = array_shift( $keys );
 	if ( $key_or_property === null || $key_or_property === '' ) {
-		return;
+		return $array_or_object;
 	}
 
 	$is_object = is_object( $array_or_object );
 
 	if ( $is_object ) {
 		if ( ! property_exists( $array_or_object, $key_or_property ) ) {
-			return;
+			return $array_or_object;
 		}
 	} else {
 		if ( ! is_array( $array_or_object ) || ! array_key_exists( $key_or_property, $array_or_object ) ) {
-			return;
+			return $array_or_object;
 		}
 	}
 
@@ -329,9 +335,9 @@ function fw_aku( $keys, &$array_or_object, $keys_delimiter = '/' ) {
 		} else {
 			unset( $array_or_object[ $key_or_property ] );
 		}
-
-		return;
 	}
+
+	return $array_or_object;
 }
 
 /**
