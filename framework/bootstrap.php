@@ -6,7 +6,6 @@ if ( defined( 'WP_CLI' ) && WP_CLI && ! isset( $_SERVER['HTTP_HOST'] ) ) {
 	$_SERVER['SERVER_PORT'] = '80';
 }
 
-
 if (defined('FW')) {
 	/**
 	 * The framework is already loaded.

@@ -1314,15 +1314,6 @@ function fw_get_google_fonts_v2() {
 function fw_current_url() {
 	static $url = null;
 
-
-	if ( defined( 'WP_CLI' ) && WP_CLI && ! isset( $_SERVER['HTTP_HOST'] ) ) {
-		$_SERVER['HTTP_HOST'] = 'wp-cli.org';
-	}
-
-	if ( defined( 'WP_CLI' ) && WP_CLI && ! isset( $_SERVER['HTTP_HOST'] ) ) {
-		$_SERVER['HTTP_HOST'] = 'wp-cli.org';
-	}
-
 	if ( $url === null ) {
 		$url = 'http://';
 
