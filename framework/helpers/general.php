@@ -1320,7 +1320,11 @@ function fw_current_url() {
         	//https://github.com/ThemeFuse/Unyson/issues/2442
 		$server_wildcard_or_regex = preg_match('/(^~\^|^\*\.|\.\*$)/', $_SERVER['SERVER_NAME']);
 		
-		if ( $_SERVER['SERVER_NAME'] === '_' || 1 === $server_wildcard_or_regex ) ) { // https://github.com/ThemeFuse/Unyson/issues/126
+		if (
+			$_SERVER['SERVER_NAME'] === '_' 
+			||
+			1 === $server_wildcard_or_regex
+		) { // https://github.com/ThemeFuse/Unyson/issues/126
 			$url .= $_SERVER['HTTP_HOST'];
 		} else {
 			$url .= $_SERVER['SERVER_NAME'];
