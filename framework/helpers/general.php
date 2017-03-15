@@ -1963,7 +1963,7 @@ function fw_callback( $callback, array $args = array(), $cache = true ) {
 function fw_call( $value ) {
 	return fw_is_callback( $value )
 		? $value->execute() :
-		( $value instanceof Closure )
+		( is_object( $value ) && get_class( $value ) == 'Closure' )
 			? $value()
 			: $value;
 }
