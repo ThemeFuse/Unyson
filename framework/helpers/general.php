@@ -1960,3 +1960,14 @@ function fw_call( $value ) {
 
 	return $value;
 }
+
+/**
+ * Check is the current value is instance of FW_Callback class
+ *
+ * @param mixed $value
+ *
+ * @return bool
+ */
+function fw_is_callback( $value ) {
+	return $value instanceof FW_Callback;
+}
