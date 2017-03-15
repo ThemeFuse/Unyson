@@ -1961,11 +1961,13 @@ function fw_callback( $callback, array $args = array(), $cache = true ) {
  * @since 2.6.14
  */
 function fw_call( $value ) {
-	return ! fw_is_callback( $value )
-		? $value :
-		( is_object( $value ) && get_class( $value ) == 'Closure' )
-			? $value()
-			: $value->execute();
+	if ( ! fw_is_callback( $value ) ) {
+		return $value;
+	}
+
+	return ( is_object( $value ) && get_class( $value ) == 'Closure' )
+		? $value()
+		: $value->execute();
 }
 
 /**
