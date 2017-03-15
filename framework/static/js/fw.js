@@ -1267,7 +1267,7 @@ fw.getValuesFromServer = function (data) {
 			}
 		),
 		initialize: function () {
-			fw.Modal.prototype.initialize.call(this);
+			fw.Modal.prototype.initialize.apply(this, arguments);
 
 			// Forward events to fwEvents
 			{

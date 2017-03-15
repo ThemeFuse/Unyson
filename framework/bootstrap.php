@@ -1,5 +1,11 @@
 <?php if (!defined('ABSPATH')) die('Forbidden');
 
+if ( defined( 'WP_CLI' ) && WP_CLI && ! isset( $_SERVER['HTTP_HOST'] ) ) {
+	$_SERVER['HTTP_HOST'] = 'unyson.io';
+	$_SERVER['SERVER_NAME'] = 'unyson';
+	$_SERVER['SERVER_PORT'] = '80';
+}
+
 if (defined('FW')) {
 	/**
 	 * The framework is already loaded.
