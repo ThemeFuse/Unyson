@@ -1961,11 +1961,11 @@ function fw_callback( $callback, array $args = array(), $cache = true ) {
  * @since 2.6.14
  */
 function fw_call( $value ) {
-	if ( $value instanceof FW_Callback ) {
-		return $value->execute();
-	}
-
-	return $value;
+	return fw_is_callback( $value )
+		? $value->execute() :
+		( $value instanceof Closure )
+			? $value()
+			: $value;
 }
 
 /**
