@@ -135,17 +135,23 @@ abstract class FW_Db_Options_Model {
 		 */
 		if ( ! is_null($default_value) ) {
 			if ( empty( $option_id ) ) {
-				if ( empty( $values ) && is_array( $default_value ) ) {
-					return $default_value;
+				if ( empty( $values )
+				     && (
+					     is_array( $default_value )
+					     ||
+					     fw_is_callback( is_array( $default_value ) )
+				     )
+				) {
+					return fw_call( $default_value );
 				}
 			} else {
 				if ( is_null( $sub_keys ) ) {
 					if ( ! isset( $values[ $option_id ] ) ) {
-						return $default_value;
+						return fw_call( $default_value );
 					}
 				} else {
 					if ( ! isset($values[ $option_id ]) || is_null( fw_akg( $sub_keys, $values[ $option_id ] ) ) ) {
-						return $default_value;
+						return fw_call( $default_value );
 					}
 				}
 			}
@@ -209,16 +215,18 @@ abstract class FW_Db_Options_Model {
 		}
 
 		if (empty($option_id)) {
-			return (empty($values) && is_array($default_value)) ? $default_value : $values;
+			return ( empty( $values ) && ( is_array( $default_value ) || fw_is_callback( $default_value ) ) )
+				? fw_call( $default_value )
+				: $values;
 		} else {
 			if (is_null($sub_keys)) {
 				return isset($values[$option_id])
 					? $values[$option_id]
-					: $default_value;
+					: fw_call( $default_value );
 			} else {
 				return isset($values[$option_id])
 					? fw_akg($sub_keys, $values[$option_id], $default_value)
-					: $default_value;
+					: fw_call( $default_value );
 			}
 		}
 	}

@@ -191,18 +191,18 @@ function fw_akg( $keys, $array_or_object, $default_value = null, $keys_delimiter
 
 	$key_or_property = array_shift( $keys );
 	if ( $key_or_property === null ) {
-		return $default_value;
+		return fw_call( $default_value );
 	}
 
 	$is_object = is_object( $array_or_object );
 
 	if ( $is_object ) {
 		if ( ! property_exists( $array_or_object, $key_or_property ) ) {
-			return $default_value;
+			return fw_call( $default_value );
 		}
 	} else {
 		if ( ! is_array( $array_or_object ) || ! array_key_exists( $key_or_property, $array_or_object ) ) {
-			return $default_value;
+			return fw_call( $default_value );
 		}
 	}
 
@@ -1392,7 +1392,7 @@ function fw_current_user_can( $capabilities, $default_value = null ) {
 		}
 	}
 
-	return ( $default_value !== null ? $default_value : array_shift( $capabilities ) );
+	return ( $default_value !== null ? fw_call( $default_value ) : array_shift( $capabilities ) );
 }
 
 /**
