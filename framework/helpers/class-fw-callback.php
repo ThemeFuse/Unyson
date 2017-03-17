@@ -98,7 +98,10 @@ class FW_Callback {
 
 	protected function get_id() {
 		if ( ! is_string( $this->id ) ) {
-			$this->id = 'fw-callback-' . md5( $this->serialize_callback() . serialize( $this->args ) );
+			//$this->id = 'fw-callback-' . md5( $this->serialize_callback() . serialize( $this->args ) );
+			//Disabled temporary for optimization reasons
+			//Maybe later will come with a better idea.
+			$this->id = rand( 'fw-callback-' );
 		}
 
 		return $this->id;
