@@ -302,7 +302,7 @@ abstract class FW_Extension
 			FW_Cache::set($cache_key, $config);
 		}
 
-		return $key === null ? $config : fw_akg($key, $config);
+		return $key === null ? $config : fw_call( fw_akg( $key, $config ) );
 	}
 
 	/**
