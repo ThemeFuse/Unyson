@@ -101,7 +101,7 @@ class FW_Callback {
 			//$this->id = 'fw-callback-' . md5( $this->serialize_callback() . serialize( $this->args ) );
 			//Disabled temporary for optimization reasons
 			//Maybe later will come with a better idea.
-			$this->id = rand( 'fw-callback-' );
+			$this->id = uniqid( 'fw-callback-' );
 		}
 
 		return $this->id;
