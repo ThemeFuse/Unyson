@@ -1315,23 +1315,13 @@ function fw_current_url() {
 	static $url = null;
 
 	if ( $url === null ) {
-		$url = 'http://';
-		
-        	//https://github.com/ThemeFuse/Unyson/issues/2442
-		$server_wildcard_or_regex = preg_match('/(^~\^|^\*\.|\.\*$)/', $_SERVER['SERVER_NAME']);
-		
-		if (
-			$_SERVER['SERVER_NAME'] === '_' 
-			||
-			1 === $server_wildcard_or_regex
-		) { // https://github.com/ThemeFuse/Unyson/issues/126
-			$url .= $_SERVER['HTTP_HOST'];
-		} else {
-			$url .= $_SERVER['SERVER_NAME'];
-		}
 
-		if ( ! in_array( intval( $_SERVER['SERVER_PORT'] ), array( 80, 443 ) ) ) {
-			$url .= ':' . $_SERVER['SERVER_PORT'];
+		if ( is_multisite() ) {
+			switch_to_blog( 1 );
+			$url = get_option( 'home' );
+			restore_current_blog();
+		} else {
+			$url = get_option( 'home' );
 		}
 
 		$url .= $_SERVER['REQUEST_URI'];
