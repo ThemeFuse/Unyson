@@ -1980,3 +1980,7 @@ function fw_call( $value ) {
 function fw_is_callback( $value ) {
 	return $value instanceof FW_Callback || ( is_object( $value ) && get_class( $value ) == 'Closure' );
 }
+
+function fw_is_cli() {
+	return ( php_sapi_name() === 'cli' ) && defined( 'WP_CLI' );
+}
