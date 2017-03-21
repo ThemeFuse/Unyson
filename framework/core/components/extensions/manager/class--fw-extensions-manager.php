@@ -93,6 +93,10 @@ final class _FW_Extensions_Manager
 	 */
 	public function can_activate()
 	{
+		if ( fw_is_cli() ) {
+			return true;
+		}
+
 		$can_activate = current_user_can('manage_options');
 
 		if ($can_activate) {
@@ -116,6 +120,10 @@ final class _FW_Extensions_Manager
 	 */
 	public function can_install()
 	{
+		if ( fw_is_cli() ) {
+			return true;
+		}
+
 		$capability = 'install_plugins';
 
 		if (is_multisite()) {
