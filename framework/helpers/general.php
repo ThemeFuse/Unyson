@@ -1316,12 +1316,12 @@ function fw_current_url() {
 
 	if ( $url === null ) {
 		$url = 'http://';
-		
-        	//https://github.com/ThemeFuse/Unyson/issues/2442
-		$server_wildcard_or_regex = preg_match('/(^~\^|^\*\.|\.\*$)/', $_SERVER['SERVER_NAME']);
-		
+
+		//https://github.com/ThemeFuse/Unyson/issues/2442
+		$server_wildcard_or_regex = preg_match( '/(^~\^|^\*\.|\.\*$)/', $_SERVER['SERVER_NAME'] );
+
 		if (
-			$_SERVER['SERVER_NAME'] === '_' 
+			$_SERVER['SERVER_NAME'] === '_'
 			||
 			1 === $server_wildcard_or_regex
 		) { // https://github.com/ThemeFuse/Unyson/issues/126
@@ -1981,6 +1981,12 @@ function fw_is_callback( $value ) {
 	return $value instanceof FW_Callback || ( is_object( $value ) && get_class( $value ) == 'Closure' );
 }
 
+/**
+ * Check for command line interface
+ *
+ * @return bool
+ * @since 2.6.16
+ */
 function fw_is_cli() {
 	return ( php_sapi_name() === 'cli' ) && defined( 'WP_CLI' );
 }
