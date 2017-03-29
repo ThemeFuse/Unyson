@@ -32,7 +32,7 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 	protected function _enqueue_static($id, $option, $data)
 	{
 		add_action(
-			'admin_print_scripts',
+			'admin_print_footer_scripts',
 			array($this, 'load_templates')
 		);
 
