@@ -1036,8 +1036,6 @@ final class _FW_Component_Backend {
 	}
 
 	public function _action_admin_enqueue_scripts() {
-		global $current_screen, $plugin_page, $post;
-
 		/**
 		 * Enqueue settings options static in <head>
 		 * @see FW_Settings_Form_Theme::_action_admin_enqueue_scripts()
@@ -1047,12 +1045,12 @@ final class _FW_Component_Backend {
 		 * Enqueue post options static in <head>
 		 */
 		{
-			if ( 'post' === $current_screen->base && $post ) {
+			if ( 'post' === get_current_screen()->base && get_the_ID() ) {
 				fw()->backend->enqueue_options_static(
-					fw()->theme->get_post_options( $post->post_type )
+					fw()->theme->get_post_options( get_post_type() )
 				);
 
-				do_action( 'fw_admin_enqueue_scripts:post', $post );
+				do_action( 'fw_admin_enqueue_scripts:post', get_post() );
 			}
 		}
 
@@ -1061,15 +1059,15 @@ final class _FW_Component_Backend {
 		 */
 		{
 			if (
-				in_array($current_screen->base, array('edit-tags', 'term'), true)
+				in_array(get_current_screen()->base, array('edit-tags', 'term'), true)
 				&&
-				$current_screen->taxonomy
+				get_current_screen()->taxonomy
 			) {
 				fw()->backend->enqueue_options_static(
-					fw()->theme->get_taxonomy_options( $current_screen->taxonomy )
+					fw()->theme->get_taxonomy_options( get_current_screen()->taxonomy )
 				);
 
-				do_action( 'fw_admin_enqueue_scripts:term', $current_screen->taxonomy );
+				do_action( 'fw_admin_enqueue_scripts:term', get_current_screen()->taxonomy );
 			}
 		}
 	}

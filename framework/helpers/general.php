@@ -1313,32 +1313,16 @@ function fw_get_google_fonts_v2() {
  */
 function fw_current_url() {
 	static $url = null;
-
 	if ( $url === null ) {
-
-		if ( is_multisite() ) {
+		if ( is_multisite() && ! ( defined( 'SUBDOMAIN_INSTALL' ) && SUBDOMAIN_INSTALL ) ) {
 			switch_to_blog( 1 );
 			$url = get_option( 'home' );
 			restore_current_blog();
 		} else {
 			$url = get_option( 'home' );
 		}
-
-		$url .= $_SERVER['REQUEST_URI'];
-
+		$url .= fw_akg( 'REQUEST_URI', $_SERVER, '/' );
 		$url = set_url_scheme( $url ); // https fix
-
-		if ( is_multisite() ) {
-			if ( defined( 'SUBDOMAIN_INSTALL' ) && SUBDOMAIN_INSTALL ) {
-				$site_url = parse_url( $url );
-
-				if ( isset( $site_url['query'] ) ) {
-					$url = home_url( $site_url['path'] . '?' . $site_url['query'] );
-				} else {
-					$url = home_url( $site_url['path'] );
-				}
-			}
-		}
 	}
 
 	return $url;
@@ -1969,4 +1953,14 @@ function fw_call( $value ) {
  */
 function fw_is_callback( $value ) {
 	return $value instanceof FW_Callback || ( is_object( $value ) && get_class( $value ) == 'Closure' );
+}
+
+/**
+ * Check for command line interface
+ *
+ * @return bool
+ * @since 2.6.16
+ */
+function fw_is_cli() {
+	return ( php_sapi_name() === 'cli' ) && defined( 'WP_CLI' );
 }
