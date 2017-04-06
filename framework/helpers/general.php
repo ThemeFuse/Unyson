@@ -1313,42 +1313,16 @@ function fw_get_google_fonts_v2() {
  */
 function fw_current_url() {
 	static $url = null;
-
 	if ( $url === null ) {
-		$url = 'http://';
-
-		//https://github.com/ThemeFuse/Unyson/issues/2442
-		$server_wildcard_or_regex = preg_match( '/(^~\^|^\*\.|\.\*$)/', $_SERVER['SERVER_NAME'] );
-
-		if (
-			$_SERVER['SERVER_NAME'] === '_'
-			||
-			1 === $server_wildcard_or_regex
-		) { // https://github.com/ThemeFuse/Unyson/issues/126
-			$url .= $_SERVER['HTTP_HOST'];
+		if ( is_multisite() && ! ( defined( 'SUBDOMAIN_INSTALL' ) && SUBDOMAIN_INSTALL ) ) {
+			switch_to_blog( 1 );
+			$url = get_option( 'home' );
+			restore_current_blog();
 		} else {
-			$url .= $_SERVER['SERVER_NAME'];
+			$url = get_option( 'home' );
 		}
-
-		if ( ! in_array( intval( $_SERVER['SERVER_PORT'] ), array( 80, 443 ) ) ) {
-			$url .= ':' . $_SERVER['SERVER_PORT'];
-		}
-
-		$url .= $_SERVER['REQUEST_URI'];
-
+		$url .= fw_akg( 'REQUEST_URI', $_SERVER, '/' );
 		$url = set_url_scheme( $url ); // https fix
-
-		if ( is_multisite() ) {
-			if ( defined( 'SUBDOMAIN_INSTALL' ) && SUBDOMAIN_INSTALL ) {
-				$site_url = parse_url( $url );
-
-				if ( isset( $site_url['query'] ) ) {
-					$url = home_url( $site_url['path'] . '?' . $site_url['query'] );
-				} else {
-					$url = home_url( $site_url['path'] );
-				}
-			}
-		}
 	}
 
 	return $url;
