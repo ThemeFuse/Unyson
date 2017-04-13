@@ -71,7 +71,10 @@ class FW_Option_Type_Typography_v2 extends FW_Option_Type {
 					"Impact",
 					"Serif"
 				) ),
-				'google' => json_decode(fw_get_google_fonts_v2(), true)
+				'google' => apply_filters(
+					'fw_option_type_typography_v2_google_fonts',
+					json_decode( fw_get_google_fonts_v2(), true )
+				)
 			);
 
 			FW_Cache::set($cache_key, $fonts);
