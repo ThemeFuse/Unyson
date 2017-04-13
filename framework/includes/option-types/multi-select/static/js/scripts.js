@@ -73,7 +73,7 @@
 			});
 		});
 
-		if ($this.val().length) { // there are values that needs to be show right away
+		if ($this.val().length || $this.is(':focus')) { // there are values that needs to be show right away
 			$this.trigger('fw:option-type:multi-select:init');
 		} else {
 			$this.one('focus', function(){
