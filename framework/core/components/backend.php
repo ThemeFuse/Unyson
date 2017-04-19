@@ -294,7 +294,7 @@ final class _FW_Component_Backend {
 		wp_register_script(
 			'fw-events',
 			fw_get_framework_directory_uri( '/static/js/fw-events.js' ),
-			array( 'backbone' ),
+			array(),
 			fw()->manifest->get_version(),
 			true
 		);
