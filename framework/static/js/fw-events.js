@@ -75,18 +75,6 @@ var fwEvents = new (function(){
 	this.on = function(event, callback, context) {
 		on(event, callback, context);
 
-		if (debug) {
-			if (typeof event == 'string') {
-				// .on('event:name', callback)
-				log('✚ '+ event);
-			} else {
-				// .on({'event:name': callback})
-				_.each(event, function(_callback, _event){
-					log('✚ '+ _event);
-				});
-			}
-		}
-
 		return this;
 	};
 
@@ -94,19 +82,7 @@ var fwEvents = new (function(){
 	 * Same as .on(), but callback will executed only once
 	 */
 	this.one = function(event, callback, context) {
-		once(event, callback);
-
-		if (debug) {
-			if (typeof event == 'string') {
-				// .one('event:name', callback)
-				log('✚ ['+ event +']');
-			} else {
-				// .one({'event:name': callback})
-				_.each(event, function(_callback, _event){
-					log('✚ ['+ _event +']');
-				});
-			}
-		}
+		once(event, callback, context);
 
 		return this;
 	};
@@ -116,10 +92,6 @@ var fwEvents = new (function(){
 	 */
 	this.off = function(event, callback, context) {
 		off(event, callback, context);
-
-		if (debug) {
-			log('✖ '+ event);
-		}
 
 		return this;
 	};
@@ -178,6 +150,8 @@ var fwEvents = new (function(){
 					listener: listener,
 					context: context
 				});
+
+				debug && log('✚ ' + eventName);
 			}
 		);
 	}
@@ -193,15 +167,30 @@ var fwEvents = new (function(){
 			splitTopicStringOrObject(topicStringOrObject, listener),
 			function (eventName, listener) {
 				(_events[eventName] || (_events[eventName] = [])).push({
-					listener: function executeOnce () {
-						listener.apply(null, arguments);
-						off(eventName, executeOnce);
-					},
-
+					listener: once(listener),
 					context: context
 				});
+
+				debug && log('✚ [' + eventName +']');
 			}
 		);
+
+		// https://github.com/jashkenas/underscore/blob/8fc7032295d60aff3620ef85d4aa6549a55688a0/underscore.js#L946
+		function once(func) {
+			var memo;
+
+			var times = 2;
+
+			return function() {
+				if (--times > 0) {
+					memo = func.apply(this, arguments);
+				}
+
+				if (times <= 1) func = null;
+
+				return memo;
+			};
+		};
 	}
 
 	/**
@@ -227,6 +216,8 @@ var fwEvents = new (function(){
 					} else {
 						_events[eventName] = [];
 					}
+
+					debug && log('✖ ' + eventName);
 				}
 			}
 		);
