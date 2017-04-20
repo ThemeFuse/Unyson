@@ -2,44 +2,9 @@
  * Listen and trigger custom events to communicate between javascript components
  */
 var fwEvents = new (function(){
-	var _events = Object.create(null);
-
-	{
-		var debug = false;
-
-		var log = function(message, data) {
-			if (!debug) {
-				return;
-			}
-
-			if (typeof data != 'undefined') {
-				console.log('[Event] ' + getIndentation() + message, '─', data);
-			} else {
-				console.log('[Event] ' + getIndentation() + message);
-			}
-		};
-
-		/**
-		 * Indent logs that happens inside another event
-		 */
-		{
-			var getIndentation = function() {
-				return new Array(currentIndentation).join('│ ');
-			};
-
-			var currentIndentation = 1;
-
-			var changeIndentation  = function(increment) {
-				if (typeof increment != 'undefined') {
-					currentIndentation += (increment > 0 ? +1 : -1);
-				}
-
-				if (currentIndentation < 0) {
-					currentIndentation = 0;
-				}
-			};
-		}
-	}
+	var _events = {};
+	var currentIndentation = 1;
+	var debug = false;
 
 	/**
 	 * Make log helper public
@@ -69,80 +34,10 @@ var fwEvents = new (function(){
 	 *     - an object: {event1: function () {}, event2: function () {}}
 	 *
 	 * @param callback {Function}
-	 * @param context {Object | null} 
+	 * @param context {Object | null}
 	 *   This is an object which would be the this inside the callback
 	 */
-	this.on = function(event, callback, context) {
-		on(event, callback, context);
-
-		return this;
-	};
-
-	/**
-	 * Same as .on(), but callback will executed only once
-	 */
-	this.one = function(event, callback, context) {
-		once(event, callback, context);
-
-		return this;
-	};
-
-	/**
-	 * Remove event listener
-	 */
-	this.off = function(event, callback, context) {
-		off(event, callback, context);
-
-		return this;
-	};
-
-	/**
-	 * Trigger event
-	 *
-	 * @public
-	 * @param {String} event
-	 * @param {Object} [data]
-	 */
-	this.trigger = function(eventName, data) {
-		log('╭─ '+ eventName, data);
-
-		changeIndentation(+1);
-
-		try {
-			trigger(eventName, data);
-		} catch (e) {
-			console.log('[Events] Exception ', {exception: e});
-
-			if (console.trace) {
-				console.trace();
-			}
-		}
-
-		changeIndentation(-1);
-
-		log('╰─ '+ eventName, data);
-
-		return this;
-	};
-
-	/**
-	 * Check if an event has listeners
-	 * @param {String} [event]
-	 * @return {Boolean}
-	 */
-	this.hasListeners = function(eventName) {
-		if (! _events) {
-			return false;
-		}
-
-		return (_events[eventName] || []).length > 0;
-	};
-
-	/**
-	 * @param topicStringOrObject {String | Object}
-	 * @param listener {Function}
-	 */
-	function on(topicStringOrObject, listener, context) {
+	this.on = function(topicStringOrObject, listener, context) {
 		objectMap(
 			splitTopicStringOrObject(topicStringOrObject, listener),
 			function (eventName, listener) {
@@ -154,15 +49,14 @@ var fwEvents = new (function(){
 				debug && log('✚ ' + eventName);
 			}
 		);
-	}
+
+		return this;
+	};
 
 	/**
-	 * Add a listener to an event which will get executed only once.
-	 *
-	 * @param topicStringOrObject {String | Object}
-	 * @param listener {Function}
+	 * Same as .on(), but callback will executed only once
 	 */
-	function once(topicStringOrObject, listener, context) {
+	this.one = function(topicStringOrObject, listener, context) {
 		objectMap(
 			splitTopicStringOrObject(topicStringOrObject, listener),
 			function (eventName, listener) {
@@ -174,6 +68,8 @@ var fwEvents = new (function(){
 				debug && log('✚ [' + eventName +']');
 			}
 		);
+
+		return this;
 
 		// https://github.com/jashkenas/underscore/blob/8fc7032295d60aff3620ef85d4aa6549a55688a0/underscore.js#L946
 		function once(func) {
@@ -191,7 +87,7 @@ var fwEvents = new (function(){
 				return memo;
 			};
 		};
-	}
+	};
 
 	/**
 	 * In order to remove one single listener you should give as an argument
@@ -201,7 +97,7 @@ var fwEvents = new (function(){
 	 * @param topicStringOrObject {String | Object}
 	 * @param listener {Function | false}
 	 */
-	function off(topicStringOrObject, listener) {
+	this.off = function(topicStringOrObject, listener) {
 		objectMap(
 			splitTopicStringOrObject(topicStringOrObject, listener),
 			function (eventName, listener) {
@@ -221,7 +117,9 @@ var fwEvents = new (function(){
 				}
 			}
 		);
-	}
+
+		return this;
+	};
 
 	/**
 	 * Trigger an event. In case you provide multiple events via space-separated
@@ -231,27 +129,65 @@ var fwEvents = new (function(){
 	 * @param topicStringOrObject {String | Object}
 	 * @param data {Object}
 	 */
-	function trigger(topicStringOrObject, data) {
+	this.trigger = function(eventName, data) {
 		objectMap(
-			splitTopicStringOrObject(topicStringOrObject, false),
+			splitTopicStringOrObject(eventName),
 			function (eventName) {
-				(_events[eventName] || []).map(function (listenerDescriptor) {
-					listenerDescriptor.listener.call(
-						listenerDescriptor.context || null,
-						data
-					);
-				});
+				log('╭─ '+ eventName, data);
 
-				(_events['all'] || []).map(function (listenerDescriptor) {
+				changeIndentation(+1);
+
+				try {
+					(_events[eventName] || []).map(dispatchSingleEvent);
+					(_events['all'] || []).map(dispatchSingleEvent);
+				} catch (e) {
+					console.log('[Events] Exception ', {exception: e});
+
+					if (console.trace) {
+						console.trace();
+					}
+				}
+
+				changeIndentation(-1);
+
+				log('╰─ '+ eventName, data);
+
+				function dispatchSingleEvent (listenerDescriptor) {
+					if (! listenerDescriptor.listener) return;
+
 					listenerDescriptor.listener.call(
-						listenerDescriptor.context || null,
-						eventName,
+						listenerDescriptor.context || this,
 						data
 					);
-				});
+				}
 			}
 		);
-	}
+
+		return this;
+
+		function changeIndentation(increment) {
+			if (typeof increment != 'undefined') {
+				currentIndentation += (increment > 0 ? +1 : -1);
+			}
+
+			if (currentIndentation < 0) {
+				currentIndentation = 0;
+			}
+		}
+	};
+
+	/**
+	 * Check if an event has listeners
+	 * @param {String} [event]
+	 * @return {Boolean}
+	 */
+	this.hasListeners = function(eventName) {
+		if (! _events) {
+			return false;
+		}
+
+		return (_events[eventName] || []).length > 0;
+	};
 
 	/**
 	 * Probably split string into general purpose object representation for
@@ -270,16 +206,16 @@ var fwEvents = new (function(){
 			return topicStringOrObject;
 		}
 
-		topicStringOrObject = topicStringOrObject.replace(
+		var arrayOfEvents = topicStringOrObject.replace(
 			/\s\s+/g, ' '
 		).trim().split(' ');
 
-		var len = topicStringOrObject.length;
+		var len = arrayOfEvents.length;
 
 		var listenerDescriptor = Object.create(null);
 
 		for (var i = 0; i < len; i++) {
-			listenerDescriptor[topicStringOrObject[i]] = listener;
+			listenerDescriptor[arrayOfEvents[i]] = listener;
 		}
 
 		return listenerDescriptor;
@@ -304,5 +240,21 @@ var fwEvents = new (function(){
 		}
 
 		return result;
+	}
+
+	function log(message, data) {
+		if (! debug) {
+			return;
+		}
+
+		if (typeof data != 'undefined') {
+			console.log('[Event] ' + getIndentation() + message, '─', data);
+		} else {
+			console.log('[Event] ' + getIndentation() + message);
+		}
+
+		function getIndentation() {
+			return new Array(currentIndentation).join('│ ');
+		}
 	}
 })();
