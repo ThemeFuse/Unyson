@@ -306,6 +306,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 					if (is_array($settings['for'])) {
 						// Insert location: after/before.
 						$location = fw_akg('location', $settings, 'before');
+						
 						foreach ($settings['for'] as $name) {
 							if (isset($choices[$name])) {
 								if ('before' === $location) {
@@ -318,7 +319,19 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 									);
 								}
 							} else {
-								$result[$name] = $settings['options'];
+								if (isset($result[$name])) {
+									if ('before' === $location) {
+										$result[$name] = array_merge(
+											$settings['options'], $result[$name]
+										);
+									} else {
+										$result[$name] = array_merge(
+											$result[$name], $settings['options']
+										);
+									}
+								} else {
+									$result[$name] = $settings['options'];
+								}
 							}
 						}
 					}
@@ -330,7 +343,9 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 			}
 		}
 
+		// Replace old `choices` with new structure.
 		fw_aks('choices', $result, $option);
+		
 		return $option;
 	}
 
