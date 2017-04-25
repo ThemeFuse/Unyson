@@ -4,7 +4,7 @@
 var fwEvents = new (function(){
 	var _events = {};
 	var currentIndentation = 1;
-	var debug = false;
+	var debug = true;
 
 	/**
 	 * Make log helper public
@@ -96,29 +96,65 @@ var fwEvents = new (function(){
 	 *
 	 * @param topicStringOrObject {String | Object}
 	 * @param listener {Function | false}
+	 * @param context {Object | null}
 	 */
-	this.off = function(topicStringOrObject, listener) {
-		objectMap(
-			splitTopicStringOrObject(topicStringOrObject, listener),
-			function (eventName, listener) {
-				if (_events[eventName]) {
-					if (listener) {
-						_events[eventName].splice(
-							_events[eventName].map(function (eventDescriptor) {
-								return eventDescriptor.listener;
-							}).indexOf(listener) >>> 0,
-							1
-						);
-					} else {
-						_events[eventName] = [];
-					}
+	this.off = function(topicStringOrObject, listener, context) {
+		var originalArguments = arguments;
 
-					debug && log('✖ ' + eventName);
-				}
-			}
-		);
+		if (! topicStringOrObject) {
+			if ((! listener) && (! context)) return this;
+
+			Object.keys(_events).map(function (eventName) {
+				removeOneOreMoreListenersCountingForContext(
+					eventName, listener
+				);
+			});
+		} else {
+			objectMap(
+				splitTopicStringOrObject(topicStringOrObject, listener),
+				removeOneOreMoreListenersCountingForContext
+			);
+		}
 
 		return this;
+
+		function removeOneOreMoreListenersCountingForContext (
+			eventName,
+			listenerToRemove
+		) {
+			if (! _events[eventName]) return;
+
+			_events[eventName] = _events[eventName].filter(function (eventDescriptor) {
+				var hasToRemove = false;
+
+				if (! listenerToRemove) {
+					// remove if same context
+					if (eventDescriptor.context === context) {
+						hasToRemove = true;
+					}
+				}
+
+				if (! context) {
+					// remove if same listener
+					if (eventDescriptor.listener === listener) {
+						hasToRemove = true;
+					}
+				}
+
+				var isSameListener = eventDescriptor.listener === listenerToRemove;
+				var isSameContext = eventDescriptor.context === context;
+
+				if (isSameListener && isSameContext) {
+					hasToRemove = true;
+				}
+
+				if (hasToRemove) {
+					debug && log('✖ ' + eventName);
+				}
+
+				return !hasToRemove;
+			});
+		}
 	};
 
 	/**
