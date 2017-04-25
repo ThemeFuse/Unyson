@@ -141,10 +141,15 @@ var fwEvents = new (function(){
 					(_events[eventName] || []).map(dispatchSingleEvent);
 					(_events['all'] || []).map(dispatchSingleEvent);
 				} catch (e) {
-					console.log('[Events] Exception ', {exception: e});
+					console.log(
+						"%c [Events] Exception raised. Please contact support in https://github.com/ThemeFuse/Unyson/issues/new. Don't forget to attach this stack trace to the issue.",
+						"color: red; font-weight: bold;"
+					);
 
-					if (console.trace) {
-						console.trace();
+					if (typeof console !== 'undefined') {
+						console.error(e)
+					} else {
+						throw e;
 					}
 				}
 
