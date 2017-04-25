@@ -4,7 +4,7 @@
 var fwEvents = new (function(){
 	var _events = {};
 	var currentIndentation = 1;
-	var debug = true;
+	var debug = false;
 
 	/**
 	 * Make log helper public
