@@ -214,8 +214,8 @@ window.fwOptionTypeIconV2Picker = fw.Modal.extend({
 	},
 
 	attachEvents: function() {
-		fwEvents.on('fw:option-type:upload:change', this.setAttachment, this);
-		fwEvents.on('fw:option-type:upload:clear', this.setAttachment, this);
+		fwEvents.on('fw:option-type:upload:change', _.bind(this.setAttachment, this));
+		fwEvents.on('fw:option-type:upload:clear', _.bind(this.setAttachment, this));
 	},
 
 	setHtml: function() {
