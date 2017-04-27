@@ -1127,17 +1127,21 @@ function fw_collect_options( &$result, &$options, $settings = array(), $_recursi
  *
  * @param array $options
  * @param array $input_array
+ * @param bool $available Return the options found in input
  *
  * @return array Values
  */
-function fw_get_options_values_from_input( array $options, $input_array = null ) {
+function fw_get_options_values_from_input( array $options, $input_array = null, $available = false ) {
 	if ( ! is_array( $input_array ) ) {
 		$input_array = FW_Request::POST( fw()->backend->get_options_name_attr_prefix() );
 	}
 
 	$values = array();
 
-	foreach ( fw_extract_only_options( $options ) as $id => $option ) {
+	$options = fw_extract_only_options( $options );
+	$options = $available ? array_intersect_key( $options, $input_array ) : $options;
+
+	foreach ( $options as $id => $option ) {
 		$values[ $id ] = fw()->backend->option_type( $option['type'] )->get_value_from_input(
 			$option,
 			isset( $input_array[ $id ] ) ? $input_array[ $id ] : null
