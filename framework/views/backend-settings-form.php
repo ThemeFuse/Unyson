@@ -203,9 +203,6 @@
 					// fw.soleModal.hide(loadingModalId); // we need to show loading until the form reset ajax will finish
 				}
 			},
-			afterSubmitDelay: function (elements) {
-				fwEvents.trigger('fw:options:init:tabs', {$elements: elements.$form});
-			},
 			onErrors: function() {
 				fw.soleModal.hide(loadingModalId);
 			},
