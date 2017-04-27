@@ -34,17 +34,14 @@ var fwEvents = new (function(){
 	 *     - an object: {event1: function () {}, event2: function () {}}
 	 *
 	 * @param callback {Function}
-	 * @param context {Object | null}
-	 *   This is an object which would be the this inside the callback
 	 */
-	this.on = function(topicStringOrObject, listener, context) {
+	this.on = function(topicStringOrObject, listener) {
 		objectMap(
 			splitTopicStringOrObject(topicStringOrObject, listener),
 			function (eventName, listener) {
-				(_events[eventName] || (_events[eventName] = [])).push({
-					listener: listener,
-					context: context
-				});
+				(_events[eventName] || (_events[eventName] = [])).push(
+					listener
+				);
 
 				debug && log('✚ ' + eventName);
 			}
@@ -56,14 +53,13 @@ var fwEvents = new (function(){
 	/**
 	 * Same as .on(), but callback will executed only once
 	 */
-	this.one = function(topicStringOrObject, listener, context) {
+	this.one = function(topicStringOrObject, listener) {
 		objectMap(
 			splitTopicStringOrObject(topicStringOrObject, listener),
 			function (eventName, listener) {
-				(_events[eventName] || (_events[eventName] = [])).push({
-					listener: once(listener),
-					context: context
-				});
+				(_events[eventName] || (_events[eventName] = [])).push(
+					once(listener)
+				);
 
 				debug && log('✚ [' + eventName +']');
 			}
@@ -104,9 +100,7 @@ var fwEvents = new (function(){
 				if (_events[eventName]) {
 					if (listener) {
 						_events[eventName].splice(
-							_events[eventName].map(function (eventDescriptor) {
-								return eventDescriptor.listener;
-							}).indexOf(listener) >>> 0,
+							_events[eventName].indexOf(listener) >>> 0,
 							1
 						);
 					} else {
@@ -158,10 +152,10 @@ var fwEvents = new (function(){
 				log('╰─ '+ eventName, data);
 
 				function dispatchSingleEvent (listenerDescriptor) {
-					if (! listenerDescriptor.listener) return;
+					if (! listenerDescriptor) return;
 
-					listenerDescriptor.listener.call(
-						listenerDescriptor.context || this,
+					listenerDescriptor.call(
+						window,
 						data
 					);
 				}
