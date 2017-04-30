@@ -28,6 +28,7 @@
 				toogleNodes : function(){
 					utils.toogleItemsWrapper();
 					utils.toogleAddButton();
+					utils.toogleClone();
 				},
 				toogleItemsWrapper: function () {
 
@@ -42,6 +43,13 @@
 						(utils.countItems() >= data.limit ) ?
 							nodes.$addButton.hide() :
 							nodes.$addButton.show();
+					}
+				},
+				toogleClone: function(){
+					if(data.limit !== 0 ){
+						(utils.countItems() >= data.limit ) ?
+							nodes.$itemsWrapper.addClass('hide-clone') :
+							nodes.$itemsWrapper.removeClass('hide-clone');
 					}
 				},
 				init: function () {
@@ -133,6 +141,15 @@
 			$(this).closest('.item').remove();
 			utils.toogleNodes();
 
+			nodes.$optionWrapper.trigger('change'); // for customizer
+		});
+		
+		nodes.$itemsWrapper.on('click', '.clone-item', function (e) {
+			e.stopPropagation();
+			var $item  = $(this).closest('.item');
+			var $vals  = JSON.parse($($item).find('input').val());
+			utils.addNewItem($vals);
+			utils.toogleNodes();
 			nodes.$optionWrapper.trigger('change'); // for customizer
 		});
 
