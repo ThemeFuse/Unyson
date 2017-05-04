@@ -35,7 +35,7 @@ $increment_placeholder = '###-addable-popup-increment-'. fw_rand_md5() .'-###';
 
 				<div class="content"><!-- will be populated from js --></div>
 				<a href="#" class="dashicons fw-x delete-item"></a>
-                <small class="dashicons dashicons-admin-page clone-item" title="<?php echo __('Clone','fw') ?>"></small>
+				<small class="dashicons dashicons-admin-page clone-item" title="<?php echo __('Clone','fw') ?>"></small>
 			</div>
 		<?php endforeach; ?>
 	</div>
@@ -50,7 +50,7 @@ $increment_placeholder = '###-addable-popup-increment-'. fw_rand_md5() .'-###';
 
 		<div class="content"></div>
 		<a href="#" class="dashicons fw-x delete-item"></a>
-        <small class="dashicons dashicons-admin-page clone-item" title="<?php echo __('Clone','fw') ?>"></small>
+		<small class="dashicons dashicons-admin-page clone-item" title="<?php echo __('Clone','fw') ?>"></small>
 	</div>
 	<?php
 	echo fw_html_tag('button', array(
