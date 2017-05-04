@@ -140,7 +140,6 @@
 			e.preventDefault();
 			$(this).closest('.item').remove();
 			utils.toogleNodes();
-
 			nodes.$optionWrapper.trigger('change'); // for customizer
 		});
 		
