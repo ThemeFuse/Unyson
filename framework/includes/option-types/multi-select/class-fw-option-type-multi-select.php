@@ -68,41 +68,31 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			);
 		}
 
-		private static function query_posts(array $limits) {
+		private static function query_posts(array $options) {
 			$limits = array_merge(array(
 				'type' => array(
 					'post' => true,
 					'page' => true,
 				),
 				'title' => '',
-				'id' => array( /* 1, 7, 120 */ ),
-				'limit' => 100,
-			), $limits);
-
-			$limits['limit'] = max($limits['limit'], 1);
+			), $options);
+			fw_aku('limit', $limits);
 
 			/** @var WPDB $wpdb */
 			global $wpdb;
 
-			$sql = "SELECT ID val, post_title title"
-				." FROM $wpdb->posts"
-				." WHERE post_status IN ( 'publish', 'private' )";
-				//." AND NULLIF(post_password, '') IS NULL"; todo: review
+			$sql = "SELECT ID"
+			       ." FROM $wpdb->posts"
+			       ." WHERE post_status IN ( 'publish', 'private' )";
+			//." AND NULLIF(post_password, '') IS NULL"; todo: review
 
 			{
 				$prepare = array();
 
-				if ($limits['id']) {
-					$sql .= " AND ID IN ( "
-						. implode( ', ', array_fill( 1, count( $limits['id'] ), '%d' ) )
-						. " ) ";
-					$prepare = array_merge($prepare, $limits['id']);
-				}
-
 				if ($limits['type']) {
 					$sql .= " AND post_type IN ( "
-						. implode( ', ', array_fill( 1, count( $limits['type'] ), '%s' ) )
-						. " ) ";
+					        . implode( ', ', array_fill( 1, count( $limits['type'] ), '%s' ) )
+					        . " ) ";
 					$prepare = array_merge($prepare, array_keys($limits['type']));
 				}
 
@@ -112,17 +102,39 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				}
 			}
 
-			$sql .= " LIMIT ". intval($limits['limit']);
-
-			return $wpdb->get_results(
+			$ids =  wp_list_pluck($wpdb->get_results(
 				$prepare
 					? $wpdb->prepare($sql, $prepare)
 					: $sql,
 				ARRAY_A
+			), 'ID');
+
+			return self::get_posts( $ids, max( fw_akg( 'limit', $options, 100 ), 1 ) );
+		}
+
+		protected static function get_posts( $ids, $limit = 100 ) {
+			if ( empty( $ids ) ) {
+				return array();
+			}
+
+			$query = new WP_Query( array(
+				'post_type'      => 'any',
+				'post__in'       => $ids,
+				'posts_per_page' => $limit,
+				'fields'         => 'ids'
+			) );
+
+			return array_map( array( __CLASS__, 'build_post' ), $query->get_posts() );
+		}
+
+		protected static function build_post( $id ) {
+			return array(
+				'val'   => $id,
+				'title' => get_the_title( $id )
 			);
 		}
 
-		private static function query_terms(array $limits) {
+		private static function query_terms(array $options) {
 			$limits = array_merge(array(
 				'taxonomy' => array(
 					'category' => true,
@@ -130,31 +142,23 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				'title' => '',
 				'id' => array( /* 1, 7, 120 */ ),
 				'limit' => 100,
-			), $limits);
-
-			$limits['limit'] = max($limits['limit'], 1);
+			), $options);
+			fw_aku('limit', $limits);
 
 			/** @var WPDB $wpdb */
 			global $wpdb;
 
-			$sql = "SELECT terms.term_id val, terms.name title"
-				." FROM $wpdb->terms AS terms, $wpdb->term_taxonomy AS taxonomies"
-				." WHERE terms.term_id = taxonomies.term_id AND taxonomies.term_id = taxonomies.term_taxonomy_id";
+			$sql = "SELECT terms.term_id"
+			       ." FROM $wpdb->terms AS terms, $wpdb->term_taxonomy AS taxonomies"
+			       ." WHERE terms.term_id = taxonomies.term_id AND taxonomies.term_id = taxonomies.term_taxonomy_id";
 
 			{
 				$prepare = array();
 
-				if ($limits['id']) {
-					$sql .= " AND terms.term_id IN ( "
-						. implode( ', ', array_fill( 1, count( $limits['id'] ), '%d' ) )
-						. " ) ";
-					$prepare = array_merge($prepare, $limits['id']);
-				}
-
 				if ($limits['taxonomy']) {
 					$sql .= " AND taxonomies.taxonomy IN ( "
-						. implode( ', ', array_fill( 1, count( $limits['taxonomy'] ), '%s' ) )
-						. " ) ";
+					        . implode( ', ', array_fill( 1, count( $limits['taxonomy'] ), '%s' ) )
+					        . " ) ";
 					$prepare = array_merge($prepare, array_keys($limits['taxonomy']));
 				}
 
@@ -164,13 +168,43 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				}
 			}
 
-			$sql .= " LIMIT ". intval($limits['limit']);
+			$ids = wp_list_pluck(
+				$wpdb->get_results(
+					$prepare
+						? $wpdb->prepare( $sql, $prepare )
+						: $sql,
+					ARRAY_A
+				),
+				'term_id'
+			);
 
-			return $wpdb->get_results(
-				$prepare
-					? $wpdb->prepare($sql, $prepare)
-					: $sql,
-				ARRAY_A
+			return self::get_terms( $ids, array_keys($limits['taxonomy']), max( fw_akg( 'limit', $options, 100 ), 1 ) );
+		}
+
+		protected static function get_terms( $ids, $taxonomy = array(), $limit = 100 ) {
+			if ( empty( $ids ) ) {
+				return array();
+			}
+
+			$terms = get_terms( array(
+				'taxonomy' => $taxonomy,
+				'hide_empty' => false,
+				'include'    => $ids,
+				'number'     => $limit,
+				'fields'     => 'ids'
+			) );
+
+			return is_wp_error( $terms )
+				? array()
+				: array_map( array( __CLASS__, 'build_term' ), $terms );
+		}
+
+		protected static function build_term( $id ) {
+			$term = get_term( $id );
+
+			return is_wp_error( $term ) ? null : array(
+				'val'   => $id,
+				'title' => $term->name
 			);
 		}
 
@@ -190,25 +224,25 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			global $wpdb;
 
 			$sql = "SELECT DISTINCT users.ID AS val, users.user_nicename AS title"
-				." FROM $wpdb->users AS users, $wpdb->usermeta AS usermeta"
-				." WHERE usermeta.user_id = users.ID";
+			       ." FROM $wpdb->users AS users, $wpdb->usermeta AS usermeta"
+			       ." WHERE usermeta.user_id = users.ID";
 
 			{
 				$prepare = array();
 
 				if ($limits['id']) {
 					$sql .= " AND users.ID IN ( "
-						. implode( ', ', array_fill( 1, count( $limits['id'] ), '%d' ) )
-						. " ) ";
+					        . implode( ', ', array_fill( 1, count( $limits['id'] ), '%d' ) )
+					        . " ) ";
 					$prepare = array_merge($prepare, $limits['id']);
 				}
 
 				if ($limits['role']) {
 					$sql .= " AND usermeta.meta_key = '{$wpdb->prefix}capabilities' "
-						. "AND ( "
-						. implode( ' OR ',
+					        . "AND ( "
+					        . implode( ' OR ',
 							array_fill( 1, count( $limits['role'] ), 'usermeta.meta_value LIKE %s' ) ) .
-						" ) ";
+					        " ) ";
 
 					foreach ( $limits['role'] as $name => $filter_by ) {
 						$prepare[] = ( $filter_by ) ? '%' . $wpdb->esc_like( $name ) . '%' : '';
@@ -299,21 +333,49 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 					case 'posts' :
 						if ( isset( $option['source'] ) ) {
 							$source = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
-							$items = self::query_posts(array(
-								'type' => array_fill_keys($source, true),
-								'id' => $data['value'],
-								'limit' => $option['prepopulate'],
-							));
+
+							$items = self::get_posts( $data['value'] );
+
+							if ( count( $items ) < $option['prepopulate'] ) {
+								foreach (
+									self::query_posts( array(
+										'type'  => array_fill_keys( $source, true ),
+										'limit' => $option['prepopulate'],
+									) ) as $item
+								) {
+									if ( ! in_array( $item, $items ) ) {
+										array_push( $items, $item );
+									}
+
+									if ( count( $items ) == $option['prepopulate'] ) {
+										break;
+									}
+								}
+							}
 						}
 						break;
 					case 'taxonomy' :
 						if ( isset( $option['source'] ) ) {
 							$source = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
-							$items = self::query_terms(array(
-								'taxonomy' => array_fill_keys($source, true),
-								'id' => $data['value'],
-								'limit' => $option['prepopulate'],
-							));
+
+							$items = self::get_terms( $data['value'], $source );
+
+							if ( count( $items ) < $option['prepopulate'] ) {
+								foreach (
+									self::query_terms( array(
+										'taxonomy' => array_fill_keys( $source, true ),
+										'limit'    => $option['prepopulate'],
+									) ) as $item
+								) {
+									if ( ! in_array( $item, $items ) ) {
+										array_push( $items, $item );
+									}
+
+									if ( count( $items ) == $option['prepopulate'] ) {
+										break;
+									}
+								}
+							}
 						}
 						break;
 					case 'users' :
