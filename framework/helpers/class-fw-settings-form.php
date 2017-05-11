@@ -305,7 +305,7 @@ abstract class FW_Settings_Form {
 				do_action('fw:settings-form:'. $this->get_id() .':reset', $old_values);
 			}
 		} else { // The "Save" button was pressed
-			$this->set_values( fw_get_options_values_from_input( $this->get_options() ) );
+			$this->set_values( $this->get_options_values() );
 
 			FW_Flash_Messages::add(
 				$flash_id,
@@ -358,5 +358,14 @@ abstract class FW_Settings_Form {
 			})(jQuery);
 		</script>
 		<?php
+	}
+
+	/**
+     * Get the options values from input
+     *
+	 * @return array
+	 */
+	protected function get_options_values() {
+        return fw_get_options_values_from_input( $this->get_options() );
 	}
 }

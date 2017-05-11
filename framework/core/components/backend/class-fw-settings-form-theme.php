@@ -30,7 +30,7 @@ class FW_Settings_Form_Theme extends FW_Settings_Form {
 	}
 
 	public function set_values($values) {
-		fw_set_db_settings_option(null, $values);
+		array_map('fw_set_db_settings_option', array_keys($values), $values);
 
 		return $this;
 	}
@@ -214,5 +214,9 @@ class FW_Settings_Form_Theme extends FW_Settings_Form {
 				do_action('fw_admin_enqueue_scripts:settings');
 			}
 		}
+	}
+
+	protected function get_options_values() {
+		return fw_get_options_values_from_input( $this->get_options(), null, true );
 	}
 }
