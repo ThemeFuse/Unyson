@@ -18,7 +18,7 @@ class _FW_Customizer_Setting_Option extends WP_Customize_Setting {
 	}
 
 	public function sanitize($value) {
-		if(is_array($value) {
+		if ( is_array( $value ) ) {
 			return null;
 		}
 		   
