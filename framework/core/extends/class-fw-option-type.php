@@ -188,7 +188,16 @@ abstract class FW_Option_Type
 
 		$this->enqueue_static($id, $option, $data);
 
-		return $this->_render( $id, $this->load_callbacks( $option ), $data );
+
+		return fw_html_tag(
+			'div',
+			array(
+				'class' => 'fw-backend-option-descriptor',
+				'data-fw-option-id' => $id,
+				'data-fw-option-type' => $option['type']
+			),
+			$this->_render( $id, $this->load_callbacks( $option ), $data )
+		);
 	}
 
 	/**
