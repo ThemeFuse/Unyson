@@ -336,6 +336,13 @@ final class _FW_Component_Backend {
 			);
 
 			wp_register_script(
+				'fw-reactive-options',
+				fw_get_framework_directory_uri('/static/js/fw-reactive-options.js'),
+				array('fw', 'fw-events'),
+				false
+			);
+
+			wp_register_script(
 				'fw',
 				fw_get_framework_directory_uri( '/static/js/fw.js' ),
 				array( 'jquery', 'fw-events', 'backbone', 'qtip' ),
@@ -381,7 +388,7 @@ final class _FW_Component_Backend {
 			wp_register_script(
 				'fw-backend-options',
 				fw_get_framework_directory_uri( '/static/js/backend-options.js' ),
-				array( 'fw', 'fw-events', 'postbox', 'jquery-ui-tabs' ),
+				array( 'fw', 'fw-events', 'fw-reactive-options', 'postbox', 'jquery-ui-tabs' ),
 				fw()->manifest->get_version(),
 				true
 			);
