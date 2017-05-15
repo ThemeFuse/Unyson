@@ -118,6 +118,7 @@ function _fw_autoload_helper_classes($class) {
 		'FW_Flash_Messages' => 'class-fw-flash-messages',
 		'FW_Resize' => 'class-fw-resize',
 		'FW_WP_List_Table' => 'class-fw-wp-list-table',
+		'FW_Mappable' => 'interface-fw-mappable',
 		'FW_Type' => 'type/class-fw-type',
 		'FW_Type_Register' => 'type/class-fw-type-register',
 	);
@@ -157,6 +158,21 @@ function _fw_includes_customizer_autoload( $class ) {
 			break;
 		case '_FW_Customizer_Setting_Option' :
 			require_once dirname( __FILE__ ) . '/includes/customizer/class--fw-customizer-setting-option.php';
+			break;
+	}
+}
+
+spl_autoload_register( '_fw_includes_monad_autoload' );
+function _fw_includes_monad_autoload( $class ) {
+	switch ( $class ) {
+		case 'FW_Monadic' :
+			require_once dirname( __FILE__ ) . '/includes/monad/class-fw-monadic.php';
+			break;
+		case 'FW_Maybe' :
+			require_once dirname( __FILE__ ) . '/includes/monad/class-fw-maybe.php';
+			break;
+		case 'FW_Nothing' :
+			require_once dirname( __FILE__ ) . '/includes/monad/class-fw-nothing.php';
 			break;
 	}
 }
