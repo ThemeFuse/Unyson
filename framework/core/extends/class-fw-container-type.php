@@ -158,7 +158,15 @@ abstract class FW_Container_Type
 			$containers[$id] = &$option;
 		}
 
-		return $this->_render($containers, $values, $data);
+		return fw_html_tag(
+			'div',
+			array(
+				'class' => 'fw-backend-option-descriptor',
+				'data-fw-option-id' => $id,
+				'data-fw-option-type' => $option['type']
+			),
+			$this->_render($containers, $values, $data)
+		);
 	}
 
 	/**
