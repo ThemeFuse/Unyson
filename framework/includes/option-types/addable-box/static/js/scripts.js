@@ -259,10 +259,14 @@ jQuery(document).ready(function ($) {
 				&&
 				$newBox.find('.fw-option-type-wp-editor:first').length
 			) {
-				fwWpEditorRefreshIds(
-					$newBox.find('.fw-option-type-wp-editor textarea:first').attr('id'),
-					$newBox
-				);
+				$newBox.find(
+					'.fw-option-type-wp-editor textarea'
+				).toArray().map(function (textarea) {
+					fwWpEditorRefreshIds(
+						$(textarea).attr('id'),
+						$newBox
+					);
+				});
 			}
 
 			methods.initControls($newBox);
