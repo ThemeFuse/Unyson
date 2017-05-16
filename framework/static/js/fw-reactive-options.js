@@ -16,12 +16,11 @@
  *
  * TODO: document this better
  */
-fw.options = (function ($) {
-	var service = {
-		on: on,
-		off: off,
-		trigger: trigger
-	};
+fw.options = (function ($, currentFwOptions) {
+	currentFwOptions.on = on;
+	currentFwOptions.off = off;
+	currentFwOptions.trigger = trigger;
+	currentFwOptions.startListeningToEvents = startListeningToEvents;
 
 	/**
 	 * Allows:
@@ -31,10 +30,10 @@ fw.options = (function ($) {
 	 *   fw.options.trigger.changeForEl(...)
 	 *   fw.options.trigger.scopedByType(...)
 	 */
-	service.trigger.change = triggerChange;
-	service.trigger.forEl = triggerForEl;
-	service.trigger.changeForEl = triggerChangeForEl;
-	service.trigger.scopedByType = triggerScopedByType;
+	currentFwOptions.trigger.change = triggerChange;
+	currentFwOptions.trigger.forEl = triggerForEl;
+	currentFwOptions.trigger.changeForEl = triggerChangeForEl;
+	currentFwOptions.trigger.scopedByType = triggerScopedByType;
 
 	/**
 	 * Allows:
@@ -43,11 +42,11 @@ fw.options = (function ($) {
 	 *   fw.options.on.change(...)
 	 *   fw.options.on.changeByContext(...)
 	 */
-	service.on.one = one;
-	service.on.change = onChange;
-	service.on.changeByContext = onChangeByContext;
+	currentFwOptions.on.one = one;
+	currentFwOptions.on.change = onChange;
+	currentFwOptions.on.changeByContext = onChangeByContext;
 
-	return service;
+	return currentFwOptions;
 
 	function onChange (listener) {
 		on('change', listener);
@@ -112,6 +111,20 @@ fw.options = (function ($) {
 		data = getActualData(el, data);
 
 		trigger(data.optionType + ':' + eventName, data);
+	}
+
+	/**
+	 * This will be automatically called at each fw:options:init event.
+	 * This will make each option type start listening to events
+	 */
+	function startListeningToEvents (el) {
+		el = (el instanceof jQuery) ? el[0] : el;
+
+		var opts = el.querySelectorAll(
+			'.fw-backend-option-descriptor[data-fw-option-type]'
+		);
+
+		console.log(opts);
 	}
 
 	function getActualData (el, data) {
@@ -210,6 +223,6 @@ fw.options = (function ($) {
 
 		return element[matchesFn](selector);
 	}
-})(jQuery);
+})(jQuery, (fw.options || {}));
 
 
