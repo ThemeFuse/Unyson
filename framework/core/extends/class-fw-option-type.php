@@ -69,6 +69,13 @@ abstract class FW_Option_Type
 	abstract protected function _get_defaults();
 
 	/**
+	 * Put data for to be accessed in JavaScript for each option type instance
+	 */
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return $option;
+	}
+
+	/**
 	 * Prevent execute enqueue multiple times
 	 * @var bool
 	 */
@@ -188,14 +195,21 @@ abstract class FW_Option_Type
 
 		$this->enqueue_static($id, $option, $data);
 
+		$html_attributes = array(
+			'class' => 'fw-backend-option-descriptor',
+			'data-fw-option-id' => $id,
+			'data-fw-option-type' => $option['type']
+		);
+
+		$data_for_js = $this->_get_data_for_js($id, $option, $data);
+
+		if ($data_for_js) {
+			$html_attributes['data-fw-for-js'] = json_encode($data_for_js);
+		}
 
 		return fw_html_tag(
 			'div',
-			array(
-				'class' => 'fw-backend-option-descriptor',
-				'data-fw-option-id' => $id,
-				'data-fw-option-type' => $option['type']
-			),
+			$html_attributes,
 			$this->_render( $id, $this->load_callbacks( $option ), $data )
 		);
 	}
