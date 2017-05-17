@@ -345,9 +345,18 @@ final class _FW_Component_Backend {
 			);
 
 			wp_register_script(
+				'fw-reactive-options-undefined-option',
+				fw_get_framework_directory_uri(
+					'/static/js/fw-reactive-options-undefined-option.js'
+				),
+				array('fw', 'fw-events', 'fw-reactive-options-registry'),
+				false
+			);
+
+			wp_register_script(
 				'fw-reactive-options',
 				fw_get_framework_directory_uri('/static/js/fw-reactive-options.js'),
-				array('fw', 'fw-events', 'fw-reactive-options-registry'),
+				array('fw', 'fw-events', 'fw-reactive-options-undefined-option'),
 				false
 			);
 

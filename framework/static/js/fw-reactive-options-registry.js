@@ -61,6 +61,11 @@ fw.options = (function ($, currentFwOptions) {
 	 * option type just like we have on backend. It is more of a hint on how
 	 * to treat the option type on frontend. Everything should be working
 	 * almost fine even if you don't provide any hints.
+	 *
+	 * interface:
+	 *
+	 *   startListeningForChanges
+	 *   getValue
 	 */
 	function register (type, hintObject) {
 		// TODO: maybe start triggering events on option type register
@@ -102,34 +107,7 @@ fw.options = (function ($, currentFwOptions) {
 	}
 
 	function defaultHintObject () {
-		return {
-			startListeningForChanges: defaultStartListeningForChanges,
-			getValue: function (optionDescriptor) {
-				// will trigger AJAX requests by default
-			}
-		}
-	}
-
-	// By default, for unknown option types do listening only once
-	function defaultStartListeningForChanges (optionDescriptor) {
-		if (optionDescriptor.el.classList.contains('fw-listening-started')) {
-			return;
-		}
-
-		optionDescriptor.el.classList.add('fw-listening-started');
-
-		listenToChangesForCurrentOptionAndPreserveScoping(
-			optionDescriptor.el,
-			function (e) {
-				fw.options.trigger.changeForEl(e.target);
-			}
-		);
-
-		if (optionDescriptor.hasNestedOptions) {
-			fw.options.on.changeByContext(optionDescriptor.el, function (nestedDescriptor) {
-				fw.options.trigger.changeForEl(optionDescriptor.el);
-			});
-		}
+		return get('fw-undefined');
 	}
 
 	function detectDOMContext (el) {
@@ -218,36 +196,6 @@ fw.options = (function ($, currentFwOptions) {
 		return null;
 	}
 
-	function listenToChangesForCurrentOptionAndPreserveScoping (el, callback) {
-		jQuery(el).find(
-			'input, select, textarea'
-		).not(
-			jQuery(el).find(
-				'.fw-backend-option-descriptor input'
-			).add(
-				jQuery(el).find(
-					'.fw-backend-option-descriptor select'
-				)
-			).add(
-				jQuery(el).find(
-					'.fw-backend-option-descriptor textarea'
-				)
-			).add(
-				jQuery(el).find(
-					'.fw-backend-options-virtual-context input'
-				)
-			).add(
-				jQuery(el).find(
-					'.fw-backend-options-virtual-context select'
-				)
-			).add(
-				jQuery(el).find(
-					'.fw-backend-options-virtual-context textarea'
-				)
-			)
-		).on('change', callback);
-	}
-
 	function hasNestedOptions (el) {
 		// exclude nested options within a virtual context
 
@@ -291,6 +239,4 @@ fw.options = (function ($, currentFwOptions) {
 	}
 
 })(jQuery, (fw.options || {}));
-
-fw.options.register('fw-undefined');
 
