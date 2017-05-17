@@ -106,6 +106,10 @@ fw.options = (function ($, currentFwOptions) {
 		hints.startListeningForChanges(optionDescriptor);
 	}
 
+	/**
+	 * We rely on the fact that by default, when we try to register some option
+	 * type -- the undefined and default one will be already registered.
+	 */
 	function defaultHintObject () {
 		return get('fw-undefined');
 	}
