@@ -252,7 +252,7 @@ fw.options = (function ($, currentFwOptions) {
 		// exclude nested options within a virtual context
 
 		var optionDescriptor = findOptionDescriptorEl(el);
-		
+
 		var hasVirtualContext = optionDescriptor.querySelector(
 			'.fw-backend-options-virtual-context'
 		);
