@@ -29,6 +29,15 @@
 		}
 	}
 
+	/**
+	 * TODO
+	 * rewrite that with:
+	 *
+	 * - Array.filter
+	 * - Array.includes
+	 * - addEventListener
+	 * - querySelectorAll
+	 */
 	function listenToChangesForCurrentOptionAndPreserveScoping (el, callback) {
 		jQuery(el).find(
 			'input, select, textarea'
