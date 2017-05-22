@@ -13,6 +13,18 @@ fw.options = (function ($, currentFwOptions) {
 	currentFwOptions.getOptionDescriptor = getOptionDescriptor;
 	currentFwOptions.startListeningToEvents = startListeningToEvents;
 
+	/**
+	 * fw.options.getValueForEl(element)
+	 *   .then(function (values, optionDescriptor) {
+	 *     // current values for option type
+	 *     console.log(values)
+	 *   })
+	 *   .fail(function () {
+	 *     // value extraction failed for some reason
+	 *   });
+	 */
+	currentFwOptions.getValueForEl = getValueForEl;
+
 	return currentFwOptions;
 
 	/**
@@ -54,6 +66,14 @@ fw.options = (function ($, currentFwOptions) {
 									);
 
 		return data;
+	}
+
+	function getValueForEl (el) {
+		var optionDescriptor = getOptionDescriptor(el);
+
+		return get(optionDescriptor.type).getValue(
+			optionDescriptor
+		);
 	}
 
 	/**
@@ -165,7 +185,8 @@ fw.options = (function ($, currentFwOptions) {
 			}
 
 			if (parent && elementMatches(parent, '.fw-backend-option-descriptor')) {
-				result.push(parent.getAttribute('data-fw-option-type'));
+				// result.push(parent.getAttribute('data-fw-option-type'));
+				result.push(parent);
 			}
 
 			el = parent;

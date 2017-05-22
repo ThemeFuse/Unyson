@@ -72,7 +72,9 @@ abstract class FW_Option_Type
 	 * Put data for to be accessed in JavaScript for each option type instance
 	 */
 	protected function _get_data_for_js($id, $option, $data = array()) {
-		return $option;
+		return array(
+			'option' => $option
+		);
 	}
 
 	/**

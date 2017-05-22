@@ -1172,7 +1172,11 @@ final class _FW_Component_Backend {
 				) );
 			}
 
-			$options = json_decode( FW_Request::POST( 'options' ), true );
+			$options = FW_Request::POST( 'options' );
+
+			if (is_string( $options )) {
+				$options = json_decode( FW_Request::POST( 'options' ), true );
+			}
 
 			if ( ! $options ) {
 				wp_send_json_error( array(
