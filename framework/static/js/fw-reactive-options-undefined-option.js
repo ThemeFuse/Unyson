@@ -41,9 +41,6 @@
 			});
 		}
 
-		console.log(inputValues);
-		console.log(optionDescriptor);
-
 		var options = {};
 
 		options[optionDescriptor.id] = JSON.parse(jQuery(optionDescriptor.el).attr(
@@ -69,7 +66,10 @@
 			.then(function (response, status, request) {
 				if (response.success && request.status === 200) {
 					resultPromise.resolve(
-						response.data.values, optionDescriptor
+						{
+							values: response.data.values[optionDescriptor.id],
+							optionDescriptor: optionDescriptor
+						}
 					);
 				} else {
 					resultPromise.reject();

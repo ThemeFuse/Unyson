@@ -12,6 +12,7 @@ fw.options = (function ($, currentFwOptions) {
 	currentFwOptions.register = register;
 	currentFwOptions.getOptionDescriptor = getOptionDescriptor;
 	currentFwOptions.startListeningToEvents = startListeningToEvents;
+	currentFwOptions.getRootOptionsForContext = getRootOptionsForContext;
 
 	/**
 	 * fw.options.getValueForEl(element)
@@ -24,6 +25,7 @@ fw.options = (function ($, currentFwOptions) {
 	 *   });
 	 */
 	currentFwOptions.getValueForEl = getValueForEl;
+	currentFwOptions.getValueForContext = getValueForContext;
 
 	return currentFwOptions;
 
@@ -68,12 +70,105 @@ fw.options = (function ($, currentFwOptions) {
 		return data;
 	}
 
-	function getValueForEl (el) {
-		var optionDescriptor = getOptionDescriptor(el);
+	/**
+	 * This receives a context (option as context works too)
+	 * and returns the first level of options underneath it.
+	 *
+	 * - form
+	 * - .fw-backend-options-virtual-context
+	 * - .fw-backend-option-descriptor
+	 */
+	function getRootOptionsForContext (el) {
+		el = (el instanceof jQuery) ? el[0] : el;
 
-		return get(optionDescriptor.type).getValue(
+		if (! (
+			el.tagName === 'FORM'
+			||
+			el.classList.contains === 'fw-backend-options-virtual-context'
+			||
+			el.classList.contains === 'fw-backend-option-descriptor'
+		)) {
+			throw "You passed an incorrect context element."
+		}
+
+		return $(el).find(
+			'.fw-backend-option-descriptor'
+		).not(
+			$(el).find(
+				'.fw-backend-options-virtual-context .fw-backend-option-descriptor'
+			)
+		).toArray().map(getOptionDescriptor).filter(function (descriptor) {
+			return isRootOption(descriptor.el, el);
+		});
+	}
+
+	function getValueForContext (el) {
+		var optionDescriptors = getRootOptionsForContext(el);
+
+		var promise = $.Deferred();
+
+		if (jQuery.when.all===undefined) {
+			jQuery.when.all = function(deferreds) {
+				var deferred = new jQuery.Deferred();
+				$.when.apply(jQuery, deferreds).then(
+					function() {
+						deferred.resolve(Array.prototype.slice.call(arguments));
+					},
+					function() {
+						deferred.fail(Array.prototype.slice.call(arguments));
+					});
+
+				return deferred;
+			}
+		}
+
+
+		$.when.all(
+			optionDescriptors.map(getValueForOptionDescriptor)
+		)
+			.then(function (valuesAsArray) {
+				var values = {};
+
+				optionDescriptors.map(function (optionDescriptor, index) {
+					values[
+						optionDescriptor.id
+					] = valuesAsArray[index].values;
+				});
+
+				promise.resolve({
+					valuesAsArray: valuesAsArray,
+					optionDescriptors: optionDescriptors,
+					values: values
+				});
+			})
+			.fail(function () {
+				// TODO: pass a reason
+				promise.reject();
+			});
+
+		return promise;
+	}
+
+	function getValueForOptionDescriptor (optionDescriptor) {
+		var maybePromise = get(optionDescriptor.type).getValue(
 			optionDescriptor
 		);
+
+		var promise = maybePromise;
+
+		/**
+		 * A promise has a then method usually
+		 */
+		if (! promise.then) {
+			promise = $.Deferred();
+			promise.resolve(maybePromise);
+		}
+
+		return promise;
+	}
+
+	function getValueForEl (el) {
+		getValueForOptionDescriptor(getOptionDescriptor(el));
 	}
 
 	/**
@@ -121,9 +216,9 @@ fw.options = (function ($, currentFwOptions) {
 	}
 
 	function startListeningToEventsForSingle (optionDescriptor) {
-		var hints = get(optionDescriptor.type);
-
-		hints.startListeningForChanges(optionDescriptor);
+		get(
+			optionDescriptor.type
+		).startListeningForChanges(optionDescriptor);
 	}
 
 	/**
@@ -131,7 +226,7 @@ fw.options = (function ($, currentFwOptions) {
 	 * type -- the undefined and default one will be already registered.
 	 */
 	function defaultHintObject () {
-		return get('fw-undefined');
+		return get('fw-undefined') || {};
 	}
 
 	function detectDOMContext (el) {
@@ -147,9 +242,19 @@ fw.options = (function ($, currentFwOptions) {
 	function findOptionDescriptorEl (el) {
 		el = (el instanceof jQuery) ? el[0] : el;
 
-		return el.classList.contains('fw-backend-option-descriptor')
-			? el
-			: $(el).closest('.fw-backend-option-descriptor')[0];
+		if (el.classList.contains('fw-backend-option-descriptor')) {
+			return el;
+		} else {
+			var closestOption = $(el).closest(
+				'.fw-backend-option-descriptor'
+			);
+
+			if (closestOption.length === 0) {
+				throw "There is no option descriptor for that element."
+			}
+
+			return closestOption[0];
+		}
 	}
 
 	function isRootOption(el, nonOptionContext) {
