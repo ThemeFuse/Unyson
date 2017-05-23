@@ -137,7 +137,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			return $show_type ? array(
 				'val'   => $id,
 				'title' => $title,
-				'type'  => static::get_post_type_name( get_post_type( $id ) ),
+				'type'  => self::get_post_type_name( get_post_type( $id ) ),
 			) : array(
 				'val'   => $id,
 				'title' => $title
@@ -219,7 +219,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			return $show_type ? array(
 				'val'   => $id,
 				'title' => $title,
-				'type'  => static::get_tax_name( $term->taxonomy ),
+				'type'  => self::get_tax_name( $term->taxonomy ),
 			) : array(
 				'val'   => $id,
 				'title' => $title
