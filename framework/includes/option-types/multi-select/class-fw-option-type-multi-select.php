@@ -48,6 +48,10 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				 * Set maximum items number that can be selected
 				 */
 				'limit'       => 100,
+				/**
+				 * Show the post type or term taxonomy
+				 */
+				'show-type' => false
 			);
 		}
 
@@ -124,13 +128,19 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				'fields'         => 'ids'
 			) );
 
-			return array_map( array( __CLASS__, 'build_post' ), $query->get_posts() );
+			return $query->get_posts();
 		}
 
-		protected static function build_post( $id ) {
-			return array(
+		protected static function build_post( $id, $show_type ) {
+			$title = get_the_title( $id );
+
+			return $show_type ? array(
 				'val'   => $id,
-				'title' => get_the_title( $id )
+				'title' => $title,
+				'type'  => static::get_post_type_name( get_post_type( $id ) ),
+			) : array(
+				'val'   => $id,
+				'title' => $title
 			);
 		}
 
@@ -194,17 +204,25 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				'fields'     => 'ids'
 			) );
 
-			return is_wp_error( $terms )
-				? array()
-				: array_map( array( __CLASS__, 'build_term' ), $terms );
+			return is_wp_error( $terms ) ? array() : $terms;
 		}
 
-		protected static function build_term( $id ) {
+		protected static function build_term( $id, $show_type ) {
 			$term = get_term( $id );
 
-			return is_wp_error( $term ) ? null : array(
+			if ( is_wp_error( $term ) ) {
+				return null;
+			}
+
+			$title = $term->name;
+
+			return $show_type ? array(
 				'val'   => $id,
-				'title' => $term->name
+				'title' => $title,
+				'type'  => static::get_tax_name( $term->taxonomy ),
+			) : array(
+				'val'   => $id,
+				'title' => $title
 			);
 		}
 
@@ -276,21 +294,33 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			$type  = FW_Request::POST( 'data/type' );
 			$names = ($names = json_decode( FW_Request::POST( 'data/names' ), true )) ? $names : array();
 			$title = FW_Request::POST( 'data/string' );
+			$show = FW_Request::POST( 'data/show-type', false );
 
 			$items = array();
 
 			switch ( $type ) {
 				case 'posts':
-					$items = self::query_posts(array(
-						'type' => array_fill_keys($names, true),
+					$items = self::query_posts( array(
+						'type'  => array_fill_keys( $names, true ),
 						'title' => $title,
-					));
+					) );
+					$items = array_map(
+						array( __CLASS__, 'build_post' ),
+						$items,
+						array_fill( 0, count($items), $show )
+					);
 					break;
 				case 'taxonomy':
 					$items = self::query_terms(array(
 						'taxonomy' => array_fill_keys($names, true),
 						'title' => $title,
 					));
+
+					$items = array_map(
+						array( __CLASS__, 'build_term' ),
+						$items,
+						array_fill( 1, count( $items ), $show )
+					);
 					break;
 				case 'users':
 					$items = self::query_users(array(
@@ -317,6 +347,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			$population = $option['population'];
 			$source     = array();
 			$items      = array();
+			$show       = fw_akg( 'show-type', $option, false );
 
 			if ( isset( $option['population'] ) ) {
 				switch ( $option['population'] ) {
@@ -353,6 +384,11 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 								}
 							}
 						}
+						$items = array_map(
+							array( $this, 'build_post' ),
+							$items,
+							array_fill( 1, count( $items ), $show )
+						);
 						break;
 					case 'taxonomy' :
 						if ( isset( $option['source'] ) ) {
@@ -377,6 +413,12 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 								}
 							}
 						}
+
+						$items = array_map(
+							array( $this, 'build_term' ),
+							$items,
+							array_fill( 1, count( $items ), $show )
+						);
 						break;
 					case 'users' :
 						if ( isset( $option['source'] ) && ! empty( $option['source'] ) ) {
@@ -395,10 +437,11 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 						return '(Invalid <code>population</code> parameter)';
 				}
 
-				$option['attr']['data-options']    = json_encode( $items );
-				$option['attr']['data-population'] = $population;
-				$option['attr']['data-source']     = json_encode( $source );
-				$option['attr']['data-limit']      = ( intval( $option['limit'] ) > 0 ) ? $option['limit'] : 0;
+				$option['attr']['data-options']     = json_encode( $items );
+				$option['attr']['data-population']  = $population;
+				$option['attr']['data-show-type']   = (int)fw_akg( 'show-type', $option, false );
+				$option['attr']['data-source']      = json_encode( $source );
+				$option['attr']['data-limit']       = ( intval( $option['limit'] ) > 0 ) ? $option['limit'] : 0;
 			} else {
 				return '(The <code>population</code> parameter is required)';
 			}
@@ -445,6 +488,26 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			$value = explode( '/*/', $input_value );
 
 			return empty( $input_value ) ? array() : $value;
+		}
+
+		private static function get_post_type_name( $type ) {
+			static $names = array();
+
+			if ( ! isset( $names[ $type ] ) ) {
+				$names[$type]=fw_akg( 'labels/name', get_post_type_object( $type ), _x( 'Unknown', 'unknown-post-type', 'fw' ) );
+			}
+
+			return $names[ $type ];
+		}
+
+		private static function get_tax_name( $tax ) {
+			static $names = array();
+
+			if ( ! isset( $names[ $tax ] ) ) {
+				$names[$tax]=fw_akg( 'labels/name', get_taxonomy( $tax ), _x( 'Unknown', 'unknown-post-type', 'fw' ) );
+			}
+
+			return $names[ $tax ];
 		}
 	}
 
