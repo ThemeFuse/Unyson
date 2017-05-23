@@ -122,7 +122,6 @@ fw.options = (function ($, currentFwOptions) {
 			}
 		}
 
-
 		$.when.all(
 			optionDescriptors.map(getValueForOptionDescriptor)
 		)
