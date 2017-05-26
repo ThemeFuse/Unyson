@@ -12,7 +12,7 @@ fw.options = (function ($, currentFwOptions) {
 	currentFwOptions.register = register;
 	currentFwOptions.getOptionDescriptor = getOptionDescriptor;
 	currentFwOptions.startListeningToEvents = startListeningToEvents;
-	currentFwOptions.getRootOptionsForContext = getRootOptionsForContext;
+	currentFwOptions.getContextOptions = getContextOptions;
 
 	/**
 	 * fw.options.getValueForEl(element)
@@ -25,7 +25,7 @@ fw.options = (function ($, currentFwOptions) {
 	 *   });
 	 */
 	currentFwOptions.getValueForEl = getValueForEl;
-	currentFwOptions.getValueForContext = getValueForContext;
+	currentFwOptions.getContextValue = getContextValue;
 
 	return currentFwOptions;
 
@@ -62,10 +62,7 @@ fw.options = (function ($, currentFwOptions) {
 
 		data.pathToTheTopContext = data.isRootOption
 									? []
-									: findPathToTheTopContext(
-										data.el,
-										findNonOptionContext(data.el)
-									);
+									: findPathToTheTopContext(data.el, findNonOptionContext(data.el));
 
 		return data;
 	}
@@ -78,7 +75,7 @@ fw.options = (function ($, currentFwOptions) {
 	 * - .fw-backend-options-virtual-context
 	 * - .fw-backend-option-descriptor
 	 */
-	function getRootOptionsForContext (el) {
+	function getContextOptions (el) {
 		el = (el instanceof jQuery) ? el[0] : el;
 
 		if (! (
@@ -91,19 +88,20 @@ fw.options = (function ($, currentFwOptions) {
 			throw "You passed an incorrect context element."
 		}
 
-		return $(el).find(
-			'.fw-backend-option-descriptor'
-		).not(
-			$(el).find(
-				'.fw-backend-options-virtual-context .fw-backend-option-descriptor'
-			)
-		).toArray().map(getOptionDescriptor).filter(function (descriptor) {
-			return isRootOption(descriptor.el, el);
-		});
+    return $(el)
+      .find('.fw-backend-option-descriptor')
+      .not(
+        $(el).find('.fw-backend-options-virtual-context .fw-backend-option-descriptor')
+      )
+      .toArray()
+      .map(getOptionDescriptor)
+      .filter(function (descriptor) {
+        return isRootOption(descriptor.el, el)
+      })
 	}
 
-	function getValueForContext (el) {
-		var optionDescriptors = getRootOptionsForContext(el);
+	function getContextValue (el) {
+		var optionDescriptors = getContextOptions(el);
 
 		var promise = $.Deferred();
 
@@ -129,9 +127,7 @@ fw.options = (function ($, currentFwOptions) {
 				var values = {};
 
 				optionDescriptors.map(function (optionDescriptor, index) {
-					values[
-						optionDescriptor.id
-					] = valuesAsArray[index].values;
+					values[optionDescriptor.id] = valuesAsArray[index].values;
 				});
 
 				promise.resolve({
@@ -149,9 +145,7 @@ fw.options = (function ($, currentFwOptions) {
 	}
 
 	function getValueForOptionDescriptor (optionDescriptor) {
-		var maybePromise = get(optionDescriptor.type).getValue(
-			optionDescriptor
-		);
+    var maybePromise = get(optionDescriptor.type).getValue(optionDescriptor)
 
 		var promise = maybePromise;
 
@@ -203,22 +197,16 @@ fw.options = (function ($, currentFwOptions) {
 		el = (el instanceof jQuery) ? el[0] : el;
 
 		[].map.call(
-			el.querySelectorAll(
-				'.fw-backend-option-descriptor[data-fw-option-type]'
-			),
+			el.querySelectorAll('.fw-backend-option-descriptor[data-fw-option-type]'),
 			function (el) {
-				startListeningToEventsForSingle(
-					getOptionDescriptor(el)
-				);
+				startListeningToEventsForSingle(getOptionDescriptor(el));
 			}
 		);
 	}
 
-	function startListeningToEventsForSingle (optionDescriptor) {
-		get(
-			optionDescriptor.type
-		).startListeningForChanges(optionDescriptor);
-	}
+  function startListeningToEventsForSingle (optionDescriptor) {
+    get(optionDescriptor.type).startListeningForChanges(optionDescriptor)
+  }
 
 	/**
 	 * We rely on the fact that by default, when we try to register some option
@@ -312,10 +300,7 @@ fw.options = (function ($, currentFwOptions) {
 		while (el) {
 			parent = el.parentElement;
 
-			if (parent && elementMatches(
-				parent,
-				'.fw-backend-options-virtual-context, form'
-			)) {
+			if (parent && elementMatches(parent, '.fw-backend-options-virtual-context, form')) {
 				return parent;
 			}
 
@@ -356,7 +341,7 @@ fw.options = (function ($, currentFwOptions) {
 			'matches','webkitMatchesSelector','mozMatchesSelector',
 			'msMatchesSelector','oMatchesSelector'
 		].some(function(fn) {
-			if (typeof document.body[fn] == 'function') {
+			if (typeof document.body[fn] === 'function') {
 				matchesFn = fn;
 				return true;
 			}
