@@ -27,6 +27,12 @@
  */
 class FW_Request
 {
+
+	protected static $local_get = null;
+	protected static $local_post = null;
+	protected static $local_request = null;
+	protected static $local_cookie = null;
+
 	protected static function prepare_key($key)
 	{
 		return (get_magic_quotes_gpc() && is_string($key) ? addslashes($key) : $key);
@@ -47,20 +53,32 @@ class FW_Request
 
 	public static function GET($multikey = null, $default_value = null)
 	{
+		$work_with = (self::$local_get === null)? $_GET : self::$local_get;
 		return fw_stripslashes_deep_keys(
 			$multikey === null
-				? $_GET
-				: fw_akg($multikey, $_GET, $default_value)
+				? $work_with
+				: fw_akg($multikey, $work_with, $default_value)
 		);
+	}
+
+	public static function mock_get($default_value = array())
+	{
+		self::$local_get = $default_value;
 	}
 
 	public static function POST($multikey = null, $default_value = null)
 	{
+		$work_with = (self::$local_post === null)? $_POST : self::$local_post;
 		return fw_stripslashes_deep_keys(
 			$multikey === null
-				? $_POST
-				: fw_akg($multikey, $_POST, $default_value)
+				? $work_with
+				: fw_akg($multikey, $work_with, $default_value)
 		);
+	}
+
+	public static function mock_post($default_value = array())
+	{
+		self::$local_post = $default_value;
 	}
 
 	public static function COOKIE($multikey = null, $set_value = null, $expire = 0, $path = null)
@@ -75,16 +93,36 @@ class FW_Request
 
 			return setcookie($multikey, $set_value, $expire, $path);
 		} else {
-			return self::get_set_key($multikey, $set_value, $_COOKIE);
+			$work_with = (self::$local_cookie === null)? $_COOKIE : self::$local_cookie;
+			return self::get_set_key($multikey, $set_value, $work_with);
 		}
+	}
+
+	public static function mock_cookie($default_value = array())
+	{
+		self::$local_cookie = $default_value;
 	}
 
 	public static function REQUEST($multikey = null, $default_value = null)
 	{
+		$work_with = (self::$local_request === null)? $_REQUEST : self::$local_request;
 		return fw_stripslashes_deep_keys(
 			$multikey === null
-				? $_REQUEST
-				: fw_akg($multikey, $_REQUEST, $default_value)
+				? $work_with
+				: fw_akg($multikey, $work_with, $default_value)
 		);
+	}
+
+	public static function mock_request($default_value = array())
+	{
+		self::$local_request = $default_value;
+	}
+
+	public static function restore_globals()
+	{
+		self::$local_get = null;
+		self::$local_post = null;
+		self::$local_request = null;
+		self::$local_cookie = null;
 	}
 }
