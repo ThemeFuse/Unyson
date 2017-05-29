@@ -161,7 +161,7 @@ fw.options = (function ($, currentFwOptions) {
 	}
 
 	function getValueForEl (el) {
-		getValueForOptionDescriptor(getOptionDescriptor(el));
+		return getValueForOptionDescriptor(getOptionDescriptor(el));
 	}
 
 	/**

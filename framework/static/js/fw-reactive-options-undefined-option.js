@@ -67,7 +67,7 @@
 				if (response.success && request.status === 200) {
 					resultPromise.resolve(
 						{
-							values: response.data.values[optionDescriptor.id],
+							value: response.data.values[optionDescriptor.id],
 							optionDescriptor: optionDescriptor
 						}
 					);
