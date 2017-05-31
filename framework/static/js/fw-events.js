@@ -4,7 +4,7 @@
 var fwEvents = new (function(){
 	var _events = {};
 	var currentIndentation = 1;
-	var debug = false;
+	var debug = true;
 
 	/**
 	 * Make log helper public
@@ -132,6 +132,14 @@ var fwEvents = new (function(){
 				changeIndentation(+1);
 
 				try {
+					// TODO: REFACTOR THAT!!!!!!!!!
+					// Maybe this is an occasion for using 'all' event???
+					if (eventName === 'fw:options:init') {
+						fw.options.startListeningToEvents(
+							data.$elements || document.body
+						)
+					}
+
 					(_events[eventName] || []).map(dispatchSingleEvent);
 					(_events['all'] || []).map(dispatchSingleEvent);
 				} catch (e) {
