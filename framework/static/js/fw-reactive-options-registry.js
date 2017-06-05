@@ -81,9 +81,9 @@ fw.options = (function ($, currentFwOptions) {
 		if (! (
 			el.tagName === 'FORM'
 			||
-			el.classList.contains === 'fw-backend-options-virtual-context'
+			el.classList.contains('fw-backend-options-virtual-context')
 			||
-			el.classList.contains === 'fw-backend-option-descriptor'
+			el.classList.contains('fw-backend-option-descriptor')
 		)) {
 			throw "You passed an incorrect context element."
 		}
@@ -127,13 +127,13 @@ fw.options = (function ($, currentFwOptions) {
 				var values = {};
 
 				optionDescriptors.map(function (optionDescriptor, index) {
-					values[optionDescriptor.id] = valuesAsArray[index].values;
+					values[optionDescriptor.id] = valuesAsArray[index].value;
 				});
 
 				promise.resolve({
-					valuesAsArray: valuesAsArray,
+					valueAsArray: valuesAsArray,
 					optionDescriptors: optionDescriptors,
-					values: values
+					value: values
 				});
 			})
 			.fail(function () {

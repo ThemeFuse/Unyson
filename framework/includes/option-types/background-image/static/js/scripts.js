@@ -86,33 +86,20 @@ jQuery(document).ready(function ($) {
 
 		}
 
-		function getValueForEl (el) {
-			var promise = $.Deferred();
-
-			$.when(
-				// TODO: maybe think about a way to extract nested options
-				// with a helper??
-				fw.options.getValueForEl(
-					$(el).find('[data-fw-option-type="radio"]')
-				),
-
-				fw.options.getValueForEl(
-					$(el).find('[data-fw-option-type="image-picker"]')
-				),
-
-				fw.options.getValueForEl(
-					$(el).find('[data-fw-option-type="upload"]')
-				)
-			).then(function (radioPicker, imagePicker, uploadValue) {
-				promise.resolve({
-					type: radioPicker.value,
-					predefined: imagePicker.value,
-					custom: uploadValue.value
-				});
-			})
-
-			return promise;
-		}
 	});
+
+	function getValueForEl (el) {
+		var promise = $.Deferred();
+
+		var optionDescriptor = fw.options.getOptionDescriptor(el);
+
+		fw.options.getContextValue(
+			optionDescriptor.el
+		).then(function (value) {
+			promise.resolve(value.value);
+		});
+
+		return promise;
+	}
 
 });
