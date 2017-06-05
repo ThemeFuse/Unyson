@@ -88,16 +88,16 @@ fw.options = (function ($, currentFwOptions) {
 			throw "You passed an incorrect context element."
 		}
 
-    return $(el)
-      .find('.fw-backend-option-descriptor')
-      .not(
-        $(el).find('.fw-backend-options-virtual-context .fw-backend-option-descriptor')
-      )
-      .toArray()
-      .map(getOptionDescriptor)
-      .filter(function (descriptor) {
-        return isRootOption(descriptor.el, el)
-      })
+		return $(el)
+			.find('.fw-backend-option-descriptor')
+			.not(
+				$(el).find('.fw-backend-options-virtual-context .fw-backend-option-descriptor')
+			)
+			.toArray()
+			.map(getOptionDescriptor)
+			.filter(function (descriptor) {
+				return isRootOption(descriptor.el, el)
+			})
 	}
 
 	function getContextValue (el) {
@@ -351,6 +351,5 @@ fw.options = (function ($, currentFwOptions) {
 
 		return element[matchesFn](selector);
 	}
-
 })(jQuery, (fw.options || {}));
 

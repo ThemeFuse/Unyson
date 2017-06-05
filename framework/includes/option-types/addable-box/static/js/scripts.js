@@ -55,10 +55,15 @@ jQuery(document).ready(function ($) {
 					}
 				},
 				update: function(){
-					$(this).closest(optionTypeClass).trigger('change'); // for customizer
+					var optionType = $(this).closest(optionTypeClass);
+
+					optionType.trigger('change'); // for customizer
+
+					fw.options.trigger.changeForEl(optionType);
 				}
 			});
 		},
+
 		/** Init boxes controls */
 		initControls: function ($boxes) {
 			$boxes
@@ -227,6 +232,12 @@ jQuery(document).ready(function ($) {
 	fwEvents.on('fw:options:init', function (data) {
 		var $elements = data.$elements.find(optionTypeClass +':not(.fw-option-initialized)');
 
+		$elements.toArray().map(function (el) {
+			fw.options.on.changeByContext(el, function (data) {
+				fw.options.trigger.changeForEl(data.context);
+			});
+		});
+
 		/** Init Add button */
 		$elements.on('click', '> .fw-option-boxes-controls > .fw-option-boxes-add-button', function(){
 			var $button   = $(this);
@@ -286,6 +297,8 @@ jQuery(document).ready(function ($) {
 
 			methods.checkLimit($option);
 			methods.updateHasBoxesClass($option);
+
+			fw.options.trigger.changeForEl($boxes);
 		});
 
 		// close postboxes and attach event listener
@@ -330,4 +343,45 @@ jQuery(document).ready(function ($) {
 
 		titleUpdater.update();
 	});
+
+	fw.options.register('addable-box', {
+		startListeningForChanges: $.noop,
+		getValue: function (optionDescriptor) {
+			var promise = $.Deferred();
+
+			// TODO: refactor that!!!
+			if (jQuery.when.all===undefined) {
+				jQuery.when.all = function(deferreds) {
+					var deferred = new jQuery.Deferred();
+					$.when.apply(jQuery, deferreds).then(
+						function() {
+							deferred.resolve(Array.prototype.slice.call(arguments));
+						},
+						function() {
+							deferred.fail(Array.prototype.slice.call(arguments));
+						});
+
+					return deferred;
+				}
+			}
+
+			jQuery.when.all(
+				$(optionDescriptor.el).find(
+					'.fw-option-boxes'
+				).first().find(
+					'> .fw-option-box.fw-backend-options-virtual-context'
+				).toArray().map(fw.options.getContextValue)
+			).then(function (valuesAsArray) {
+				promise.resolve({
+					value: valuesAsArray.map(function (singleContextValue) {
+						return singleContextValue.value;
+					}),
+
+					optionDescriptor: optionDescriptor
+				})
+			});
+
+			return promise;
+		}
+	})
 });
