@@ -158,8 +158,15 @@
 				//fwe.trigger('fw:datetime-range:first:open', { dateTimePicker: dateTimeFirstPicker, dateTimeInput: $dateTimeFirstInput }); ????
 			});
 
-			$dateTimeFirstInput.on('change', setMaxTimeLimit );
-			$dateTimeLastInput.on('change', setMinTimeLimit );
+			$dateTimeFirstInput.on('change', function () {
+				setMaxTimeLimit();
+				triggerChangeFor(this);
+			});
+
+			$dateTimeLastInput.on('change', function () {
+				setMinTimeLimit();
+				triggerChangeFor(this);
+			});
 
 			dateTimeLastPicker.on('open.xdsoft', function(e){
 				var firstInputMomentFormat = $dateTimeFirstInput.data('moment-format'),
@@ -264,6 +271,39 @@
 				.find('.fw-option-type-datetime-range:not(.fw-option-initialized)').each(init)
 				.addClass('fw-option-initialized');
 		});
+
+		fw.options.register('datetime-range', {
+			startListeningForChanges: $.noop,
+			getValue: function (optionDescriptor) {
+				return {
+					value: getValueForEl(optionDescriptor.el),
+					optionDescriptor: optionDescriptor
+				};
+			}
+		});
+
+		function triggerChangeFor ($container) {
+			$container = $($container).closest(
+				'[data-fw-option-type="datetime-range"]'
+			);
+
+			fw.options.trigger.changeForEl($container, {
+				value: getValueForEl($container)
+			});
+		}
+
+		function getValueForEl (el) {
+			return {
+				from: $(el).find(
+					'[data-fw-option-id="from"] input'
+				).val(),
+
+				to: $(el).find(
+					'[data-fw-option-id="to"] input'
+				).val()
+			}
+		}
+
 
 	});
 

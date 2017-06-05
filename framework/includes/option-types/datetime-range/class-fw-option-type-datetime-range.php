@@ -15,6 +15,10 @@ class FW_Option_Type_Datetime_Range extends FW_Option_Type {
 		return 'auto';
 	}
 
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
+	}
+
 	/**
 	 * Avaible options on http://xdsoft.net/jqplugins/datetimepicker/ excepts: [value, format]
 	 * @internal
