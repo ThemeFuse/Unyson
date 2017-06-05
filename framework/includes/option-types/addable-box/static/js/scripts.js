@@ -83,6 +83,9 @@ jQuery(document).ready(function ($) {
 
 							methods.checkLimit($option);
 							methods.updateHasBoxesClass($option);
+
+							fw.options.trigger.changeForEl($option);
+
 							break;
 						default:
 							// custom control. trigger event for others to handle this
@@ -233,8 +236,19 @@ jQuery(document).ready(function ($) {
 		var $elements = data.$elements.find(optionTypeClass +':not(.fw-option-initialized)');
 
 		$elements.toArray().map(function (el) {
-			fw.options.on.changeByContext(el, function (data) {
-				fw.options.trigger.changeForEl(data.context);
+			fw.options.on.change(function (data) {
+				if (! $(data.context).is(
+					'[data-fw-option-type="addable-box"] .fw-option-boxes > .fw-option-box'
+				)) {
+					return;
+				}
+
+				// Listen to just its own virtual contexts
+				if (! el.contains(data.context)) {
+					return;
+				}
+
+				fw.options.trigger.changeForEl(el);
 			});
 		});
 
@@ -260,7 +274,6 @@ jQuery(document).ready(function ($) {
 					$newBox.removeClass('fw-animation-zoom-in');
 				}, 300);
 			}
-
 
 			$boxes.append($newBox);
 
