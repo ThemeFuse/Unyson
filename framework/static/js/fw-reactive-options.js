@@ -81,7 +81,7 @@ fw.options = (function ($, currentFwOptions) {
 	/**
 	 * data:
 	 *  optionId
-	 *  optionType
+	 *  type
 	 *  value
 	 *  context
 	 *  el
@@ -106,10 +106,10 @@ fw.options = (function ($, currentFwOptions) {
 	 * Trigger a scoped event for a specific option type, has the form:
 	 *   fw:options:{type}:{eventName}
 	 */
-	function triggerScopedByType (eventName, data, el) {
+	function triggerScopedByType (eventName, el, data) {
 		data = getActualData(el, data);
 
-		trigger(data.optionType + ':' + eventName, data);
+		trigger(data.type + ':' + eventName, data);
 	}
 
 	function getActualData (el, data) {
