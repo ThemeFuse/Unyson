@@ -199,22 +199,39 @@
 	function setDataForRoot ($root, data) {
 		var currentData = getDataForRoot($root);
 
-		$root.find('input').val(
-			JSON.stringify(
-				_.omit(
-					_.extend(
-						{},
-						currentData,
-						data
-					),
+		var actualValue = _.omit(
+			_.extend(
+				{},
+				currentData,
+				data
+			),
 
-					'attachment'
-				)
-			)
+			'attachment'
+		);
+
+		fw.options.trigger.changeForEl($root, {
+			value: actualValue
+		});
+
+		$root.find('input').val(
+			JSON.stringify(actualValue)
 		).trigger('change');
 
 		refreshSinglePreview($root);
 	}
+
+	fw.options.register('icon-v2', {
+		startListeningForChanges: $.noop,
+		getValue: function (optionDescriptor) {
+			return {
+				value: JSON.parse(
+					$(optionDescriptor.el).find('input').val()
+				),
+
+				optionDescriptor: optionDescriptor
+			}
+		}
+	})
 
 }(jQuery));
 
