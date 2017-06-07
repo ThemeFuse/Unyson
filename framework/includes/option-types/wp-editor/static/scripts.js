@@ -153,6 +153,25 @@
 			.addClass('fw-option-initialized');
 	});
 
+	fw.options.register('wp-editor', {
+		startListeningForChanges: function (optionDescriptor) {
+			$(optionDescriptor.el).find('textarea.wp-editor-area')
+				.on('change', function (e) {
+					fw.options.trigger.changeForEl(e.target);
+				});
+		},
+
+		getValue: function (optionDescriptor) {
+			return {
+				value: $(optionDescriptor.el).find(
+					'textarea.wp-editor-area'
+				).val(),
+
+				optionDescriptor: optionDescriptor
+			}
+		}
+	});
+
 })(jQuery, fwEvents);
 
 /**
