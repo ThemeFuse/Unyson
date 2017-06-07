@@ -12,7 +12,8 @@
 		'select',
 		'short-select',
 		'gmap-key',
-		'slider'
+		'slider',
+		'short-slider'
 	]
 
 	simpleInputs.map(function (optionType) {
