@@ -45,6 +45,14 @@ fw.options = (function ($, currentFwOptions) {
 	currentFwOptions.on.change = onChange;
 	currentFwOptions.on.changeByContext = onChangeByContext;
 
+	/**
+	 * Allows:
+	 *   fw.options.off(...)
+	 *   fw.options.off.change(...)
+	 */
+	currentFwOptions.off.change = offChange;
+
+
 	return currentFwOptions;
 
 	function onChange (listener) {
@@ -76,6 +84,10 @@ fw.options = (function ($, currentFwOptions) {
 
 	function off (eventName, listener) {
 		fwEvents.off('fw:options:' + eventName, listener);
+	}
+
+	function offChange (listener) {
+		off('change', listener);
 	}
 
 	/**
