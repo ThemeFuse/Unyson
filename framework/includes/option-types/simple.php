@@ -12,6 +12,10 @@ class FW_Option_Type_Hidden extends FW_Option_Type {
 		return 'hidden';
 	}
 
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
+	}
+
 	/**
 	 * @internal
 	 * {@inheritdoc}
@@ -75,6 +79,10 @@ class FW_Option_Type_Text extends FW_Option_Type {
 	protected function _enqueue_static( $id, $option, $data ) {
 	}
 
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
+	}
+
 	/**
 	 * @param string $id
 	 * @param array $option
@@ -117,6 +125,10 @@ class FW_Option_Type_Short_Text extends FW_Option_Type_Text {
 		return 'short-text';
 	}
 
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
+	}
+
 	/**
 	 * @param string $id
 	 * @param array $option
@@ -151,6 +163,10 @@ class FW_Option_Type_Password extends FW_Option_Type {
 	 * {@inheritdoc}
 	 */
 	protected function _enqueue_static( $id, $option, $data ) {
+	}
+
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
 	}
 
 	/**
@@ -200,6 +216,10 @@ class FW_Option_Type_Textarea extends FW_Option_Type {
 	 * {@inheritdoc}
 	 */
 	protected function _enqueue_static( $id, $option, $data ) {
+	}
+
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
 	}
 
 	/**
@@ -256,6 +276,10 @@ class FW_Option_Type_Html extends FW_Option_Type {
 	 * {@inheritdoc}
 	 */
 	protected function _enqueue_static( $id, $option, $data ) {
+	}
+
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
 	}
 
 	/**
@@ -365,6 +389,10 @@ class FW_Option_Type_Checkbox extends FW_Option_Type {
 	protected function _enqueue_static( $id, $option, $data ) {
 	}
 
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
+	}
+
 	/**
 	 * @param string $id
 	 * @param array $option
@@ -456,6 +484,10 @@ class FW_Option_Type_Checkboxes extends FW_Option_Type {
 	protected function _enqueue_static( $id, $option, $data ) {
 	}
 
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
+	}
+
 	/**
 	 * @param string $id
 	 * @param array $option
@@ -496,6 +528,7 @@ class FW_Option_Type_Checkboxes extends FW_Option_Type {
 					'name' => $option['attr']['name'] . '[' . $value . ']',
 					'value' => 'true',
 					'id' => $option['attr']['id'] . '-' . $value,
+					'data-fw-checkbox-id' => $value
 				),
 				isset( $option['value'][ $value ] ) && $option['value'][ $value ]
 					? array('checked' => 'checked') : array()
@@ -584,6 +617,10 @@ class FW_Option_Type_Radio extends FW_Option_Type {
 	 * {@inheritdoc}
 	 */
 	protected function _enqueue_static( $id, $option, $data ) {
+	}
+
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
 	}
 
 	/**
@@ -702,6 +739,10 @@ class FW_Option_Type_Select extends FW_Option_Type {
 	 * {@inheritdoc}
 	 */
 	protected function _enqueue_static( $id, $option, $data ) {
+	}
+
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
 	}
 
 	/**
@@ -995,14 +1036,17 @@ class FW_Option_Type_Select_Multiple extends FW_Option_Type_Select {
 	}
 }
 
-class FW_Option_Type_Unique extends FW_Option_Type
-{
+class FW_Option_Type_Unique extends FW_Option_Type {
 	private static $ids = array();
 	private static $should_do_regeneration = true;
 
 	public function get_type()
 	{
 		return 'unique';
+	}
+
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
 	}
 
 	protected function _get_defaults()

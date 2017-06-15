@@ -336,6 +336,45 @@ final class _FW_Component_Backend {
 			);
 
 			wp_register_script(
+				'fw-reactive-options-registry',
+				fw_get_framework_directory_uri(
+					'/static/js/fw-reactive-options-registry.js'
+				),
+				array('fw', 'fw-events'),
+				false
+			);
+
+			wp_register_script(
+				'fw-reactive-options-simple-options',
+				fw_get_framework_directory_uri(
+					'/static/js/fw-reactive-options-simple-options.js'
+				),
+				array('fw', 'fw-events', 'fw-reactive-options-undefined-option'),
+				false
+			);
+
+			wp_register_script(
+				'fw-reactive-options-undefined-option',
+				fw_get_framework_directory_uri(
+					'/static/js/fw-reactive-options-undefined-option.js'
+				),
+				array(
+					'fw', 'fw-events', 'fw-reactive-options-registry'
+				),
+				false
+			);
+
+			wp_register_script(
+				'fw-reactive-options',
+				fw_get_framework_directory_uri('/static/js/fw-reactive-options.js'),
+				array(
+					'fw', 'fw-events', 'fw-reactive-options-undefined-option',
+					'fw-reactive-options-simple-options'
+				),
+				false
+			);
+
+			wp_register_script(
 				'fw',
 				fw_get_framework_directory_uri( '/static/js/fw.js' ),
 				array( 'jquery', 'fw-events', 'backbone', 'qtip' ),
@@ -381,7 +420,7 @@ final class _FW_Component_Backend {
 			wp_register_script(
 				'fw-backend-options',
 				fw_get_framework_directory_uri( '/static/js/backend-options.js' ),
-				array( 'fw', 'fw-events', 'postbox', 'jquery-ui-tabs' ),
+				array( 'fw', 'fw-events', 'fw-reactive-options', 'postbox', 'jquery-ui-tabs' ),
 				fw()->manifest->get_version(),
 				true
 			);
@@ -1147,7 +1186,11 @@ final class _FW_Component_Backend {
 				) );
 			}
 
-			$options = json_decode( FW_Request::POST( 'options' ), true );
+			$options = FW_Request::POST( 'options' );
+
+			if (is_string( $options )) {
+				$options = json_decode( FW_Request::POST( 'options' ), true );
+			}
 
 			if ( ! $options ) {
 				wp_send_json_error( array(

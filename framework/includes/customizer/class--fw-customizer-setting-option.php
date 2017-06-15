@@ -18,6 +18,10 @@ class _FW_Customizer_Setting_Option extends WP_Customize_Setting {
 	}
 
 	public function sanitize($value) {
+		if ( is_array( $value ) ) {
+			return null;
+		}
+		   
 		$value = json_decode($value, true);
 
 		if (is_null($value) || !is_array($value)) {
