@@ -46,6 +46,10 @@ class FW_Option_Type_Range_Slider extends FW_Option_Type {
 		return 'range-slider';
 	}
 
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
+	}
+
 	/**
 	 * @internal
 	 */

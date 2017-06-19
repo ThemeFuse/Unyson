@@ -51,6 +51,10 @@
 			'change:values': function (modal, values) {
 				utils.editItem(utils.modal.get('itemRef'), values);
 
+                fw.options.trigger.changeForEl(utils.modal.get('itemRef'), {
+					value: values
+				});
+
 				fwEvents.trigger('fw:option-type:popup:change', {
 					element: $this,
 					values: values
@@ -93,5 +97,18 @@
 		data.$elements
 			.find('.fw-option-type-popup:not(.fw-option-initialized)').each(popup)
 			.addClass('fw-option-initialized');
+	});
+
+	fw.options.register('popup', {
+		startListeningForChanges: $.noop,
+		getValue: function (optionDescriptor) {
+			return {
+				value: JSON.parse(
+					$(optionDescriptor.el).find('[type="hidden"]').val()
+				),
+
+				optionDescriptor: optionDescriptor
+			}
+		}
 	});
 })(jQuery, _, fwEvents, window);

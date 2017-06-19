@@ -41,6 +41,10 @@ class Fw_Option_Type_Image_Picker extends FW_Option_Type
 		);
 	}
 
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
+	}
+
 	/**
 	 * @internal
 	 * {@inheritdoc}

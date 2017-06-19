@@ -29,6 +29,10 @@ jQuery(document).ready(function ($) {
 				$this.closest('.'+ optionTypeClass).trigger(customEventPrefix +'change', {
 					value: JSON.parse(value)
 				});
+
+				fw.options.trigger.changeForEl(
+					$this.closest('.' + optionTypeClass)
+				);
 			})
 			.on('change update:color', function(){
 				var $this = $(this),
@@ -42,4 +46,16 @@ jQuery(document).ready(function ($) {
 			.adaptiveSwitch()
 			.trigger('update:color');
 	});
+
+	fw.options.register('switch', {
+		startListeningForChanges: $.noop,
+		getValue: function (optionDescriptor) {
+			return {
+				value: JSON.parse(
+					$(optionDescriptor.el).find('[type="checkbox"]').val()
+				),
+				optionDescriptor: optionDescriptor
+			}
+		}
+	})
 });

@@ -9,6 +9,10 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 		return 'wp-editor';
 	}
 
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
+	}
+
 	/**
 	 * @internal
 	 */

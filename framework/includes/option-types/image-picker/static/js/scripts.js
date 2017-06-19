@@ -2,6 +2,16 @@
 	var optionTypeClass = 'fw-option-type-image-picker';
 	var eventNamePrefix = 'fw:option-type:image-picker:';
 
+	fw.options.register('image-picker', {
+		startListeningForChanges: jQuery.noop,
+		getValue: function (optionDescriptor) {
+			return {
+				value: optionDescriptor.el.querySelector('select').value,
+				optionDescriptor: optionDescriptor
+			}
+		}
+	});
+
 	jQuery(document).ready(function ($) {
 		/** Init image_picker options */
 		fwEvents.on('fw:options:init', function (data) {
@@ -26,6 +36,10 @@
 					},
 					changed: function (oldValues, newValues) {
 						var $this = $(this);
+
+						fw.options.trigger.changeForEl($this[0], {
+							value: newValues[0]
+						});
 
 						$this.closest('.'+ optionTypeClass).trigger(eventNamePrefix +'changed', {
 							oldValues : oldValues,

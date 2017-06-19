@@ -17,6 +17,10 @@ class FW_Option_Type_Slider extends FW_Option_Type {
 		return 'slider';
 	}
 
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
+	}
+
 	/**
 	 * @internal
 	 * {@inheritdoc}

@@ -81,23 +81,23 @@ fw.options = (function ($, currentFwOptions) {
 		if (! (
 			el.tagName === 'FORM'
 			||
-			el.classList.contains === 'fw-backend-options-virtual-context'
+			el.classList.contains('fw-backend-options-virtual-context')
 			||
-			el.classList.contains === 'fw-backend-option-descriptor'
+			el.classList.contains('fw-backend-option-descriptor')
 		)) {
 			throw "You passed an incorrect context element."
 		}
 
-    return $(el)
-      .find('.fw-backend-option-descriptor')
-      .not(
-        $(el).find('.fw-backend-options-virtual-context .fw-backend-option-descriptor')
-      )
-      .toArray()
-      .map(getOptionDescriptor)
-      .filter(function (descriptor) {
-        return isRootOption(descriptor.el, el)
-      })
+		return $(el)
+			.find('.fw-backend-option-descriptor')
+			.not(
+				$(el).find('.fw-backend-options-virtual-context .fw-backend-option-descriptor')
+			)
+			.toArray()
+			.map(getOptionDescriptor)
+			.filter(function (descriptor) {
+				return isRootOption(descriptor.el, el)
+			})
 	}
 
 	function getContextValue (el) {
@@ -127,13 +127,13 @@ fw.options = (function ($, currentFwOptions) {
 				var values = {};
 
 				optionDescriptors.map(function (optionDescriptor, index) {
-					values[optionDescriptor.id] = valuesAsArray[index].values;
+					values[optionDescriptor.id] = valuesAsArray[index].value;
 				});
 
 				promise.resolve({
-					valuesAsArray: valuesAsArray,
+					valueAsArray: valuesAsArray,
 					optionDescriptors: optionDescriptors,
-					values: values
+					value: values
 				});
 			})
 			.fail(function () {
@@ -351,6 +351,5 @@ fw.options = (function ($, currentFwOptions) {
 
 		return element[matchesFn](selector);
 	}
-
 })(jQuery, (fw.options || {}));
 

@@ -12,6 +12,10 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 		return 'icon-v2';
 	}
 
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
+	}
+
 	public function _init()
 	{
 		/**

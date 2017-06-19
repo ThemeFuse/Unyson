@@ -73,9 +73,11 @@
 
 				frame.on('select', function() {
 					var attachment = frame.state().get('selection').first();
+
 					elements.$input
 						.val(attachment.id)
 						.trigger('change'); // trigger Customizer update
+
 					performSelection(attachment);
 				});
 			};
@@ -124,6 +126,14 @@
 
 			fwe.trigger('fw:option-type:upload:clear', {$element: elements.$container});
 			elements.$container.trigger('fw:option-type:upload:clear');
+
+			fw.options.trigger.changeForEl(elements.$container, {
+				value: {}
+			});
+
+			fw.options.trigger.scopedByType('clear', elements.$container, {
+				value: {}
+			});
 		}
 
 		function performSelection (attachment) {
@@ -139,6 +149,13 @@
 
 			elements.$container.trigger('fw:option-type:upload:change', {
 				attachment: attachment
+			});
+
+			fw.options.trigger.changeForEl(elements.$container, {
+				value: {
+					attachment_id: attachment.get('id'),
+					url: attachment.get('url')
+				}
 			});
 		}
 	};
