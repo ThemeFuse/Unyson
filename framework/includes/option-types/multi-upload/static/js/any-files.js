@@ -101,9 +101,12 @@
 					$element: elements.$container,
 					attachments: attachments
 				});
+
 				elements.$container.trigger('fw:option-type:multi-upload:change', {
 					attachments: attachments
 				});
+
+				triggerChangeForIds(elements.$container, ids);
 			});
 		};
 
@@ -125,6 +128,11 @@
 			fwe.trigger('fw:option-type:multi-upload:clear', {$element: elements.$container});
 			elements.$container.trigger('fw:option-type:multi-upload:clear');
 
+			triggerChangeForIds(elements.$container, {
+				attachments: [],
+				value: {}
+			});
+
 			e.preventDefault();
 		});
 	};
@@ -134,5 +142,19 @@
 			.find('.fw-option-type-multi-upload.any-files:not(.fw-option-initialized)').each(init)
 			.addClass('fw-option-initialized');
 	});
+
+	function triggerChangeForIds ($container, attachment_ids) {
+		fw.options.trigger.changeForEl($container, {
+			attachments: attachment_ids.map(wp.media.attachment),
+			value: attachment_ids.map(extractSingleAttachmentData)
+		});
+
+		function extractSingleAttachmentData (attachment_id) {
+			return {
+				attachment_id: attachment_id,
+				url: wp.media.attachment(attachment_id).get('url')
+			};
+		}
+	}
 
 })(jQuery, fwEvents);

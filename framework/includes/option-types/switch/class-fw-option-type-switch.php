@@ -12,6 +12,10 @@ class FW_Option_Type_Switch extends FW_Option_Type
 		return 'switch';
 	}
 
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
+	}
+
 	/**
 	 * @internal
 	 * {@inheritdoc}
@@ -101,6 +105,7 @@ class FW_Option_Type_Switch extends FW_Option_Type
 
 		return '<div '. fw_attr_to_html($option['attr']) .'>'.
 			'<!-- note: value is json encoded, if want to use it in js, do: var val = JSON.parse($input.val()); -->'.
+			'<!-- deprecated: use reactive options for extracting the current value of the switch -->'.
 			($checked ? '' : fw_html_tag('input', array(
 				'type' => 'hidden',
 				'name' => $input_attr['name'],

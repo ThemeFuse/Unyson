@@ -25,6 +25,10 @@ class FW_Option_Type_Upload extends FW_Option_Type
 		);
 	}
 
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
+	}
+
 	/**
 	 * @internal
 	 */

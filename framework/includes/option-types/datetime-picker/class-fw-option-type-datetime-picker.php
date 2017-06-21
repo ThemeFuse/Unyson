@@ -11,6 +11,10 @@ class FW_Option_Type_Datetime_Picker extends FW_Option_Type {
 		return 'fixed';
 	}
 
+	protected function _get_data_for_js($id, $option, $data = array()) {
+		return false;
+	}
+
 	/**
 	 * Detetime-picker options on http://xdsoft.net/jqplugins/datetimepicker/ excepts: [value]
 	 * Additional options:

@@ -11,8 +11,28 @@
 			};
 
 		fwe.trigger('fw:options:datetime-picker:before-init', data);
-		$input.datetimepicker(data.options);
+
+		$input.datetimepicker(data.options)
+			.on('change', function (e) {
+				fw.options.trigger.changeForEl(
+					jQuery(e.target).closest('[data-fw-option-type="datetime-picker"]'), {
+						value: e.target.value
+					}
+				)
+			});
 	};
+
+	fw.options.register('datetime-picker', {
+		startListeningForChanges: $.noop,
+		getValue: function (optionDescriptor) {
+			return {
+				value: $(optionDescriptor.el).find(
+					'[data-fw-option-type="text"]'
+				).find('> input').val(),
+				optionDescriptor: optionDescriptor
+			}
+		}
+	})
 
 	fwe.on('fw:options:init', function(data) {
 		data.$elements

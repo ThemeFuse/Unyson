@@ -93,9 +93,9 @@
 
 		listenToChangesForCurrentOptionAndPreserveScoping(
 			optionDescriptor.el,
-			function (e) {
+			_.throttle(function (e) {
 				fw.options.trigger.changeForEl(e.target);
-			}
+			}, 300)
 		);
 
 		if (optionDescriptor.hasNestedOptions) {

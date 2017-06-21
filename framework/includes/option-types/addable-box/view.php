@@ -42,7 +42,7 @@ if (!empty($data['value'])) {
 	<div class="fw-option-boxes metabox-holder">
 		<?php foreach ($data['value'] as $value_index => &$values): ?>
 			<?php $i++; ?>
-			<div class="fw-option-box" data-name-prefix="<?php echo fw_htmlspecialchars($data['name_prefix'] .'['. $id .']['. $i .']') ?>" data-values="<?php echo fw_htmlspecialchars(json_encode($values)) ?>">
+			<div class="fw-option-box fw-backend-options-virtual-context" data-name-prefix="<?php echo fw_htmlspecialchars($data['name_prefix'] .'['. $id .']['. $i .']') ?>" data-values="<?php echo fw_htmlspecialchars(json_encode($values)) ?>">
 				<?php ob_start() ?>
 				<div class="fw-option-box-options fw-force-xs">
 					<?php
@@ -80,7 +80,7 @@ if (!empty($data['value'])) {
 		$increment_placeholder = '###-addable-box-increment-'. fw_rand_md5() .'-###';
 
 		echo fw_htmlspecialchars(
-			'<div class="fw-option-box" data-name-prefix="'. fw_htmlspecialchars($data['name_prefix'] .'['. $id .']['. $increment_placeholder .']') .'">'.
+			'<div class="fw-option-box fw-backend-options-virtual-context" data-name-prefix="'. fw_htmlspecialchars($data['name_prefix'] .'['. $id .']['. $increment_placeholder .']') .'">'.
 				fw()->backend->render_box(
 					$data['id_prefix'] . $id .'-'. $increment_placeholder .'-box',
 					'&nbsp;',
