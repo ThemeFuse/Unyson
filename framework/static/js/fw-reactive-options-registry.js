@@ -55,6 +55,8 @@ fw.options = (function ($, currentFwOptions) {
 		data.context = detectDOMContext(el);
 
 		data.el = findOptionDescriptorEl(el);
+
+		data.rootContext = findNonOptionContext(data.el);
 		data.id = $(data.el).attr('data-fw-option-id');
 		data.type = $(data.el).attr('data-fw-option-type');
 		data.isRootOption = isRootOption(data.el, findNonOptionContext(data.el));
