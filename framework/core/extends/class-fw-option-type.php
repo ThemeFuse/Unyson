@@ -257,7 +257,7 @@ abstract class FW_Option_Type
 				wp_enqueue_script(
 					'fw-option-types',
 					fw_get_framework_directory_uri('/static/js/option-types.js'),
-					array('fw-events', 'qtip'),
+					array('fw-events', 'qtip', 'fw-reactive-options'),
 					fw()->manifest->get_version(),
 					true
 				);
