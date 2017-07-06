@@ -341,6 +341,8 @@ abstract class FW_Option_Type
 	/**
 	 * a general purpose 'label' => false | true from options.php
 	 * @return bool | string
+	 *
+	 * @since 2.7.1
 	 */
 	public function _default_label($id, $option) {
 		return fw_id_to_title($id);
