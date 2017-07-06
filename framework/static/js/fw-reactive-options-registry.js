@@ -13,6 +13,7 @@ fw.options = (function ($, currentFwOptions) {
 	currentFwOptions.getOptionDescriptor = getOptionDescriptor;
 	currentFwOptions.startListeningToEvents = startListeningToEvents;
 	currentFwOptions.getContextOptions = getContextOptions;
+	currentFwOptions.findOptionInSameContextFor = findOptionInSameContextFor;
 
 	/**
 	 * fw.options.getValueForEl(element)
@@ -67,6 +68,17 @@ fw.options = (function ($, currentFwOptions) {
 									: findPathToTheTopContext(data.el, findNonOptionContext(data.el));
 
 		return data;
+	}
+
+	// TODO: allow to pass a nested path here
+	function findOptionInSameContextFor (el, path) {
+		// Allow nested options here
+		return getContextOptions(getOptionDescriptor(el).rootContext).filter(
+			function (optionDescriptor) {
+				// TODO: check the path here
+				return optionDescriptor.id === path;
+			}
+		)[0];
 	}
 
 	/**
