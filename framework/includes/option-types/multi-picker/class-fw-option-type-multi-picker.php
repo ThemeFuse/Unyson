@@ -65,6 +65,9 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 		return true;
 	}
 
+	/**
+	 * Hide label for each multi-picker by default
+	 */
 	public function _default_label($id, $option) {
 		return false;
 	}
