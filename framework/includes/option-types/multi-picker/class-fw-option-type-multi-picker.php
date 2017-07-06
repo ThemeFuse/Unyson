@@ -93,7 +93,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 		 * the rest move to attr[data-options-template] to be rendered on choice change.
 		 * This should improve page loading speed.
 		 */
-		{
+		if (is_array($option['picker'])) {
 			{
 				reset($option['picker']);
 				$picker_key   = key($option['picker']);
@@ -164,7 +164,9 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 	 * @param string $picker_type
 	 * @return array( 'choice_id' => array( Choice Options ) )
 	 */
-	private function get_picker_choices($option, $picker, $picker_type) {
+	private function get_picker_choices($option) {
+		return $option['choices'];
+
 		switch($picker_type) {
 			case 'switch':
 				$picker_choices = array_intersect_key($option['choices'], array(
@@ -227,17 +229,9 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 		 */
 		$option = $this->prepare_choices($option);
 
-		{
-			reset($option['picker']);
-			$picker_key  = key($option['picker']);
-			$picker      = $option['picker'][$picker_key];
-			$picker_type = $picker['type'];
-		}
 
 		$picker_choices = $this->get_picker_choices(
-			$option,
-			$picker,
-			$picker_type
+			$option
 		);
 
 		$hide_picker = '';
@@ -262,6 +256,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 		}
 
 		$choices_groups = array();
+
 		foreach ($picker_choices as $key => $set) {
 			if (!empty($set)) {
 				$choices_groups[$id . '-' . $key] = array(
@@ -283,17 +278,29 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 			}
 		}
 
-		$picker_group = array(
-			$id . '-picker' => array(
-				'type'    => 'group',
-				'desc'    => false,
-				'label'   => false,
-				'attr'    => array('class' => $show_borders .' '. $hide_picker .' picker-group picker-type-'. $picker_type),
-				'options' => array($picker_key => $picker)
-			)
-		);
+		$picker_group = null;
 
-		return array_merge($picker_group, $choices_groups);
+		if (is_array($option['picker'])) {
+			{
+				reset($option['picker']);
+				$picker_key  = key($option['picker']);
+				$picker      = $option['picker'][$picker_key];
+				$picker_type = $picker['type'];
+			}
+
+			$picker_group = array(
+				$id . '-picker' => array(
+					'type'    => 'group',
+					'desc'    => false,
+					'label'   => false,
+					'attr'    => array('class' => $show_borders .' '. $hide_picker .' picker-group picker-type-'. $picker_type),
+					'options' => array($picker_key => $picker)
+				)
+			);
+
+		}
+
+		return $picker_group ? array_merge($picker_group, $choices_groups) : $choices_groups;
 	}
 	
 	/**
@@ -361,13 +368,6 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 	 */
 	protected function _get_value_from_input($option, $input_value)
 	{
-		{
-			reset($option['picker']);
-			$picker_key  = key($option['picker']);
-			$picker_type = $option['picker'][$picker_key]['type'];
-			$picker      = $option['picker'][$picker_key];
-		}
-
 		$value = array();
 		
 		/**
@@ -375,20 +375,25 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 		 */
 		$option = $this->prepare_choices($option);
 
-		if (is_null($input_value) && isset($option['value'][$picker_key])) {
-			$value[$picker_key] = $option['value'][$picker_key];
-		} else {
-			$value[$picker_key] = fw()->backend->option_type($picker_type)->get_value_from_input(
-				$picker,
-				isset($input_value[$picker_key]) ? $input_value[$picker_key] : null
-			);
+		if (is_array($option['picker'])) {
+			reset($option['picker']);
+			$picker_key  = key($option['picker']);
+			$picker_type = $option['picker'][$picker_key]['type'];
+			$picker      = $option['picker'][$picker_key];
+
+			if (is_null($input_value) && isset($option['value'][$picker_key])) {
+				$value[$picker_key] = $option['value'][$picker_key];
+			} else {
+				$value[$picker_key] = fw()->backend->option_type($picker_type)->get_value_from_input(
+					$picker,
+					isset($input_value[$picker_key]) ? $input_value[$picker_key] : null
+				);
+			}
 		}
 
 		foreach (
 			$this->get_picker_choices(
-				$option,
-				$picker,
-				$picker_type
+				$option
 			)
 			as $choice_id => $choice_options
 		) {
