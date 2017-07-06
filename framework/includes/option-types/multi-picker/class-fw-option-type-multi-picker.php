@@ -23,7 +23,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 				)
 			),
 			'choices' => array(),
-			'hide_picker' => true,
+			'hide_picker' => false,
 			/**
 			 * Display separators between options
 			 */
