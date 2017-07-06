@@ -23,7 +23,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 				)
 			),
 			'choices' => array(),
-			'hide_picker' => false,
+			'hide_picker' => true,
 			/**
 			 * Display separators between options
 			 */
@@ -63,6 +63,10 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 		fw()->backend->enqueue_options_static($this->prepare_option($id, $option));
 
 		return true;
+	}
+
+	public function _default_label($id, $option) {
+		return false;
 	}
 
 	/**

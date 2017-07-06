@@ -339,6 +339,14 @@ abstract class FW_Option_Type
 	}
 
 	/**
+	 * a general purpose 'label' => false | true from options.php
+	 * @return bool | string
+	 */
+	public function _default_label($id, $option) {
+		return fw_id_to_title($id);
+	}
+
+	/**
 	 * Use this method to register a new option type
 	 *
 	 * @param string|FW_Option_Type $option_type_class
