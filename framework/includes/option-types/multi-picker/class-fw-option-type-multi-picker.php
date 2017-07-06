@@ -88,6 +88,16 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 			$option['attr']['class'] .= ' fw-option-type-multi-picker-without-borders';
 		}
 
+		$option['attr']['class'] .= is_array(
+			$option['picker']
+		) ? '' : ' fw-option-type-multi-picker-dynamic';
+
+		// Allow picker to be another option in the same context
+		// JS will watch its changes accordingly
+		if (is_string($option['picker'])) {
+			$option['attr']['data-fw-dynamic-picker-path'] = $option['picker'];
+		}
+
 		/**
 		 * Leave only select choice options to be rendered in the browser
 		 * the rest move to attr[data-options-template] to be rendered on choice change.
