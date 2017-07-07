@@ -97,4 +97,5 @@
 			return promise;
 		}
 	})
+
 })(jQuery);
