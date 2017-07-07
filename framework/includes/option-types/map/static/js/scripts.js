@@ -434,7 +434,7 @@
 
 	fw.options.register('map', {
 		getValue: function (optionDescriptor) {
-			let promise = $.Deferred()
+			var promise = $.Deferred()
 
 			fw.options
 				.getContextValue(optionDescriptor.el)
