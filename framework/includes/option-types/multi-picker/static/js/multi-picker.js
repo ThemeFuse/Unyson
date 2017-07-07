@@ -191,19 +191,6 @@
 	};
 
 	fw.options.register('multi-picker', {
-		getValue: function (optionDescriptor) {
-			let promise = $.Deferred()
-
-			fw.options
-				.getContextValue(optionDescriptor.el)
-				.then(function (result) {
-					promise.resolve({
-						value: result.value,
-						optionDescriptor: optionDescriptor
-					});
-				});
-
-			return promise;
-		}
+		getValue: fw.options.get('multi').getValue
 	})
 })(jQuery, fwEvents);
