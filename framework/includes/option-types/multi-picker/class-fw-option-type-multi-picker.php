@@ -65,6 +65,10 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 		return true;
 	}
 
+	public function _get_data_for_js($id, $option, $data = array()) {
+		return false;
+	}
+
 	/**
 	 * Hide label for each multi-picker by default
 	 */
