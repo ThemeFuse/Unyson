@@ -1,5 +1,5 @@
 jQuery(function($){
-  Color.prototype.toString = function (remove_alpha) {
+  Color.prototype.toStr = function (remove_alpha) {
     if (remove_alpha == 'no-alpha') {
       return this.toRgbaCSS(1).replace(/\s+/g, '');
     }
@@ -88,9 +88,12 @@ jQuery(function($){
         $input.iris({
           palettes: JSON.parse($input.attr('data-palettes')),
           defaultColor: false,
+	        create: function () {
+		        $(this).val(Color($(this).val()).toStr())
+	        },
           change: function (event, ui) {
             var $transparency = $input.next('.iris-picker').find('.transparency');
-            $transparency.css('backgroundColor', ui.color.toString('no-alpha'));
+            $transparency.css('backgroundColor', ui.color.toStr('no-alpha'));
 
             $alphaSlider.slider("option", "value", ui.color._alpha * 100);
 
@@ -144,6 +147,7 @@ jQuery(function($){
 
         $input.on('change keyup blur', function () {
           // iris::change is not triggered when the input is empty or color is wrong
+	        $(this).val(Color($(this).val()).toStr())
           helpers.updatePreview($input, $input.val());
         });
 
