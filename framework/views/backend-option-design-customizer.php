@@ -7,7 +7,9 @@
 
 {
 	if (!isset($option['label'])) {
-		$option['label'] = fw_id_to_title($id);
+		$option['label'] = fw()->backend->option_type($option['type'])->_default_label(
+			$id, $option
+		);
 	}
 
 	if (!isset($option['desc'])) {

@@ -27,6 +27,7 @@ class FW_Option_Type_Map extends FW_Option_Type {
 			'1.0',
 			true
 		);
+
 		wp_localize_script(
 			$this->get_type() . '-scripts',
 			'_fw_option_type_map',
@@ -49,21 +50,26 @@ class FW_Option_Type_Map extends FW_Option_Type {
 			? json_encode($data['value']['coordinates'])
 			: '';
 
-		$path = fw_get_framework_directory( '/includes/option-types/' . $this->get_type() . '/views/view.php' );
+		$path = fw_get_framework_directory(
+			'/includes/option-types/' . $this->get_type() . '/views/view.php'
+		);
 
-		return fw_render_view( $path, array(
+		return fw_render_view($path, array(
 			'id'     => $id,
 			'option' => $option,
 			'data'   => $data
-		) );
+		));
+	}
+
+	public function _get_data_for_js($id, $option, $data = array()) {
+		return false;
 	}
 
 	/**
 	 * @internal
 	 */
 	protected function _get_value_from_input( $option, $input_value ) {
-
-		if ( ! is_array( $input_value ) || empty( $input_value ) ) {
+		if (! is_array( $input_value ) || empty( $input_value )) {
 			$input_value = $option['value'];
 		}
 

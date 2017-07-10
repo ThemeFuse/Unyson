@@ -13,6 +13,8 @@ fw.options = (function ($, currentFwOptions) {
 	currentFwOptions.getOptionDescriptor = getOptionDescriptor;
 	currentFwOptions.startListeningToEvents = startListeningToEvents;
 	currentFwOptions.getContextOptions = getContextOptions;
+	currentFwOptions.findOptionInContextForPath = findOptionInContextForPath;
+	currentFwOptions.findOptionInSameContextFor = findOptionInSameContextFor;
 
 	/**
 	 * fw.options.getValueForEl(element)
@@ -52,9 +54,13 @@ fw.options = (function ($, currentFwOptions) {
 	function getOptionDescriptor (el) {
 		var data = {};
 
+		if (! el) return null;
+
 		data.context = detectDOMContext(el);
 
 		data.el = findOptionDescriptorEl(el);
+
+		data.rootContext = findNonOptionContext(data.el);
 		data.id = $(data.el).attr('data-fw-option-id');
 		data.type = $(data.el).attr('data-fw-option-type');
 		data.isRootOption = isRootOption(data.el, findNonOptionContext(data.el));
@@ -65,6 +71,56 @@ fw.options = (function ($, currentFwOptions) {
 									: findPathToTheTopContext(data.el, findNonOptionContext(data.el));
 
 		return data;
+	}
+
+	function findOptionInSameContextFor (el, path) {
+		var rootContext = getOptionDescriptor(el).rootContext;
+
+		return findOptionInContextForPath(
+			rootContext, path
+		);
+	}
+
+	/**
+	 * This receives a context (option as context works too)
+	 * and returns the option descriptor which respects the path
+	 *
+	 * - form
+	 * - .fw-backend-options-virtual-context
+	 * - .fw-backend-option-descriptor
+	 *
+	 * path:
+	 *  id/other_id/another_one
+	 */
+	function findOptionInContextForPath (context, path) {
+		var pathToTheTop = path.split('/');
+
+		return pathToTheTop.reduce(function (currentContext, path, index) {
+			if (! currentContext) return false;
+
+			var elOrDescriptorForPath = _.compose(
+				index === pathToTheTop.length - 1
+					? getOptionDescriptor
+					: _.identity,
+
+				_.partial(
+					maybeFindFirstLevelOptionInContext,
+					currentContext
+				)
+
+			);
+
+			return elOrDescriptorForPath(path);
+
+		}, context);
+
+		function maybeFindFirstLevelOptionInContext (context, firstLevelId) {
+			return (getContextOptions(context).filter(
+				function (optionDescriptor) {
+					return optionDescriptor.id === firstLevelId;
+				}
+			)[0] || {}).el;
+		}
 	}
 
 	/**
@@ -228,6 +284,8 @@ fw.options = (function ($, currentFwOptions) {
 
 	function findOptionDescriptorEl (el) {
 		el = (el instanceof jQuery) ? el[0] : el;
+
+		if (! el) return false;
 
 		if (el.classList.contains('fw-backend-option-descriptor')) {
 			return el;

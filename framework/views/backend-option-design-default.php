@@ -7,7 +7,9 @@
 
 {
 	if (!isset($option['label'])) {
-		$option['label'] = fw_id_to_title($id);
+		$option['label'] = fw()->backend->option_type($option['type'])->_default_label(
+			$id, $option
+		);
 	}
 
 	if (!isset($option['desc'])) {
@@ -133,6 +135,7 @@ try {
 		$desc_under_label = apply_filters('fw:backend-option-view:design-default:desc-under-label', false)
 	);
 }
+
 ?>
 <div class="<?php echo esc_attr($classes['option']) ?>" id="fw-backend-option-<?php echo esc_attr($data['id_prefix'] . $id) ?>">
 	<?php if ($option['label'] !== false): ?>

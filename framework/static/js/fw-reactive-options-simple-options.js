@@ -80,4 +80,22 @@
 			};
 		}
 	});
+
+	fw.options.register('multi', {
+		getValue: function (optionDescriptor) {
+			var promise = $.Deferred()
+
+			fw.options
+				.getContextValue(optionDescriptor.el)
+				.then(function (result) {
+					promise.resolve({
+						value: result.value,
+						optionDescriptor: optionDescriptor
+					});
+				});
+
+			return promise;
+		}
+	})
+
 })(jQuery);

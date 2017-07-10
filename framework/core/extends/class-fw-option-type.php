@@ -257,7 +257,7 @@ abstract class FW_Option_Type
 				wp_enqueue_script(
 					'fw-option-types',
 					fw_get_framework_directory_uri('/static/js/option-types.js'),
-					array('fw-events', 'qtip'),
+					array('fw-events', 'qtip', 'fw-reactive-options'),
 					fw()->manifest->get_version(),
 					true
 				);
@@ -336,6 +336,16 @@ abstract class FW_Option_Type
 	public function _get_backend_width_type()
 	{
 		return 'fixed';
+	}
+
+	/**
+	 * a general purpose 'label' => false | true from options.php
+	 * @return bool | string
+	 *
+	 * @since 2.7.1
+	 */
+	public function _default_label($id, $option) {
+		return fw_id_to_title($id);
 	}
 
 	/**
