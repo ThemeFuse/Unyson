@@ -40,6 +40,10 @@
 	function initDynamicMultiPicker () {
 		var $container = $(this);
 
+		$container.closest(
+			'.fw-backend-option-type-multi-picker'
+		).addClass('fw-option-type-multi-picker-dynamic-container');
+
 		$container.addClass('fw-option-initialized');
 
 		var optionDescriptor = fw.options.getOptionDescriptor($container[0]);
@@ -84,8 +88,16 @@
 
 				if ($choicesToReveal.length) {
 					$container.addClass('has-choice');
+
+					$container.closest(
+						'.fw-backend-option-type-multi-picker'
+					).addClass('fw-has-dynamic-choice');
 				} else {
 					$container.removeClass('has-choice');
+
+					$container.closest(
+						'.fw-backend-option-type-multi-picker'
+					).removeClass('fw-has-dynamic-choice');
 				}
 			};
 		}
