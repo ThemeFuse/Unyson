@@ -16,7 +16,7 @@
  *
  * TODO: document this better
  */
-fw.options = (function ($, currentFwOptions) {
+fw.options = (function($, currentFwOptions) {
 	currentFwOptions.on = on;
 	currentFwOptions.off = off;
 	currentFwOptions.trigger = trigger;
@@ -52,10 +52,27 @@ fw.options = (function ($, currentFwOptions) {
 	 */
 	currentFwOptions.off.change = offChange;
 
+	/**
+	 * A small little service for fetching HTML for option types from server.
+	 * It will perform caching for results inside a key-value store.
+	 *
+	 * Allows:
+	 *
+	 * fw.options.fetchHtml(options, values)
+	 * fw.options.fetchHtml.getCacheEntryFor(options, values)
+	 * fw.options.fetchHtml.emptyCache();
+	 *
+	 * // TODO: provide a way to empty cache for a specific set of options???
+	 */
+	var htmlCache = {};
+
+	fw.options.fetchHtml = fetchHtml;
+	fw.options.fetchHtml.getCacheEntryFor = fetchHtmlGetCacheEntryFor;
+	fw.options.fetchHtml.emptyCache = fetchHtmlEmptyCache;
 
 	return currentFwOptions;
 
-	function onChange (listener) {
+	function onChange(listener) {
 		on('change', listener);
 	}
 
@@ -66,8 +83,8 @@ fw.options = (function ($, currentFwOptions) {
 	 * If you want to be able to off the listener you should attach it with
 	 * onChange and filter based on context by yourself.
 	 */
-	function onChangeByContext (context, listener) {
-		onChange(function (data) {
+	function onChangeByContext(context, listener) {
+		onChange(function(data) {
 			if (data.context === findOptionDescriptorEl(context)) {
 				listener(data);
 			}
@@ -82,11 +99,11 @@ fw.options = (function ($, currentFwOptions) {
 		fwEvents.one('fw:options:' + eventName, listener);
 	}
 
-	function off (eventName, listener) {
+	function off(eventName, listener) {
 		fwEvents.off('fw:options:' + eventName, listener);
 	}
 
-	function offChange (listener) {
+	function offChange(listener) {
 		off('change', listener);
 	}
 
@@ -106,11 +123,11 @@ fw.options = (function ($, currentFwOptions) {
 		trigger(eventName, getActualData(el, data));
 	}
 
-	function triggerChange (data) {
+	function triggerChange(data) {
 		trigger('change', data);
 	}
 
-	function triggerChangeForEl (el, data) {
+	function triggerChangeForEl(el, data) {
 		triggerChange(getActualData(el, data));
 	}
 
@@ -118,25 +135,80 @@ fw.options = (function ($, currentFwOptions) {
 	 * Trigger a scoped event for a specific option type, has the form:
 	 *   fw:options:{type}:{eventName}
 	 */
-	function triggerScopedByType (eventName, el, data) {
+	function triggerScopedByType(eventName, el, data) {
 		data = getActualData(el, data);
 
 		trigger(data.type + ':' + eventName, data);
 	}
 
-	function getActualData (el, data) {
-		return $.extend(
-			{}, currentFwOptions.getOptionDescriptor(el), data
-		);
+	function getActualData(el, data) {
+		return $.extend({}, currentFwOptions.getOptionDescriptor(el), data);
 	}
 
-	function findOptionDescriptorEl (el) {
-		el = (el instanceof jQuery) ? el[0] : el;
+	function findOptionDescriptorEl(el) {
+		el = el instanceof jQuery ? el[0] : el;
 
 		return el.classList.contains('fw-backend-option-descriptor')
 			? el
 			: $(el).closest('.fw-backend-option-descriptor')[0];
 	}
-})(jQuery, (fw.options || {}));
 
+	function fetchHtml(options, values) {
+		var promise = $.Deferred();
 
+		var cacheId = fetchHtmlGetCacheId(options, values);
+
+		if (typeof htmlCache[cacheId] !== 'undefined') {
+			promise.resolve(htmlCache[cacheId]);
+			return promise;
+		}
+
+		$.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'fw_backend_options_render',
+				options: JSON.stringify(options),
+				values: JSON.stringify(
+					typeof values == 'undefined' ? {} : values
+				),
+				data: {
+					name_prefix: 'fw_edit_options_modal',
+					id_prefix: 'fw-edit-options-modal-',
+				},
+			},
+			dataType: 'json',
+			success: function(response, status, xhr) {
+				if (!response.success) {
+					promise.reject('Error: ' + response.data.message);
+					return;
+				}
+
+				htmlCache[cacheId] = response.data.html;
+
+				promise.resolve(response.data.html, response, status, xhr);
+			},
+			error: function(xhr, status, error) {
+				promise.reject(status + ': ' + String(error));
+			},
+		});
+
+		return promise;
+	}
+
+	function fetchHtmlGetCacheEntryFor(options, values) {
+		return htmlCache[fetchHtmlGetCacheId(options, values)];
+	}
+
+	function fetchHtmlEmptyCache() {
+		htmlCache = {};
+	}
+
+	function fetchHtmlGetCacheId(options, values) {
+		return fw.md5(
+			JSON.stringify(options) +
+				'~' +
+				JSON.stringify(typeof values == 'undefined' ? {} : values)
+		);
+	}
+})(jQuery, fw.options || {});
