@@ -70,6 +70,32 @@ fw.options = (function($, currentFwOptions) {
 	fw.options.fetchHtml.getCacheEntryFor = fetchHtmlGetCacheEntryFor;
 	fw.options.fetchHtml.emptyCache = fetchHtmlEmptyCache;
 
+	/**
+	 * A helper for getting actual values for a set of options and values.
+	 * Much better than fw.getValuesFromServer() because it doesn't require
+	 * you to encode values as form data params. You just pass a valid JSON
+	 * object and it just works.
+	 *
+	 * fw.options
+	 *   .getActualValues({a: {type: 'text', value: 'Initial'})
+	 *   .then(function (values) {
+	 *     // {
+	 *     //   a: 'Initial'
+	 *     // }
+	 *     console.log(values);
+	 *   });
+	 *
+	 * fw.options
+	 *   .getActualValues({a: {type: 'text', value: 'Initial'}, {a: 'Changed'})
+	 *   .then(function (values) {
+	 *     // {
+	 *     //   a: 'Changed'
+	 *     // }
+	 *     console.log(values);
+	 *   });
+	 */
+    fw.options.getActualValues = getActualValues;
+
 	return currentFwOptions;
 
 	function onChange(listener) {
@@ -214,5 +240,35 @@ fw.options = (function($, currentFwOptions) {
 				'~' +
 				JSON.stringify(typeof values == 'undefined' ? {} : values)
 		);
+	}
+
+	function getActualValues (options, values) {
+		var promise = $.Deferred();
+
+		$.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'fw_backend_options_get_values_json',
+				options: JSON.stringify(options),
+				values: JSON.stringify(
+					typeof values == 'undefined' ? {} : values
+				)
+			},
+			dataType: 'json',
+			success: function(response, status, xhr) {
+				if (!response.success) {
+					promise.reject('Error: ' + response.data.message);
+					return;
+				}
+
+				promise.resolve(response.data.values, response, status, xhr);
+			},
+			error: function(xhr, status, error) {
+				promise.reject(status + ': ' + String(error));
+			},
+		});
+
+		return promise;
 	}
 })(jQuery, fw.options || {});
