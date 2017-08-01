@@ -153,8 +153,12 @@ fw.options = (function($, currentFwOptions) {
 			: $(el).closest('.fw-backend-option-descriptor')[0];
 	}
 
-	function fetchHtml(options, values) {
+	function fetchHtml(options, values, options) {
 		var promise = $.Deferred();
+
+		if (!options) options = {};
+
+		options = _.extend({ name_prefix: 'fw_edit_options_modal' }, options);
 
 		var cacheId = fetchHtmlGetCacheId(options, values);
 
@@ -173,8 +177,8 @@ fw.options = (function($, currentFwOptions) {
 					typeof values == 'undefined' ? {} : values
 				),
 				data: {
-					name_prefix: 'fw_edit_options_modal',
-					id_prefix: 'fw-edit-options-modal-',
+					name_prefix: options.name_prefix,
+					id_prefix: options.name_prefix.replace(/_/g, '-') + '-',
 				},
 			},
 			dataType: 'json',
