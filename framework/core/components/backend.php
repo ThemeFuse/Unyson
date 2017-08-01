@@ -1262,10 +1262,12 @@ final class _FW_Component_Backend {
 				$values = json_decode( FW_Request::POST( 'values' ), true );
 			}
 
-			if ( ! $values ) {
-				wp_send_json_error(array(
-					'message' => 'Wrong values'
-				));
+			if (! is_array($values)) {
+				if ( ! $values ) {
+					wp_send_json_error(array(
+						'message' => 'Wrong values'
+					));
+				}
 			}
 		}
 
