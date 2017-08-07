@@ -65,7 +65,7 @@
 			if (pickerDescriptor.el === optionDescriptor.el) {
 				setTimeout(function () {
 					chooseGroupForOptionDescriptor(optionDescriptor);
-				}, 300);
+				}, 0);
 			}
 		}
 
