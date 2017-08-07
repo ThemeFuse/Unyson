@@ -71,11 +71,10 @@
 
 		function chooseGroupForOptionDescriptor (optionDescriptor) {
 			fw.options.getValueForEl(pickerDescriptor.el).then(function (value) {
+				// TODO: implement interfaces for multiple compound option types
 				if (pickerDescriptor.type === 'icon-v2') {
 					if (value.value.type === 'icon-font') {
-						if (value.value['icon-class']) {
-							chooseGroup(value.value.type);
-						}
+						chooseGroup(value.value['icon-class'] ? value.value.type : '');
 					} else {
 						chooseGroup(value.value.type);
 					}
