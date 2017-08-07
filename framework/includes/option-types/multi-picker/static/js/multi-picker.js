@@ -72,7 +72,13 @@
 		function chooseGroupForOptionDescriptor (optionDescriptor) {
 			fw.options.getValueForEl(pickerDescriptor.el).then(function (value) {
 				if (pickerDescriptor.type === 'icon-v2') {
-					chooseGroup(value.value.type);
+					if (value.value.type === 'icon-font') {
+						if (value.value['icon-class']) {
+							chooseGroup(value.value.type);
+						}
+					} else {
+						chooseGroup(value.value.type);
+					}
 				} else {
 					if (! _.isString(value.value)) {
 						throw "Your picker returned a non-string value. In order for it to work with multi-pickers it should yield string values";
