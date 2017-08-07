@@ -107,7 +107,11 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 		 * the rest move to attr[data-options-template] to be rendered on choice change.
 		 * This should improve page loading speed.
 		 */
-		if (is_array($option['picker'])) {
+		$theme_has_lazy_multi_picker = fw()->theme->get_config(
+			'lazy_multi_picker', true
+		);
+
+		if (is_array($option['picker']) && $theme_has_lazy_multi_picker) {
 			{
 				reset($option['picker']);
 				$picker_key   = key($option['picker']);
@@ -155,6 +159,7 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 					'id_prefix' => $data['id_prefix'] . $id . '-',
 					'name_prefix' => $data['name_prefix'] . '[' . $id . ']',
 				));
+
 				$options_array[$group_id]['options'] = array();
 			}
 		}
