@@ -50,7 +50,7 @@
 
 			$this.selectize({
 				maxItems: ( limit > 0 ) ? limit : null,
-				plugins: ['remove_button'],
+				plugins: ['remove_button','drag_drop'],
 				delimiter: '/*/',
 				valueField: 'val',
 				labelField: 'title',
