@@ -421,6 +421,17 @@ function fw_print( $value ) {
 }
 
 /**
+ * Alias for fw_print
+ *
+ * @see fw_print()
+ */
+if ( ! function_exists( 'debug' ) ) {
+	function debug() {
+		call_user_func_array( 'fw_print', func_get_args() );
+	}
+}
+
+/**
  * Generate html tag
  *
  * @param string $tag Tag name

@@ -2,8 +2,8 @@
 Contributors: unyson
 Tags: page builder, shortcodes, backup, seo, breadcrumbs, portfolio, framework
 Requires at least: 4.4
-Tested up to: 4.7
-Stable tag: 2.6.16
+Tested up to: 4.8
+Stable tag: 2.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,13 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.7.1 =
+* Bug fixes
+
+= 2.7.0 =
+* Fixed [#2460](https://github.com/ThemeFuse/Unyson/issues/2460),[#1775](https://github.com/ThemeFuse/Unyson/issues/1775#issuecomment-293581057),[#2516](https://github.com/ThemeFuse/Unyson/issues/2516)[#2536](https://github.com/ThemeFuse/Unyson/pull/2536)[#1419](https://github.com/ThemeFuse/Unyson/issues/1419)[#2563](https://github.com/ThemeFuse/Unyson/issues/2563)[#2587](https://github.com/ThemeFuse/Unyson/issues/2587)[#2591](https://github.com/ThemeFuse/Unyson/issues/2591)[#2604](https://github.com/ThemeFuse/Unyson/issues/2604)
+* New feature. Introducing Reactive Option Types
 
 = 2.6.15 =
 * Fixed [#2490](https://github.com/ThemeFuse/Unyson/issues/2490), [#2450](https://github.com/ThemeFuse/Unyson/issues/2450), [#326](https://github.com/ThemeFuse/Unyson/issues/326)

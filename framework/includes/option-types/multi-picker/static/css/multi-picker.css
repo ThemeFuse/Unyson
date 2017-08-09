@@ -31,6 +31,10 @@
 	animation-duration: .5s;
 }
 
+.fw-option-type-multi-picker-dynamic-container.fw-backend-option-type-multi-picker:not(.fw-has-dynamic-choice) {
+	display: none;
+}
+
 .fw-option-type-multi-picker.fw-option-type-multi-picker-with-borders:not(.has-choice) > .picker-group > .fw-backend-option,
 .fw-option-type-multi-picker.fw-option-type-multi-picker-with-borders > .choice-group > .fw-backend-option-type-multi > div > div > div > div > .fw-backend-option:last-child,
 .fw-option-type-multi-picker.fw-option-type-multi-picker-without-borders > .choice-group > .fw-backend-option-type-multi > div > div > div > div > .fw-backend-option {

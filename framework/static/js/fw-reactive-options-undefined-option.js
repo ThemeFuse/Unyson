@@ -159,6 +159,18 @@
 					'.fw-backend-options-virtual-context textarea'
 				)
 			)
+		).not(
+			jQuery(el).find(
+				'.fw-filter-from-serialization input'
+			).add(
+				jQuery(el).find(
+					'.fw-filter-from-serialization select'
+				)
+			).add(
+				jQuery(el).find(
+					'.fw-filter-from-serialization textarea'
+				)
+			)
 		);
 	}
 
@@ -232,9 +244,11 @@
 		}
 
 		function addPair(pair) {
-			if (!patterns.validate.test(pair.name)) return this;
+			if (! patterns.validate.test(pair.name)) return this;
+
 			var obj = makeObject(pair.name, encode(pair));
 			data = helper.extend(true, data, obj);
+
 			return this;
 		}
 

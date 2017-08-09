@@ -6,6 +6,10 @@ var fwEvents = new (function(){
 	var currentIndentation = 1;
 	var debug = false;
 
+	this.countAll = function (topic) {
+		return _events[topic];
+	}
+
 	/**
 	 * Make log helper public
 	 *

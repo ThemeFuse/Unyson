@@ -54,6 +54,14 @@ class FW_Option_Type_Multi extends FW_Option_Type
 		'</div>';
 	}
 
+	public function _get_data_for_js($id, $option, $data = array()) {
+		return false;
+	}
+
+	public function _default_label($id, $option) {
+		return false;
+	}
+
 	/**
 	 * @internal
 	 */

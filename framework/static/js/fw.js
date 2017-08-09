@@ -1093,8 +1093,7 @@ fw.getValuesFromServer = function (data) {
 };
 
 (function(){
-	var fwLoadingId = 'fw-options-modal',
-		htmlCache = {};
+	var fwLoadingId = 'fw-options-modal';
 
 	/**
 	 * Modal to edit backend options
@@ -1399,66 +1398,33 @@ fw.getValuesFromServer = function (data) {
 		getActualValues: function () {
 			return this.getValuesFromServer(this.content.$el.serialize());
 		},
-		getHtmlCacheId: function(values) {
-			return fw.md5(
-				JSON.stringify(this.get('options')) +
-				'~' +
-				JSON.stringify(typeof values == 'undefined' ? this.get('values') : values)
-			);
-		},
+
 		updateHtml: function(values) {
-			var cacheId = this.getHtmlCacheId(values);
-
-			if (typeof htmlCache[cacheId] != 'undefined') {
-				this.set('html', htmlCache[cacheId]);
-				return;
-			}
-
 			fw.loading.show(fwLoadingId);
 
 			this.set('html', '');
 
 			var modal = this;
 
-			jQuery.ajax({
-				url: ajaxurl,
-				type: 'POST',
-				data: {
-					action: 'fw_backend_options_render',
-					options: JSON.stringify(this.get('options')),
-					values: JSON.stringify(typeof values == 'undefined' ? this.get('values') : values),
-					data: {
-						name_prefix: 'fw_edit_options_modal',
-						id_prefix: 'fw-edit-options-modal-'
-					}
-				},
-				dataType: 'json',
-				success: function (response, status, xhr) {
-					fw.loading.hide(fwLoadingId);
-
-					if (!response.success) {
-						modal.set('html', 'Error: '+ response.data.message);
-						return;
-					}
-
-					htmlCache[cacheId] = response.data.html;
-
-					if (_.isEmpty(modal.get('values'))) {
-						// fixes https://github.com/ThemeFuse/Unyson/issues/1042#issuecomment-244364121
-						modal.set(
-							'values',
-							response.data.default_values,
-							{silent: modal.get('silentReceiveOfDefaultValues')}
-						);
-					}
-
-					modal.set('html', response.data.html);
-				},
-				error: function (xhr, status, error) {
-					fw.loading.hide(fwLoadingId);
-
-					modal.set('html', status+ ': '+ String(error));
+			var promise = fw.options.fetchHtml(
+				this.get('options'),
+				typeof values == 'undefined' ? this.get('values') : values
+			);
+			
+			promise.then(function (html, response) {
+				if (response && _.isEmpty(modal.get('values'))) {
+					// fixes https://github.com/ThemeFuse/Unyson/issues/1042#issuecomment-244364121
+					modal.set(
+						'values',
+						response.data.default_values,
+						{silent: modal.get('silentReceiveOfDefaultValues')}
+					);
 				}
+			});
+
+			promise.always(function (html) {
+				fw.loading.hide(fwLoadingId);
+				modal.set('html', html);
 			});
 		}
 	});

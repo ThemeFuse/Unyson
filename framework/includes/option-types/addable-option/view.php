@@ -20,7 +20,7 @@ if ($option['sortable']) {
 	<table class="fw-option-type-addable-option-options" width="100%" cellpadding="0" cellspacing="0" border="0">
 	<?php $i = 1; ?>
 	<?php foreach($data['value'] as $option_value): ?>
-		<tr class="fw-option-type-addable-option-option">
+		<tr class="fw-option-type-addable-option-option fw-backend-options-virtual-context">
 			<td class="td-move">
 				<img src="<?php echo esc_attr($move_img_src); ?>" width="7" />
 			</td>
@@ -64,7 +64,7 @@ if ($option['sortable']) {
 		$increment_placeholder = '###-addable-option-increment-'. fw_rand_md5() .'-###';
 
 		echo fw_htmlspecialchars(
-			'<tr class="fw-option-type-addable-option-option">
+			'<tr class="fw-option-type-addable-option-option fw-backend-options-virtual-context">
 				<td class="td-move">
 					<img src="'. $move_img_src .'" width="7" />
 				</td>

@@ -3,7 +3,7 @@
 #### Requirements:
 
 1. Make sure you have installed PHPUnit `sudo apt install phpunit`
-2. Get [`install-wp-tests.sh`](https://github.com/wp-cli/wp-cli/blob/master/templates/install-wp-tests.sh) helper
+2. Get [`install-wp-tests.sh`](https://github.com/wp-cli/scaffold-command/blob/v1.0.4/templates/install-wp-tests.sh) helper
 
 ## Steps to follow:
 

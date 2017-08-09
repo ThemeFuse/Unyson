@@ -122,6 +122,7 @@ jQuery(document).ready(function($){
 					},
 					activate: function (event, ui) {
 						initTab(ui.newPanel);
+						ui.newPanel.closest('.fw-options-tabs-contents')[0].scrollTop = 0
 					}
 				});
 
@@ -135,7 +136,11 @@ jQuery(document).ready(function($){
 						}
 					});
 			} else {
-				$tabs.tabs();
+				$tabs.tabs({
+					activate: function (event, ui) {
+						ui.newPanel.closest('.fw-options-tabs-contents')[0].scrollTop = 0
+					}
+				});
 			}
 
 			$tabs.each(function () {
