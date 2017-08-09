@@ -72,6 +72,11 @@ if (defined('FW')) {
 		}
 
 		/**
+		 * WP-CLI Unyson
+		 */
+		require $dir .'/wp-cli/fw-cli-autoload.php';
+
+		/**
 		 * The framework is loaded
 		 */
 		do_action('fw_init');
