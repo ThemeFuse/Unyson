@@ -104,7 +104,7 @@
 		getValue: function (optionDescriptor) {
 			return {
 				value: JSON.parse(
-					$(optionDescriptor.el).find('[type="hidden"]').val()
+					$(optionDescriptor.el).find('[type="hidden"]').val() || '""'
 				),
 
 				optionDescriptor: optionDescriptor
