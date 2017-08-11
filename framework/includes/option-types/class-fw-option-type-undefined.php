@@ -7,7 +7,7 @@
  */
 final class FW_Option_Type_Undefined extends FW_Option_Type {
 	public function get_type() {
-		return '';
+		return 'fw-undefined';
 	}
 
 	/**
