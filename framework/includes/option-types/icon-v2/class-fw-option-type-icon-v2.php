@@ -2,13 +2,11 @@
 
 if (! defined('FW')) { die('Forbidden'); }
 
-class FW_Option_Type_Icon_v2 extends FW_Option_Type
-{
+class FW_Option_Type_Icon_v2 extends FW_Option_Type {
 	private $enqueued_font_styles = array();
 	public $packs_loader = null;
 
-	public function get_type()
-	{
+	public function get_type() {
 		return 'icon-v2';
 	}
 
@@ -33,8 +31,7 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 
 	}
 
-	protected function _enqueue_static($id, $option, $data)
-	{
+	protected function _enqueue_static($id, $option, $data) {
 		add_action(
 			'admin_print_footer_scripts',
 			array($this, 'load_templates')
@@ -48,9 +45,7 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 			'/includes/option-types/' . $this->get_type() . '/static/'
 		);
 
-		wp_enqueue_style(
-			'fw-selectize'
-		);
+		wp_enqueue_style('fw-selectize');
 
 		wp_enqueue_script(
 			'fw-option-type-'. $this->get_type() .'-backend-previews',
