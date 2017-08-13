@@ -408,7 +408,9 @@
 			this.iconsDataPromise = jQuery.post(ajaxurl, {
 				action: 'fw_icon_v2_get_icons',
 			});
+
 			this.iconsDataPromise.then(_.bind(this.preloadFonts, this));
+
 			return this.iconsDataPromise;
 		},
 
@@ -425,56 +427,48 @@
 		},
 
 		loadLatestFavorites: function() {
-			if (this.favoritesPromise) {
-				return this.favoritesPromise;
+			var modal = this;
+
+			if (modal.favoritesPromise) {
+				return modal.favoritesPromise;
 			}
 
-			this.favoritesPromise = jQuery.post(ajaxurl, {
+			modal.favoritesPromise = jQuery.post(ajaxurl, {
 				action: 'fw_icon_v2_get_favorites',
 			});
 
-			this.favoritesPromise.then(_.bind(this.getFavoritesData, this));
+			modal.favoritesPromise.then(function () {
+				if (modal.favoritesPromise.state() === 'resolved') {
+					modal.currentFavorites = _.uniq(
+						modal.favoritesPromise.responseJSON
+					);
+				}
+			});
 
-			return this.favoritesPromise;
-		},
-
-		getFavoritesData: function() {
-			this.loadLatestFavorites();
-
-			if (this.favoritesPromise.state() === 'resolved') {
-				this.currentFavorites = _.uniq(
-					this.favoritesPromise.responseJSON
-				);
-			}
-
-			return null;
-		},
-
-		setFavorites: function() {
-			var data = {
-				action: 'fw_icon_v2_update_favorites',
-				favorites: JSON.stringify(_.uniq(this.currentFavorites)),
-			};
-
-			jQuery.post(ajaxurl, data, function(data) {});
+			return modal.favoritesPromise;
 		},
 
 		markAsFavorite: function(icon) {
 			icon = icon.trim();
 
-			var isFavorite = _.contains(this.currentFavorites, icon);
+			var modal = this;
+
+			var isFavorite = _.contains(modal.currentFavorites, icon);
 
 			if (isFavorite) {
-				this.currentFavorites = _.uniq(
-					_.reject(this.currentFavorites, function(favorite) {
+				modal.currentFavorites = _.uniq(
+					_.reject(modal.currentFavorites, function(favorite) {
 						return favorite == icon;
 					})
 				);
 			} else {
-				this.currentFavorites.push(icon);
+				modal.currentFavorites.push(icon);
 			}
 
-			this.setFavorites();
+			jQuery.post(ajaxurl, {
+				action: 'fw_icon_v2_update_favorites',
+				favorites: JSON.stringify(_.uniq(modal.currentFavorites)),
+			});
 		},
 
 		preloadFonts: function() {

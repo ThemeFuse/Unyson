@@ -133,6 +133,7 @@
 			.attr('data-icon-type', data['type']);
 
 		$root.find('i').attr('class', '');
+		$root.find('i').attr('style', '');
 
 		if (data.type === 'icon-font') {
 			$root.find('i').attr('class', data['icon-class']);
@@ -172,13 +173,13 @@
 		var actualValue = _.omit(_.extend({}, currentData, data), 'attachment');
 
 		if (actualValue.type === 'icon-font') {
-			if ((actualValue['icon-font'] || "").trim() === '') {
+			if ((actualValue['icon-class'] || "").trim() === '') {
 				actualValue.type = 'none';
 			}
 		}
 
 		if (actualValue.type === 'custom-upload') {
-			if ((actualValue['attachment-id'] || "").trim() === '') {
+			if (! actualValue['attachment-id']) {
 				actualValue.type = 'none';
 			}
 		}
