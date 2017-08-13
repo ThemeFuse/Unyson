@@ -51,6 +51,7 @@
 
 			onSubmit: function(e) {
 				this.model.resolveResult();
+
 				var content = this;
 
 				e.preventDefault();
@@ -268,8 +269,8 @@
 			this.frame.open();
 
 			/**
-		 * On first open, modal is prepared here.
-		 */
+			 * On first open, modal is prepared here.
+			 */
 			if (!this.get('controls_ready')) {
 				setTimeout(_.bind(this.prepareForPick, this), 0);
 				this.setupControls();

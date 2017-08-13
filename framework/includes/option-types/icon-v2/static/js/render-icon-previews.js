@@ -14,7 +14,7 @@
 	 * </div>
 	 */
 
-	fwEvents.on('fw:options:init', function (data) {
+	fwEvents.on('fw:options:init', function(data) {
 		data.$elements.find($rootClass).toArray().map(renderSinglePreview);
 	});
 
@@ -25,9 +25,11 @@
 	/**
 	 * For debugging purposes
 	 */
-	function refreshEachIcon () { $($rootClass).toArray().map(refreshSinglePreview); }
+	function refreshEachIcon() {
+		$($rootClass).toArray().map(refreshSinglePreview);
+	}
 
-	function getNewIcon (event) {
+	function getNewIcon(event) {
 		event.preventDefault();
 
 		var $root = $(this).closest($rootClass);
