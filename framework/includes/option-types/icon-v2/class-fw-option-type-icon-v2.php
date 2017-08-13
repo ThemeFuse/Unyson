@@ -164,7 +164,7 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type {
 	{
 		return array(
 			'value' => array(
-				'type' => 'icon-font', // icon-font | custom-upload
+				'type' => 'none', // none | icon-font | custom-upload
 
 				// ONLY IF icon-font
 				'icon-class' => '',

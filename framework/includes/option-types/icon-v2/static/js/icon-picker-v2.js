@@ -259,6 +259,10 @@
 				'icon-class': '',
 			};
 
+			if (values.type === 'none') {
+				values.type = 'icon-font';
+			}
+
 			this.set('current_state', values);
 			this.setResultBasedOnCurrentState();
 
