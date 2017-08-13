@@ -28,13 +28,19 @@
 				);
 			},
 
+			/**
+			 * Make that the thing with virtual lists.
+			 * Think about that.
+			 */
 			computeModalHeight: function() {
 				var $icons = this.model.frame.$el.find(
 					'.fw-icon-v2-library-packs-wrapper'
 				);
+
 				var toolbarHeight = this.model.frame.$el
 					.find('.fw-icon-v2-toolbar')
 					.height();
+
 				var $tabsList = this.model.frame.$el.find(
 					'.fw-options-tabs-list'
 				);
@@ -437,7 +443,7 @@
 				action: 'fw_icon_v2_get_favorites',
 			});
 
-			modal.favoritesPromise.then(function () {
+			modal.favoritesPromise.then(function() {
 				if (modal.favoritesPromise.state() === 'resolved') {
 					modal.currentFavorites = _.uniq(
 						modal.favoritesPromise.responseJSON
@@ -517,6 +523,7 @@
 
 		fuzzyConsecutive: function fuzzyConsecutive(query, search) {
 			if (query.trim() === '') return true;
+
 			return (
 				search.toLowerCase().trim().indexOf(query.toLowerCase()) > -1
 			);
