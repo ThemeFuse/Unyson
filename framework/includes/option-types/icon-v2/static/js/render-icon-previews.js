@@ -171,11 +171,23 @@
 
 		var actualValue = _.omit(_.extend({}, currentData, data), 'attachment');
 
+		if (actualValue.type === 'icon-font') {
+			if ((actualValue['icon-font'] || "").trim() === '') {
+				actualValue.type = 'none';
+			}
+		}
+
+		if (actualValue.type === 'custom-upload') {
+			if ((actualValue['attachment-id'] || "").trim() === '') {
+				actualValue.type = 'none';
+			}
+		}
+
+		$root.find('input').val(JSON.stringify(actualValue)).trigger('change');
+
 		fw.options.trigger.changeForEl($root, {
 			value: actualValue,
 		});
-
-		$root.find('input').val(JSON.stringify(actualValue)).trigger('change');
 
 		refreshSinglePreview($root);
 	}

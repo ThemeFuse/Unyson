@@ -73,11 +73,9 @@
 			fw.options.getValueForEl(pickerDescriptor.el).then(function (value) {
 				// TODO: implement interfaces for multiple compound option types
 				if (pickerDescriptor.type === 'icon-v2') {
-					if (value.value.type === 'icon-font') {
-						chooseGroup(value.value['icon-class'] ? value.value.type : '');
-					} else {
-						chooseGroup(value.value.type);
-					}
+					chooseGroup(
+						value.value.type === 'none' ? '' : value.value.type
+					);
 				} else {
 					if (! _.isString(value.value)) {
 						throw "Your picker returned a non-string value. In order for it to work with multi-pickers it should yield string values";
