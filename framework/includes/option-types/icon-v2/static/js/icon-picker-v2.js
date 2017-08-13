@@ -26,6 +26,8 @@
 					_.bind(this.model.applyFilters, this.model),
 					200
 				);
+
+				this.handleWindowResize = _.bind(this.computeModalHeight, this);
 			},
 
 			/**
@@ -213,6 +215,8 @@
 			}
 
 			this.promise = null;
+
+			$(window).off('resize', this.content.handleWindowResize);
 		},
 
 		initializeFrame: function(settings) {
@@ -256,6 +260,9 @@
 
 		open: function(values) {
 			this.promise = jQuery.Deferred();
+			var modal = this;
+
+			$(window).on('resize', this.content.handleWindowResize);
 
 			this.get('controls_ready') &&
 				this.set('controls_ready', !!this.frame.state());
