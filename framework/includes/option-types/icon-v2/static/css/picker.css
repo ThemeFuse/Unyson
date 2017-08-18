@@ -233,7 +233,7 @@
 	z-index: 10;
 }
 
-.admin-color-light .fw-icon-v2-library-pack > li:hover:not(.selected) {
+.fw-icon-v2-library-pack > li:hover:not(.selected) {
 	box-shadow: inset 0px 0px 0px 3px #dedede;
 }
 
