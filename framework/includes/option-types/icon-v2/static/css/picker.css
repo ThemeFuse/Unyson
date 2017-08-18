@@ -183,7 +183,7 @@
 .fw-icon-v2-library-packs-wrapper {
 	flex: 1 1 auto;
     overflow-y: auto;
-    padding: 20px 20px 0 20px; 
+    padding: 0 20px 0 20px; 
     box-shadow: inset 0px -5px 10px 0px rgba(0, 0, 0, 0.02);
 }
 
@@ -198,22 +198,18 @@
 	flex-wrap: wrap;
 	width: 100%;
 	margin: 0;
-	background: #eee;
+	padding: 20px 0 20px 0; 
 }
 
 .fw-icon-v2-library-pack > li {
 	display: flex;
 	position: relative;
-	/*width: 65px;*/
+	width: 65px;
 	/*height: 65px;*/
-	/*flex: 1 0 65px;*/
+	flex: 1 0 65px;
 	cursor: pointer;
 	margin-bottom: 0;
 	border-radius: 4px;
-	box-shadow: inset 0px 0px 0px 3px #dedede;
-
-	flex: 1;
-	flex-basis: 65px;
 }
 
 .fw-icon-v2-library-pack > li:before {
