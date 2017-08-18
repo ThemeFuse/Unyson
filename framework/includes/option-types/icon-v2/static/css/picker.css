@@ -180,9 +180,11 @@
 	height: 28px;
 }
 
-.fw-icon-v2-library-packs-wrapper {
+.fw-icon-v2-library-packs-wrapper,
+.fw-icon-v2-icon-favorites {
 	flex: 1 1 auto;
     overflow-y: auto;
+    height: 100%;
     padding: 0 20px 0 20px; 
     box-shadow: inset 0px -5px 10px 0px rgba(0, 0, 0, 0.02);
 }
@@ -228,7 +230,8 @@
 }
 
 .fw-icon-v2-library-pack > li.selected {
-	box-shadow: inset 0px 0px 0px 3px #00aadc, 0 2px 16px 4px rgba(43, 43, 54, 0.1);
+	z-index: 10;
+	box-shadow: inset 0px 0px 0px 3px #00aadc;
 }
 
 .fw-icon-v2-library-pack > li:hover:not(.selected) {
@@ -271,15 +274,6 @@
 	color: #00aadc;
 }
 
-/*** Favorites ***/
-.fw-icon-v2-icon-favorites {
-	flex: 1 1 auto;
-    overflow-y: auto;
-	height: 100%;
-	box-sizing: border-box;
-	padding: 20px 20px 0 20px;
-	box-shadow: inset 0px -5px 10px 0px rgba(0, 0, 0, 0.02);
-}
 
 
 
