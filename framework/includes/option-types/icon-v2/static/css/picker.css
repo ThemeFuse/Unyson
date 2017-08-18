@@ -231,10 +231,9 @@
 
 .fw-icon-v2-library-pack > li.selected {
 	z-index: 10;
-	box-shadow: inset 0px 0px 0px 3px #00aadc;
 }
 
-.fw-icon-v2-library-pack > li:hover:not(.selected) {
+.admin-color-light .fw-icon-v2-library-pack > li:hover:not(.selected) {
 	box-shadow: inset 0px 0px 0px 3px #dedede;
 }
 
@@ -251,7 +250,7 @@
 
 .fw-icon-v2-library-pack .fw-icon-inner i {
 	font-size: 22px;
-	color: #666666;
+	color: #6a737b;
 }
 
 .fw-icon-v2-library-pack .fw-icon-inner a {
@@ -269,11 +268,125 @@
 	opacity: 1;
 }
 
-.fw-icon-v2-library-pack .fw-icon-inner a:hover,
-.fw-icon-v2-library-pack .fw-icon-v2-favorite a {
+
+
+/*** Color Schemes ***********************************************************/
+
+/*** Default ***/
+.admin-color-fresh .fw-icon-v2-library-pack > li.selected {
+	box-shadow: inset 0px 0px 0px 3px #00aadc;
+}
+
+.admin-color-fresh .fw-icon-v2-library-pack > li.selected i {
+	color: #0085ba;
+}
+
+.admin-color-fresh .fw-icon-v2-library-pack .fw-icon-inner a:hover,
+.admin-color-fresh .fw-icon-v2-library-pack .fw-icon-v2-favorite a {
 	color: #00aadc;
 }
 
 
+/*** Light ***/
+.admin-color-light .fw-icon-v2-library-pack > li.selected {
+	box-shadow: inset 0px 0px 0px 3px #02A4C7;
+}
+
+.admin-color-light .fw-icon-v2-library-pack > li.selected i {
+	color: #037c9a;
+}
+
+.admin-color-light .fw-icon-v2-library-pack .fw-icon-inner a:hover,
+.admin-color-light .fw-icon-v2-library-pack .fw-icon-v2-favorite a {
+	color: #02A4C7;
+}
 
 
+/*** Blue ***/
+.admin-color-blue .fw-icon-v2-library-pack > li.selected {
+	box-shadow: inset 0px 0px 0px 3px #e3af55;
+}
+
+.admin-color-blue .fw-icon-v2-library-pack > li.selected i {
+	color: #bd831f;
+}
+
+.admin-color-blue .fw-icon-v2-library-pack .fw-icon-inner a:hover,
+.admin-color-blue .fw-icon-v2-library-pack .fw-icon-v2-favorite a {
+	color: #e3af55;
+}
+
+
+/*** Cofee ***/
+.admin-color-coffee .fw-icon-v2-library-pack > li.selected {
+	box-shadow: inset 0px 0px 0px 3px #c7a589;
+}
+
+.admin-color-coffee .fw-icon-v2-library-pack > li.selected i {
+	color: #ae7d55;
+}
+
+.admin-color-coffee .fw-icon-v2-library-pack .fw-icon-inner a:hover,
+.admin-color-coffee .fw-icon-v2-library-pack .fw-icon-v2-favorite a {
+	color: #c7a589;
+}
+
+
+/*** Ectoplasm ***/
+.admin-color-ectoplasm .fw-icon-v2-library-pack > li.selected {
+	box-shadow: inset 0px 0px 0px 3px #a3b745;
+}
+
+.admin-color-ectoplasm .fw-icon-v2-library-pack > li.selected i {
+	color: #727f30;
+}
+
+.admin-color-ectoplasm .fw-icon-v2-library-pack .fw-icon-inner a:hover,
+.admin-color-ectoplasm .fw-icon-v2-library-pack .fw-icon-v2-favorite a {
+	color: #a3b745;
+}
+
+
+/*** Midnight ***/
+.admin-color-midnight .fw-icon-v2-library-pack > li.selected {
+	box-shadow: inset 0px 0px 0px 3px #e14d43;
+}
+
+.admin-color-midnight .fw-icon-v2-library-pack > li.selected i {
+	color: #ba281e;
+}
+
+.admin-color-midnight .fw-icon-v2-library-pack .fw-icon-inner a:hover,
+.admin-color-midnight .fw-icon-v2-library-pack .fw-icon-v2-favorite a {
+	color: #e14d43;
+}
+
+
+/*** Ocean ***/
+.admin-color-ocean .fw-icon-v2-library-pack > li.selected {
+	box-shadow: inset 0px 0px 0px 3px #9ebaa0;
+}
+
+.admin-color-ocean .fw-icon-v2-library-pack > li.selected i {
+	color: #719a74;
+}
+
+.admin-color-ocean .fw-icon-v2-library-pack .fw-icon-inner a:hover,
+.admin-color-ocean .fw-icon-v2-library-pack .fw-icon-v2-favorite a {
+	color: #9ebaa0;
+}
+
+
+/*** Sunrise ***/
+.admin-color-sunrise .fw-icon-v2-library-pack > li.selected {
+	box-shadow: inset 0px 0px 0px 3px #dd823b;
+}
+
+.admin-color-sunrise .fw-icon-v2-library-pack > li.selected i {
+	color: #ad5d1e;
+}
+
+.admin-color-sunrise .fw-icon-v2-library-pack .fw-icon-inner a:hover,
+.admin-color-sunrise .fw-icon-v2-library-pack .fw-icon-v2-favorite a {
+	color: #dd823b;
+}
