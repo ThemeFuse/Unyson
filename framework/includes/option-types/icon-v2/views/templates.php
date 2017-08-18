@@ -174,14 +174,14 @@ $tabs = fw()->backend->render_options(
 				data-fw-icon-v2="{{data.css_class_prefix}} {{icon}}"
 				class="fw-icon-v2-library-icon {{selectedClass}} {{favoriteClass}}">
 
-				<i class="{{iconClass}}"></i>
+				<div class="fw-icon-inner">
+					<i class="{{iconClass}}"></i>
 
-				<a
-					title="<?php echo __('Add to Favorites', 'fw') ?>"
-					class="fw-icon-v2-favorite">
-
-					<i class="dashicons dashicons-star-filled"></i>
-				</a>
+					<a
+						title="<?php echo __('Add to Favorites', 'fw') ?>"
+						class="fw-icon-v2-favorite dashicons dashicons-star-filled">
+					</a>
+				</div>
 			</li>
 
 		<# }) #>
