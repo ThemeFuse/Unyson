@@ -111,9 +111,12 @@ $tabs = fw()->backend->render_options(
 <script type="text/html" id="tmpl-fw-icon-v2-favorites">
 
 <div class="fw-icon-v2-icon-favorites">
-	<# if (data.favorites.length === 0) { #>
+	<# var favorites = _.filter(data.favorites, _.compose(_.isNaN, _.partial(parseInt, _, 10))) #>
+
+	<# if (favorites.length === 0) { #>
 
 		<h4>You have no favorite icons yet.</h4>
+
 		<p>
 			To add icons here, simply click on the star 
 			(<i class="fw-icon-v2-info dashicons dashicons-star-filled"></i>)
@@ -124,7 +127,7 @@ $tabs = fw()->backend->render_options(
 
 		{{{
 			wp.template('fw-icon-v2-icons-collection')(
-				_.extend({}, {icons: data.favorites, current_state: data.current_state})
+				_.extend({}, {icons: favorites, current_state: data.current_state})
 			)
 		}}}
 
@@ -136,13 +139,15 @@ $tabs = fw()->backend->render_options(
 <script type="text/html" id="tmpl-fw-icon-v2-recent-custom-icon-uploads">
 
 <div class="fw-icon-v2-icon-recent-uploads">
-	<# if (data.recent_uploads.length === 0) { #>
+	<# var recent_uploads = _.filter(data.favorites, _.compose(_.negate(_.isNaN), _.partial(parseInt, _, 10))) #>
 
-		<h1>Upload an icon</h1>
+	<h1>Upload an icon</h1>
 
-		<button type="button" class="fw-icon-v2-custom-upload-perform button primary">
-			Upload
-		</button>
+	<button type="button" class="fw-icon-v2-custom-upload-perform button primary">
+		Upload
+	</button>
+
+	<# if (recent_uploads.length === 0) { #>
 
 		<h4>You have no uploaded icons.</h4>
 
@@ -153,7 +158,9 @@ $tabs = fw()->backend->render_options(
 
 	<# } else { #>
 
-		<p>Uploads listing</p>
+		<# _.each(recent_uploads, function (attachment_id) { #>
+			<p>{{attachment_id}}</p>
+		<# }) #>
 
 	<# } #>
 </div>

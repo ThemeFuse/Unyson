@@ -44,6 +44,8 @@
 			},
 
 			performImageUpload: function () {
+				var vm = this;
+
 				var uploadFrame = wp.media({
 					library: {
 						type: 'image',
@@ -68,8 +70,16 @@
 				uploadFrame.on('select', function () {
 					var attachments = uploadFrame.state().get('selection').toArray();
 
-					console.log('new icons', attachments);
-					// TODO: select all uploaded images here
+					attachments.map(function (attachment) {
+						if (! _.contains(
+							vm.model.currentFavorites,
+							attachment.id.toString()
+						)) {
+							vm.model.markAsFavorite(attachment.id.toString());
+						}
+					});
+
+					vm.renderFavoritesAndRecentUploads();
 
 					uploadFrame.detach();
 				});
@@ -113,7 +123,7 @@
 
 				this.model.markAsFavorite(icon);
 
-				this.renderFavorites();
+				this.renderFavoritesAndRecentUploads();
 				this.refreshFavorites();
 			},
 
@@ -127,14 +137,14 @@
 				});
 			},
 
-			renderFavorites: function() {
-				var $favorites = this.model.frame.$el.find(
+			renderFavoritesAndRecentUploads: function() {
+				this.model.frame.$el.find(
 					'.fw-icon-v2-icon-favorites'
-				);
+				).replaceWith(this.model.getFavoritesHtml());
 
-				$favorites.empty();
-
-				$favorites.replaceWith(this.model.getFavoritesHtml());
+				this.model.frame.$el.find(
+					'.fw-icon-v2-icon-recent-uploads'
+				).replaceWith(this.model.getRecentIconsHtml());
 			},
 
 			onSearch: function(event) {
@@ -407,19 +417,62 @@
 				return modal.favoritesPromise;
 			}
 
-			modal.favoritesPromise = jQuery.post(ajaxurl, {
+			modal.favoritesPromise = $.Deferred();
+
+			var ajaxPromise = $.post(ajaxurl, {
 				action: 'fw_icon_v2_get_favorites',
 			});
 
-			modal.favoritesPromise.then(function() {
-				if (modal.favoritesPromise.state() === 'resolved') {
-					modal.currentFavorites = _.uniq(
-						modal.favoritesPromise.responseJSON
+			ajaxPromise.then(function() {
+				if (ajaxPromise.state() === 'resolved') {
+					ajaxPromise = _.uniq(
+						ajaxPromise.responseJSON
 					);
 				}
+
+				var recent_uploads = _.filter(
+					ajaxPromise.responseJSON,
+					_.compose(_.negate(_.isNaN), _.partial(parseInt, _, 10))
+				);
+
+				if (recent_uploads.length === 0) {
+					modal.favoritesPromise.resolve();
+					return;
+				}
+
+				console.log(recent_uploads);
+
+				modal.preloadMultipleAttachments(recent_uploads).then(function () {
+					modal.favoritesPromise.resolve();
+				});
 			});
 
 			return modal.favoritesPromise;
+		},
+
+		preloadMultipleAttachments: function (attachment_ids) {
+			if (jQuery.when.all===undefined) {
+				jQuery.when.all = function(deferreds) {
+					var deferred = new jQuery.Deferred();
+					$.when.apply(jQuery, deferreds).then(
+						function() {
+							deferred.resolve(Array.prototype.slice.call(arguments));
+						},
+						function() {
+							deferred.fail(Array.prototype.slice.call(arguments));
+						});
+
+					return deferred;
+				}
+			}
+
+			return jQuery.when.all(
+				attachment_ids.filter(function (attachment_id) {
+					return ! wp.media.attachment(attachment_id).get('url');
+				}).map(function (id) {
+					return wp.attachment(id).fetch();
+				})
+			);
 		},
 
 		markAsFavorite: function(icon) {
@@ -499,7 +552,7 @@
 
 		getRecentIconsHtml: function () {
 			return wp.template('fw-icon-v2-recent-custom-icon-uploads')({
-				recent_uploads: [],
+				favorites: this.currentFavorites,
 				current_state: this.result,
 			});
 		},
