@@ -92,7 +92,11 @@
 
 				var $el = $(e.currentTarget);
 
-				this.model.result['icon-class'] = $el
+				this.model.result[
+					$el.closest('.fw-icon-v2-icon-recent-uploads').length > 0
+						? 'attachment-id'
+						: 'icon-class'
+				] = $el
 					.attr('data-fw-icon-v2')
 					.trim();
 
@@ -100,11 +104,16 @@
 			},
 
 			refreshSelectedIcon: function refreshSelectedIcon() {
-				var currentValue = this.model.result['icon-class'];
 
 				this.model.frame.$el
 					.find('.fw-icon-v2-library-icon.selected')
 					.removeClass('selected');
+
+				if (this.model.result.type === 'icon-font') {
+					var currentValue = this.model.result['icon-class'];
+				} else if (this.model.result.type === 'custom-upload') {
+					var currentValue = this.model.result['attachment-id'];
+				}
 
 				if (currentValue) {
 					this.model.frame.$el

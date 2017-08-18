@@ -167,15 +167,15 @@ $tabs = fw()->backend->render_options(
 			}).url; #>
 
 			<li
-				data-fw-icon-v2="attachment_id"
+				data-fw-icon-v2="{{ attachment_id }}"
 				class="fw-icon-v2-library-icon {{selectedClass}}">
 
 				<div class="fw-icon-inner">
-					<img src="{{ url }}" alt="">
+					<img src="{{ url }}" style="max-width: 100%" alt="">
 
 					<a
 						title="<?php echo __('Add to Favorites', 'fw') ?>"
-						class="fw-icon-v2-favorite dashicons dashicons-star-filled">
+						class="fw-icon-v2-favorite dashicons dashicons-no">
 					</a>
 				</div>
 			</li>
