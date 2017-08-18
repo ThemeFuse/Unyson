@@ -425,7 +425,7 @@
 
 			ajaxPromise.then(function() {
 				if (ajaxPromise.state() === 'resolved') {
-					ajaxPromise = _.uniq(
+					modal.currentFavorites = _.uniq(
 						ajaxPromise.responseJSON
 					);
 				}
@@ -439,8 +439,6 @@
 					modal.favoritesPromise.resolve();
 					return;
 				}
-
-				console.log(recent_uploads);
 
 				modal.preloadMultipleAttachments(recent_uploads).then(function () {
 					modal.favoritesPromise.resolve();
@@ -470,7 +468,7 @@
 				attachment_ids.filter(function (attachment_id) {
 					return ! wp.media.attachment(attachment_id).get('url');
 				}).map(function (id) {
-					return wp.attachment(id).fetch();
+					return wp.media.attachment(id).fetch();
 				})
 			);
 		},
