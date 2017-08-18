@@ -514,8 +514,13 @@
 		},
 
 		getLibraryHtml: function() {
+
+			var packs = _.values(this.getIconsData());
+			var pack_to_select = [ _.first(packs) ];
+
 			return wp.template('fw-icon-v2-library')({
 				packs: _.values(this.getIconsData()),
+				pack_to_select: pack_to_select,
 				current_state: this.result,
 				favorites: this.currentFavorites,
 			});

@@ -69,12 +69,10 @@ $tabs = fw()->backend->render_options(
 		class="fw-option fw-option-type-text">
 
 	<select class="fw-selectize">
-		<option selected value="all">
-			<?php echo __('All Packs', 'fw'); ?>
-		</option>
-
-		<# _.each(data.packs, function (pack) { #>
-			<option value="{{pack.name}}">{{pack.title}}</option>
+		<# _.each(data.packs, function (pack, index) { #>
+			<option {{ index === 0 ? 'selected' : '' }} value="{{pack.name}}">
+				{{pack.title}}
+			</option>
 		<# }) #>
 	</select>
 </div>
@@ -82,6 +80,7 @@ $tabs = fw()->backend->render_options(
 <div class="fw-icon-v2-library-packs-wrapper">
 	<# if (data.packs.length > 0) { #>
 		<# var template = wp.template('fw-icon-v2-packs'); #>
+		<# data.packs = data.pack_to_select #>
 
 		{{{ template(data) }}}
 	<# } #>
