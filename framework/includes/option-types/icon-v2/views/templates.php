@@ -115,13 +115,15 @@ $tabs = fw()->backend->render_options(
 
 	<# if (favorites.length === 0) { #>
 
-		<h4>You have no favorite icons yet.</h4>
+		<div class="fw-icon-v2-note">
+			<h3>You have no favorite icons yet.</h3>
 
-		<p>
-			To add icons here, simply click on the star 
-			(<i class="fw-icon-v2-info dashicons dashicons-star-filled"></i>)
-			button that's on top of each icon.
-		</p>
+			<p>
+				To add icons here, simply click on the star 
+				(<i class="fw-icon-v2-info dashicons dashicons-star-filled"></i>)
+				button that's on top right corner of each icon.
+			</p>
+		</div>
 
 	<# } else { #>
 

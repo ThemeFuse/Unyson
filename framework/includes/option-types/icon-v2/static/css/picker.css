@@ -193,6 +193,22 @@
 	display: none;
 }
 
+.fw-icon-v2-note {
+	text-align: center;
+}
+
+.fw-icon-v2-note h3 {
+	margin-top: 40px;
+	margin-bottom: 0;
+}
+
+.fw-icon-v2-note i {
+	width: 15px;
+	height: 15px;
+	font-size: 15px;
+	line-height: 19px;
+}
+
 /*** Icon List ***/
 .fw-icon-v2-library-pack {
 	display: flex;
@@ -234,7 +250,7 @@
 }
 
 .fw-icon-v2-library-pack > li:hover:not(.selected) {
-	box-shadow: inset 0px 0px 0px 3px #dedede;
+	box-shadow: inset 0px 0px 0px 3px #d2d7dc;
 }
 
 .fw-icon-v2-library-pack .fw-icon-inner {
@@ -261,7 +277,7 @@
 	height: 12px;
 	font-size: 12px;
 	opacity: 0;
-	color: #e0e0e0;
+	color: #d2d7dc;
 }
 
 .fw-icon-v2-library-pack .fw-icon-inner:hover a {
