@@ -158,9 +158,43 @@ $tabs = fw()->backend->render_options(
 
 	<# } else { #>
 
+		<ul class="fw-icon-v2-library-pack">
+
 		<# _.each(recent_uploads, function (attachment_id) { #>
-			<p>{{attachment_id}}</p>
+			<# var selectedClass = data.current_state['attachment-id'] === attachment_id ? 'selected' : ''; #>
+			<# url = _.min(_.values(wp.media.attachment(attachment_id).get('sizes')), function (size) {
+				return size.width;
+			}).url; #>
+
+			<li
+				data-fw-icon-v2="attachment_id"
+				class="fw-icon-v2-library-icon {{selectedClass}}">
+
+				<div class="fw-icon-inner">
+					<img src="{{ url }}" alt="">
+
+					<a
+						title="<?php echo __('Add to Favorites', 'fw') ?>"
+						class="fw-icon-v2-favorite dashicons dashicons-star-filled">
+					</a>
+				</div>
+			</li>
+
 		<# }) #>
+
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			
+		</ul>
 
 	<# } #>
 </div>
