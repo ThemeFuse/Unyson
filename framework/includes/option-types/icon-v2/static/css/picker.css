@@ -194,32 +194,41 @@
 /*** Icon List ***/
 .fw-icon-v2-library-pack {
 	display: flex;
+	justify-content: flex-start;
 	flex-wrap: wrap;
 	width: 100%;
-	/*justify-content: space-between;*/
 	margin: 0;
-	background: #ccc;
-	/*padding: 20px 20px 0 20px; */
+	background: #eee;
 }
 
 .fw-icon-v2-library-pack > li {
 	display: flex;
-	align-items: center;
-	justify-content: center;
 	position: relative;
-	width: 65px;
+	/*width: 65px;*/
 	/*height: 65px;*/
-	flex: 1 0 65px;
+	/*flex: 1 0 65px;*/
 	cursor: pointer;
 	margin-bottom: 0;
 	border-radius: 4px;
 	box-shadow: inset 0px 0px 0px 3px #dedede;
+
+	flex: 1;
+	flex-basis: 65px;
 }
 
 .fw-icon-v2-library-pack > li:before {
 	content: '';
 	width: 100%;
 	padding-top: 100%;
+}
+
+.fw-icon-v2-library-pack > li.fw-ghost-item {
+	opacity: 0;
+	height: 0;
+}
+
+.fw-icon-v2-library-pack > li.fw-ghost-item:before {
+	display: none;
 }
 
 .fw-icon-v2-library-pack > li.selected {
@@ -230,18 +239,23 @@
 	box-shadow: inset 0px 0px 0px 3px #dedede;
 }
 
-.fw-icon-v2-library-pack > li:hover > a {
-	opacity: 1;
+.fw-icon-v2-library-pack .fw-icon-inner {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
 }
 
-.fw-icon-v2-library-pack > li > i {
-	display: none;
+.fw-icon-v2-library-pack .fw-icon-inner i {
 	font-size: 22px;
 	color: #666666;
 }
 
-.fw-icon-v2-library-pack > li > a {
-	display: none;
+.fw-icon-v2-library-pack .fw-icon-inner a {
 	position: absolute;
 	top: 6px;
 	right: 6px;
@@ -249,25 +263,27 @@
 	height: 12px;
 	font-size: 12px;
 	opacity: 0;
-}
-
-.fw-icon-v2-library-pack > li > a > i {
-	font-size: inherit;
-	width: inherit;
-	height: inherit;
 	color: #e0e0e0;
 }
 
-.fw-icon-v2-library-pack > li > a > i:hover {
+.fw-icon-v2-library-pack .fw-icon-inner:hover a {
+	opacity: 1;
+}
+
+.fw-icon-v2-library-pack .fw-icon-inner a:hover,
+.fw-icon-v2-library-pack .fw-icon-v2-favorite a {
 	color: #00aadc;
 }
 
-.fw-icon-v2-library-pack > li.fw-icon-v2-favorite > a > i {
-	color: #00aadc;
+/*** Favorites ***/
+.fw-icon-v2-icon-favorites {
+	flex: 1 1 auto;
+    overflow-y: auto;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 20px 20px 0 20px;
+	box-shadow: inset 0px -5px 10px 0px rgba(0, 0, 0, 0.02);
 }
-
-
-
 
 
 

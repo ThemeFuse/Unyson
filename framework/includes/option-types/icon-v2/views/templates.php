@@ -192,6 +192,19 @@ $tabs = fw()->backend->render_options(
 			</li>
 
 		<# }) #>
+
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			<li class="fw-ghost-item"></li>
+			
 		</ul>
 	<# } #>
 
