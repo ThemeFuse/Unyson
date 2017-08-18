@@ -35,9 +35,10 @@ $tabs = fw()->backend->render_options(
 			'lazy_tabs' => false,
 			'title' => __('Upload', 'fw'),
 			'options' => array(
-				'custom-upload' => array(
-					'type' => 'upload',
-					'label' => __('Upload Icon', 'fw')
+				'upload-custom-icon-recents' => array(
+					'type' => 'html-full',
+					'label' => false,
+					'html' => '{{{data.recently_used_custom_uploads_html}}}'
 				)
 			)
 		)
@@ -126,6 +127,33 @@ $tabs = fw()->backend->render_options(
 				_.extend({}, {icons: data.favorites, current_state: data.current_state})
 			)
 		}}}
+
+	<# } #>
+</div>
+
+</script>
+
+<script type="text/html" id="tmpl-fw-icon-v2-recent-custom-icon-uploads">
+
+<div class="fw-icon-v2-icon-recent-uploads">
+	<# if (data.recent_uploads.length === 0) { #>
+
+		<h1>Upload an icon</h1>
+
+		<button type="button" class="fw-icon-v2-custom-upload-perform button primary">
+			Upload
+		</button>
+
+		<h4>You have no uploaded icons.</h4>
+
+		<p>
+			You can simply click on the Upload button to upload more icons and
+			use them right away.
+		</p>
+
+	<# } else { #>
+
+		<p>Uploads listing</p>
 
 	<# } #>
 </div>

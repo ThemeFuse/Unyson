@@ -295,6 +295,30 @@ class FW_Icon_V2_Packs_Loader
 	public function get_default_icon_packs()
 	{
 		return array(
+			'dashicons' => array(
+				'name' => 'dashicons',
+				'title' => 'Dashicons',
+				'css_class_prefix' => 'dashicons',
+				'css_file' => ABSPATH . WPINC . '/css/dashicons.min.css',
+				'css_file_uri' => includes_url('css/dashicons.min.css'),
+
+				'admin_wp_enqueue_handle' => 'dashicons',
+				'frontend_wp_enqueue_handle' => 'dashicons',
+			),
+
+			'linecons' => array(
+				'name' => 'linecons',
+				'title' => 'Linecons',
+				'css_class_prefix' => 'linecons',
+				'css_file' => fw_get_framework_directory(
+					'/static/libs/linecons/css/linecons.css'
+				),
+
+				'css_file_uri' => fw_get_framework_directory_uri(
+					'/static/libs/linecons/css/linecons.css'
+				),
+			),
+
 			'font-awesome' => array(
 				'name' => 'font-awesome',
 				'title' => 'Font Awesome',
@@ -323,18 +347,6 @@ class FW_Icon_V2_Packs_Loader
 				),
 			),
 
-			'linecons' => array(
-				'name' => 'linecons',
-				'title' => 'Linecons',
-				'css_class_prefix' => 'linecons',
-				'css_file' => fw_get_framework_directory(
-					'/static/libs/linecons/css/linecons.css'
-				),
-
-				'css_file_uri' => fw_get_framework_directory_uri(
-					'/static/libs/linecons/css/linecons.css'
-				),
-			),
 
 			'linearicons' => array(
 				'name' => 'linearicons',

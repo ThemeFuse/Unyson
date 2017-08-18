@@ -13,6 +13,7 @@
 					'onSearch',
 				'click .fw-icon-v2-library-icon': 'markIconAsSelected',
 				'click .fw-icon-v2-library-icon a': 'markIconAsFavorite',
+				'click button.fw-icon-v2-custom-upload-perform': 'performImageUpload',
 				submit: 'onSubmit',
 			},
 
@@ -42,6 +43,40 @@
 				}, 0);
 			},
 
+			performImageUpload: function () {
+				var uploadFrame = wp.media({
+					library: {
+						type: 'image',
+					},
+
+					states: new wp.media.controller.Library({
+						library: wp.media.query({ type: 'image' }),
+						multiple: true,
+						filterable: 'uploaded',
+						content: 'upload',
+						title: 'Select Image',
+						priority: 20,
+					}),
+				});
+
+				uploadFrame.on('ready', function () {
+					uploadFrame.modal.$el.addClass('fw-option-type-upload');
+				});
+
+				uploadFrame.off('select');
+
+				uploadFrame.on('select', function () {
+					var attachments = uploadFrame.state().get('selection').toArray();
+
+					console.log('new icons', attachments);
+					// TODO: select all uploaded images here
+
+					uploadFrame.detach();
+				});
+
+				uploadFrame.open();
+			},
+
 			markIconAsSelected: function markIconAsSelected(e) {
 				e.preventDefault();
 
@@ -66,15 +101,6 @@
 						.find('[data-fw-icon-v2$="' + currentValue + '"]')
 						.addClass('selected');
 				}
-			},
-
-			refreshAttachment: function() {
-				var currentId = this.model.result['attachment-id'];
-
-				this.model.frame.$el
-					.find('.fw-option-type-upload > input[type="hidden"]')
-					.val(currentId)
-					.trigger('change');
 			},
 
 			markIconAsFavorite: function markIconAsFavorite(e) {
@@ -138,8 +164,6 @@
 
 			var modal = this;
 
-			this.set('picker_id', fw.randomMD5());
-
 			this.currentFavorites = null;
 
 			this.result = {};
@@ -147,8 +171,6 @@
 			jQuery
 				.when(this.loadIconsData(), this.loadLatestFavorites())
 				.then(_.bind(this.setHtml, this));
-
-			this.attachEvents();
 
 			this.frame.on('close', _.bind(this.rejectResultAndResetIt, this));
 
@@ -192,43 +214,13 @@
 			fw.OptionsModal.prototype.initializeFrame.call(this, settings);
 		},
 
-		setAttachment: function(data) {
-			if (
-				data.$element.attr('data-fw-icon-v2-id') !==
-				this.get('picker_id')
-			) {
-				return;
-			}
-
-			this.result.attachment = data.attachment;
-
-			if (data.attachment) {
-				this.result['attachment-id'] = data.attachment.get('id');
-				this.result['url'] = data.attachment.get('url');
-			} else {
-				this.result['attachment-id'] = '';
-				this.result['url'] = '';
-			}
-		},
-
-		attachEvents: function() {
-			fwEvents.on(
-				'fw:option-type:upload:change',
-				_.bind(this.setAttachment, this)
-			);
-
-			fwEvents.on(
-				'fw:option-type:upload:clear',
-				_.bind(this.setAttachment, this)
-			);
-		},
-
 		setHtml: function() {
 			this.set('html', this.getTabsHtml());
 		},
 
 		open: function(values) {
 			this.promise = jQuery.Deferred();
+
 			var modal = this;
 
 			this.get('controls_ready') &&
@@ -257,7 +249,12 @@
 			 */
 			if (!this.get('controls_ready')) {
 				setTimeout(_.bind(this.prepareForPick, this), 0);
-				this.setupControls();
+
+				this.frame.$el.find('.fw-icon-v2-toolbar select').selectize({
+					onChange: _.bind(this.applyFilters, this),
+				});
+
+				this.content.refreshFavorites();
 			}
 
 			return this.promise;
@@ -281,8 +278,6 @@
 				if (currentTab !== 2) {
 					$tabs.tabs({ active: 2 });
 				}
-
-				this.content.refreshAttachment();
 			}
 
 			if (this.get('current_state').type !== 'custom-upload') {
@@ -290,7 +285,13 @@
 					$tabs.tabs({ active: 0 });
 				}
 
+				this.maybeResetFiltersForIcon();
+
 				this.content.refreshSelectedIcon();
+
+				// TODO: scroll into view for both uploads and the rest of the
+				// icons
+				return;
 
 				if (this.result['icon-class']) {
 					var el = this.frame.$el.find(
@@ -306,16 +307,14 @@
 			}
 		},
 
-		setupControls: function() {
-			this.frame.$el.find('.fw-icon-v2-toolbar select').selectize({
-				onChange: _.bind(this.applyFilters, this),
+		maybeResetFiltersForIcon: function () {
+			if (! this.result['icon-class']) return;
+
+			var packForIcon = _.findWhere(_.values(this.getIconsData()), {
+				css_class_prefix: this.result['icon-class'].split(' ')[0]
 			});
 
-			this.content.refreshFavorites();
-
-			this.frame.$el
-				.find('.fw-option-type-upload')
-				.attr('data-fw-icon-v2-id', this.get('picker_id'));
+			console.log(packForIcon);
 		},
 
 		applyFilters: function() {
@@ -349,7 +348,7 @@
 				{},
 				{
 					search: '',
-					pack: 'all',
+					pack: '',
 				},
 				filters
 			);
@@ -357,7 +356,7 @@
 			var packs = [];
 
 			if (filters.pack.trim() === '' || filters.pack === 'all') {
-				packs = _.values(this.getIconsData());
+				packs = [ _.first(_.values(this.getIconsData())) ];
 			} else {
 				packs = [this.getIconsData()[filters.pack]];
 			}
@@ -467,12 +466,15 @@
 		},
 
 		getTabsHtml: function() {
+
 			return wp.template('fw-icon-v2-tabs')({
 				icons_library_html: this.getLibraryHtml(),
 				favorites_list_html: this.getFavoritesHtml(),
+				recently_used_custom_uploads_html: this.getRecentIconsHtml(),
 				current_state: this.result,
 				favorites: this.currentFavorites,
 			});
+
 		},
 
 		getLibraryHtml: function() {
@@ -491,6 +493,13 @@
 		getFavoritesHtml: function() {
 			return wp.template('fw-icon-v2-favorites')({
 				favorites: this.currentFavorites,
+				current_state: this.result,
+			});
+		},
+
+		getRecentIconsHtml: function () {
+			return wp.template('fw-icon-v2-recent-custom-icon-uploads')({
+				recent_uploads: [],
 				current_state: this.result,
 			});
 		},
