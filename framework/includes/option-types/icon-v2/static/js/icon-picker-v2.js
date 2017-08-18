@@ -188,28 +188,38 @@
 			this.result = {};
 
 			jQuery
-				.when(this.loadIconsData(), this.loadLatestFavorites())
-				.then(_.bind(this.setHtml, this));
+				.when(this.loadIconsData())
+				.then(_.bind(function () {
+					this.set('html', this.getTabsHtml());
+
+					modal.frame.$el
+						.find('.fw-options-tabs-wrapper')
+						.on('tabsactivate', function(event, ui) {
+							/**
+							 * Every tab change should cause a change on a modal.
+							 *
+							 * It may be the case that the user will switch to
+							 * `Custom Upload` and the value of the option type won't change
+							 * because of the fact that `change:values` callback will not
+							 * be executed.
+							 */
+							modal.result.type =
+								ui.newTab.index() === 2
+									? 'custom-upload'
+									: 'icon-font';
+						});
+				}, this));
+
+			jQuery
+				.when(this.loadLatestFavorites())
+				.then(_.bind(function () {
+					this.content.renderFavoritesAndRecentUploads();
+					this.content.refreshFavorites();
+				}, this));
 
 			this.frame.on('close', _.bind(this.rejectResultAndResetIt, this));
 
 			this.frame.once('ready', function() {
-				modal.frame.$el
-					.find('.fw-options-tabs-wrapper')
-					.on('tabsactivate', function(event, ui) {
-						/**
-						 * Every tab change should cause a change on a modal.
-						 *
-						 * It may be the case that the user will switch to
-						 * `Custom Upload` and the value of the option type won't change
-						 * because of the fact that `change:values` callback will not
-						 * be executed.
-						 */
-						modal.result.type =
-							ui.newTab.index() === 2
-								? 'custom-upload'
-								: 'icon-font';
-					});
 			});
 		},
 
@@ -231,10 +241,6 @@
 
 		initializeFrame: function(settings) {
 			fw.OptionsModal.prototype.initializeFrame.call(this, settings);
-		},
-
-		setHtml: function() {
-			this.set('html', this.getTabsHtml());
 		},
 
 		open: function(values) {
@@ -552,14 +558,14 @@
 
 		getFavoritesHtml: function() {
 			return wp.template('fw-icon-v2-favorites')({
-				favorites: this.currentFavorites,
+				favorites: this.currentFavorites || [],
 				current_state: this.result,
 			});
 		},
 
 		getRecentIconsHtml: function () {
 			return wp.template('fw-icon-v2-recent-custom-icon-uploads')({
-				favorites: this.currentFavorites,
+				favorites: this.currentFavorites || [],
 				current_state: this.result,
 			});
 		},
