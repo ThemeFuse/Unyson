@@ -244,7 +244,7 @@
 			}
 
 			this.set('current_state', values);
-			this.setResultBasedOnCurrentState();
+			this.result = this.get('current_state');
 
 			if (this.frame.state()) {
 				this.prepareForPick();
@@ -265,10 +265,6 @@
 
 		close: function() {
 			fw.Modal.prototype.close.call(this);
-		},
-
-		setResultBasedOnCurrentState: function() {
-			this.result = this.get('current_state');
 		},
 
 		prepareForPick: function() {
