@@ -157,9 +157,9 @@
 			var url, filename, compiled;
 
 			if (attachment.get('sizes')) {
-				url = attachment.get('sizes').thumbnail
-						? attachment.get('sizes').thumbnail.url
-						: attachment.get('sizes').full.url;
+				url = _.min(_.values(attachment.get('sizes')), function (size) {
+					return size.width;
+				}).url;
 			} else {
 				url = attachment.get('url');
 			}
