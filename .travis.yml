@@ -6,23 +6,25 @@ matrix:
   allow_failures:
     - php: 7.0
   include:
-    - php: 5.2
+    - php: 5.3
       env: WP_VERSION=master WP_MULTISITE=1 PHPLINT=1 CHECKS=1
-    - php: 5.2
+    - php: 5.3
       env: WP_VERSION=4.7 WP_MULTISITE=1 PHPLINT=1
-    - php: 5.2
+    - php: 5.3
       env: WP_VERSION=4.7
-    - php: 5.2
+    - php: 5.3
       env: WP_VERSION=4.6
-    - php: 5.2
+    - php: 5.3
       env: WP_VERSION=4.5
-    - php: 5.2
+    - php: 5.3
       env: WP_VERSION=4.4
     - php: 7.0
       env: WP_VERSION=4.7 COVERAGE=1
 
+dist: precise
+
 before_script:
-- phpenv local 5.2
+- phpenv local 5.3
 - phpenv local --unset
 - PLUGIN_SLUG=$(basename $(pwd))
 - export WP_DEVELOP_DIR=/tmp/wordpress/
