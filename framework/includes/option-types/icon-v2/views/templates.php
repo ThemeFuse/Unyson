@@ -80,7 +80,7 @@ $tabs = fw()->backend->render_options(
 		class="fw-option fw-option-type-text">
 </div>
 
-<div class="fw-icon-v2-library-pack-wrapper">
+<div class="fw-icon-v2-library-pack-wrapper fw-search-icons-wrapper">
 	<# if (data.packs.length > 0) { #>
 		<# var template = wp.template('fw-icon-v2-packs'); #>
 		<# data.packs = data.pack_to_select #>

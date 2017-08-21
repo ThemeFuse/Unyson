@@ -214,7 +214,7 @@
 .fw-icon-v2-library-pack-wrapper {
 	flex: 1 1 auto;
     overflow-y: auto;
-    padding: 0 20px 0 20px; 
+    /*padding: 0 20px 0 20px; */
     box-shadow: inset 0px -5px 10px 0px rgba(0, 0, 0, 0.02);
 }
 
@@ -225,6 +225,19 @@
 .fw-favorite-icons-wrapper {
 	height: 100%;
 }
+
+/*** Search wrapper ***/
+.fw-search-icons-wrapper h2 {
+	position: relative;
+	text-align: left;
+	font-size: 13px;
+	color: #0085ba;
+}
+
+.fw-search-icons-wrapper {
+	
+}
+
 
 /*** Note ***/
 .fw-icon-v2-note {
@@ -250,7 +263,8 @@
 	flex-wrap: wrap;
 	width: 100%;
 	margin: 0;
-	padding: 20px 0 20px 0; 
+	padding: 20px;
+	box-sizing: border-box;
 }
 
 .fw-icon-v2-library-pack > li {
