@@ -165,6 +165,7 @@
 	flex-direction: column;
 }
 
+/*** Toolbar ***/
 .fw-icon-v2-toolbar {
 	display: flex;
 	align-items: center;
@@ -181,16 +182,34 @@
 	width: 49% !important;
 	height: 28px;
 	margin: 0;
+	flex: 1 1 auto;
+}
+
+.fw-icon-v2-toolbar > div {
+	margin-right: 15px;
 }
 
 .fw-icon-v2-toolbar > div > .selectize-input {
 	margin: 0 !important;
 }
 
+.fw-icon-v2-toolbar input::-webkit-input-placeholder {
+	font-style: normal;
+}
+
+.fw-icon-v2-toolbar input::-moz-placeholder {
+	font-style: normal;
+}
+
+.fw-icon-v2-toolbar input:-ms-input-placeholder {
+	font-style: normal;
+}
+
 .fw-icon-v2-toolbar h3 {
 	margin: 0;
 }
 
+/*** Pack wrapper ***/
 .fw-icon-v2-library-packs-wrapper {
 	flex: 1 1 auto;
     overflow-y: auto;
@@ -200,10 +219,6 @@
 
 .fw-icon-v2-library-packs-wrapper {
 	height: calc(100% - 75px);
-}
-
-.fw-icon-v2-library-packs-wrapper h2 {
-	/*display: none;*/
 }
 
 .fw-favorite-icons-wrapper {
