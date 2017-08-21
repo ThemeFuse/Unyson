@@ -158,6 +158,11 @@
 	background-color: #fcfcfc;
 }
 
+.fw-icon-v2-picker-modal .fw-options-tabs-list li.ui-tabs-active,
+.fw-icon-v2-picker-modal .fw-options-tabs-list li.ui-state-active {
+	background: #fff;
+}
+
 .fw-icon-v2-picker-modal .fw-options-tabs-contents {
 	margin-top: 0;
 }
