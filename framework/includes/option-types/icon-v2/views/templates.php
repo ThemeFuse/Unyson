@@ -116,7 +116,7 @@ $tabs = fw()->backend->render_options(
 	<# if (data.packs.length === 0) { #>
 		<div class="fw-icon-v2-note">
 			<h3><?php echo __('Sorry, but no results have been found', 'fw'); ?></h3>
-			<p>You can try something like: <b>wordpress</b>, <b>twitter</b>, <b>heart</b>, <b>cat</b> e.t.c </p>
+			<p><?php echo __('You can try something like: wordpress, twitter, heart, cat e.t.c ', 'fw'); ?></p>
 		</div>
 	<# } #>
 </script>

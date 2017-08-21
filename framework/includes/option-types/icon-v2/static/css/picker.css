@@ -28,6 +28,12 @@
 	color: #7a7a7a;
 	background-repeat: no-repeat;
 	line-height: 1em;
+	margin: 0;
+}
+
+/*** Unycon Icon fix ***/
+.fw-icon-v2-preview i.unycon:before {
+	font-size: 30px;
 }
 
 .fw-icon-v2-preview a {
