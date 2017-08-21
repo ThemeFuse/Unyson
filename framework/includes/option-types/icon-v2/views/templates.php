@@ -80,7 +80,7 @@ $tabs = fw()->backend->render_options(
 		class="fw-option fw-option-type-text">
 </div>
 
-<div class="fw-icon-v2-library-packs-wrapper">
+<div class="fw-icon-v2-library-pack-wrapper">
 	<# if (data.packs.length > 0) { #>
 		<# var template = wp.template('fw-icon-v2-packs'); #>
 		<# data.packs = data.pack_to_select #>
@@ -115,7 +115,7 @@ $tabs = fw()->backend->render_options(
 
 <script type="text/html" id="tmpl-fw-icon-v2-favorites">
 
-<div class="fw-icon-v2-library-packs-wrapper fw-favorite-icons-wrapper">
+<div class="fw-icon-v2-library-pack-wrapper fw-favorite-icons-wrapper">
 	<# var favorites = _.filter(data.favorites, _.compose(_.isNaN, _.partial(parseInt, _, 10))) #>
 
 	<# if (favorites.length === 0) { #>
@@ -159,7 +159,7 @@ $tabs = fw()->backend->render_options(
 
 <# if (recent_uploads.length === 0) { #>
 
-	<div class="fw-icon-v2-library-packs-wrapper">
+	<div class="fw-icon-v2-library-pack-wrapper">
 		<div class="fw-icon-v2-note">
 
 			<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 20 20">
@@ -177,7 +177,7 @@ $tabs = fw()->backend->render_options(
 
 <# } else { #>
 	
-	<div class="fw-icon-v2-library-packs-wrapper">
+	<div class="fw-icon-v2-library-pack-wrapper">
 		<ul class="fw-icon-v2-library-pack">
 
 		<# _.each(recent_uploads, function (attachment_id) { #>
