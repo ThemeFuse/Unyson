@@ -191,23 +191,6 @@
 				.when(this.loadIconsData())
 				.then(_.bind(function () {
 					this.set('html', this.getTabsHtml());
-
-					modal.frame.$el
-						.find('.fw-options-tabs-wrapper')
-						.on('tabsactivate', function(event, ui) {
-							/**
-							 * Every tab change should cause a change on a modal.
-							 *
-							 * It may be the case that the user will switch to
-							 * `Custom Upload` and the value of the option type won't change
-							 * because of the fact that `change:values` callback will not
-							 * be executed.
-							 */
-							modal.result.type =
-								ui.newTab.index() === 2
-									? 'custom-upload'
-									: 'icon-font';
-						});
 				}, this));
 
 			jQuery
@@ -218,9 +201,6 @@
 				}, this));
 
 			this.frame.on('close', _.bind(this.rejectResultAndResetIt, this));
-
-			this.frame.once('ready', function() {
-			});
 		},
 
 		resolveResult: function() {
@@ -245,8 +225,6 @@
 
 		open: function(values) {
 			this.promise = jQuery.Deferred();
-
-			var modal = this;
 
 			this.get('controls_ready') &&
 				this.set('controls_ready', !!this.frame.state());
@@ -273,13 +251,7 @@
 			 * On first open, modal is prepared here.
 			 */
 			if (!this.get('controls_ready')) {
-				setTimeout(_.bind(this.prepareForPick, this), 0);
-
-				this.frame.$el.find('.fw-icon-v2-toolbar select').selectize({
-					onChange: _.bind(this.applyFilters, this),
-				});
-
-				this.content.refreshFavorites();
+				this.prepareForPick();
 			}
 
 			return this.promise;
@@ -290,56 +262,63 @@
 		},
 
 		prepareForPick: function() {
-			// use this.get('current_state') in order to populate current
-			// active icon or current attachment
-			//
-			// this.frame.$el.find('.ui-tabs').tabs({active: 2});
+			var modal = this;
 
-			var $tabs = this.frame.$el.find('.ui-tabs');
+			modal.frame.$el.find('.fw-icon-v2-toolbar select').selectize({
+				onChange: _.bind(modal.applyFilters, modal),
+			});
 
+			modal.frame.$el
+				.find('.fw-options-tabs-wrapper')
+				.off('tabsactivate.fwiconv2')
+				.on('tabsactivate.fwiconv2', function(event, ui) {
+					/**
+					 * Every tab change should cause a change on a modal.
+					 *
+					 * It may be the case that the user will switch to
+					 * `Custom Upload` and the value of the option type won't change
+					 * because of the fact that `change:values` callback will not
+					 * be executed.
+					 */
+					modal.result.type =
+						ui.newTab.index() === 2
+							? 'custom-upload'
+							: 'icon-font';
+				});
+
+			this.content.renderFavoritesAndRecentUploads();
+			this.content.refreshFavorites();
+
+			var $tabs = modal.frame.$el.find('.ui-tabs');
 			var currentTab = $tabs.tabs('option', 'active');
 
-			if (this.get('current_state').type === 'custom-upload') {
+			if (modal.get('current_state').type === 'custom-upload') {
 				if (currentTab !== 2) {
 					$tabs.tabs({ active: 2 });
 				}
 			}
 
-			if (this.get('current_state').type !== 'custom-upload') {
+			if (modal.get('current_state').type !== 'custom-upload') {
 				if (currentTab === 2) {
 					$tabs.tabs({ active: 0 });
 				}
 
-				this.maybeResetFiltersForIcon();
+				modal.maybeResetFiltersForIcon();
 
-				this.content.refreshSelectedIcon();
+				if (modal.result['icon-class']) {
+					var packForIcon = _.findWhere(_.values(this.getIconsData()), {
+						css_class_prefix: this.result['icon-class'].split(' ')[0]
+					});
 
-				// TODO: scroll into view for both uploads and the rest of the
-				// icons
-				return;
-
-				if (this.result['icon-class']) {
-					var el = this.frame.$el.find(
-						'[data-fw-icon-v2$="' + this.result['icon-class'] + '"]'
+					var selectInput = modal.frame.$el.find(
+						'.fw-icon-v2-icons-library .fw-icon-v2-toolbar select'
 					)[0];
 
-					if (el.scrollIntoViewIfNeeded) {
-						el.scrollIntoViewIfNeeded(true);
-					} else if (el.scrollIntoView) {
-						el.scrollIntoView();
+					if (selectInput.value !== packForIcon) {
+						selectInput.selectize.setValue(packForIcon.name);
 					}
 				}
 			}
-		},
-
-		maybeResetFiltersForIcon: function () {
-			if (! this.result['icon-class']) return;
-
-			var packForIcon = _.findWhere(_.values(this.getIconsData()), {
-				css_class_prefix: this.result['icon-class'].split(' ')[0]
-			});
-
-			console.log(packForIcon);
 		},
 
 		applyFilters: function() {
@@ -364,6 +343,8 @@
 					favorites: this.currentFavorites,
 				})
 			);
+
+			this.content.refreshSelectedIcon();
 		},
 
 		getFilteredPacks: function(filters) {
@@ -455,37 +436,13 @@
 					return;
 				}
 
-				modal.preloadMultipleAttachments(recent_uploads).then(function () {
-					modal.favoritesPromise.resolve();
-				});
+				wp.media.query({ post__in: recent_uploads })
+					.more().then(function () {
+						modal.favoritesPromise.resolve();
+					});
 			});
 
 			return modal.favoritesPromise;
-		},
-
-		preloadMultipleAttachments: function (attachment_ids) {
-			if (jQuery.when.all===undefined) {
-				jQuery.when.all = function(deferreds) {
-					var deferred = new jQuery.Deferred();
-					$.when.apply(jQuery, deferreds).then(
-						function() {
-							deferred.resolve(Array.prototype.slice.call(arguments));
-						},
-						function() {
-							deferred.fail(Array.prototype.slice.call(arguments));
-						});
-
-					return deferred;
-				}
-			}
-
-			return jQuery.when.all(
-				attachment_ids.filter(function (attachment_id) {
-					return ! wp.media.attachment(attachment_id).get('url');
-				}).map(function (id) {
-					return wp.media.attachment(id).fetch();
-				})
-			);
 		},
 
 		markAsFavorite: function(icon) {
