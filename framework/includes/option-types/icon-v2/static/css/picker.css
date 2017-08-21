@@ -210,13 +210,14 @@
 	height: 100%;
 }
 
+/*** Note ***/
 .fw-icon-v2-note {
 	text-align: center;
+	padding-top: 30px;
 }
 
 .fw-icon-v2-note h3 {
-	margin-top: 40px;
-	margin-bottom: 0;
+	margin: 10px 0 0 0;
 }
 
 .fw-icon-v2-note i {
@@ -284,6 +285,12 @@
 .fw-icon-v2-library-pack .fw-icon-inner i {
 	font-size: 22px;
 	color: #6a737b;
+}
+
+.fw-icon-v2-library-pack .fw-icon-inner img {
+	max-width: 30px !important;
+	max-height: 30px !important;
+	height: auto;
 }
 
 .fw-icon-v2-library-pack .fw-icon-inner a {
