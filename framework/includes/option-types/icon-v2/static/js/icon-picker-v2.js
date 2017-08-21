@@ -303,8 +303,6 @@
 					$tabs.tabs({ active: 0 });
 				}
 
-				modal.maybeResetFiltersForIcon();
-
 				if (modal.result['icon-class']) {
 					var packForIcon = _.findWhere(_.values(this.getIconsData()), {
 						css_class_prefix: this.result['icon-class'].split(' ')[0]
