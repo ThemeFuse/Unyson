@@ -4,7 +4,7 @@ $tabs = fw()->backend->render_options(
 	array(
 		'icon-fonts' => array(
 			'type' => 'tab',
-			'title' => __('Icons', 'fw'),
+			'title' => __('Icon Fonts', 'fw'),
 			'lazy_tabs' => false,
 			'options' => array(
 				'icon-font' => array(
@@ -12,6 +12,19 @@ $tabs = fw()->backend->render_options(
 					'attr' => array('class' => 'fw-icon-v2-icons-library'),
 					'label' => false,
 					'html' => '{{{data.icons_library_html}}}',
+				)
+			)
+		),
+
+		'custom-upload' => array(
+			'type' => 'tab',
+			'lazy_tabs' => false,
+			'title' => __('Custom Upload', 'fw'),
+			'options' => array(
+				'upload-custom-icon-recents' => array(
+					'type' => 'html-full',
+					'label' => false,
+					'html' => '{{{data.recently_used_custom_uploads_html}}}'
 				)
 			)
 		),
@@ -26,19 +39,6 @@ $tabs = fw()->backend->render_options(
 					'type' => 'html-full',
 					'label' => false,
 					'html' => '{{{data.favorites_list_html}}}'
-				)
-			)
-		),
-
-		'custom-upload' => array(
-			'type' => 'tab',
-			'lazy_tabs' => false,
-			'title' => __('Upload', 'fw'),
-			'options' => array(
-				'upload-custom-icon-recents' => array(
-					'type' => 'html-full',
-					'label' => false,
-					'html' => '{{{data.recently_used_custom_uploads_html}}}'
 				)
 			)
 		)
