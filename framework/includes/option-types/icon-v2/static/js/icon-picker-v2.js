@@ -325,7 +325,7 @@
 			)[0].value;
 
 			var search = this.frame.$el
-				.find('.fw-icon-v2-icons-library .fw-icon-v2-toolbar input')
+				.find('.fw-icon-v2-icons-library .fw-icon-v2-toolbar input.fw-option-type-text')
 				.val()
 				.trim();
 
@@ -359,17 +359,22 @@
 
 			var packs = [];
 
+			/*
 			if (filters.pack.trim() === '' || filters.pack === 'all') {
 				packs = [ _.first(_.values(this.getIconsData())) ];
 			} else {
 				packs = [this.getIconsData()[filters.pack]];
 			}
+			*/
 
 			if (filters.search.trim() === '') {
 				packs = [this.getIconsData()[filters.pack]];
 			} else {
-				packs = [ _.first(_.values(this.getIconsData())) ];
+				packs = _.values(this.getIconsData());
 			}
+
+			console.log(filters.search.trim());
+			console.log(packs);
 
 			packs = _.map(packs, function(pack) {
 				var newPack = _.extend({}, pack);
