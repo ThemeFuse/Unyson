@@ -373,9 +373,6 @@
 				packs = _.values(this.getIconsData());
 			}
 
-			console.log(filters.search.trim());
-			console.log(packs);
-
 			packs = _.map(packs, function(pack) {
 				var newPack = _.extend({}, pack);
 
