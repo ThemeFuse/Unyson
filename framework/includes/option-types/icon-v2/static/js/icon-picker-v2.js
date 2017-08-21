@@ -319,6 +319,10 @@
 					)[0];
 
 					if (selectInput.value !== packForIcon) {
+						this.frame.$el
+							.find('.fw-icon-v2-icons-library .fw-icon-v2-toolbar input.fw-option-type-text')
+							.val('');
+
 						selectInput.selectize.setValue(packForIcon.name);
 					}
 				}
