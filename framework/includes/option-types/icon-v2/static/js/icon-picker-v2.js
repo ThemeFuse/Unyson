@@ -411,7 +411,9 @@
 				return newPack;
 			});
 
-			return _.reject(packs, _.isEmpty);
+			return _.reject(packs, function (pack) {
+                return _.isEmpty(pack.icons);
+            });
 		},
 
 		loadIconsData: function() {

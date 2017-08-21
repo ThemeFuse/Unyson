@@ -88,6 +88,7 @@ $tabs = fw()->backend->render_options(
 
 		{{{ template(data) }}}
 	<# } #>
+
 </div>
 
 </script>
@@ -111,6 +112,10 @@ $tabs = fw()->backend->render_options(
 			)
 		}}}
 	<# }) #>
+
+	<# if (data.packs.length === 0) { #>
+		<p><?php echo __('No results', 'fw'); ?></p>
+	<# } #>
 </script>
 
 <script type="text/html" id="tmpl-fw-icon-v2-favorites">
