@@ -167,6 +167,7 @@
 
 .fw-icon-v2-toolbar {
 	display: flex;
+	align-items: center;
 	justify-content: space-between;
 	flex: 0 0 auto;
 	padding: 25px 20px 20px 20px;
@@ -178,6 +179,10 @@
 .fw-icon-v2-toolbar > div {
 	width: 49% !important;
 	height: 28px;
+}
+
+.fw-icon-v2-toolbar h3 {
+	margin: 0;
 }
 
 .fw-icon-v2-library-packs-wrapper,

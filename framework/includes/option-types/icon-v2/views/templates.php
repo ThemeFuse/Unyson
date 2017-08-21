@@ -64,11 +64,6 @@ $tabs = fw()->backend->render_options(
 <script type="text/html" id="tmpl-fw-icon-v2-library">
 
 <div class="fw-icon-v2-toolbar">
-	<input 
-		type="text"
-		placeholder="<?php echo __('Search Icon', 'fw'); ?>"
-		class="fw-option fw-option-type-text">
-
 	<select class="fw-selectize">
 		<# _.each(data.packs, function (pack, index) { #>
 			<option {{ index === 0 ? 'selected' : '' }} value="{{pack.name}}">
@@ -76,6 +71,11 @@ $tabs = fw()->backend->render_options(
 			</option>
 		<# }) #>
 	</select>
+	
+	<input 
+		type="text"
+		placeholder="<?php echo __('Search Icon', 'fw'); ?>"
+		class="fw-option fw-option-type-text">
 </div>
 
 <div class="fw-icon-v2-library-packs-wrapper">
@@ -142,12 +142,14 @@ $tabs = fw()->backend->render_options(
 
 <div class="fw-icon-v2-icon-recent-uploads">
 	<# var recent_uploads = _.filter(data.favorites, _.compose(_.negate(_.isNaN), _.partial(parseInt, _, 10))) #>
+	
+	<div class="fw-icon-v2-toolbar">
+		<h3>Upload an icon</h3>
 
-	<h1>Upload an icon</h1>
-
-	<button type="button" class="fw-icon-v2-custom-upload-perform button primary">
-		Upload
-	</button>
+		<button type="button" class="fw-icon-v2-custom-upload-perform button primary">
+			Upload
+		</button>
+	</div>
 
 	<# if (recent_uploads.length === 0) { #>
 
@@ -159,44 +161,46 @@ $tabs = fw()->backend->render_options(
 		</p>
 
 	<# } else { #>
+		
+		<div class="fw-icon-v2-library-packs-wrapper">
+			<ul class="fw-icon-v2-library-pack">
 
-		<ul class="fw-icon-v2-library-pack">
+			<# _.each(recent_uploads, function (attachment_id) { #>
+				<# var selectedClass = data.current_state['attachment-id'] === attachment_id ? 'selected' : ''; #>
+				<# url = _.min(_.values(wp.media.attachment(attachment_id).get('sizes')), function (size) {
+					return size.width;
+				}).url; #>
 
-		<# _.each(recent_uploads, function (attachment_id) { #>
-			<# var selectedClass = data.current_state['attachment-id'] === attachment_id ? 'selected' : ''; #>
-			<# url = _.min(_.values(wp.media.attachment(attachment_id).get('sizes')), function (size) {
-				return size.width;
-			}).url; #>
+				<li
+					data-fw-icon-v2="{{ attachment_id }}"
+					class="fw-icon-v2-library-icon {{selectedClass}}">
 
-			<li
-				data-fw-icon-v2="{{ attachment_id }}"
-				class="fw-icon-v2-library-icon {{selectedClass}}">
+					<div class="fw-icon-inner">
+						<img src="{{ url }}" style="max-width: 100%" alt="">
 
-				<div class="fw-icon-inner">
-					<img src="{{ url }}" style="max-width: 100%" alt="">
+						<a
+							title="<?php echo __('Add to Favorites', 'fw') ?>"
+							class="fw-icon-v2-favorite dashicons dashicons-no">
+						</a>
+					</div>
+				</li>
 
-					<a
-						title="<?php echo __('Add to Favorites', 'fw') ?>"
-						class="fw-icon-v2-favorite dashicons dashicons-no">
-					</a>
-				</div>
-			</li>
+			<# }) #>
 
-		<# }) #>
-
-			<li class="fw-ghost-item"></li>
-			<li class="fw-ghost-item"></li>
-			<li class="fw-ghost-item"></li>
-			<li class="fw-ghost-item"></li>
-			<li class="fw-ghost-item"></li>
-			<li class="fw-ghost-item"></li>
-			<li class="fw-ghost-item"></li>
-			<li class="fw-ghost-item"></li>
-			<li class="fw-ghost-item"></li>
-			<li class="fw-ghost-item"></li>
-			<li class="fw-ghost-item"></li>
-			
-		</ul>
+				<li class="fw-ghost-item"></li>
+				<li class="fw-ghost-item"></li>
+				<li class="fw-ghost-item"></li>
+				<li class="fw-ghost-item"></li>
+				<li class="fw-ghost-item"></li>
+				<li class="fw-ghost-item"></li>
+				<li class="fw-ghost-item"></li>
+				<li class="fw-ghost-item"></li>
+				<li class="fw-ghost-item"></li>
+				<li class="fw-ghost-item"></li>
+				<li class="fw-ghost-item"></li>
+				
+			</ul>
+		</div>
 
 	<# } #>
 </div>
