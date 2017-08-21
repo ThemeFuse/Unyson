@@ -334,7 +334,7 @@
 				search: search,
 			});
 
-			this.frame.$el.find('.fw-icon-v2-library-packs-wrapper').html(
+			this.frame.$el.find('[data-fw-option-id="icon-font"] .fw-icon-v2-library-packs-wrapper').html(
 				wp.template('fw-icon-v2-packs')({
 					packs: packs,
 					current_state: this.result,
