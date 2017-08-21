@@ -49,7 +49,6 @@
 		fwOptionTypeIconV2Instance
 			.open(getDataForRoot($root))
 			.then(function(data) {
-				console.log(data);
 				setDataForRoot($root, data);
 			})
 			.fail(function() {
@@ -106,6 +105,18 @@
 		);
 
 		$wrapper.appendTo($root);
+
+		if (getDataForRoot($root)['type'] === 'custom-upload') {
+			var media = wp.media.attachment(
+				getDataForRoot($root)['attachment-id']
+			);
+			
+			if (! media.get('url')) {
+				media.fetch().then(function () {
+					refreshSinglePreview($root);
+				});
+			}
+		}
 
 		refreshSinglePreview($root);
 	}

@@ -92,13 +92,19 @@
 
 				var $el = $(e.currentTarget);
 
+				var type = $el.closest('[data-fw-option-id="upload-custom-icon-recents"]').length > 0
+						? 'custom-upload'
+						: 'icon-font';
+
+				var result = $el.attr('data-fw-icon-v2').trim();
+
 				this.model.result[
-					$el.closest('[data-fw-option-id="upload-custom-icon-recents"]').length > 0
-						? 'attachment-id'
-						: 'icon-class'
-				] = $el
-					.attr('data-fw-icon-v2')
-					.trim();
+					type === 'custom-upload' ? 'attachment-id' : 'icon-class'
+				] = result;
+
+				if (type === 'custom-upload') {
+					this.model.result.url = wp.media.attachment(result).get('url');
+				}
 
 				this.refreshSelectedIcon();
 			},
@@ -442,7 +448,7 @@
 					return;
 				}
 
-				wp.media.query({ post__in: recent_uploads })
+				wp.media.query({ post__in: recent_uploads, perPage: 200 })
 					.more().then(function () {
 						modal.favoritesPromise.resolve();
 					});
