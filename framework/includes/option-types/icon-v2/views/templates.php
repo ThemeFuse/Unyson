@@ -110,7 +110,7 @@ $tabs = fw()->backend->render_options(
 
 <script type="text/html" id="tmpl-fw-icon-v2-favorites">
 
-<div class="fw-icon-v2-icon-favorites">
+<div class="fw-icon-v2-library-packs-wrapper fw-favorite-icons-wrapper">
 	<# var favorites = _.filter(data.favorites, _.compose(_.isNaN, _.partial(parseInt, _, 10))) #>
 
 	<# if (favorites.length === 0) { #>

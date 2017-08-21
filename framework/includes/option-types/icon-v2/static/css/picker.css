@@ -191,8 +191,7 @@
 	margin: 0;
 }
 
-.fw-icon-v2-library-packs-wrapper,
-.fw-icon-v2-icon-favorites {
+.fw-icon-v2-library-packs-wrapper {
 	flex: 1 1 auto;
     overflow-y: auto;
     padding: 0 20px 0 20px; 
@@ -204,7 +203,11 @@
 }
 
 .fw-icon-v2-library-packs-wrapper h2 {
-	display: none;
+	/*display: none;*/
+}
+
+.fw-favorite-icons-wrapper {
+	height: 100%;
 }
 
 .fw-icon-v2-note {

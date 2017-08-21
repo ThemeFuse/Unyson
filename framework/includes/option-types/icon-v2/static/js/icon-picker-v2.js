@@ -148,7 +148,7 @@
 
 			renderFavoritesAndRecentUploads: function() {
 				this.model.frame.$el.find(
-					'.fw-icon-v2-icon-favorites'
+					'.fw-favorite-icons-wrapper'
 				).replaceWith(this.model.getFavoritesHtml());
 
 				this.model.frame.$el.find(
