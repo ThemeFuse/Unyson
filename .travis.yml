@@ -21,6 +21,8 @@ matrix:
     - php: 7.0
       env: WP_VERSION=4.7 COVERAGE=1
 
+dist: precise
+
 before_script:
 - phpenv local 5.3
 - phpenv local --unset
