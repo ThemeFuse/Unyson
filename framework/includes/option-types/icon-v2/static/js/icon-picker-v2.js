@@ -93,7 +93,7 @@
 				var $el = $(e.currentTarget);
 
 				this.model.result[
-					$el.closest('.fw-icon-v2-icon-recent-uploads').length > 0
+					$el.closest('[data-fw-option-id="upload-custom-icon-recents"]').length > 0
 						? 'attachment-id'
 						: 'icon-class'
 				] = $el
@@ -152,8 +152,8 @@
 				).replaceWith(this.model.getFavoritesHtml());
 
 				this.model.frame.$el.find(
-					'.fw-icon-v2-icon-recent-uploads'
-				).replaceWith(this.model.getRecentIconsHtml());
+					'[data-fw-option-id="upload-custom-icon-recents"] .fw-option-html'
+				).html(this.model.getRecentIconsHtml());
 			},
 
 			onSearch: function(event) {
@@ -363,6 +363,12 @@
 				packs = [ _.first(_.values(this.getIconsData())) ];
 			} else {
 				packs = [this.getIconsData()[filters.pack]];
+			}
+
+			if (filters.search.trim() === '') {
+				packs = [this.getIconsData()[filters.pack]];
+			} else {
+				packs = [ _.first(_.values(this.getIconsData())) ];
 			}
 
 			packs = _.map(packs, function(pack) {
