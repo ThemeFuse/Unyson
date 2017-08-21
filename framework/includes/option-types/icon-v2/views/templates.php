@@ -64,14 +64,16 @@ $tabs = fw()->backend->render_options(
 <script type="text/html" id="tmpl-fw-icon-v2-library">
 
 <div class="fw-icon-v2-toolbar">
-	<select class="fw-selectize">
-		<# _.each(data.packs, function (pack, index) { #>
-			<option {{ index === 0 ? 'selected' : '' }} value="{{pack.name}}">
-				{{pack.title}}
-			</option>
-		<# }) #>
-	</select>
-	
+	<# if (data.packs.length > 1) { #>
+		<select class="fw-selectize">
+			<# _.each(data.packs, function (pack, index) { #>
+				<option {{ index === 0 ? 'selected' : '' }} value="{{pack.name}}">
+					{{pack.title}}
+				</option>
+			<# }) #>
+		</select>
+	<# } #>
+
 	<input 
 		type="text"
 		placeholder="<?php echo __('Search Icon', 'fw'); ?>"

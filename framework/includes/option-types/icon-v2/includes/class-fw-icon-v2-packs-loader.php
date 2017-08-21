@@ -305,7 +305,9 @@ class FW_Icon_V2_Packs_Loader
 				'admin_wp_enqueue_handle' => 'dashicons',
 				'frontend_wp_enqueue_handle' => 'dashicons',
 			),
+		);
 
+		array(
 			'linecons' => array(
 				'name' => 'linecons',
 				'title' => 'Linecons',

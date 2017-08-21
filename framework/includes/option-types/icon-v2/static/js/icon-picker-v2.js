@@ -310,6 +310,10 @@
 				}
 
 				if (modal.result['icon-class']) {
+					this.frame.$el
+						.find('.fw-icon-v2-icons-library .fw-icon-v2-toolbar input.fw-option-type-text')
+						.val('');
+
 					var packForIcon = _.findWhere(_.values(this.getIconsData()), {
 						css_class_prefix: this.result['icon-class'].split(' ')[0]
 					});
@@ -318,7 +322,7 @@
 						'.fw-icon-v2-icons-library .fw-icon-v2-toolbar select'
 					)[0];
 
-					if (selectInput.value !== packForIcon) {
+					if (selectInput && selectInput.value !== packForIcon) {
 						this.frame.$el
 							.find('.fw-icon-v2-icons-library .fw-icon-v2-toolbar input.fw-option-type-text')
 							.val('');
