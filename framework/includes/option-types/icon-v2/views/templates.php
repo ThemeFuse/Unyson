@@ -176,7 +176,7 @@ $tabs = fw()->backend->render_options(
 			</h3>
 
 			<p>
-				<?php echo __('You can simply click on the Upload button to upload more icons and use them right away.', 'fw'); ?>
+				<?php echo __('To add new icons simply click on the Upload button.', 'fw'); ?>
 			</p>
 		</div>
 	</div>
