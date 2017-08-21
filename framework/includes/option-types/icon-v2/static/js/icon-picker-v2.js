@@ -348,6 +348,7 @@
 				wp.template('fw-icon-v2-packs')({
 					packs: packs,
 					current_state: this.result,
+					should_have_headings: search.trim().length > 0,
 					favorites: this.currentFavorites,
 				})
 			);

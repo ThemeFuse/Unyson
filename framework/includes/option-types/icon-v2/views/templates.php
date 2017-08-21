@@ -82,6 +82,7 @@ $tabs = fw()->backend->render_options(
 	<# if (data.packs.length > 0) { #>
 		<# var template = wp.template('fw-icon-v2-packs'); #>
 		<# data.packs = data.pack_to_select #>
+		<# data.should_have_headings = false #>
 
 		{{{ template(data) }}}
 	<# } #>
@@ -93,9 +94,11 @@ $tabs = fw()->backend->render_options(
 	<# _.each(data.packs, function (pack) { #>
 		<# if (pack.icons.length === 0) { return; } #>
 
-		<h2>
-			<span>{{pack.title}}</span>
-		</h2>
+		<# if (data.should_have_headings) { #>
+			<h2>
+				<span>{{pack.title}}</span>
+			</h2>
+		<# } #>
 
 		{{{
 			wp.template('fw-icon-v2-icons-collection')(
