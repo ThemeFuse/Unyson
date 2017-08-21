@@ -121,12 +121,15 @@ $tabs = fw()->backend->render_options(
 	<# if (favorites.length === 0) { #>
 
 		<div class="fw-icon-v2-note">
-			<h3>You have no favorite icons yet.</h3>
+			<!-- <i class="fw-icon-v2-info dashicons dashicons-star-filled"></i> -->
+			<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 20 20">
+				<path d="M10 1l3 6 6 .75-4.12 4.62L16 19l-6-3-6 3 1.13-6.63L1 7.75 7 7z"/>
+			</svg>
+
+			<h3>You have no favorite icons yet</h3>
 
 			<p>
-				To add icons here, simply click on the star 
-				(<i class="fw-icon-v2-info dashicons dashicons-star-filled"></i>)
-				button that's on top right corner of each icon.
+				To add icons here, simply click on the star button that's on top right corner of each icon.
 			</p>
 		</div>
 
@@ -147,9 +150,9 @@ $tabs = fw()->backend->render_options(
 <# var recent_uploads = _.filter(data.favorites, _.compose(_.negate(_.isNaN), _.partial(parseInt, _, 10))) #>
 
 <div class="fw-icon-v2-toolbar">
-	<h3>Upload an icon</h3>
+	<h3>Upload Icons</h3>
 
-	<button type="button" class="fw-icon-v2-custom-upload-perform button primary">
+	<button type="button" class="fw-icon-v2-custom-upload-perform button button-primary">
 		Upload
 	</button>
 </div>
