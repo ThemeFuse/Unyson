@@ -196,8 +196,8 @@
 
 		initialize: function(attributes, settings) {
 			fw.Modal.prototype.initialize.call(this, attributes, {
-                disableResetButton: true
-            });
+				disableResetButton: true
+			});
 
 			var modal = this;
 
@@ -300,7 +300,7 @@
 					 * be executed.
 					 */
 					modal.result.type =
-						ui.newTab.index() === 2
+						ui.newTab.index() === 1
 							? 'custom-upload'
 							: 'icon-font';
 				});
@@ -312,13 +312,13 @@
 			var currentTab = $tabs.tabs('option', 'active');
 
 			if (modal.get('current_state').type === 'custom-upload') {
-				if (currentTab !== 2) {
-					$tabs.tabs({ active: 2 });
+				if (currentTab !== 1) {
+					$tabs.tabs({ active: 1 });
 				}
 			}
 
 			if (modal.get('current_state').type !== 'custom-upload') {
-				if (currentTab === 2) {
+				if (currentTab === 1) {
 					$tabs.tabs({ active: 0 });
 				}
 

@@ -126,10 +126,10 @@ $tabs = fw()->backend->render_options(
 				<path d="M10 1l3 6 6 .75-4.12 4.62L16 19l-6-3-6 3 1.13-6.63L1 7.75 7 7z"/>
 			</svg>
 
-			<h3>You have no favorite icons yet</h3>
+			<h3><?php echo __('You have no favorite icons yet', 'fw'); ?></h3>
 
 			<p>
-				To add icons here, simply click on the star button that's on top right corner of each icon.
+				<?php echo __("To add icons here, simply click on the star button that's on top right corner of each icon.", 'fw'); ?>
 			</p>
 		</div>
 
@@ -150,10 +150,10 @@ $tabs = fw()->backend->render_options(
 <# var recent_uploads = _.filter(data.favorites, _.compose(_.negate(_.isNaN), _.partial(parseInt, _, 10))) #>
 
 <div class="fw-icon-v2-toolbar">
-	<h3>Upload Icons</h3>
+	<h3><?php echo __('Upload Icons', 'fw'); ?></h3>
 
 	<button type="button" class="fw-icon-v2-custom-upload-perform button button-primary">
-		Upload
+		<?php echo __('Upload', 'fw'); ?>
 	</button>
 </div>
 
@@ -166,11 +166,12 @@ $tabs = fw()->backend->render_options(
 				<path d="M8 14V8H5l5-6 5 6h-3v6H8zm-2 2v-6H4v8h12.01v-8H14v6H6z"></path>
 			</svg>
 
-			<h3>You have no uploaded icons yet</h3>
+			<h3>
+				<?php echo __('You have no uploaded icons yet', 'fw'); ?>
+			</h3>
 
 			<p>
-				You can simply click on the Upload button to upload more icons and
-				use them right away.
+				<?php echo __('You can simply click on the Upload button to upload more icons and use them right away.', 'fw'); ?>
 			</p>
 		</div>
 	</div>
@@ -264,14 +265,3 @@ $tabs = fw()->backend->render_options(
 
 </script>
 
-<?php
-
-/* 			<li class="fw-icon-v2-library-icon" data-fw-icon-v2="{{icon}}"> */
-/* 				<i class="{{icon}}"> */
-/* 				<a title="<?php __('Add To Favorites', 'fw'); ?>" */
-/* 					class="fw-icon-v2-favorite"> */
-/* 					<i class="dashicons dashicons-star-filled"></i> */
-/* 				</a> */
-/* 			</li> */
-
-?>
