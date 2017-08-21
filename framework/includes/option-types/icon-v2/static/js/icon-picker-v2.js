@@ -472,11 +472,33 @@
 
 				wp.media.query({ post__in: recent_uploads, perPage: 200 })
 					.more().then(function () {
+						var oldLength = modal.currentFavorites.length;
+
+						recent_uploads.map(function (id) {
+							if (! wp.media.attachment(id).get('url')) {
+								modal.currentFavorites = _.without(
+									modal.currentFavorites,
+									id
+								);
+							}
+						});
+
+						if (oldLength !== modal.currentFavorites.length) {
+							modal.syncFavoritesToServer();
+						}
+
 						modal.favoritesPromise.resolve();
 					});
 			});
 
 			return modal.favoritesPromise;
+		},
+
+		syncFavoritesToServer: function () {
+			jQuery.post(ajaxurl, {
+				action: 'fw_icon_v2_update_favorites',
+				favorites: JSON.stringify(_.uniq(this.currentFavorites)),
+			});
 		},
 
 		markAsFavorite: function(icon) {
@@ -496,10 +518,7 @@
 				modal.currentFavorites.push(icon);
 			}
 
-			jQuery.post(ajaxurl, {
-				action: 'fw_icon_v2_update_favorites',
-				favorites: JSON.stringify(_.uniq(modal.currentFavorites)),
-			});
+			this.syncFavoritesToServer();
 		},
 
 		preloadFonts: function() {
