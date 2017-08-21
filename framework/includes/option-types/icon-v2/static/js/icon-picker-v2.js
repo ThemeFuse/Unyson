@@ -5,6 +5,7 @@
 			size: 'small',
 			modalCustomClass: 'fw-icon-v2-picker-modal',
 			emptyHtmlOnClose: false,
+            disableResetButton: true
 		}),
 
 		ContentView: fw.Modal.prototype.ContentView.extend({
@@ -194,7 +195,9 @@
 		}),
 
 		initialize: function(attributes, settings) {
-			fw.Modal.prototype.initialize.call(this, attributes, settings);
+			fw.Modal.prototype.initialize.call(this, attributes, {
+                disableResetButton: true
+            });
 
 			var modal = this;
 
