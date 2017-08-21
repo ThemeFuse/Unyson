@@ -146,6 +146,15 @@
 				$('.fw-icon-v2-favorite').removeClass('fw-icon-v2-favorite');
 
 				_.map(this.model.currentFavorites, function(favorite) {
+					if (
+						_.compose(
+							_.negate(_.isNaN),
+							_.partial(parseInt, _, 10)
+						)(favorite)
+					) {
+						return;
+					}
+
 					$('[data-fw-icon-v2="' + favorite + '"]').addClass(
 						'fw-icon-v2-favorite'
 					);
