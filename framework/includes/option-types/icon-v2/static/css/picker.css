@@ -195,9 +195,12 @@
 .fw-icon-v2-icon-favorites {
 	flex: 1 1 auto;
     overflow-y: auto;
-    height: 100%;
     padding: 0 20px 0 20px; 
     box-shadow: inset 0px -5px 10px 0px rgba(0, 0, 0, 0.02);
+}
+
+.fw-icon-v2-library-packs-wrapper {
+	height: calc(100% - 75px);
 }
 
 .fw-icon-v2-library-packs-wrapper h2 {
