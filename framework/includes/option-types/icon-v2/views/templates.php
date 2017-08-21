@@ -18,7 +18,7 @@ $tabs = fw()->backend->render_options(
 
 		'favorites' => array(
 			'type' => 'tab',
-			'attr' => array('class' => '.fw-icon-v2-favorites'),
+			'attr' => array('class' => 'fw-icon-v2-favorites'),
 			'title' => __('Favorites', 'fw'),
 			'lazy_tabs' => false,
 			'options' => array(
