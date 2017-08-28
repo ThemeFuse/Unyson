@@ -1332,8 +1332,18 @@ function fw_current_url() {
 		} else {
 			$url = get_option( 'home' );
 		}
-		$url .= fw_akg( 'REQUEST_URI', $_SERVER, '/' );
-		$url = set_url_scheme( $url ); // https fix
+
+		//Remove the "//" before the domain name
+		$url = ltrim( fw_get_url_without_scheme( $url ), '/' );
+
+		//Remove the ulr subdirectory in case it has one
+		$split = explode( '/', $url );
+
+		//Remove end slash
+		$url = rtrim( $split[0], '/' );
+
+		$url .= '/' . ltrim( fw_akg( 'REQUEST_URI', $_SERVER, '' ), '/' );
+		$url = set_url_scheme( '//' . $url ); // https fix
 	}
 
 	return $url;
