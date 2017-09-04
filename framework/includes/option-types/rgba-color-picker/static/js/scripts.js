@@ -8,7 +8,7 @@ jQuery(function($){
   };
   Color.prototype.toRgba = function (a) {
     var rgb = this.toRgb();
-    rgb['a'] = (typeof a === 'undefined') ? 1 : 0;
+    rgb['a'] = (typeof a === 'undefined') ? 1 : a;
     return rgb;
   }
   Color.prototype.toRgbaCSS = function (a) {
