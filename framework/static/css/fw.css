@@ -3149,6 +3149,48 @@ body.rtl .fw-modal .media-frame-content > form .fw-options-tabs-contents .fw-opt
 	padding: 0 25px 0 0;
 }
 
+body.rtl .fw-option-type-builder > .builder-items-types > .fw-builder-header-tools .pull-right,
+body.rtl .fw-option-type-builder > .builder-items-types > .fw-builder-header-tools .fw-pull-right {
+    float: left !important;
+}
+body.rtl .tf-theme-pred-tpl-add-btn-wrap {
+    margin-right: 0;
+    margin-left: 23px;
+}
+body.rtl .fw-backend-side-tabs .fw-options-tabs-first-level {
+    background-color: #e5e5e5 ;
+}
+body.rtl .fw-option-html .builder-item-type .fw-page-builder-thumb-width--3_4 > img,
+body.rtl .fw-option-html .builder-item-type .fw-page-builder-thumb-width--2_3 > img {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+body.rtl .pb-item-type-column.pb-item .column-title {
+    margin-left: 0;
+    margin-right: 6px;
+}
+body.rtl .fw-backend-side-tabs .fw-settings-form-header h2 {
+    display: inline-block;
+}
+body.rtl .fw-backend-side-tabs .fw-settings-form-header h2 a {
+    float: left;
+    margin-right: 10px;
+}
+body.rtl.tools_page_fw-backups .wrap>h2:first-child {
+    display: inline-block;
+}
+body.rtl.tools_page_fw-backups .wrap>h2:first-child #fw-ext-backups-status {
+    float: left;
+    margin-right: 10px;
+}
+body.rtl.tools_page_fw-backups .wrap>h2:first-child #fw-ext-backups-status img {
+    margin-left: 5px;
+}
+
 /* end: Hide last border */
 
 /* end: Modal */
