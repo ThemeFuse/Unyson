@@ -121,8 +121,14 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				return array();
 			}
 
+			$ids = array_map( 'intval', $ids );
+
+			if (! get_post_type($ids[0]) ) {
+				return;
+			}
+
 			$query = new WP_Query( array(
-				'post_type'      => 'any',
+				'post_type'      => get_post_type($ids[0]),
 				'post__in'       => $ids,
 				'posts_per_page' => $limit,
 				'fields'         => 'ids'
