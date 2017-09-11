@@ -1274,7 +1274,7 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 .fw-selectize.selectize-control .selectize-dropdown {
 	margin: 0 1px;
 	border: none;
-	top: 33px !important;
+	top: 33px;
 }
 
 .fw-selectize.selectize-control .selectize-dropdown .selectize-dropdown-content {
