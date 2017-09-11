@@ -72,46 +72,35 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			);
 		}
 
-		private static function query_posts(array $options) {
-			$limits = array_merge(array(
-				'type' => array(
+		private static function query_posts( array $options ) {
+			$limits = array_merge( array(
+				'type'  => array(
 					'post' => true,
 					'page' => true,
 				),
 				'title' => '',
-			), $options);
-			fw_aku('limit', $limits);
+			), $options );
+			fw_aku( 'limit', $limits );
 
 			/** @var WPDB $wpdb */
 			global $wpdb;
 
-			$sql = "SELECT ID"
-			       ." FROM $wpdb->posts"
-			       ." WHERE post_status IN ( 'publish', 'private' )";
+			$sql = "SELECT ID FROM $wpdb->posts WHERE post_status IN ( 'publish', 'private' )";
 			//." AND NULLIF(post_password, '') IS NULL"; todo: review
 
-			{
-				$prepare = array();
+			$prepare = array();
 
-				if ($limits['type']) {
-					$sql .= " AND post_type IN ( "
-					        . implode( ', ', array_fill( 1, count( $limits['type'] ), '%s' ) )
-					        . " ) ";
-					$prepare = array_merge($prepare, array_keys($limits['type']));
-				}
-
-				if ($limits['title']) {
-					$sql .= " AND post_title LIKE %s";
-					$prepare[] = '%'. $wpdb->esc_like( $limits['title'] ) .'%';
-				}
+			if ( $limits['type'] ) {
+				$sql     .= " AND post_type IN ( " . implode( ', ', array_fill( 1, count( $limits['type'] ), '%s' ) ) . " ) ";
+				$prepare = array_merge( $prepare, array_keys( $limits['type'] ) );
 			}
 
-			$ids =  wp_list_pluck($wpdb->get_results(
-				$prepare
-					? $wpdb->prepare($sql, $prepare)
-					: $sql,
-				ARRAY_A
-			), 'ID');
+			if ( $limits['title'] ) {
+				$sql       .= " AND post_title LIKE %s";
+				$prepare[] = '%' . $wpdb->esc_like( $limits['title'] ) . '%';
+			}
+
+			$ids = wp_list_pluck( $wpdb->get_results( $prepare ? $wpdb->prepare( $sql, $prepare ) : $sql, ARRAY_A ), 'ID' );
 
 			return self::get_posts( $ids, max( fw_akg( 'limit', $options, 100 ), 1 ) );
 		}
@@ -123,7 +112,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 
 			$query = new WP_Query( array(
 				'post_type'      => 'any',
-				'post__in'       => $ids,
+				'post__in'       => array_map( 'intval', $ids ),
 				'posts_per_page' => $limit,
 				'fields'         => 'ids'
 			) );
