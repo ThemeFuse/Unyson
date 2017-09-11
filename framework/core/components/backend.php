@@ -624,7 +624,7 @@ final class _FW_Component_Backend {
 	 * @param WP_Post $post
 	 */
 	public function _action_create_post_meta_boxes( $post_type, $post ) {
-		if ('comment' === $post_type) {
+		if ( 'comment' === $post_type ) {
 			/**
 			 * This is wrong, comment is not a post(type)
 			 * it is stored in a separate db table and has a separate meta (wp_comments and wp_commentmeta)
@@ -641,50 +641,34 @@ final class _FW_Component_Backend {
 		$collected = array();
 
 		fw_collect_options( $collected, $options, array(
-			'limit_option_types' => false,
+			'limit_option_types'    => false,
 			'limit_container_types' => false,
-			'limit_level' => 1,
+			'limit_level'           => 1,
 		) );
 
-		if (empty($collected)) {
+		if ( empty( $collected ) ) {
 			return;
 		}
 
 		$values = fw_get_db_post_option( $post->ID );
 
-		foreach ( $collected as $id => &$option ) {
-			if (
-				isset($option['options']) // container
-				&&
-				$option['type'] === 'box'
-			) { // this is a box, add it as a metabox
-				$context  = isset( $option['context'] )
-					? $option['context']
-					: 'normal';
-				$priority = isset( $option['priority'] )
-					? $option['priority']
-					: 'default';
-
-				add_meta_box(
-					'fw-options-box-' . $id,
-					empty( $option['title'] ) ? ' ' : $option['title'],
-					$this->print_meta_box_content_callback,
-					$post_type,
-					$context,
-					$priority,
-					$this->render_options( $option['options'], $values )
-				);
-			} else { // this is not a box, wrap it in auto-generated box
-				add_meta_box(
-					'fw-options-box:auto-generated:'. time() .':'. fw_unique_increment(),
-					' ',
-					$this->print_meta_box_content_callback,
-					$post_type,
-					'normal',
-					'default',
-					$this->render_options( array($id => $option), $values )
-				);
+		foreach ( $collected as $id => $option ) {
+			if ( ! isset( $option['options'] ) || ! in_array( $option['type'], array( 'box', 'group' ) ) ) {
+				continue;
 			}
+
+			$context  = isset( $option['context'] ) ? $option['context'] : 'normal';
+			$priority = isset( $option['priority'] ) ? $option['priority'] : 'default';
+
+			add_meta_box(
+				"fw-options-{$option['type']}-{$id}",
+				empty( $option['title'] ) ? ' ' : $option['title'],
+				$this->print_meta_box_content_callback,
+				$post_type,
+				$context,
+				$priority,
+				$this->render_options( $option['options'], $values )
+			);
 		}
 	}
 
