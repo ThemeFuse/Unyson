@@ -111,7 +111,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			}
 
 			$query = new WP_Query( array(
-				'post_type'      => 'any',
+				'post_type'      => get_post_types(),
 				'post__in'       => array_map( 'intval', $ids ),
 				'posts_per_page' => $limit,
 				'fields'         => 'ids'
