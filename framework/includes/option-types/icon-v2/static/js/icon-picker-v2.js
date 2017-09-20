@@ -544,7 +544,6 @@
 		},
 
 		getTabsHtml: function() {
-
 			return wp.template('fw-icon-v2-tabs')({
 				icons_library_html: this.getLibraryHtml(),
 				favorites_list_html: this.getFavoritesHtml(),
@@ -552,11 +551,9 @@
 				current_state: this.result,
 				favorites: this.currentFavorites,
 			});
-
 		},
 
 		getLibraryHtml: function() {
-
 			var packs = _.values(this.getIconsData());
 			var pack_to_select = [ _.first(packs) ];
 
@@ -591,7 +588,9 @@
 		},
 	});
 
-	fwOptionTypeIconV2Instance = new fwOptionTypeIconV2Picker();
+	$(function () {
+		fwOptionTypeIconV2Instance = new fwOptionTypeIconV2Picker();
+	});
 
 	Selectize.define('hidden_textfield', function(options) {
 		var self = this;
