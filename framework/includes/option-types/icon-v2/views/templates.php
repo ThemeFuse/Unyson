@@ -74,7 +74,7 @@ $tabs = fw()->backend->render_options(
 		</select>
 	<# } #>
 
-	<input 
+	<input
 		type="text"
 		placeholder="<?php echo __('Search Icon', 'fw'); ?>"
 		class="fw-option fw-option-type-text">
@@ -185,7 +185,7 @@ $tabs = fw()->backend->render_options(
 	</div>
 
 <# } else { #>
-	
+
 	<div class="fw-icon-v2-library-pack-wrapper">
 		<ul class="fw-icon-v2-library-pack">
 
@@ -222,7 +222,7 @@ $tabs = fw()->backend->render_options(
 			<li class="fw-ghost-item"></li>
 			<li class="fw-ghost-item"></li>
 			<li class="fw-ghost-item"></li>
-			
+
 		</ul>
 	</div>
 
@@ -267,7 +267,7 @@ $tabs = fw()->backend->render_options(
 			<li class="fw-ghost-item"></li>
 			<li class="fw-ghost-item"></li>
 			<li class="fw-ghost-item"></li>
-			
+
 		</ul>
 	<# } #>
 
