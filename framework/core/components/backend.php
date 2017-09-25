@@ -763,10 +763,13 @@ final class _FW_Component_Backend {
 				$current_edit_taxonomy['taxonomy'] . '_edit_form',
 				array( $this, '_action_create_taxonomy_options' )
 			);
-			add_action(
-				$current_edit_taxonomy['taxonomy'] . '_add_form_fields',
-				array( $this, '_action_create_add_taxonomy_options' )
-			);
+
+			if (fw()->theme->get_config('taxonomy_create_has_unyson_options', true)) {
+				add_action(
+					$current_edit_taxonomy['taxonomy'] . '_add_form_fields',
+					array( $this, '_action_create_add_taxonomy_options' )
+				);
+			}
 		}
 
 		if ( ! empty( $_POST ) ) {
