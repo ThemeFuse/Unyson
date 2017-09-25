@@ -715,7 +715,9 @@ final class _FW_Component_Backend {
 		// fixes word_press style: .form-field input { width: 95% }
 		echo '<style type="text/css">.fw-option-type-radio input, .fw-option-type-checkbox input { width: auto; }</style>';
 
+		do_action( 'fw_backend_options_render:taxonomy:before' );
 		echo $this->render_options( $collected, $values, array(), 'taxonomy' );
+		do_action( 'fw_backend_options_render:taxonomy:after' );
 	}
 
 	/**
@@ -723,6 +725,7 @@ final class _FW_Component_Backend {
 	 */
 	public function _action_create_add_taxonomy_options( $taxonomy ) {
 		$options = fw()->theme->get_taxonomy_options( $taxonomy );
+
 		if ( empty( $options ) ) {
 			return;
 		}
@@ -742,9 +745,13 @@ final class _FW_Component_Backend {
 		// fixes word_press style: .form-field input { width: 95% }
 		echo '<style type="text/css">.fw-option-type-radio input, .fw-option-type-checkbox input { width: auto; }</style>';
 
+		do_action( 'fw_backend_options_render:taxonomy:before' );
+
 		echo '<div class="fw-force-xs">';
 		echo $this->render_options( $collected, array(), array(), 'taxonomy' );
 		echo '</div>';
+
+		do_action( 'fw_backend_options_render:taxonomy:after' );
 
 		echo '<script type="text/javascript">'
 			.'jQuery(function($){'
@@ -763,10 +770,13 @@ final class _FW_Component_Backend {
 				$current_edit_taxonomy['taxonomy'] . '_edit_form',
 				array( $this, '_action_create_taxonomy_options' )
 			);
-			add_action(
-				$current_edit_taxonomy['taxonomy'] . '_add_form_fields',
-				array( $this, '_action_create_add_taxonomy_options' )
-			);
+
+			if (fw()->theme->get_config('taxonomy_create_has_unyson_options', true)) {
+				add_action(
+					$current_edit_taxonomy['taxonomy'] . '_add_form_fields',
+					array( $this, '_action_create_add_taxonomy_options' )
+				);
+			}
 		}
 
 		if ( ! empty( $_POST ) ) {
@@ -1421,7 +1431,7 @@ final class _FW_Component_Backend {
 	 */
 	public function enqueue_options_static( $options ) {
 		static $static_enqueue = true;
-		
+
 		if (
 			!doing_action('admin_enqueue_scripts')
 			&&
@@ -1441,11 +1451,11 @@ final class _FW_Component_Backend {
 			 */
 			if ($static_enqueue) {
 				$this->register_static();
-	
+
 				wp_enqueue_media();
 				wp_enqueue_style( 'fw-backend-options' );
 				wp_enqueue_script( 'fw-backend-options' );
-				
+
 				$static_enqueue = false;
 			}
 		}
