@@ -8,22 +8,16 @@ matrix:
   include:
     - php: 5.2
       env: WP_VERSION=master WP_MULTISITE=1 PHPLINT=1 CHECKS=1
-      dist: precise
     - php: 5.2
       env: WP_VERSION=4.7 WP_MULTISITE=1 PHPLINT=1
-      dist: precise
     - php: 5.2
       env: WP_VERSION=4.7
-      dist: precise
     - php: 5.2
       env: WP_VERSION=4.6
-      dist: precise
     - php: 5.2
       env: WP_VERSION=4.5
-      dist: precise
     - php: 5.2
       env: WP_VERSION=4.4
-      dist: precise
     - php: 7.0
       env: WP_VERSION=4.7 COVERAGE=1
 
