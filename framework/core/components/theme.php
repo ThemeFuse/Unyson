@@ -13,15 +13,14 @@ final class _FW_Component_Theme
 	 */
 	public $manifest;
 
-	public function __construct()
-	{
-		{
-			$manifest = array();
+	public function __construct() {
+		$manifest = array();
 
-			@include fw_get_template_customizations_directory('/theme/manifest.php');
-
-			$this->manifest = new FW_Theme_Manifest($manifest);
+		if ( ( $manifest_file = fw_get_template_customizations_directory( '/theme/manifest.php' ) ) && is_file( $manifest_file ) ) {
+			@include $manifest_file;
 		}
+
+		$this->manifest = new FW_Theme_Manifest( $manifest );
 	}
 
 	/**
