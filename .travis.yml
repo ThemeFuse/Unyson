@@ -23,6 +23,7 @@ matrix:
       dist: precise
     - php: 5.2
       env: WP_VERSION=4.4
+      dist: precise
     - php: 7.0
       env: WP_VERSION=4.7 COVERAGE=1
 
