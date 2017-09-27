@@ -30,7 +30,6 @@ matrix:
 dist: precise
 
 before_script:
-- phpenv local 5.2
 - phpenv local --unset
 - PLUGIN_SLUG=$(basename $(pwd))
 - export WP_DEVELOP_DIR=/tmp/wordpress/
