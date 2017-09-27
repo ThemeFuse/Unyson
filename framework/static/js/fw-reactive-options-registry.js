@@ -161,24 +161,7 @@ fw.options = (function ($, currentFwOptions) {
 
 		var promise = $.Deferred();
 
-		if (jQuery.when.all===undefined) {
-			jQuery.when.all = function(deferreds) {
-				var deferred = new jQuery.Deferred();
-				$.when.apply(jQuery, deferreds).then(
-					function() {
-						deferred.resolve(Array.prototype.slice.call(arguments));
-					},
-					function() {
-						deferred.fail(Array.prototype.slice.call(arguments));
-					});
-
-				return deferred;
-			}
-		}
-
-		$.when.all(
-			optionDescriptors.map(getValueForOptionDescriptor)
-		)
+		fw.whenAll(optionDescriptors.map(getValueForOptionDescriptor))
 			.then(function (valuesAsArray) {
 				var values = {};
 
@@ -347,7 +330,7 @@ fw.options = (function ($, currentFwOptions) {
 
 	/**
 	 * A non-option context has two possible values:
-	 * 
+	 *
 	 * - a form tag which encloses a list of root options
 	 * - a virtual context is an el with `.fw-backend-options-virtual-context`
 	 */

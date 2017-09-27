@@ -362,23 +362,7 @@ jQuery(document).ready(function ($) {
 		getValue: function (optionDescriptor) {
 			var promise = $.Deferred();
 
-			// TODO: refactor that!!!
-			if (jQuery.when.all===undefined) {
-				jQuery.when.all = function(deferreds) {
-					var deferred = new jQuery.Deferred();
-					$.when.apply(jQuery, deferreds).then(
-						function() {
-							deferred.resolve(Array.prototype.slice.call(arguments));
-						},
-						function() {
-							deferred.fail(Array.prototype.slice.call(arguments));
-						});
-
-					return deferred;
-				}
-			}
-
-			jQuery.when.all(
+			fw.whenAll(
 				$(optionDescriptor.el).find(
 					'.fw-option-boxes'
 				).first().find(
