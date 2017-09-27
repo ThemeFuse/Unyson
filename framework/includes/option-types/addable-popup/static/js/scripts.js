@@ -165,7 +165,7 @@
 			nodes.$optionWrapper.trigger('change'); // for customizer
 			fw.options.trigger.changeForEl(nodes.$optionWrapper);
 		});
-		
+
 		nodes.$itemsWrapper.on('click', '.clone-item', function (e) {
 			e.stopPropagation();
 			var $item  = $(this).closest('.item');
@@ -245,23 +245,7 @@
 		getValue: function (optionDescriptor) {
 			var promise = $.Deferred();
 
-			// TODO: refactor that!!!
-			if (jQuery.when.all===undefined) {
-				jQuery.when.all = function(deferreds) {
-					var deferred = new jQuery.Deferred();
-					$.when.apply(jQuery, deferreds).then(
-						function() {
-							deferred.resolve(Array.prototype.slice.call(arguments));
-						},
-						function() {
-							deferred.fail(Array.prototype.slice.call(arguments));
-						});
-
-					return deferred;
-				}
-			}
-
-			jQuery.when.all(
+			fw.whenAll(
 				$(optionDescriptor.el).find(
 					'> .fw-option-type-addable-popup > .items-wrapper'
 				).first().find(
