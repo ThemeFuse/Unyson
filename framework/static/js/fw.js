@@ -462,6 +462,25 @@ fw.capitalizeFirstLetter = function(str) {
 };
 
 /**
+ * Wait until an array of dynamically computed jQuery.Deferred() objects
+ * get resolved.
+ */
+fw.whenAll = function(deferreds) {
+	var deferred = new jQuery.Deferred();
+
+	jQuery.when.apply(jQuery, deferreds).then(
+		function() {
+			deferred.resolve(Array.prototype.slice.call(arguments));
+		},
+		function() {
+			deferred.fail(Array.prototype.slice.call(arguments));
+		}
+	);
+
+	return deferred;
+}
+
+/**
  * Set nested property value
  *
  * Usage:
@@ -1410,7 +1429,7 @@ fw.getValuesFromServer = function (data) {
 				this.get('options'),
 				typeof values == 'undefined' ? this.get('values') : values
 			);
-			
+
 			promise.then(function (html, response) {
 				if (response && _.isEmpty(modal.get('values'))) {
 					// fixes https://github.com/ThemeFuse/Unyson/issues/1042#issuecomment-244364121
