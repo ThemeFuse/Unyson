@@ -11,6 +11,10 @@ class FW_Option_Type_Radio_Text extends FW_Option_Type
 		return 'radio-text';
 	}
 
+	public function _get_data_for_js($id, $option, $data = array()) {
+		return false;
+	}
+
 	/**
 	 * @internal
 	 */
