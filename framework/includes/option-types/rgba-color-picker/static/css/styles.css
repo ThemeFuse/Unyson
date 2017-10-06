@@ -1,86 +1,21 @@
-input.fw-option-type-rgba-color-picker.iris-error {
-	background-color: #ffebe8;
-	border-color: #c00;
-	color: #000;
+.fw-backend-option-input-type-rgba-color-picker .iris-palette {
+    height: 33px !important;
+    width: 33px !important;
 }
-
-.fw-alpha-container .transparency {
-	height: 24px;
-	width: 100%;
-	background-color: #FFF;
-	background-image: url(../images/transparency-grid.png);
-	box-shadow: 0 0 5px rgba(0, 0, 0, 0.4) inset;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-	padding: 0;
+.fw-backend-option-input-type-rgba-color-picker .fw-option-help-in-input {
+    top: 2px !important;
 }
-
-.fw-alpha-container .ui-slider-handle {
-	color: #777;
-	background-color: #FFF;
-	text-shadow: 0 1px 0 #FFF;
-	text-decoration: none;
-	position: absolute;
-	z-index: 2;
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-	border: 1px solid #aaa;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	border-radius: 4px;
-	opacity: 0.9;
-	margin-top: -2px;
-	height: 20px;
-	cursor: ew-resize;
-	font-size: 12px;
-	padding: 3px;
+.fw-backend-option-input-type-rgba-color-picker .wp-picker-holder {
+    position:absolute;
+    z-index:99999;
 }
-
-.fw-alpha-container .ui-slider {
-	position: relative;
-	text-align: center;
-	width: 88%;
+.fw-backend-option-input-type-rgba-color-picker .wp-picker-clear {
+    height: 23px !important;
 }
-
-.fw-alpha-container {
-	box-sizing: padding-box;
-	display: block;
-	border-right: 1px solid #aaa;
-	border-left: 1px solid #aaa;
-	border-top: none;
-	border-bottom: 1px solid #aaa;
-	background: #FFF;
-	padding: 0 11px 6px;
-	position: relative;
-	top: 176px;
-	width: 89%;
-	left: -1px;
+.fw-backend-option-input-type-rgba-color-picker .wp-color-result {
+    height: auto;
+    box-shadow:none;
 }
-
-
-.fw-option-type-rgba-color-picker-iris,
-.fw-option-type-rgba-color-picker-iris.iris-picker {
-	z-index: 999;
-	position: absolute;
-}
-
-.fw-option-type-rgba-color-picker-iris .fw-option-type-rgba-color-picker-reset-default {
-	width: 139px;
-	margin-top: 2px;
-	cursor: pointer;
-}
-
-.fw-option-type-rgba-color-picker-iris .fw-option-type-rgba-color-picker-reset-default span {
-	line-height: 16px;
-	padding-left: 2px;
-	float: left;
-}
-
-
-.fw-option-type-rgba-color-picker-with-reset-default > .iris-palette-container {
-	bottom: 27px !important;
-}
-
-.fw-option-type-rgba-color-picker-with-reset-default .fw-alpha-container {
-	top: 192px;
+.fw-backend-option-input-type-rgba-color-picker input {
+    max-width: 140px !important;
 }

@@ -63,7 +63,7 @@ class FW_Option_Type_Rgba_Color_Picker extends FW_Option_Type {
 
 		$option['attr']['data-palettes'] = json_encode( $palettes );
 
-		return '<input type="text" ' . fw_attr_to_html( $option['attr'] ) . '>';
+		return '<input type="text" ' . fw_attr_to_html( $option['attr'] ) . ' data-alpha="true">';
 	}
 
 	/**
