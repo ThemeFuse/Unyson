@@ -3235,6 +3235,35 @@ body > .fw-sole-modal .fw-sole-modal-content p {
 
 /* end: SoleModal */
 
+/* Fixed: https://github.com/ThemeFuse/Unyson/issues/2888 */
+.appearance_page_fw-settings .fw-sole-modal-content .wp-spinner{
+	-webkit-animation: fw-spin 1.2s linear infinite;
+	-moz-animation: fw-spin 1.2s linear infinite;
+	-ms-animation: fw-spin 1.2s linear infinite;
+	-o-animation: fw-spin 1.2s linear infinite;
+	animation: fw-spin 1.2s linear infinite;
+}
+@-ms-keyframes fw-spin {
+	from { -ms-transform: rotate(0deg); }
+	to { -ms-transform: rotate(360deg); }
+}
+@-moz-keyframes fw-spin {
+	from { -moz-transform: rotate(0deg); }
+	to { -moz-transform: rotate(360deg); }
+}
+@-webkit-keyframes fw-spin {
+	from { -webkit-transform: rotate(0deg); }
+	to { -webkit-transform: rotate(360deg); }
+}
+@keyframes fw-spin {
+	from {
+		transform:rotate(0deg);
+	}
+	to {
+		transform:rotate(360deg);
+	}
+}
+/* End Fixed: https://github.com/ThemeFuse/Unyson/issues/2888 */
 
 /* qtip custom style */
 
