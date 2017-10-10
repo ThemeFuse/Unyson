@@ -153,6 +153,7 @@
 			: 'fw:settings-form:'. $form->get_id() .':ajax-submit:extra-message',
 		''
      )) ?>"></div>
+<img src="<?php echo site_url(); ?>/wp-admin/images/spinner.gif" alt="Loading" class="wp-spinner" style="display: none;"/>
 <script type="text/javascript">
 	jQuery(function ($) {
 		function isReset($submitButton) {
