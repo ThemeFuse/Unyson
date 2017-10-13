@@ -27,17 +27,11 @@ jQuery(document).ready(function($){
 		getInstance: function ($iris) {
 			return $iris.data('a8cIris');
 		},
-		updatePreview: function ($input, color) {
-			if (this.isColorValid(color)) {
-				$input.css({
-					'background-color': color,
-					'color': this.isColorDark(color) ? '#FFFFFF' : '#000000'
-				});
+		updatePreview: function ( $input, color ) {
+			if ( this.isColorValid( color ) ) {
+				$input.attr( 'style', 'background-color:' + color + ' !important; color:' + ( this.isColorDark( color ) ? '#FFFFFF' : '#000000' ) + ' !important;' );
 			} else {
-				$input.css({
-					'background-color': '',
-					'color': ''
-				});
+				$input.css( {'background-color': '', 'color': ''} );
 			}
 		},
 		increment: 0
