@@ -562,10 +562,15 @@ class FW_Option_Type_Checkboxes extends FW_Option_Type {
 
 			foreach ($option['choices'] as $choice => $choice_value){
 				if (isset($input_value[$choice]) && $input_value[$choice] ) {
+					// Handle boolean values that got lost into the universe
+					// and somehow become strings by the miracle of
+					// PHP's $_POST parsing
 					$value[$choice] = is_string(
 						$input_value[$choice]
 					) ? $input_value[$choice] === 'true' : true;
 				} else {
+					// If the value's missing from the input it is falsy,
+					// for sure
 					$value[$choice] = false;
 				}
 			}
