@@ -732,6 +732,11 @@ if ( ! function_exists( 'fw_render_view' ) ):
 	 * @return string HTML
 	 */
 	function fw_render_view( $file_path, $view_variables = array(), $return = true ) {
+
+		if ( ! is_file( $file_path ) ) {
+			return '';
+		}
+
 		extract( $view_variables, EXTR_REFS );
 		unset( $view_variables );
 
@@ -743,6 +748,8 @@ if ( ! function_exists( 'fw_render_view' ) ):
 		} else {
 			require $file_path;
 		}
+
+		return '';
 	}
 endif;
 
