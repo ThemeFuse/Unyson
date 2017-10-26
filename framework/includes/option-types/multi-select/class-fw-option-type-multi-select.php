@@ -342,9 +342,9 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				switch ( $option['population'] ) {
 					case 'array' :
 						if ( isset( $option['choices'] ) && is_array( $option['choices'] ) ) {
-							foreach ($option['choices'] as $c_key => $c_val) {
+							foreach ( $option['choices'] as $c_key => $c_val ) {
 								$items[] = array(
-									'val' => $c_key,
+									'val'   => $c_key,
 									'title' => $c_val,
 								);
 							}
@@ -352,27 +352,20 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 						break;
 					case 'posts' :
 						if ( isset( $option['source'] ) ) {
-							$source = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
 
-							$items = self::get_posts( $data['value'] );
+							$items = self::get_posts( (array) $data['value'] );
 
-							if ( count( $items ) < $option['prepopulate'] ) {
-								foreach (
-									self::query_posts( array(
-										'type'  => array_fill_keys( $source, true ),
-										'limit' => $option['prepopulate'],
-									) ) as $item
-								) {
-									if ( ! in_array( $item, $items ) ) {
-										array_push( $items, $item );
-									}
+							$query = new WP_Query( array(
+								'post_type'           => $option['source'],
+								'post__not_in'        => $data['value'],
+								'posts_per_page'      => $option['prepopulate'],
+								'fields'              => 'ids',
+								'ignore_sticky_posts' => 1
+							) );
 
-									if ( count( $items ) == $option['prepopulate'] ) {
-										break;
-									}
-								}
-							}
+							$items = array_merge( $items, $query->get_posts() );
 						}
+
 						$items = array_map(
 							array( $this, 'build_post' ),
 							$items,
@@ -385,22 +378,18 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 
 							$items = self::get_terms( $data['value'], $source );
 
-							if ( count( $items ) < $option['prepopulate'] ) {
-								foreach (
-									self::query_terms( array(
-										'taxonomy' => array_fill_keys( $source, true ),
-										'limit'    => $option['prepopulate'],
-									) ) as $item
-								) {
-									if ( ! in_array( $item, $items ) ) {
-										array_push( $items, $item );
-									}
+							$terms = get_terms( array(
+								'taxonomy'   => $option['source'],
+								'hide_empty' => false,
+								'exclude'    => $data['value'],
+								'number'     => $option['prepopulate'],
+								'fields'     => 'ids'
+							) );
 
-									if ( count( $items ) == $option['prepopulate'] ) {
-										break;
-									}
-								}
+							if ( ! is_wp_error( $terms ) ) {
+								$items = array_merge( $items, (array) $terms );
 							}
+
 						}
 
 						$items = array_map(
@@ -410,27 +399,39 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 						);
 						break;
 					case 'users' :
-						if ( isset( $option['source'] ) && ! empty( $option['source'] ) ) {
-							$source = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
-						} else {
-							$source = array();
+
+						$source = ! empty( $option['source'] ) ? (array) $option['source'] : array();
+
+						$items = self::query_users( array(
+							'role'  => array_fill_keys( $source, true ),
+							'id'    => $data['value'],
+							'limit' => $option['prepopulate']
+						) );
+
+						$users = get_users(
+							array(
+								'role__in' => $source,
+								'exclude'  => (array) $data['value'],
+								'number'   => (int) $option['prepopulate'],
+								'fields'   => array( 'ID', 'display_name' )
+							)
+						);
+
+						foreach ( $users as $user ) {
+							$items[] = array( 'val' => $user->ID, 'title' => $user->display_name );
 						}
 
-						$items = self::query_users(array(
-							'role' => array_fill_keys($source, true),
-							'id' => $data['value'],
-							'limit' => $option['prepopulate'],
-						));
 						break;
 					default :
 						return '(Invalid <code>population</code> parameter)';
 				}
 
-				$option['attr']['data-options']     = json_encode( $items );
-				$option['attr']['data-population']  = $population;
-				$option['attr']['data-show-type']   = (int)fw_akg( 'show-type', $option, false );
-				$option['attr']['data-source']      = json_encode( $source );
-				$option['attr']['data-limit']       = ( intval( $option['limit'] ) > 0 ) ? $option['limit'] : 0;
+				$option['attr']['data-options']    = json_encode( $items );
+				$option['attr']['data-population'] = $population;
+				$option['attr']['data-show-type']  = (int) fw_akg( 'show-type', $option, false );
+				$option['attr']['data-source']     = json_encode( $source );
+				$option['attr']['data-limit']      = ( intval( $option['limit'] ) > 0 ) ? $option['limit'] : 0;
+
 			} else {
 				return '(The <code>population</code> parameter is required)';
 			}
