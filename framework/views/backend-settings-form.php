@@ -206,8 +206,16 @@
 			afterSubmitDelay: function (elements) {
 				fwEvents.trigger('fw:options:init:tabs', {$elements: elements.$form});
 			},
-			onErrors: function() {
-				fw.soleModal.hide(loadingModalId);
+			onErrors: function( elements, data ) {
+				var message = $.map( data.errors, function( mssg ) { return '<p class="fw-text-danger">' + mssg + '</p>' } ) + fw.soleModal.renderFlashMessages( data.flash_messages );
+
+				fw.soleModal.hide( loadingModalId );
+
+				fw.soleModal.show(
+					'fw-options-ajax-save-error',
+					'<p class="fw-text-danger">' + message + '</p>'
+				);
+
 			},
 			onAjaxError: function(elements, data) {
 				{
@@ -228,6 +236,7 @@
 				/**
 				 * Display messages
 				 */
+
 				do {
 					/**
 					 * Don't display the "Settings successfully saved" message
