@@ -277,7 +277,7 @@
 							}
 						);
 					} else {
-						fw.soleModal.hide();
+						fw.soleModal.hide('fw-options-ajax-save-success');
 					}
 				} while(false);
 
