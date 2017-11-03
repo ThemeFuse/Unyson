@@ -652,23 +652,31 @@ final class _FW_Component_Backend {
 
 		$values = fw_get_db_post_option( $post->ID );
 
-		foreach ( $collected as $id => $option ) {
-			if ( ! isset( $option['options'] ) || ! in_array( $option['type'], array( 'box', 'group' ) ) ) {
-				continue;
+		foreach ( $collected as $id => &$option ) {
+			if ( isset( $option['options'] ) && ( $option['type'] === 'box' || $option['type'] === 'group' ) ) {
+				$context  = isset( $option['context'] ) ? $option['context'] : 'normal';
+				$priority = isset( $option['priority'] ) ? $option['priority'] : 'default';
+
+				add_meta_box(
+					"fw-options-box-{$id}",
+					empty( $option['title'] ) ? ' ' : $option['title'],
+					$this->print_meta_box_content_callback,
+					$post_type,
+					$context,
+					$priority,
+					$this->render_options( $option['options'], $values )
+				);
+			} else { // this is not a box, wrap it in auto-generated box
+				add_meta_box(
+					'fw-options-box:auto-generated:' . time() . ':' . fw_unique_increment(),
+					' ',
+					$this->print_meta_box_content_callback,
+					$post_type,
+					'normal',
+					'default',
+					$this->render_options( array( $id => $option ), $values )
+				);
 			}
-
-			$context  = isset( $option['context'] ) ? $option['context'] : 'normal';
-			$priority = isset( $option['priority'] ) ? $option['priority'] : 'default';
-
-			add_meta_box(
-				"fw-options-{$option['type']}-{$id}",
-				empty( $option['title'] ) ? ' ' : $option['title'],
-				$this->print_meta_box_content_callback,
-				$post_type,
-				$context,
-				$priority,
-				$this->render_options( $option['options'], $values )
-			);
 		}
 	}
 
