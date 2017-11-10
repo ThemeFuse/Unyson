@@ -109,23 +109,28 @@ abstract class FW_Db_Options_Model {
 	 * @return mixed
 	 */
 	final public function get( $item_id = null, $option_id = null, $default_value = null, array $extra_data = array() ) {
-		if (empty($option_id)) {
+
+		if ( is_preview() && is_main_query() ) {
+			$item_id = ( $rewisions = reset( wp_get_post_revisions( $item_id ) ) ) && isset( $rewisions->ID ) ? $rewisions->ID : $item_id;
+		}
+
+		if ( empty( $option_id ) ) {
 			$sub_keys = null;
 		} else {
-			$option_id = explode('/', $option_id); // 'option_id/sub/keys'
-			$_option_id = array_shift($option_id); // 'option_id'
-			$sub_keys = empty($option_id) ? null : implode('/', $option_id); // 'sub/keys'
-			$option_id = $_option_id;
-			unset($_option_id);
+			$option_id  = explode( '/', $option_id ); // 'option_id/sub/keys'
+			$_option_id = array_shift( $option_id ); // 'option_id'
+			$sub_keys   = empty( $option_id ) ? null : implode( '/', $option_id ); // 'sub/keys'
+			$option_id  = $_option_id;
+			unset( $_option_id );
 		}
 
 		try {
 			// Cached because values are merged with extracted default values
-			$values = FW_Cache::get($cache_key_values = $this->get_cache_key('values', $item_id, $extra_data));
-		} catch (FW_Cache_Not_Found_Exception $e) {
+			$values = FW_Cache::get( $cache_key_values = $this->get_cache_key( 'values', $item_id, $extra_data ) );
+		} catch ( FW_Cache_Not_Found_Exception $e ) {
 			FW_Cache::set(
 				$cache_key_values,
-				$values = (is_array($values = $this->get_values($item_id, $extra_data)) ? $values : array())
+				$values = ( is_array( $values = $this->get_values( $item_id, $extra_data ) ) ? $values : array() )
 			);
 		}
 
@@ -133,7 +138,7 @@ abstract class FW_Db_Options_Model {
 		 * If db value is not found and default value is provided
 		 * return default value before the options file is loaded
 		 */
-		if ( ! is_null($default_value) ) {
+		if ( ! is_null( $default_value ) ) {
 			if ( empty( $option_id ) ) {
 				if ( empty( $values )
 				     && (
@@ -150,7 +155,7 @@ abstract class FW_Db_Options_Model {
 						return fw_call( $default_value );
 					}
 				} else {
-					if ( ! isset($values[ $option_id ]) || is_null( fw_akg( $sub_keys, $values[ $option_id ] ) ) ) {
+					if ( ! isset( $values[ $option_id ] ) || is_null( fw_akg( $sub_keys, $values[ $option_id ] ) ) ) {
 						return fw_call( $default_value );
 					}
 				}
@@ -158,74 +163,73 @@ abstract class FW_Db_Options_Model {
 		}
 
 		try {
-			$options = FW_Cache::get( $cache_key = $this->get_cache_key('options', $item_id, $extra_data));
-		} catch (FW_Cache_Not_Found_Exception $e) {
-			FW_Cache::set($cache_key, array()); // prevent recursion
-			FW_Cache::set($cache_key, $options = fw_extract_only_options($this->get_options($item_id, $extra_data)));
+			$options = FW_Cache::get( $cache_key = $this->get_cache_key( 'options', $item_id, $extra_data ) );
+		} catch ( FW_Cache_Not_Found_Exception $e ) {
+			FW_Cache::set( $cache_key, array() ); // prevent recursion
+			FW_Cache::set( $cache_key, $options = fw_extract_only_options( $this->get_options( $item_id, $extra_data ) ) );
 		}
 
-		if ($options) {
+		if ( $options ) {
 			try {
 				FW_Cache::get(
-					// fixes https://github.com/ThemeFuse/Unyson/issues/2034
-					$cache_key_values_processed = $this->get_cache_key('values:processed', $item_id, $extra_data)
+				// fixes https://github.com/ThemeFuse/Unyson/issues/2034
+					$cache_key_values_processed = $this->get_cache_key( 'values:processed', $item_id, $extra_data )
 				);
-			} catch (FW_Cache_Not_Found_Exception $e) {
+			} catch ( FW_Cache_Not_Found_Exception $e ) {
 				/**
 				 * Set cache value before processing options
 				 * Fixes https://github.com/ThemeFuse/Unyson/issues/2034#issuecomment-248571149
 				 */
-				FW_Cache::set($cache_key_values_processed, true);
+				FW_Cache::set( $cache_key_values_processed, true );
 
 				// Complete missing db values with default values from options array
 				{
 					try {
-						$skip_types_process = FW_Cache::get($cache_key = 'fw:options-default-values:skip-types');
-					} catch (FW_Cache_Not_Found_Exception $e) {
+						$skip_types_process = FW_Cache::get( $cache_key = 'fw:options-default-values:skip-types' );
+					} catch ( FW_Cache_Not_Found_Exception $e ) {
 						FW_Cache::set(
 							$cache_key,
-							$skip_types_process = apply_filters('fw:options-default-values:skip-types', array(
-								// 'type' => true
-							))
+							$skip_types_process = apply_filters( 'fw:options-default-values:skip-types', array(// 'type' => true
+							) )
 						);
 					}
 
-					foreach (array_diff_key(fw_extract_only_options( $options ), $values) as $id => $option) {
-						$values[ $id ] = isset($skip_types_process[ $option['type'] ])
+					foreach ( array_diff_key( fw_extract_only_options( $options ), $values ) as $id => $option ) {
+						$values[ $id ] = isset( $skip_types_process[ $option['type'] ] )
 							? (
-							isset($option['value'])
+							isset( $option['value'] )
 								? $option['value']
 								: fw()->backend->option_type( $option['type'] )->get_defaults( 'value' )
 							)
-							: fw()->backend->option_type($option['type'])->get_value_from_input($option, null);
+							: fw()->backend->option_type( $option['type'] )->get_value_from_input( $option, null );
 					}
 				}
 
-				foreach ($options as $id => $option) {
-					$values[$id] = fw()->backend->option_type($option['type'])->storage_load(
+				foreach ( $options as $id => $option ) {
+					$values[ $id ] = fw()->backend->option_type( $option['type'] )->storage_load(
 						$id,
 						$option,
-						isset($values[$id]) ? $values[$id] : null,
-						$this->get_fw_storage_params($item_id, $extra_data)
+						isset( $values[ $id ] ) ? $values[ $id ] : null,
+						$this->get_fw_storage_params( $item_id, $extra_data )
 					);
 				}
 
-				FW_Cache::set($cache_key_values, $values);
+				FW_Cache::set( $cache_key_values, $values );
 			}
 		}
 
-		if (empty($option_id)) {
+		if ( empty( $option_id ) ) {
 			return ( empty( $values ) && ( is_array( $default_value ) || fw_is_callback( $default_value ) ) )
 				? fw_call( $default_value )
 				: $values;
 		} else {
-			if (is_null($sub_keys)) {
-				return isset($values[$option_id])
-					? $values[$option_id]
+			if ( is_null( $sub_keys ) ) {
+				return isset( $values[ $option_id ] )
+					? $values[ $option_id ]
 					: fw_call( $default_value );
 			} else {
-				return isset($values[$option_id])
-					? fw_akg($sub_keys, $values[$option_id], $default_value)
+				return isset( $values[ $option_id ] )
+					? fw_akg( $sub_keys, $values[ $option_id ], $default_value )
 					: fw_call( $default_value );
 			}
 		}
