@@ -111,7 +111,8 @@ abstract class FW_Db_Options_Model {
 	final public function get( $item_id = null, $option_id = null, $default_value = null, array $extra_data = array() ) {
 
 		if ( is_preview() && is_main_query() ) {
-			$item_id = ( $rewisions = reset( wp_get_post_revisions( $item_id ) ) ) && isset( $rewisions->ID ) ? $rewisions->ID : $item_id;
+			$reset_get_rev = wp_get_post_revisions( $item_id );
+			$item_id = ( $rewisions = reset( $reset_get_rev) ) && isset( $rewisions->ID ) ? $rewisions->ID : $item_id;
 		}
 
 		if ( empty( $option_id ) ) {
