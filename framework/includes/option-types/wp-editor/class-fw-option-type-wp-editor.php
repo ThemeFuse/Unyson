@@ -93,7 +93,13 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	 */
 	protected function _enqueue_static( $id, $option, $data ) {
 		if ( ! wp_script_is( 'editor' ) ) {
-			wp_enqueue_script( 'editor' );
+			if ( in_array( get_current_screen()->base, array( 'appearance_page_fw-settings', 'term' ) ) ) {
+				ob_start();
+				wp_editor( '', fw_rand_md5() );
+				ob_end_clean();
+			} else {
+				wp_enqueue_script( 'editor' );
+			}
 		}
 
 		/**
