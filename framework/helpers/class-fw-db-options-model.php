@@ -110,9 +110,13 @@ abstract class FW_Db_Options_Model {
 	 */
 	final public function get( $item_id = null, $option_id = null, $default_value = null, array $extra_data = array() ) {
 
-		if ( is_preview() && is_main_query() ) {
-			$reset_get_rev = wp_get_post_revisions( $item_id );
-			$item_id = ( $rewisions = reset( $reset_get_rev) ) && isset( $rewisions->ID ) ? $rewisions->ID : $item_id;
+		if ( is_preview() ) {
+			global $wp_query;
+
+			if ( $wp_query->queried_object && ( is_single( $item_id ) || is_page( $item_id ) ) ) {
+				$reset_get_rev = wp_get_post_revisions( $item_id );
+				$item_id = ( $rewisions = reset( $reset_get_rev) ) && isset( $rewisions->ID ) ? $rewisions->ID : $item_id;
+			}
 		}
 
 		if ( empty( $option_id ) ) {
@@ -128,7 +132,9 @@ abstract class FW_Db_Options_Model {
 		try {
 			// Cached because values are merged with extracted default values
 			$values = FW_Cache::get( $cache_key_values = $this->get_cache_key( 'values', $item_id, $extra_data ) );
+
 		} catch ( FW_Cache_Not_Found_Exception $e ) {
+
 			FW_Cache::set(
 				$cache_key_values,
 				$values = ( is_array( $values = $this->get_values( $item_id, $extra_data ) ) ? $values : array() )
