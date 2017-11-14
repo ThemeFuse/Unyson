@@ -5,11 +5,7 @@ jQuery( document ).ready( function ( $ ) {
 		} );
 	}, 30 );
 
-	$( '#post-preview' ).on( 'mouseup touchend', function () {
-
-		if ( $( '#fw-option-page-builder' ).is( ':visible' ) ) {
-			return;
-		}
+	$( '#post-preview' ).on( 'mousedown touchend', function () {
 
 		var $content      = $( '#content' ),
 			$contentValue = $content.val(),

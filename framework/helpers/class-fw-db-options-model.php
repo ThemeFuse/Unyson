@@ -115,7 +115,7 @@ abstract class FW_Db_Options_Model {
 
 			if ( $wp_query->queried_object && ( is_single( $item_id ) || is_page( $item_id ) ) ) {
 				$reset_get_rev = wp_get_post_revisions( $item_id );
-				$item_id = ( $rewisions = reset( $reset_get_rev) ) && isset( $rewisions->ID ) ? $rewisions->ID : $item_id;
+				$item_id = ( $rewisions = reset( $reset_get_rev ) ) && isset( $rewisions->ID ) ? $rewisions->ID : $item_id;
 			}
 		}
 
