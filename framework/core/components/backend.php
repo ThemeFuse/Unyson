@@ -13,7 +13,9 @@ final class _FW_Component_Backend {
 	/** @var FW_Settings_Form */
 	private $settings_form;
 
-	private $available_render_designs = array( 'default', 'taxonomy', 'customizer' );
+	private $available_render_designs = array(
+		'default', 'taxonomy', 'customizer', 'empty'
+	);
 
 	private $default_render_design = 'default';
 
@@ -1487,8 +1489,16 @@ final class _FW_Component_Backend {
 	 * @return string
 	 */
 	public function render_option( $id, $option, $data = array(), $design = null ) {
+		$maybe_forced_design = fw()->backend->option_type(
+			$option['type']
+		)->get_forced_render_design();
+
 		if (empty($design)) {
 			$design = $this->default_render_design;
+		}
+
+		if ($maybe_forced_design) {
+			$design = $maybe_forced_design;
 		}
 
 		if (
