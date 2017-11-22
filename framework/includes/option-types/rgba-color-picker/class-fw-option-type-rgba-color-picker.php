@@ -50,7 +50,11 @@ class FW_Option_Type_Rgba_Color_Picker extends FW_Option_Type {
 	}
 
 	/**
-	 * @internal
+	 * @param string $id
+	 * @param array $option
+	 * @param array $data
+	 *
+	 * @return string
 	 */
 	protected function _render( $id, $option, $data ) {
 		$option['attr']['value'] = $data['value'];

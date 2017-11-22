@@ -5,7 +5,7 @@
 		_before = '<a tabindex="0" class="wp-color-result" />',
 		_after  = '<div class="wp-picker-holder" />',
 		_wrap   = '<div class="wp-picker-container" />',
-		_button = '<input type="button" class="button button-small hidden" />';
+		_button = '<input type="button" class="button button-small" />';
 
 	/**
 	 * Overwrite Color
@@ -60,6 +60,8 @@
 
 			el.wrap( '<span class="wp-picker-input-wrap" />' ).after( self.button );
 
+			self.inputWrapper = el.closest( '.wp-picker-input-wrap' );
+
 			el.iris( {
 				target   : self.pickerContainer,
 				hide     : self.options.hide,
@@ -108,8 +110,10 @@
 			self.toggler.on( 'click', function() {
 				if ( self.toggler.hasClass( 'wp-picker-open' ) ) {
 					self.close();
+					self.element.hide();
 				} else {
 					self.open();
+					self.element.show();
 				}
 			});
 
@@ -124,8 +128,9 @@
 					}
 
 					// fire clear callback if we have one
-					if ( $.isFunction( self.options.clear ) )
+					if ( $.isFunction( self.options.clear ) ) {
 						self.options.clear.call( this, event );
+					}
 				}
 			} );
 
@@ -147,8 +152,11 @@
 						self.toggler.css( 'backgroundColor', '' );
 					}
 
-					if ( $.isFunction( self.options.clear ) )
+					if ( $.isFunction( self.options.clear ) ) {
 						self.options.clear.call( this, event );
+					}
+
+					//self.close();
 
 				} else if ( $( this ).hasClass( 'wp-picker-default' ) ) {
 					self.element.val( self.options.defaultColor ).change();

@@ -9,7 +9,6 @@
     height: 23px !important;
 }
 .fw-backend-option-input-type-rgba-color-picker .wp-color-result {
-    height: auto;
     box-shadow:none;
 }
 .fw-backend-option-input-type-rgba-color-picker input {
