@@ -2385,9 +2385,9 @@ final class _FW_Extensions_Manager
 	 * @return string|WP_Error WP Filesystem path to the downloaded directory
 	 */
 	private function download( $extension_name, $data ) {
+		global $wp_filesystem;
 		$wp_error_id = 'fw_extension_download';
 
-		// TODO: more checks for $data['download']
 		if ( empty( $data['download'] ) ) {
 			return new WP_Error(
 				$wp_error_id,
@@ -2395,31 +2395,52 @@ final class _FW_Extensions_Manager
 			);
 		}
 
-		/** @var WP_Filesystem_Base $wp_filesystem */
-		global $wp_filesystem;
+		$opts = array_merge( array(
+			'extension_name'  => $extension_name,
+			'extension_title' => $this->get_extension_title( $extension_name )
+		), $data['download']['opts'] );
+
+		if ( isset( $opts['plugin'] ) && is_plugin_active( $opts['plugin'] ) ) {
+			return '';
+		}
+
+		if ( ( $download_source = $this->get_download_source( $data ) ) && is_wp_error( $download_source ) ) {
+			return $download_source;
+		}
+
+		if ( isset( $opts['plugin'] ) ) {
+			return $download_source->download( $opts, '' );
+        }
 
 		// create temporary directory
-		{
-			$wp_fs_tmp_dir = FW_WP_Filesystem::real_path_to_filesystem_path( $this->get_tmp_dir() );
+		$wp_fs_tmp_dir = FW_WP_Filesystem::real_path_to_filesystem_path( $this->get_tmp_dir() );
 
-			if ( $wp_filesystem->exists( $wp_fs_tmp_dir ) ) {
-				// just in case it already exists, clear everything, it may contain old files
-				if ( ! $wp_filesystem->rmdir( $wp_fs_tmp_dir, true ) ) {
-					return new WP_Error(
-						$wp_error_id,
-						sprintf( __( 'Cannot remove temporary directory: %s', 'fw' ), $wp_fs_tmp_dir )
-					);
-				}
-			}
-
-			if ( ! FW_WP_Filesystem::mkdir_recursive( $wp_fs_tmp_dir ) ) {
+		if ( $wp_filesystem->exists( $wp_fs_tmp_dir ) ) {
+			// just in case it already exists, clear everything, it may contain old files
+			if ( ! $wp_filesystem->rmdir( $wp_fs_tmp_dir, true ) ) {
 				return new WP_Error(
 					$wp_error_id,
-					sprintf( __( 'Cannot create temporary directory: %s', 'fw' ), $wp_fs_tmp_dir )
+					sprintf( __( 'Cannot remove temporary directory: %s', 'fw' ), $wp_fs_tmp_dir )
 				);
 			}
 		}
 
+		if ( ! FW_WP_Filesystem::mkdir_recursive( $wp_fs_tmp_dir ) ) {
+			return new WP_Error(
+				$wp_error_id,
+				sprintf( __( 'Cannot create temporary directory: %s', 'fw' ), $wp_fs_tmp_dir )
+			);
+		}
+
+		return $this->perform_zip_download( $download_source, $opts, $wp_fs_tmp_dir );
+	}
+
+	/**
+	 * @param $set
+	 *
+	 * @return FW_Ext_Download_Source|WP_Error
+	 */
+	private function get_download_source( $set ) {
 		require_once dirname( __FILE__ ) . '/includes/download-source/types/init.php';
 
 		$register = new _FW_Ext_Download_Source_Register( self::get_access_key()->get_key() );
@@ -2433,21 +2454,14 @@ final class _FW_Extensions_Manager
 		 */
 		do_action( 'fw_register_ext_download_sources', $register );
 
-		$download_source = $register->_get_type( self::get_access_key(), $data['download']['source'] );
+		$download_source = $register->_get_type( self::get_access_key(), $set['download']['source'] );
 
 		if ( ! $download_source ) {
-			return new WP_Error( 'invalid_dl_source', sprintf( esc_html__( 'Invalid download source: %s', 'fw' ), $data['download']['source'] ) );
+			$download_source = new WP_Error( 'invalid_dl_source', sprintf( esc_html__( 'Invalid download source: %s', 'fw' ), $set['download']['source'] ) );
 		}
 
-		return $this->perform_zip_download(
-			$download_source,
-			array_merge( array(
-				'extension_name'  => $extension_name,
-				'extension_title' => $this->get_extension_title( $extension_name )
-			), $data['download']['opts'] ),
-			$wp_fs_tmp_dir
-		);
-	}
+		return $download_source;
+    }
 
 	private function perform_zip_download( FW_Ext_Download_Source $download_source, array $opts, $wp_fs_tmp_dir ) {
 		$wp_error_id = 'fw_extension_download';

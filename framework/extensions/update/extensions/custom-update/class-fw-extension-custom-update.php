@@ -36,7 +36,7 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 	private function get_latest_version( $force_check, $set ) {
 
 		$transient_name = 'fw_ext_upd_gh_fw';
-		$url            = $set['remote'];
+		$url            = $set['source'];
 
 		if ( $force_check ) {
 			delete_site_transient( $transient_name );
@@ -57,15 +57,10 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 		}
 
 		if ( is_wp_error( $latest_version ) ) {
-			/**
-			 * Internet connection problems or Github API requests limit reached.
-			 * Cache fake version to prevent requests to Github API on every refresh.
-			 */
+			// Cache fake version to prevent requests to yourserver on every refresh.
 			$cache = array_merge( $cache, array( $url => $this->fake_latest_version ) );
 
-			/**
-			 * Show the error to the user because it is not visible elsewhere
-			 */
+			// Show the error to the user because it is not visible elsewhere.
 			FW_Flash_Messages::add( 'fw_ext_custom_update_error', $latest_version->get_error_message(), 'error' );
 
 		} else {
@@ -97,7 +92,7 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 		}
 
 		$request = wp_remote_request(
-			apply_filters( 'fw_custom_url_versions', $set['remote'], $set ),
+			apply_filters( 'fw_custom_url_versions', $set['source'], $set ),
 			array(
 				'method'  => isset( $set['method'] ) ? $set['method'] : 'GET',
 				'timeout' => $this->download_timeout,
@@ -132,7 +127,7 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 
 		$error_id = 'fw_ext_update_custom_download_zip';
 		$request = wp_remote_request(
-			apply_filters( 'fw_custom_url_zip', esc_url( "{$set['remote']}.{$version}.zip" ), $set ),
+			apply_filters( 'fw_custom_url_zip', esc_url( "{$set['source']}.{$version}.zip" ), $set ),
 			array(
 				'method'  => isset( $set['method'] ) ? $set['method'] : 'GET',
 				'timeout' => $this->download_timeout,

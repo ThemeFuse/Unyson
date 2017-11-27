@@ -39,7 +39,7 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 				}
 			}
 			// Ex: https://downloads.wordpress.org/plugin/your_plugin.1.0.8.zip
-			$download_link = apply_filters( 'fw_custom_url_zip', esc_url( "{$set['source']}.{$tag}.zip" ), $set );
+			$download_link = apply_filters( 'fw_custom_url_zip', esc_url( "{$set['remote']}.{$tag}.zip" ), $set );
 
 			$cache[ $extension_name ] = array( 'zipball_url' => $download_link, 'tag_name' => $tag );
 
@@ -77,7 +77,7 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 
 	public function get_version( $set ) {
 
-		if ( strpos( $set['source'], 'downloads.wordpress.org' ) !== false ) {
+		if ( strpos( $set['remote'], 'downloads.wordpress.org' ) !== false ) {
 
 			include ABSPATH . 'wp-admin/includes/plugin-install.php';
 
@@ -119,7 +119,7 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 		}
 
 		$request = wp_remote_request(
-			apply_filters( 'fw_custom_url_versions', $set['source'], $set ),
+			apply_filters( 'fw_custom_url_versions', $set['remote'], $set ),
 			array(
 				'method'  => isset( $set['method'] ) ? $set['method'] : 'GET',
 				'timeout' => $this->download_timeout,

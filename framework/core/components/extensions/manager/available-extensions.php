@@ -337,7 +337,12 @@ $extensions = array(
 		'name'        => __( 'Translatepress', 'fw' ),
 		'description' => __( 'This extension lets you translate your website in any language or even add multiple languages for your users to change at their will from the front-end.', 'fw' ),
 		'thumbnail'   => $thumbnails_uri . '/translation.jpg',
-		'plugin'      => 'translatepress-multilingual/class-translate-press.php',
-		'source'      => 'https://downloads.wordpress.org/plugin/translatepress-multilingual',
+		'download'    => array(
+			'source' => 'custom',
+			'opts' => array(
+				'plugin' => 'translatepress-multilingual/class-translate-press.php',
+				'remote' => 'https://downloads.wordpress.org/plugin/translatepress-multilingual'
+			)
+		)
 	),
 );
