@@ -102,28 +102,32 @@
 
 <!-- reset warning -->
 <script type="text/javascript">
-	jQuery(function($){
-		$(document.body).on(
+	jQuery( function ( $ ) {
+		$( document.body ).on(
 			'click.fw-settings-form-reset-warning',
-			'<?php echo $js_form_selector ?> input[name="<?php echo esc_js($input_name_reset) ?>"]',
-			function(e){
+			'<?php echo $js_form_selector ?> input[name="<?php echo esc_js( $input_name_reset ) ?>"]',
+			function ( e ) {
 				/**
 				 * on confirm() the submit input looses focus
 				 * fwForm.isAdminPage() must be able to select the input to send it in _POST
 				 * so use alternative solution http://stackoverflow.com/a/5721762
 				 */
-				{
-					$(this).closest('form').find('[clicked]:submit').removeAttr('clicked');
-					$(this).attr('clicked', '');
-				}
+				$( this ).closest( 'form' ).find( '[clicked]:submit' ).removeAttr( 'clicked' );
+				$( this ).attr( 'clicked', '' );
 
-				if (!confirm('<?php echo esc_js($form->get_string('reset_warning')); ?>')) {
+				var resetWarning = '<?php echo esc_js( $form->get_string( 'reset_warning' ) ); ?>',
+					data         = { 'reset_warning': resetWarning };
+
+				if ( ! confirm( resetWarning ) ) {
 					e.preventDefault();
-					$(this).removeAttr('clicked');
+					$( document.body ).trigger( 'fw:settings-form:cancel-reset', data );
+					$( this ).removeAttr( 'clicked' );
+				} else {
+					$( document.body ).trigger( 'fw:settings-form:before-reset', data );
 				}
 			}
 		);
-	});
+	} );
 </script>
 <!-- end: reset warning -->
 
