@@ -293,6 +293,8 @@
 					self._change();
 				} );
 			}
+
+			el.trigger( 'change' );
 		},
 		_addInputListeners: function( input ) {
 			var self            = this,
