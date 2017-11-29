@@ -64,15 +64,31 @@ class FW_Extension_Update extends FW_Extension {
 			return;
 		}
 
-		add_submenu_page( 'admin.php', esc_html__( 'Unyson updates', 'fw' ), '', 'update_plugins', 'fw-update', array( $this, '_action_updates_page_footer' ) );
+		add_submenu_page( 'admin.php', esc_html__( 'Unyson updates', 'fw' ), '', 'update_plugins', 'fw-update', array( $this, '_multisite_updates_page' ) );
+	}
+
+	public function _multisite_updates_page() {
+		if ( isset( $_GET['action'] ) && ! empty( $_POST ) ) {
+			if ( $_GET['action'] === 'fw-update-extensions' ) {
+				$this->_action_update_extensions();
+			} else {
+				$this->_action_update_theme();
+			}
+		}
+
+		$this->_action_updates_page_footer();
 	}
 
 	/**
 	 * @internal
 	 */
 	public function _action_updates_page_footer() {
+
+		$url = current_filter() == 'core_upgrade_preamble' ? 'update-core.php' : '?page=fw-update';
+
 		echo $this->render_view( 'updates-list', array(
-			'updates' => $this->get_updates( ! empty( $_GET['force-check'] ) )
+			'updates'      => $this->get_updates( ! empty( $_GET['force-check'] ) ),
+			'form_action'  => self_admin_url( $url )
 		) );
 	}
 

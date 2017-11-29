@@ -40,7 +40,7 @@
 			<?php if ( is_wp_error( $updates['theme'] ) ): ?>
                 <p class="wp-ui-text-notification"><?php echo $updates['theme']->get_error_message() ?></p>
 			<?php else: ?>
-                <form id="fw-ext-update-theme" method="post" action="update-core.php?action=fw-update-theme">
+                <form id="fw-ext-update-theme" method="post" action="<?php echo esc_url( add_query_arg( 'action', 'fw-update-theme', $form_action ) ); ?>">
                     <p>
                         <?php
                             _e( sprintf( 'You have version %s installed. Update to %s.',
@@ -79,7 +79,7 @@
                 }
             }
 		?>
-        <form id="fw-ext-update-extensions" method="post" action="http://localhost/wp/wp-admin/?fw-update-extensions">
+        <form id="fw-ext-update-extensions" method="post" action="<?php echo esc_url( add_query_arg( 'action', 'fw-update-extensions', $form_action ) ); ?>">
             <div class="fw-ext-update-extensions-form-detailed"<?php echo( $one_update_mode ? ' style="display: none;"' : '' ); ?>>
                 <p>
                     <input class="button" type="submit" value="<?php echo esc_attr( __( 'Update Extensions', 'fw' ) ) ?>" name="update">
