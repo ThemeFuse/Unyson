@@ -1,6 +1,4 @@
-<?php if ( ! defined( 'FW' ) ) {
-	die( 'Forbidden' );
-}
+<?php defined( 'FW' ) or die();
 
 if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 
@@ -51,7 +49,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				/**
 				 * Show the post type or term taxonomy
 				 */
-				'show-type' => false
+				'show-type'   => false
 			);
 		}
 
@@ -133,37 +131,37 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			);
 		}
 
-		private static function query_terms(array $options) {
-			$limits = array_merge(array(
+		private static function query_terms( array $options ) {
+			$limits = array_merge( array(
 				'taxonomy' => array(
 					'category' => true,
 				),
-				'title' => '',
-				'id' => array( /* 1, 7, 120 */ ),
-				'limit' => 100,
-			), $options);
-			fw_aku('limit', $limits);
+				'title'    => '',
+				'id'       => array( /* 1, 7, 120 */ ),
+				'limit'    => 100,
+			), $options );
+			fw_aku( 'limit', $limits );
 
 			/** @var WPDB $wpdb */
 			global $wpdb;
 
 			$sql = "SELECT terms.term_id"
-			       ." FROM $wpdb->terms AS terms, $wpdb->term_taxonomy AS taxonomies"
-			       ." WHERE terms.term_id = taxonomies.term_id AND taxonomies.term_id = taxonomies.term_taxonomy_id";
+			       . " FROM $wpdb->terms AS terms, $wpdb->term_taxonomy AS taxonomies"
+			       . " WHERE terms.term_id = taxonomies.term_id AND taxonomies.term_id = taxonomies.term_taxonomy_id";
 
 			{
 				$prepare = array();
 
-				if ($limits['taxonomy']) {
-					$sql .= " AND taxonomies.taxonomy IN ( "
-					        . implode( ', ', array_fill( 1, count( $limits['taxonomy'] ), '%s' ) )
-					        . " ) ";
-					$prepare = array_merge($prepare, array_keys($limits['taxonomy']));
+				if ( $limits['taxonomy'] ) {
+					$sql     .= " AND taxonomies.taxonomy IN ( "
+					            . implode( ', ', array_fill( 1, count( $limits['taxonomy'] ), '%s' ) )
+					            . " ) ";
+					$prepare = array_merge( $prepare, array_keys( $limits['taxonomy'] ) );
 				}
 
-				if ($limits['title']) {
-					$sql .= " AND terms.name LIKE %s";
-					$prepare[] = '%'. $wpdb->esc_like( $limits['title'] ) .'%';
+				if ( $limits['title'] ) {
+					$sql       .= " AND terms.name LIKE %s";
+					$prepare[] = '%' . $wpdb->esc_like( $limits['title'] ) . '%';
 				}
 			}
 
@@ -177,7 +175,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				'term_id'
 			);
 
-			return self::get_terms( $ids, array_keys($limits['taxonomy']), max( fw_akg( 'limit', $options, 100 ), 1 ) );
+			return self::get_terms( $ids, array_keys( $limits['taxonomy'] ), max( fw_akg( 'limit', $options, 100 ), 1 ) );
 		}
 
 		protected static function get_terms( $ids, $taxonomy = array(), $limit = 100 ) {
@@ -186,7 +184,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			}
 
 			$terms = get_terms( array(
-				'taxonomy' => $taxonomy,
+				'taxonomy'   => $taxonomy,
 				'hide_empty' => false,
 				'include'    => $ids,
 				'number'     => $limit,
@@ -215,36 +213,36 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			);
 		}
 
-		private static function query_users(array $limits) {
-			$limits = array_merge(array(
-				'name' => '',
-				'role' => array(
+		private static function query_users( array $limits ) {
+			$limits = array_merge( array(
+				'name'  => '',
+				'role'  => array(
 					'editor' => true,
 				),
-				'id' => array( /* 1, 7, 120 */ ),
+				'id'    => array( /* 1, 7, 120 */ ),
 				'limit' => 100,
-			), $limits);
+			), $limits );
 
-			$limits['limit'] = max($limits['limit'], 1);
+			$limits['limit'] = max( $limits['limit'], 1 );
 
 			/** @var WPDB $wpdb */
 			global $wpdb;
 
 			$sql = "SELECT DISTINCT users.ID AS val, users.user_nicename AS title"
-			       ." FROM $wpdb->users AS users, $wpdb->usermeta AS usermeta"
-			       ." WHERE usermeta.user_id = users.ID";
+			       . " FROM $wpdb->users AS users, $wpdb->usermeta AS usermeta"
+			       . " WHERE usermeta.user_id = users.ID";
 
 			{
 				$prepare = array();
 
-				if ($limits['id']) {
-					$sql .= " AND users.ID IN ( "
-					        . implode( ', ', array_fill( 1, count( $limits['id'] ), '%d' ) )
-					        . " ) ";
-					$prepare = array_merge($prepare, $limits['id']);
+				if ( $limits['id'] ) {
+					$sql     .= " AND users.ID IN ( "
+					            . implode( ', ', array_fill( 1, count( $limits['id'] ), '%d' ) )
+					            . " ) ";
+					$prepare = array_merge( $prepare, $limits['id'] );
 				}
 
-				if ($limits['role']) {
+				if ( $limits['role'] ) {
 					$sql .= " AND usermeta.meta_key = '{$wpdb->prefix}capabilities' "
 					        . "AND ( "
 					        . implode( ' OR ',
@@ -256,17 +254,17 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 					}
 				}
 
-				if ($limits['name']) {
-					$sql .= " AND users.user_nicename LIKE %s";
-					$prepare[] = '%'. $wpdb->esc_like( $limits['name'] ) .'%';
+				if ( $limits['name'] ) {
+					$sql       .= " AND users.user_nicename LIKE %s";
+					$prepare[] = '%' . $wpdb->esc_like( $limits['name'] ) . '%';
 				}
 			}
 
-			$sql .= " LIMIT ". intval($limits['limit']);
+			$sql .= " LIMIT " . intval( $limits['limit'] );
 
 			return $wpdb->get_results(
 				$prepare
-					? $wpdb->prepare($sql, $prepare)
+					? $wpdb->prepare( $sql, $prepare )
 					: $sql,
 				ARRAY_A
 			);
@@ -276,14 +274,14 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 		 * @internal
 		 */
 		public static function _ajax_autocomplete() {
-			if (!current_user_can('edit_posts')) {
+			if ( ! current_user_can( 'edit_posts' ) ) {
 				wp_send_json_error();
 			}
 
 			$type  = FW_Request::POST( 'data/type' );
-			$names = ($names = json_decode( FW_Request::POST( 'data/names' ), true )) ? $names : array();
+			$names = ( $names = json_decode( FW_Request::POST( 'data/names' ), true ) ) ? $names : array();
 			$title = FW_Request::POST( 'data/string' );
-			$show = FW_Request::POST( 'data/show-type', false );
+			$show  = FW_Request::POST( 'data/show-type', false );
 
 			$items = array();
 
@@ -296,14 +294,14 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 					$items = array_map(
 						array( __CLASS__, 'build_post' ),
 						$items,
-						array_fill( 0, count($items), $show )
+						array_fill( 0, count( $items ), $show )
 					);
 					break;
 				case 'taxonomy':
-					$items = self::query_terms(array(
-						'taxonomy' => array_fill_keys($names, true),
-						'title' => $title,
-					));
+					$items = self::query_terms( array(
+						'taxonomy' => array_fill_keys( $names, true ),
+						'title'    => $title,
+					) );
 
 					$items = array_map(
 						array( __CLASS__, 'build_term' ),
@@ -312,10 +310,10 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 					);
 					break;
 				case 'users':
-					$items = self::query_users(array(
-						'role' => array_fill_keys($names, true),
+					$items = self::query_users( array(
+						'role' => array_fill_keys( $names, true ),
 						'name' => $title,
-					));
+					) );
 					break;
 			}
 
@@ -351,9 +349,11 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 						}
 						break;
 					case 'posts' :
+
 						if ( isset( $option['source'] ) ) {
 
-							$items = self::get_posts( (array) $data['value'] );
+							$source = is_array( $option['source'] ) ? $option['source'] : (array) $option['source'];
+							$items  = self::get_posts( (array) $data['value'] );
 
 							$query = new WP_Query( array(
 								'post_type'           => $option['source'],
@@ -484,7 +484,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			static $names = array();
 
 			if ( ! isset( $names[ $type ] ) ) {
-				$names[$type]=fw_akg( 'labels/name', get_post_type_object( $type ), _x( 'Unknown', 'unknown-post-type', 'fw' ) );
+				$names[ $type ] = fw_akg( 'labels/name', get_post_type_object( $type ), _x( 'Unknown', 'unknown-post-type', 'fw' ) );
 			}
 
 			return $names[ $type ];
@@ -494,7 +494,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			static $names = array();
 
 			if ( ! isset( $names[ $tax ] ) ) {
-				$names[$tax]=fw_akg( 'labels/name', get_taxonomy( $tax ), _x( 'Unknown', 'unknown-post-type', 'fw' ) );
+				$names[ $tax ] = fw_akg( 'labels/name', get_taxonomy( $tax ), _x( 'Unknown', 'unknown-post-type', 'fw' ) );
 			}
 
 			return $names[ $tax ];
