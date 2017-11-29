@@ -340,7 +340,7 @@ $extensions = array(
 		'download'    => array(
 			'source' => 'custom',
 			'opts' => array(
-				'plugin' => 'translatepress-multilingual/class-translate-press.php',
+				'plugin' => 'translatepress-multilingual/index.php',
 				'remote' => 'https://downloads.wordpress.org/plugin/translatepress-multilingual'
 			)
 		)

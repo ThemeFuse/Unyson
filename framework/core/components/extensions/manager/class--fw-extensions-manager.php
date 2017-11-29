@@ -1192,7 +1192,8 @@ final class _FW_Extensions_Manager
 
 				foreach ( $parents as $parent_extension_name ) {
 					$current_extension_path .= '/extensions/' . $parent_extension_name;
-                    $destination = isset( $available_extensions[ $parent_extension_name ]['theme'] ) && $available_extensions[ $parent_extension_name ]['theme'] ? 'theme' : 'framework';
+					$set = $available_extensions[ $parent_extension_name ];
+                    $destination = isset( $set['theme'] ) && $set['theme'] ? 'theme' : 'framework';
 
 					if ( isset( $installed_extensions[ $parent_extension_name ] ) ) {
 						continue; // skip already installed extensions
@@ -1215,7 +1216,7 @@ final class _FW_Extensions_Manager
 					}
 
 					// If is plugin will returned downloadable link zip.
-					$wp_fw_downloaded_dir = $this->download( $parent_extension_name, $available_extensions[ $parent_extension_name ] );
+					$wp_fw_downloaded_dir = $this->download( $parent_extension_name, $set );
 
 					if ( is_wp_error( $wp_fw_downloaded_dir ) ) {
 						if ( $verbose ) {
@@ -1249,7 +1250,7 @@ final class _FW_Extensions_Manager
 					}
 
 					// Merge directories only for extensions. If we have plugin it will installed via Plugin_Upgrader.
-					if ( ! isset( $parent_extension_name['plugin'] ) ) {
+					if ( empty( $set['download']['opts']['plugin'] ) ) {
 						$merge_result = $this->merge_extension(
 							$wp_fw_downloaded_dir,
 							FW_WP_Filesystem::real_path_to_filesystem_path( $destination_path[ $destination ] . $current_extension_path )

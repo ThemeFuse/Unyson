@@ -148,12 +148,26 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 			return '';
 		}
 
-		if ( ! class_exists( 'Plugin_Upgrader', false ) ) {
-			require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-		}
+		if ( ! ( $installed = get_plugins() ) || ! isset( $installed[ $set['plugin'] ] ) ) {
+			if ( ! class_exists( 'Plugin_Upgrader', false ) ) {
+				require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+			}
 
-		$upgrader = new Plugin_Upgrader( new Plugin_Installer_Skin( array() ) );
-		$upgrader->install( $source );
+			$upgrader = new Plugin_Upgrader( new Plugin_Installer_Skin( array() ) );
+			$install = $upgrader->install( $source );
+
+			if ( ! $install || is_wp_error( $install ) ) {
+				return new WP_Error( sprintf( __( 'Cannot install plugin: %s', 'fw' ), $set['extension_title'] ) );
+			}
+
+			if ( ! ( $installed = get_plugins() ) || ! isset( $installed[ $set['plugin'] ] ) ) {
+				return new WP_Error( sprintf( __( 'Cannot find plugin: %s', 'fw' ), $set['extension_title'] ) );
+			}
+
+			$cache_plugins = ( $c = wp_cache_get( 'plugins', 'plugins' ) ) && ! empty( $c ) ? $c : array();
+			$cache_plugins[''][ $set['plugin'] ] = $installed[ $set['plugin'] ];
+			wp_cache_set( 'plugins', $cache_plugins, 'plugins' );
+		}
 
 		return activate_plugin( $set['plugin'] );
 	}
