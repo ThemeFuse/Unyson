@@ -80,16 +80,6 @@ unset($data);
             foreach ( $display_active_extensions as $name => &$data ) {
 
                 $ext = fw_ext( $name );
-                $link = $ext ? $ext->_get_link() : admin_url( '?page=fw-extensions' );
-	            $url_set = '';
-
-                if ( $ext && $ext->get_settings_options() ) {
-                    $url_set = "{$link}&sub-page=extension&extension={$name}";
-                } else {
-                    if ( ! empty( $data['download']['url_set'] ) ) {
-                        $url_set = admin_url( $data['download']['url_set'] );
-                    }
-                }
 
                 fw_render_view( $extension_view_path, array(
                     'name'              => $name,

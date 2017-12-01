@@ -12,11 +12,11 @@
  * @var bool $is_active
  */
 
-$ext = fw_ext( $name );
-$link = $ext ? $ext->_get_link() : admin_url( '?page=fw-extensions' );
+$ext       = fw_ext( $name );
 $is_active = isset( $lists['active'][ $name ] ) ? true : false;
-$version = $ext ? $ext->manifest->get_version() : '';
-$url_set = '';
+$version   = $ext ? $ext->manifest->get_version() : '';
+$ext_page  = $ext ? $ext->_get_link() : admin_url( '?page=fw-extensions' );
+$url_set   = '';
 
 if ( $ext && $ext->get_settings_options() ) {
 	$url_set = "{$link}&sub-page=extension&extension={$name}";
@@ -90,20 +90,22 @@ if (!$installed_data && !$is_compatible) {
 				</div>
 				<div class="fw-extension-list-item-table-cell cell-2">
 
-					<h3 class="fw-extensions-list-item-title"<?php if ($is_active): ?> title="v<?php echo esc_attr( $version ); ?>"<?php endif; ?>><?php
-						if ( $is_active && $link ) {
-							echo fw_html_tag( 'a', array( 'href' => $link ), $title );
-						} else {
-							echo $title;
-						}
-					?></h3>
+					<h3 class="fw-extensions-list-item-title"<?php echo( $is_active ? 'title="v' . esc_attr( $version ) . '"' : '' ); ?>>
+                        <?php
+                            if ( $is_active && $ext_page ) {
+                                echo fw_html_tag( 'a', array( 'href' => $link ), $title );
+                            } else {
+                                echo $title;
+                            }
+					    ?>
+                    </h3>
 
 					<?php if ($description): ?>
 						<p class="fw-extensions-list-item-desc"><?php echo esc_html($description); ?></p>
 					<?php endif; ?>
 
 					<?php
-					if ($installed_data) {
+					if ( $installed_data ) {
 						$_links = array();
 
 						if ( $is_active && $url_set ) {
@@ -119,8 +121,7 @@ if (!$installed_data && !$is_compatible) {
 						}
 
 						if ( ! empty( $_links ) ):
-							?><p
-							class="fw-extensions-list-item-links"><?php echo implode( ' <span class="fw-text-muted">|</span> ', $_links ); ?></p><?php
+							?><p class="fw-extensions-list-item-links"><?php echo implode( ' <span class="fw-text-muted">|</span> ', $_links ); ?></p><?php
 						endif;
 
 						unset( $_links );
@@ -165,7 +166,7 @@ if (!$installed_data && !$is_compatible) {
 								<a href="#"
 								   onclick="jQuery(this).closest('form').submit(); return false;"
 								   data-remove-extension="<?php echo esc_attr($name) ?>"
-								   title="<?php echo esc_attr_e('Remove', 'fw'); ?>"
+								   title="<?php esc_attr_e('Remove', 'fw'); ?>"
 									><span class="btn-text fw-visible-xs-inline"><?php _e('Remove', 'fw'); ?></span><span class="btn-icon unycon unycon-trash fw-hidden-xs"></span></a>
 							</form>
 							<?php endif; ?>
