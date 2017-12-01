@@ -125,7 +125,7 @@ unset($data);
 			foreach ($theme_extensions + $lists['supported'] as $name => $data) {
 				if (isset($displayed[$name])) {
 					continue;
-				} elseif (isset($lists['installed'][$name])) {
+				} elseif ( isset( $lists['installed'][ $name ] ) && ! empty( $lists['installed'][$name]['manifest'] ) ) {
 					if (true !== fw_akg('display', $lists['installed'][$name]['manifest'], $display_default_value)) {
 						continue;
 					}

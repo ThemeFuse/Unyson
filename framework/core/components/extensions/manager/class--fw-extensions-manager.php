@@ -258,7 +258,7 @@ final class _FW_Extensions_Manager
 					unset($extensions['backups']);
 				}
 
-				foreach ( array('backup', 'styling', 'translation', 'learning' ) as $obsolete_extension ) {
+				foreach ( array('backup', 'styling', 'learning' ) as $obsolete_extension ) {
 					if (
 						!isset($supported_extensions[$obsolete_extension])
 						&&

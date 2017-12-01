@@ -303,34 +303,6 @@ $extensions = array(
 		),
 	),
 
-	'styling' => array(
-		'display'     => true,
-		'parent'      => null,
-		'name'        => __( 'Styling', 'fw' ),
-		'description' => __( 'This extension lets you control the website visual style. Starting from predefined styles to changing specific fonts and colors across the website.', 'fw' ),
-		'thumbnail'   => $thumbnails_uri . '/styling.jpg',
-		'download'    => array(
-			'source' => 'github',
-			'opts' => array(
-				'user_repo' => $github_account . '/Unyson-Styling-Extension',
-			),
-		),
-	),
-
-	'translation' => array(
-		'display'     => true,
-		'parent'      => null,
-		'name'        => __( 'Translations', 'fw' ),
-		'description' => __( 'This extension lets you translate your website in any language or even add multiple languages for your users to change at their will from the front-end.', 'fw' ),
-		'thumbnail'   => $thumbnails_uri . '/translation.jpg',
-		'download'    => array(
-			'source' => 'github',
-			'opts' => array(
-				'user_repo' => $github_account . '/Unyson-Translation-Extension'
-			)
-		),
-	),
-
 	'translatepress' => array(
 		'display'     => true,
 		'parent'      => null,
@@ -346,4 +318,18 @@ $extensions = array(
 			)
 		)
 	),
+
+	'styling' => array(
+		'display'     => true,
+		'parent'      => null,
+		'name'        => __( 'Styling', 'fw' ),
+		'description' => __( 'This extension lets you control the website visual style. Starting from predefined styles to changing specific fonts and colors across the website.', 'fw' ),
+		'thumbnail'   => $thumbnails_uri . '/styling.jpg',
+		'download'    => array(
+			'source' => 'github',
+			'opts' => array(
+				'user_repo' => $github_account . '/Unyson-Styling-Extension',
+			),
+		),
+	)
 );
