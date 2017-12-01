@@ -9,9 +9,22 @@
  * @var array $nonces
  * @var string $default_thumbnail
  * @var bool $can_install
+ * @var bool $is_active
  */
 
-$is_active = (bool)fw()->extensions->get($name);
+$ext = fw_ext( $name );
+$link = $ext ? $ext->_get_link() : admin_url( '?page=fw-extensions' );
+$is_active = isset( $lists['active'][ $name ] ) ? true : false;
+$version = $ext ? $ext->manifest->get_version() : '';
+$url_set = '';
+
+if ( $ext && $ext->get_settings_options() ) {
+	$url_set = "{$link}&sub-page=extension&extension={$name}";
+} else {
+	if ( ! empty( $lists['available'][ $name ]['download']['url_set'] ) ) {
+		$url_set = admin_url( $lists['available'][ $name ]['download']['url_set'] );
+	}
+}
 
 if (isset($lists['installed'][$name])) {
 	$installed_data = &$lists['installed'][$name];
@@ -32,18 +45,20 @@ if (isset($lists['available'][$name])) {
 		$thumbnail = $default_thumbnail;
 	}
 
-	if (isset($lists['installed'][$name])) {
-		$thumbnail = fw_akg('thumbnail', $lists['installed'][$name]['manifest'], $thumbnail);
+	if ( isset( $lists['installed'][ $name ] ) ) {
+
+		$manifest  = ! empty( $lists['installed'][ $name ]['thumbnail'] ) ? $lists['installed'][ $name ]['thumbnail'] : $lists['installed'][ $name ]['manifest'];
+		$thumbnail = fw_akg( 'thumbnail', $manifest, $thumbnail );
 
 		// local image
 		if (
-			substr($thumbnail, 0, 11) !== 'data:image/'
+			substr( $thumbnail, 0, 11 ) !== 'data:image/'
 			&&
-			!filter_var($thumbnail, FILTER_VALIDATE_URL)
+			! filter_var( $thumbnail, FILTER_VALIDATE_URL )
 			&&
-			file_exists($thumbnail_path = $lists['installed'][$name]['path'] .'/'. $thumbnail)
+			file_exists( $thumbnail_path = $lists['installed'][ $name ]['path'] . '/' . $thumbnail )
 		) {
-			$thumbnail = fw_get_path_url($thumbnail_path);
+			$thumbnail = fw_get_path_url( $thumbnail_path );
 		}
 	}
 }
@@ -51,7 +66,7 @@ if (isset($lists['available'][$name])) {
 $is_compatible =
 	isset($lists['supported'][$name]) // is listed in the supported extensions list in theme manifest
 	||
-	($installed_data && $installed_data['is']['theme']); // is located in the theme
+	($installed_data && ! empty( $installed_data['is']['theme'] ) ); // is located in the theme
 
 $wrapper_class = 'fw-col-xs-12 fw-col-lg-6 fw-extensions-list-item';
 
@@ -74,9 +89,10 @@ if (!$installed_data && !$is_compatible) {
 					</div>
 				</div>
 				<div class="fw-extension-list-item-table-cell cell-2">
-					<h3 class="fw-extensions-list-item-title"<?php if ($is_active): ?> title="v<?php echo esc_attr(fw()->extensions->get($name)->manifest->get_version()) ?>"<?php endif; ?>><?php
-						if ($is_active && ($extension_link = fw()->extensions->get($name)->_get_link())) {
-							echo fw_html_tag('a', array('href' => $extension_link), $title);
+
+					<h3 class="fw-extensions-list-item-title"<?php if ($is_active): ?> title="v<?php echo esc_attr( $version ); ?>"<?php endif; ?>><?php
+						if ( $is_active && $link ) {
+							echo fw_html_tag( 'a', array( 'href' => $link ), $title );
 						} else {
 							echo $title;
 						}
@@ -90,11 +106,11 @@ if (!$installed_data && !$is_compatible) {
 					if ($installed_data) {
 						$_links = array();
 
-						if ( $is_active && fw()->extensions->get( $name )->get_settings_options() ) {
-							$_links[] = '<a href="' . esc_attr( $link ) . '&sub-page=extension&extension=' . esc_attr( $name ) . '">' . __( 'Settings', 'fw' ) . '</a>';
+						if ( $is_active && $url_set ) {
+							$_links[] = '<a href="' . esc_url( $url_set ) . '">' . __( 'Settings', 'fw' ) . '</a>';
 						}
 
-						if ( $is_active && file_exists( $installed_data['path'] . '/readme.md.php' ) ) {
+						if ( $is_active && isset( $installed_data['path'] ) && file_exists( $installed_data['path'] . '/readme.md.php' ) ) {
 							if ( isset($lists['supported'][$name]) ) {
 								// no sense to teach how to install the extension if theme is already configured and the is extension marked as compatible
 							} else {
@@ -116,7 +132,7 @@ if (!$installed_data && !$is_compatible) {
 				</div>
 				<div class="fw-extension-list-item-table-cell cell-3">
 					<?php if ($is_active): ?>
-						<form action="<?php echo esc_attr($link) ?>&sub-page=deactivate&extension=<?php echo esc_attr($name) ?>" method="post">
+						<form action="<?php echo esc_attr($link) ?>&sub-page=deactivate&extension=<?php echo esc_attr( $name ) ?>" method="post">
 							<?php wp_nonce_field($nonces['deactivate']['action'], $nonces['deactivate']['name']); ?>
 							<input class="button" type="submit" value="<?php esc_attr_e('Deactivate', 'fw'); ?>"/>
 						</form>

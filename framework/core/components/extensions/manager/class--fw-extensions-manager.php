@@ -864,6 +864,7 @@ final class _FW_Extensions_Manager
 						? $ext_data['display']
 						: $this->manifest_default_values['display'],
 					'theme' => isset($ext_data['theme']) && $ext_data['theme'],
+                    'download' => isset( $ext_data['download'] ) ? $ext_data['download'] : array()
 				);
 
 				if ($lists['available'][$ext_name]['theme']) {
@@ -2144,12 +2145,20 @@ final class _FW_Extensions_Manager
 			);
 		}
 
+		$available_extensions = $this->get_available_extensions();
 		$installed_extensions = $this->get_installed_extensions();
 
 		$result = $extensions_for_deactivation = array();
 		$has_errors = false;
 
 		foreach ($extensions as $extension_name => $not_used_var) {
+
+		    if ( ! empty( $available_extensions[ $extension_name ]['download']['opts']['plugin'] ) ) {
+			    deactivate_plugins( plugin_basename( $available_extensions[ $extension_name ]['download']['opts']['plugin'] ) );
+			    continue;
+            }
+
+
 			if (!isset($installed_extensions[$extension_name])) {
 				// anyway remove from the active list
 				$extensions_for_deactivation[$extension_name] = array();

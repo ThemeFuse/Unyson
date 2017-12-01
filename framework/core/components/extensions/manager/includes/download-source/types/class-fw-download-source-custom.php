@@ -154,6 +154,7 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 			}
 
 			$upgrader = new Plugin_Upgrader( new Plugin_Installer_Skin( array() ) );
+
 			$install = $upgrader->install( $source );
 
 			if ( ! $install || is_wp_error( $install ) ) {
