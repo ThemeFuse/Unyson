@@ -15,7 +15,7 @@
 $ext       = fw_ext( $name );
 $is_active = isset( $lists['active'][ $name ] ) ? true : false;
 $version   = $ext ? $ext->manifest->get_version() : '';
-$ext_page  = $ext ? $ext->_get_link() : admin_url( '?page=fw-extensions' );
+$ext_page  = $ext ? $ext->_get_link() : '';
 $url_set   = '';
 
 if ( $ext && $ext->get_settings_options() ) {
@@ -90,10 +90,10 @@ if (!$installed_data && !$is_compatible) {
 				</div>
 				<div class="fw-extension-list-item-table-cell cell-2">
 
-					<h3 class="fw-extensions-list-item-title"<?php echo( $is_active ? 'title="v' . esc_attr( $version ) . '"' : '' ); ?>>
+					<h3 class="fw-extensions-list-item-title"<?php echo( $is_active && $version ? ' title="v' . esc_attr( $version ) . '"' : '' ); ?>>
                         <?php
                             if ( $is_active && $ext_page ) {
-                                echo fw_html_tag( 'a', array( 'href' => $link ), $title );
+                                echo fw_html_tag( 'a', array( 'href' => $ext_page ), $title );
                             } else {
                                 echo $title;
                             }

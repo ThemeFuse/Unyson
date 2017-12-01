@@ -153,8 +153,7 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 				require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 			}
 
-			$upgrader = new Plugin_Upgrader( new Plugin_Installer_Skin( array() ) );
-
+			$upgrader = new Plugin_Upgrader( new Automatic_Upgrader_Skin() );
 			$install = $upgrader->install( $source );
 
 			if ( ! $install || is_wp_error( $install ) ) {

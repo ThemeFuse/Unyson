@@ -1556,16 +1556,45 @@ final class _FW_Extensions_Manager
 			);
 		}
 
-		$installed_extensions = $this->get_installed_extensions();
-		$extensions_before_uninstall = array_fill_keys(array_keys($installed_extensions), array());
+		$installed_extensions        = $this->get_installed_extensions();
+		$available_extensions        = $this->get_available_extensions();
+		$extensions_before_uninstall = array_fill_keys( array_keys( $installed_extensions ), array() );
 
 		$result = $uninstalled_extensions = array();
 		$has_errors = false;
 
-		while (!empty($extensions)) {
-			$not_used_var = reset($extensions);
-			$extension_name = key($extensions);
-			unset($extensions[$extension_name]);
+		while ( ! empty( $extensions ) ) {
+
+			reset( $extensions );
+			$extension_name = key( $extensions );
+			unset( $extensions[ $extension_name ] );
+
+			if ( ! empty( $available_extensions[ $extension_name ]['download']['opts']['plugin'] ) ) {
+				$unistall     = delete_plugins( (array) $available_extensions[ $extension_name ]['download']['opts']['plugin'] );
+                $plugin_title = $available_extensions['name'];
+
+				if ( $unistall ) {
+					$this->verbose( sprintf( esc_html__( 'Extension "%s" has been deleted.', 'fw' ), $plugin_title ), $verbose );
+					$result[ $extension_name ] = true;
+                } else {
+				    if ( is_wp_error( $unistall ) ) {
+					    $msg_error = $unistall->get_error_message() . ' - ' . $plugin_title;
+                    } else {
+					    $msg_error = sprintf( esc_html__( 'Plugin %s is empty.' ), $plugin_title );
+                    }
+
+					$result[ $extension_name ] = new WP_Error( 'fw_delete_plugins', $msg_error, $plugin_title );
+					$has_errors = true;
+
+					if ( $cancel_on_error ) {
+						break;
+					} else {
+						continue;
+					}
+                }
+
+				continue;
+			}
 
 			$extension_title = $this->get_extension_title($extension_name);
 
@@ -1602,15 +1631,7 @@ final class _FW_Extensions_Manager
 				continue;
 			}
 
-			if ($verbose) {
-				$verbose_message = sprintf(__('Deleting the "%s" extension...', 'fw'), $extension_title);
-
-				if (is_subclass_of($verbose, 'WP_Upgrader_Skin')) {
-					$verbose->feedback($verbose_message);
-				} else {
-					echo fw_html_tag('p', array(), $verbose_message);
-				}
-			}
+			$this->verbose( sprintf( esc_html__( 'Deleting the "%s" extension...', 'fw' ), $extension_title ), $verbose );
 
 			if (!$wp_filesystem->delete($wp_fs_extension_path, true, 'd')) {
 				$result[$extension_name] = new WP_Error(
@@ -1625,19 +1646,7 @@ final class _FW_Extensions_Manager
 					continue;
 				}
 			} else {
-				if ($verbose) {
-					$verbose_message = sprintf(
-						__('The %s extension has been successfully deleted.', 'fw'),
-						$extension_title
-					);
-
-					if (is_subclass_of($verbose, 'WP_Upgrader_Skin')) {
-						$verbose->feedback($verbose_message);
-					} else {
-						echo fw_html_tag('p', array(), $verbose_message);
-					}
-				}
-
+				$this->verbose( sprintf( esc_html__( 'The %s extension has been successfully deleted.', 'fw' ), $extension_title ), $verbose );
 				$result[$extension_name] = true;
 			}
 
@@ -1710,6 +1719,19 @@ final class _FW_Extensions_Manager
 			return $result;
 		} else {
 			return true;
+		}
+	}
+
+	public function verbose( $msg, &$verbose ) {
+
+	    if ( ! $verbose ) {
+	        return;
+        }
+
+		if ( is_subclass_of( $verbose, 'WP_Upgrader_Skin' ) ) {
+			$verbose->feedback( $msg );
+		} else {
+			echo fw_html_tag( 'p', array(), $msg );
 		}
 	}
 
@@ -1931,11 +1953,18 @@ final class _FW_Extensions_Manager
 		}
 
 		$installed_extensions = $this->get_installed_extensions();
+		$available_extensions = $this->get_available_extensions();
 
 		$result = $extensions_for_activation = array();
 		$has_errors = false;
 
 		foreach ($extensions as $extension_name => $not_used_var) {
+
+			if ( ! empty( $available_extensions[ $extension_name ]['download']['opts']['plugin'] ) ) {
+				activate_plugin( $available_extensions[ $extension_name ]['download']['opts']['plugin'] );
+				continue;
+			}
+
 			if (!isset($installed_extensions[$extension_name])) {
 				$result[$extension_name] = new WP_Error(
 					'extension_not_installed',

@@ -26,6 +26,8 @@ foreach ( $lists['available'] as $name => &$_ext ) {
 	        $lists['disabled'][ $name ] = $_ext;
         }
     }
+
+	$lists['supported'][ $name ] = $_ext;
 }
 
 // Set extensions order same as in available extensions list
