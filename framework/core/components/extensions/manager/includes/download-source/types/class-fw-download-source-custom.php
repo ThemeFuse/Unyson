@@ -14,48 +14,37 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 	 * @return WP_Error|bool
 	 */
 	public function download( array $set, $zip_path ) {
-
+		/** @var WP_Filesystem_Base $wp_filesystem */
 		global $wp_filesystem;
 
 		$wp_error_id    = 'fw_ext_custom_download_source';
 		$extension_name = $set['extension_name'];
 		$transient_name = 'fw_ext_mngr_gh_dl';
+		$requirements = fw()->theme->manifest->get( 'requirements/extensions' );
+
+		if ( isset( $requirements[ $set['extension_name'] ] ) && isset( $requirements[ $set['extension_name'] ]['max_version'] ) ) {
+			$tag = $requirements[ $set['extension_name'] ]['max_version'];
+		} else {
+			$tag = $this->get_version( $set );
+
+			if ( is_wp_error( $tag ) ) {
+				return $tag;
+			}
+		}
 
 		$cache = ( $c = get_site_transient( $transient_name ) ) && $c !== false ? $c : array();
-
-		if ( isset( $cache[ $extension_name ] ) ) {
-			$download_link = $cache[ $extension_name ]['zipball_url'];
-		} else {
-
-			$requirements = fw()->theme->manifest->get( 'requirements/extensions' );
-
-			if ( isset( $requirements[ $set['extension_name'] ] ) && isset( $requirements[ $set['extension_name'] ]['max_version'] ) ) {
-				$tag = $requirements[ $set['extension_name'] ]['max_version'];
-			} else {
-				$tag = $this->get_version( $set );
-
-				if ( is_wp_error( $tag ) ) {
-					return $tag;
-				}
-			}
-			// Ex: https://downloads.wordpress.org/plugin/your_plugin.1.0.8.zip
-			$download_link = apply_filters( 'fw_custom_url_zip', esc_url( "{$set['remote']}.{$tag}.zip" ), $set );
-
-			$cache[ $extension_name ] = array( 'zipball_url' => $download_link, 'tag_name' => $tag );
-
-			set_site_transient( $transient_name, $cache, HOUR_IN_SECONDS );
-		}
+		$cache[ $extension_name ] = array( 'tag_name' => $tag );
+		set_site_transient( $transient_name, $cache, HOUR_IN_SECONDS );
 
 		if ( $set['plugin'] ) {
-			return $this->install_plugin( $set, $download_link );
+			return $this->install_plugin( $set, $set['remote'] );
 		}
 
-		$request = wp_remote_request(
-			$download_link,
+		$request = wp_remote_post(
+			$set['remote'],
 			array(
-				'method'  => isset( $set['method'] ) ? $set['method'] : 'GET',
 				'timeout' => $this->download_timeout,
-				'body'    => $set
+				'body'    => json_encode( array_merge( $set, array( 'action' => 'download' ) ) )
 			)
 		);
 
@@ -67,9 +56,14 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 			return ! $body ? new WP_Error( $wp_error_id, sprintf( esc_html__( 'Empty zip body for extension: %s', 'fw' ), $set['extension_title'] ) ) : $body;
 		}
 
+		// Try to extract error if server returned json with key error. If not then is an archive zip.
+		if ( ( $error = json_decode( $body, true ) ) && isset( $error['error'] ) ) {
+			return new WP_Error( $wp_error_id, $error['error'] );
+		}
+
 		// save zip to file
 		if ( ! $wp_filesystem->put_contents( $zip_path, $body ) ) {
-			return new WP_Error( $wp_error_id, sprintf( __( 'Cannot save the "%s" extension zip.', 'fw' ), $set['extension_title'] ) );
+			return new WP_Error( $wp_error_id, sprintf( __( 'Cannot save the "%s" extension zip.', 'fw' ), $extension_name ) );
 		}
 
 		return '';
@@ -118,12 +112,11 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 			return $wp_org->version;
 		}
 
-		$request = wp_remote_request(
-			apply_filters( 'fw_custom_url_versions', $set['remote'], $set ),
+		$request = wp_remote_post(
+			$set['remote'],
 			array(
-				'method'  => isset( $set['method'] ) ? $set['method'] : 'GET',
 				'timeout' => $this->download_timeout,
-				'body'    => $set
+				'body'    => json_encode( array_merge( $set, array( 'action' => 'version' ) ) )
 			)
 		);
 

@@ -1571,7 +1571,7 @@ final class _FW_Extensions_Manager
 
 			if ( ! empty( $available_extensions[ $extension_name ]['download']['opts']['plugin'] ) ) {
 				$unistall     = delete_plugins( (array) $available_extensions[ $extension_name ]['download']['opts']['plugin'] );
-                $plugin_title = $available_extensions['name'];
+                $plugin_title = $available_extensions[ $extension_name ]['name'];
 
 				if ( $unistall ) {
 					$this->verbose( sprintf( esc_html__( 'Extension "%s" has been deleted.', 'fw' ), $plugin_title ), $verbose );

@@ -36,7 +36,7 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 	private function get_latest_version( $force_check, $set ) {
 
 		$transient_name = 'fw_ext_upd_gh_fw';
-		$url            = $set['source'];
+		$url            = $set['remote'];
 
 		if ( $force_check ) {
 			delete_site_transient( $transient_name );
@@ -91,12 +91,11 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 			return $this->fake_latest_version;
 		}
 
-		$request = wp_remote_request(
-			apply_filters( 'fw_custom_url_versions', $set['source'], $set ),
+		$request = wp_remote_post(
+			apply_filters( 'fw_custom_url_version', $set['remote'], $set ),
 			array(
-				'method'  => isset( $set['method'] ) ? $set['method'] : 'GET',
 				'timeout' => $this->download_timeout,
-				'body'    => $set
+				'body'    => json_encode( array_merge( $set, array( 'action' => 'version' ) ) )
 			)
 		);
 
@@ -124,14 +123,15 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 	 * @return string|WP_Error Path to the downloaded directory
 	 */
 	private function download( $set, $version, $wp_filesystem_download_directory, $title ) {
+		/** @var WP_Filesystem_Base $wp_filesystem */
+		global $wp_filesystem;
 
 		$error_id = 'fw_ext_update_custom_download_zip';
-		$request = wp_remote_request(
-			apply_filters( 'fw_custom_url_zip', esc_url( "{$set['source']}.{$version}.zip" ), $set ),
+		$request = wp_remote_post(
+			$set['remote'],
 			array(
-				'method'  => isset( $set['method'] ) ? $set['method'] : 'GET',
 				'timeout' => $this->download_timeout,
-				'body'    => $set
+				'body'    => json_encode( array_merge( $set, array( 'action' => 'download' ) ) )
 			)
 		);
 
@@ -143,8 +143,10 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 			return ! $body ? new WP_Error( $error_id, sprintf( esc_html__( 'Empty zip body for item: %s', 'fw' ), $title ) ) : $body;
 		}
 
-		/** @var WP_Filesystem_Base $wp_filesystem */
-		global $wp_filesystem;
+		// Try to extract error if server returned json with key error. If not then is an archive zip.
+		if ( ( $error = json_decode( $body, true ) ) && isset( $error['error'] ) ) {
+			return new WP_Error( $error_id, $error['error'] );
+		}
 
 		$zip_path = $wp_filesystem_download_directory . '/temp.zip';
 
@@ -231,11 +233,11 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 	 */
 	public function _get_extension_latest_version( FW_Extension $extension, $force_check ) {
 
-		if ( ! $extension->manifest->get( 'remote' ) || $extension->manifest->get( 'plugin' ) ) {
+		if ( ! $extension->manifest->get( 'remote' ) ) {
 			return false;
 		}
 
-		return $this->get_latest_version( $force_check, $extension->manifest );
+		return $this->get_latest_version( $force_check, $extension->manifest->get_manifest() );
 	}
 
 	/**
@@ -243,6 +245,11 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 	 * @internal
 	 */
 	public function _download_extension( FW_Extension $extension, $version, $wp_filesystem_download_directory ) {
-		return $this->download( $extension->manifest, $version, $wp_filesystem_download_directory, sprintf( esc_html__( '%s extension', 'fw' ), $extension->manifest->get_name() ) );
+		return $this->download(
+			$extension->manifest->get_manifest(),
+			$version,
+			$wp_filesystem_download_directory,
+			sprintf( esc_html__( '%s extension', 'fw' ), $extension->manifest->get_name() )
+		);
 	}
 }

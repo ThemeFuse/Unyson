@@ -298,6 +298,14 @@ abstract class FW_Manifest
 	}
 
 	/**
+	 * Get entire manifest.
+	 * @return array
+	 */
+	public function get_manifest() {
+		return $this->manifest;
+	}
+
+	/**
 	 * Call this only after check_requirements() failed
 	 * @return array
 	 */
