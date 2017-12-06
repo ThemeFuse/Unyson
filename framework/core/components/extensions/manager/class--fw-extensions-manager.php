@@ -192,25 +192,21 @@ final class _FW_Extensions_Manager
 	 *
 	 * @since 2.6.9
 	 */
-	public function get_available_extensions()
-	{
+	public function get_available_extensions() {
 		try {
 			$cache_key = $this->get_cache_key( 'available_extensions' );
 
-			return FW_Cache::get($cache_key);
-		} catch (FW_Cache_Not_Found_Exception $e) {
-			$extensions = fw_get_variables_from_file(
-				dirname( __FILE__ ) . '/available-extensions.php',
-				array( 'extensions' => array() )
-			);
-			$extensions = $extensions['extensions'];
+			return FW_Cache::get( $cache_key );
+		} catch ( FW_Cache_Not_Found_Exception $e ) {
+			$available = fw_get_variables_from_file( dirname( __FILE__ ) . '/available-extensions.php', array( 'extensions' => array() ) );
+			$available = $available['extensions'];
 
 			// Allow theme to register available extensions
-			if (file_exists(
-				$theme_available_ext_file = fw_fix_path(get_template_directory())
-					. fw_get_framework_customizations_dir_rel_path( '/theme/available-extensions.php' )
-			)) {
-				$register = new _FW_Available_Extensions_Register(self::get_access_key()->get_key());
+			$theme_available_ext_file = fw_fix_path( get_template_directory() ) . fw_get_framework_customizations_dir_rel_path( '/theme/available-extensions.php' );
+
+			if ( file_exists( $theme_available_ext_file ) ) {
+
+				$register = new _FW_Available_Extensions_Register( self::get_access_key()->get_key() );
 
 				/**
 				 * Usage: https://github.com/ThemeFuse/Unyson/issues/2900
@@ -219,24 +215,25 @@ final class _FW_Extensions_Manager
 				 * $extension->set_...();
 				 * $register->register($extension);
 				 */
-				fw_get_variables_from_file($theme_available_ext_file, array(), array('register' => $register));
+				$theme_exts = fw_get_variables_from_file( $theme_available_ext_file, array( 'extensions' => array() ), array( 'register' => $register ) );
+				$available = array_merge( $available, $theme_exts['extensions'] );
 
-				foreach ($register->_get_types(self::$access_key) as $extension) {
+				foreach ( $register->_get_types( self::$access_key ) as $extension ) {
 					/** @var FW_Available_Extension $extension */
-					if (isset($extensions[ $extension->get_name() ])) {
+					if ( isset( $available[ $extension->get_name() ] ) ) {
 						trigger_error(
-							'Overwriting default extension "'. $extension->get_name() .'" is not allowed',
+							'Overwriting default extension "' . $extension->get_name() . '" is not allowed',
 							E_USER_WARNING
 						);
 						continue;
-					} elseif (!$extension->is_valid()) {
+					} elseif ( ! $extension->is_valid() ) {
 						trigger_error(
-							'Theme extension "'. $extension->get_name() .'" is not valid',
+							'Theme extension "' . $extension->get_name() . '" is not valid',
 							E_USER_WARNING
 						);
 						continue;
 					} else {
-						$extensions[ $extension->get_name() ] = array(
+						$available[ $extension->get_name() ] = array(
 							'theme'       => true, // Registered by theme
 							'display'     => $extension->get_display(),
 							'parent'      => $extension->get_parent(),
@@ -251,27 +248,27 @@ final class _FW_Extensions_Manager
 
 			{
 				$installed_extensions = $this->get_installed_extensions();
-				$supported_extensions = fw()->theme->manifest->get('supported_extensions', array());
+				$supported_extensions = fw()->theme->manifest->get( 'supported_extensions', array() );
 
-				if (isset($installed_extensions['backup'])) {
+				if ( isset( $installed_extensions['backup'] ) ) {
 					// make sure only Backup or Backups can be installed
-					unset($extensions['backups']);
+					unset( $available['backups'] );
 				}
 
-				foreach ( array('backup', 'styling', 'learning' ) as $obsolete_extension ) {
+				foreach ( array( 'backup', 'styling', 'learning' ) as $obsolete_extension ) {
 					if (
-						!isset($supported_extensions[$obsolete_extension])
+						! isset( $supported_extensions[ $obsolete_extension ] )
 						&&
-						!isset($installed_extensions[$obsolete_extension])
+						! isset( $installed_extensions[ $obsolete_extension ] )
 					) {
-						unset($extensions[$obsolete_extension]);
+						unset( $available[ $obsolete_extension ] );
 					}
 				}
 			}
 
-			FW_Cache::set($cache_key, $extensions);
+			FW_Cache::set( $cache_key, $available );
 
-			return $extensions;
+			return $available;
 		}
 	}
 
