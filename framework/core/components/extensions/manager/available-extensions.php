@@ -331,38 +331,6 @@ $extensions = array(
 				'user_repo' => $github_account . '/Unyson-Styling-Extension',
 			),
 		),
-	),
-
-	'test' => array(
-		'display'     => true,
-		'parent'      => null,
-		'name'        => __( 'Test', 'fw' ),
-		'description' => __( 'Description', 'fw' ),
-		'thumbnail'   => $thumbnails_uri . '/translation.jpg',
-		'download'    => array(
-			'source'  => 'custom',
-			//'url_set' => 'options-general.php?page=translate-press',
-			'opts'    => array(
-				//'plugin' => 'translatepress-multilingual/index.php',
-				'remote' => 'http://test.themefuse.com/viorel/wp-content/plugins/unyson/framework/extensions/get-ext/?ext=test'
-			)
-		)
-	),
-);
-
-/*$body = wp_remote_post(
-	'http://test.themefuse.com/viorel/wp-content/plugins/unyson/framework/extensions/get-ext/?ext=test',
-	array(
-		'body' => json_encode(
-			array(
-				'action' => 'download',
-				'api'    => 'adsfasdf',
-				'user'   => 'themeforest user',
-				'error'  => 'Error please insert apikey'
-			)
-		)
 	)
 );
-echo '<pre style="z-index:1000000;position:relative;color:#78FF5B;background:#23282d;">';
-print_r( wp_remote_retrieve_body( $body ) );
-echo '</pre>';*/
+

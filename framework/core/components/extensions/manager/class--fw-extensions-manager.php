@@ -213,7 +213,7 @@ final class _FW_Extensions_Manager
 				$register = new _FW_Available_Extensions_Register(self::get_access_key()->get_key());
 
 				/**
-				 * Usage:
+				 * Usage: https://github.com/ThemeFuse/Unyson/issues/2900
 				 * Create {theme}/framework-customizations/theme/available-extensions.php with the following contents:
 				 * $extension = new FW_Available_Extension();
 				 * $extension->set_...();

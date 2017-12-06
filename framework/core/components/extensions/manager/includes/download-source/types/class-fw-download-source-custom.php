@@ -2,6 +2,8 @@
 
 class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 	private $download_timeout = 300;
+	// Used in filter http_request_args when extension is as plugin we use api worpdress Plugin_Upgrader.
+	private $set              = array();
 
 	public function get_type() {
 		return 'custom';
@@ -20,20 +22,20 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 		$wp_error_id    = 'fw_ext_custom_download_source';
 		$extension_name = $set['extension_name'];
 		$transient_name = 'fw_ext_mngr_gh_dl';
-		$requirements = fw()->theme->manifest->get( 'requirements/extensions' );
+		$requirements   = fw()->theme->manifest->get( 'requirements/extensions' );
 
 		if ( isset( $requirements[ $set['extension_name'] ] ) && isset( $requirements[ $set['extension_name'] ]['max_version'] ) ) {
-			$tag = $requirements[ $set['extension_name'] ]['max_version'];
+			$set['tag'] = $requirements[ $set['extension_name'] ]['max_version'];
 		} else {
-			$tag = $this->get_version( $set );
+			$set['tag'] = $this->get_version( $set );
 
-			if ( is_wp_error( $tag ) ) {
-				return $tag;
+			if ( is_wp_error( $set['tag'] ) ) {
+				return $set['tag'];
 			}
 		}
 
 		$cache = ( $c = get_site_transient( $transient_name ) ) && $c !== false ? $c : array();
-		$cache[ $extension_name ] = array( 'tag_name' => $tag );
+		$cache[ $extension_name ] = array( 'tag_name' => $set['tag'] );
 		set_site_transient( $transient_name, $cache, HOUR_IN_SECONDS );
 
 		if ( $set['plugin'] ) {
@@ -71,7 +73,7 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 
 	public function get_version( $set ) {
 
-		if ( strpos( $set['remote'], 'downloads.wordpress.org' ) !== false ) {
+		if ( $this->is_wp_org( $set['remote'] ) ) {
 
 			include ABSPATH . 'wp-admin/includes/plugin-install.php';
 
@@ -146,8 +148,18 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 				require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 			}
 
+			if ( $this->is_wp_org( $set['remote'] ) ) {
+				$source = esc_url( "{$source}.{$set['tag']}.zip" );
+			}
+
 			$upgrader = new Plugin_Upgrader( new Automatic_Upgrader_Skin() );
+			// To easy access download settings in function http_request_args.
+			$this->set = $set;
+			add_filter( 'http_request_args', array( $this, 'http_request_args' ) );
+
 			$install = $upgrader->install( $source );
+
+			remove_filter( 'http_request_args', array( $this, 'http_request_args' ) );
 
 			if ( ! $install || is_wp_error( $install ) ) {
 				return new WP_Error( sprintf( __( 'Cannot install plugin: %s', 'fw' ), $set['extension_title'] ) );
@@ -165,6 +177,14 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 		return activate_plugin( $set['plugin'] );
 	}
 
+	public function http_request_args( $r ) {
+		$r['body'] = json_encode( $this->set );
+		return $r;
+	}
+
+	public function is_wp_org( $url ) {
+		return strpos( $url, 'downloads.wordpress.org' ) !== false;
+	}
 }
 
 
