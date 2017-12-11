@@ -2432,6 +2432,7 @@ final class _FW_Extensions_Manager
 		}
 
 		$opts = array_merge( array(
+            'item'            => $extension_name,
 			'extension_name'  => $extension_name,
 			'extension_title' => $this->get_extension_title( $extension_name )
 		), $data['download']['opts'] );
@@ -2470,34 +2471,6 @@ final class _FW_Extensions_Manager
 
 		return $this->perform_zip_download( $download_source, $opts, $wp_fs_tmp_dir );
 	}
-
-	/**
-	 * @param $set
-	 *
-	 * @return FW_Ext_Download_Source|WP_Error
-	 */
-	private function get_download_source( $set ) {
-		require_once dirname( __FILE__ ) . '/includes/download-source/types/init.php';
-
-		$register = new _FW_Ext_Download_Source_Register( self::get_access_key()->get_key() );
-
-		/**
-		 * Register download sources for extensions.
-		 *
-		 * Usage:
-		 *   $download_source = new FW_Ext_Download_Source();
-		 *   $register->register($download_source);
-		 */
-		do_action( 'fw_register_ext_download_sources', $register );
-
-		$download_source = $register->_get_type( self::get_access_key(), $set['download']['source'] );
-
-		if ( ! $download_source ) {
-			$download_source = new WP_Error( 'invalid_dl_source', sprintf( esc_html__( 'Invalid download source: %s', 'fw' ), $set['download']['source'] ) );
-		}
-
-		return $download_source;
-    }
 
 	private function perform_zip_download( FW_Ext_Download_Source $download_source, array $opts, $wp_fs_tmp_dir ) {
 		$wp_error_id = 'fw_extension_download';
@@ -2558,6 +2531,34 @@ final class _FW_Extensions_Manager
 			$wp_error_id,
 			sprintf( __( 'The unzipped "%s" extension directory not found.', 'fw' ), $this->get_extension_title( $extension_name ) )
 		);
+	}
+
+	/**
+	 * @param $set
+	 *
+	 * @return FW_Ext_Download_Source|WP_Error
+	 */
+	private function get_download_source( $set ) {
+		require_once dirname( __FILE__ ) . '/includes/download-source/types/init.php';
+
+		$register = new _FW_Ext_Download_Source_Register( self::get_access_key()->get_key() );
+
+		/**
+		 * Register download sources for extensions.
+		 *
+		 * Usage:
+		 *   $download_source = new FW_Ext_Download_Source();
+		 *   $register->register($download_source);
+		 */
+		do_action( 'fw_register_ext_download_sources', $register );
+
+		$download_source = $register->_get_type( self::get_access_key(), $set['download']['source'] );
+
+		if ( ! $download_source ) {
+			$download_source = new WP_Error( 'invalid_dl_source', sprintf( esc_html__( 'Invalid download source: %s', 'fw' ), $set['download']['source'] ) );
+		}
+
+		return $download_source;
 	}
 
 	/**

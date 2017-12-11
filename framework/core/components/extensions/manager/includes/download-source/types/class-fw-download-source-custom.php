@@ -20,9 +20,9 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 		global $wp_filesystem;
 
 		$wp_error_id    = 'fw_ext_custom_download_source';
-		$extension_name = $set['extension_name'];
 		$transient_name = 'fw_ext_mngr_gh_dl';
 		$requirements   = fw()->theme->manifest->get( 'requirements/extensions' );
+		$set['type']    = 'extension';
 
 		if ( isset( $requirements[ $set['extension_name'] ] ) && isset( $requirements[ $set['extension_name'] ]['max_version'] ) ) {
 			$set['tag'] = $requirements[ $set['extension_name'] ]['max_version'];
@@ -35,7 +35,7 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 		}
 
 		$cache = ( $c = get_site_transient( $transient_name ) ) && $c !== false ? $c : array();
-		$cache[ $extension_name ] = array( 'tag_name' => $set['tag'] );
+		$cache[ $set['item'] ] = array( 'tag_name' => $set['tag'] );
 		set_site_transient( $transient_name, $cache, HOUR_IN_SECONDS );
 
 		if ( $set['plugin'] ) {
@@ -46,7 +46,7 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 			$set['remote'],
 			array(
 				'timeout' => $this->download_timeout,
-				'body'    => json_encode( array_merge( $set, array( 'action' => 'download' ) ) )
+				'body'    => json_encode( array_merge( $set, array( 'pull' => 'zip' ) ) )
 			)
 		);
 
@@ -58,14 +58,14 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 			return ! $body ? new WP_Error( $wp_error_id, sprintf( esc_html__( 'Empty zip body for extension: %s', 'fw' ), $set['extension_title'] ) ) : $body;
 		}
 
-		// Try to extract error if server returned json with key error. If not then is an archive zip.
+		// Try to extract error if server returned json with key error, if not then is an archive zip.
 		if ( ( $error = json_decode( $body, true ) ) && isset( $error['error'] ) ) {
 			return new WP_Error( $wp_error_id, $error['error'] );
 		}
 
 		// save zip to file
 		if ( ! $wp_filesystem->put_contents( $zip_path, $body ) ) {
-			return new WP_Error( $wp_error_id, sprintf( __( 'Cannot save the "%s" extension zip.', 'fw' ), $extension_name ) );
+			return new WP_Error( $wp_error_id, sprintf( __( 'Cannot save the "%s" extension zip.', 'fw' ), $set['name'] ) );
 		}
 
 		return '';
@@ -118,7 +118,7 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 			$set['remote'],
 			array(
 				'timeout' => $this->download_timeout,
-				'body'    => json_encode( array_merge( $set, array( 'action' => 'version' ) ) )
+				'body'    => json_encode( array_merge( $set, array( 'pull' => 'version' ) ) )
 			)
 		);
 
@@ -178,7 +178,7 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 	}
 
 	public function http_request_args( $r ) {
-		$r['body'] = json_encode( $this->set );
+		$r['body'] = json_encode( array_merge( $this->set, array( 'type' => 'extension' ) ) );
 		return $r;
 	}
 

@@ -36,7 +36,6 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 	private function get_latest_version( $force_check, $set ) {
 
 		$transient_name = 'fw_ext_upd_gh_fw';
-		$url            = $set['remote'];
 
 		if ( $force_check ) {
 			delete_site_transient( $transient_name );
@@ -45,31 +44,27 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 		} else {
 			$cache = ( $c = get_site_transient( $transient_name ) ) && $c !== false ? $c : array();
 
-			if ( isset( $cache[ $url ] ) ) {
-				return $cache[ $url ];
+			if ( isset( $cache[ $set['item'] ] ) ) {
+				return $cache[ $set['item'] ];
 			}
 		}
 
-		$latest_version = $this->fetch_latest_version( $set );
+		$version = $this->fetch_latest_version( $set );
 
-		if ( empty( $latest_version ) ) {
-			return new WP_Error( 'fw_ext_update_failed_fetch_latest_version', sprintf( esc_html__( 'Empty version for extension: %s', 'fw' ), $set['name'] ) );
-		}
-
-		if ( is_wp_error( $latest_version ) ) {
+		if ( is_wp_error( $version ) ) {
 			// Cache fake version to prevent requests to yourserver on every refresh.
-			$cache = array_merge( $cache, array( $url => $this->fake_latest_version ) );
+			$cache[ $set['item'] ] = $this->fake_latest_version;
 
 			// Show the error to the user because it is not visible elsewhere.
-			FW_Flash_Messages::add( 'fw_ext_custom_update_error', $latest_version->get_error_message(), 'error' );
+			FW_Flash_Messages::add( 'fw_ext_custom_update_error', $version->get_error_message(), 'error' );
 
 		} else {
-			$cache = array_merge( $cache, array( $url => $latest_version ) );
+			$cache[ $set['item'] ] = $version;
 		}
 
 		set_site_transient( $transient_name, $cache, $this->transient_expiration );
 
-		return $latest_version;
+		return $version;
 	}
 
 	/**
@@ -95,7 +90,7 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 			apply_filters( 'fw_custom_url_version', $set['remote'], $set ),
 			array(
 				'timeout' => $this->download_timeout,
-				'body'    => json_encode( array_merge( $set, array( 'action' => 'version' ) ) )
+				'body'    => json_encode( array_merge( $set, array( 'pull' => 'version' ) ) )
 			)
 		);
 
@@ -108,7 +103,7 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 		}
 
 		if ( ! ( $version = wp_remote_retrieve_body( $request ) ) || is_wp_error( $version ) ) {
-			return ! $version ? new WP_Error( sprintf( __( 'Empty version for extension: %s', 'fw' ), $set['name'] ) ) : $version;
+			return ! $version ? new WP_Error( sprintf( __( 'Empty version for item: %s', 'fw' ), $set['item'] ) ) : $version;
 		}
 
 		return $version;
@@ -131,7 +126,7 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 			$set['remote'],
 			array(
 				'timeout' => $this->download_timeout,
-				'body'    => json_encode( array_merge( $set, array( 'action' => 'download' ) ) )
+				'body'    => json_encode( array_merge( $set, array( 'pull' => 'zip' ) ) )
 			)
 		);
 
@@ -208,17 +203,6 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 		return $this->get_latest_version( $force_check, $manifest );
 	}
 
-	public function get_clean_theme_manifest() {
-
-		if ( ! ( $manifest_file = fw_get_template_customizations_directory( '/theme/manifest.php' ) ) || ! is_file( $manifest_file ) ) {
-			return array();
-		}
-
-		include $manifest_file;
-
-		return isset( $manifest ) ? $manifest : array();
-	}
-
 	/**
 	 * {@inheritdoc}
 	 * @internal
@@ -237,7 +221,7 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 			return false;
 		}
 
-		return $this->get_latest_version( $force_check, $extension->manifest->get_manifest() );
+		return $this->get_latest_version( $force_check, $this->data_manifest( $extension->manifest->get_manifest(), 'extension', $extension->get_name() ) );
 	}
 
 	/**
@@ -246,10 +230,25 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 	 */
 	public function _download_extension( FW_Extension $extension, $version, $wp_filesystem_download_directory ) {
 		return $this->download(
-			$extension->manifest->get_manifest(),
+			$this->data_manifest( $extension->manifest->get_manifest(), 'extension', $extension->get_name() ),
 			$version,
 			$wp_filesystem_download_directory,
 			sprintf( esc_html__( '%s extension', 'fw' ), $extension->manifest->get_name() )
 		);
+	}
+
+	public function data_manifest( $manifest, $type, $id ) {
+		return array_merge( $manifest, array( 'type' => $type, 'item' => $id ) );
+	}
+
+	public function get_clean_theme_manifest() {
+
+		if ( ! ( $manifest_file = fw_get_template_customizations_directory( '/theme/manifest.php' ) ) || ! is_file( $manifest_file ) ) {
+			return array();
+		}
+
+		include $manifest_file;
+
+		return isset( $manifest ) ? $this->data_manifest( $manifest, 'theme', $manifest['id'] ) : array();
 	}
 }
