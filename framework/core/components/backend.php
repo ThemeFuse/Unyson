@@ -626,10 +626,10 @@ final class _FW_Component_Backend {
 	 * @param WP_Post $post
 	 */
 	public function _action_create_post_meta_boxes( $post_type, $post ) {
-		if ( 'comment' === $post_type ) {
+		if ( 'comment' === $post_type || ( isset( $_GET['vc_action'] ) && $_GET['vc_action'] === 'vc_inline' ) ) {
 			/**
-			 * This is wrong, comment is not a post(type)
-			 * it is stored in a separate db table and has a separate meta (wp_comments and wp_commentmeta)
+			 * 1. https://github.com/ThemeFuse/Unyson/issues/3052
+			 * 2. This is wrong, comment is not a post(type) it is stored in a separate db table and has a separate meta (wp_comments and wp_commentmeta)
 			 */
 			return;
 		}
