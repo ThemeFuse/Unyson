@@ -103,8 +103,8 @@ final class _FW_Component_Extensions
 	 * @since 2.6.9
 	 */
 	public static function _get_manifest($extension_name, FW_Access_Key $access_key) {
-		if (!in_array($access_key->get_key(), array('extension', self::$access_key->get_key()), true)) {
-			trigger_error('Method call denied', E_USER_ERROR);
+		if ( ! in_array( $access_key->get_key(), array( 'extension', self::$access_key->get_key() ), true ) ) {
+			trigger_error( 'Method call denied', E_USER_ERROR );
 		}
 
 		if (isset(self::$all_extensions[$extension_name])) {
