@@ -424,14 +424,17 @@ final class _FW_Component_Extensions
 
 				if (fw_include_file_isolated(self::$all_extensions[$extension_name]['path'] .'/'. $class_file_name)) {
 					$class_name = 'FW_Extension_'. fw_dirname_to_classname($extension_name);
+
 				} else {
-					$parent_class_name = get_class(
-						fw()->extensions->get(self::$all_extensions[$extension_name]['parent'])
-					);
+
+					$parent_class_name = '';
+					if ( self::$all_extensions[ $extension_name ]['parent'] ) {
+						$parent_class_name = get_class( fw()->extensions->get( self::$all_extensions[ $extension_name ]['parent'] ) );
+					}
 
 					// check if parent extension has been defined custom Default class for its child extensions
-					if (class_exists($parent_class_name .'_Default')) {
-						$class_name = $parent_class_name .'_Default';
+					if ( class_exists( $parent_class_name . '_Default' ) ) {
+						$class_name = $parent_class_name . '_Default';
 					} else {
 						$class_name = 'FW_Extension_Default';
 					}

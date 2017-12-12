@@ -7,9 +7,6 @@
  */
 final class _FW_Component_Backend {
 
-	/** @var callable */
-	private $print_meta_box_content_callback;
-
 	/** @var FW_Settings_Form */
 	private $settings_form;
 
@@ -136,9 +133,7 @@ final class _FW_Component_Backend {
 		return $cache_current_taxonomy_data;
 	}
 
-	public function __construct() {
-		$this->print_meta_box_content_callback = create_function( '$post,$args', 'echo $args["args"];' );
-	}
+	public function __construct() {}
 
 	/**
 	 * @internal
@@ -662,7 +657,7 @@ final class _FW_Component_Backend {
 				add_meta_box(
 					"fw-options-box-{$id}",
 					empty( $option['title'] ) ? ' ' : $option['title'],
-					$this->print_meta_box_content_callback,
+					array( $this, 'render_meta_box' ),
 					$post_type,
 					$context,
 					$priority,
@@ -672,7 +667,7 @@ final class _FW_Component_Backend {
 				add_meta_box(
 					'fw-options-box:auto-generated:' . time() . ':' . fw_unique_increment(),
 					' ',
-					$this->print_meta_box_content_callback,
+					array( $this, 'render_meta_box' ),
 					$post_type,
 					'normal',
 					'default',
@@ -680,6 +675,10 @@ final class _FW_Component_Backend {
 				);
 			}
 		}
+	}
+
+	public function render_meta_box( $post, $args ) {
+		echo $args['args'];
 	}
 
 	/**
@@ -1489,9 +1488,8 @@ final class _FW_Component_Backend {
 	 * @return string
 	 */
 	public function render_option( $id, $option, $data = array(), $design = null ) {
-		$maybe_forced_design = fw()->backend->option_type(
-			$option['type']
-		)->get_forced_render_design();
+
+		$maybe_forced_design = fw()->backend->option_type( $option['type'] )->get_forced_render_design();
 
 		if (empty($design)) {
 			$design = $this->default_render_design;
@@ -1588,7 +1586,7 @@ final class _FW_Component_Backend {
 			add_meta_box(
 				$placeholders['id'],
 				$placeholders['title'],
-				$this->print_meta_box_content_callback,
+				array( $this, 'render_meta_box' ),
 				$temp_screen_id,
 				$context,
 				'default',
