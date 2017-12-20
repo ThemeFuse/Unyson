@@ -95,6 +95,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 		if ( ! wp_script_is( 'editor' ) ) {
 			wp_enqueue_script( 'editor' );
 			wp_enqueue_script( 'quicktags' );
+			wp_enqueue_script('fw-ext-shortcodes-editor-integration');
 
 			if ( ! class_exists( '_WP_Editors', false ) ) {
 				require( ABSPATH . WPINC . '/class-wp-editor.php' );
