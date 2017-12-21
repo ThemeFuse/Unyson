@@ -106,7 +106,12 @@ class FW_Option_Type_Addable_Box extends FW_Option_Type
 
 			fw_collect_options( $box_options, $option['box-options'], array(
 				'limit_option_types' => false,
-				'limit_container_types' => array('group'), // Use only groups and options
+				'limit_container_types' => apply_filters(
+					'fw:option-type:addable-box:limit-container-types',
+					// Use only groups and options by default
+					array('group')
+				),
+
 				'limit_level' => 1,
 			) );
 		}
