@@ -249,6 +249,11 @@ class FW_Extension_Custom_Update extends FW_Ext_Update_Service {
 
 		include $manifest_file;
 
-		return isset( $manifest ) ? $this->data_manifest( $manifest, 'theme', $manifest['id'] ) : array();
+		if ( isset( $manifest ) ) {
+			$theme_id = isset( $manifest['id'] ) ? $manifest['id'] : '';
+			return $this->data_manifest( $manifest, 'theme', $theme_id );
+		}
+
+		return array();
 	}
 }
