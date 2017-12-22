@@ -74,14 +74,18 @@ class FW_Option_Type_Switch extends FW_Option_Type
 			);
 
 			foreach (array('left', 'right') as $value_type) {
-				$input_attr['data-switch-'. $value_type .'-value-json'] = json_encode($option[$value_type .'-choice']['value']);
+				$input_attr['data-switch-'. $value_type .'-value-json'] = $option[$value_type .'-choice']['value'];
+			}
+
+			if ( is_bool( $option['right-choice']['value'] ) ) {
+				$data['value'] = (bool) $data['value'];
 			}
 
 			if ($checked = ($data['value'] === $option['right-choice']['value'])) {
 				$input_attr['checked'] = 'checked'; // right choice means checked
 			}
 
-			$input_attr['value'] = json_encode($option[ ($checked ? 'right' : 'left') .'-choice' ]['value']);
+			$input_attr['value'] = $option[ ($checked ? 'right' : 'left') .'-choice' ]['value'];
 		}
 
 		{
@@ -126,22 +130,16 @@ class FW_Option_Type_Switch extends FW_Option_Type
 			} else {
 				return $option['left-choice']['value'];
 			}
+		}
+
+		if ( is_bool( $option['left-choice']['value'] ) && is_bool( $option['right-choice']['value'] ) ) {
+			$input_value = (bool) $input_value;
+		}
+
+		if ( in_array( $input_value, array( $option['left-choice']['value'], $option['right-choice']['value'] ), true ) ) {
+			return $input_value;
 		} else {
-			$tmp_json = json_decode($input_value);
-
-			/**
-			 * Check if parsing is successful.
-			 * If it's not - leave $input_value as it is.
-			 */
-			if (!is_null($tmp_json)) {
-				$input_value = $tmp_json;
-			}
-
-			if (in_array($input_value, array($option['left-choice']['value'], $option['right-choice']['value']), true)) {
-				return $input_value;
-			} else {
-				return $option['value'];
-			}
+			return $option['value'];
 		}
 	}
 

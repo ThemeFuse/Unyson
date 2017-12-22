@@ -27,7 +27,7 @@ jQuery(document).ready(function ($) {
 				}
 
 				$this.closest('.'+ optionTypeClass).trigger(customEventPrefix +'change', {
-					value: JSON.parse(value)
+					value: value
 				});
 
 				fw.options.trigger.changeForEl(
@@ -51,9 +51,7 @@ jQuery(document).ready(function ($) {
 		startListeningForChanges: $.noop,
 		getValue: function (optionDescriptor) {
 			return {
-				value: JSON.parse(
-					$(optionDescriptor.el).find('[type="checkbox"]').val()
-				),
+				value: $(optionDescriptor.el).find('[type="checkbox"]').val(),
 				optionDescriptor: optionDescriptor
 			}
 		}
