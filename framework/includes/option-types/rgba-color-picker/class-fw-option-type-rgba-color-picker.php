@@ -18,6 +18,9 @@ class FW_Option_Type_Rgba_Color_Picker extends FW_Option_Type {
 	 * {@inheritdoc}
 	 */
 	protected function _enqueue_static( $id, $option, $data ) {
+
+		wp_enqueue_style( 'wp-color-picker' );
+
 		wp_enqueue_style(
 			'fw-option-' . $this->get_type(),
 			fw_get_framework_directory_uri( '/includes/option-types/' . $this->get_type() . '/static/css/styles.css' ),
