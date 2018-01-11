@@ -136,9 +136,7 @@
 				self.button = $( _button );
 			}
 
-			console.log( self.options );
-
-			// Set up the Clear/Default button.
+			// Set up the Default button.
 			self.button.addClass( 'wp-picker-default' ).val( wpColorPickerL10n.defaultString );
 			if ( ! _deprecated ) {
 				self.button.attr( 'aria-label', wpColorPickerL10n.defaultAriaLabel );
