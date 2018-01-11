@@ -119,7 +119,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 		}
 
 		protected static function build_post( $id, $show_type ) {
-			$title = get_the_title( $id );
+			$title = ( $t = get_the_title( $id ) ) && $t ? $t : esc_html__( 'No title', 'fw' ) . ' - #' . $id;
 
 			return $show_type ? array(
 				'val'   => $id,
