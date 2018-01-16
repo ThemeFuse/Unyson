@@ -110,7 +110,7 @@
 			var media = wp.media.attachment(
 				getDataForRoot($root)['attachment-id']
 			);
-			
+
 			if (! media.get('url')) {
 				media.fetch().then(function () {
 					refreshSinglePreview($root);
@@ -158,12 +158,12 @@
 						'style',
 						'background-image: url("' +
 						// Insert the smallest possible image in the preview
-						_.min(
+						(_.min(
 							_.values(wp.media.attachment(
 								data['attachment-id']
 							).get('sizes')),
 							function (size) {return size.width}
-						).url +
+						).url || wp.media.attachment(data['attachment-id']).get('url')) +
 						'");'
 					);
 			}
