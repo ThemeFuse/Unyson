@@ -307,7 +307,7 @@
 	display: flex;
 	position: relative;
 	width: 65px;
-	/*height: 65px;*/
+	height: 65px;
 	flex: 1 0 65px;
 	cursor: pointer;
 	margin-bottom: 0;
