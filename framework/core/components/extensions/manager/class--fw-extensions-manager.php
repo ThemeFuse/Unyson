@@ -746,6 +746,10 @@ final class _FW_Extensions_Manager
 			}
 		}
 
+		if (! apply_filters('fw_backend_enable_custom_extensions_menu', true)) {
+			return;
+		}
+
 		/**
 		 * Use this action if you what to add the extensions page in a custom place in menu
 		 * Usage example http://pastebin.com/2iWVRPAU
