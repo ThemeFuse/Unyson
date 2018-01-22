@@ -19,6 +19,13 @@ final class _FW_Component_Theme {
 			@include $manifest_file;
 		}
 
+		if ( is_child_theme() && ( $manifest_file = fw_get_stylesheet_customizations_directory( '/theme/manifest.php' ) ) && is_file( $manifest_file ) ) {
+			$extracted = fw_get_variables_from_file( $manifest_file, array( 'manifest' => array() ) );
+			if ( isset( $extracted['manifest'] ) ) {
+				$manifest = array_merge( $manifest, $extracted['manifest'] );
+			}
+		}
+
 		$this->manifest = new FW_Theme_Manifest( $manifest );
 	}
 
