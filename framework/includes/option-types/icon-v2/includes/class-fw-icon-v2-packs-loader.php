@@ -114,8 +114,10 @@ class FW_Icon_V2_Packs_Loader
 					'admin_wp_enqueue_handle' => null,
 					'frontend_wp_enqueue_handle' => null,
 					'require_css_file' => true,
+					'apply_root_class' => true,
+
 					'icons' => false,
-					'apply_root_class' => true
+					'load_icons_callback' => array($this, '_default_load_icons_callback')
 				),
 
 				$pack
@@ -133,7 +135,7 @@ class FW_Icon_V2_Packs_Loader
 			 * it to. You can totally change this behavior by using
 			 * `fw:option-type:icon-v2:packs` filter.
 			 *
-			 * If you want to lazy load CSS on the frontend side you can 
+			 * If you want to lazy load CSS on the frontend side you can
 			 * set `require_css_file` for this pack and load it by yourself,
 			 * you will receive information about the pack in the value
 			 * of the icon-v2 option type.
@@ -183,6 +185,19 @@ class FW_Icon_V2_Packs_Loader
 		}
 	}
 
+	public function get_packs_unfiltered()
+	{
+		$new_packs = array();
+
+		foreach ($this->icon_packs as $key => $pack) {
+			unset($pack['load_icons_callback']);
+
+			$new_packs[$key] = $pack;
+		}
+
+		return $new_packs;
+	}
+
 	public function get_packs($needs_to_load_icons_for_each_pack = false)
 	{
 		/**
@@ -211,6 +226,50 @@ class FW_Icon_V2_Packs_Loader
 		return $collect_names;
 	}
 
+	public function _default_load_icons_callback($pack) {
+		if (! $pack['css_file']) { return array(); }
+		if ( is_array($pack['icons']) ) { return array(); }
+
+		$css = file_get_contents($pack['css_file']);
+
+		$parser_matches = array();
+
+		preg_match_all(
+			'/(?ims)([a-z0-9\s\,\.\:#_\-@]+)\{([^\}]*)\}/',
+			$css,
+			$parser_matches
+		);
+
+		$result = array();
+
+		foreach ($parser_matches[0] as $i => $x) {
+			$selector = trim($parser_matches[1][$i]);
+			$value = trim($parser_matches[2][$i]);
+
+			$is_correct_prefix = substr(
+				$selector, 0,
+				strlen('.' . $pack['css_class_prefix'])
+			) === '.' . $pack['css_class_prefix'];
+
+			$is_with_pseudo_element = is_numeric(strpos($selector, ':'));
+			$has_content_for_pseudo = is_numeric(strpos($value, 'content'));
+
+			/**
+			 * It's probably an icon definition at this point.
+			 */
+			$selector_is_icon = $is_correct_prefix &&
+				$is_with_pseudo_element &&
+				$has_content_for_pseudo;
+
+			if ($selector_is_icon) {
+				$icon = explode(':', ltrim($selector, '.'));
+				$result[] = $icon[0];
+			}
+		}
+
+		return $result;
+	}
+
 	private function _load_icons_for_each_pack()
 	{
 		if ($this->icons_for_packs_parsed) { return; }
@@ -218,48 +277,9 @@ class FW_Icon_V2_Packs_Loader
 		foreach ($this->icon_packs as $pack_name => $pack) {
 			$this->icon_packs[$pack_name]['icons'] = array();
 
-			if (! $pack['css_file']) { continue; }
-			if ( is_array($pack['icons']) ) { continue; }
-
-			$css = file_get_contents(
-				$pack['css_file']
+			$this->icon_packs[$pack_name]['icons'] = call_user_func(
+				$pack['load_icons_callback'], $pack
 			);
-
-			$parser_matches = array();
-
-			preg_match_all(
-				'/(?ims)([a-z0-9\s\,\.\:#_\-@]+)\{([^\}]*)\}/',
-				$css,
-				$parser_matches
-			);
-
-			foreach ($parser_matches[0] as $i => $x) {
-				$selector = trim($parser_matches[1][$i]);
-				$value = trim($parser_matches[2][$i]);
-
-				$is_correct_prefix = substr(
-					$selector, 0,
-					strlen('.' . $pack['css_class_prefix'])
-				) === '.' . $pack['css_class_prefix'];
-
-				$is_with_pseudo_element = is_numeric(strpos($selector, ':'));
-				$has_content_for_pseudo = is_numeric(strpos($value, 'content'));
-
-				/**
-				 * It's probably an icon definition at this point.
-				 */
-				$selector_is_icon = $is_correct_prefix &&
-									$is_with_pseudo_element &&
-									$has_content_for_pseudo;
-
-				if ($selector_is_icon) {
-					$icon = explode(':', ltrim($selector, '.'));
-
-					$icon = $icon[0];
-
-					$this->icon_packs[$pack_name]['icons'][] = $icon;
-				}
-			}
 		}
 
 		$this->icons_for_packs_parsed = true;
@@ -285,6 +305,7 @@ class FW_Icon_V2_Packs_Loader
 			$pack_allowed = in_array($pack_name, $names);
 
 			if ($pack_allowed) {
+				unset($pack['load_icons_callback']);
 				$packs[$pack_name] = $pack;
 			}
 		}
