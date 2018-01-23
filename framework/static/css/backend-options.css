@@ -63,8 +63,10 @@ Included on pages where backend options are rendered
 
 .fw-options-tabs-wrapper > .fw-options-tabs-list ul,
 .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
-	padding: 0;
-	margin: 0;
+	padding: 0 !important;
+	margin: 0 !important;
+	background: none !important;
+	border: none !important;
 }
 
 .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {

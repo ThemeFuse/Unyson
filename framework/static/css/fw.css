@@ -3145,6 +3145,10 @@ body.rtl .fw-modal .media-frame-content > form .fw-options-tabs-contents > .fw-i
 .fw-modal .media-frame-content > form .fw-options-tabs-contents .fw-options-tabs-list {
 	padding: 0 0 0 25px;
 }
+.fw-modal .media-frame-content > form .fw-options-tabs-list > .ui-widget-header {
+	border: 0 !important;
+	background: transparent !important;
+}
 body.rtl .fw-modal .media-frame-content > form .fw-options-tabs-contents .fw-options-tabs-list {
 	padding: 0 25px 0 0;
 }
