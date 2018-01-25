@@ -1,6 +1,6 @@
 === Unyson ===
 Contributors: unyson
-Tags: page builder, shortcodes, backup, seo, breadcrumbs, portfolio, framework
+Tags: page builder, editor, drag-and-drop, landing-page, widgets, sidebar, backup, shortcodes, backup, seo, breadcrumbs, portfolio, framework
 Requires at least: 4.4
 Tested up to: 4.9.1
 Stable tag: 2.7.11
@@ -40,6 +40,10 @@ Developers can contribute to the source code on the [Unyson GitHub Repository](h
 Translators can contribute new languages to Unyson through [Transifex](https://www.transifex.com/projects/p/unyson/).
 
 Theme developers can test the compatibility of their themes with new extensions updates before they are going to be released on [Unyson Extensions Approval](https://github.com/ThemeFuse/Unyson-Extensions-Approval).
+
+**WP-CLI INTEGRATION IS INCLUDED**
+
+* **[Unyson CLI](https://github.com/ThemeFuse/Unyson-CLI)**
 
 
 == Installation ==
