@@ -21,10 +21,10 @@ class FW_Extension_Github_Update extends FW_Ext_Update_Service {
 	private $manifest_key_regex = '/^([^\s\/]+)\/([^\s\/]+)$/';
 
 	/**
-	 * How long to cache server responses
+	 * How long to cache server responses - 12 hours
 	 * @var int seconds
 	 */
-	private $transient_expiration = DAY_IN_SECONDS;
+	private $transient_expiration = 43200;
 
 	private $download_timeout = 300;
 
