@@ -28,10 +28,6 @@ class FW_Option_Type_Multi extends FW_Option_Type
 
 			$enqueue = false;
 		}
-
-		fw()->backend->enqueue_options_static($option['inner-options']);
-
-		return true;
 	}
 
 	/**

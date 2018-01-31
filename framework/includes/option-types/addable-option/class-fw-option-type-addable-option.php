@@ -58,10 +58,6 @@ class FW_Option_Type_Addable_Option extends FW_Option_Type
 
 			$enqueue = false;
 		}
-
-		fw()->backend->option_type($option['option']['type'])->enqueue_static();
-
-		return true;
 	}
 
 	/**

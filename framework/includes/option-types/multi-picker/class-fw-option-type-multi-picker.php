@@ -59,10 +59,6 @@ class FW_Option_Type_Multi_Picker extends FW_Option_Type
 
 			$enqueue = false;
 		}
-
-		fw()->backend->enqueue_options_static($this->prepare_option($id, $option));
-
-		return true;
 	}
 
 	public function _get_data_for_js($id, $option, $data = array()) {

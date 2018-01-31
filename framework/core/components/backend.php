@@ -62,6 +62,12 @@ final class _FW_Component_Backend {
 	private $access_key;
 
 	/**
+	 * Contains all required container and option types.
+	 * @var array
+	 */
+	private $required_static = array();
+
+	/**
 	 * @internal
 	 */
 	public function _get_settings_page_slug() {
@@ -1453,16 +1459,28 @@ final class _FW_Component_Backend {
 			}
 		}
 
-		$collected = array();
+		/**
+		 * Search option and container types with regular expresion.
+		 * @see https://github.com/ThemeFuse/Unyson/issues/2047
+		 */
+		$encode = json_encode( $options );
+		preg_match_all( '#"type":"(.+?)"#siu', $encode, $matches );
 
-		fw_collect_options( $collected, $options, array(
-			'limit_option_types' => false,
-			'limit_container_types' => false,
-			'limit_level' => 0,
-			'callback' => array(__CLASS__, '_callback_fw_collect_options_enqueue_static'),
-		) );
+		if ( isset( $matches[1] ) ) {
+			foreach ( $matches[1] as $type ) {
+				if ( ! isset( $this->required_static[$type] ) ) {
+					if ( isset( $this->container_types[$type] ) ) {
+						fw()->backend->container_type( $type )->enqueue_static();
+					}
 
-		unset($collected);
+					if ( isset( $this->option_types[$type] ) ) {
+						fw()->backend->option_type( $type )->enqueue_static();
+					}
+
+					$this->required_static[$type] = true;
+				}
+			}
+		}
 	}
 
 	/**
