@@ -52,7 +52,7 @@ final class _FW_Extensions_Manager
 
 		add_action('fw_plugin_activate', array($this, '_action_plugin_activate_install_compatible_extensions'), 100);
 		add_action('fw_after_plugin_activate', array($this, '_action_after_plugin_activate'), 100);
-		add_action('after_switch_theme', array($this, '_action_theme_switch'));
+		add_action('after_switch_theme', array($this, '_action_theme_switch'), '');
 
 		if (!is_admin()) {
 			return;
@@ -3046,7 +3046,12 @@ final class _FW_Extensions_Manager
 	 */
 	public function _action_theme_switch()
 	{
+		if ( ! apply_filters( 'fw_after_switch_theme_activate_exts', true ) ) {
+			return;
+		}
+
 		$this->activate_theme_extensions();
+
 		$this->activate_extensions(
 			array_fill_keys(
 				array_keys(fw()->theme->manifest->get('supported_extensions', array())),
