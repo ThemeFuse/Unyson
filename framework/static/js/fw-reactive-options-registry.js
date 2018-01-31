@@ -10,6 +10,7 @@ fw.options = (function ($, currentFwOptions) {
 	currentFwOptions.get = get;
 	currentFwOptions.getAll = getAll;
 	currentFwOptions.register = register;
+	currentFwOptions.__unsafePatch = __unsafePatch;
 	currentFwOptions.getOptionDescriptor = getOptionDescriptor;
 	currentFwOptions.startListeningToEvents = startListeningToEvents;
 	currentFwOptions.getContextOptions = getContextOptions;
@@ -224,6 +225,14 @@ fw.options = (function ($, currentFwOptions) {
 		allOptionTypes[type] = jQuery.extend(
 			{}, defaultHintObject(),
 			hintObject || {}
+		);
+	}
+
+	function __unsafePatch (type, hintObject) {
+		allOptionTypes[type] = jQuery.extend(
+			{}, defaultHintObject(),
+			(allOptionTypes[type] || {}),
+			hintObject || {},
 		);
 	}
 
