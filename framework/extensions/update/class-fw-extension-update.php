@@ -21,7 +21,7 @@ class FW_Extension_Update extends FW_Extension {
 	 */
 	protected function _init() {
 
-		if ( ! current_user_can( 'update_plugins' ) ) {
+		if ( ! current_user_can( 'update_plugins' ) && ! fw_is_cli() ) {
 			return false;
 		}
 
@@ -154,7 +154,7 @@ class FW_Extension_Update extends FW_Extension {
 	 *
 	 * @return array {ext_name => update_data}
 	 */
-	private function get_extensions_with_updates( $force_check = false ) {
+	public function get_extensions_with_updates( $force_check = false ) {
 		$updates                = array();
 		$services               = $this->get_children();
 		$theme_ext_requirements = fw()->theme->manifest->get( 'requirements/extensions' );
@@ -825,8 +825,9 @@ class FW_Extension_Update extends FW_Extension {
 
 	/**
 	 * @internal
+	 * @param string $skin
 	 */
-	public function _action_update_extensions() {
+	public function _action_update_extensions( $skin = '' ) {
 		$nonce_name = '_nonce_fw_ext_update_extensions';
 		if ( ! isset( $_POST[ $nonce_name ] ) || ! wp_verify_nonce( $_POST[ $nonce_name ] ) ) {
 			wp_die( __( 'Invalid nonce.', 'fw' ) );
@@ -861,12 +862,16 @@ class FW_Extension_Update extends FW_Extension {
 				);
 			}
 
-			$skin = new _FW_Ext_Update_Extensions_Upgrader_Skin( array(
-				'title' => __( 'Extensions Update', 'fw' ),
-			) );
+			if ( ! $skin ) {
+				$skin = new _FW_Ext_Update_Extensions_Upgrader_Skin( array(
+					'title' => __( 'Extensions Update', 'fw' ),
+				) );
+			}
 		}
 
-		require_once( ABSPATH . 'wp-admin/admin-header.php' );
+		if ( ! fw_is_cli() ) {
+			require_once( ABSPATH . 'wp-admin/admin-header.php' );
+		}
 
 		$skin->header();
 
@@ -949,11 +954,14 @@ class FW_Extension_Update extends FW_Extension {
 			}
 
 			$skin->after();
+
 		} while ( false );
 
 		$skin->footer();
 
-		require_once( ABSPATH . 'wp-admin/admin-footer.php' );
+		if ( ! fw_is_cli() ) {
+			require_once( ABSPATH . 'wp-admin/admin-footer.php' );
+		}
 	}
 
 	public function _action_admin_notices() {

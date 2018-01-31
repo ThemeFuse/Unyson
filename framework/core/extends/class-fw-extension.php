@@ -374,6 +374,7 @@ abstract class FW_Extension
 	 * @return mixed|null
 	 */
 	final public function get_db_settings_option( $option_id = null, $default_value = null, $get_original_value = null ) {
+
 		return fw_get_db_ext_settings_option( $this->get_name(), $option_id, $default_value, $get_original_value );
 	}
 
