@@ -316,11 +316,10 @@ class FW_WP_Filesystem
 	 *
 	 * @return bool|WP_Error
 	 */
-	static public function put( $file_path, $content ) {
+	public static function put( $file_path, $content ) {
 
-		if ( self::is_ready() ) {
-			return new WP_Error( 'fs_not_initialized', esc_html__( 'WP Filesystem is not initialized', 'fw' ) );
-		}
+		self::init_file_system();
+
 		/** @var WP_Filesystem_Base $wp_filesystem */
 		global $wp_filesystem;
 
@@ -336,11 +335,10 @@ class FW_WP_Filesystem
 	 *
 	 * @return bool|mixed|WP_Error
 	 */
-	static public function get( $file_path ) {
+	public static function get( $file_path ) {
 
-		if ( self::is_ready() ) {
-			return new WP_Error( 'fs_not_initialized', esc_html__( 'WP Filesystem is not initialized', 'fw' ) );
-		}
+		self::init_file_system();
+
 		/** @var WP_Filesystem_Base $wp_filesystem */
 		global $wp_filesystem;
 
@@ -351,6 +349,19 @@ class FW_WP_Filesystem
 		}
 
 		return $content;
+	}
+
+	/**
+	 *  Initialize wp files system.
+	 */
+	public static function init_file_system() {
+		if ( self::is_ready() ) {
+			return;
+		}
+
+		include_once( ABSPATH . '/wp-admin/includes/file.php' );
+
+		WP_Filesystem();
 	}
 
 	/**
