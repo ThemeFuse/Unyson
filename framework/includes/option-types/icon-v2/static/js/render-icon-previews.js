@@ -18,9 +18,9 @@
 		data.$elements.find($rootClass).toArray().map(renderSinglePreview);
 	});
 
-	$(document).on('click', '.fw-icon-v2-remove-icon', removeIcon);
-	$(document).on('click', '.fw-icon-v2-trigger-modal', getNewIcon);
-	$(document).on('click', '.fw-icon-v2-preview', getNewIcon);
+	$(document).on('click', $rootClass + ' .fw-icon-v2-remove-icon', removeIcon);
+	$(document).on('click', $rootClass + ' .fw-icon-v2-trigger-modal', getNewIcon);
+	$(document).on('click', $rootClass + ' .fw-icon-v2-preview', getNewIcon);
 
 	/**
 	 * For debugging purposes
