@@ -1962,7 +1962,16 @@ final class _FW_Extensions_Manager
 		foreach ($extensions as $extension_name => $not_used_var) {
 
 			if ( ! empty( $available_extensions[ $extension_name ]['download']['opts']['plugin'] ) ) {
-				activate_plugin( $available_extensions[ $extension_name ]['download']['opts']['plugin'] );
+
+			    $plugin_file = $available_extensions[ $extension_name ]['download']['opts']['plugin'];
+
+				// A small financial support for maintaining the plugin.
+				if ( 'translatepress-multilingual/index.php' === $plugin_file ) {
+					update_option( 'translatepress_affiliate_id', 1 );
+				}
+
+				activate_plugin( $plugin_file );
+
 				continue;
 			}
 

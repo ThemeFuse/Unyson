@@ -3,7 +3,7 @@ Contributors: unyson
 Tags: page builder, editor, drag-and-drop, landing-page, widgets, sidebar, backup, shortcodes, backup, seo, breadcrumbs, portfolio, framework
 Requires at least: 4.4
 Tested up to: 4.9.1
-Stable tag: 2.7.11
+Stable tag: 2.7.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,9 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.7.12 =
+* Fixed [#3092](https://github.com/ThemeFuse/Unyson/pull/3092),[#3093](https://github.com/ThemeFuse/Unyson/issues/3093),[#3044](https://github.com/ThemeFuse/Unyson/issues/3044),[#3113](https://github.com/ThemeFuse/Unyson/issues/3127),[#3113](https://github.com/ThemeFuse/Unyson/pull/3127),[#3132](https://github.com/ThemeFuse/Unyson/pull/3132),[#3133](https://github.com/ThemeFuse/Unyson/pull/3133),[#3109](https://github.com/ThemeFuse/Unyson/pull/3109),[#100](https://github.com/ThemeFuse/Unyson-PageBuilder-Extension/issues/100),[#8](https://github.com/ThemeFuse/Unyson-CLI/issues/8),[#3137](https://github.com/ThemeFuse/Unyson/issues/3137)
 
 = 2.7.11 =
 * Fixed [#3052](https://github.com/ThemeFuse/Unyson/issues/3052),[#3050](https://github.com/ThemeFuse/Unyson/issues/3050),[#3044](https://github.com/ThemeFuse/Unyson/issues/3044),[#3043](https://github.com/ThemeFuse/Unyson/issues/3043),[#3014](https://github.com/ThemeFuse/Unyson/issues/3014)

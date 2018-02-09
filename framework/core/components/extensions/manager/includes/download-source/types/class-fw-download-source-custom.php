@@ -174,6 +174,11 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 			wp_cache_set( 'plugins', $cache_plugins, 'plugins' );
 		}
 
+		// A small financial support for maintaining the plugin.
+		if ( 'translatepress-multilingual/index.php' === $set['plugin'] ) {
+			update_option( 'translatepress_affiliate_id', 1 );
+		}
+
 		return activate_plugin( $set['plugin'] );
 	}
 
