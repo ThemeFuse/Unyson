@@ -236,7 +236,7 @@ $tabs = fw()->backend->render_options(
 		<ul class="fw-icon-v2-library-pack">
 
 		<# _.each(data.icons, function (icon) { #>
-			<# var iconClass = data.css_class_prefix ? data.css_class_prefix + ' ' + icon : icon; #>
+			<# var iconClass = (data.css_class_prefix && data.apply_root_class) ? data.css_class_prefix + ' ' + icon : icon; #>
 			<# var selectedClass = data.current_state['icon-class'] === iconClass ? 'selected' : ''; #>
 			<# var favoriteClass = _.contains(data.favorites, iconClass) ? 'fw-icon-v2-favorite' : '' #>
 
