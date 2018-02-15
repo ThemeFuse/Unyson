@@ -1155,6 +1155,16 @@ function fw_get_options_values_from_input( array $options, $input_array = null )
 
 	$values = array();
 
+	$maybe_new_values = apply_filters(
+		'fw:get_options_values_from_input:before',
+		null,
+		$options, $input_array
+	);
+
+	if ($maybe_new_values) {
+		return $maybe_new_values;
+	}
+
 	foreach ( fw_extract_only_options( $options ) as $id => $option ) {
 		$values[ $id ] = fw()->backend->option_type( $option['type'] )->get_value_from_input(
 			$option,

@@ -1153,7 +1153,7 @@ final class _FW_Component_Backend {
 				$values = array();
 			}
 
-			$values = array_intersect_key($values, fw_extract_only_options($options));
+			$values = fw_get_options_values_from_input($options, $values);
 		}
 
 		// data
@@ -1381,7 +1381,19 @@ final class _FW_Component_Backend {
 					foreach ( $collected_type_options as $id => &$_option ) {
 						$data = $options_data; // do not change directly to not affect next loops
 
-						$data['value'] = isset( $values[ $id ] ) ? $values[ $id ] : null;
+						$maybe_future_value = apply_filters(
+							'fw:render_options:option_value',
+							null,
+							$values,
+							$_option,
+							$id
+						);
+
+						if (! $maybe_future_value) {
+							$maybe_future_value = isset( $values[ $id ] ) ? $values[ $id ] : null;
+						}
+
+						$data['value'] = $maybe_future_value;
 
 						$html .= $this->render_option(
 							$id,
