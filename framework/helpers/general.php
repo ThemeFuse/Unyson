@@ -1165,14 +1165,6 @@ function fw_get_options_values_from_input( array $options, $input_array = null )
 		return $maybe_new_values;
 	}
 
-	$first_option = array_keys(fw_extract_only_options( $options ));
-	$first_option = $extracted[$first_option[0]];
-
-	if ($first_option['type'] === 'ct-options-panel') {
-		require "/Users/andreiglingeanu/.composer/vendor/bin/psysh";
-		\Psy\Shell::debug(get_defined_vars());
-	}
-
 	foreach ( fw_extract_only_options( $options ) as $id => $option ) {
 		$values[ $id ] = fw()->backend->option_type( $option['type'] )->get_value_from_input(
 			$option,
