@@ -1287,6 +1287,8 @@ fw.getValuesFromServer = function (data) {
 		initialize: function () {
 			fw.Modal.prototype.initialize.apply(this, arguments);
 
+			fwEvents.trigger('fw:options-modal:after-initialize', {modal: this});
+
 			// Forward events to fwEvents
 			{
 				/** @since 2.6.14 */
