@@ -33,13 +33,25 @@ class FW_Option_Type_Map extends FW_Option_Type {
 			'_fw_option_type_map',
 			array(
 				'google_maps_js_uri' => 'https://maps.googleapis.com/maps/api/js?'. http_build_query(array(
-					'v' => '3.23',
+					'v' => '3.30',
 					'libraries' => 'places',
 					'language' => substr( get_locale(), 0, 2 ),
 					'key' => self::api_key(),
 				))
 			)
 		);
+
+		// Some plugins load the map without library places.
+		global $wp_scripts;
+
+		foreach( $wp_scripts->queue as $handle ) {
+
+			$url = &$wp_scripts->registered[ $handle ]->src;
+
+			if ( strpos( $url, 'maps.googleapis.com/maps/api/js' ) && ! strpos( $url, 'places' ) ) {
+				$url .= '&libraries=places';
+			}
+		}
 	}
 
 	/**
