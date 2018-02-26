@@ -192,7 +192,6 @@ final class _FW_Component_Backend {
 
 		add_action('save_post', array($this, '_action_save_post'), 7, 3);
 		add_action('wp_restore_post_revision', array($this, '_action_restore_post_revision'), 10, 2);
-		add_action('_wp_put_post_revision', array($this, '_action__wp_put_post_revision'));
 
 		add_action('customize_register', array($this, '_action_customize_register'), 7);
 	}
@@ -792,6 +791,7 @@ final class _FW_Component_Backend {
 	 * @param bool $update
 	 */
 	public function _action_save_post( $post_id, $post, $update ) {
+
 		if (
 			isset($_POST['post_ID'])
 			&&
@@ -832,6 +832,7 @@ final class _FW_Component_Backend {
 			 */
 			do_action( 'fw_save_post_options', $post_id, $post, $old_values );
 		} elseif ($original_post_id = wp_is_post_autosave( $post_id )) {
+
 			do {
 				$parent = get_post($post->post_parent);
 
@@ -839,11 +840,9 @@ final class _FW_Component_Backend {
 					break;
 				}
 
-				if (
-					isset($_POST['post_ID'])
-					&&
-					intval($_POST['post_ID']) === intval($parent->ID)
-				) {} else {
+				if ( isset($_POST['post_ID']) && intval($_POST['post_ID']) === intval($parent->ID) ) {
+
+				} else {
 					break;
 				}
 
@@ -889,25 +888,6 @@ final class _FW_Component_Backend {
 			$post_id,
 			null,
 			(array)fw_get_db_post_option($revision_id, null, array())
-		);
-	}
-
-	/**
-	 * @param $revision_id
-	 */
-	public function _action__wp_put_post_revision($revision_id)
-	{
-		/**
-		 * Copy options meta from post to revision
-		 */
-		fw_set_db_post_option(
-			$revision_id,
-			null,
-			(array)fw_get_db_post_option(
-				wp_is_post_revision($revision_id),
-				null,
-				array()
-			)
 		);
 	}
 
