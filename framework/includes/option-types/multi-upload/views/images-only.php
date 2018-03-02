@@ -5,6 +5,7 @@
  * @var bool   $is_empty if when rendered the view has a valid attachment to display
  * @var array  $l10n The localization strings
  */
+
 ?>
 <div <?php echo fw_attr_to_html($wrapper_attr); ?>>
 	<input type="hidden" <?php echo fw_attr_to_html($input_attr); ?>/>

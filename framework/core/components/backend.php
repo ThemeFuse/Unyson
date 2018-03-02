@@ -1133,7 +1133,7 @@ final class _FW_Component_Backend {
 				$values = array();
 			}
 
-			$values = array_intersect_key( $values, fw_extract_only_options( $options ) );
+			$values = fw_get_options_values_from_input($options, $values);
 		}
 
 		// data
