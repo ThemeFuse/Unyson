@@ -232,7 +232,7 @@ fw.options = (function ($, currentFwOptions) {
 		allOptionTypes[type] = jQuery.extend(
 			{}, defaultHintObject(),
 			(allOptionTypes[type] || {}),
-			hintObject || {},
+			hintObject || {}
 		);
 	}
 
