@@ -7,13 +7,12 @@
  */
 final class _FW_Component_Backend {
 
-	/** @var callable */
-	private $print_meta_box_content_callback;
-
 	/** @var FW_Settings_Form */
 	private $settings_form;
 
-	private $available_render_designs = array( 'default', 'taxonomy', 'customizer' );
+	private $available_render_designs = array(
+		'default', 'taxonomy', 'customizer', 'empty'
+	);
 
 	private $default_render_design = 'default';
 
@@ -134,9 +133,7 @@ final class _FW_Component_Backend {
 		return $cache_current_taxonomy_data;
 	}
 
-	public function __construct() {
-		$this->print_meta_box_content_callback = create_function( '$post,$args', 'echo $args["args"];' );
-	}
+	public function __construct() {}
 
 	/**
 	 * @internal
@@ -195,7 +192,6 @@ final class _FW_Component_Backend {
 
 		add_action('save_post', array($this, '_action_save_post'), 7, 3);
 		add_action('wp_restore_post_revision', array($this, '_action_restore_post_revision'), 10, 2);
-		add_action('_wp_put_post_revision', array($this, '_action__wp_put_post_revision'));
 
 		add_action('customize_register', array($this, '_action_customize_register'), 7);
 	}
@@ -624,10 +620,10 @@ final class _FW_Component_Backend {
 	 * @param WP_Post $post
 	 */
 	public function _action_create_post_meta_boxes( $post_type, $post ) {
-		if ('comment' === $post_type) {
+		if ( 'comment' === $post_type || ( isset( $_GET['vc_action'] ) && $_GET['vc_action'] === 'vc_inline' ) ) {
 			/**
-			 * This is wrong, comment is not a post(type)
-			 * it is stored in a separate db table and has a separate meta (wp_comments and wp_commentmeta)
+			 * 1. https://github.com/ThemeFuse/Unyson/issues/3052
+			 * 2. This is wrong, comment is not a post(type) it is stored in a separate db table and has a separate meta (wp_comments and wp_commentmeta)
 			 */
 			return;
 		}
@@ -641,34 +637,26 @@ final class _FW_Component_Backend {
 		$collected = array();
 
 		fw_collect_options( $collected, $options, array(
-			'limit_option_types' => false,
+			'limit_option_types'    => false,
 			'limit_container_types' => false,
-			'limit_level' => 1,
+			'limit_level'           => 1,
 		) );
 
-		if (empty($collected)) {
+		if ( empty( $collected ) ) {
 			return;
 		}
 
 		$values = fw_get_db_post_option( $post->ID );
 
 		foreach ( $collected as $id => &$option ) {
-			if (
-				isset($option['options']) // container
-				&&
-				$option['type'] === 'box'
-			) { // this is a box, add it as a metabox
-				$context  = isset( $option['context'] )
-					? $option['context']
-					: 'normal';
-				$priority = isset( $option['priority'] )
-					? $option['priority']
-					: 'default';
+			if ( isset( $option['options'] ) && ( $option['type'] === 'box' || $option['type'] === 'group' ) ) {
+				$context  = isset( $option['context'] ) ? $option['context'] : 'normal';
+				$priority = isset( $option['priority'] ) ? $option['priority'] : 'default';
 
 				add_meta_box(
-					'fw-options-box-' . $id,
+					"fw-options-box-{$id}",
 					empty( $option['title'] ) ? ' ' : $option['title'],
-					$this->print_meta_box_content_callback,
+					array( $this, 'render_meta_box' ),
 					$post_type,
 					$context,
 					$priority,
@@ -676,16 +664,20 @@ final class _FW_Component_Backend {
 				);
 			} else { // this is not a box, wrap it in auto-generated box
 				add_meta_box(
-					'fw-options-box:auto-generated:'. time() .':'. fw_unique_increment(),
+					'fw-options-box:auto-generated:' . time() . ':' . fw_unique_increment(),
 					' ',
-					$this->print_meta_box_content_callback,
+					array( $this, 'render_meta_box' ),
 					$post_type,
 					'normal',
 					'default',
-					$this->render_options( array($id => $option), $values )
+					$this->render_options( array( $id => $option ), $values )
 				);
 			}
 		}
+	}
+
+	public function render_meta_box( $post, $args ) {
+		echo $args['args'];
 	}
 
 	/**
@@ -715,7 +707,9 @@ final class _FW_Component_Backend {
 		// fixes word_press style: .form-field input { width: 95% }
 		echo '<style type="text/css">.fw-option-type-radio input, .fw-option-type-checkbox input { width: auto; }</style>';
 
+		do_action( 'fw_backend_options_render:taxonomy:before' );
 		echo $this->render_options( $collected, $values, array(), 'taxonomy' );
+		do_action( 'fw_backend_options_render:taxonomy:after' );
 	}
 
 	/**
@@ -723,6 +717,7 @@ final class _FW_Component_Backend {
 	 */
 	public function _action_create_add_taxonomy_options( $taxonomy ) {
 		$options = fw()->theme->get_taxonomy_options( $taxonomy );
+
 		if ( empty( $options ) ) {
 			return;
 		}
@@ -742,9 +737,13 @@ final class _FW_Component_Backend {
 		// fixes word_press style: .form-field input { width: 95% }
 		echo '<style type="text/css">.fw-option-type-radio input, .fw-option-type-checkbox input { width: auto; }</style>';
 
+		do_action( 'fw_backend_options_render:taxonomy:before' );
+
 		echo '<div class="fw-force-xs">';
 		echo $this->render_options( $collected, array(), array(), 'taxonomy' );
 		echo '</div>';
+
+		do_action( 'fw_backend_options_render:taxonomy:after' );
 
 		echo '<script type="text/javascript">'
 			.'jQuery(function($){'
@@ -763,10 +762,13 @@ final class _FW_Component_Backend {
 				$current_edit_taxonomy['taxonomy'] . '_edit_form',
 				array( $this, '_action_create_taxonomy_options' )
 			);
-			add_action(
-				$current_edit_taxonomy['taxonomy'] . '_add_form_fields',
-				array( $this, '_action_create_add_taxonomy_options' )
-			);
+
+			if (fw()->theme->get_config('taxonomy_create_has_unyson_options', true)) {
+				add_action(
+					$current_edit_taxonomy['taxonomy'] . '_add_form_fields',
+					array( $this, '_action_create_add_taxonomy_options' )
+				);
+			}
 		}
 
 		if ( ! empty( $_POST ) ) {
@@ -789,6 +791,7 @@ final class _FW_Component_Backend {
 	 * @param bool $update
 	 */
 	public function _action_save_post( $post_id, $post, $update ) {
+
 		if (
 			isset($_POST['post_ID'])
 			&&
@@ -829,6 +832,7 @@ final class _FW_Component_Backend {
 			 */
 			do_action( 'fw_save_post_options', $post_id, $post, $old_values );
 		} elseif ($original_post_id = wp_is_post_autosave( $post_id )) {
+
 			do {
 				$parent = get_post($post->post_parent);
 
@@ -836,11 +840,9 @@ final class _FW_Component_Backend {
 					break;
 				}
 
-				if (
-					isset($_POST['post_ID'])
-					&&
-					intval($_POST['post_ID']) === intval($parent->ID)
-				) {} else {
+				if ( isset($_POST['post_ID']) && intval($_POST['post_ID']) === intval($parent->ID) ) {
+
+				} else {
 					break;
 				}
 
@@ -886,25 +888,6 @@ final class _FW_Component_Backend {
 			$post_id,
 			null,
 			(array)fw_get_db_post_option($revision_id, null, array())
-		);
-	}
-
-	/**
-	 * @param $revision_id
-	 */
-	public function _action__wp_put_post_revision($revision_id)
-	{
-		/**
-		 * Copy options meta from post to revision
-		 */
-		fw_set_db_post_option(
-			$revision_id,
-			null,
-			(array)fw_get_db_post_option(
-				wp_is_post_revision($revision_id),
-				null,
-				array()
-			)
 		);
 	}
 
@@ -1150,7 +1133,7 @@ final class _FW_Component_Backend {
 				$values = array();
 			}
 
-			$values = array_intersect_key($values, fw_extract_only_options($options));
+			$values = fw_get_options_values_from_input($options, $values);
 		}
 
 		// data
@@ -1378,7 +1361,19 @@ final class _FW_Component_Backend {
 					foreach ( $collected_type_options as $id => &$_option ) {
 						$data = $options_data; // do not change directly to not affect next loops
 
-						$data['value'] = isset( $values[ $id ] ) ? $values[ $id ] : null;
+						$maybe_future_value = apply_filters(
+							'fw:render_options:option_value',
+							null,
+							$values,
+							$_option,
+							$id
+						);
+
+						if (! $maybe_future_value) {
+							$maybe_future_value = isset( $values[ $id ] ) ? $values[ $id ] : null;
+						}
+
+						$data['value'] = $maybe_future_value;
 
 						$html .= $this->render_option(
 							$id,
@@ -1421,7 +1416,7 @@ final class _FW_Component_Backend {
 	 */
 	public function enqueue_options_static( $options ) {
 		static $static_enqueue = true;
-		
+
 		if (
 			!doing_action('admin_enqueue_scripts')
 			&&
@@ -1441,11 +1436,11 @@ final class _FW_Component_Backend {
 			 */
 			if ($static_enqueue) {
 				$this->register_static();
-	
+
 				wp_enqueue_media();
 				wp_enqueue_style( 'fw-backend-options' );
 				wp_enqueue_script( 'fw-backend-options' );
-				
+
 				$static_enqueue = false;
 			}
 		}
@@ -1485,8 +1480,15 @@ final class _FW_Component_Backend {
 	 * @return string
 	 */
 	public function render_option( $id, $option, $data = array(), $design = null ) {
+
+		$maybe_forced_design = fw()->backend->option_type( $option['type'] )->get_forced_render_design();
+
 		if (empty($design)) {
 			$design = $this->default_render_design;
+		}
+
+		if ($maybe_forced_design) {
+			$design = $maybe_forced_design;
 		}
 
 		if (
@@ -1576,7 +1578,7 @@ final class _FW_Component_Backend {
 			add_meta_box(
 				$placeholders['id'],
 				$placeholders['title'],
-				$this->print_meta_box_content_callback,
+				array( $this, 'render_meta_box' ),
 				$temp_screen_id,
 				$context,
 				'default',

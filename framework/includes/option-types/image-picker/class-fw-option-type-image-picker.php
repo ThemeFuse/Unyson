@@ -138,17 +138,17 @@ class Fw_Option_Type_Image_Picker extends FW_Option_Type
 
 				$attr['data-img-src'] = $choice['small']['src']; // required by image-picker plugin
 
-				if (!empty($choice['large'])) {
-					if (is_string($choice['large'])) {
+				if ( ! empty( $choice['large'] ) ) {
+					if ( is_string( $choice['large'] ) ) {
 						// is 'http://.../large.png'
 						$choice['large'] = array(
 							'src' => $choice['large']
 						);
 					}
 
-					$attr['data-large-img-attr'] = json_encode($choice['large']);
+					$attr['data-large-img-attr'] = json_encode( $choice['large'] );
 
-					$pre_load_images_html .= fw_html_tag('img', array('src' => $choice['large']['src']));
+					$pre_load_images_html .= fw_html_tag( 'img', $choice['large'] );
 				}
 
 				if (!empty($choice['data'])) {

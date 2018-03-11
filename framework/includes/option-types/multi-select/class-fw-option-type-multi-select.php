@@ -1,6 +1,4 @@
-<?php if ( ! defined( 'FW' ) ) {
-	die( 'Forbidden' );
-}
+<?php defined( 'FW' ) or die();
 
 if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 
@@ -51,7 +49,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				/**
 				 * Show the post type or term taxonomy
 				 */
-				'show-type' => false
+				'show-type'   => false
 			);
 		}
 
@@ -72,46 +70,35 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			);
 		}
 
-		private static function query_posts(array $options) {
-			$limits = array_merge(array(
-				'type' => array(
+		private static function query_posts( array $options ) {
+			$limits = array_merge( array(
+				'type'  => array(
 					'post' => true,
 					'page' => true,
 				),
 				'title' => '',
-			), $options);
-			fw_aku('limit', $limits);
+			), $options );
+			fw_aku( 'limit', $limits );
 
 			/** @var WPDB $wpdb */
 			global $wpdb;
 
-			$sql = "SELECT ID"
-			       ." FROM $wpdb->posts"
-			       ." WHERE post_status IN ( 'publish', 'private' )";
+			$sql = "SELECT ID FROM $wpdb->posts WHERE post_status IN ( 'publish', 'private' )";
 			//." AND NULLIF(post_password, '') IS NULL"; todo: review
 
-			{
-				$prepare = array();
+			$prepare = array();
 
-				if ($limits['type']) {
-					$sql .= " AND post_type IN ( "
-					        . implode( ', ', array_fill( 1, count( $limits['type'] ), '%s' ) )
-					        . " ) ";
-					$prepare = array_merge($prepare, array_keys($limits['type']));
-				}
-
-				if ($limits['title']) {
-					$sql .= " AND post_title LIKE %s";
-					$prepare[] = '%'. $wpdb->esc_like( $limits['title'] ) .'%';
-				}
+			if ( $limits['type'] ) {
+				$sql     .= " AND post_type IN ( " . implode( ', ', array_fill( 1, count( $limits['type'] ), '%s' ) ) . " ) ";
+				$prepare = array_merge( $prepare, array_keys( $limits['type'] ) );
 			}
 
-			$ids =  wp_list_pluck($wpdb->get_results(
-				$prepare
-					? $wpdb->prepare($sql, $prepare)
-					: $sql,
-				ARRAY_A
-			), 'ID');
+			if ( $limits['title'] ) {
+				$sql       .= " AND post_title LIKE %s";
+				$prepare[] = '%' . $wpdb->esc_like( $limits['title'] ) . '%';
+			}
+
+			$ids = wp_list_pluck( $wpdb->get_results( $prepare ? $wpdb->prepare( $sql, $prepare ) : $sql, ARRAY_A ), 'ID' );
 
 			return self::get_posts( $ids, max( fw_akg( 'limit', $options, 100 ), 1 ) );
 		}
@@ -122,8 +109,8 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			}
 
 			$query = new WP_Query( array(
-				'post_type'      => 'any',
-				'post__in'       => $ids,
+				'post_type'      => get_post_types(),
+				'post__in'       => array_map( 'intval', $ids ),
 				'posts_per_page' => $limit,
 				'fields'         => 'ids'
 			) );
@@ -132,7 +119,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 		}
 
 		protected static function build_post( $id, $show_type ) {
-			$title = get_the_title( $id );
+			$title = ( $t = get_the_title( $id ) ) && $t ? $t : esc_html__( 'No title', 'fw' ) . ' - #' . $id;
 
 			return $show_type ? array(
 				'val'   => $id,
@@ -144,37 +131,37 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			);
 		}
 
-		private static function query_terms(array $options) {
-			$limits = array_merge(array(
+		private static function query_terms( array $options ) {
+			$limits = array_merge( array(
 				'taxonomy' => array(
 					'category' => true,
 				),
-				'title' => '',
-				'id' => array( /* 1, 7, 120 */ ),
-				'limit' => 100,
-			), $options);
-			fw_aku('limit', $limits);
+				'title'    => '',
+				'id'       => array( /* 1, 7, 120 */ ),
+				'limit'    => 100,
+			), $options );
+			fw_aku( 'limit', $limits );
 
 			/** @var WPDB $wpdb */
 			global $wpdb;
 
 			$sql = "SELECT terms.term_id"
-			       ." FROM $wpdb->terms AS terms, $wpdb->term_taxonomy AS taxonomies"
-			       ." WHERE terms.term_id = taxonomies.term_id AND taxonomies.term_id = taxonomies.term_taxonomy_id";
+			       . " FROM $wpdb->terms AS terms, $wpdb->term_taxonomy AS taxonomies"
+			       . " WHERE terms.term_id = taxonomies.term_id AND taxonomies.term_id = taxonomies.term_taxonomy_id";
 
 			{
 				$prepare = array();
 
-				if ($limits['taxonomy']) {
-					$sql .= " AND taxonomies.taxonomy IN ( "
-					        . implode( ', ', array_fill( 1, count( $limits['taxonomy'] ), '%s' ) )
-					        . " ) ";
-					$prepare = array_merge($prepare, array_keys($limits['taxonomy']));
+				if ( $limits['taxonomy'] ) {
+					$sql     .= " AND taxonomies.taxonomy IN ( "
+					            . implode( ', ', array_fill( 1, count( $limits['taxonomy'] ), '%s' ) )
+					            . " ) ";
+					$prepare = array_merge( $prepare, array_keys( $limits['taxonomy'] ) );
 				}
 
-				if ($limits['title']) {
-					$sql .= " AND terms.name LIKE %s";
-					$prepare[] = '%'. $wpdb->esc_like( $limits['title'] ) .'%';
+				if ( $limits['title'] ) {
+					$sql       .= " AND terms.name LIKE %s";
+					$prepare[] = '%' . $wpdb->esc_like( $limits['title'] ) . '%';
 				}
 			}
 
@@ -188,7 +175,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				'term_id'
 			);
 
-			return self::get_terms( $ids, array_keys($limits['taxonomy']), max( fw_akg( 'limit', $options, 100 ), 1 ) );
+			return self::get_terms( $ids, array_keys( $limits['taxonomy'] ), max( fw_akg( 'limit', $options, 100 ), 1 ) );
 		}
 
 		protected static function get_terms( $ids, $taxonomy = array(), $limit = 100 ) {
@@ -197,7 +184,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			}
 
 			$terms = get_terms( array(
-				'taxonomy' => $taxonomy,
+				'taxonomy'   => $taxonomy,
 				'hide_empty' => false,
 				'include'    => $ids,
 				'number'     => $limit,
@@ -226,36 +213,36 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			);
 		}
 
-		private static function query_users(array $limits) {
-			$limits = array_merge(array(
-				'name' => '',
-				'role' => array(
+		private static function query_users( array $limits ) {
+			$limits = array_merge( array(
+				'name'  => '',
+				'role'  => array(
 					'editor' => true,
 				),
-				'id' => array( /* 1, 7, 120 */ ),
+				'id'    => array( /* 1, 7, 120 */ ),
 				'limit' => 100,
-			), $limits);
+			), $limits );
 
-			$limits['limit'] = max($limits['limit'], 1);
+			$limits['limit'] = max( $limits['limit'], 1 );
 
 			/** @var WPDB $wpdb */
 			global $wpdb;
 
 			$sql = "SELECT DISTINCT users.ID AS val, users.user_nicename AS title"
-			       ." FROM $wpdb->users AS users, $wpdb->usermeta AS usermeta"
-			       ." WHERE usermeta.user_id = users.ID";
+			       . " FROM $wpdb->users AS users, $wpdb->usermeta AS usermeta"
+			       . " WHERE usermeta.user_id = users.ID";
 
 			{
 				$prepare = array();
 
-				if ($limits['id']) {
-					$sql .= " AND users.ID IN ( "
-					        . implode( ', ', array_fill( 1, count( $limits['id'] ), '%d' ) )
-					        . " ) ";
-					$prepare = array_merge($prepare, $limits['id']);
+				if ( $limits['id'] ) {
+					$sql     .= " AND users.ID IN ( "
+					            . implode( ', ', array_fill( 1, count( $limits['id'] ), '%d' ) )
+					            . " ) ";
+					$prepare = array_merge( $prepare, $limits['id'] );
 				}
 
-				if ($limits['role']) {
+				if ( $limits['role'] ) {
 					$sql .= " AND usermeta.meta_key = '{$wpdb->prefix}capabilities' "
 					        . "AND ( "
 					        . implode( ' OR ',
@@ -267,17 +254,17 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 					}
 				}
 
-				if ($limits['name']) {
-					$sql .= " AND users.user_nicename LIKE %s";
-					$prepare[] = '%'. $wpdb->esc_like( $limits['name'] ) .'%';
+				if ( $limits['name'] ) {
+					$sql       .= " AND users.user_nicename LIKE %s";
+					$prepare[] = '%' . $wpdb->esc_like( $limits['name'] ) . '%';
 				}
 			}
 
-			$sql .= " LIMIT ". intval($limits['limit']);
+			$sql .= " LIMIT " . intval( $limits['limit'] );
 
 			return $wpdb->get_results(
 				$prepare
-					? $wpdb->prepare($sql, $prepare)
+					? $wpdb->prepare( $sql, $prepare )
 					: $sql,
 				ARRAY_A
 			);
@@ -287,14 +274,14 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 		 * @internal
 		 */
 		public static function _ajax_autocomplete() {
-			if (!current_user_can('edit_posts')) {
+			if ( ! current_user_can( 'edit_posts' ) ) {
 				wp_send_json_error();
 			}
 
 			$type  = FW_Request::POST( 'data/type' );
-			$names = ($names = json_decode( FW_Request::POST( 'data/names' ), true )) ? $names : array();
+			$names = ( $names = json_decode( FW_Request::POST( 'data/names' ), true ) ) ? $names : array();
 			$title = FW_Request::POST( 'data/string' );
-			$show = FW_Request::POST( 'data/show-type', false );
+			$show  = FW_Request::POST( 'data/show-type', false );
 
 			$items = array();
 
@@ -307,14 +294,14 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 					$items = array_map(
 						array( __CLASS__, 'build_post' ),
 						$items,
-						array_fill( 0, count($items), $show )
+						array_fill( 0, count( $items ), $show )
 					);
 					break;
 				case 'taxonomy':
-					$items = self::query_terms(array(
-						'taxonomy' => array_fill_keys($names, true),
-						'title' => $title,
-					));
+					$items = self::query_terms( array(
+						'taxonomy' => array_fill_keys( $names, true ),
+						'title'    => $title,
+					) );
 
 					$items = array_map(
 						array( __CLASS__, 'build_term' ),
@@ -323,10 +310,10 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 					);
 					break;
 				case 'users':
-					$items = self::query_users(array(
-						'role' => array_fill_keys($names, true),
+					$items = self::query_users( array(
+						'role' => array_fill_keys( $names, true ),
 						'name' => $title,
-					));
+					) );
 					break;
 			}
 
@@ -353,37 +340,32 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				switch ( $option['population'] ) {
 					case 'array' :
 						if ( isset( $option['choices'] ) && is_array( $option['choices'] ) ) {
-							foreach ($option['choices'] as $c_key => $c_val) {
+							foreach ( $option['choices'] as $c_key => $c_val ) {
 								$items[] = array(
-									'val' => $c_key,
+									'val'   => $c_key,
 									'title' => $c_val,
 								);
 							}
 						}
 						break;
 					case 'posts' :
+
 						if ( isset( $option['source'] ) ) {
-							$source = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
 
-							$items = self::get_posts( $data['value'] );
+							$source = is_array( $option['source'] ) ? $option['source'] : (array) $option['source'];
+							$items  = self::get_posts( (array) $data['value'] );
 
-							if ( count( $items ) < $option['prepopulate'] ) {
-								foreach (
-									self::query_posts( array(
-										'type'  => array_fill_keys( $source, true ),
-										'limit' => $option['prepopulate'],
-									) ) as $item
-								) {
-									if ( ! in_array( $item, $items ) ) {
-										array_push( $items, $item );
-									}
+							$query = new WP_Query( array(
+								'post_type'           => $option['source'],
+								'post__not_in'        => $data['value'],
+								'posts_per_page'      => $option['prepopulate'],
+								'fields'              => 'ids',
+								'ignore_sticky_posts' => 1
+							) );
 
-									if ( count( $items ) == $option['prepopulate'] ) {
-										break;
-									}
-								}
-							}
+							$items = array_merge( $items, $query->get_posts() );
 						}
+
 						$items = array_map(
 							array( $this, 'build_post' ),
 							$items,
@@ -396,22 +378,18 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 
 							$items = self::get_terms( $data['value'], $source );
 
-							if ( count( $items ) < $option['prepopulate'] ) {
-								foreach (
-									self::query_terms( array(
-										'taxonomy' => array_fill_keys( $source, true ),
-										'limit'    => $option['prepopulate'],
-									) ) as $item
-								) {
-									if ( ! in_array( $item, $items ) ) {
-										array_push( $items, $item );
-									}
+							$terms = get_terms( array(
+								'taxonomy'   => $option['source'],
+								'hide_empty' => false,
+								'exclude'    => $data['value'],
+								'number'     => $option['prepopulate'],
+								'fields'     => 'ids'
+							) );
 
-									if ( count( $items ) == $option['prepopulate'] ) {
-										break;
-									}
-								}
+							if ( ! is_wp_error( $terms ) ) {
+								$items = array_merge( $items, (array) $terms );
 							}
+
 						}
 
 						$items = array_map(
@@ -421,27 +399,39 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 						);
 						break;
 					case 'users' :
-						if ( isset( $option['source'] ) && ! empty( $option['source'] ) ) {
-							$source = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
-						} else {
-							$source = array();
+
+						$source = ! empty( $option['source'] ) ? (array) $option['source'] : array();
+
+						$items = self::query_users( array(
+							'role'  => array_fill_keys( $source, true ),
+							'id'    => $data['value'],
+							'limit' => $option['prepopulate']
+						) );
+
+						$users = get_users(
+							array(
+								'role__in' => $source,
+								'exclude'  => (array) $data['value'],
+								'number'   => (int) $option['prepopulate'],
+								'fields'   => array( 'ID', 'display_name' )
+							)
+						);
+
+						foreach ( $users as $user ) {
+							$items[] = array( 'val' => $user->ID, 'title' => $user->display_name );
 						}
 
-						$items = self::query_users(array(
-							'role' => array_fill_keys($source, true),
-							'id' => $data['value'],
-							'limit' => $option['prepopulate'],
-						));
 						break;
 					default :
 						return '(Invalid <code>population</code> parameter)';
 				}
 
-				$option['attr']['data-options']     = json_encode( $items );
-				$option['attr']['data-population']  = $population;
-				$option['attr']['data-show-type']   = (int)fw_akg( 'show-type', $option, false );
-				$option['attr']['data-source']      = json_encode( $source );
-				$option['attr']['data-limit']       = ( intval( $option['limit'] ) > 0 ) ? $option['limit'] : 0;
+				$option['attr']['data-options']    = json_encode( $items );
+				$option['attr']['data-population'] = $population;
+				$option['attr']['data-show-type']  = (int) fw_akg( 'show-type', $option, false );
+				$option['attr']['data-source']     = json_encode( $source );
+				$option['attr']['data-limit']      = ( intval( $option['limit'] ) > 0 ) ? $option['limit'] : 0;
+
 			} else {
 				return '(The <code>population</code> parameter is required)';
 			}
@@ -494,7 +484,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			static $names = array();
 
 			if ( ! isset( $names[ $type ] ) ) {
-				$names[$type]=fw_akg( 'labels/name', get_post_type_object( $type ), _x( 'Unknown', 'unknown-post-type', 'fw' ) );
+				$names[ $type ] = fw_akg( 'labels/name', get_post_type_object( $type ), _x( 'Unknown', 'unknown-post-type', 'fw' ) );
 			}
 
 			return $names[ $type ];
@@ -504,7 +494,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			static $names = array();
 
 			if ( ! isset( $names[ $tax ] ) ) {
-				$names[$tax]=fw_akg( 'labels/name', get_taxonomy( $tax ), _x( 'Unknown', 'unknown-post-type', 'fw' ) );
+				$names[ $tax ] = fw_akg( 'labels/name', get_taxonomy( $tax ), _x( 'Unknown', 'unknown-post-type', 'fw' ) );
 			}
 
 			return $names[ $tax ];

@@ -462,7 +462,7 @@ class FW_Form {
 		$errors = array();
 
 		if ( ! $this->check_nonce( $this->get_nonce() ) ) {
-			$errors[ $this->get_nonce_name() ] = __( 'Nonce verification failed', 'fw' );
+			$errors[ $this->get_nonce_name() ] = esc_html__( 'Your session expired. Please refresh page and try again.', 'fw' );
 		}
 
 		/**

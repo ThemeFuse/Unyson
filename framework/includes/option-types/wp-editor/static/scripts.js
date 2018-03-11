@@ -144,6 +144,8 @@
 		} else {
 			qTagsInit(id, $option, $wrap, $textarea);
 		}
+
+		tinymce.ui.FloatPanel.zIndex = 100100;
 	};
 
 	fwe.on('fw:options:init', function (data) {

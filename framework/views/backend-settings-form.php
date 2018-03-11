@@ -102,28 +102,32 @@
 
 <!-- reset warning -->
 <script type="text/javascript">
-	jQuery(function($){
-		$(document.body).on(
+	jQuery( function ( $ ) {
+		$( document.body ).on(
 			'click.fw-settings-form-reset-warning',
-			'<?php echo $js_form_selector ?> input[name="<?php echo esc_js($input_name_reset) ?>"]',
-			function(e){
+			'<?php echo $js_form_selector ?> input[name="<?php echo esc_js( $input_name_reset ) ?>"]',
+			function ( e ) {
 				/**
 				 * on confirm() the submit input looses focus
 				 * fwForm.isAdminPage() must be able to select the input to send it in _POST
 				 * so use alternative solution http://stackoverflow.com/a/5721762
 				 */
-				{
-					$(this).closest('form').find('[clicked]:submit').removeAttr('clicked');
-					$(this).attr('clicked', '');
-				}
+				$( this ).closest( 'form' ).find( '[clicked]:submit' ).removeAttr( 'clicked' );
+				$( this ).attr( 'clicked', '' );
 
-				if (!confirm('<?php echo esc_js($form->get_string('reset_warning')); ?>')) {
+				var resetWarning = '<?php echo esc_js( $form->get_string( 'reset_warning' ) ); ?>',
+					data         = { 'reset_warning': resetWarning };
+
+				if ( ! confirm( resetWarning ) ) {
 					e.preventDefault();
-					$(this).removeAttr('clicked');
+					$( document.body ).trigger( 'fw:settings-form:cancel-reset', data );
+					$( this ).removeAttr( 'clicked' );
+				} else {
+					$( document.body ).trigger( 'fw:settings-form:before-reset', data );
 				}
 			}
 		);
-	});
+	} );
 </script>
 <!-- end: reset warning -->
 
@@ -188,7 +192,7 @@
 					fw.soleModal.show(
 						loadingModalId,
 						'<h2 class="fw-text-muted">'+
-							'<img src="'+ fw.img.loadingSpinner +'" alt="Loading" class="wp-spinner" /> '+
+							'<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAAAAACo4kLRAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAnRSTlMA/1uRIrUAAAACYktHRADdUu+NWwAAAAd0SU1FB+EKCgYABDchIukAAACZelRYdFJhdyBwcm9maWxlIHR5cGUgZ2lmOnhtcCBkYXRheG1wAAAImU2NMQ5CMQxD957iHyGNnaTlNkVtEQMSAwPHJx8WHMleXuxyu+/L+/E85niNzHJ85b1gRwvx6vCrWxCGBkdNF1WVaD5DODkx2H0Fgkmv5I2dxFQ9mRKiy3seMdBZCZ4lnUqjQYj/GRW3LPm95w42VvkACzYml9QYNjwAAACjSURBVBjTfZChDoNAEETfbZpgVqJPXHIO0w+hCZYPxJKUD6mpIzmBPrmmigoQcCSM2eRlszM7buWqxzbSd8Y0NgEAtwJ5WvYd39Y7TKOB7xkW0C6AQB4N6KuqB2zMIDDZ0cQmENJ2b8i/AYAl4db3pwj0fAlzmXJGsBIagl4/kitShFjCiNCUsEEI/sx8QKA9WWkLAnV3oNrVN9VtJZtyKrnUH9vgMmhlXVedAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE3LTEwLTEwVDA2OjAwOjA0LTA3OjAw4kWx4AAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNy0xMC0xMFQwNjowMDowNC0wNzowMJMYCVwAAAAASUVORK5CYII=" alt="Loading" class="wp-spinner" /> '+
 							title +
 						'</h2>'+
 						'<p class="fw-text-muted"><em>'+ description +'</em></p>'+ loadingExtraMessage,
@@ -206,8 +210,16 @@
 			afterSubmitDelay: function (elements) {
 				fwEvents.trigger('fw:options:init:tabs', {$elements: elements.$form});
 			},
-			onErrors: function() {
-				fw.soleModal.hide(loadingModalId);
+			onErrors: function( elements, data ) {
+				var message = $.map( data.errors, function( mssg ) { return '<p class="fw-text-danger">' + mssg + '</p>' } ) + fw.soleModal.renderFlashMessages( data.flash_messages );
+
+				fw.soleModal.hide( loadingModalId );
+
+				fw.soleModal.show(
+					'fw-options-ajax-save-error',
+					'<p class="fw-text-danger">' + message + '</p>'
+				);
+
 			},
 			onAjaxError: function(elements, data) {
 				{
@@ -228,6 +240,7 @@
 				/**
 				 * Display messages
 				 */
+
 				do {
 					/**
 					 * Don't display the "Settings successfully saved" message
@@ -268,7 +281,7 @@
 							}
 						);
 					} else {
-						fw.soleModal.hide();
+						fw.soleModal.hide('fw-options-ajax-save-success');
 					}
 				} while(false);
 

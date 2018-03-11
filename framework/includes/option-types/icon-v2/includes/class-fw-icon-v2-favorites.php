@@ -24,8 +24,7 @@ class FW_Icon_V2_Favorites_Manager
 		);
 	}
 
-	public function get_icon_packs()
-	{
+	public function get_icon_packs() {
 		wp_send_json_success(
 			fw()->backend->option_type('icon-v2')->packs_loader->get_packs(true)
 		);

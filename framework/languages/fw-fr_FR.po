@@ -2851,7 +2851,7 @@ msgstr "Août"
 
 #: ../extensions/shortcodes/shortcodes/calendar/static.php:93
 msgid "September"
-msgstr "Séptembre"
+msgstr "Septembre"
 
 #: ../extensions/shortcodes/shortcodes/calendar/static.php:94
 msgid "October"

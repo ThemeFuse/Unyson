@@ -569,7 +569,7 @@ class FW_Option_Type_Checkboxes extends FW_Option_Type {
 					continue;
 				}
 
-				$value[ $choice ] = true;
+				$value[$choice] = true;
 			}
 		} else {
 			$value = $option['value'];
@@ -846,24 +846,25 @@ class FW_Option_Type_Select extends FW_Option_Type {
 				}
 
 				if ( isset( $choice['choices'] ) ) { // optgroup
-					$html .= '<optgroup ' . fw_attr_to_html( $choice['attr'] ) . '>' .
-					         $this->render_choices( $choice['choices'], $value ) .
-					         '</optgroup>';
+					$html .=
+						'<optgroup ' . fw_attr_to_html( $choice['attr'] ) . '>' .
+							$this->render_choices( $choice['choices'], $value ) .
+						'</optgroup>';
 				} else { // choice as array (with custom attributes)
 					$choice['attr']['value'] = $c_value;
 
 					unset( $choice['attr']['selected'] ); // this is not allowed
 
-					$html .= '<option ' . fw_attr_to_html( $choice['attr'] ) . ' ' .
-					         ( $c_value == $value ? 'selected="selected" ' : '' ) . '>' .
-					         htmlspecialchars( isset( $choice['text'] ) ? $choice['text'] : '', ENT_COMPAT, 'UTF-8' ) .
-					         '</option>';
+					$html .=
+						'<option ' . fw_attr_to_html( $choice['attr'] ) . selected( $c_value, $value, false ) . '>' .
+							htmlspecialchars( isset( $choice['text'] ) ? $choice['text'] : '', ENT_COMPAT, 'UTF-8' ) .
+						'</option>';
 				}
 			} else { // simple choice
-				$html .= '<option value="' . esc_attr( $c_value ) . '" ' .
-				         ( $c_value == $value ? 'selected="selected" ' : '' ) . '>' .
-				         htmlspecialchars( $choice, ENT_COMPAT, 'UTF-8' ) .
-				         '</option>';
+				$html .=
+					'<option value="' . esc_attr( $c_value ) . '"' . selected( $c_value, $value, false ) . '>' .
+						htmlspecialchars( $choice, ENT_COMPAT, 'UTF-8' ) .
+					'</option>';
 			}
 		}
 

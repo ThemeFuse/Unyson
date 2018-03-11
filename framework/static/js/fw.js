@@ -462,6 +462,25 @@ fw.capitalizeFirstLetter = function(str) {
 };
 
 /**
+ * Wait until an array of dynamically computed jQuery.Deferred() objects
+ * get resolved.
+ */
+fw.whenAll = function(deferreds) {
+	var deferred = new jQuery.Deferred();
+
+	jQuery.when.apply(jQuery, deferreds).then(
+		function() {
+			deferred.resolve(Array.prototype.slice.call(arguments));
+		},
+		function() {
+			deferred.fail(Array.prototype.slice.call(arguments));
+		}
+	);
+
+	return deferred;
+}
+
+/**
  * Set nested property value
  *
  * Usage:
@@ -730,8 +749,6 @@ fw.getQueryString = function(name) {
 				uploader: false
 			});
 
-			patchMediaFramesModalToDoTheFocusCorrectly( this.frame );
-
 			var modal = this;
 
 			this.frame.once('ready', function(){
@@ -988,65 +1005,6 @@ fw.getQueryString = function(name) {
 			$frame.css('overflow-y', 'hidden');
 		}
 	});
-
-	// https://github.com/WordPress/WordPress/blob/4ca4ff999aba05892c05d26cddf3af540f47b93b/wp-includes/js/media-views.js#L6800
-	// When you execute frame.modal.open() - the modal tries to switch focus
-	// to its $el. Actually, this switches the scrollTop property for window.
-	//
-	// In order to prevent that we'll have to monkey patch the frame.modal.open
-	// method and do the focus properly - that's what this function does
-	function patchMediaFramesModalToDoTheFocusCorrectly (frame) {
-		if (! frame.modal) return;
-
-		frame.modal.open = function () {
-			var $el = this.$el,
-				options = this.options,
-				mceEditor;
-
-			if ( $el.is(':visible') ) {
-				return this;
-			}
-
-			this.clickedOpenerEl = document.activeElement;
-
-			if ( ! this.views.attached ) {
-				this.attach();
-			}
-
-			// If the `freeze` option is set, record the window's scroll position.
-			if ( options.freeze ) {
-				this._freeze = {
-					scrollTop: jQuery( window ).scrollTop()
-				};
-			}
-
-			// Disable page scrolling.
-			jQuery( 'body' ).addClass( 'modal-open' );
-
-			$el.show();
-
-			// Try to close the onscreen keyboard
-			if ( 'ontouchend' in document ) {
-				if ( ( mceEditor = window.tinymce && window.tinymce.activeEditor )  && ! mceEditor.isHidden() && mceEditor.iframeElement ) {
-					mceEditor.iframeElement.focus();
-					mceEditor.iframeElement.blur();
-
-					setTimeout( function() {
-						mceEditor.iframeElement.blur();
-					}, 100 );
-				}
-			}
-
-			// this part is changed from the original method
-			// this.$el.focus();
-			// http://stackoverflow.com/a/11676673/3220977
-			var initialX = window.scrollX, initialY = window.scrollY;
-			this.$el.focus();
-			window.scrollTo(initialX, initialY);
-
-			return this.propagate('open');
-		}
-	}
 })();
 
 /**
@@ -1268,6 +1226,8 @@ fw.getValuesFromServer = function (data) {
 		initialize: function () {
 			fw.Modal.prototype.initialize.apply(this, arguments);
 
+			fwEvents.trigger('fw:options-modal:after-initialize', {modal: this});
+
 			// Forward events to fwEvents
 			{
 				/** @since 2.6.14 */
@@ -1410,7 +1370,7 @@ fw.getValuesFromServer = function (data) {
 				this.get('options'),
 				typeof values == 'undefined' ? this.get('values') : values
 			);
-			
+
 			promise.then(function (html, response) {
 				if (response && _.isEmpty(modal.get('values'))) {
 					// fixes https://github.com/ThemeFuse/Unyson/issues/1042#issuecomment-244364121

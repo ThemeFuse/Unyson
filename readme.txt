@@ -1,9 +1,9 @@
 === Unyson ===
 Contributors: unyson
-Tags: page builder, shortcodes, backup, seo, breadcrumbs, portfolio, framework
+Tags: page builder, editor, drag-and-drop, landing-page, widgets, sidebar, backup, shortcodes, backup, seo, breadcrumbs, portfolio, framework
 Requires at least: 4.4
-Tested up to: 4.8
-Stable tag: 2.7.1
+Tested up to: 4.9.1
+Stable tag: 2.7.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,10 @@ Developers can contribute to the source code on the [Unyson GitHub Repository](h
 Translators can contribute new languages to Unyson through [Transifex](https://www.transifex.com/projects/p/unyson/).
 
 Theme developers can test the compatibility of their themes with new extensions updates before they are going to be released on [Unyson Extensions Approval](https://github.com/ThemeFuse/Unyson-Extensions-Approval).
+
+**WP-CLI INTEGRATION IS INCLUDED**
+
+* **[Unyson CLI](https://github.com/ThemeFuse/Unyson-CLI)**
 
 
 == Installation ==
@@ -84,6 +88,31 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.7.12 =
+* Fixed [#3092](https://github.com/ThemeFuse/Unyson/pull/3092),[#3093](https://github.com/ThemeFuse/Unyson/issues/3093),[#3044](https://github.com/ThemeFuse/Unyson/issues/3044),[#3113](https://github.com/ThemeFuse/Unyson/issues/3127),[#3113](https://github.com/ThemeFuse/Unyson/pull/3127),[#3132](https://github.com/ThemeFuse/Unyson/pull/3132),[#3133](https://github.com/ThemeFuse/Unyson/pull/3133),[#3109](https://github.com/ThemeFuse/Unyson/pull/3109),[#100](https://github.com/ThemeFuse/Unyson-PageBuilder-Extension/issues/100),[#8](https://github.com/ThemeFuse/Unyson-CLI/issues/8),[#3137](https://github.com/ThemeFuse/Unyson/issues/3137)
+
+= 2.7.11 =
+* Fixed [#3052](https://github.com/ThemeFuse/Unyson/issues/3052),[#3050](https://github.com/ThemeFuse/Unyson/issues/3050),[#3044](https://github.com/ThemeFuse/Unyson/issues/3044),[#3043](https://github.com/ThemeFuse/Unyson/issues/3043),[#3014](https://github.com/ThemeFuse/Unyson/issues/3014)
+,[#3008](https://github.com/ThemeFuse/Unyson/issues/3008),[#3006](https://github.com/ThemeFuse/Unyson/issues/3006),[#3071](https://github.com/ThemeFuse/Unyson/pull/3071),[#3061](https://github.com/ThemeFuse/Unyson/issues/3061)
+
+= 2.7.10 =
+* Fixed [#2997](https://github.com/ThemeFuse/Unyson/issues/2997),[#2999](https://github.com/ThemeFuse/Unyson/pull/2999)
+
+= 2.7.9 =
+* Fixed [#1351](https://github.com/ThemeFuse/Unyson/issues/1351),[#2716](https://github.com/ThemeFuse/Unyson/issues/2716),[#2833](https://github.com/ThemeFuse/Unyson/issues/2833),[#2736](https://github.com/ThemeFuse/Unyson/issues/2736),[#2718](https://github.com/ThemeFuse/Unyson/issues/2718),[#2953](https://github.com/ThemeFuse/Unyson/issues/2953),[#2888](https://github.com/ThemeFuse/Unyson/issues/2888),[#2855](https://github.com/ThemeFuse/Unyson/issues/2855),[#2906](https://github.com/ThemeFuse/Unyson/issues/2906)
+
+= 2.7.8 =
+* Fixed [#2905](https://github.com/ThemeFuse/Unyson/issues/2905),[#2862](https://github.com/ThemeFuse/Unyson/issues/2862),[#2909](https://github.com/ThemeFuse/Unyson/issues/2909),[#2924](https://github.com/ThemeFuse/Unyson/issues/2924),[#2925](https://github.com/ThemeFuse/Unyson/issues/2925),[#2921](https://github.com/ThemeFuse/Unyson/issues/2921),[#2844](https://github.com/ThemeFuse/Unyson/issues/2844)
+
+= 2.7.7 =
+* Fixed [#2832](https://github.com/ThemeFuse/Unyson/issues/2832),[#2862](https://github.com/ThemeFuse/Unyson/issues/2862),[#2781](https://github.com/ThemeFuse/Unyson/issues/2781),[#2732](https://github.com/ThemeFuse/Unyson/issues/2732),[#2703](https://github.com/ThemeFuse/Unyson/issues/2703)
+
+= 2.7.6 =
+* Urgent update
+
+= 2.7.5 =
+* Urgent update
 
 = 2.7.1 =
 * Bug fixes
