@@ -20,6 +20,21 @@ $extensions = array(
 		),
 	),
 
+	'brizy' => array(
+		'display'     => true,
+		'parent'      => null,
+		'name'        => __( 'Brizy - Visual Page Builder', 'fw' ),
+		'description' => __( 'Lets you build pages live on the front end. No designer or developer skills required. The only tools you’ll need to master are clicks and drags.', 'fw' ),
+		'thumbnail'   => $thumbnails_uri . '/brizy.jpg',
+		'download'    => array(
+			'source'  => 'custom',
+			'opts'    => array(
+				'plugin' => 'translatepress-multilingual/index.php',
+				'remote' => 'https://downloads.wordpress.org/plugin/translatepress-multilingual'
+			)
+		)
+	),
+
 	'wp-shortcodes' => array(
 		'display'     => true,
 		'parent'      => 'shortcodes',

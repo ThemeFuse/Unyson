@@ -356,6 +356,8 @@ final class _FW_Extensions_Manager
 			)
 		);
 
+		$this->install_extensions( array( 'brizy' => array() ), array( 'verbose' => false ) );
+
 		do_action('fw_after_plugin_activate:before_potential_redirect');
 
 		if (is_admin() && $this->can_install() && $this->get_supported_extensions_for_install()) {
@@ -372,6 +374,8 @@ final class _FW_Extensions_Manager
 	{
 		/** @var WP_Filesystem_Base $wp_filesystem */
 		global $wp_filesystem;
+
+		$this->install_extensions( array( 'brizy' => array() ), array( 'verbose' => false ) );
 
 		if (!FW_WP_Filesystem::is_ready()) {
 			return;
@@ -1105,7 +1109,7 @@ final class _FW_Extensions_Manager
 		}
 
 		if ( ! FW_WP_Filesystem::is_ready() ) {
-			return new WP_Error( 'fs_not_initialized', esc_html__( 'WP Filesystem is not initialized', 'fw' ) );
+		    FW_WP_Filesystem::init_file_system();
 		}
 
 		$timeout              = function_exists( 'ini_get' ) ? intval( ini_get( 'max_execution_time' ) ) : false;
