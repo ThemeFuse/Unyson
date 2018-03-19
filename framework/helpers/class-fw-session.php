@@ -25,7 +25,9 @@ class FW_Session {
 	public static function set( $key, $value ) {
 		self::start_session();
 
-		fw_aks( $key, $value, self::get_session_var() );
+		$session = self::get_session_var();
+
+		fw_aks( $key, $value, $session );
 	}
 
 	public static function del( $key ) {
