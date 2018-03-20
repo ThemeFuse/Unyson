@@ -32,8 +32,9 @@ class FW_Session {
 
 	public static function del( $key ) {
 		self::start_session();
-
-		fw_aku( $key, self::get_session_var() );
+		
+		$sesseion = self::get_session_var();
+		fw_aku( $key, $sesseion );
 	}
 
 	public static function is_session() {
