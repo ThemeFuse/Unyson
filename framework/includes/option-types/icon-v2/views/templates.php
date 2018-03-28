@@ -203,7 +203,7 @@ $tabs = fw()->backend->render_options(
 					<img src="{{ url }}" style="max-width: 100%" alt="">
 
 					<a
-						title="<?php echo __('Add to Favorites', 'fw') ?>"
+						title="<?php esc_html_e( 'Delete item', 'fw' ); ?>"
 						class="fw-icon-v2-favorite dashicons dashicons-no">
 					</a>
 				</div>
