@@ -421,6 +421,7 @@
 						el.width( defaultWidth );
 					}
 				}
+				el.change();
 			}
 
 			var reset = el.data( 'reset-alpha' ) || false;
