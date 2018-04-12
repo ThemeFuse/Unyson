@@ -5,6 +5,14 @@ jQuery( document ).ready( function ( $ ) {
 		} );
 	}, 30 );
 
+	function updateContent( $content ) {
+		if ( tinymce.get( 'content' ) ) {
+			tinymce.get( 'content' ).setContent( $content );
+		} else {
+			$content.val( $content );
+		}
+	}
+
 	$( '#post-preview' ).on( 'mousedown touchend', function () {
 
 		var $content      = $( '#content' ),
@@ -17,10 +25,7 @@ jQuery( document ).ready( function ( $ ) {
 			$contentValue = $contentValue + $session;
 		}
 
-		if ( tinymce.get( 'content' ) ) {
-			tinymce.get( 'content' ).setContent( $contentValue );
-		} else {
-			$content.val( $contentValue );
-		}
+		updateContent( $contentValue );
+		updateContent( $contentValue.replace( /<!-- <fw_preview_session>(.*?)<\/fw_preview_session> -->/gi, '' ) );
 	} );
 } );
