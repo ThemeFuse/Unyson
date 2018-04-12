@@ -2,13 +2,11 @@
 
 if (! defined('FW')) { die('Forbidden'); }
 
-class FW_Option_Type_Icon_v2 extends FW_Option_Type
-{
+class FW_Option_Type_Icon_v2 extends FW_Option_Type {
 	private $enqueued_font_styles = array();
 	public $packs_loader = null;
 
-	public function get_type()
-	{
+	public function get_type() {
 		return 'icon-v2';
 	}
 
@@ -16,8 +14,7 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 		return false;
 	}
 
-	public function _init()
-	{
+	public function _init() {
 		/**
 		 * CSS for each pack is not loaded by default in frontend.
 		 *
@@ -30,11 +27,9 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 		if (! is_admin()) { return; }
 
 		$this->favorites = new FW_Icon_V2_Favorites_Manager();
-
 	}
 
-	protected function _enqueue_static($id, $option, $data)
-	{
+	protected function _enqueue_static($id, $option, $data) {
 		add_action(
 			'admin_print_footer_scripts',
 			array($this, 'load_templates')
@@ -48,9 +43,7 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 			'/includes/option-types/' . $this->get_type() . '/static/'
 		);
 
-		wp_enqueue_style(
-			'fw-selectize'
-		);
+		wp_enqueue_style('fw-selectize');
 
 		wp_enqueue_script(
 			'fw-option-type-'. $this->get_type() .'-backend-previews',
@@ -93,8 +86,7 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 		);
 	}
 
-	protected function _render($id, $option, $data)
-	{
+	protected function _render($id, $option, $data) {
 		$json = $this->_get_json_value_to_insert_in_html($data);
 
 		$option['attr']['value'] = $json;
@@ -105,8 +97,7 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 		);
 	}
 
-	protected function _get_value_from_input($option, $input_value)
-	{
+	protected function _get_value_from_input($option, $input_value) {
 		if (is_null( $input_value )) {
 			return $option['value'];
 		}
@@ -114,8 +105,7 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 		return $this->_get_db_value_from_json($input_value);
 	}
 
-	protected function _get_db_value_from_json($input_value)
-	{
+	protected function _get_db_value_from_json($input_value) {
 		$input = $input_value;
 
 		/**
@@ -153,8 +143,7 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 		return $result;
 	}
 
-	protected function _get_json_value_to_insert_in_html($data)
-	{
+	protected function _get_json_value_to_insert_in_html($data) {
 		$result = array();
 
 		$result['type'] = $data['value']['type'];
@@ -175,7 +164,7 @@ class FW_Option_Type_Icon_v2 extends FW_Option_Type
 	{
 		return array(
 			'value' => array(
-				'type' => 'icon-font', // icon-font | custom-upload
+				'type' => 'none', // none | icon-font | custom-upload
 
 				// ONLY IF icon-font
 				'icon-class' => '',

@@ -78,6 +78,18 @@ abstract class FW_Option_Type
 	}
 
 	/**
+	 * An option type can decide which design to use by default when rendering
+	 * itself.
+	 *
+	 * @return
+	 *   null - will use whatever is passed based on the context
+	 *   string - will use that particular design
+	 */
+	public function get_forced_render_design() {
+		return null;
+	}
+
+	/**
 	 * Prevent execute enqueue multiple times
 	 * @var bool
 	 */

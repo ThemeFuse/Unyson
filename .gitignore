@@ -3,6 +3,8 @@
 !/framework/extensions/blog/
 !/framework/extensions/update/
 !/framework/extensions/clone-all.bash
+
+.idea
 node_modules/
 package.json
 yarn.lock

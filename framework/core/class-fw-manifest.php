@@ -293,9 +293,16 @@ abstract class FW_Manifest
 	 * @param mixed $default_value
 	 * @return mixed
 	 */
-	public function get($multi_key, $default_value = null)
-	{
-		return fw_akg($multi_key, $this->manifest, $default_value);
+	public function get( $multi_key, $default_value = null ) {
+		return fw_akg( $multi_key, $this->manifest, $default_value );
+	}
+
+	/**
+	 * Get entire manifest.
+	 * @return array
+	 */
+	public function get_manifest() {
+		return $this->manifest;
 	}
 
 	/**

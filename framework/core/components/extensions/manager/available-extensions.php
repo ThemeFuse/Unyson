@@ -303,6 +303,22 @@ $extensions = array(
 		),
 	),
 
+	'translatepress' => array(
+		'display'     => true,
+		'parent'      => null,
+		'name'        => __( 'Translate Press', 'fw' ),
+		'description' => __( 'This extension lets you translate your website in any language or even add multiple languages for your users to change at their will from the front-end.', 'fw' ),
+		'thumbnail'   => $thumbnails_uri . '/translation.jpg',
+		'download'    => array(
+			'source'  => 'custom',
+			'url_set' => 'options-general.php?page=translate-press',
+			'opts'    => array(
+				'plugin' => 'translatepress-multilingual/index.php',
+				'remote' => 'https://downloads.wordpress.org/plugin/translatepress-multilingual'
+			)
+		)
+	),
+
 	'styling' => array(
 		'display'     => true,
 		'parent'      => null,
@@ -315,20 +331,6 @@ $extensions = array(
 				'user_repo' => $github_account . '/Unyson-Styling-Extension',
 			),
 		),
-	),
-
-	'translation' => array(
-		'display'     => true,
-		'parent'      => null,
-		'name'        => __( 'Translations', 'fw' ),
-		'description' => __( 'This extension lets you translate your website in any language or even add multiple languages for your users to change at their will from the front-end.', 'fw' ),
-		'thumbnail'   => $thumbnails_uri . '/translation.jpg',
-		'download'    => array(
-			'source' => 'github',
-			'opts' => array(
-				'user_repo' => $github_account . '/Unyson-Translation-Extension',
-			)
-		),
-	),
+	)
 );
 

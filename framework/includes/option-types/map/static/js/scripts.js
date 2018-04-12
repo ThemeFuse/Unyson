@@ -143,6 +143,15 @@
 						});
 					}
 
+					if ( option.map.object.map.infowindow ) {
+						option.map.object.map.infowindow.close();
+					}
+
+					option.map.object.map.infowindow = new google.maps.InfoWindow();
+
+					option.map.object.map.infowindow.setContent( '<div>' + option.getComputedLongAddress() + '</div>' );
+					option.map.object.map.infowindow.open( {}, option.map.object.marker );
+
 					this.map.object.map.setCenter(googleMapsPos);
 
 					google.maps.event.addListener(

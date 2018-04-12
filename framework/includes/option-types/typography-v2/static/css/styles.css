@@ -301,4 +301,7 @@ color:      fw-col-sm-2 = 16.66666667%
 	padding-bottom: 10px;
 	font-style: italic;
 	color: #666;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }

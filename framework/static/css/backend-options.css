@@ -66,6 +66,17 @@ Included on pages where backend options are rendered
 	padding: 0;
 	margin: 0;
 }
+.post-type-product .fw-options-tabs-wrapper {
+	border: none;
+	padding: 10px 0;
+}
+.post-type-product .fw-options-tabs-wrapper > .fw-options-tabs-list ul,
+.post-type-product .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+	padding: 0 !important;
+	margin: 0 !important;
+	background: none !important;
+	border: none !important;
+}
 
 .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
 	float: left;
@@ -1274,7 +1285,7 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 .fw-selectize.selectize-control .selectize-dropdown {
 	margin: 0 1px;
 	border: none;
-	top: 33px !important;
+	top: 33px;
 }
 
 .fw-selectize.selectize-control .selectize-dropdown .selectize-dropdown-content {

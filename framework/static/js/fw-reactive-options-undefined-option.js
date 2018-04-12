@@ -6,6 +6,20 @@
 	});
 
 	function defaultGetValue (optionDescriptor) {
+		var resultPromise = $.Deferred();
+
+		/**
+		 * If we get a really undefined option type.
+		 */
+		if (optionDescriptor.type === 'fw-undefined') {
+			resultPromise.resolve({
+				value: '',
+				optionDescriptor: optionDescriptor
+			})
+
+			return resultPromise;
+		}
+
 		// 1. find all inputs and ignore virtual contexts
 		//    this really should include nested options and properly serialize
 		//    them together
@@ -46,8 +60,6 @@
 		options[optionDescriptor.id] = JSON.parse(jQuery(optionDescriptor.el).attr(
 			'data-fw-for-js'
 		)).option;
-
-		var resultPromise = $.Deferred();
 
 		// 3. construct an AJAX request with correct options and input values
 		$.ajax({

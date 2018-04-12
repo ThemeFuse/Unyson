@@ -63,17 +63,26 @@
 
 		function handleChange (optionDescriptor) {
 			if (pickerDescriptor.el === optionDescriptor.el) {
-				chooseGroupForOptionDescriptor(optionDescriptor);
+				setTimeout(function () {
+					chooseGroupForOptionDescriptor(optionDescriptor);
+				}, 0);
 			}
 		}
 
 		function chooseGroupForOptionDescriptor (optionDescriptor) {
 			fw.options.getValueForEl(pickerDescriptor.el).then(function (value) {
-				if (! _.isString(value.value)) {
-					throw "Your picker returned a non-string value. In order for it to work with multi-pickers it should yield string values";
-				}
+				// TODO: implement interfaces for multiple compound option types
+				if (pickerDescriptor.type === 'icon-v2') {
+					chooseGroup(
+						value.value.type === 'none' ? '' : value.value.type
+					);
+				} else {
+					if (! _.isString(value.value)) {
+						throw "Your picker returned a non-string value. In order for it to work with multi-pickers it should yield string values";
+					}
 
-				chooseGroup(value.value);
+					chooseGroup(value.value);
+				}
 			});
 
 			function chooseGroup(groupId) {

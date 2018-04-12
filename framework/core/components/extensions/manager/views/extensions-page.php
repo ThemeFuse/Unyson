@@ -8,32 +8,53 @@
  * @var bool $can_install
  */
 
+$installed_plugins = get_plugins();
+
+foreach ( $lists['available'] as $name => &$_ext ) {
+    if ( empty( $_ext['download']['opts']['plugin'] ) ) {
+        continue;
+    }
+
+    $slug = $_ext['download']['opts']['plugin'];
+
+    if ( is_plugin_active( $slug ) ) {
+	    $lists['active'][ $name ] = $_ext;
+	    $lists['installed'][ $name ] = $_ext;
+    } else {
+        if ( isset( $installed_plugins[ $slug ] ) ) {
+	        $lists['installed'][ $name ] = $_ext;
+	        $lists['disabled'][ $name ] = $_ext;
+        }
+    }
+
+	$lists['supported'][ $name ] = $_ext;
+}
+
 // Set extensions order same as in available extensions list
 {
 	$ordered = array(
-		'active' => array(),
+		'active'    => array(),
 		'installed' => array(),
 	);
 
-	foreach ($lists['available'] as $name => &$_ext) {
-		foreach ($ordered as $type => &$_exts) {
-			if (isset($lists[$type][$name])) {
-				$ordered[$type][$name] = $lists[$type][$name];
+	foreach ( $lists['available'] as $name => &$_ext ) {
+		foreach ( $ordered as $type => &$_exts ) {
+			if ( isset( $lists[ $type ][ $name ] ) ) {
+				$ordered[ $type ][ $name ] = $lists[ $type ][ $name ];
 			}
 		}
 	}
 
-	foreach ($ordered as $type => &$_exts) {
-		if (!empty($ordered[$type])) {
-			$lists[$type] = array_merge($ordered[$type], $lists[$type]);
+	foreach ( $ordered as $type => &$_exts ) {
+		if ( ! empty( $ordered[ $type ] ) ) {
+			$lists[ $type ] = array_merge( $ordered[ $type ], $lists[ $type ] );
 		}
 	}
 
-	unset($ordered, $name, $_ext, $_exts, $type);
+	unset( $ordered, $name, $_ext, $_exts, $type );
 }
 
-$dir = dirname(__FILE__);
-$extension_view_path = $dir .'/extension.php';
+$extension_view_path = dirname( __FILE__ ) . '/extension.php';
 
 $displayed = array();
 ?>
@@ -42,13 +63,12 @@ $displayed = array();
 <?php
 $display_active_extensions = array();
 
-foreach ($lists['active'] as $name => &$data) {
-	if (true !== fw_akg('display', $data['manifest'], $display_default_value)) {
-		continue;
+foreach ( $lists['active'] as $name => &$data ) {
+	if ( ! empty( $data['display'] ) || true === fw_akg( 'display', $data['manifest'], $display_default_value ) ) {
+		$display_active_extensions[ $name ] = &$data;
 	}
-
-	$display_active_extensions[$name] = &$data;
 }
+
 unset($data);
 ?>
 <?php if (empty($display_active_extensions)): ?>
@@ -59,21 +79,24 @@ unset($data);
 <?php else: ?>
 	<div class="fw-row fw-extensions-list">
 		<?php
-		foreach ($display_active_extensions as $name => &$data) {
-			fw_render_view($extension_view_path, array(
-				'name' => $name,
-				'title' => fw_ext($name)->manifest->get_name(),
-				'description' => fw_ext($name)->manifest->get('description'),
-				'link' => $link,
-				'lists' => &$lists,
-				'nonces' => $nonces,
-				'default_thumbnail' => $default_thumbnail,
-				'can_install' => $can_install,
-			), false);
+            foreach ( $display_active_extensions as $name => &$data ) {
 
-			$displayed[$name] = true;
-		}
-		unset($data);
+                $ext = fw_ext( $name );
+
+                fw_render_view( $extension_view_path, array(
+                    'name'              => $name,
+                    'title'             => $ext ? $ext->manifest->get_name() : $data['name'],
+                    'description'       => $ext ? $ext->manifest->get( 'description' ) : ( isset( $data['description'] ) ? $data['description'] : '' ),
+                    'link'              => $link,
+                    'lists'             => &$lists,
+                    'nonces'            => $nonces,
+                    'default_thumbnail' => $default_thumbnail,
+                    'can_install'       => $can_install,
+                ), false );
+
+                $displayed[ $name ] = true;
+            }
+            unset($data);
 		?>
 	</div>
 <?php endif; ?>
@@ -87,14 +110,14 @@ unset($data);
 		{
 			$theme_extensions = array();
 
-			foreach ($lists['disabled'] as $name => &$data) {
-				if (!$data['is']['theme']) {
+			foreach ( $lists['disabled'] as $name => &$data ) {
+				if ( empty( $data['is']['theme'] ) ) {
 					continue;
 				}
 
-				$theme_extensions[$name] = array(
-					'name' => fw_akg('name', $data['manifest'], fw_id_to_title($name)),
-					'description' => fw_akg('description', $data['manifest'], '')
+				$theme_extensions[ $name ] = array(
+					'name'        => fw_akg( 'name', $data['manifest'], fw_id_to_title( $name ) ),
+					'description' => fw_akg( 'description', $data['manifest'], '' )
 				);
 			}
 			unset($data);
@@ -102,7 +125,7 @@ unset($data);
 			foreach ($theme_extensions + $lists['supported'] as $name => $data) {
 				if (isset($displayed[$name])) {
 					continue;
-				} elseif (isset($lists['installed'][$name])) {
+				} elseif ( isset( $lists['installed'][ $name ] ) && ! empty( $lists['installed'][$name]['manifest'] ) ) {
 					if (true !== fw_akg('display', $lists['installed'][$name]['manifest'], $display_default_value)) {
 						continue;
 					}
@@ -134,23 +157,25 @@ unset($data);
 			unset($theme_extensions);
 		}
 
-		foreach ($lists['disabled'] as $name => &$data) {
-			if (isset($displayed[$name])) {
+		foreach ( $lists['disabled'] as $name => &$data ) {
+			if ( isset( $displayed[ $name ] ) ) {
 				continue;
-			} elseif (true !== fw_akg('display', $data['manifest'], $display_default_value)) {
+			} elseif ( isset( $data['display'] ) && true !== $data['display'] ) {
+				continue;
+			} elseif ( isset( $data['manifest'] ) && true !== fw_akg( 'display', $data['manifest'], $display_default_value ) ) {
 				continue;
 			}
 
-			fw_render_view($extension_view_path, array(
-				'name' => $name,
-				'title' => fw_akg('name', $data['manifest'], fw_id_to_title($name)),
-				'description' => fw_akg('description', $data['manifest'], ''),
-				'link' => $link,
-				'lists' => &$lists,
-				'nonces' => $nonces,
+			fw_render_view( $extension_view_path, array(
+				'name'              => $name,
+				'title'             => ! empty( $data['manifest']['name'] ) ? $data['manifest']['name'] : ( ! empty( $data['name'] ) ? $data['name'] : 'No name' ),
+				'description'       => ! empty( $data['manifest']['description'] ) ? $data['manifest']['description'] : ( ! empty( $data['description'] ) ? $data['description'] : '' ),
+				'link'              => $link,
+				'lists'             => &$lists,
+				'nonces'            => $nonces,
 				'default_thumbnail' => $default_thumbnail,
-				'can_install' => $can_install,
-			), false);
+				'can_install'       => $can_install,
+			), false );
 
 			$displayed[$name] = $something_displayed = true;
 		}

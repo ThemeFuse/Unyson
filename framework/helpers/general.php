@@ -421,6 +421,17 @@ function fw_print( $value ) {
 }
 
 /**
+ * Alias for fw_print
+ *
+ * @see fw_print()
+ */
+if ( ! function_exists( 'debug' ) ) {
+	function debug() {
+		call_user_func_array( 'fw_print', func_get_args() );
+	}
+}
+
+/**
  * Generate html tag
  *
  * @param string $tag Tag name
@@ -721,6 +732,11 @@ if ( ! function_exists( 'fw_render_view' ) ):
 	 * @return string HTML
 	 */
 	function fw_render_view( $file_path, $view_variables = array(), $return = true ) {
+
+		if ( ! is_file( $file_path ) ) {
+			return '';
+		}
+
 		extract( $view_variables, EXTR_REFS );
 		unset( $view_variables );
 
@@ -732,6 +748,8 @@ if ( ! function_exists( 'fw_render_view' ) ):
 		} else {
 			require $file_path;
 		}
+
+		return '';
 	}
 endif;
 
@@ -1137,6 +1155,16 @@ function fw_get_options_values_from_input( array $options, $input_array = null )
 
 	$values = array();
 
+	$maybe_new_values = apply_filters(
+		'fw:get_options_values_from_input:before',
+		null,
+		$options, $input_array
+	);
+
+	if ($maybe_new_values) {
+		return $maybe_new_values;
+	}
+
 	foreach ( fw_extract_only_options( $options ) as $id => $option ) {
 		$values[ $id ] = fw()->backend->option_type( $option['type'] )->get_value_from_input(
 			$option,
@@ -1321,8 +1349,18 @@ function fw_current_url() {
 		} else {
 			$url = get_option( 'home' );
 		}
-		$url .= fw_akg( 'REQUEST_URI', $_SERVER, '/' );
-		$url = set_url_scheme( $url ); // https fix
+
+		//Remove the "//" before the domain name
+		$url = ltrim( fw_get_url_without_scheme( $url ), '/' );
+
+		//Remove the ulr subdirectory in case it has one
+		$split = explode( '/', $url );
+
+		//Remove end slash
+		$url = rtrim( $split[0], '/' );
+
+		$url .= '/' . ltrim( fw_akg( 'REQUEST_URI', $_SERVER, '' ), '/' );
+		$url = set_url_scheme( '//' . $url ); // https fix
 	}
 
 	return $url;

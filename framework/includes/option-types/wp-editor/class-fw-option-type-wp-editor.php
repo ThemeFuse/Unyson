@@ -92,39 +92,45 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 	 * {@inheritdoc}
 	 */
 	protected function _enqueue_static( $id, $option, $data ) {
-		if (! wp_script_is('editor')) {
-			ob_start();
-			wp_editor('', fw_rand_md5());
-			ob_end_clean();
+		if ( ! wp_script_is( 'editor' ) ) {
+			wp_enqueue_script( 'editor' );
+			wp_enqueue_script( 'quicktags' );
+			wp_enqueue_script('fw-ext-shortcodes-editor-integration');
+
+			if ( ! class_exists( '_WP_Editors', false ) ) {
+				require( ABSPATH . WPINC . '/class-wp-editor.php' );
+			}
+
+			add_action( 'admin_print_footer_scripts', '_WP_Editors::print_default_editor_scripts', 45 );
 		}
+
 		/**
 		 * The below styles usually are included directly in html when wp_editor() is called
 		 * but since we call it (below) wrapped in ob_start()...ob_end_clean() the html is not printed.
 		 * So included the styles manually.
 		 */
-		{
-			wp_enqueue_style(
-				/**
-				 * https://github.com/WordPress/WordPress/blob/4.4.2/wp-includes/script-loader.php#L731
-				 * without prefix it won't enqueue
-				 */
-				'fw-option-type-' . $this->get_type() .'-dashicons',
-				includes_url('css/dashicons.min.css'),
-				array(),
-				fw()->manifest->get_version()
-			);
 
-			wp_enqueue_style(
-				/**
-				 * https://github.com/WordPress/WordPress/blob/4.4.2/wp-includes/script-loader.php#L737
-				 * without prefix it won't enqueue
-				 */
-				'fw-option-type-' . $this->get_type() .'-editor-buttons',
-				includes_url('/css/editor.min.css'),
-				array('dashicons', 'fw-unycon'),
-				fw()->manifest->get_version()
-			);
-		}
+		wp_enqueue_style(
+		/**
+		 * https://github.com/WordPress/WordPress/blob/4.4.2/wp-includes/script-loader.php#L731
+		 * without prefix it won't enqueue
+		 */
+			'fw-option-type-' . $this->get_type() . '-dashicons',
+			includes_url( 'css/dashicons.min.css' ),
+			array(),
+			fw()->manifest->get_version()
+		);
+
+		wp_enqueue_style(
+		/**
+		 * https://github.com/WordPress/WordPress/blob/4.4.2/wp-includes/script-loader.php#L737
+		 * without prefix it won't enqueue
+		 */
+			'fw-option-type-' . $this->get_type() . '-editor-buttons',
+			includes_url( '/css/editor.min.css' ),
+			array( 'dashicons', 'fw-unycon' ),
+			fw()->manifest->get_version()
+		);
 
 		$uri = fw_get_framework_directory_uri(
 			'/includes/option-types/' . $this->get_type() . '/static'
@@ -133,7 +139,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 		wp_enqueue_script(
 			'fw-option-type-' . $this->get_type(),
 			$uri . '/scripts.js',
-			array('jquery', 'fw-events', 'editor', 'fw'),
+			array( 'jquery', 'fw-events', 'editor', 'fw' ),
 			fw()->manifest->get_version(),
 			true
 		);
@@ -141,11 +147,11 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 		wp_enqueue_style(
 			'fw-option-type-' . $this->get_type(),
 			$uri . '/styles.css',
-			array('dashicons', 'editor-buttons'),
+			array( 'dashicons', 'editor-buttons' ),
 			fw()->manifest->get_version()
 		);
 
-		do_action('fw:option-type:wp-editor:enqueue-scripts');
+		do_action( 'fw:option-type:wp-editor:enqueue-scripts' );
 	}
 
 	/**

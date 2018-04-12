@@ -1,86 +1,86 @@
-input.fw-option-type-rgba-color-picker.iris-error {
-	background-color: #ffebe8;
-	border-color: #c00;
-	color: #000;
+.fw-backend-option-input-type-rgba-color-picker .fw-option-help-in-input {
+    top: 2px !important;
 }
-
-.fw-alpha-container .transparency {
-	height: 24px;
-	width: 100%;
-	background-color: #FFF;
-	background-image: url(../images/transparency-grid.png);
-	box-shadow: 0 0 5px rgba(0, 0, 0, 0.4) inset;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-	padding: 0;
+.fw-backend-option-input-type-rgba-color-picker .wp-picker-holder {
+    position:absolute;
+    z-index:99999;
 }
-
-.fw-alpha-container .ui-slider-handle {
-	color: #777;
-	background-color: #FFF;
-	text-shadow: 0 1px 0 #FFF;
-	text-decoration: none;
-	position: absolute;
-	z-index: 2;
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-	border: 1px solid #aaa;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	border-radius: 4px;
-	opacity: 0.9;
-	margin-top: -2px;
-	height: 20px;
-	cursor: ew-resize;
-	font-size: 12px;
-	padding: 3px;
+.fw-backend-option-input-type-rgba-color-picker .wp-picker-clear {
+    height: 23px !important;
 }
-
-.fw-alpha-container .ui-slider {
-	position: relative;
-	text-align: center;
-	width: 88%;
+.fw-backend-option-input-type-rgba-color-picker .wp-color-result {
+    box-shadow:none;
 }
-
-.fw-alpha-container {
-	box-sizing: padding-box;
-	display: block;
-	border-right: 1px solid #aaa;
-	border-left: 1px solid #aaa;
-	border-top: none;
-	border-bottom: 1px solid #aaa;
-	background: #FFF;
-	padding: 0 11px 6px;
-	position: relative;
-	top: 176px;
-	width: 89%;
-	left: -1px;
+.fw-backend-option-input-type-rgba-color-picker input {
+    max-width: 140px !important;
 }
-
-
-.fw-option-type-rgba-color-picker-iris,
-.fw-option-type-rgba-color-picker-iris.iris-picker {
-	z-index: 999;
-	position: absolute;
+#customize-controls .customize-pane-child .customize-control:last-child .fw-backend-customizer-option .fw-backend-option-type-rgba-color-picker {
+    padding-bottom: 220px;
 }
-
-.fw-option-type-rgba-color-picker-iris .fw-option-type-rgba-color-picker-reset-default {
-	width: 139px;
-	margin-top: 2px;
-	cursor: pointer;
+/* Picker WP style */
+.wp-color-result {
+     background-color: #f7f7f7;
+     border: 1px solid #ccc;
+     -webkit-border-radius: 3px;
+     border-radius: 3px;
+     cursor: pointer;
+     height: 22px;
+     margin: 0 6px 6px 0;
+     position: relative;
+     -webkit-user-select: none;
+     -moz-user-select: none;
+     -ms-user-select: none;
+     user-select: none;
+     vertical-align: bottom;
+     display: inline-block;
+     padding-left: 30px;
+     -webkit-box-shadow: 0 1px 0 #ccc;
+     box-shadow: 0 1px 0 #ccc;
+     top: 0;
+ }
+.wp-color-result:focus,
+.wp-color-result:hover {
+    background: #fafafa;
+    border-color: #999;
+    color: #23282d;
 }
-
-.fw-option-type-rgba-color-picker-iris .fw-option-type-rgba-color-picker-reset-default span {
-	line-height: 16px;
-	padding-left: 2px;
-	float: left;
+.wp-color-result:after {
+    background: #f7f7f7;
+    -webkit-border-radius: 0 2px 2px 0;
+    border-radius: 0 2px 2px 0;
+    border-left: 1px solid #ccc;
+    color: #555;
+    content: attr(title);
+    display: block;
+    font-size: 11px;
+    line-height: 22px;
+    padding: 0 6px;
+    position: relative;
+    right: 0;
+    text-align: center;
+    top: 0;
 }
-
-
-.fw-option-type-rgba-color-picker-with-reset-default > .iris-palette-container {
-	bottom: 27px !important;
+.wp-color-result.wp-picker-open:after {
+    content: attr(data-current);
 }
-
-.fw-option-type-rgba-color-picker-with-reset-default .fw-alpha-container {
-	top: 192px;
+.wp-color-result:focus:after,
+.wp-color-result:hover:after {
+    color: #23282d;
+    border-color: #a0a5aa;
+    border-left: 1px solid #999;
+}
+.wp-picker-open+.wp-picker-input-wrap {
+    display: inline-block;
+    vertical-align: top;
+}
+.wp-picker-container input[type=text].wp-color-picker {
+    width: 65px;
+    height: 24px;
+    font-size: 12px;
+    font-family: monospace;
+    line-height: 16px;
+    margin: 0;
+}
+.wp-picker-container .button {
+    margin-left: 6px;
 }

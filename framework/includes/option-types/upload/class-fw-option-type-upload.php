@@ -216,21 +216,44 @@ class FW_Option_Type_Upload extends FW_Option_Type
 			if (is_array($input_value)) {
 				return $input_value;
 			} else {
-				return $this->get_attachment_info($input_value);
+				return $this->get_attachment_info($option,$input_value);
 			}
 		}
 	}
 
-	private function get_attachment_info($attachment_id)
-	{
-		$url = wp_get_attachment_url($attachment_id);
-		if ($url) {
-			return array(
+	private function get_attachment_info( $option, $attachment_id ) {
+		$url = wp_get_attachment_url( $attachment_id );
+
+		if ( $url ) {
+
+			$data = array(
 				'attachment_id' => $attachment_id,
-				'url'           => preg_replace('/^https?:\/\//', '//', $url)
+				'url'           => preg_replace( '/^https?:\/\//', '//', $url )
 			);
+
+			if ( isset( $option['sizes'] ) && is_array( $option['sizes'] ) ) {
+
+				$sizes = array();
+				$info  = wp_prepare_attachment_for_js( $attachment_id );
+
+				foreach ( $option['sizes'] as $size ) {
+
+					if ( isset( $info['sizes'][ $size ] ) ) {
+						$sizes[ $size ] = $info['sizes'][ $size ];
+					}
+
+				}
+
+				if ( ! empty( $sizes ) ) {
+					$data['sizes'] = $sizes;
+				}
+			}
+
+			return $data;
+
 		} else {
 			$defaults = $this->get_defaults();
+
 			return $defaults['value'];
 		}
 	}

@@ -59,6 +59,9 @@ function _fw_core_components_extensions_autoload( $class ) {
 		case 'FW_Ext_Download_Source_Github' :
 			require_once dirname( __FILE__ ) . '/core/components/extensions/manager/includes/download-source/types/class-fw-download-source-github.php';
 			break;
+		case 'FW_Ext_Download_Source_Custom' :
+			require_once dirname( __FILE__ ) . '/core/components/extensions/manager/includes/download-source/types/class-fw-download-source-custom.php';
+			break;
 		case '_FW_Available_Extensions_Register' :
 			require_once dirname( __FILE__ ) . '/core/components/extensions/manager/includes/available-ext/class--fw-available-extensions-register.php';
 			break;

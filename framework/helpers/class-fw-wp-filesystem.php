@@ -311,6 +311,60 @@ class FW_WP_Filesystem
 	}
 
 	/**
+	 * @param $file_path
+	 * @param $content
+	 *
+	 * @return bool|WP_Error
+	 */
+	public static function put( $file_path, $content ) {
+
+		self::init_file_system();
+
+		/** @var WP_Filesystem_Base $wp_filesystem */
+		global $wp_filesystem;
+
+		if ( ! $wp_filesystem->put_contents( $file_path, $content ) ) {
+			return new WP_Error( 'fs_error_put_content', esc_html__( 'Error writing to file: ', 'fw' ) . wp_basename( $file_path ) );
+		}
+
+		return true;
+	}
+
+	/**
+	 * @param $file_path
+	 *
+	 * @return bool|mixed|WP_Error
+	 */
+	public static function get( $file_path ) {
+
+		self::init_file_system();
+
+		/** @var WP_Filesystem_Base $wp_filesystem */
+		global $wp_filesystem;
+
+		$content = $wp_filesystem->get_contents( $file_path );
+
+		if ( false === $content ) {
+			return new WP_Error( 'fs_error_get_content', esc_html__( 'Error to get content from file: ', 'fw' ) . wp_basename( $file_path ) );
+		}
+
+		return $content;
+	}
+
+	/**
+	 *  Initialize wp files system.
+	 */
+	public static function init_file_system() {
+		if ( self::is_ready() ) {
+			return;
+		}
+
+		include_once( ABSPATH . '/wp-admin/includes/file.php' );
+
+		WP_Filesystem();
+	}
+
+	/**
 	 * If is initialized and has no errors
 	 * @return bool
 	 * @since 2.6.8
