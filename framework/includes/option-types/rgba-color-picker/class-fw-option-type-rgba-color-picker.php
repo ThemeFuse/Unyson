@@ -37,14 +37,9 @@ class FW_Option_Type_Rgba_Color_Picker extends FW_Option_Type {
 		);
 
 		wp_localize_script(
-			'fw-option-'. $this->get_type(),
-			'_fw_option_type_'. str_replace('-', '_', $this->get_type()) .'_localized',
-			array(
-				'l10n' => array(
-					'reset_to_default' => __('Reset', 'fw'),
-					'reset_to_initial' => __('Reset', 'fw'),
-				),
-			)
+			'fw-option-' . $this->get_type(),
+			'_fw_option_type_' . str_replace( '-', '_', $this->get_type() ) . '_localized',
+			array( 'l10n' => array( 'reset_to_default' => esc_html__( 'Reset', 'fw' ) ) )
 		);
 	}
 

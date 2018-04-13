@@ -137,7 +137,7 @@
 			}
 
 			// Set up the Default button.
-			self.button.addClass( 'wp-picker-default' ).val( wpColorPickerL10n.defaultString );
+			self.button.addClass( 'wp-picker-default' ).val( window._fw_option_type_rgba_color_picker_localized.l10n.reset_to_default );
 			if ( ! _deprecated ) {
 				self.button.attr( 'aria-label', wpColorPickerL10n.defaultAriaLabel );
 			}
