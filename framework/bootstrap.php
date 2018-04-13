@@ -75,11 +75,5 @@ if (defined('FW')) {
 		 * The framework is loaded
 		 */
 		do_action('fw_init');
-
-		$request = wp_remote_get( 'https://api.bitbucket.org/2.0/repositories/eremia_viorel/test/refs/tags/' );
-
-		/*echo '<pre style="overflow-y:scroll;background:#23282d;position:relative;z-index:11111;color:#78FF5B;line-height:16px;">';
-		print_r( json_decode( wp_remote_retrieve_body( $request ), true ) );
-		echo '</pre>';*/
 	}
 }

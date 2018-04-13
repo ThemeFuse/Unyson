@@ -52,7 +52,7 @@ class FW_Extension_Bitbucket_Update extends FW_Ext_Update_Service {
 		$version = $this->fetch_latest_version( $user_repo );
 
 		if ( is_wp_error( $version ) ) {
-			// Cache fake version to prevent requests to yourserver on every refresh.
+			// Cache fake version to prevent requests to bitbucket on every refresh.
 			$cache[ $user_repo ] = $this->fake_latest_version;
 
 			// Show the error to the user because it is not visible elsewhere.
@@ -217,7 +217,7 @@ class FW_Extension_Bitbucket_Update extends FW_Ext_Update_Service {
 			return false;
 		}
 
-		return $this->get_latest_version( $force_check, $extension->manifest->get_manifest() );
+		return $this->get_latest_version( $extension->manifest->get( 'bitbucket' ), $force_check );
 	}
 
 	/**

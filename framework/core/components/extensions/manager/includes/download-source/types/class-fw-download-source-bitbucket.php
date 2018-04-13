@@ -13,7 +13,7 @@ class FW_Ext_Download_Source_Bitbucket extends FW_Ext_Download_Source {
 	 * @param array $set {user_repo: 'ThemeFuse/Unyson'}
 	 * @param string $zip_path
 	 *
-	 * @return WP_Error
+	 * @return WP_Error|boolean
 	 */
 	public function download( array $set, $zip_path ) {
 		$wp_error_id            = 'fw_ext_bitbucket_download_source';
@@ -38,50 +38,43 @@ class FW_Ext_Download_Source_Bitbucket extends FW_Ext_Download_Source {
 			$tag = $this->get_version( $set['user_repo'] );
 		}
 
-		$download_link = "https://bitbucket.org/{$set['user_repo']}/get/{$tag}.zip";
+		$response = wp_remote_get( "https://bitbucket.org/{$set['user_repo']}/get/{$tag}.zip", array( 'timeout' => $this->download_timeout ) );
 
-		{
-			$http = new WP_Http();
-			$response = $http->request( $download_link, array( 'timeout' => $this->download_timeout ) );
-
-			unset( $http );
-
-			if ( ( $response_code = intval( wp_remote_retrieve_response_code( $response ) ) ) !== 200 ) {
-				if ( $response_code ) {
-					return new WP_Error(
-						$wp_error_id,
-						sprintf( __( 'Cannot download the "%s" extension zip. (Response code: %d)', 'fw' ),
-							$extension_title, $response_code
-						)
-					);
-				} elseif ( is_wp_error( $response ) ) {
-					return new WP_Error(
-						$wp_error_id,
-						sprintf( __( 'Cannot download the "%s" extension zip. %s', 'fw' ),
-							$extension_title,
-							$response->get_error_message()
-						)
-					);
-				} else {
-					return new WP_Error(
-						$wp_error_id,
-						sprintf( __( 'Cannot download the "%s" extension zip.', 'fw' ),
-							$extension_title
-						)
-					);
-				}
-			}
-
-			// save zip to file
-			if ( ! $wp_filesystem->put_contents( $zip_path, $response['body'] ) ) {
+		if ( ( $response_code = intval( wp_remote_retrieve_response_code( $response ) ) ) !== 200 ) {
+			if ( $response_code ) {
 				return new WP_Error(
 					$wp_error_id,
-					sprintf( __( 'Cannot save the "%s" extension zip.', 'fw' ), $extension_title )
+					sprintf( __( 'Cannot download the "%s" extension zip. (Response code: %d)', 'fw' ),
+						$extension_title, $response_code
+					)
+				);
+			} elseif ( is_wp_error( $response ) ) {
+				return new WP_Error(
+					$wp_error_id,
+					sprintf( __( 'Cannot download the "%s" extension zip. %s', 'fw' ),
+						$extension_title,
+						$response->get_error_message()
+					)
+				);
+			} else {
+				return new WP_Error(
+					$wp_error_id,
+					sprintf( __( 'Cannot download the "%s" extension zip.', 'fw' ),
+						$extension_title
+					)
 				);
 			}
-
-			unset( $response );
 		}
+
+		// save zip to file
+		if ( ! $wp_filesystem->put_contents( $zip_path, $response['body'] ) ) {
+			return new WP_Error(
+				$wp_error_id,
+				sprintf( __( 'Cannot save the "%s" extension zip.', 'fw' ), $extension_title )
+			);
+		}
+
+		return true;
 	}
 
 	private function get_version( $user_repo, $next_page = '' ) {
@@ -95,7 +88,7 @@ class FW_Ext_Download_Source_Bitbucket extends FW_Ext_Download_Source {
 		static $no_internet_connection = false;
 
 		if ( $no_internet_connection ) {
-			return $this->fake_latest_version;
+			return '0.0.0';
 		}
 
 		$url = $next_page ? $next_page : "https://api.bitbucket.org/2.0/repositories/{$user_repo}/refs/tags/";
