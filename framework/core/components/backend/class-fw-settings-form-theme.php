@@ -11,6 +11,13 @@ class FW_Settings_Form_Theme extends FW_Settings_Form {
 			->set_is_side_tabs( fw()->theme->get_config('settings_form_side_tabs') )
 			->set_string( 'title', __('Theme Settings', 'fw') );
 
+		if ( isset( $_POST['fw_theme_settings_form'] ) ) {
+			$this->parse_str( $_POST['fw_theme_settings_form'], $parsed );
+			unset( $_POST['fw_theme_settings_form'] );
+
+			$_POST = array_merge( $_POST, $parsed );
+		}
+
 		{
 			add_action('admin_init', array($this, '_action_get_title_from_menu'));
 			add_action('admin_menu', array($this, '_action_admin_menu'));
@@ -214,5 +221,48 @@ class FW_Settings_Form_Theme extends FW_Settings_Form {
 				do_action('fw_admin_enqueue_scripts:settings');
 			}
 		}
+	}
+
+	// The same than parse_str without max_input_vars limitation
+	private function parse_str( $string, &$result )
+	{
+		if ( $string==='') {
+			return false;
+		}
+
+		$result = array();
+		// find the pairs "name=value"
+		$pairs = explode( '&', $string );
+
+		foreach ( $pairs as $pair ) {
+			// use the original parse_str() on each element
+			parse_str( $pair, $params );
+			$k = key( $params );
+
+			if ( ! isset( $result[ $k ] ) ) {
+				$result += $params;
+			} else {
+				$result[ $k ] = $this->array_merge_recursive_distinct( $result[ $k ], $params[ $k ] );
+			}
+		}
+
+		return true;
+	}
+
+	// better recursive array merge function listed on the array_merge_recursive PHP page in the comments
+	private function array_merge_recursive_distinct( array &$array1, array &$array2 )
+	{
+		$merged = $array1;
+
+		foreach ( $array2 as $key => &$value ) {
+
+			if ( is_array( $value ) && isset( $merged[ $key ] ) && is_array( $merged[ $key ] ) ){
+				$merged[ $key ] = $this->array_merge_recursive_distinct( $merged[ $key ], $value );
+			} else {
+				$merged[ $key ] = $value;
+			}
+		}
+
+		return $merged;
 	}
 }
