@@ -246,6 +246,7 @@ class FW_Option_Type_Multi_Upload extends FW_Option_Type
 		$return_arr = array();
 
 		foreach ($decoded_ids as $id) {
+			
 			if (is_array($id) && isset($id['attachment_id'])) {
 				$id = $id['attachment_id'];
 			}
@@ -253,10 +254,32 @@ class FW_Option_Type_Multi_Upload extends FW_Option_Type
 			$url = wp_get_attachment_url($id);
 
 			if ($url) {
-				$return_arr[] = array(
+				
+				$data = array(
 					'attachment_id' => $id,
 					'url'           => preg_replace('/^https?:\/\//', '//', $url)
 				);
+				
+				if( isset($option['sizes']) && is_array($option['sizes']) ){
+					
+					$sizes =  array();
+					$info  = wp_prepare_attachment_for_js ($id);
+					
+					foreach( $option['sizes'] as $size ){
+						
+						if( isset($info['sizes'][$size])){
+							$sizes[$size] = $info['sizes'][$size];
+						}
+						
+					}
+					
+					if(!empty($sizes)){
+						$data['sizes'] = $sizes;
+					}
+				}
+				
+				$return_arr[] = $data;
+				
 			}
 		}
 
