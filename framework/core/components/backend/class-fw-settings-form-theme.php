@@ -14,7 +14,6 @@ class FW_Settings_Form_Theme extends FW_Settings_Form {
 		if ( isset( $_POST['fw_theme_settings_form'] ) ) {
 			$this->parse_str( $_POST['fw_theme_settings_form'], $parsed );
 			unset( $_POST['fw_theme_settings_form'] );
-
 			$_POST = array_merge( $_POST, $parsed );
 		}
 
@@ -230,6 +229,8 @@ class FW_Settings_Form_Theme extends FW_Settings_Form {
 			return false;
 		}
 
+		parse_str( $string, $fuck );
+
 		$result = array();
 		// find the pairs "name=value"
 		$pairs = explode( '&', $string );
@@ -257,7 +258,7 @@ class FW_Settings_Form_Theme extends FW_Settings_Form {
 		foreach ( $array2 as $key => &$value ) {
 
 			if ( is_array( $value ) && isset( $merged[ $key ] ) && is_array( $merged[ $key ] ) ){
-				$merged[ $key ] = $this->array_merge_recursive_distinct( $merged[ $key ], $value );
+				$merged[ $key ] = array_merge_recursive( $merged[ $key ], $value );
 			} else {
 				$merged[ $key ] = $value;
 			}
