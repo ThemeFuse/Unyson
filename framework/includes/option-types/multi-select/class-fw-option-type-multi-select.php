@@ -298,8 +298,10 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 					);
 					break;
 				case 'taxonomy':
+					global $wp_taxonomies;
+
 					$items = self::query_terms( array(
-						'taxonomy' => array_fill_keys( $names, true ),
+						'taxonomy' => array_intersect_key( array_fill_keys( $names, true ), $wp_taxonomies ),
 						'title'    => $title,
 					) );
 
