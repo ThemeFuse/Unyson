@@ -376,7 +376,10 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 						break;
 					case 'taxonomy' :
 						if ( isset( $option['source'] ) ) {
-							$source = is_array( $option['source'] ) ? $option['source'] : array( $option['source'] );
+
+							global $wp_taxonomies;
+
+							$source = array_intersect( array_keys( $wp_taxonomies ), (array)$option['source'] );
 
 							$items = self::get_terms( $data['value'], $source );
 
@@ -399,6 +402,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 							$items,
 							array_fill( 1, count( $items ), $show )
 						);
+
 						break;
 					case 'users' :
 
