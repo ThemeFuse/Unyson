@@ -382,9 +382,8 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 							$source = array_intersect( array_keys( $wp_taxonomies ), (array)$option['source'] );
 
 							$items = self::get_terms( $data['value'], $source );
-
 							$terms = get_terms( array(
-								'taxonomy'   => $option['source'],
+								'taxonomy'   => $source,
 								'hide_empty' => false,
 								'exclude'    => $data['value'],
 								'number'     => $option['prepopulate'],
