@@ -238,6 +238,8 @@ class FW_Settings_Form_Theme extends FW_Settings_Form {
 		foreach ( $pairs as $pair ) {
 			// use the original parse_str() on each element
 			parse_str( $pair, $params );
+			$params = wp_slash( $params );
+
 			$k = key( $params );
 
 			if ( ! isset( $result[ $k ] ) ) {
