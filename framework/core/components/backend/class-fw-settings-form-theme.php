@@ -238,7 +238,7 @@ class FW_Settings_Form_Theme extends FW_Settings_Form {
 		foreach ( $pairs as $pair ) {
 			// use the original parse_str() on each element
 			parse_str( $pair, $params );
-			$params = wp_slash( $params );
+			$params = $this->wp_slash( $params );
 
 			$k = key( $params );
 
@@ -250,6 +250,22 @@ class FW_Settings_Form_Theme extends FW_Settings_Form {
 		}
 
 		return true;
+	}
+
+	function wp_slash( $value ) {
+		if ( is_array( $value ) ) {
+			foreach ( $value as $k => $v ) {
+				if ( is_array( $v ) ) {
+					$value[ $k ] = $this->wp_slash( $v );
+				} else {
+					$value[ $k ] = str_replace( "\\\\'", "'", addslashes( $v ) );
+				}
+			}
+		} else {
+			$value = str_replace( "\\\\'", "'", addslashes( $value ) );
+		}
+
+		return $value;
 	}
 
 	// better recursive array merge function listed on the array_merge_recursive PHP page in the comments
