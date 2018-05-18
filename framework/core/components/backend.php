@@ -1133,7 +1133,17 @@ final class _FW_Component_Backend {
 				$values = array();
 			}
 
-			$values = array_intersect_key( $values, fw_extract_only_options( $options ) );
+			$filtered_values = apply_filters(
+				'fw:ajax_options_render:values',
+				null,
+				$options,
+				$values
+			);
+
+			$values = $filtered_values ? $filtered_values : array_intersect_key(
+				$values,
+				fw_extract_only_options( $options )
+			);
 		}
 
 		// data
