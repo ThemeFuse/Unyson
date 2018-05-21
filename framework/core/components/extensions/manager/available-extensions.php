@@ -29,8 +29,8 @@ $extensions = array(
 		'download'    => array(
 			'source'  => 'custom',
 			'opts'    => array(
-				'plugin' => 'translatepress-multilingual/index.php',
-				'remote' => 'https://downloads.wordpress.org/plugin/translatepress-multilingual'
+				'plugin' => 'brizy/brizy.php',
+				'remote' => 'https://downloads.wordpress.org/plugin/brizy'
 			)
 		)
 	),
