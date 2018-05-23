@@ -1038,7 +1038,7 @@ class FW_Option_Type_Select_Multiple extends FW_Option_Type_Select {
 }
 
 class FW_Option_Type_Unique extends FW_Option_Type {
-	private static $ids = array();
+	public static $cache_key = 'fw:option-type:unique_id:ids';
 	private static $should_do_regeneration = true;
 
 	public function get_type()
@@ -1106,8 +1106,15 @@ class FW_Option_Type_Unique extends FW_Option_Type {
 			$original_id = $post_id;
 		}
 
-		self::$ids[$post_id] = array();
-		self::$ids[$original_id] = array();
+		$ids = $this->get_loaded_ids();
+
+		if ( isset( $ids[ $post_id ] ) ) {
+			FW_Cache::set( self::$cache_key . '/' . $post_id, $ids );
+		}
+
+		if ( isset( $ids[ $original_id ] ) ) {
+			FW_Cache::set( self::$cache_key . '/' . $original_id, $ids );
+		}
 	}
 
 	public function set_should_do_regeneration($new) {
@@ -1115,6 +1122,7 @@ class FW_Option_Type_Unique extends FW_Option_Type {
 	}
 
 	protected function _get_value_from_input($option, $input_value) {
+
 		if (is_null($input_value)) {
 			$id = empty($option['value']) ? $this->generate_id($option['length']) : $option['value'];
 		} else {
@@ -1143,18 +1151,33 @@ class FW_Option_Type_Unique extends FW_Option_Type {
 				$post_id = '~';
 			}
 
-			if (!isset(self::$ids[$post_id])) {
-				self::$ids[$post_id] = array();
+			$ids = $this->get_loaded_ids();
+
+			if ( ! isset( $ids[ $post_id ] ) ) {
+				$ids[ $post_id ] = array();
 			}
 
-			while (isset(self::$ids[$post_id][$id])) {
-				$id = $this->generate_id($option['length']);
+			while ( isset( $ids[ $post_id ][ $id ] ) ) {
+				$id = $this->generate_id( $option['length'] );
 			}
 
-			self::$ids[$post_id][$id] = true;
+			$ids[ $post_id ][ $id ] = true;
+
+			FW_Cache::set( self::$cache_key, $ids );
 		}
 
 		return $id;
+	}
+
+	public function get_loaded_ids() {
+		try {
+			return FW_Cache::get( $cache_key = 'fw:option-type:unique_id:ids' );
+		} catch (FW_Cache_Not_Found_Exception $e) {
+
+			FW_Cache::set( $cache_key, array() );
+
+			return array();
+		}
 	}
 
 	/**
