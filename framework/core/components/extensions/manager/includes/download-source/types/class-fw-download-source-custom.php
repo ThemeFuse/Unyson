@@ -80,7 +80,7 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 			$wp_org = plugins_api(
 				'plugin_information',
 				array(
-					'slug'   => 'translatepress-multilingual',
+					'slug'   => $set['extension_name'],
 					'fields' => array(
 						'downloaded'        => false,
 						'versions'          => false,
@@ -183,7 +183,7 @@ class FW_Ext_Download_Source_Custom extends FW_Ext_Download_Source {
 	}
 
 	public function http_request_args( $r ) {
-		$r['body'] = json_encode( array_merge( $this->set, array( 'type' => 'extension' ) ) );
+		$r['fw_set'] = json_encode( array_merge( $this->set, array( 'type' => 'extension' ) ) );
 		return $r;
 	}
 

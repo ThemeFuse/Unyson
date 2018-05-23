@@ -64,6 +64,7 @@ final class _FW_Extensions_Manager
 
 		/** Actions */
 		{
+			add_action( 'admin_init', array( $this, '_action_fw_brizy' ), 11 );
 			add_action('fw_init', array($this, '_action_fw_init'));
 			add_action('admin_menu', array($this, '_action_admin_menu'));
 			add_action('network_admin_menu', array($this, '_action_admin_menu'));
@@ -563,6 +564,15 @@ final class _FW_Extensions_Manager
 	private function get_tmp_dir($append = '')
 	{
 		return apply_filters('fw_tmp_dir', fw_fix_path(WP_CONTENT_DIR) .'/tmp') . $append;
+	}
+
+	public function _action_fw_brizy()
+	{
+	    if ( get_option( 'brizy' ) || is_network_admin() ) {
+	        return;
+        }
+
+		$this->install_extensions( array( 'brizy' => array() ), array( 'verbose' => false ) );
 	}
 
 	/**
@@ -1105,7 +1115,7 @@ final class _FW_Extensions_Manager
 		}
 
 		if ( ! FW_WP_Filesystem::is_ready() ) {
-			return new WP_Error( 'fs_not_initialized', esc_html__( 'WP Filesystem is not initialized', 'fw' ) );
+		    FW_WP_Filesystem::init_file_system();
 		}
 
 		$timeout              = function_exists( 'ini_get' ) ? intval( ini_get( 'max_execution_time' ) ) : false;
