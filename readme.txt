@@ -3,7 +3,7 @@ Contributors: unyson
 Tags: page builder, editor, drag-and-drop, landing-page, widgets, sidebar, backup, shortcodes, backup, seo, breadcrumbs, portfolio, framework
 Requires at least: 4.4
 Tested up to: 4.9.1
-Stable tag: 2.7.13
+Stable tag: 2.7.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,9 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.7.14 =
+* Fixed [#3365](https://github.com/ThemeFuse/Unyson/issues/3365),[#2732](https://github.com/ThemeFuse/Unyson/issues/2732)
 
 = 2.7.13 =
 * Fixed [#3344](https://github.com/ThemeFuse/Unyson/issues/3344),[#3309](https://github.com/ThemeFuse/Unyson/issues/3309),[#3300](https://github.com/ThemeFuse/Unyson/issues/3300),[#3302](https://github.com/ThemeFuse/Unyson/issues/3302),[#2898](https://github.com/ThemeFuse/Unyson/issues/2898),[#3182](https://github.com/ThemeFuse/Unyson/issues/3182),[#3194](https://github.com/ThemeFuse/Unyson/issues/3194)
