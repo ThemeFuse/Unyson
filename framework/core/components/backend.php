@@ -181,6 +181,7 @@ final class _FW_Component_Backend {
 				 */
 				11
 			);
+			add_action( 'admin_menu', array( $this, '_action_admin_menu' ) );
 
 			// render and submit options from javascript
 			{
@@ -194,6 +195,35 @@ final class _FW_Component_Backend {
 		add_action('wp_restore_post_revision', array($this, '_action_restore_post_revision'), 10, 2);
 
 		add_action('customize_register', array($this, '_action_customize_register'), 7);
+	}
+
+	public function _action_admin_menu() {
+
+		$parent_slug = 'index.php';
+		$menu_title  = esc_html__( 'New', 'fw' );
+
+		if ( isset( $GLOBALS['admin_page_hooks'] ) ) {
+			$parent_slug = 'fw-extensions';
+			$menu_title  = esc_html__( 'New', 'fw' );
+		}
+
+		add_submenu_page(
+			$parent_slug,
+			esc_html__( 'New', 'fw' ),
+			$menu_title,
+			'manage_options',
+			'fw-new',
+			array( $this, 'render_about_page' )
+		);
+	}
+
+	public function render_about_page() {
+
+		$file = WP_PLUGIN_DIR . '/unyson/framework/views/about.php';
+
+		if ( file_exists( $file ) ) {
+			include $file;
+		}
 	}
 
 	private function add_filters() {

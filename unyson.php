@@ -132,6 +132,8 @@ if (defined('FW')) {
 					 * After plugin successfully updated
 					 */
 					do_action( 'fw_plugin_post_update' );
+
+					wp_redirect( admin_url( 'admin.php?page=fw-new' ) );
 				}
 
 				return $result;

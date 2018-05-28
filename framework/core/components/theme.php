@@ -34,6 +34,7 @@ final class _FW_Component_Theme {
 	 */
 	public function _init() {
 		add_action( 'admin_notices', array( $this, '_action_admin_notices' ) );
+		add_action( 'wp_ajax_fw_brz_dismiss_notice', array( $this, '_action_ajax_brz_dismiss_notice' ) );
 	}
 
 	/**
@@ -198,6 +199,7 @@ final class _FW_Component_Theme {
 	 * @internal
 	 */
 	public function _action_admin_notices() {
+
 		if ( is_admin() && ! fw()->theme->manifest->check_requirements() && current_user_can( 'manage_options' ) ) {
 			echo
 				'<div class="notice notice-warning">
@@ -206,5 +208,76 @@ final class _FW_Component_Theme {
 					'</p>
 				</div>';
 		}
+
+		//delete_transient( 'fw_brz_admin_notice' );
+
+		if ( false === get_transient( 'fw_brz_admin_notice' ) && ! defined( 'BRIZY_VERSION' ) && ! ( isset( $_GET['page'] ) && 'fw-new' == $_GET['page'] ) ) {
+
+			$url_install_plugin = is_multisite() ? network_admin_url( 'plugin-install.php?s=brizy&tab=search&type=term' ) : admin_url( 'plugin-install.php?s=brizy&tab=search&type=term' );
+
+			echo
+				'<div class="notice updated is-dismissible fw-brz-dismiss">
+					<p class="fw-brz-alert" style="font-size:14px;">' .
+						esc_html__( 'Try Brizy: A Fast & Easy Way of Creating Pages Visually', 'fw' ) .
+						' - <a href="' . admin_url( 'admin.php?page=fw-new' ) . '">' .
+							__( 'More Details', 'fw' ) .
+						'</a> 
+					</p>
+					<p>
+						<a href="' . $url_install_plugin . '">' .
+							__( 'Activate Now | for FREE', 'fw' ) .
+						'</a> 
+					</p>
+					<style>
+						.fw-brz-dismiss {
+							border-left-color: #d62c64 !important;
+						}
+						.fw-brz-dismiss p:last-of-type a {
+							color: #fff;
+							font-size: 13px;
+							line-height: 1;
+							background-color: #d62c64;
+							box-shadow: 0px 2px 0px 0px #981e46;
+							padding: 11px 27px 12px;
+							border: 1px solid #d62c64;
+							border-bottom: 0;
+							border-radius: 3px;
+							text-shadow: none;
+							height: auto;
+							text-decoration: none;
+							display:inline-block;
+							transition: all 200ms linear;
+						}
+						.fw-brz__btn-install:hover {
+							background-color: #141923;
+							color: #fff;
+							border-color: #141923;
+							box-shadow: 0px 2px 0px 0px #141923;
+						}
+					</style>
+				</div>
+				<script>
+					jQuery(document).ready(function(){
+						jQuery(document).on( "click", ".fw-brz-dismiss .notice-dismiss", function(){
+							jQuery.ajax({
+								url: "' . admin_url( 'admin-ajax.php' ) . ' ",
+								type: "POST",
+								data: {fw_brz_admin_notice: 1, action: "fw_brz_dismiss_notice"}
+							});
+						});
+					});
+				</script>';
+		}
+	}
+
+	/**
+	 * @internal
+	 */
+	public function _action_ajax_brz_dismiss_notice() {
+		$expiration = 3 * ( 60 * 60 * 24 );
+
+		set_transient( 'fw_brz_admin_notice', 1, $expiration );
+
+		wp_send_json_success();
 	}
 }
