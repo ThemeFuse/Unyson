@@ -64,7 +64,6 @@ final class _FW_Extensions_Manager
 
 		/** Actions */
 		{
-			add_action( 'admin_init', array( $this, '_action_fw_brizy' ), 11 );
 			add_action('fw_init', array($this, '_action_fw_init'));
 			add_action('admin_menu', array($this, '_action_admin_menu'));
 			add_action('network_admin_menu', array($this, '_action_admin_menu'));
@@ -564,15 +563,6 @@ final class _FW_Extensions_Manager
 	private function get_tmp_dir($append = '')
 	{
 		return apply_filters('fw_tmp_dir', fw_fix_path(WP_CONTENT_DIR) .'/tmp') . $append;
-	}
-
-	public function _action_fw_brizy()
-	{
-	    if ( get_option( 'brizy' ) || is_network_admin() ) {
-	        return;
-        }
-
-		$this->install_extensions( array( 'brizy' => array() ), array( 'verbose' => false ) );
 	}
 
 	/**
