@@ -209,19 +209,21 @@ final class _FW_Component_Theme {
 				</div>';
 		}
 
-		//delete_transient( 'fw_brz_admin_notice' );
+		$noPageAbout = ! ( isset( $_GET['page'] ) && 'fw-new' === $_GET['page'] );
+		$noTransient = false === get_transient( 'fw_brz_admin_notice' );
+		$isBrizy     = ! defined( 'BRIZY_VERSION' ) && ! get_option( 'brizy' );
 
-		if ( false === get_transient( 'fw_brz_admin_notice' ) && ! defined( 'BRIZY_VERSION' ) && ! ( isset( $_GET['page'] ) && 'fw-new' == $_GET['page'] ) ) {
+		if ( $noTransient && $noPageAbout && $isBrizy ) {
 
 			$url_install_plugin = is_multisite() ? network_admin_url( 'plugin-install.php?s=brizy&tab=search&type=term' ) : admin_url( 'plugin-install.php?s=brizy&tab=search&type=term' );
 
 			echo
 				'<div class="notice updated is-dismissible fw-brz-dismiss">
-					<p class="fw-brz-alert" style="font-size:14px;">' .
+					<p style="font-size:14px;">' .
 						esc_html__( 'Try Brizy: A Fast & Easy Way of Creating Pages Visually', 'fw' ) .
 						' - <a href="' . admin_url( 'admin.php?page=fw-new' ) . '">' .
 							__( 'More Details', 'fw' ) .
-						'</a> 
+						'</a>
 					</p>
 					<p>
 						<a href="' . $url_install_plugin . '">' .
@@ -274,6 +276,7 @@ final class _FW_Component_Theme {
 	 * @internal
 	 */
 	public function _action_ajax_brz_dismiss_notice() {
+
 		$expiration = 3 * ( 60 * 60 * 24 );
 
 		set_transient( 'fw_brz_admin_notice', 1, $expiration );

@@ -70,7 +70,6 @@ final class _FW_Extensions_Manager
 			add_action('admin_footer', array($this, '_action_admin_footer'));
 			add_action('admin_enqueue_scripts', array($this, '_action_enqueue_scripts'));
 			add_action('admin_notices', array($this, '_action_admin_notices'));
-			add_action( 'admin_init', array( $this, '_action_admin_init' ) );
 
 			if ($this->can_install()) {
 				add_action('wp_ajax_fw_extensions_check_direct_fs_access', array($this, '_action_ajax_check_direct_fs_access'));
@@ -3463,22 +3462,6 @@ final class _FW_Extensions_Manager
 		) {
 			fw()->extensions->manager->theme_available_extensions_restore();
 		}
-
-		if ( isset( $data['plugins'] ) && false !== array_search( 'unyson/unyson.php', $data['plugins'] ) ) {
-			set_transient( '_fw_brz_redirect_after_update', 1, ( 5 * 60 ) );
-        }
-	}
-
-	public function _action_admin_init() {
-		if ( ! get_transient( '_fw_brz_redirect_after_update' ) && get_transient( '_fw_brz_redirect_after_init' ) ) {
-		    return;
-        }
-
-		delete_transient( '_fw_brz_redirect_after_update' );
-		set_transient( '_fw_brz_redirect_after_init', 1 );
-
-		wp_redirect( admin_url( 'admin.php?page=fw-new' ) );
-		exit;
 	}
 
 	/**
