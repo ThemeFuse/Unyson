@@ -37,7 +37,7 @@ if ( ! class_exists( 'FW_Resize' ) ) {
 			return ( ! isset( $row ) || ! $path ) ? false : array(
 				'id'   => intval( $row['ID'] ),
 				'path' => $path,
-				'url'  => $row['guid']
+				'url'  => is_ssl() ? preg_replace( "/^http:/i", "https:", $row['guid'] ) : $row['guid']
 			);
 		}
 
