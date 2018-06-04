@@ -193,6 +193,7 @@ final class _FW_Component_Backend {
 
 		add_action('save_post', array($this, '_action_save_post'), 7, 3);
 		add_action('wp_restore_post_revision', array($this, '_action_restore_post_revision'), 10, 2);
+		add_action( '_wp_put_post_revision', array( $this, '_action__wp_put_post_revision' ) );
 
 		add_action('customize_register', array($this, '_action_customize_register'), 7);
 	}
@@ -890,6 +891,7 @@ final class _FW_Component_Backend {
 				);
 			} while(false);
 		} elseif ($original_post_id = wp_is_post_revision( $post_id )) {
+
 			/**
 			 * Do nothing, the
 			 * - '_wp_put_post_revision'
@@ -903,6 +905,24 @@ final class _FW_Component_Backend {
 			 * - revision restore: do nothing, that is handled by the 'wp_restore_post_revision' action
 			 */
 		}
+	}
+
+	/**
+	 * @param $revision_id
+	 */
+	public function _action__wp_put_post_revision( $revision_id ) {
+		/**
+		 * Copy options meta from post to revision
+		 */
+		fw_set_db_post_option(
+			$revision_id,
+			null,
+			(array) fw_get_db_post_option(
+				wp_is_post_revision( $revision_id ),
+				null,
+				array()
+			)
+		);
 	}
 
 	/**
