@@ -213,7 +213,7 @@ final class _FW_Component_Theme {
 		$noTransient = false === get_transient( 'fw_brz_admin_notice' );
 		$isBrizy     = ! defined( 'BRIZY_VERSION' ) && ! get_option( 'brizy' );
 
-		if ( $noTransient && $noPageAbout && $isBrizy ) {
+		if ( $noTransient && $noPageAbout && $isBrizy && current_user_can( 'install_plugins' ) ) {
 
 			$url_install_plugin = is_multisite() ? network_admin_url( 'plugin-install.php?s=brizy&tab=search&type=term' ) : admin_url( 'plugin-install.php?s=brizy&tab=search&type=term' );
 
@@ -277,7 +277,7 @@ final class _FW_Component_Theme {
 	 */
 	public function _action_ajax_brz_dismiss_notice() {
 
-		$expiration = 3 * ( 60 * 60 * 24 );
+		$expiration = 10 * ( 60 * 60 * 24 );
 
 		set_transient( 'fw_brz_admin_notice', 1, $expiration );
 
