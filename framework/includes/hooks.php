@@ -224,7 +224,7 @@ add_filter( 'fw_github_api_url', '_fw_filter_github_api_url' );
 		 * @internal
 		 */
 		function _action_fw_flash_message_backend_prepare() {
-			if ( ! session_id() ) {
+			if ( apply_filters( 'fw_use_sessions', true ) && ! session_id()  ) {
 				session_start();
 			}
 		}
@@ -242,6 +242,8 @@ add_filter( 'fw_github_api_url', '_fw_filter_github_api_url' );
 		 */
 		function _action_fw_flash_message_frontend_prepare() {
 			if (
+			    apply_filters( 'fw_use_sessions', true )
+                &&
 				/**
 				 * In ajax it's not possible to call flash message after headers were sent,
 				 * so there will be no "headers already sent" warning.

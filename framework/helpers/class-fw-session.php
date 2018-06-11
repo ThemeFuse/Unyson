@@ -9,7 +9,7 @@
  */
 class FW_Session {
 	private static function start_session() {
-		if ( ! session_id() ) {
+		if ( apply_filters( 'fw_use_sessions', true ) && ! session_id() ) {
 			session_start();
 		}
 	}
