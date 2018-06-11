@@ -318,7 +318,7 @@ $extensions = array(
 		),
 	),
 
-	'translatepress' => array(
+	'translatepress-multilingual' => array(
 		'display'     => true,
 		'parent'      => null,
 		'name'        => __( 'Translate Press', 'fw' ),
