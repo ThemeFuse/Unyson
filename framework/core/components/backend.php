@@ -680,6 +680,7 @@ final class _FW_Component_Backend {
 		$values = fw_get_db_post_option( $post->ID );
 
 		foreach ( $collected as $id => &$option ) {
+
 			if ( isset( $option['options'] ) && ( $option['type'] === 'box' || $option['type'] === 'group' ) ) {
 				$context  = isset( $option['context'] ) ? $option['context'] : 'normal';
 				$priority = isset( $option['priority'] ) ? $option['priority'] : 'default';
@@ -691,7 +692,7 @@ final class _FW_Component_Backend {
 					$post_type,
 					$context,
 					$priority,
-					$this->render_options( $option['options'], $values )
+					array( 'fw_box_html' => $this->render_options( $option['options'], $values ) )
 				);
 			} else { // this is not a box, wrap it in auto-generated box
 				add_meta_box(
@@ -708,7 +709,15 @@ final class _FW_Component_Backend {
 	}
 
 	public function render_meta_box( $post, $args ) {
-		echo $args['args'];
+		if ( empty( $args['args'] ) ) {
+			return;
+		}
+
+		if ( isset( $args['args']['fw_box_html'] ) ) {
+			echo $args['args']['fw_box_html'];
+		} elseif ( ! is_array( $args['args'] ) ) {
+			echo $args['args'];
+		}
 	}
 
 	/**
