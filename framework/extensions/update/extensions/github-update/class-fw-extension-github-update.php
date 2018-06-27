@@ -171,7 +171,7 @@ class FW_Extension_Github_Update extends FW_Ext_Update_Service {
 			);
 		}
 
-		if ( is_wp_error( $latest_version ) ) {
+		if ( is_wp_error( $latest_version ) && is_admin() ) {
 			/**
 			 * Internet connection problems or Github API requests limit reached.
 			 * Cache fake version to prevent requests to Github API on every refresh.
