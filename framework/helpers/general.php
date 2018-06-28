@@ -1303,7 +1303,7 @@ function fw_get_google_fonts_v2() {
 		( $saved_data['last_update'] + $ttl < time() )
 	) {
 		$response = wp_remote_get( apply_filters( 'fw_googleapis_webfonts_url',
-			'http://google-webfonts-cache.unyson.io/v1/webfonts' ) );
+			'https://google-webfonts-cache.unyson.io/v1/webfonts' ) );
 		$body     = wp_remote_retrieve_body( $response );
 
 		if (
