@@ -66,7 +66,7 @@
         <p><?php echo sprintf( __( 'You have the latest version of %s Extensions.', 'fw' ), fw()->manifest->get_name() ); ?></p>
 	<?php else: ?>
 		<?php
-            $one_update_mode = fw()->extensions->get( 'update' )->get_config( 'extensions_as_one_update' );
+            $one_update_mode = fw()->extensions->get( 'update' )->ext_as_one_update();
 
             foreach ( $updates['extensions'] as $extension ) {
                 if ( is_wp_error( $extension ) ) {

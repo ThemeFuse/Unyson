@@ -114,7 +114,7 @@ class FW_Extension_Update extends FW_Extension {
 
 				++ $data['counts']['total'];
 
-				if ( $this->get_config( 'extensions_as_one_update' ) ) {
+				if ( $this->ext_as_one_update() ) {
 					// no matter how many extensions, display as one update
 					break;
 				}
@@ -126,6 +126,10 @@ class FW_Extension_Update extends FW_Extension {
 		}
 
 		return $data;
+	}
+
+	public function ext_as_one_update() {
+		return apply_filters( 'fw_extensions_as_one_update', $this->get_config( 'extensions_as_one_update' ) );
 	}
 
 	private function get_updates( $force_check = false ) {
@@ -944,12 +948,12 @@ class FW_Extension_Update extends FW_Extension {
 
 				$skin->set_result( true );
 
-				if ( ! $this->get_config( 'extensions_as_one_update' ) ) {
+				if ( ! $this->ext_as_one_update() ) {
 					$skin->decrement_extension_update_count( $extension_name );
 				}
 			}
 
-			if ( $this->get_config( 'extensions_as_one_update' ) ) {
+			if ( $this->ext_as_one_update() ) {
 				$skin->decrement_extension_update_count( $extension_name );
 			}
 
