@@ -15,6 +15,10 @@ class FW_Session {
 	}
 
 	public static function get( $key, $default_value = null ) {
+		if ( ! apply_filters( 'fw_use_sessions', true ) ) {
+			return array();
+		}
+
 		self::start_session();
 
 		return fw_akg( $key, $_SESSION, $default_value );
