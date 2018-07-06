@@ -24,9 +24,7 @@ class FW_Option_Type_Datetime_Picker extends FW_Option_Type {
 	 */
 	protected function _get_defaults() {
 		return array(
-			'attr' => array(
-				'readonly' => 'readonly'
-			),
+			'attr' => array(),
 			'value'  => '',
 			'datetime-picker' => array(
 				'format'        => 'Y/m/d H:i',
