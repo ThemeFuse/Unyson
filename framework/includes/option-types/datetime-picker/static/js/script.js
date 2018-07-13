@@ -1,5 +1,5 @@
 (function($, fwe) {
-	jQuery.datetimepicker.setLocale(jQuery('html').attr('lang').split('-').shift());
+	//jQuery.fwDatetimepicker.setLocale(jQuery('html').attr('lang').split('-').shift());
 
 	var init = function() {
 		var $container = $(this),
@@ -12,7 +12,7 @@
 
 		fwe.trigger('fw:options:datetime-picker:before-init', data);
 
-		$input.datetimepicker(data.options)
+		$input.fwDatetimepicker(data.options)
 			.on('change', function (e) {
 				fw.options.trigger.changeForEl(
 					jQuery(e.target).closest('[data-fw-option-type="datetime-picker"]'), {
