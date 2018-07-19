@@ -8,8 +8,8 @@
 				$dateTimeLastWrapper = $dateTimeRange.find('.fw-option-type-datetime-picker:last'),
 				$dateTimeFirstInput = $dateTimeFirstWrapper.find('input'),
 				$dateTimeLastInput = $dateTimeLastWrapper.find('input'),
-				dateTimeFirstPicker = $dateTimeFirstInput.data('xdsoft_datetimepicker'),
-				dateTimeLastPicker = $dateTimeLastInput.data('xdsoft_datetimepicker');
+				dateTimeFirstPicker = $dateTimeFirstInput.data('fw_xdsoft_datetimepicker'),
+				dateTimeLastPicker = $dateTimeLastInput.data('fw_xdsoft_datetimepicker');
 
 			fwe.trigger('fw:options:datetime-range:before-init', {el: $dateTimeRange} );
 
@@ -65,7 +65,7 @@
 				return true;
 			}
 
-			dateTimeFirstPicker.on('open.xdsoft', function(e){
+			dateTimeFirstPicker.on('open.fw_xdsoft', function(e){
 
 				var firstInputMomentFormat = $dateTimeFirstInput.data('moment-format'),
 					lastInputMomentFormat = $dateTimeLastInput.data('moment-format'),
