@@ -3,11 +3,11 @@ Contributors: unyson
 Tags: page builder, editor, drag-and-drop, landing-page, widgets, sidebar, backup, shortcodes, backup, seo, breadcrumbs, portfolio, framework
 Requires at least: 4.4
 Tested up to: 4.9.6
-Stable tag: 2.7.18
+Stable tag: 2.7.19
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-A simple and easy way to build a powerful website.  
+A simple and easy way to build a powerful website.
 
 == Description ==
 
@@ -88,6 +88,9 @@ Yes; Unyson will work with any theme.
 
 
 == Changelog ==
+
+= 2.7.19 =
+* Security issue
 
 = 2.7.18 =
 * Fixed [#3480](https://github.com/ThemeFuse/Unyson/issues/3480),[#3474](https://github.com/ThemeFuse/Unyson/issues/3474),[#3468](https://github.com/ThemeFuse/Unyson/issues/3468)
