@@ -89,6 +89,9 @@ Yes; Unyson will work with any theme.
 
 == Changelog ==
 
+= 2.7.19 =
+* Security Issue
+
 = 2.7.18 =
 * Fixed [#3480](https://github.com/ThemeFuse/Unyson/issues/3480),[#3474](https://github.com/ThemeFuse/Unyson/issues/3474),[#3468](https://github.com/ThemeFuse/Unyson/issues/3468)
 
