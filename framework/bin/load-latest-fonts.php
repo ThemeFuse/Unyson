@@ -2,6 +2,10 @@
 
 <?php
 
+if ( php_sapi_name() != 'cli' ) {
+	die();
+}
+
 /**
  * Download latest font packs from their sources.
  */
