@@ -150,14 +150,16 @@ var fwForm = {
 					opts.afterSubmitDelay(elements);
 				}
 
+				var data = $form.serialize() + ( $submitButton.length ? '&' + $submitButton.attr( 'name' ) + '=' + $submitButton.attr( 'value' ) : '' );
+
+				if ( $form.attr( 'data-fw-form-id' ) === 'fw-settings-form:theme-settings' ) {
+					data = {'fw_theme_settings_form': data};
+				}
+
 				jQuery.ajax({
 					type: "POST",
 					url: opts.ajaxUrl,
-					data: $form.serialize() + (
-						$submitButton.length
-						? '&'+ $submitButton.attr('name') +'='+ $submitButton.attr('value')
-						: ''
-					),
+					data: data,
 					dataType: 'json'
 				}).done(function(r){
 					isBusy = false;
