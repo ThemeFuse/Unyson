@@ -106,6 +106,10 @@ class FW_Settings_Form_Theme extends FW_Settings_Form {
 			return;
 		}
 
+		if (fw()->theme->get_config('disable_theme_settings_page', false)) {
+			return;
+		}
+
 		if ( ! fw()->theme->locate_path('/options/settings.php') ) {
 			return;
 		}
