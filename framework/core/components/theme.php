@@ -15,7 +15,7 @@ final class _FW_Component_Theme {
 	public function __construct() {
 		$manifest = array();
 
-		if ( ( $manifest_file = fw_get_template_customizations_directory( '/theme/manifest.php' ) ) && is_file( $manifest_file ) ) {
+		if ( ( $manifest_file = apply_filters('fw_framework_manifest_path', fw_get_template_customizations_directory( '/theme/manifest.php' )) ) && is_file( $manifest_file ) ) {
 			@include $manifest_file;
 		}
 
@@ -228,7 +228,7 @@ final class _FW_Component_Theme {
 					<p>
 						<a href="' . $url_install_plugin . '">' .
 							__( 'Activate Now | for FREE', 'fw' ) .
-						'</a> 
+						'</a>
 					</p>
 					<style>
 						.fw-brz-dismiss {

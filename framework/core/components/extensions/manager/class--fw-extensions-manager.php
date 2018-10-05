@@ -202,7 +202,7 @@ final class _FW_Extensions_Manager
 			$available = $available['extensions'];
 
 			// Allow theme to register available extensions
-			$theme_available_ext_file = fw_fix_path( get_template_directory() ) . fw_get_framework_customizations_dir_rel_path( '/theme/available-extensions.php' );
+			$theme_available_ext_file = fw_fix_path( get_template_directory() ) . apply_filters('fw_theme_available_extensions_file_path', fw_get_framework_customizations_dir_rel_path( '/theme/available-extensions.php' ));
 
 			if ( file_exists( $theme_available_ext_file ) ) {
 
