@@ -58,6 +58,10 @@ class FW_Extension_Update extends FW_Extension {
 		);
 	}
 
+	private function get_update_services() {
+		return apply_filter('fw_update_ext_update_services', $this->get_children());
+	}
+
 	public function _action_admin_menu() {
 
 		if ( ! is_multisite() || is_plugin_active_for_network( 'unyson/unyson.php' ) ) {
@@ -160,7 +164,7 @@ class FW_Extension_Update extends FW_Extension {
 	 */
 	public function get_extensions_with_updates( $force_check = false ) {
 		$updates                = array();
-		$services               = $this->get_children();
+		$services               = $this->get_update_services();
 		$theme_ext_requirements = fw()->theme->manifest->get( 'requirements/extensions' );
 
 		foreach ( fw()->extensions->get_all() as $ext_name => $extension ) {
@@ -223,7 +227,7 @@ class FW_Extension_Update extends FW_Extension {
 		/**
 		 * Ask each service if it knows how to update the framework
 		 */
-		foreach ( $this->get_children() as $service_name => $service ) {
+		foreach ( $this->get_update_services() as $service_name => $service ) {
 			/** @var $service FW_Ext_Update_Service */
 
 			$latest_version = $service->_get_framework_latest_version( $force_check );
@@ -263,7 +267,7 @@ class FW_Extension_Update extends FW_Extension {
 		/**
 		 * Ask each service if it knows how to update the theme
 		 */
-		foreach ( $this->get_children() as $service_name => $service ) {
+		foreach ( $this->get_update_services() as $service_name => $service ) {
 			/** @var $service FW_Ext_Update_Service */
 
 			$latest_version = $service->_get_theme_latest_version( $force_check );
