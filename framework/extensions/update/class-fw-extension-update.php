@@ -59,7 +59,7 @@ class FW_Extension_Update extends FW_Extension {
 	}
 
 	private function get_update_services() {
-		return apply_filter('fw_update_ext_update_services', $this->get_children());
+		return apply_filters('fw_update_ext_update_services', $this->get_children());
 	}
 
 	public function _action_admin_menu() {
