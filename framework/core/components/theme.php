@@ -262,7 +262,7 @@ final class _FW_Component_Theme {
 					jQuery(document).ready(function(){
 						jQuery(document).on( "click", ".fw-brz-dismiss .notice-dismiss", function(){
 							jQuery.ajax({
-								url: "' . admin_url( 'admin-ajax.php' ) . ' ",
+								url: "' . admin_url( 'admin-ajax.php' ) . '",
 								type: "POST",
 								data: {fw_brz_admin_notice: 1, action: "fw_brz_dismiss_notice"}
 							});
