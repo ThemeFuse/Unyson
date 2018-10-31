@@ -6,19 +6,19 @@ This framework was created from the ground up by the team behind [ThemeFuse](htt
 
 ## Table of contents
 
-* [Installation](#installation)
-* [Documentation](#documentation)
-* [Extensions](#extensions)
-* [Contributing](#contributing)
-* [Bug reports](#bug-reports)
-* [Copyright and license](#copyright-and-license)
+* [Installation](#installation).
+* [Documentation](#documentation).
+* [Extensions](#extensions).
+* [Contributing](#contributing).
+* [Bug reports](#bug-reports).
+* [Copyright and license](#copyright-and-license).
 
 ## Installation
 
-1. Open the WordPress dashboard **Plugins > Add New** menu
-2. Type **Unyson** in the search field
-3. Press the **Install** button and **activate** the plugin
-4. Configure the plugin by going to the **Unyson menu**
+1. Open the WordPress dashboard **Plugins > Add New** menu.
+2. Type **Unyson** in the search field.
+3. Press the **Install** button and **activate** the plugin.
+4. Configure the plugin by going to the **Unyson menu**.
 
 ## Documentation
 
@@ -86,4 +86,3 @@ Code and documentation copyright 2014 ThemeFuse LTD. Code released under [the GP
 
 [![PhpStorm IDE](https://rawgit.com/ThemeFuse/Unyson/master/.github/img/phpstorm.png)](https://www.jetbrains.com/phpstorm/)
 [![Build Status](https://travis-ci.org/ThemeFuse/Unyson.svg?branch=master)](https://travis-ci.org/ThemeFuse/Unyson)
-
