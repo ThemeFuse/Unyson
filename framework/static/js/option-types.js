@@ -9,7 +9,7 @@ jQuery( document ).ready( function ( $ ) {
 		if ( tinymce.get( 'content' ) ) {
 			tinymce.get( 'content' ).setContent( $content );
 		} else {
-			$content.val( $content );
+			$( '#content' ).val( $content );
 		}
 	}
 
