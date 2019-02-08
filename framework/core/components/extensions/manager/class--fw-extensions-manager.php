@@ -3679,7 +3679,7 @@ final class _FW_Extensions_Manager
 
 				default:
 					trigger_error('Invalid requirement: '. $req_name, E_USER_WARNING);
-					continue;
+					break;
 			}
 		}
 
