@@ -76,9 +76,11 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 					'post' => true,
 					'page' => true,
 				),
-				'title' => '',
+				'title' => ''
 			), $options );
 			fw_aku( 'limit', $limits );
+
+			$limits = self::filter_query_posts( $limits );
 
 			/** @var WPDB $wpdb */
 			global $wpdb;
@@ -108,12 +110,14 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 				return array();
 			}
 
-			$query = new WP_Query( array(
-				'post_type'      => get_post_types(),
-				'post__in'       => array_map( 'intval', $ids ),
-				'posts_per_page' => $limit,
-				'fields'         => 'ids'
+			$args = self::filter_query_posts( array(
+				'post_type'        => get_post_types(),
+				'post__in'         => array_map( 'intval', $ids ),
+				'posts_per_page'   => $limit,
+				'fields'           => 'ids'
 			) );
+
+			$query = new WP_Query( $args );
 
 			return $query->get_posts();
 		}
@@ -356,14 +360,15 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 
 							$source = is_array( $option['source'] ) ? $option['source'] : (array) $option['source'];
 							$items  = self::get_posts( (array) $data['value'] );
-
-							$query = new WP_Query( array(
+							$args = self::filter_query_posts( array(
 								'post_type'           => $option['source'],
 								'post__not_in'        => $data['value'],
 								'posts_per_page'      => $option['prepopulate'],
 								'fields'              => 'ids',
 								'ignore_sticky_posts' => 1
 							) );
+
+							$query = new WP_Query( $args );
 
 							$items = array_merge( $items, $query->get_posts() );
 						}
@@ -503,6 +508,15 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 			}
 
 			return $names[ $tax ];
+		}
+
+		private static function filter_query_posts( $set ) {
+
+			if ( class_exists( 'SitePress' ) ) {
+				$set['suppress_filters'] = true;
+			}
+
+			return apply_filters( 'fw:option-type:multi-select:query_posts', $set );
 		}
 	}
 
