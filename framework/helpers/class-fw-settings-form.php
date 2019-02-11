@@ -274,24 +274,24 @@ abstract class FW_Settings_Form {
 		$old_values = (array)$this->get_values();
 
 		if ( ! empty( $_POST[ self::$input_name_reset ] ) ) { // The "Reset" button was pressed
-			$this->set_values(
-				$this->is_theme_settings()
-					/**
-					 * Some values that don't relate to design, like API credentials, are useful to not be wiped out.
-					 *
-					 * Usage:
-					 *
-					 * add_filter('fw_settings_form_reset:values', '_filter_add_persisted_option', 10, 2);
-					 * function _filter_add_persisted_option ($current_persisted, $old_values) {
-					 *   $value_to_persist = fw_akg('my/multi/key', $old_values);
-					 *   fw_aks('my/multi/key', $value_to_persist, $current_persisted);
-					 *
-					 *   return $current_persisted;
-					 * }
-					 */
-					? apply_filters('fw_settings_form_reset:values', array(), $old_values)
-					: apply_filters('fw:settings-form:'. $this->get_id() .':reset:values', array(), $old_values)
-			);
+			/**
+			 * Some values that don't relate to design, like API credentials, are useful to not be wiped out.
+			 *
+			 * Usage:
+			 *
+			 * add_filter('fw_settings_form_reset:values', '_filter_add_persisted_option', 10, 2);
+			 * function _filter_add_persisted_option ($current_persisted, $old_values) {
+			 *   $value_to_persist = fw_akg('my/multi/key', $old_values);
+			 *   fw_aks('my/multi/key', $value_to_persist, $current_persisted);
+			 *
+			 *   return $current_persisted;
+			 * }
+			 */
+			$new_values = $this->is_theme_settings()
+				? apply_filters( 'fw_settings_form_reset:values', array(), $old_values )
+				: apply_filters( 'fw:settings-form:' . $this->get_id() . ':reset:values', array(), $old_values );
+
+			$this->set_values( $new_values );
 
 			FW_Flash_Messages::add(
 				$flash_id,
@@ -299,13 +299,15 @@ abstract class FW_Settings_Form {
 				'success'
 			);
 
-			if ($this->is_theme_settings()) {
-				do_action('fw_settings_form_reset', $old_values);
+			if ( $this->is_theme_settings() ) {
+				do_action( 'fw_settings_form_reset', $old_values, $new_values );
 			} else {
-				do_action('fw:settings-form:'. $this->get_id() .':reset', $old_values);
+				do_action( 'fw:settings-form:' . $this->get_id() . ':reset', $old_values, $new_values );
 			}
 		} else { // The "Save" button was pressed
-			$this->set_values( fw_get_options_values_from_input( $this->get_options() ) );
+			$new_values = fw_get_options_values_from_input( $this->get_options() );
+
+			$this->set_values( $new_values );
 
 			FW_Flash_Messages::add(
 				$flash_id,
@@ -314,9 +316,9 @@ abstract class FW_Settings_Form {
 			);
 
 			if ($this->is_theme_settings()) {
-				do_action('fw_settings_form_saved', $old_values);
+				do_action('fw_settings_form_saved', $old_values, $new_values);
 			} else {
-				do_action('fw:settings-form:'. $this->get_id() .':saved', $old_values);
+				do_action('fw:settings-form:'. $this->get_id() .':saved', $old_values, $new_values);
 			}
 		}
 
