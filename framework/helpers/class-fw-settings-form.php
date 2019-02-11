@@ -288,8 +288,8 @@ abstract class FW_Settings_Form {
 			 * }
 			 */
 			$new_values = $this->is_theme_settings()
-				? apply_filters('fw_settings_form_reset:values', array(), $old_values)
-				: apply_filters('fw:settings-form:'. $this->get_id() .':reset:values', array(), $old_values);
+				? apply_filters( 'fw_settings_form_reset:values', array(), $old_values )
+				: apply_filters( 'fw:settings-form:' . $this->get_id() . ':reset:values', array(), $old_values );
 
 			$this->set_values( $new_values );
 
@@ -299,10 +299,10 @@ abstract class FW_Settings_Form {
 				'success'
 			);
 
-			if ($this->is_theme_settings()) {
-				do_action('fw_settings_form_reset', $old_values, $new_values);
+			if ( $this->is_theme_settings() ) {
+				do_action( 'fw_settings_form_reset', $old_values, $new_values );
 			} else {
-				do_action('fw:settings-form:'. $this->get_id() .':reset', $old_values, $new_values);
+				do_action( 'fw:settings-form:' . $this->get_id() . ':reset', $old_values, $new_values );
 			}
 		} else { // The "Save" button was pressed
 			$new_values = fw_get_options_values_from_input( $this->get_options() );
