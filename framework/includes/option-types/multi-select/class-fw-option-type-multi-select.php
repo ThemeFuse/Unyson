@@ -125,6 +125,11 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 		protected static function build_post( $id, $show_type ) {
 			$title = ( $t = get_the_title( $id ) ) && $t ? $t : esc_html__( 'No title', 'fw' ) . ' - #' . $id;
 
+			if ( class_exists( 'SitePress' ) ) {
+				$wpml_info = wpml_get_language_information( null, $id );
+				$title .= ' (' . strtoupper( $wpml_info['language_code'] ) . ')';
+			}
+
 			return $show_type ? array(
 				'val'   => $id,
 				'title' => $title,
