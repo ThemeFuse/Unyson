@@ -197,6 +197,7 @@ function _fw_includes_option_types_autoload( $class ) {
 		case 'FW_Option_Type_Hidden' :
 		case 'FW_Option_Type_Text' :
 		case 'FW_Option_Type_Short_Text' :
+		case 'FW_Option_Type_Number' :
 		case 'FW_Option_Type_Password' :
 		case 'FW_Option_Type_Textarea' :
 		case 'FW_Option_Type_Html' :

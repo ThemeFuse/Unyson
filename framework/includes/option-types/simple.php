@@ -153,6 +153,64 @@ class FW_Option_Type_Short_Text extends FW_Option_Type_Text {
 	}
 }
 
+/**
+ * Class FW_Option_Type_Number
+ *
+ * Add Input type="number" <input type="number">
+ */
+class FW_Option_Type_Number extends FW_Option_Type {
+    public function get_type() {
+        return 'number';
+    }
+
+    /**
+     * @internal
+     * {@inheritdoc}
+     */
+    protected function _enqueue_static( $id, $option, $data ) {
+    }
+
+    protected function _get_data_for_js($id, $option, $data = array()) {
+        return false;
+    }
+
+    /**
+     * @param string $id
+     * @param array $option
+     * @param array $data
+     *
+     * @return string
+     *
+     * @internal
+     */
+    protected function _render( $id, $option, $data ) {
+        $option['attr']['value'] = (string) $data['value'];
+
+        return '<input ' . fw_attr_to_html( $option['attr'] ) . ' type="number" />';
+    }
+
+    /**
+     * @param array $option
+     * @param array|null|string $input_value
+     *
+     * @return string
+     *
+     * @internal
+     */
+    protected function _get_value_from_input( $option, $input_value ) {
+        return (string) ( is_null( $input_value ) ? $option['value'] : $input_value );
+    }
+
+    /**
+     * @internal
+     */
+    protected function _get_defaults() {
+        return array(
+            'value' => ''
+        );
+    }
+}
+
 class FW_Option_Type_Password extends FW_Option_Type {
 	public function get_type() {
 		return 'password';
