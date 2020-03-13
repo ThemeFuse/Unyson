@@ -484,7 +484,7 @@ function fw_attr_to_html( array $attr_array ) {
 function fw_stripslashes_deep_keys( $value ) {
 	static $magic_quotes = null;
 	if ( $magic_quotes === null ) {
-		$magic_quotes = get_magic_quotes_gpc();
+		$magic_quotes = false; //https://www.php.net/manual/en/function.get-magic-quotes-gpc.php - always returns FALSE as of PHP 5.4.0. false fixes https://github.com/ThemeFuse/Unyson/issues/3915
 	}
 
 	if ( is_array( $value ) ) {
