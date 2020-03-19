@@ -650,7 +650,7 @@ final class _FW_Component_Backend {
 	 * @param string $post_type
 	 * @param WP_Post $post
 	 */
-	public function _action_create_post_meta_boxes( $post_type, $post ) {
+	public function _action_create_post_meta_boxes( $post_type, $post = null ) {
 		if ( 'comment' === $post_type || ( isset( $_GET['vc_action'] ) && $_GET['vc_action'] === 'vc_inline' ) ) {
 			/**
 			 * 1. https://github.com/ThemeFuse/Unyson/issues/3052
