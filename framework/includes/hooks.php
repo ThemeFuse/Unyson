@@ -16,6 +16,7 @@
 		FW_Option_Type::register( 'FW_Option_Type_Hidden' );
 		FW_Option_Type::register( 'FW_Option_Type_Text' );
 		FW_Option_Type::register( 'FW_Option_Type_Short_Text' );
+        FW_Option_Type::register( 'FW_Option_Type_Number' );
 		FW_Option_Type::register( 'FW_Option_Type_Password' );
 		FW_Option_Type::register( 'FW_Option_Type_Textarea' );
 		FW_Option_Type::register( 'FW_Option_Type_Html' );
