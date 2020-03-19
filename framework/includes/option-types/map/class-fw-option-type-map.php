@@ -33,7 +33,7 @@ class FW_Option_Type_Map extends FW_Option_Type {
 			'_fw_option_type_map',
 			array(
 				'google_maps_js_uri' => 'https://maps.googleapis.com/maps/api/js?'. http_build_query(array(
-					'v' => '3.30',
+					'v' => 'quarterly',
 					'libraries' => 'places',
 					'language' => substr( get_locale(), 0, 2 ),
 					'key' => self::api_key(),
