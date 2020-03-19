@@ -1113,6 +1113,7 @@ class FW_Option_Type_Unique extends FW_Option_Type {
 		return array(
 			'value' => '',
 			'length' => 0, // Limit id length
+			'prefix' => '', // Prefix for ID
 		);
 	}
 
@@ -1134,9 +1135,9 @@ class FW_Option_Type_Unique extends FW_Option_Type {
 	 * @param null|int $length_limit
 	 * @return string
 	 */
-	protected function generate_id($length_limit = null)
+	protected function generate_id($length_limit = null, $prefix = '')
 	{
-		$id = fw_rand_md5();
+		$id = $prefix . fw_rand_md5();
 
 		if ($length_limit) {
 			$id = substr($id, 0, (int)$length_limit);
@@ -1182,13 +1183,13 @@ class FW_Option_Type_Unique extends FW_Option_Type {
 	protected function _get_value_from_input($option, $input_value) {
 
 		if (is_null($input_value)) {
-			$id = empty($option['value']) ? $this->generate_id($option['length']) : $option['value'];
+			$id = empty($option['value']) ? $this->generate_id($option['length'], $option['prefix']) : $option['value'];
 		} else {
 			$id = $input_value;
 		}
 
 		if (empty($id) || !is_string($id)) {
-			$id = $this->generate_id($option['length']);
+			$id = $this->generate_id($option['length'], $option['prefix']);
 		}
 
 		/**
@@ -1216,7 +1217,7 @@ class FW_Option_Type_Unique extends FW_Option_Type {
 			}
 
 			while ( isset( $ids[ $post_id ][ $id ] ) ) {
-				$id = $this->generate_id( $option['length'] );
+				$id = $this->generate_id( $option['length'], $option['prefix'] );
 			}
 
 			$ids[ $post_id ][ $id ] = true;
