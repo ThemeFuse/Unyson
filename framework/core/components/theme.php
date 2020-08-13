@@ -33,8 +33,8 @@ final class _FW_Component_Theme {
 	 * @internal
 	 */
 	public function _init() {
-		add_action( 'admin_notices', array( $this, '_action_admin_notices' ) );
-		add_action( 'wp_ajax_fw_brz_dismiss_notice', array( $this, '_action_ajax_brz_dismiss_notice' ) );
+		// add_action( 'admin_notices', array( $this, '_action_admin_notices' ) );
+		// add_action( 'wp_ajax_fw_brz_dismiss_notice', array( $this, '_action_ajax_brz_dismiss_notice' ) );
 	}
 
 	/**

@@ -30,7 +30,7 @@ jQuery(document).ready(function($){
 			// make postboxes to close/open on click
 			$boxes
 				.off('click'+ eventNamespace) // remove already attached, just to be sure, prevent multiple execution
-				.on('click'+ eventNamespace, '> .hndle, > .handlediv', function(e){
+				.on( 'click' + eventNamespace, '.postbox-header > .hndle, .postbox-header > .handlediv', function( e ) {
 					var $box = $(this).closest('.fw-postbox');
 
 					if ($box.parent().is('.fw-backend-postboxes') && !$box.siblings().length) {

@@ -65,7 +65,7 @@ final class _FW_Component_Backend {
 	 * @internal
 	 */
 	public function _get_settings_page_slug() {
-		return 'fw-settings';
+		return apply_filters( 'fw_get_settings_page_slug', 'fw-settings' );
 	}
 
 	/**
@@ -1683,7 +1683,7 @@ final class _FW_Component_Backend {
 
 			// add 'fw-postbox' class and some attr related placeholders
 			$meta_box_template = str_replace(
-				'class="postbox',
+				'class="postbox ',
 				$placeholders['attr'] . ' class="postbox fw-postbox' . $placeholders['attr_class'],
 				$meta_box_template
 			);
@@ -1691,16 +1691,18 @@ final class _FW_Component_Backend {
 			// add html_before|after_title placeholders
 			{
 				$meta_box_template = str_replace(
-					'<span>' . $placeholders['title'] . '</span>',
+					'<h2 class="hndle">' . $placeholders['title'] . '</h2>',
 
 					/**
 					 * used <small> not <span> because there is a lot of css and js
 					 * that thinks inside <h2 class="hndle"> there is only one <span>
 					 * so do not brake their logic
 					 */
+					'<h2 class="hndle">' .
 					'<small class="fw-html-before-title">' . $placeholders['html_before_title'] . '</small>' .
 					'<span>' . $placeholders['title'] . '</span>' .
-					'<small class="fw-html-after-title">' . $placeholders['html_after_title'] . '</small>',
+					'<small class="fw-html-after-title">' . $placeholders['html_after_title'] . '</small>' .
+					'</h2>',
 
 					$meta_box_template
 				);

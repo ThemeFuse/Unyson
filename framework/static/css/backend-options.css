@@ -5,8 +5,8 @@ Included on pages where backend options are rendered
 
 /* General */
 
-.postbox-with-fw-options > .inside,
-.fw-postbox > .inside {
+.postbox-with-fw-options>.inside,
+.fw-postbox>.inside {
 	padding: 0 0 5px !important;
 	margin: 10px 0 0 !important;
 	position: relative;
@@ -56,39 +56,41 @@ Included on pages where backend options are rendered
 	opacity: 1;
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-list {
+.fw-options-tabs-wrapper>.fw-options-tabs-list {
 	border-bottom: 1px solid #CCC;
 	/*padding: 0 10px;*/
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-list ul,
-.fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+.fw-options-tabs-wrapper>.fw-options-tabs-list ul,
+.fw-options-tabs-wrapper>.fw-options-tabs-list ul li {
 	padding: 0;
 	margin: 0;
 }
+
 .post-type-product .fw-options-tabs-wrapper {
 	border: none;
 	padding: 10px 0;
 }
-.post-type-product .fw-options-tabs-wrapper > .fw-options-tabs-list ul,
-.post-type-product .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+
+.post-type-product .fw-options-tabs-wrapper>.fw-options-tabs-list ul,
+.post-type-product .fw-options-tabs-wrapper>.fw-options-tabs-list ul li {
 	padding: 0 !important;
 	margin: 0 !important;
 	background: none !important;
 	border: none !important;
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+.fw-options-tabs-wrapper>.fw-options-tabs-list ul li {
 	float: left;
 }
 
-body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+body.rtl .fw-options-tabs-wrapper>.fw-options-tabs-list ul li {
 	float: right;
 	margin-right: 0px;
 	margin-left: 6px;
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab {
+.fw-options-tabs-wrapper>.fw-options-tabs-list ul li a.nav-tab {
 	padding: 6px 12px;
 	font-weight: 600;
 	font-size: 15px;
@@ -100,34 +102,34 @@ body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
 	margin-bottom: -1px;
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab:hover {
+.fw-options-tabs-wrapper>.fw-options-tabs-list ul li a.nav-tab:hover {
 	color: #000;
 	background-color: #f1f1f1;
 }
 
-.postbox .fw-options-tabs-wrapper > .fw-options-tabs-list {
+.postbox .fw-options-tabs-wrapper>.fw-options-tabs-list {
 	padding: 10px 10px 0 10px;
 }
 
-.postbox .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab {
+.postbox .fw-options-tabs-wrapper>.fw-options-tabs-list ul li a.nav-tab {
 	background-color: #f1f1f1;
 }
 
-.postbox .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab:hover {
+.postbox .fw-options-tabs-wrapper>.fw-options-tabs-list ul li a.nav-tab:hover {
 	background-color: #f8f8f8;
 }
 
-.postbox .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+.postbox .fw-options-tabs-wrapper>.fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 	border-bottom-color: #fff;
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+.fw-options-tabs-wrapper>.fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 	color: #222;
 	background: 0 0;
 	border-bottom-color: #f1f1f1;
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab:hover {
+.fw-options-tabs-wrapper>.fw-options-tabs-list ul li.ui-state-active a.nav-tab:hover {
 	background: 0 0;
 }
 
@@ -137,49 +139,52 @@ body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
 	box-shadow: none;
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-contents,
+.fw-options-tabs-wrapper>.fw-options-tabs-contents,
 #wpbody-content .metabox-holder.fw-options-tabs-contents {
 	padding-top: 0;
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-contents {
+.fw-options-tabs-wrapper>.fw-options-tabs-contents {
 	margin-top: 20px;
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
+.fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list {
 	padding: 0 0 0 5px;
 	border-bottom-width: 0;
 }
-body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
+
+body.rtl .fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list {
 	padding: 0 5px 0 0;
 }
 
-.postbox .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
+.postbox .fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list {
 	padding: 0 0 0 25px;
 }
-body.rtl .postbox .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
+
+body.rtl .postbox .fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list {
 	padding: 0 25px 0 0;
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li:after {
+.fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li:after {
 	content: '|';
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li:last-child:after {
+.fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li:last-child:after {
 	content: none;
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul > li {
+.fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul>li {
 	float: left;
 	color: #666;
 	margin-right: 0;
 }
-body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul > li {
+
+body.rtl .fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul>li {
 	float: right;
 	margin-left: 0;
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab {
+.fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li a.nav-tab {
 	background: none;
 	border: none;
 	padding: 0;
@@ -189,40 +194,41 @@ body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-
 	font-weight: normal;
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab.fw-wp-link {
+.fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li a.nav-tab.fw-wp-link {
 	color: #0074a2;
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li:first-child a.nav-tab {
+.fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li:first-child a.nav-tab {
 	margin-left: 0;
 }
-body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li:first-child a.nav-tab {
+
+body.rtl .fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li:first-child a.nav-tab {
 	margin-left: 5px;
 	margin-right: 0;
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+.fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 	background: none;
 	padding: 0;
 	border: none;
 	color: #000;
 }
 
-.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab {
+.fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner>.fw-options-tab {
 	position: relative;
 }
 
 @media (max-width: 782px) {
-	.fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+	.fw-options-tabs-wrapper>.fw-options-tabs-list ul li {
 		float: none;
 	}
 
-	.fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab {
+	.fw-options-tabs-wrapper>.fw-options-tabs-list ul li a.nav-tab {
 		display: block;
 		text-align: center;
 	}
 
-	.fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab {
+	.fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li a.nav-tab {
 		display: inline;
 	}
 }
@@ -248,20 +254,20 @@ body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-
 
 form.fw-settings-form.fw-backend-side-tabs {
 	background-color: #fff;
-	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-	box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
 }
 
 .fw-backend-side-tabs .fw-options-tabs-first-level {
 	background:
-		#fff
-		url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAAABCAYAAAAo/lyUAAAAIklEQVQ4T2N8/Pjxf4ZRMBoCoyEwGgKjITAaAqMhMKRDAACcIAOqH7nZlwAAAABJRU5ErkJgggAA') /* #e3e3e3 500x1 */
-		-302px /* 198-500 */
-		0
-		repeat-y;
+		#fff url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAAABCAYAAAAo/lyUAAAAIklEQVQ4T2N8/Pjxf4ZRMBoCoyEwGgKjITAaAqMhMKRDAACcIAOqH7nZlwAAAABJRU5ErkJgggAA')
+		/* #e3e3e3 500x1 */
+		-302px
+		/* 198-500 */
+		0 repeat-y;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-list {
 	width: 198px;
 	margin: 0;
 	padding: 0 0 70px;
@@ -269,16 +275,16 @@ form.fw-settings-form.fw-backend-side-tabs {
 	border-bottom: none;
 }
 
-body.rtl .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list {
+body.rtl .fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-list {
 	float: right;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents {
 	margin-left: 198px !important;
 	background: #fff;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner {
 	width: 100%;
 	min-height: 100%;
 	border-right: 1px solid #e5e5e5;
@@ -286,7 +292,7 @@ body.rtl .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-l
 	padding-bottom: 70px;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-list ul li {
 	float: none;
 	margin-right: 0;
 	border: 1px solid #d3d3d3;
@@ -294,25 +300,25 @@ body.rtl .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-l
 	overflow: hidden;
 }
 
-body.rtl .fw-backend-side-tabs .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
+body.rtl .fw-backend-side-tabs .fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list {
 	padding: 0;
 }
 
-body.rtl .fw-backend-side-tabs .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li:first-child a.nav-tab {
+body.rtl .fw-backend-side-tabs .fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li:first-child a.nav-tab {
 	margin: 0;
 }
 
-body.rtl .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+body.rtl .fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li {
 	border-left: 1px solid #e5e5e5;
 	border-right: none;
 }
 
-body.rtl .fw-backend-side-tabs .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+body.rtl .fw-backend-side-tabs .fw-options-tabs-wrapper>.fw-options-tabs-list ul li {
 	float: none;
 	margin-left: 0;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-list ul li a.nav-tab {
 	position: relative;
 	outline: none;
 	margin: 0;
@@ -331,47 +337,47 @@ body.rtl .fw-backend-side-tabs .fw-options-tabs-wrapper > .fw-options-tabs-list 
 	box-shadow: none;
 }
 
-body.branch-4-0 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab,
-body.branch-4-1 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab,
-body.branch-4-2 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab,
-body.branch-4-3 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li a.nav-tab {
+body.branch-4-0 .fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-list ul li a.nav-tab,
+body.branch-4-1 .fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-list ul li a.nav-tab,
+body.branch-4-2 .fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-list ul li a.nav-tab,
+body.branch-4-3 .fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-list ul li a.nav-tab {
 	height: 44px;
 	line-height: 44px;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list .ui-tabs-nav a:hover {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-list .ui-tabs-nav a:hover {
 	background: #dadada;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-list ul li.ui-state-active {
 	border-color: #b1b1b1;
 	margin-top: -1px;
 	border-width: 1px 0;
 	position: relative;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active:first-child {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-list ul li.ui-state-active:first-child {
 	margin-top: 0;
 	border-top-width: 0;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 	font-weight: 600;
 	margin: 0;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab,
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li.ui-state-active a.nav-tab:hover {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-list ul li.ui-state-active a.nav-tab,
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-list ul li.ui-state-active a.nav-tab:hover {
 	background: #bdbdbd;
 	color: #fff;
 }
 
-body.rtl .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents {
+body.rtl .fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents {
 	margin-left: 0 !important;
 	margin-right: 198px !important;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents .fw-options-tabs-wrapper>.fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 	border-bottom-color: #fff;
 }
 
@@ -379,49 +385,49 @@ body.rtl .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-c
 	outline: none;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list {
 	padding: 0;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li:after {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li:after {
 	content: none;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul {
 	padding: 0;
 	background: #f7f7f7;
 	border-width: 1px 0;
 	clear: both;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul:before,
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul:after {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul:before,
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul:after {
 	display: table;
 	content: " ";
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul:after {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul:after {
 	clear: both;
 	margin-bottom: -1px;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul {
 	border-bottom: 1px solid #e5e5e5;
 }
 
-body.branch-4-0 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li,
-body.branch-4-1 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li,
-body.branch-4-2 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li,
-body.branch-4-3 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+body.branch-4-0 .fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li,
+body.branch-4-1 .fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li,
+body.branch-4-2 .fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li,
+body.branch-4-3 .fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li {
 	border-bottom: 1px solid #e5e5e5;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li {
 	position: relative;
 	border-right: 1px solid #e5e5e5;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active:after {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li.ui-state-active:after {
 	height: 1px;
 	background: #fff;
 	width: 100%;
@@ -430,8 +436,8 @@ body.branch-4-3 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options
 	position: absolute;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab,
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li a.nav-tab,
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 	margin: 0;
 	padding: 0 24px;
 	border: none;
@@ -443,26 +449,26 @@ body.branch-4-3 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options
 	outline: none;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li a.nav-tab {
 	background: transparent;
 	color: #000;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 	background: #fff;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul > li a.nav-tab:hover {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul>li a.nav-tab:hover {
 	color: #0074a2;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents,
-.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-contents {
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents,
+.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-contents {
 	margin-top: 0;
 }
 
 /* hide last option border */
-.fw-backend-side-tabs .fw-options-tabs-wrapper > .fw-options-tabs-contents > .fw-inner:after {
+.fw-backend-side-tabs .fw-options-tabs-wrapper>.fw-options-tabs-contents>.fw-inner:after {
 	content: ' ';
 	display: block;
 	width: 100%;
@@ -472,17 +478,17 @@ body.branch-4-3 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options
 	position: relative;
 }
 
-.fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox {
+.fw-backend-side-tabs .fw-backend-postboxes>.fw-postbox {
 	border: none;
 	-webkit-box-shadow: none;
 	box-shadow: none;
 }
 
-.fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox.closed {
+.fw-backend-side-tabs .fw-backend-postboxes>.fw-postbox.closed {
 	margin-bottom: 0;
 }
 
-.fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > .hndle {
+.fw-backend-side-tabs .fw-backend-postboxes>.fw-postbox>.hndle {
 	position: relative;
 	padding: 0 25px;
 	height: 46px;
@@ -492,18 +498,20 @@ body.branch-4-3 .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options
 	color: #0074a2;
 }
 
-body.branch-4-0 .fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > .hndle,
-body.branch-4-1 .fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > .hndle,
-body.branch-4-2 .fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > .hndle,
-body.branch-4-3 .fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > .hndle {
+body.branch-4-0 .fw-backend-side-tabs .fw-backend-postboxes>.fw-postbox>.hndle,
+body.branch-4-1 .fw-backend-side-tabs .fw-backend-postboxes>.fw-postbox>.hndle,
+body.branch-4-2 .fw-backend-side-tabs .fw-backend-postboxes>.fw-postbox>.hndle,
+body.branch-4-3 .fw-backend-side-tabs .fw-backend-postboxes>.fw-postbox>.hndle {
 	height: 47px;
 }
 
-.fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > .hndle:after {
+.fw-backend-side-tabs .fw-backend-postboxes>.fw-postbox>.hndle:after {
 	content: "";
 	display: block;
 	position: absolute;
-	left: 0; right: 0; bottom: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 	height: 1px;
 	border-top: 1px solid #eee;
 	border-bottom: 1px solid #eee;
@@ -514,7 +522,7 @@ body.branch-4-3 .fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > .hnd
 	display: none;
 }*/
 
-.fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > .handlediv:before {
+.fw-backend-side-tabs .fw-backend-postboxes>.fw-postbox>.handlediv:before {
 	top: 4px;
 }
 
@@ -527,67 +535,67 @@ body.branch-4-3 .fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > .hnd
 		background-image: none;
 	}
 
-	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list {
+	.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-list {
 		width: 100%;
 		text-align: center;
 		float: none;
 		padding: 0;
 	}
 
-	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-list ul li {
+	.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-list ul li {
 		margin-top: 0;
 	}
 
-	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents {
+	.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents {
 		float: none;
 		margin-left: 0 !important;
 	}
 
-	body.rtl .fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents {
+	body.rtl .fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents {
 		margin-right: 0 !important;
 	}
 
-	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner {
+	.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner {
 		padding-bottom: 0;
 	}
 
-	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul {
+	.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul {
 		height: auto;
 		border-bottom-width: 0;
 	}
 
-	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+	.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li {
 		float: none;
 		width: 100%;
 		text-align: center;
 		border-right-width: 0;
 	}
 
-	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active:after {
+	.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li.ui-state-active:after {
 		display: none;
 	}
 
-	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+	.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 		margin-bottom: 0;
 		border-bottom-width: 0;
 		display: block;
 	}
 
-	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li a.nav-tab,
-	.fw-backend-side-tabs .fw-options-tabs-first-level > .fw-options-tabs-contents > .fw-inner > .fw-options-tab > .fw-options-tabs-wrapper > .fw-options-tabs-list ul li.ui-state-active a.nav-tab {
+	.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li a.nav-tab,
+	.fw-backend-side-tabs .fw-options-tabs-first-level>.fw-options-tabs-contents>.fw-inner>.fw-options-tab>.fw-options-tabs-wrapper>.fw-options-tabs-list ul li.ui-state-active a.nav-tab {
 		width: 100%;
 		height: auto;
 		padding: 0;
 		display: block;
 	}
 
-	.fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > .handlediv:before {
+	.fw-backend-side-tabs .fw-backend-postboxes>.fw-postbox>.handlediv:before {
 		top: 2px;
 	}
 }
 
-@media (max-width: 782px){
-	body.rtl .fw-options-tabs-wrapper > .fw-options-tabs-list ul li {
+@media (max-width: 782px) {
+	body.rtl .fw-options-tabs-wrapper>.fw-options-tabs-list ul li {
 		float: none;
 	}
 }
@@ -604,14 +612,37 @@ body.branch-4-3 .fw-backend-side-tabs .fw-backend-postboxes > .fw-postbox > .hnd
 }
 
 /* make it match with admin color themes */
-body.admin-color-light .fw-backend-side-tabs .fw-settings-form-header { background-color: #777 }
-body.admin-color-light .fw-backend-side-tabs .fw-options-tabs-first-level { background: #ddd }
-body.admin-color-blue .fw-backend-side-tabs .fw-settings-form-header { background-color: #4796b3 }
-body.admin-color-coffee .fw-backend-side-tabs .fw-settings-form-header { background-color: #46403c }
-body.admin-color-ectoplasm .fw-backend-side-tabs .fw-settings-form-header { background-color: #413256 }
-body.admin-color-midnight .fw-backend-side-tabs .fw-settings-form-header { background-color: #26292c }
-body.admin-color-ocean .fw-backend-side-tabs .fw-settings-form-header { background-color: #627c83 }
-body.admin-color-sunrise .fw-backend-side-tabs .fw-settings-form-header { background-color: #be3631 }
+body.admin-color-light .fw-backend-side-tabs .fw-settings-form-header {
+	background-color: #777
+}
+
+body.admin-color-light .fw-backend-side-tabs .fw-options-tabs-first-level {
+	background: #ddd
+}
+
+body.admin-color-blue .fw-backend-side-tabs .fw-settings-form-header {
+	background-color: #4796b3
+}
+
+body.admin-color-coffee .fw-backend-side-tabs .fw-settings-form-header {
+	background-color: #46403c
+}
+
+body.admin-color-ectoplasm .fw-backend-side-tabs .fw-settings-form-header {
+	background-color: #413256
+}
+
+body.admin-color-midnight .fw-backend-side-tabs .fw-settings-form-header {
+	background-color: #26292c
+}
+
+body.admin-color-ocean .fw-backend-side-tabs .fw-settings-form-header {
+	background-color: #627c83
+}
+
+body.admin-color-sunrise .fw-backend-side-tabs .fw-settings-form-header {
+	background-color: #be3631
+}
 
 .fw-backend-side-tabs .fw-settings-form-header.initialized {
 	opacity: 1;
@@ -623,7 +654,7 @@ body.admin-color-sunrise .fw-backend-side-tabs .fw-settings-form-header { backgr
 	box-shadow: none;
 }
 
-.fw-backend-side-tabs .fw-settings-form-header > div {
+.fw-backend-side-tabs .fw-settings-form-header>div {
 	padding: 20px 20px 20px 30px;
 }
 
@@ -679,13 +710,13 @@ body.rtl .fw-backend-side-tabs .fw-settings-form-header .form-header-buttons {
 	vertical-align: middle;
 	margin: 0 12px;
 	color: #358eb6;
-	background-color: rgb(255,255,255);
-	background-color: rgba(255,255,255,0.5);
+	background-color: rgb(255, 255, 255);
+	background-color: rgba(255, 255, 255, 0.5);
 	height: 14px;
 	width: 1px;
 }
 
-.fw-backend-side-tabs .fw-settings-form-header .form-header-buttons > * {
+.fw-backend-side-tabs .fw-settings-form-header .form-header-buttons>* {
 	line-height: 26px;
 	vertical-align: middle;
 }
@@ -727,7 +758,7 @@ body.rtl .fw-backend-side-tabs .fw-settings-form-header .form-header-buttons {
 		text-align: inherit;
 	}
 
-	.fw-backend-side-tabs .fw-settings-form-header > div:first-child {
+	.fw-backend-side-tabs .fw-settings-form-header>div:first-child {
 		padding-bottom: 0;
 	}
 }
@@ -749,13 +780,14 @@ body.rtl .fw-backend-side-tabs .fw-settings-form-header .form-header-buttons {
 	animation: fwFadeIn 3s ease-in;
 }
 
-.fw-backend-side-tabs .fw-options-tabs-wrapper + .form-footer-buttons {
+.fw-backend-side-tabs .fw-options-tabs-wrapper+.form-footer-buttons {
 	margin: -71px 0 0 198px;
 }
 
-.fw-backend-side-tabs .fw-backend-option + .form-footer-buttons,
-.fw-backend-side-tabs .fw-backend-postboxes + .form-footer-buttons {
-	margin-top: -1px; /* hide last option border */
+.fw-backend-side-tabs .fw-backend-option+.form-footer-buttons,
+.fw-backend-side-tabs .fw-backend-postboxes+.form-footer-buttons {
+	margin-top: -1px;
+	/* hide last option border */
 }
 
 .fw-backend-side-tabs .form-footer-buttons input[type="submit"] {
@@ -782,16 +814,17 @@ body.rtl .fw-backend-side-tabs .form-footer-buttons input[type="submit"] {
 }
 
 
-body.rtl .fw-backend-side-tabs .fw-options-tabs-wrapper + .form-footer-buttons {
+body.rtl .fw-backend-side-tabs .fw-options-tabs-wrapper+.form-footer-buttons {
 	margin: -71px 198px 0 0;
 }
 
 @media (max-width: 782px) {
-	.fw-backend-side-tabs .fw-options-tabs-wrapper + .form-footer-buttons {
-		margin: -1px 0 0; /* hide last option border */
+	.fw-backend-side-tabs .fw-options-tabs-wrapper+.form-footer-buttons {
+		margin: -1px 0 0;
+		/* hide last option border */
 	}
 
-	body.rtl .fw-backend-side-tabs .fw-options-tabs-wrapper + .form-footer-buttons {
+	body.rtl .fw-backend-side-tabs .fw-options-tabs-wrapper+.form-footer-buttons {
 		margin: -1px 0 0;
 	}
 }
@@ -807,7 +840,7 @@ body.rtl .fw-backend-side-tabs .fw-options-tabs-wrapper + .form-footer-buttons {
 
 /* Fixes for edit post page */
 
-form#post .fw-options-tabs-wrapper > .fw-options-tabs-contents .fw-backend-postboxes {
+form#post .fw-options-tabs-wrapper>.fw-options-tabs-contents .fw-backend-postboxes {
 	padding: 0 10px;
 }
 
@@ -815,15 +848,16 @@ form#post .fw-options-tabs-wrapper > .fw-options-tabs-contents .fw-backend-postb
 
 /* Fixes postboxes */
 
-.fw-postbox-without-name > .hndle,
-.fw-postbox-without-name > .handlediv,
-.js .fw-postbox-without-name > .hndle,
-.js .fw-postbox-without-name > .handlediv {
+.fw-postbox-without-name>.hndle,
+.fw-postbox-without-name>.handlediv,
+.js .fw-postbox-without-name>.hndle,
+.js .fw-postbox-without-name>.handlediv {
 	display: none;
 }
 
 .fw-postbox .hndle {
-	cursor: pointer !important; /* to rewrite .js .postbox .hndle */
+	cursor: pointer !important;
+	/* to rewrite .js .postbox .hndle */
 }
 
 .fw-postbox:not(.initialized) .hndle {
@@ -839,12 +873,14 @@ form#post .fw-options-tabs-wrapper > .fw-options-tabs-contents .fw-backend-postb
 .fw-postbox .hndle .fw-html-after-title .dashicons {
 	width: auto;
 	height: auto;
-	color: #AAA; /* copied from .handlediv */
+	color: #AAA;
+	/* copied from .handlediv */
 }
 
 .fw-postbox .hndle .fw-html-before-title .dashicons:hover,
 .fw-postbox .hndle .fw-html-after-title .dashicons:hover {
-	color: #777; /* copied from .handlediv */
+	color: #777;
+	/* copied from .handlediv */
 }
 
 /* we do not use .meta-box-sortables because of the glitches that appears from /wp-admin/js/postbox.js:130 */
@@ -860,15 +896,33 @@ form#post .fw-options-tabs-wrapper > .fw-options-tabs-contents .fw-backend-postb
 	position: relative;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	text-decoration: none!important;
+	text-decoration: none !important;
 }
+
 body.rtl .fw-postbox .handlediv:before {
 	left: 12px;
 	right: auto;
+	padding: 8px 21px 12px 7px;
 }
 
 .fw-postbox .handlediv:before {
 	content: '\f142';
+	color: #ccc;
+}
+
+.fw-postbox .handle-order-higher,
+.fw-postbox .handle-order-lower {
+	display: none !important;
+}
+
+.rtl .fw-postbox .postbox-header .hndle {
+	justify-content: right;
+}
+
+.rtl .fw-option-type-addable-box>.fw-option-boxes>.fw-option-box .hndle .fw-html-after-title {
+	right: auto;
+	left: 43px;
+	background: transparent;
 }
 
 .fw-postbox.closed .handlediv:before {
@@ -876,7 +930,8 @@ body.rtl .fw-postbox .handlediv:before {
 }
 
 .fw-postbox .toggle-indicator {
-	display: none; /* fixes https://github.com/ThemeFuse/Unyson/issues/1261 */
+	display: none;
+	/* fixes https://github.com/ThemeFuse/Unyson/issues/1261 */
 }
 
 /* end copy from: .js .meta-box-sortables .postbox .handlediv */
@@ -901,22 +956,24 @@ body.rtl .fw-postbox .handlediv:before {
 	padding: 15px 12px;
 }
 
-.postbox-with-fw-options > .inside > .fw-backend-options-last-border-hider,
-.fw-postbox > .inside > .fw-backend-options-last-border-hider {
+.postbox-with-fw-options>.inside>.fw-backend-options-last-border-hider,
+.fw-postbox>.inside>.fw-backend-options-last-border-hider {
 	position: absolute;
-	bottom: 5px; /* padding from: .fw-postbox > .inside */
+	bottom: 5px;
+	/* padding from: .fw-postbox > .inside */
 	left: 0;
 	width: 100%;
 	border-bottom: 1px solid #FFFFFF;
 }
-body.rtl .postbox-with-fw-options > .inside > .fw-backend-options-last-border-hider,
-body.rtl .fw-postbox > .inside > .fw-backend-options-last-border-hider {
+
+body.rtl .postbox-with-fw-options>.inside>.fw-backend-options-last-border-hider,
+body.rtl .fw-postbox>.inside>.fw-backend-options-last-border-hider {
 	right: 0;
 	left: auto;
 }
 
-.fw-backend-option-design-default > .fw-backend-option-input > .fw-inner,
-.fw-backend-option-design-customizer > .fw-backend-option-input > .fw-inner {
+.fw-backend-option-design-default>.fw-backend-option-input>.fw-inner,
+.fw-backend-option-design-customizer>.fw-backend-option-input>.fw-inner {
 	position: relative;
 	max-width: 100%;
 
@@ -925,39 +982,41 @@ body.rtl .fw-postbox > .inside > .fw-backend-options-last-border-hider {
 	box-sizing: border-box;
 }
 
-.fw-backend-option-design-default > .fw-backend-option-input.width-type-fixed > .fw-inner,
-.fw-backend-option-design-customizer > .fw-backend-option-input.width-type-fixed > .fw-inner,
+.fw-backend-option-design-default>.fw-backend-option-input.width-type-fixed>.fw-inner,
+.fw-backend-option-design-customizer>.fw-backend-option-input.width-type-fixed>.fw-inner,
 .fw-backend-option-fixed-width {
 	width: 100%;
 	max-width: 428px;
 }
 
-.fw-backend-option-design-default > .fw-backend-option-input.width-type-full > .fw-inner,
-.fw-backend-option-design-customizer > .fw-backend-option-input.width-type-full > .fw-inner {
+.fw-backend-option-design-default>.fw-backend-option-input.width-type-full>.fw-inner,
+.fw-backend-option-design-customizer>.fw-backend-option-input.width-type-full>.fw-inner {
 	width: 100%;
 }
 
-.fw-backend-option-design-default > .fw-backend-option-label label {
+.fw-backend-option-design-default>.fw-backend-option-label label {
 	font-weight: 600;
 	float: left;
 	margin-top: 0.1em;
 	font-size: 14px;
 }
-body.rtl .fw-backend-option-design-default > .fw-backend-option-label label {
-	float:right;
+
+body.rtl .fw-backend-option-design-default>.fw-backend-option-label label {
+	float: right;
 }
 
-.fw-backend-option-design-default > .fw-backend-option-desc {
+.fw-backend-option-design-default>.fw-backend-option-desc {
 	font-style: italic;
 	color: #666;
 }
 
-.fw-backend-option-design-default > .fw-backend-option-desc > .fw-inner {
+.fw-backend-option-design-default>.fw-backend-option-desc>.fw-inner {
 	font-size: 1em;
 	padding-top: 7px;
 	padding-left: 1px;
 }
-body.rtl .fw-backend-option-design-default > .fw-backend-option-desc > .fw-inner {
+
+body.rtl .fw-backend-option-design-default>.fw-backend-option-desc>.fw-inner {
 	padding-left: inherit;
 	padding-right: 1px;
 }
@@ -967,7 +1026,7 @@ body.rtl .fw-backend-option-design-default > .fw-backend-option-desc > .fw-inner
 	padding: 5px 0 10px;
 }
 
-.fw-backend-option-design-customizer > .fw-backend-option-desc {
+.fw-backend-option-design-customizer>.fw-backend-option-desc {
 	padding-bottom: 6px;
 }
 
@@ -976,15 +1035,16 @@ body.rtl .fw-backend-option-design-default > .fw-backend-option-desc > .fw-inner
 	line-height: inherit;
 }
 
-.fw-backend-option-design-customizer > .fw-backend-option-label {
+.fw-backend-option-design-customizer>.fw-backend-option-label {
 	padding-bottom: 5px;
 }
 
-.fw-backend-option-design-customizer > .fw-backend-option-label .fw-option-help {
+.fw-backend-option-design-customizer>.fw-backend-option-label .fw-option-help {
 	display: inline-block;
 	vertical-align: middle;
 }
-.fw-backend-option-design-customizer > .fw-backend-option-label .customize-control-title {
+
+.fw-backend-option-design-customizer>.fw-backend-option-label .customize-control-title {
 	display: inline-block;
 }
 
@@ -994,11 +1054,11 @@ body.rtl .fw-backend-option-design-default > .fw-backend-option-desc > .fw-inner
 	border-bottom: 1px solid #eeeeee;
 }
 
-.fw-backend-options-group:not(.show-borders) > .fw-backend-option {
+.fw-backend-options-group:not(.show-borders)>.fw-backend-option {
 	border-bottom-width: 0;
 }
 
-.fw-backend-options-group:not(.show-borders) > .fw-backend-option:not(:last-child) {
+.fw-backend-options-group:not(.show-borders)>.fw-backend-option:not(:last-child) {
 	padding-bottom: 0;
 }
 
@@ -1009,28 +1069,30 @@ body.rtl .fw-backend-option-design-default > .fw-backend-option-desc > .fw-inner
 
 
 @media (max-width: 782px) {
-	.fw-backend-option-design-default > .fw-backend-option-label > .fw-inner {
+	.fw-backend-option-design-default>.fw-backend-option-label>.fw-inner {
 		padding: 0 0 10px;
 	}
 
-	.fw-backend-option-design-default.with-help > .fw-backend-option-label label {
+	.fw-backend-option-design-default.with-help>.fw-backend-option-label label {
 		margin-right: 8px;
 	}
-	body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label label {
+
+	body.rtl .fw-backend-option-design-default.with-help>.fw-backend-option-label label {
 		margin-right: 0px;
 		margin-left: 8px;
 	}
 
-	.fw-backend-option-design-default > .fw-backend-option-label .fw-option-help {
+	.fw-backend-option-design-default>.fw-backend-option-label .fw-option-help {
 		margin-top: 0;
 	}
 }
 
 @media (min-width: 783px) {
-	.fw-backend-option-design-default > .fw-backend-option-label > .fw-inner {
+	.fw-backend-option-design-default>.fw-backend-option-label>.fw-inner {
 		padding: 3px 20px 0 0;
 	}
-	body.rtl .fw-backend-option-design-default > .fw-backend-option-label > .fw-inner {
+
+	body.rtl .fw-backend-option-design-default>.fw-backend-option-label>.fw-inner {
 		padding: 3px 0 0 20px;
 	}
 }
@@ -1038,7 +1100,7 @@ body.rtl .fw-backend-option-design-default > .fw-backend-option-desc > .fw-inner
 
 /* Options inside option fixes */
 
-.fw-backend-option-type-html .fw-backend-option-design-default > .fw-backend-option-input {
+.fw-backend-option-type-html .fw-backend-option-design-default>.fw-backend-option-input {
 	max-width: 100%;
 }
 
@@ -1052,28 +1114,29 @@ body.rtl .fw-backend-option-design-default > .fw-backend-option-desc > .fw-inner
 
 /* .fw-force-xs have design like on mobile */
 
-.fw-force-xs .fw-options-tabs-first-level > .fw-options-tabs-list ul li {
+.fw-force-xs .fw-options-tabs-first-level>.fw-options-tabs-list ul li {
 	float: none;
 }
 
-.fw-force-xs .fw-options-tabs-first-level > .fw-options-tabs-list ul li a {
+.fw-force-xs .fw-options-tabs-first-level>.fw-options-tabs-list ul li a {
 	display: block;
 }
 
-.fw-force-xs .fw-backend-option-design-default > .fw-backend-option-label > .fw-inner,
-body.rtl .fw-force-xs .fw-backend-option-design-default > .fw-backend-option-label > .fw-inner {
+.fw-force-xs .fw-backend-option-design-default>.fw-backend-option-label>.fw-inner,
+body.rtl .fw-force-xs .fw-backend-option-design-default>.fw-backend-option-label>.fw-inner {
 	padding: 0 0 10px;
 }
 
-.fw-force-xs .fw-backend-option-design-default.with-help > .fw-backend-option-label label {
+.fw-force-xs .fw-backend-option-design-default.with-help>.fw-backend-option-label label {
 	margin-right: 8px;
 }
-body.rtl .fw-force-xs .fw-backend-option-design-default.with-help > .fw-backend-option-label label {
+
+body.rtl .fw-force-xs .fw-backend-option-design-default.with-help>.fw-backend-option-label label {
 	margin-right: 0px;
 	margin-left: 8px;
 }
 
-.fw-force-xs .fw-backend-option-design-default > .fw-backend-option-label .fw-option-help {
+.fw-force-xs .fw-backend-option-design-default>.fw-backend-option-label .fw-option-help {
 	margin-top: 0;
 }
 
@@ -1084,7 +1147,8 @@ body.rtl .fw-force-xs .fw-backend-option-design-default.with-help > .fw-backend-
 
 .fw-backend-option .fw-option-help {
 	cursor: pointer;
-	color: #AAAAAA; /* copied from .handlediv */
+	color: #AAAAAA;
+	/* copied from .handlediv */
 }
 
 .fw-backend-option .fw-option-help:hover,
@@ -1092,36 +1156,40 @@ body.rtl .fw-force-xs .fw-backend-option-design-default.with-help > .fw-backend-
 	color: #333333;
 }
 
-.fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner > .fw-option-help {
+.fw-backend-option-design-default.with-help>.fw-backend-option-input>.fw-inner>.fw-option-help {
 	position: absolute;
 	top: 0;
 	right: 0px;
 }
-body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner > .fw-option-help {
+
+body.rtl .fw-backend-option-design-default.with-help>.fw-backend-option-input>.fw-inner>.fw-option-help {
 	right: auto;
 	left: 0;
 }
 
-.fw-backend-option-design-default.with-help > .fw-backend-option-label > .fw-inner > .fw-option-help {
+.fw-backend-option-design-default.with-help>.fw-backend-option-label>.fw-inner>.fw-option-help {
 	float: left;
 }
-body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label > .fw-inner > .fw-option-help{
+
+body.rtl .fw-backend-option-design-default.with-help>.fw-backend-option-label>.fw-inner>.fw-option-help {
 	float: right;
 }
 
 @media (min-width: 783px) {
-	.fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner {
+	.fw-backend-option-design-default.with-help>.fw-backend-option-input>.fw-inner {
 		padding-right: 26px;
 	}
-	body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner {
+
+	body.rtl .fw-backend-option-design-default.with-help>.fw-backend-option-input>.fw-inner {
 		padding-right: 0;
 		padding-left: 26px;
 	}
 
-	.fw-force-xs .fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner {
+	.fw-force-xs .fw-backend-option-design-default.with-help>.fw-backend-option-input>.fw-inner {
 		padding-right: 0;
 	}
-	body.rtl .fw-force-xs .fw-backend-option-design-default.with-help > .fw-backend-option-input > .fw-inner {
+
+	body.rtl .fw-force-xs .fw-backend-option-design-default.with-help>.fw-backend-option-input>.fw-inner {
 		padding-right: inherit;
 		padding-left: 0;
 	}
@@ -1137,32 +1205,33 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 }
 
 
-#edittag > .fw-backend-option,
-#edittag > .fw-backend-options-group > .fw-backend-option,
-#edittag > .fw-backend-option-type-multi .fw-backend-option,
-#edittag > .fw-backend-option-type-multi-picker .fw-backend-option {
+#edittag>.fw-backend-option,
+#edittag>.fw-backend-options-group>.fw-backend-option,
+#edittag>.fw-backend-option-type-multi .fw-backend-option,
+#edittag>.fw-backend-option-type-multi-picker .fw-backend-option {
 	padding: 15px 0;
 	border-bottom-width: 0;
 }
 
 @media (min-width: 783px) {
-	#edittag > .fw-backend-option > .fw-backend-option-label,
-	#edittag > .fw-backend-options-group > .fw-backend-option > .fw-backend-option-label,
-	#edittag > .fw-backend-option-type-multi .fw-backend-option > .fw-backend-option-label,
-	#edittag > .fw-backend-option-type-multi-picker .fw-backend-option > .fw-backend-option-label {
+
+	#edittag>.fw-backend-option>.fw-backend-option-label,
+	#edittag>.fw-backend-options-group>.fw-backend-option>.fw-backend-option-label,
+	#edittag>.fw-backend-option-type-multi .fw-backend-option>.fw-backend-option-label,
+	#edittag>.fw-backend-option-type-multi-picker .fw-backend-option>.fw-backend-option-label {
 		width: 219px;
 	}
 
-	#edittag > .fw-backend-option > .fw-backend-option-input,
-	#edittag > .fw-backend-options-group > .fw-backend-option > .fw-backend-option-input,
-	#edittag > .fw-backend-option-type-multi .fw-backend-option > .fw-backend-option-input,
-	#edittag > .fw-backend-option-type-multi-picker .fw-backend-option > .fw-backend-option-input {
+	#edittag>.fw-backend-option>.fw-backend-option-input,
+	#edittag>.fw-backend-options-group>.fw-backend-option>.fw-backend-option-input,
+	#edittag>.fw-backend-option-type-multi .fw-backend-option>.fw-backend-option-input,
+	#edittag>.fw-backend-option-type-multi-picker .fw-backend-option>.fw-backend-option-input {
 		width: calc(100% - 219px);
 	}
 
-	#edittag > .fw-backend-option > .fw-backend-option-desc,
-	#edittag > .fw-backend-options-group > .fw-backend-option > .fw-backend-option-desc,
-	#edittag > .fw-backend-option-type-multi .fw-backend-option > .fw-backend-option-desc {
+	#edittag>.fw-backend-option>.fw-backend-option-desc,
+	#edittag>.fw-backend-options-group>.fw-backend-option>.fw-backend-option-desc,
+	#edittag>.fw-backend-option-type-multi .fw-backend-option>.fw-backend-option-desc {
 		margin-left: 219px;
 	}
 }
@@ -1173,6 +1242,7 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 }
 
 @media (max-width: 782px) {
+
 	#edittag .fw-backend-option input[type=checkbox],
 	#edittag .fw-backend-option input[type=radio] {
 		height: 25px;
@@ -1204,15 +1274,15 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 /* modal fix https://github.com/ThemeFuse/Unyson/issues/1353 */
 
 @media (min-width: 1200px) {
-	.media-frame-content .fw-backend-option > .fw-backend-option-label.fw-col-lg-2 {
+	.media-frame-content .fw-backend-option>.fw-backend-option-label.fw-col-lg-2 {
 		width: 25%;
 	}
 
-	.media-frame-content .fw-backend-option > .fw-backend-option-input.fw-col-lg-10 {
+	.media-frame-content .fw-backend-option>.fw-backend-option-input.fw-col-lg-10 {
 		width: 75%;
 	}
 
-	.media-frame-content .fw-backend-option > .fw-backend-option-desc.fw-col-lg-offset-2 {
+	.media-frame-content .fw-backend-option>.fw-backend-option-desc.fw-col-lg-offset-2 {
 		margin-left: 25%;
 		width: 75%;
 	}
@@ -1235,9 +1305,9 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 	border-color: #000000 transparent transparent transparent;
 }
 
-.fw-selectize.selectize-control > .selectize-input,
-.fw-selectize.selectize-control > .selectize-input.has-items,
-.fw-selectize.selectize-control > .selectize-input.input-active {
+.fw-selectize.selectize-control>.selectize-input,
+.fw-selectize.selectize-control>.selectize-input.has-items,
+.fw-selectize.selectize-control>.selectize-input.input-active {
 	display: block !important;
 	padding: 0;
 	margin: 1px;
@@ -1245,40 +1315,40 @@ body.rtl .fw-backend-option-design-default.with-help > .fw-backend-option-label 
 	border: 1px solid #ddd;
 	color: #333333;
 
-	-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.07);
-	box-shadow: inset 0 1px 2px rgba(0,0,0,.07);
+	-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .07);
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, .07);
 }
 
-.fw-selectize.selectize-control > .selectize-input > input {
+.fw-selectize.selectize-control>.selectize-input>input {
 	padding: 2px 5px !important;
 	height: auto;
 	font-size: 14px;
 	vertical-align: middle;
 }
 
-.fw-modal .media-frame .fw-selectize.selectize-control > .selectize-input > input {
+.fw-modal .media-frame .fw-selectize.selectize-control>.selectize-input>input {
 	height: 26px;
 }
 
-.fw-selectize.selectize-control .selectize-input > div {
+.fw-selectize.selectize-control .selectize-input>div {
 	vertical-align: middle;
 }
 
-.fw-selectize.selectize-control.single .selectize-input > div {
+.fw-selectize.selectize-control.single .selectize-input>div {
 	padding: 2px 5px;
 	font-size: 14px;
 }
 
-.fw-modal .media-frame .fw-selectize.selectize-control.single .selectize-input > div {
+.fw-modal .media-frame .fw-selectize.selectize-control.single .selectize-input>div {
 	padding: 4px 5px;
 }
 
-.fw-selectize.selectize-control.multi .selectize-input > div {
+.fw-selectize.selectize-control.multi .selectize-input>div {
 	margin: 2px;
 	padding: 0 3px;
 }
 
-.fw-modal .media-frame .fw-selectize.selectize-control.multi .selectize-input > div {
+.fw-modal .media-frame .fw-selectize.selectize-control.multi .selectize-input>div {
 	padding: 2px 5px;
 }
 

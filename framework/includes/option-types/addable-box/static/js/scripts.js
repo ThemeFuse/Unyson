@@ -180,7 +180,7 @@ jQuery(document).ready(function ($) {
 
 				var jsonParsedValues = JSON.parse(values) || {};
 
-				$box.find('> .hndle span:not([class])').first().html(
+				$box.find( '.postbox-header > .hndle span:not([class])' ).first().html(
 					this.template(data.template, $.extend({}, {o: jsonParsedValues}, jsonParsedValues))
 				);
 
@@ -214,7 +214,7 @@ jQuery(document).ready(function ($) {
 					template = '[Ajax Error] '+ response.data.message
 				}
 
-				$box.find('> .hndle span:not([class])').first().html(template);
+				$box.find( '.postbox-header > .hndle span:not([class])' ).first().html( template );
 
 				delete data;
 
@@ -223,7 +223,7 @@ jQuery(document).ready(function ($) {
 				this.isBusy = false;
 				$box.removeClass(titleUpdater.pendingClass);
 
-				$box.find('> .hndle span:not([class])').first().text('[Server Error] '+ status +': '+ error.message);
+				$box.find( '.postbox-header > .hndle span:not([class])' ).first().text( '[Server Error] ' + status + ': ' + error.message );
 
 				delete data;
 
