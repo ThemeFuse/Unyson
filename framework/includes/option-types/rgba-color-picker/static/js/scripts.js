@@ -14,6 +14,11 @@
 		return;
 	}
 
+	if ( typeof wpColorPickerL10n === "undefined" ) {
+		wpColorPicker_i18n={"clear":"Clear","defaultString":"Default","pick":"Select Color","current":"Current Color"};
+		wpColorPickerL10n=wpColorPicker_i18n;
+	}
+
 	// Variable for some backgrounds ( grid )
 	var image   = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAAHnlligAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAHJJREFUeNpi+P///4EDBxiAGMgCCCAGFB5AADGCRBgYDh48CCRZIJS9vT2QBAggFBkmBiSAogxFBiCAoHogAKIKAlBUYTELAiAmEtABEECk20G6BOmuIl0CIMBQ/IEMkO0myiSSraaaBhZcbkUOs0HuBwDplz5uFJ3Z4gAAAABJRU5ErkJggg==',
 		// html stuff for wpColorPicker copy of the original color-picker.js
