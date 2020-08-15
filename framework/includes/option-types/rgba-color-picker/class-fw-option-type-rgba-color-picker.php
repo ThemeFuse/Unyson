@@ -19,7 +19,13 @@ class FW_Option_Type_Rgba_Color_Picker extends FW_Option_Type {
 	 */
 	protected function _enqueue_static( $id, $option, $data ) {
 
-		wp_enqueue_style( 'wp-color-picker' );
+		if ( ! wp_style_is( 'wp-color-picker' ) ) {
+			wp_enqueue_style( 'wp-color-picker' );
+		}
+
+		if ( ! wp_script_is( 'wp-color-picker' ) ) {
+			wp_enqueue_script( 'wp-color-picker' );
+		}
 
 		wp_enqueue_style(
 			'fw-option-' . $this->get_type(),
@@ -49,13 +55,13 @@ class FW_Option_Type_Rgba_Color_Picker extends FW_Option_Type {
 
 	/**
 	 * @param string $id
-	 * @param array $option
-	 * @param array $data
+	 * @param array  $option
+	 * @param array  $data
 	 *
 	 * @return string
 	 */
 	protected function _render( $id, $option, $data ) {
-		$option['attr']['value'] = $data['value'];
+		$option['attr']['value']        = $data['value'];
 		$option['attr']['data-default'] = $option['value'];
 
 		$option['attr']['data-palettes'] = ! empty( $option['palettes'] ) && is_array( $option['palettes'] ) ? json_encode( $option['palettes'] ) : '';
@@ -68,22 +74,22 @@ class FW_Option_Type_Rgba_Color_Picker extends FW_Option_Type {
 	 */
 	protected function _get_value_from_input( $option, $input_value ) {
 		if (
-			is_null($input_value)
+			is_null( $input_value )
 			||
 			(
 				// do not use `!is_null()` allow empty values https://github.com/ThemeFuse/Unyson/issues/2025
-				!empty($input_value)
+				! empty( $input_value )
 				&&
-				!(
+				! (
 					preg_match( '/^#([a-f0-9]{3}){1,2}$/i', $input_value )
 					||
 					preg_match( '/^rgba\( *([01]?\d\d?|2[0-4]\d|25[0-5]) *\, *([01]?\d\d?|2[0-4]\d|25[0-5]) *\, *([01]?\d\d?|2[0-4]\d|25[0-5]) *\, *(1|0|0?.\d+) *\)$/', $input_value )
 				)
 			)
 		) {
-			return (string)$option['value'];
+			return (string) $option['value'];
 		} else {
-			return (string)$input_value;
+			return (string) $input_value;
 		}
 	}
 
@@ -92,8 +98,8 @@ class FW_Option_Type_Rgba_Color_Picker extends FW_Option_Type {
 	 */
 	protected function _get_defaults() {
 		return array(
-			'value' => '',
-			'palettes'=> true
+			'value'    => '',
+			'palettes' => true,
 		);
 	}
 }

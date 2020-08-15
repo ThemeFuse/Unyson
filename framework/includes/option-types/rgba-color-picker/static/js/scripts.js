@@ -14,24 +14,22 @@
 		return;
 	}
 
-	if ( typeof wpColorPickerL10n === "undefined" ) {
-		wpColorPicker_i18n = {
-			"clear": "Clear",
-			"defaultString": "Default",
-			"pick": "Select Color",
-			"current": "Current Color"
-		};
-		wpColorPickerL10n = wpColorPicker_i18n;
-	}
-
 	// Variable for some backgrounds ( grid )
 	var image = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAAHnlligAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAHJJREFUeNpi+P///4EDBxiAGMgCCCAGFB5AADGCRBgYDh48CCRZIJS9vT2QBAggFBkmBiSAogxFBiCAoHogAKIKAlBUYTELAiAmEtABEECk20G6BOmuIl0CIMBQ/IEMkO0myiSSraaaBhZcbkUOs0HuBwDplz5uFJ3Z4gAAAABJRU5ErkJggg==',
 		// html stuff for wpColorPicker copy of the original color-picker.js
 		_after = '<div class="wp-picker-holder" />',
 		_wrap = '<div class="wp-picker-container" />',
 		_button = '<input type="button" class="button button-small" />',
+		_deprecated = false;
+	__ = wp.i18n.__;
+
+	// WP < 5.5
+	if ( typeof wpColorPickerL10n !== "undefined" ) {
+
 		// Prevent CSS issues in < WordPress 4.9
-		_deprecated = ( wp.i18n.__.current !== undefined );
+		_deprecated = ( wpColorPickerL10n.current !== undefined );
+	}
+
 	// Declare some global variables when is deprecated or not
 	if ( _deprecated ) {
 		var _before = '<a tabindex="0" class="wp-color-result" />';
@@ -108,8 +106,8 @@
 					.css( {
 						backgroundColor: self.initialValue
 					} )
-					.attr( 'title', wp.i18n.__.pick )
-					.attr( 'data-current', wp.i18n.__.current );
+					.attr( 'title', __( 'Select Color' ) )
+					.attr( 'data-current', __( 'Current' ) );
 				self.pickerContainer = $( _after ).insertAfter( el );
 				self.button = $( _button ).addClass( 'hidden' );
 			} else {
@@ -123,7 +121,7 @@
 					// Insert the default label text.
 					self.wrappingLabelText = $( _wrappingLabelText )
 						.insertBefore( el )
-						.text( wp.i18n.__.defaultLabel );
+						.text( __( 'Color value' ) );
 				}
 
 				/*
@@ -143,7 +141,7 @@
 						backgroundColor: self.initialValue
 					} );
 				// Set the toggle button span element text.
-				self.toggler.find( '.wp-color-result-text' ).text( wp.i18n.__.pick );
+				self.toggler.find( '.wp-color-result-text' ).text( __( 'Select Color' ) );
 				// Set up the Iris container and insert it after the wrapping label.
 				self.pickerContainer = $( _after ).insertAfter( self.wrappingLabel );
 				// Store a reference to the Clear/Default button.
@@ -152,14 +150,14 @@
 
 			// Set up the Clear/Default button.
 			if ( self.options.defaultColor ) {
-				self.button.addClass( 'wp-picker-default' ).val( wp.i18n.__.defaultString );
+				self.button.addClass( 'wp-picker-default' ).val( __( 'Default' ) );
 				if ( !_deprecated ) {
-					self.button.attr( 'aria-label', wp.i18n.__.defaultAriaLabel );
+					self.button.attr( 'aria-label', __( 'Select default color' ) );
 				}
 			} else {
 				self.button.addClass( 'wp-picker-clear' ).val( _fw_option_type_rgba_color_picker_localized.l10n.reset_to_default );
 				if ( !_deprecated ) {
-					self.button.attr( 'aria-label', wp.i18n.__.clearAriaLabel );
+					self.button.attr( 'aria-label', __( 'Clear color' ) );
 				}
 			}
 
@@ -396,7 +394,7 @@
 				var emptyWidth = ( self.picker.width() - self.controls.square.width() - 20 ),
 					stripsMargin = ( emptyWidth / 7 ),
 					stripsWidth = ( ( emptyWidth / 2 ) - stripsMargin );
-				console.log( stripsMargin );
+
 				$.each( [ 'aContainer', 'strip' ], function( k, v ) {
 					self.controls[ v ].width( stripsWidth ).css( {
 						'margin-left': stripsMargin + 'px'
