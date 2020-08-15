@@ -15,8 +15,13 @@
 	}
 
 	if ( typeof wpColorPickerL10n === "undefined" ) {
-		wpColorPicker_i18n={"clear":"Clear","defaultString":"Default","pick":"Select Color","current":"Current Color"};
-		wpColorPickerL10n=wpColorPicker_i18n;
+		wpColorPicker_i18n = {
+			"clear": "Clear",
+			"defaultString": "Default",
+			"pick": "Select Color",
+			"current": "Current Color"
+		};
+		wpColorPickerL10n = wpColorPicker_i18n;
 	}
 
 	// Variable for some backgrounds ( grid )
