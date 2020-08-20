@@ -66,9 +66,15 @@ jQuery(document).ready(function ($) {
 
 		/** Init boxes controls */
 		initControls: function ($boxes) {
+
+			$boxes.find('.fw-option-box-control').on('mouseover', function () {
+				$(this).off('click');
+			})
+
 			$boxes
 				.find('.fw-option-box-controls:not(.initialized)')
 				.on('click', '.fw-option-box-control', function(e){
+
 					e.preventDefault();
 					e.stopPropagation(); // prevent open/close of the box (when the link is in box title bar)
 

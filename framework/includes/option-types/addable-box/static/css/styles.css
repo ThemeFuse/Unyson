@@ -54,20 +54,12 @@
 
 
 /* Controls */
-
-
-.fw-option-type-addable-box>.fw-option-boxes>.fw-option-box .hndle .fw-html-after-title {
-	position: absolute;
-	top: 0;
-	right: 27px;
-	display: block;
-	height: 100%;
-	background-color: #FFF;
-	box-sizing: border-box;
-	padding: 0 3px;
-	padding-top: inherit;
+.fw-option-type-addable-box>.fw-option-boxes>.fw-option-box .hndle .fw-html-before-title:empty {
+	display: none;
 }
-
+.fw-option-type-addable-box>.fw-option-boxes>.fw-option-box .postbox-header h2.hndle {
+	border-bottom: none !important;
+}
 .rtl .fw-option-type-addable-box>.fw-option-boxes>.fw-option-box .hndle .fw-html-after-title {
 	height: auto;
 	left: 27px;
