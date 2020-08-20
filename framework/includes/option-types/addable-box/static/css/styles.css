@@ -7,20 +7,23 @@
 }
 
 .fw-option-type-addable-box.has-boxes.width-type-fixed {
-	width: 428px; /* same as .fw-backend-option-fixed-width */
+	width: 428px;
+	/* same as .fw-backend-option-fixed-width */
 }
 
-.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox {
+.fw-option-type-addable-box>.fw-option-boxes.ui-sortable>.fw-option-box>.fw-postbox {
 	min-width: 100%;
 }
 
-.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox > .hndle {
-	cursor: move !important; /* to rewrite .fw-postbox h3.hndle */
-	word-break: break-all; /* if box text is too long, do not move controls outside box */
+.fw-option-type-addable-box>.fw-option-boxes.ui-sortable>.fw-option-box>.fw-postbox>.hndle {
+	cursor: move !important;
+	/* to rewrite .fw-postbox h3.hndle */
+	word-break: break-all;
+	/* if box text is too long, do not move controls outside box */
 	position: relative;
 }
 
-.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox > .hndle > span {
+.fw-option-type-addable-box>.fw-option-boxes.ui-sortable>.fw-option-box>.fw-postbox>.hndle>span {
 	overflow: hidden;
 	white-space: nowrap;
 	max-width: 100%;
@@ -32,15 +35,16 @@
 	margin: 0;
 }
 
-.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box {
+.fw-option-type-addable-box>.fw-option-boxes>.fw-option-box {
 	margin-bottom: 20px;
 }
 
-.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox > .hndle span:after {
-	content: '\00a0'; /* &nbsp; - when title is empty, box has too small (broken) height */
+.fw-option-type-addable-box>.fw-option-boxes.ui-sortable>.fw-option-box>.fw-postbox>.hndle span:after {
+	content: '\00a0';
+	/* &nbsp; - when title is empty, box has too small (broken) height */
 }
 
-.fw-option-type-addable-box > .fw-option-boxes.ui-sortable > .fw-option-box > .fw-postbox > .hndle img {
+.fw-option-type-addable-box>.fw-option-boxes.ui-sortable>.fw-option-box>.fw-postbox>.hndle img {
 	vertical-align: middle;
 }
 
@@ -50,28 +54,32 @@
 
 
 /* Controls */
-
-
-.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box .hndle .fw-html-after-title {
-	position: absolute;
-	top: 0;
-	right: 27px;
-	display: block;
-	height: 100%;
-	background-color: #FFF;
-	box-sizing: border-box;
-	padding: 0 3px;
-	padding-top: inherit;
+.fw-option-type-addable-box>.fw-option-boxes>.fw-option-box .hndle .fw-html-before-title:empty {
+	display: none;
+}
+.fw-option-type-addable-box>.fw-option-boxes>.fw-option-box .postbox-header h2.hndle {
+	border-bottom: none !important;
+}
+.rtl .fw-option-type-addable-box>.fw-option-boxes>.fw-option-box .hndle .fw-html-after-title {
+	height: auto;
+	left: 27px;
+	right: auto;
 }
 
-.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box .hndle .fw-html-after-title .fw-option-box-controls .fw-option-box-control {
+.rtl .fw-option-type-addable-box .postbox .handlediv {
+	padding: 0 12px;
+}
+
+.rtl .fw-option-type-addable-box .postbox-header .hndle {
+	justify-content: right;
+}
+
+.fw-option-type-addable-box>.fw-option-boxes>.fw-option-box .hndle .fw-html-after-title .fw-option-box-controls .fw-option-box-control {
 	text-decoration: none;
 }
 
-.fw-option-type-addable-box > .fw-option-boxes > .fw-option-box .hndle .fw-html-after-title .fw-option-box-controls .fw-option-box-control-wrapper {
+.fw-option-type-addable-box>.fw-option-boxes>.fw-option-box .hndle .fw-html-after-title .fw-option-box-controls .fw-option-box-control-wrapper {
 	color: #cccccc;
 }
 
 /* end: Controls */
-
-

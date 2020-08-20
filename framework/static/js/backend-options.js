@@ -23,14 +23,18 @@ jQuery(document).ready(function($){
 		 */
 		function addPostboxToggles($boxes) {
 			/** Remove events added by /wp-admin/js/postbox.js */
-			$boxes.find('h2, h3, .handlediv').off('click.postboxes');
+			$boxes.find('h2, h3, .handlediv, .hndle').off('click.postboxes');
 
 			var eventNamespace = '.fw-backend-postboxes';
 
+			$boxes.find('.postbox-header .hndle, .postbox-header .handlediv').on('mouseover', function () {
+				$(this).off('click.postboxes');
+			})
+
 			// make postboxes to close/open on click
-			$boxes
-				.off('click'+ eventNamespace) // remove already attached, just to be sure, prevent multiple execution
-				.on('click'+ eventNamespace, '> .hndle, > .handlediv', function(e){
+			$boxes.off('click'+ eventNamespace); // remove already attached, just to be sure, prevent multiple execution
+			$boxes.find('.postbox-header .hndle, .postbox-header .handlediv').on( 'click', function( e ) {
+
 					var $box = $(this).closest('.fw-postbox');
 
 					if ($box.parent().is('.fw-backend-postboxes') && !$box.siblings().length) {

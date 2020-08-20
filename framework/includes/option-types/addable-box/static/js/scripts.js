@@ -66,9 +66,15 @@ jQuery(document).ready(function ($) {
 
 		/** Init boxes controls */
 		initControls: function ($boxes) {
+
+			$boxes.find('.fw-option-box-control').on('mouseover', function () {
+				$(this).off('click');
+			})
+
 			$boxes
 				.find('.fw-option-box-controls:not(.initialized)')
 				.on('click', '.fw-option-box-control', function(e){
+
 					e.preventDefault();
 					e.stopPropagation(); // prevent open/close of the box (when the link is in box title bar)
 
@@ -180,7 +186,7 @@ jQuery(document).ready(function ($) {
 
 				var jsonParsedValues = JSON.parse(values) || {};
 
-				$box.find('> .hndle span:not([class])').first().html(
+				$box.find( '.postbox-header > .hndle span:not([class])' ).first().html(
 					this.template(data.template, $.extend({}, {o: jsonParsedValues}, jsonParsedValues))
 				);
 
@@ -214,7 +220,7 @@ jQuery(document).ready(function ($) {
 					template = '[Ajax Error] '+ response.data.message
 				}
 
-				$box.find('> .hndle span:not([class])').first().html(template);
+				$box.find( '.postbox-header > .hndle span:not([class])' ).first().html( template );
 
 				delete data;
 
@@ -223,7 +229,7 @@ jQuery(document).ready(function ($) {
 				this.isBusy = false;
 				$box.removeClass(titleUpdater.pendingClass);
 
-				$box.find('> .hndle span:not([class])').first().text('[Server Error] '+ status +': '+ error.message);
+				$box.find( '.postbox-header > .hndle span:not([class])' ).first().text( '[Server Error] ' + status + ': ' + error.message );
 
 				delete data;
 

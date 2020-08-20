@@ -15,7 +15,7 @@ final class _FW_Component_Theme {
 	public function __construct() {
 		$manifest = array();
 
-		if ( ( $manifest_file = apply_filters('fw_framework_manifest_path', fw_get_template_customizations_directory( '/theme/manifest.php' )) ) && is_file( $manifest_file ) ) {
+		if ( ( $manifest_file = apply_filters( 'fw_framework_manifest_path', fw_get_template_customizations_directory( '/theme/manifest.php' ) ) ) && is_file( $manifest_file ) ) {
 			@include $manifest_file;
 		}
 
@@ -64,7 +64,7 @@ final class _FW_Component_Theme {
 	 * Return array with options from specified name/path
 	 *
 	 * @param string $name '{theme}/framework-customizations/theme/options/{$name}.php'
-	 * @param array $variables These will be available in options file (like variables for view)
+	 * @param array  $variables These will be available in options file (like variables for view)
 	 *
 	 * @return array
 	 */
@@ -149,7 +149,7 @@ final class _FW_Component_Theme {
 	 * Config array is merged from child configs
 	 *
 	 * @param string|null $key Multi key format accepted: 'a/b/c'
-	 * @param mixed $default_value
+	 * @param mixed       $default_value
 	 *
 	 * @return mixed|null
 	 */
@@ -201,10 +201,9 @@ final class _FW_Component_Theme {
 	public function _action_admin_notices() {
 
 		if ( is_admin() && ! fw()->theme->manifest->check_requirements() && current_user_can( 'manage_options' ) ) {
-			echo
-				'<div class="notice notice-warning">
+			echo '<div class="notice notice-warning">
 					<p>' .
-			            __( 'Theme requirements not met:', 'fw' ) . ' ' . fw()->theme->manifest->get_not_met_requirement_text() .
+						__( 'Theme requirements not met:', 'fw' ) . ' ' . fw()->theme->manifest->get_not_met_requirement_text() .
 					'</p>
 				</div>';
 		}
@@ -217,8 +216,7 @@ final class _FW_Component_Theme {
 
 			$url_install_plugin = is_multisite() ? network_admin_url( 'plugin-install.php?s=brizy&tab=search&type=term' ) : admin_url( 'plugin-install.php?s=brizy&tab=search&type=term' );
 
-			echo
-				'<div class="notice updated is-dismissible fw-brz-dismiss">
+			echo '<div class="notice updated is-dismissible fw-brz-dismiss">
 					<p style="font-size:14px;">' .
 						esc_html__( 'Try Brizy: A Fast & Easy Way of Creating Pages Visually', 'fw' ) .
 						' - <a href="' . admin_url( 'admin.php?page=fw-new' ) . '">' .
