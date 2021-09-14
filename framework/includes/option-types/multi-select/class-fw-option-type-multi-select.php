@@ -156,7 +156,7 @@ if ( ! class_exists( 'FW_Option_Type_Multi_Select' ) ):
 
 			$sql = "SELECT terms.term_id"
 			       . " FROM $wpdb->terms AS terms, $wpdb->term_taxonomy AS taxonomies"
-			       . " WHERE terms.term_id = taxonomies.term_id AND taxonomies.term_id = taxonomies.term_taxonomy_id";
+			       . " WHERE terms.term_id = taxonomies.term_id";
 
 			{
 				$prepare = array();
