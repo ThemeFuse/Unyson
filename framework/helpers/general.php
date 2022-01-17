@@ -516,7 +516,7 @@ function fw_stripslashes_deep_keys( $value ) {
 function fw_addslashes_deep_keys( $value ) {
 	static $magic_quotes = null;
 	if ( $magic_quotes === null ) {
-		$magic_quotes = get_magic_quotes_gpc();
+		$magic_quotes = false;
 	}
 
 	if ( is_array( $value ) ) {
