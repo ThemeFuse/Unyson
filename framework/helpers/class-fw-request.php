@@ -29,7 +29,7 @@ class FW_Request
 {
 	protected static function prepare_key($key)
 	{
-		return (is_string($key) ? addslashes($key) : $key);
+		return $key;
 	}
 
 	protected static function get_set_key($multikey = null, $set_value = null, &$value = '')
