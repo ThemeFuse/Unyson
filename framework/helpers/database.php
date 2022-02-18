@@ -71,7 +71,7 @@ class FW_Db_Options_Model_Settings extends FW_Db_Options_Model {
 		 * @param null $option_id Specific option id (accepts multikey). null - all options
 		 * @param mixed $value
 		 */
-		function fw_set_db_settings_option( $option_id = null, $value ) {
+		function fw_set_db_settings_option( $option_id = null, $value = '' ) {
 			FW_Db_Options_Model_Settings::_get_instance('settings')->set(null, $option_id, $value);
 		}
 	}
@@ -235,7 +235,7 @@ class FW_Db_Options_Model_Post extends FW_Db_Options_Model {
 		 * @param string|null $option_id Specific option id (accepts multikey). null - all options
 		 * @param $value
 		 */
-		function fw_set_db_post_option( $post_id = null, $option_id = null, $value ) {
+		function fw_set_db_post_option( $post_id = null, $option_id = null, $value = '' ) {
 			FW_Db_Options_Model::_get_instance('post')->set(intval($post_id), $option_id, $value);
 		}
 
@@ -430,7 +430,7 @@ class FW_Db_Options_Model_Term extends FW_Db_Options_Model {
 		 *
 		 * @return null
 		 */
-		function fw_set_db_term_option( $term_id, $taxonomy, $option_id = null, $value ) {
+		function fw_set_db_term_option( $term_id, $taxonomy, $option_id = null, $value = '' ) {
 			if ( ! taxonomy_exists( $taxonomy ) ) {
 				return null;
 			}
@@ -497,7 +497,7 @@ class FW_Db_Options_Model_Extension extends FW_Db_Options_Model {
 		 * @param string|null $option_id
 		 * @param mixed $value
 		 */
-		function fw_set_db_ext_settings_option( $extension_name, $option_id = null, $value ) {
+		function fw_set_db_ext_settings_option( $extension_name, $option_id = null, $value = '' ) {
 			if ( ! fw_ext( $extension_name ) ) {
 				trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
 
@@ -585,7 +585,7 @@ class FW_Db_Options_Model_Customizer extends FW_Db_Options_Model {
 		 * @param null $option_id Specific option id (accepts multikey). null - all options
 		 * @param mixed $value
 		 */
-		function fw_set_db_customizer_option( $option_id = null, $value ) {
+		function fw_set_db_customizer_option( $option_id = null, $value = '' ) {
 			FW_Db_Options_Model::_get_instance('customizer')->set(null, $option_id, $value);
 		}
 
@@ -695,7 +695,7 @@ new FW_Db_Options_Model_Customizer();
 	 * @param string|null $multi_key The key of the data you want to set. null - all data
 	 * @param mixed $value
 	 */
-	function fw_set_db_extension_data( $extension_name, $multi_key = null, $value ) {
+	function fw_set_db_extension_data( $extension_name, $multi_key = null, $value = '' ) {
 		if ( ! fw()->extensions->get( $extension_name ) ) {
 			trigger_error( 'Invalid extension: ' . $extension_name, E_USER_WARNING );
 

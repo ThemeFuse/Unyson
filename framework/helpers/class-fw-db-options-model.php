@@ -242,7 +242,7 @@ abstract class FW_Db_Options_Model {
 		}
 	}
 
-	final public function set( $item_id = null, $option_id = null, $value, array $extra_data = array() ) {
+	final public function set( $item_id = null, $option_id = null, $value = '', array $extra_data = array() ) {
 		FW_Cache::del($cache_key_values = $this->get_cache_key('values', $item_id, $extra_data));
 		FW_Cache::del($cache_key_values_processed = $this->get_cache_key('values:processed', $item_id, $extra_data));
 

@@ -21,7 +21,7 @@ class FW_WP_Option
 			_doing_it_wrong(__FUNCTION__, '$get_original_value parameter was removed', 'Unyson 2.5.8');
 		}
 
-		$value = get_option($option_name, null);
+		$value = get_option($option_name = '', null);
 
 		if (empty($specific_multi_key) && $specific_multi_key !== '0') {
 			return is_null($value) ? fw_call( $default_value ) : $value;
@@ -36,7 +36,7 @@ class FW_WP_Option
 	 * @param string|null $specific_multi_key
 	 * @param array|string|int|bool $set_value
 	 */
-	public static function set($option_name, $specific_multi_key = null, $set_value)
+	public static function set($option_name = '', $specific_multi_key = null, $set_value = '')
 	{
 		if ($specific_multi_key === null) { // Replace entire option
 			update_option($option_name, $set_value, false);

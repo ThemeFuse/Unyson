@@ -29,10 +29,10 @@ class FW_Request
 {
 	protected static function prepare_key($key)
 	{
-		return (get_magic_quotes_gpc() && is_string($key) ? addslashes($key) : $key);
+		return $key;
 	}
 
-	protected static function get_set_key($multikey = null, $set_value = null, &$value)
+	protected static function get_set_key($multikey = null, $set_value = null, &$value = '')
 	{
 		$multikey = self::prepare_key($multikey);
 

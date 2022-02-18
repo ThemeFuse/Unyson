@@ -106,7 +106,7 @@ abstract class FW_Extension
 
 		if (!$full_path) {
 			trigger_error('Extension view not found: '. $name, E_USER_WARNING);
-			return;
+			return '';
 		}
 
 		return fw_render_view($full_path, $view_variables, $return);
@@ -384,7 +384,7 @@ abstract class FW_Extension
 	 * @param string|null $option_id
 	 * @param mixed $value
 	 */
-	final public function set_db_settings_option( $option_id = null, $value ) {
+	final public function set_db_settings_option( $option_id = null, $value = '' ) {
 		fw_set_db_ext_settings_option( $this->get_name(), $option_id, $value );
 	}
 
@@ -407,7 +407,7 @@ abstract class FW_Extension
 	 * @param string|null $multi_key The key of the data you want to set. null - all data
 	 * @param mixed $value
 	 */
-	final public function set_db_data( $multi_key = null, $value ) {
+	final public function set_db_data( $multi_key = null, $value = '' ) {
 		fw_set_db_extension_data( $this->get_name(), $multi_key, $value );
 	}
 
