@@ -1756,7 +1756,7 @@ final class _FW_Extensions_Manager
 				}
 
 				if (!isset($installed_extensions[$extension_name])) {
-					$error = sprintf(__('Extension "%s" is not installed.', 'fw'), $this->get_extension_title($extension_name));
+					$error = sprintf(__('Extension "%s" is not installed.', 'fw'), esc_html( $this->get_extension_title($extension_name) ));
 					break;
 				}
 			} while(false);
