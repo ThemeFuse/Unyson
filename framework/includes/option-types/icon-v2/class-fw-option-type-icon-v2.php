@@ -2,6 +2,7 @@
 
 if (! defined('FW')) { die('Forbidden'); }
 
+#[\AllowDynamicProperties]
 class FW_Option_Type_Icon_v2 extends FW_Option_Type {
 	private $enqueued_font_styles = array();
 	public $packs_loader = null;
