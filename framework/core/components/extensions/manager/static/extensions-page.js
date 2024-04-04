@@ -26,7 +26,10 @@ jQuery(function($){
 
 			var $form = $(this);
 
-			var confirmMessage = $form.attr('data-confirm-message');
+			var confirmMessage = $form.attr('data-confirm-message'),
+			    action         = $form.attr('data-extension-action'),
+				action         = action === 'uninstall' ? 'delete' : action,
+				nonceName      = '_nonce_fw_extensions_' + action;
 
 			inst.isBusy = true;
 			inst.loading($form, true);
@@ -35,7 +38,9 @@ jQuery(function($){
 				url: ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'fw_extensions_check_direct_fs_access'
+					action: 'fw_extensions_check_direct_fs_access',
+					[nonceName]: $form.find('#' + nonceName).val(),
+					extAction: action
 				},
 				dataType: 'json'
 			}).done(function(data){
@@ -51,8 +56,9 @@ jQuery(function($){
 						url: ajaxurl,
 						type: 'POST',
 						data: {
-							action: 'fw_extensions_'+ $form.attr('data-extension-action'),
-							extension: $form.attr('data-extension-name')
+							action: 'fw_extensions_' + (action === 'delete' ? 'uninstall' : action),
+							extension: $form.attr('data-extension-name'),
+							[nonceName]: $form.find('#' + nonceName).val()
 						},
 						dataType: 'json'
 					}).done(function(r) {

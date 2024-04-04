@@ -277,8 +277,14 @@ final class _FW_Extensions_Manager
 	 */
 	public function _action_ajax_check_direct_fs_access()
 	{
-		if (!$this->can_install()) {
+		if ( ! $this->can_install() || empty( $_POST['extAction'] ) ) {
 			// if can't install, no need to know if has access or not
+			wp_send_json_error();
+		}
+
+		$nonce = $this->get_nonce( $_POST['extAction'] );
+
+		if ( ! isset( $_POST[ $nonce['name'] ] ) || ! wp_verify_nonce( $_POST[ $nonce['name'] ], $nonce['action'] ) ) {
 			wp_send_json_error();
 		}
 
@@ -296,6 +302,12 @@ final class _FW_Extensions_Manager
 	{
 		if ( ! $this->can_install() ) {
 			// if can't install, no need to know if has access or not
+			wp_send_json_error();
+		}
+
+		$nonce = $this->get_nonce( 'install' );
+
+		if ( ! isset( $_POST[ $nonce['name'] ] ) || ! wp_verify_nonce( $_POST[ $nonce['name'] ], $nonce['action'] ) ) {
 			wp_send_json_error();
 		}
 
@@ -321,6 +333,12 @@ final class _FW_Extensions_Manager
 	{
 		if (!$this->can_install()) {
 			// if can't install, no need to know if has access or not
+			wp_send_json_error();
+		}
+
+		$nonce = $this->get_nonce( 'delete' );
+
+		if ( ! isset( $_POST[ $nonce['name'] ] ) || ! wp_verify_nonce( $_POST[ $nonce['name'] ], $nonce['action'] ) ) {
 			wp_send_json_error();
 		}
 
