@@ -3,7 +3,7 @@ Contributors: unyson
 Tags: page builder, editor, drag-and-drop, landing-page, widgets, sidebar, backup, shortcodes, backup, seo, breadcrumbs, portfolio, framework
 Requires at least: 4.4
 Tested up to: 6.0
-Stable tag: 2.7.29
+Stable tag: 2.7.30
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 
 == Changelog ==
+
+= 2.7.30 =
+* Security Issue
 
 = 2.7.28 =
 * Fixed [#4276](https://github.com/ThemeFuse/Unyson/issues/3915),[#3861](https://github.com/ThemeFuse/Unyson/issues/3861),[#4275](https://github.com/ThemeFuse/Unyson/issues/3861)
