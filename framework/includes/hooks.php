@@ -226,7 +226,8 @@ add_filter( 'fw_github_api_url', '_fw_filter_github_api_url' );
 		 */
 		function _action_fw_flash_message_backend_prepare() {
 			if ( apply_filters( 'fw_use_sessions', true ) && ! session_id()  ) {
-				session_start();
+			// We close the session just after reading the information to avoid loopback error.	
+			session_start(['read_and_close' => true, ]); 
 			}
 		}
 
@@ -256,8 +257,12 @@ add_filter( 'fw_github_api_url', '_fw_filter_github_api_url' );
 				&&
 				! session_id()
 			) {
-				session_start();
-			}
+			       /**
+		                * PHP sessions created with session_start() function may cause issues with REST API and loopback requests due to cURL error 28. 
+		 		* @internal
+				*/
+				session_start(['read_and_close' => true,]);
+			} 
 		}
 
 		add_action( 'send_headers', '_action_fw_flash_message_frontend_prepare', 9999 );
