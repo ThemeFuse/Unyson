@@ -139,7 +139,7 @@ class FW_Option_Type_Wp_Editor extends FW_Option_Type {
 		wp_enqueue_script(
 			'fw-option-type-' . $this->get_type(),
 			$uri . '/scripts.js',
-			array( 'jquery', 'fw-events', 'editor', 'fw' ),
+			array( 'jquery', 'tinymce', 'fw-events', 'editor', 'fw' ),
 			fw()->manifest->get_version(),
 			true
 		);
