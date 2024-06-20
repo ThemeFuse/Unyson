@@ -749,6 +749,8 @@ fw.getQueryString = function(name) {
 				uploader: false
 			});
 
+            patchMediaFramesModalToDoTheFocusCorrectly( this.frame );
+
 			var modal = this;
 
 			this.frame.once('ready', function(){
@@ -1005,6 +1007,67 @@ fw.getQueryString = function(name) {
 			$frame.css('overflow-y', 'hidden');
 		}
 	});
+
+	// https://github.com/WordPress/WordPress/blob/4ca4ff999aba05892c05d26cddf3af540f47b93b/wp-includes/js/media-views.js#L6800
+	// When you execute frame.modal.open() - the modal tries to switch focus
+	// to its $el. Actually, this switches the scrollTop property for window.
+	//
+	// In order to prevent that we'll have to monkey patch the frame.modal.open
+	// method and do the focus properly - that's what this function does
+	//
+	// TODO: remove to remove this after WordPress 5.0
+	function patchMediaFramesModalToDoTheFocusCorrectly (frame) {
+		if (! frame.modal) return;
+
+		frame.modal.open = function () {
+			var $el = this.$el,
+				options = this.options,
+				mceEditor;
+
+			if ( $el.is(':visible') ) {
+				return this;
+			}
+
+			this.clickedOpenerEl = document.activeElement;
+
+			if ( ! this.views.attached ) {
+				this.attach();
+			}
+
+			// If the `freeze` option is set, record the window's scroll position.
+			if ( options.freeze ) {
+				this._freeze = {
+					scrollTop: jQuery( window ).scrollTop()
+				};
+			}
+
+			// Disable page scrolling.
+			jQuery( 'body' ).addClass( 'modal-open' );
+
+			$el.show();
+
+			// Try to close the onscreen keyboard
+			if ( 'ontouchend' in document ) {
+				if ( ( mceEditor = window.tinymce && window.tinymce.activeEditor )  && ! mceEditor.isHidden() && mceEditor.iframeElement ) {
+					mceEditor.iframeElement.focus();
+					mceEditor.iframeElement.blur();
+
+					setTimeout( function() {
+						mceEditor.iframeElement.blur();
+					}, 100 );
+				}
+			}
+
+			// this part is changed from the original method
+			// this.$el.focus();
+			// http://stackoverflow.com/a/11676673/3220977
+			var initialX = window.scrollX, initialY = window.scrollY;
+			this.$el.focus();
+			window.scrollTo(initialX, initialY);
+
+			return this.propagate('open');
+		}
+	}
 })();
 
 /**
